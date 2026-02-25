@@ -1,0 +1,1112 @@
+{
+  "fileName": "ItemPurchasePopup",
+  "filePath": "E:/AIMED/FantaPuzzle/PuzzleAutomation2/Assets\\Resources\\Prefabs\\Popup\\ItemPurchasePopup.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 34,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "3814788179140861591",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "OpenAds",
+      "rectSize": {
+        "x": 306.7,
+        "y": 132.0
+      },
+      "anchoredPosition": {
+        "x": 352.7,
+        "y": -4.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Button",
+      "fileID": "3568569002757705794",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "RewardButton",
+      "rectSize": {
+        "x": 350.0,
+        "y": 133.0
+      },
+      "anchoredPosition": {
+        "x": 179.0,
+        "y": -562.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Button",
+      "fileID": "7614158566565519540",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "PurchaseButton",
+      "rectSize": {
+        "x": 350.0,
+        "y": 133.0
+      },
+      "anchoredPosition": {
+        "x": -177.0,
+        "y": -562.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Button",
+      "fileID": "7614158566671703149",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "CloseBtn",
+      "rectSize": {
+        "x": 128.0,
+        "y": 128.0
+      },
+      "anchoredPosition": {
+        "x": 455.0,
+        "y": 545.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    }
+  ],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "1904977349519465386",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "2d92a169488f740aba41494345a6ed72",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Ads",
+      "rectSize": {
+        "x": 128.0,
+        "y": 128.0
+      },
+      "anchoredPosition": {
+        "x": -70.0,
+        "y": 2.1
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "3814788179140861590",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 783871198868519349,
+        "guid": "26195f4347926410ebc19be979d79cc5",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "OpenAds",
+      "rectSize": {
+        "x": 306.7,
+        "y": 132.0
+      },
+      "anchoredPosition": {
+        "x": 352.7,
+        "y": -4.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "3814788179395588444",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "c0b76f4cbc481459285834fa735981e6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image",
+      "rectSize": {
+        "x": 115.3,
+        "y": 115.32
+      },
+      "anchoredPosition": {
+        "x": 131.0,
+        "y": -1.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "3814788179872655954",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 5575179077785088333,
+        "guid": "193a5905cd58c45fe8fe9134f9e260f9"
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BottomAds",
+      "rectSize": {
+        "x": 1080.0,
+        "y": 191.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.0
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "3814788179965180425",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "68a2683078ca84b87a88dc4f21d034a9",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Gold",
+      "rectSize": {
+        "x": 512.0,
+        "y": 512.0
+      },
+      "anchoredPosition": {
+        "x": 5.0,
+        "y": 289.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "3814788180053229626",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8ff720204eaf04fa980ea8c7fe09905b",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Gold",
+      "rectSize": {
+        "x": 113.1,
+        "y": 109.2
+      },
+      "anchoredPosition": {
+        "x": -133.3,
+        "y": -0.6
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "3814788180157114740",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8ff720204eaf04fa980ea8c7fe09905b",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image",
+      "rectSize": {
+        "x": 121.7,
+        "y": 117.49
+      },
+      "anchoredPosition": {
+        "x": -90.0,
+        "y": 1.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "158358344099296121",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": -7229724631080877923,
+        "guid": "2e594e93b82534b6f8128eba3d7aadcd"
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "RewardButton",
+      "rectSize": {
+        "x": 350.0,
+        "y": 133.0
+      },
+      "anchoredPosition": {
+        "x": 179.0,
+        "y": -562.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "2940417499422328050",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "64f1d0623659a4f03acbcfed64c24f74",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Item",
+      "rectSize": {
+        "x": 500.0,
+        "y": 500.0
+      },
+      "anchoredPosition": {
+        "x": -64.8,
+        "y": 1.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "4501034006772225524",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 6481630576905144970,
+        "guid": "76e2a2f6fe199466f8aab9e008760eef"
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Bottom",
+      "rectSize": {
+        "x": 678.2,
+        "y": 201.8
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -328.6
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "1737894070483253419",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "33674a527fca34fd3af3a61a52f61a6c",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Nice",
+      "rectSize": {
+        "x": 77.8,
+        "y": 62.3
+      },
+      "anchoredPosition": {
+        "x": -125.1,
+        "y": 37.8
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "7614158565324984936",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "133ccaf0330484dc2bcd64aab4fea19c",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "TitleBackground",
+      "rectSize": {
+        "x": 1024.0,
+        "y": 1024.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 535.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "7614158565852518736",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 4412336079460670110,
+        "guid": "68160c32af78e480eac9e52a16d7f7ed"
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Background",
+      "rectSize": {
+        "x": 583.5,
+        "y": 413.1
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -42.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "7614158566178536271",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 0.57254905
+      },
+      "m_Sprite": {
+        "fileID": 10907,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Panel",
+      "rectSize": {
+        "x": 3000.0,
+        "y": 3000.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "7614158566565519531",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": -7838180443215080354,
+        "guid": "a3ae827c2f0cf477d98e732e0d47d08a"
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "PurchaseButton",
+      "rectSize": {
+        "x": 350.0,
+        "y": 133.0
+      },
+      "anchoredPosition": {
+        "x": -177.0,
+        "y": -562.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "7614158566671703148",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "84ae387d48bfe4172a9519732d95d3a0",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "CloseBtn",
+      "rectSize": {
+        "x": 128.0,
+        "y": 128.0
+      },
+      "anchoredPosition": {
+        "x": 455.0,
+        "y": 545.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    }
+  ],
+  "texts": [
+    {
+      "type": "Text",
+      "fileID": "1454780000425002864",
+      "m_FontSize": 60.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "+1",
+      "gameObjectName": "Purchase (1)",
+      "rectSize": {
+        "x": 123.33,
+        "y": 78.1
+      },
+      "anchoredPosition": {
+        "x": 54.0,
+        "y": -6.699951
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "4018492991398683984",
+      "m_FontSize": 30.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "FREE",
+      "gameObjectName": "Purchase",
+      "rectSize": {
+        "x": 135.19,
+        "y": 30.106
+      },
+      "anchoredPosition": {
+        "x": 56.0,
+        "y": 39.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "3814788179288630473",
+      "m_FontSize": 20.0,
+      "m_Alignment": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "gameObjectName": "Body",
+      "rectSize": {
+        "x": 532.0,
+        "y": 75.0
+      },
+      "anchoredPosition": {
+        "x": -73.0,
+        "y": -43.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "3814788180050408159",
+      "m_FontSize": 40.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "gameObjectName": "CallToAction",
+      "rectSize": {
+        "x": 275.0,
+        "y": 86.0
+      },
+      "anchoredPosition": {
+        "x": 1.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "3814788180476298656",
+      "m_FontSize": 45.0,
+      "m_Alignment": 5,
+      "m_Color": {
+        "r": 0.9150943,
+        "g": 0.89807343,
+        "b": 0.75538445,
+        "a": 1.0
+      },
+      "m_Text": "200000",
+      "gameObjectName": "text",
+      "rectSize": {
+        "x": 183.0,
+        "y": 90.0
+      },
+      "anchoredPosition": {
+        "x": 1.3,
+        "y": -3.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "3814788180536808930",
+      "m_FontSize": 20.0,
+      "m_Alignment": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "gameObjectName": "HeadLine",
+      "rectSize": {
+        "x": 532.0,
+        "y": 68.0
+      },
+      "anchoredPosition": {
+        "x": -72.91399,
+        "y": 28.809006
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "6829459098881263149",
+      "m_FontSize": 100.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 1.0,
+        "g": 0.7467409,
+        "b": 0.0,
+        "a": 1.0
+      },
+      "m_Text": "x3",
+      "gameObjectName": "ItemCount",
+      "rectSize": {
+        "x": 229.8,
+        "y": 109.5
+      },
+      "anchoredPosition": {
+        "x": 248.0,
+        "y": -86.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "6829459098885918856",
+      "m_FontSize": 37.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "gameObjectName": "ItemExplain",
+      "rectSize": {
+        "x": 632.3,
+        "y": 158.8
+      },
+      "anchoredPosition": {
+        "x": 2.2,
+        "y": 0.4
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "7614158566526689537",
+      "m_FontSize": 65.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.64705884,
+        "g": 0.7058824,
+        "b": 0.6862745,
+        "a": 1.0
+      },
+      "m_Text": "Special Package",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 396.9,
+        "y": 88.1
+      },
+      "anchoredPosition": {
+        "x": 3.6,
+        "y": 8.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "7614158566805446369",
+      "m_FontSize": 60.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "1500",
+      "gameObjectName": "Purchase",
+      "rectSize": {
+        "x": 169.8,
+        "y": 84.97
+      },
+      "anchoredPosition": {
+        "x": 44.0,
+        "y": -5.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ItemPurchasePopup"
+    }
+  ],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 34
+}

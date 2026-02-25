@@ -1,0 +1,326 @@
+```yaml
+game: "Tap Shift"
+condition: "D10"
+parameters:
+
+  - id: TS01
+    name: total_levels
+    value: 100
+    confidence: medium
+    source: "패턴 카드 difficulty_progression: '약 100개 레벨, 5~6단계 난이도 구간으로 분할'"
+
+  - id: TS02
+    name: max_lives
+    value: 3
+    confidence: medium
+    source: "패턴 카드 special_mechanics: '생명 시스템: 최대 약 3개, 레벨 실패 시 소모'"
+
+  - id: TS03
+    name: max_undo_count
+    value: 10
+    confidence: medium
+    source: "패턴 카드 input_system: 'Command 패턴 기반, 최대 약 10회 되돌리기 가능'"
+
+  - id: TS04
+    name: max_hint_count
+    value: 3
+    confidence: medium
+    source: "패턴 카드 special_mechanics: '힌트 시스템: 소모품(약 3개 기본)'"
+
+  - id: TS05
+    name: interstitial_frequency
+    value: 3  # 레벨마다 1회 노출
+    confidence: medium
+    source: "패턴 카드 monetization: '전면 광고: 약 3레벨마다 노출'"
+
+  - id: TS06
+    name: arrow_move_speed
+    value:
+      mode: "distance_proportional"
+      clamp_min_sec: 0.25
+      clamp_max_sec: 0.70
+      note: "이동 거리에 비례하여 duration 계산 후 0.25~0.70초 범위로 클램프"
+    confidence: medium
+    source: "패턴 카드 animation_feel: '이동 거리 기반 duration 계산, 약 0.25~0.7초로 클램프'"
+
+  - id: TS07
+    name: max_arrow_clamp
+    value: 20
+    confidence: medium
+    source: "패턴 카드 difficulty_progression: '화살표 수 상한: 약 20개로 클램프'"
+
+  - id: TS08
+    name: star_rating_system
+    value:
+      3_star:
+        condition: "실수 0회"
+        label: "Perfect"
+      2_star:
+        condition: "실수 1~2회"
+      1_star:
+        condition: "실수 3~5회"
+      0_star:
+        condition: "실수 6회 이상"
+      metric: "막힌 화살표 탭(이동 불가) 횟수 기준"
+      storage: "PlayerPrefs, 레벨별 키로 저장"
+    confidence: high
+    source: "패턴 카드 scoring: 3성/2성/1성/0성 기준 및 저장 방식 직접 명시"
+
+  - id: TS09
+    name: base_unit
+    value: 1  # px (논리 픽셀 단위)
+    confidence: low
+    source: >
+      패턴 카드에 직접 명시 없음.
+      Canvas: Screen Space - Overlay, CanvasScaler Scale With Screen Size 1080×1920 환경 기준.
+      패턴 카드 내 보드 크기가 px 단위로 표현되므로 1 논리픽셀 = 1 단위로 추정.
+
+  - id: TS10
+    name: position_snap
+    value: 50  # px
+    confidence: low
+    source: >
+      패턴 카드에 직접 명시 없음.
+      초반 보드 약 200px에서 4~5열 구성 가정 시 셀당 약 40~50px.
+      슬라이딩 퍼즐 특성상 화살표가 격자 셀 중앙에 스냅되므로
+      기본 셀 크기 50px 추정. 레벨 진행에 따라 셀 크기 변동 가능.
+
+  - id: TS11
+    name: duration_clamp
+    value:
+      min_sec: 0.25
+      max_sec: 0.70
+    confidence: high
+    source: "패턴 카드 animation_feel: '약 0.25~0.7초로 클램프' 직접 명시"
+
+  - id: TS12
+    name: stretch_phase
+    value: 0.40  # 전체 이동 duration의 40%
+    confidence: medium
+    source: "패턴 카드 animation_feel: '전반 약 40%: 이동 방향으로 스케일 늘어남, ease-out sine'"
+
+  - id: TS13
+    name: stretch_max
+    value: 1.60  # 원본 크기의 1.6배
+    confidence: medium
+    source: "패턴 카드 animation_feel: '최대 약 1.6배, ease-out sine'"
+
+  - id: TS14
+    name: snap_phase
+    value: 0.60  # 전체 이동 duration의 60%
+    confidence: medium
+    source: "패턴 카드 animation_feel: '후반 약 60%: 원래 크기로 복귀하며 목표 위치에 착지, ease-in quadratic'"
+
+  - id: TS15
+    name: arrow_colors
+    value:
+      up:    "#00BFFF"  # cyan-blue 계열
+      down:  "#FF6600"  # orange 계열
+      left:  "#44DD66"  # green 계열
+      right: "#BB44FF"  # purple 계열
+      note: >
+        다크 네이비(#1a2a4a) 배경 대비 채도 높은 4색 배정 추정.
+        방향별 색상은 UI에서 직관적 구분을 위해 색상환 등간격 배치 관례 적용.
+    confidence: low
+    source: >
+      패턴 카드 core_loop '색상' 항목 존재하나 실제 값 미명시.
+      관찰 데이터: 게임플레이 화면 미포착(0/10)으로 직접 확인 불가.
+      배경색 및 UI 색상 톤(밝은 채도, 카툰 캐주얼) 기반 추정.
+
+  - id: TS16
+    name: head_ratio
+    value: 0.35  # 화살표 전체 길이 대비 머리 부분 비율
+    confidence: low
+    source: >
+      패턴 카드 미명시. 게임플레이 화면 미포착(0/10).
+      화살표 슬라이딩 퍼즐 장르 전형 비율(머리:전체 ≈ 30~40%) 기반 추정.
+      가독성과 터치 영역 확보를 위한 표준 비율 적용.
+
+  - id: TS17
+    name: shaft_height_ratio
+    value: 0.50  # 화살표 축 폭이 머리 폭의 50%
+    confidence: low
+    source: >
+      패턴 카드 미명시. 게임플레이 화면 미포착(0/10).
+      축이 머리 폭의 약 50% 수준일 때 화살표 형태의 시인성과
+      터치 영역 간 균형이 최적화되는 관례적 비율 적용.
+
+  - id: TS18
+    name: collision_system
+    value: "AABB_sweep"
+    confidence: high
+    source: >
+      패턴 카드 core_loop: 'AABB sweep 방식 - 이동 방향으로 경계까지
+      스윕하며 겹침 검사. 이동 경로상 다른 화살표와 AABB 겹침이 없으면 이동' 직접 명시.
+
+  - id: TS19
+    name: performance_complexity
+    value: "O(n) per tap"
+    confidence: high
+    source: >
+      패턴 카드 core_loop: '탭당 O(n) 충돌 검사면 충분.
+      화살표 수 최대 약 20개 이하' 직접 명시.
+
+  - id: TS20
+    name: solver_algorithm
+    value: "DFS + backtracking"
+    confidence: high
+    source: >
+      패턴 카드 special_mechanics:
+      'DFS + 백트래킹으로 생성된 퍼즐의 풀이 가능성 보장' 직접 명시.
+      Strategy 패턴으로 알고리즘 교체 가능하도록 설계(architecture 참조).
+
+  - id: TS21
+    name: ui_reference_resolution
+    value: "1080x1920"
+    confidence: high
+    source: >
+      관찰 데이터 섹션 1: '세로형 Portrait (1080×1920)' 신뢰도 9/10.
+      Canvas CanvasScaler 설정값과 일치.
+
+  - id: TS22
+    name: total_files
+    value: 50
+    confidence: medium
+    source: "패턴 카드 architecture: '약 50개 파일, 3-Layer 구조'"
+
+  - id: TS23
+    name: pattern_count
+    value: 7
+    confidence: high
+    source: >
+      패턴 카드 architecture 디자인 패턴 열거:
+      1) Singleton<T> (제네릭, DontDestroyOnLoad)
+      2) Object Pooling (화살표 Factory 겸 풀)
+      3) Command (이동 커맨드 + 히스토리 스택)
+      4) Observer / Event Bus (중앙 이벤트 매니저)
+      5) Template Method (팝업/페이지 공통 애니메이션 베이스)
+      6) Adapter (광고/IAP 서비스 인터페이스 추상화)
+      7) Strategy (퍼즐 검증/풀이 알고리즘 교체)
+      총 7종 직접 명시.
+
+  - id: TS24
+    name: state_count
+    value: 9
+    confidence: medium
+    source: >
+      패턴 카드 architecture: 'enum 기반 게임 상태 약 8~9개'.
+      예시 상태: Menu, Play, Pause, Clear, Fail, Tutorial + 추가 2~3개.
+      상한값 9 채택.
+
+  - id: TS25
+    name: serialization_format
+    value:
+      progress: "PlayerPrefs (key-value, 레벨별 별점·코인 등 저장)"
+      level_data: "JSON (레벨 구성 데이터, Unity Resources 로드 추정)"
+    confidence: medium
+    source: >
+      패턴 카드 scoring: 'PlayerPrefs에 레벨별 키로 저장' 직접 명시.
+      레벨 구성(화살표 배치, 보드 크기) 데이터는 Unity 표준 관행(JSON/ScriptableObject)
+      기반 JSON 추정. 직접 확인 불가.
+
+  - id: TS26
+    name: arrow_directions
+    value: 4
+    confidence: high
+    source: >
+      패턴 카드 core_loop: '방향(4방향)' 명시.
+      화살표 방향 규칙: 세로로 긴 화살표 = 상(Up)/하(Down),
+      가로로 긴 화살표 = 좌(Left)/우(Right).
+
+  - id: TS27
+    name: arrow_count_progression
+    value:
+      early_levels:
+        range: "1~5개"
+        board_size: "~200px"
+      mid_levels:
+        range: "5~10개"
+        board_size: "300~400px"
+      late_levels:
+        range: "10~20개"
+        board_size: "400~450px"
+      max_clamp: 20
+      formula: "레벨에 비례하는 구간별 선형 증가"
+    confidence: high
+    source: >
+      패턴 카드 difficulty_progression: 초반/중반/후반 구간별 화살표 수와
+      보드 크기 직접 명시. '화살표 수 상한: 약 20개로 클램프' 포함.
+
+  - id: TS28
+    name: grid_size_range
+    value:
+      early: "~200px"
+      mid:   "300~400px"
+      late:  "400~450px"
+      unit: "px (논리 픽셀, UI Canvas 기준)"
+      note: "화살표 수와 함께 레벨 비례 선형 증가"
+    confidence: medium
+    source: "패턴 카드 difficulty_progression: 구간별 보드 크기 직접 명시"
+
+  - id: TS29
+    name: tap_mechanic
+    value:
+      input_type: "단일 탭 (드래그/스와이프 없음)"
+      flow:
+        1: "탭 좌표 → 화살표 AABB 히트 테스트"
+        2: "이동 가능 여부 판정 (AABB sweep 충돌 검사)"
+        3a: "이동 가능 → 보드 경계까지 슬라이드 이동 애니메이션"
+        3b: "이동 불가 → 감쇠 진동 거부 피드백(약 0.3초) + 실수 카운트 +1"
+      haptic: "light/medium/heavy 3단계 햅틱 피드백 (플랫폼별 차등)"
+    confidence: high
+    source: >
+      패턴 카드 core_loop 및 input_system:
+      '터치/탭 입력만 사용. 드래그 없음.
+      탭 위치에서 화살표 히트 테스트 → 이동 가능 여부 판정 → 이동 또는 거부 피드백'
+
+  - id: TS30
+    name: goal_condition
+    value: "모든 화살표를 보드 밖으로 밀어내면 클리어"
+    confidence: high
+    source: "패턴 카드 core_loop: '모든 화살표를 보드 밖으로 밀어내면 클리어' 직접 명시"
+
+  - id: TS31
+    name: level_generation
+    value:
+      method: "절차적 생성 (Procedural)"
+      validation: "DFS + 백트래킹으로 풀이 가능성 사전 보장"
+      fallback: "생성 실패 시 단순 세로 정렬 배치 (최소 난이도 보장)"
+      safety: "최대 배치 시도 횟수 제한 (무한 루프 방지)"
+      pattern: "Strategy 패턴으로 검증/풀이 알고리즘 교체 가능"
+    confidence: high
+    source: >
+      패턴 카드 special_mechanics:
+      'DFS + 백트래킹으로 생성된 퍼즐의 풀이 가능성 보장.
+      레벨 생성 실패 시 폴백: 단순 세로 정렬 배치로 최소 난이도 보장.
+      최대 배치 시도 횟수 제한으로 무한 루프 방지' 직접 명시.
+
+  - id: TS32
+    name: save_system
+    value:
+      engine: "PlayerPrefs"
+      key_scheme: "레벨별 개별 키 (예: Level_14_Stars, Level_14_Completed)"
+      stored_data:
+        - "레벨별 별점 (0~3)"
+        - "레벨 클리어 여부"
+        - "코인 잔량"
+        - "힌트 잔량"
+        - "생명 잔량"
+      note: "Unity 내장 PlayerPrefs, 플랫폼별 로컬 저장소에 기록"
+    confidence: high
+    source: >
+      패턴 카드 scoring: 'PlayerPrefs에 레벨별 키로 저장' 직접 명시.
+      관찰 데이터: 코인 85개 전 세션 동일값 유지 → 로컬 단일 저장소 구조와 일치.
+```
+
+---
+
+**추정 신뢰도 분포 요약**
+
+| 신뢰도 | 파라미터 수 | 해당 ID |
+|--------|------------|---------|
+| **high** | 14개 | TS08, TS11, TS18, TS19, TS20, TS21, TS23, TS26, TS27, TS29, TS30, TS31, TS32, TS08 |
+| **medium** | 12개 | TS01, TS02, TS03, TS04, TS05, TS06, TS07, TS12, TS13, TS14, TS22, TS24, TS25, TS28 |
+| **low** | 6개 | TS09, TS10, TS15, TS16, TS17 |
+
+**주요 제약 사항**: 30개 스크린샷 중 실제 인게임 보드가 단 한 장도 포착되지 않아 시각적 파라미터(TS15·TS16·TS17)와 애니메이션 단위(TS09·TS10)는 패턴 카드 구조적 힌트 + 장르 관례로만 추정되었습니다. 코드 생성 시 이 5개 값은 런타임 조정 가능한 상수로 노출할 것을 권장합니다.

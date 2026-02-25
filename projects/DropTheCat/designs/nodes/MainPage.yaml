@@ -1,0 +1,79 @@
+# MainPage - Game Main Menu
+metadata:
+  nodeId: "MainPage"
+  version: "1.0.0"
+  phase: 3
+  role: "Handler"
+
+dependencies:
+  internal:
+    - "LevelManager"
+    - "CurrencyManager"
+    - "GameManager"
+    - "EventManager"
+  external:
+    - "UnityEngine"
+    - "UnityEngine.UI"
+
+contract:
+  provides:
+    - "void RefreshLevelMap()"
+    - "void RefreshCoinDisplay()"
+    - "void OnLevelButtonClicked(int levelNumber)"
+    - "void OnSettingsButtonClicked()"
+    - "void OnShopButtonClicked()"
+  requires:
+    - "LevelManager.IsLevelUnlocked/GetStars/MaxClearedLevel"
+    - "CurrencyManager.GetBalance"
+    - "GameManager.StartLevel"
+    - "EventManager.Subscribe"
+
+tags:
+  layer: "Game"
+  genre: "Puzzle"
+  role: "Handler"
+  system: "UI"
+  majorFunctions:
+    - "FlowControl"
+    - "DataSync"
+  minorFunctions:
+    - "Find"
+    - "Assign"
+    - "Iterate"
+    - "Notify"
+
+logicFlow:
+  - step: 1
+    tag: "DataSync"
+    action: "화면 진입 시 LevelManager에서 진행도 로드 → 레벨 맵 렌더링"
+    next: 2
+  - step: 2
+    tag: "FlowControl"
+    action: "레벨 버튼 동적 생성: 해금 레벨은 활성화 + 별점 표시, 잠김은 자물쇠"
+    next: 3
+  - step: 3
+    tag: "FlowControl"
+    action: "현재 진행 레벨로 스크롤 자동 이동"
+    next: 4
+  - step: 4
+    tag: "ResponseTrigger"
+    action: "레벨 버튼 클릭 → GameManager.StartLevel(levelNumber) 호출"
+    next: 5
+  - step: 5
+    tag: "ResponseTrigger"
+    action: "OnCoinChanged 수신 시 코인 표시 UI 갱신"
+    next: null
+
+referencePatterns:
+  - source: "db/base/puzzle/domain/HomeScene"
+    pattern: "레벨 선택 맵, 진행도 표시 패턴"
+
+codeHints:
+  patterns:
+    - "public class MainPage : MonoBehaviour"
+    - "ScrollRect로 레벨 맵 스크롤"
+    - "LevelButton 프리팹 동적 생성 (ObjectPool 또는 직접 Instantiate)"
+    - "각 LevelButton에 별점 표시 (Image[] stars)"
+  avoidPatterns:
+    - "모든 레벨 버튼을 하드코딩 금지 (동적 생성)"
+    - "씬 전환 직접 호출 금지 (GameManager 사용)"

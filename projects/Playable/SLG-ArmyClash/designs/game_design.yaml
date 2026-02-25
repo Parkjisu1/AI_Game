@@ -1,0 +1,352 @@
+## =============================================================
+## Layer 1: 게임 기획서 (game_design.yaml)
+## Project  : SLG-ArmyClash
+## Platform : playable (HTML5 광고)
+## Generated: 2026-02-23
+## =============================================================
+
+game_overview:
+  title: "Army Clash: Kingdom War"
+  genre: "SLG"
+  sub_genre:
+    - "ArmyDeploy"
+    - "AutoBattle"
+  platform: "playable"
+  target_user: "midcore"
+  session_length: "45s"
+  one_liner: "부대를 드래그 배치하여 적 성을 함락시키는 SLG 자동 전투"
+  references:
+    - "Last War: Survival (부대 배치 SLG)"
+    - "Top War: Battle Game (머지+전투)"
+    - "Art of War: Legions (자동 전투)"
+
+core_experience:
+  main_fun: "부대 카드를 드래그해 전장에 배치하면 병사들이 자동 행군하여 전투하는 쾌감"
+  emotion_goal: "전략적 배치 → 자동 전투 관전 → 적 성 함락 카타르시스 → 보스전 긴장감"
+  core_verbs:
+    - "드래그(부대 배치)"
+    - "관전(자동 전투)"
+    - "선택(부대 종류)"
+    - "함락(적 성 파괴)"
+
+core_loop:
+  main_loop:
+    description: "부대 카드 드래그 → 전장 배치 → 자동 행군 → 적과 교전 → 적 성 공격"
+    flow:
+      - "화면 하단 부대 카드 확인"
+      - "카드를 전장 영역으로 드래그"
+      - "배치된 부대가 적 방향으로 자동 행군"
+      - "적 부대와 조우 시 자동 교전"
+      - "적 전멸 후 적 성 공격"
+      - "적 성 HP 0 → 웨이브 클리어"
+    duration: "10~15s per wave"
+  deploy_loop:
+    description: "코인 획득 → 부대 카드 구매 → 배치 반복"
+    flow:
+      - "적 처치 시 코인 획득"
+      - "코인으로 부대 카드 구매"
+      - "전장에 배치"
+  long_term_loop:
+    description: "3웨이브 → 빅토리 → CTA (Install Now)"
+    flow:
+      - "Wave 1 (튜토리얼, 보병만)"
+      - "Wave 2 (궁수 해금, 적 다양화)"
+      - "Wave 3 (보스, 강력한 적 파상공세)"
+      - "VICTORY 또는 패배 → CTA"
+
+session_structure:
+  start_condition: "화면 탭 또는 첫 드래그"
+  progress_type: "realtime"
+  end_conditions:
+    - "all_waves_clear: Wave 3 적 성 함락"
+    - "player_base_destroyed: 아군 성 HP 0"
+    - "timer_expired: 45초 경과"
+  result_handling: "클리어 시 VICTORY 연출 후 CTA / 실패 시 즉시 CTA"
+
+monetization:
+  main_bm: "f2p"
+  revenue_sources:
+    - "플레이어블 광고 → 게임 설치 유도"
+
+## =============================================================
+## Playable 광고 전용 규격
+## =============================================================
+
+playable_spec:
+  duration: "45s"
+  levels: 3
+  fail_trigger: "wave3_boss"
+  cta_text: "INSTALL NOW"
+  cta_trigger:
+    - "all_levels_clear"
+    - "player_base_destroyed"
+    - "timer_expired"
+  target_networks:
+    - google_ads
+    - facebook
+    - ironsource
+  max_file_size: "5MB"
+  asset_mode: "provided"
+  tech_stack: "canvas"
+
+## =============================================================
+## 비주얼 스타일 정의
+## =============================================================
+
+visual_style:
+  theme: "중세 판타지 SLG - 왕국 전쟁"
+  view: "사이드뷰 (좌→우 행군)"
+  color_palette:
+    background_grass: "#4a7c3f"
+    background_sky: "#87CEEB"
+    player_color: "#3a6ebf"
+    player_accent: "#ffd700"
+    enemy_color: "#cc4444"
+    enemy_accent: "#8b0000"
+    boss_color: "#660066"
+    ui_panel: "rgba(0,0,0,0.75)"
+    ui_accent: "#ffd700"
+    hp_bar_ally: "#00cc44"
+    hp_bar_enemy: "#ff4444"
+    coin_color: "#ffd700"
+  canvas_size:
+    width: 540
+    height: 960
+
+## =============================================================
+## 유닛 정의
+## =============================================================
+
+units:
+  player:
+    swordsman:
+      name: "보병"
+      cost: 10
+      hp: 60
+      atk: 12
+      speed: 50
+      range: 30
+      attack_type: "melee"
+      asset: "NPC_Summon_001_D.png"
+    archer:
+      name: "궁수"
+      cost: 20
+      hp: 35
+      atk: 18
+      speed: 35
+      range: 150
+      attack_type: "ranged"
+      asset: "TowerA.png"
+  enemy:
+    soldier:
+      name: "적 보병"
+      hp: 40
+      atk: 8
+      speed: 45
+      range: 30
+      attack_type: "melee"
+      asset: "MOB_Cactus01_red_D.png"
+    elite:
+      name: "적 정예병"
+      hp: 80
+      atk: 15
+      speed: 35
+      range: 30
+      attack_type: "melee"
+      asset: "MOB_Cactus01_red_D.png"
+    boss:
+      name: "적 대장"
+      hp: 300
+      atk: 25
+      speed: 20
+      range: 40
+      attack_type: "melee"
+      asset: "MOB_Boss_Cactus_Crown_D.png"
+
+bases:
+  player_base:
+    position: "좌측 (x=30)"
+    hp: 200
+    asset: "WallA.png"
+  enemy_base:
+    position: "우측 (x=510)"
+    hp: 150
+    asset: "WallA.png"
+
+## =============================================================
+## 게임 플로우 상세
+## =============================================================
+
+game_flow_detail:
+
+  phase_0_title:
+    duration: "2s"
+    state: "title"
+    ui:
+      - text: "ARMY CLASH"
+        style: "bold 32px, #ffd700, center"
+        pos: "270, 400"
+      - text: "Drag troops to battle!"
+        style: "22px, white, center"
+        pos: "270, 450"
+      - hand_icon:
+          animation: "드래그 모션 (카드→전장)"
+          pos: "270, 600"
+    auto_advance: true
+    advance_trigger: "2s elapsed OR any tap"
+
+  phase_1_wave1:
+    wave_id: 1
+    name: "Tutorial Wave"
+    duration_target: "10s"
+    player_start_gold: 30
+    gold_per_kill: 10
+    unlocked_units: ["swordsman"]
+    enemy_waves:
+      - type: "soldier"
+        count: 3
+        spawn_interval: 2.0
+    enemy_base_hp: 100
+    tutorial_hint:
+      text: "DRAG TROOP CARD HERE!"
+      show_duration: "5s"
+      hand_animation: "카드에서 전장으로 드래그"
+    guaranteed_win: true
+    wave_clear_ui:
+      - text: "WAVE 1 CLEAR!"
+        color: "#ffd700"
+        animation: "scale-in"
+
+  phase_2_wave2:
+    wave_id: 2
+    name: "Archer Unlocked!"
+    duration_target: "12s"
+    bonus_gold: 20
+    unlocked_units: ["swordsman", "archer"]
+    enemy_waves:
+      - type: "soldier"
+        count: 4
+        spawn_interval: 1.5
+      - type: "elite"
+        count: 1
+        spawn_delay: 4.0
+    enemy_base_hp: 150
+    new_unit_hint:
+      text: "NEW! ARCHER UNLOCKED!"
+      unit: "archer"
+      show_duration: "3s"
+    fail_bait: true
+    note: "정예병 등장으로 긴장감 유발. 궁수 활용 필요"
+
+  phase_3_wave3:
+    wave_id: 3
+    name: "Boss Battle!"
+    duration_target: "15s"
+    bonus_gold: 30
+    unlocked_units: ["swordsman", "archer"]
+    enemy_waves:
+      - type: "soldier"
+        count: 3
+        spawn_interval: 1.0
+      - type: "elite"
+        count: 2
+        spawn_delay: 3.0
+        spawn_interval: 2.0
+      - type: "boss"
+        count: 1
+        spawn_delay: 6.0
+    enemy_base_hp: 200
+    fail_bait: true
+    note: "보스 HP 300 + 잡몹 파상공세로 아슬아슬한 전투"
+
+  phase_4_result:
+    state: "result"
+    duration: "2s"
+    victory_ui:
+      - text: "VICTORY!"
+        style: "bold 40px, #ffd700"
+        animation: "scale-in + shake"
+      - stars: 3
+        animation: "순차 팝인"
+    defeat_ui:
+      - text: "DEFEATED!"
+        style: "bold 36px, #ff4444"
+      - text: "Can you conquer the kingdom?"
+        style: "20px, white"
+    auto_advance: "2s → CTA"
+
+  phase_5_cta:
+    state: "cta"
+    ui:
+      overlay: "rgba(0,0,0,0.85)"
+      title: "BUILD YOUR ARMY!"
+      subtitle: "Recruit heroes & conquer kingdoms!"
+      button:
+        text: "INSTALL NOW"
+        color: "#ffd700"
+        bg: "#cc0000"
+        size: "220x60"
+        pos: "270, 700"
+        animation: "pulse loop"
+
+## =============================================================
+## HUD 규격
+## =============================================================
+
+hud_spec:
+  gold_display:
+    pos: "left top (20, 20)"
+    icon: "Coin.png"
+    format: "{n}"
+    style: "bold 18px, #ffd700"
+  wave_indicator:
+    pos: "center top (270, 20)"
+    format: "WAVE {n} / 3"
+    style: "bold 18px, white"
+  player_base_hp:
+    pos: "left (20, battlefield_top - 10)"
+    label: "YOUR BASE"
+    bar_width: 100
+    fill_color: "#00cc44"
+  enemy_base_hp:
+    pos: "right (520, battlefield_top - 10)"
+    label: "ENEMY BASE"
+    bar_width: 100
+    fill_color: "#ff4444"
+  timer_bar:
+    pos: "top full width (0, 45)"
+    height: 4
+    color: "#ff6600"
+  troop_cards:
+    pos: "bottom panel (0, 850~960)"
+    bg: "rgba(0,0,0,0.75)"
+    cards:
+      - unit: "swordsman"
+        icon: "NPC_Summon_001_D.png"
+        cost_text: "10"
+        cost_color: "#ffd700"
+      - unit: "archer"
+        icon: "TowerA.png"
+        cost_text: "20"
+        cost_color: "#ffd700"
+        locked_until: "wave2"
+
+## =============================================================
+## 에셋 매핑
+## =============================================================
+
+assets:
+  mode: "provided"
+  mapping:
+    background: "Map_2048.png"
+    player_unit: "NPC_Summon_001_D.png"
+    archer_unit: "TowerA.png"
+    enemy_unit: "MOB_Cactus01_red_D.png"
+    enemy_boss: "MOB_Boss_Cactus_Crown_D.png"
+    base_wall: "WallA.png"
+    projectile: "Arrow.png"
+    coin: "Coin.png"
+    button: "Button.png"
+    hit_effect: "Effect_Star_1.png"
+    hp_bar: "HPSlider.png"
+    shadow: "Shadow.png"

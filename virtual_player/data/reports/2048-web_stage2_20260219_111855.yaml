@@ -1,0 +1,28 @@
+version: '1.0'
+exported_at: '2026-02-19T11:18:55.201679'
+game_id: 2048-web
+summary:
+  total_sessions: 1
+  total_actions: 1
+  avg_duration_seconds: 60.0
+  avg_score: 2048.0
+  max_score: 2048.0
+  action_distribution:
+    swipe_left:
+      count: 1
+      ratio: 1.0
+behavior_patterns:
+- persona: casual
+  session_count: 1
+  avg_duration: 60.0
+  avg_score: 2048.0
+session_details:
+- session_id: test-001
+  persona: casual
+  pattern: commuter
+  duration_seconds: 60.0
+  action_count: 50
+  final_score: 2048.0
+  action_sequence_sample:
+  - swipe_left
+  notable_streaks: []

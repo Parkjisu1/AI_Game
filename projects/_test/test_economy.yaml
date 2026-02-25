@@ -1,0 +1,11 @@
+currency:
+  name: Gold
+  initial_amount: 500
+daily_income:
+  base: 200
+  events: 100
+  ads: 150
+daily_costs:
+  - name: upgrade
+    amount: 300
+    frequency_per_day: 2

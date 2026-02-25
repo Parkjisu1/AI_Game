@@ -1,0 +1,3867 @@
+{
+  "fileName": "TUTORIAL_MISSION_CONTAGION",
+  "filePath": "E:/AIMED/TamplePuzzle/PuzzleAutomation/Assets\\Resources\\Prefabs\\Tutorial\\TUTORIAL_MISSION_CONTAGION.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 119,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "6563963176688279250",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "90d380a5e78cd324c9c6e19406f5f887",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer1 (3)",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "2573800363830054855",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "328994af3235f0c47864e68c36f123a2",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer1 (6)",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043194837502",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "234bdb0d1af9347e5b96c4d146d69be1",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image19",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": -110.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043198746712",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer3",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043208326724",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer7",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": 90.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043218654569",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "56c9772ae0a064ffda239483f780fbcc",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer20",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 200.0,
+        "y": -110.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043230549976",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "0951d415c3bf50f4a9682d5465b6a540",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer7",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": 90.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043234443658",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "234bdb0d1af9347e5b96c4d146d69be1",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image1",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043243588119",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "56c9772ae0a064ffda239483f780fbcc",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer24",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": -210.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043259822227",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "90d380a5e78cd324c9c6e19406f5f887",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer9",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": 90.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043277032864",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "56c9772ae0a064ffda239483f780fbcc",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer21",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": -210.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043279598140",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "56c9772ae0a064ffda239483f780fbcc",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer22",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": -210.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043298617864",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "234bdb0d1af9347e5b96c4d146d69be1",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image21",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": -210.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043299920391",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "b04d83137440d481dabc3cb70e82804c",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image18",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -110.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043301021142",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "cb40e9181e37eff4a87329a4fabe55a2",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer10",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 200.0,
+        "y": 90.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043318346644",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "b04d83137440d481dabc3cb70e82804c",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image20",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 200.0,
+        "y": -110.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043320689609",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer17",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": -110.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043370252188",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "234bdb0d1af9347e5b96c4d146d69be1",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image3",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043404698209",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "234bdb0d1af9347e5b96c4d146d69be1",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image11",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": -10.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043456295850",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8a7d1c7fd44ff4942a3ff4b48da4caac",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer2",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043472331693",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "56c9772ae0a064ffda239483f780fbcc",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer15",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 200.0,
+        "y": -10.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043480430577",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer15",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 200.0,
+        "y": -10.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043507143587",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "cb40e9181e37eff4a87329a4fabe55a2",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer21",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": -210.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043526045646",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "186a107676bb697428b7b9f914f233c3",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer15",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 200.0,
+        "y": -10.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043552411907",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "56c9772ae0a064ffda239483f780fbcc",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer17",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": -110.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043568152919",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "234bdb0d1af9347e5b96c4d146d69be1",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image9",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": 90.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043570075421",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "b04d83137440d481dabc3cb70e82804c",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image4",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043572058930",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8a7d1c7fd44ff4942a3ff4b48da4caac",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer6",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": 90.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043586234257",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "186a107676bb697428b7b9f914f233c3",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer20",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 200.0,
+        "y": -110.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043610681363",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "186a107676bb697428b7b9f914f233c3",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer22",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": -210.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043686495081",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "0c2c4c120258e224fb3960ebb6871eb5",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer11",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": -10.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043710820482",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "b04d83137440d481dabc3cb70e82804c",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image14",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": -10.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043758683339",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "90fcda5bc2ee14874aebcd5e6e517bce",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer12",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": -10.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043791190852",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "b04d83137440d481dabc3cb70e82804c",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image10",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 200.0,
+        "y": 90.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043808943507",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer12",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": -10.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043835163705",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer20",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 200.0,
+        "y": -110.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043856011114",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "328994af3235f0c47864e68c36f123a2",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer8",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 90.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043880021463",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8a7d1c7fd44ff4942a3ff4b48da4caac",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer4",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043888373490",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "b04d83137440d481dabc3cb70e82804c",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image12",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": -10.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043906369443",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "234bdb0d1af9347e5b96c4d146d69be1",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image23",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -210.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043916928929",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "56c9772ae0a064ffda239483f780fbcc",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer14",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": -10.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043921194889",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer2",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172043969752776",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "0c2c4c120258e224fb3960ebb6871eb5",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer1",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044011309812",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer4",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044030139927",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "186a107676bb697428b7b9f914f233c3",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer17",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": -110.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044112751131",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "186a107676bb697428b7b9f914f233c3",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer25",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 200.0,
+        "y": -210.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044113024711",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "b04d83137440d481dabc3cb70e82804c",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image8",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 90.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044158504899",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "b04d83137440d481dabc3cb70e82804c",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image6",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": 90.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044163015492",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer10",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 200.0,
+        "y": 90.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044177526292",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "56c9772ae0a064ffda239483f780fbcc",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer25",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 200.0,
+        "y": -210.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044210910547",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "234bdb0d1af9347e5b96c4d146d69be1",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image17",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": -110.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044297578710",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "0951d415c3bf50f4a9682d5465b6a540",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer4",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044330647773",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "328994af3235f0c47864e68c36f123a2",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer6",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": 90.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044339370564",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "56c9772ae0a064ffda239483f780fbcc",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer10",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 200.0,
+        "y": 90.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044341218755",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "56c9772ae0a064ffda239483f780fbcc",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer19",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": -110.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044363507948",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "186a107676bb697428b7b9f914f233c3",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer12",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": -10.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044410946390",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer25",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 200.0,
+        "y": -210.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044427949557",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer14",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": -10.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044451237371",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer18",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -110.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044496941008",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer22",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": -210.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044579115103",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "b04d83137440d481dabc3cb70e82804c",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image2",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044598160780",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "90fcda5bc2ee14874aebcd5e6e517bce",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer8",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 90.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044614405448",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8a7d1c7fd44ff4942a3ff4b48da4caac",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer5",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 200.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044681085802",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "0951d415c3bf50f4a9682d5465b6a540",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer2",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044705891949",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer23",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -210.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044722308210",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "56c9772ae0a064ffda239483f780fbcc",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer13",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -10.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044783653055",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "56c9772ae0a064ffda239483f780fbcc",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer18",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -110.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044783724437",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "56c9772ae0a064ffda239483f780fbcc",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer11",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": -10.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044791313286",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "234bdb0d1af9347e5b96c4d146d69be1",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image7",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": 90.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044809834605",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "234bdb0d1af9347e5b96c4d146d69be1",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image13",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -10.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044820746357",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "234bdb0d1af9347e5b96c4d146d69be1",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image15",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 200.0,
+        "y": -10.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044823445367",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "90fcda5bc2ee14874aebcd5e6e517bce",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer9",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": 90.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044840150229",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "b04d83137440d481dabc3cb70e82804c",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image24",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": -210.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044844573840",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "186a107676bb697428b7b9f914f233c3",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer24",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": -210.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044855648704",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "186a107676bb697428b7b9f914f233c3",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer14",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": -10.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044864973355",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "186a107676bb697428b7b9f914f233c3",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer18",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -110.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044867508862",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "234bdb0d1af9347e5b96c4d146d69be1",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image25",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 200.0,
+        "y": -210.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044877362526",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer5",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 200.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044881259377",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer11",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": -10.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044930440447",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer6",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": 90.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044949601909",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "e9652aba566604171bf3b319fe9e084d",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Dig_Two_Two",
+      "rectSize": {
+        "x": 400.0,
+        "y": 400.0
+      },
+      "anchoredPosition": {
+        "x": -50.0,
+        "y": 50.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044962546281",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "0c2c4c120258e224fb3960ebb6871eb5",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer5",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 200.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172044967462065",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer9",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": 90.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172045017480732",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer24",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": -210.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172045028838529",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer21",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": -210.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172045038173367",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer19",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": -110.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172045038919917",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "90fcda5bc2ee14874aebcd5e6e517bce",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer7",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": 90.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172045057355706",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "56c9772ae0a064ffda239483f780fbcc",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer23",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -210.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172045074915118",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "b04d83137440d481dabc3cb70e82804c",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image16",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": -110.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172045111887431",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "186a107676bb697428b7b9f914f233c3",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer23",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -210.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172045118828723",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "b04d83137440d481dabc3cb70e82804c",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image22",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": -210.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172045156711138",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8a7d1c7fd44ff4942a3ff4b48da4caac",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer1",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172045166444040",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer16",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": -110.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172045192240968",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "186a107676bb697428b7b9f914f233c3",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer13",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -10.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172045214628706",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer13",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -10.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172045238303618",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "0c2c4c120258e224fb3960ebb6871eb5",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer16",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": -110.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172045249753809",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "234bdb0d1af9347e5b96c4d146d69be1",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image5",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 200.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172045266316512",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "cb40e9181e37eff4a87329a4fabe55a2",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer3",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172045276834994",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8a7d1c7fd44ff4942a3ff4b48da4caac",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer3",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172045309266880",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer8",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 90.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172045310670624",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "35ec2cc8b81e54f75adabb458ea10dd6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "3Layer1",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172045314261945",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "56c9772ae0a064ffda239483f780fbcc",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "1Layer16",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": -110.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4574172045319742798",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "186a107676bb697428b7b9f914f233c3",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer19",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": -110.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "3997609450491361109",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "cb40e9181e37eff4a87329a4fabe55a2",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer2 (1)",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "4151677884116116327",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "186a107676bb697428b7b9f914f233c3",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer17 (1)",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": -110.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "5094152633886362181",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "328994af3235f0c47864e68c36f123a2",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer1 (1)",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "1353083009641251594",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "90d380a5e78cd324c9c6e19406f5f887",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer1 (4)",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "2070939723863812274",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "cb40e9181e37eff4a87329a4fabe55a2",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer2 (2)",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "2949450442434444402",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "328994af3235f0c47864e68c36f123a2",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer1 (2)",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    },
+    {
+      "type": "Image",
+      "fileID": "2588773511776634415",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "328994af3235f0c47864e68c36f123a2",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "2Layer1 (5)",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -200.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "TUTORIAL_MISSION_CONTAGION"
+    }
+  ],
+  "texts": [],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 119
+}

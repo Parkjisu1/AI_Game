@@ -1,0 +1,626 @@
+# CarMatch - Complete Game Design Specification
+# Generated from Design Intent Patterns (B1 level - no source numbers)
+# All numeric values derived from design judgment
+
+meta:
+  game_title: "Car Match"
+  genre: "Mobile 3D Puzzle"
+  platform: "Mobile (iOS / Android)"
+  spec_version: "1.0"
+  spec_level: "B1_design_intent"
+
+# ─────────────────────────────────────────
+# GRID
+# ─────────────────────────────────────────
+grid:
+  cell_size_world_units: 1.2        # world-space cell width/height
+  cell_height_world_units: 0.1      # thin slab; cars sit on top
+  board_configs:                    # width x height, unlocked by level range
+    - id: "small"
+      cols: 4
+      rows: 4
+      level_range: [1, 15]
+    - id: "medium"
+      cols: 5
+      rows: 5
+      level_range: [16, 50]
+    - id: "medium_wide"
+      cols: 6
+      rows: 5
+      level_range: [51, 100]
+    - id: "large"
+      cols: 6
+      rows: 6
+      level_range: [101, 200]
+    - id: "extra_large"
+      cols: 7
+      rows: 6
+      level_range: [201, 999]
+  orthogonal_movement_only: true    # no diagonal
+  border_padding_units: 0.5         # gap between board edge and screen edge
+  max_cars_per_cell: 1
+  empty_cell_passable: true
+  blocked_cell_passable: false
+
+# ─────────────────────────────────────────
+# CAR SYSTEM
+# ─────────────────────────────────────────
+car_system:
+  match_count: 3                    # exactly 3 same-type cars to clear
+  type_counts_by_level:             # how many distinct car types on board
+    - level_range: [1, 5]
+      types: 3
+    - level_range: [6, 20]
+      types: 4
+    - level_range: [21, 50]
+      types: 5
+    - level_range: [51, 100]
+      types: 6
+    - level_range: [101, 200]
+      types: 7
+    - level_range: [201, 999]
+      types: 8
+  max_type_pool: 12                 # total distinct car visual types in game
+  car_scale_world: 0.85             # fits within cell (85% of cell size)
+  car_y_offset: 0.1                 # slight float above grid surface
+  guarantee_solvable: true          # board gen must always produce solvable state
+  multiples_of_match: true          # total cars per type always multiple of 3
+
+# ─────────────────────────────────────────
+# HOLDER
+# ─────────────────────────────────────────
+holder:
+  capacity: 7                       # max slots before game-over
+  warning_threshold: 5              # highlight holder when 5+ slots filled
+  critical_threshold: 6             # strong warning at 6/7
+  display_style: "horizontal_bar"   # shown at bottom of screen
+  slot_width_world: 1.0
+  slot_height_world: 1.0
+  holder_y_position_screen_pct: 0.08  # 8% from bottom
+  animation_on_receive_sec: 0.15
+  animation_on_match_sec: 0.25
+  auto_match_on_three: true         # trigger match immediately when 3 same appear
+  match_scan_order: "left_to_right"
+
+temporary_storage:
+  capacity: 1                       # one extra parking slot
+  unlock_level: 10
+  cost_coins: 0                     # free to use (limited cooldown)
+  cooldown_sec: 0                   # no cooldown; limited by game flow
+  visual_position: "right_of_holder"
+  max_uses_per_level: 3             # hard cap per level attempt
+
+# ─────────────────────────────────────────
+# SCORING
+# ─────────────────────────────────────────
+scoring:
+  star_system:
+    max_stars: 3
+    star_3_condition: "moves <= par_moves"
+    star_2_condition: "moves <= par_moves * 1.4"
+    star_1_condition: "level_complete"   # any completion = 1 star
+  par_moves_formula: "ceil(total_cars / 3) * 1.5"
+    # example: 18 cars → 6 matches → par = 9 moves
+  coin_reward_by_stars:
+    1_star: 10
+    2_stars: 20
+    3_stars: 35
+  first_clear_bonus_coins: 15       # one-time bonus per level
+  replay_coin_factor: 0.5           # replays earn 50% of first-clear reward
+  perfect_clear_bonus:              # all stars on first attempt
+    enabled: true
+    coins: 25
+
+# ─────────────────────────────────────────
+# LEVEL GENERATION
+# ─────────────────────────────────────────
+level_generation:
+  total_levels_initial_ship: 250
+  content_cadence_new_levels_per_week: 10
+  car_density_by_stage:             # fraction of cells filled
+    - level_range: [1, 15]
+      density: 0.45
+    - level_range: [16, 50]
+      density: 0.55
+    - level_range: [51, 100]
+      density: 0.65
+    - level_range: [101, 200]
+      density: 0.70
+    - level_range: [201, 999]
+      density: 0.75
+  obstacle_introduction_level:
+    box: 20
+    wall: 35
+    locked_car: 55
+    ice: 80
+    tunnel: 40
+  obstacle_density_cap: 0.20        # max 20% of cells can be obstacles
+  level_fail_definition: "holder_full_and_no_valid_move"
+  retry_allowed: true
+  retry_cost: 0                     # free retry (lives system not used)
+  hint_auto_show_idle_sec: 8        # show path hint after 8s inactivity
+
+# ─────────────────────────────────────────
+# BOOSTERS
+# ─────────────────────────────────────────
+boosters:
+  initial_free_grants:              # given at tutorial / first unlock
+    undo: 5
+    shuffle: 3
+    super_undo: 2
+    magnet: 2
+
+  undo:
+    display_name: "Undo"
+    description: "Return the last moved car to its original cell."
+    initial_free: 5
+    cost_coins: 25
+    max_uses_per_level: 5
+    unlock_level: 1
+    reverts_holder_state: true
+    reverts_match_state: false      # completed matches cannot be undone
+
+  shuffle:
+    display_name: "Shuffle"
+    description: "Randomly rearrange all remaining cars on the board."
+    initial_free: 3
+    cost_coins: 60
+    max_uses_per_level: 3
+    unlock_level: 8
+    preserves_obstacles: true
+    preserves_holder: true
+    guarantee_solvable_after: true
+
+  super_undo:
+    display_name: "Super Undo"
+    description: "Return the last 3 moved cars to their original cells."
+    initial_free: 2
+    cost_coins: 80
+    max_uses_per_level: 2
+    unlock_level: 25
+    reverts_steps: 3
+
+  magnet:
+    display_name: "Magnet"
+    description: "Automatically pull one matching set of 3 cars to the holder."
+    initial_free: 2
+    cost_coins: 100
+    max_uses_per_level: 2
+    unlock_level: 40
+    targets: "most_common_type_on_board"
+    animation_sec: 0.8
+
+# ─────────────────────────────────────────
+# TUNNEL
+# ─────────────────────────────────────────
+tunnel:
+  description: >
+    Tunnels connect two edge cells. A car entering a tunnel entrance
+    exits from the paired tunnel exit on a different edge.
+  introduction_level: 40
+  max_tunnels_per_board: 3
+  tunnel_entrance_condition: "car_must_be_at_board_edge_cell"
+  entrance_indicator: "arch_visual_at_cell_edge"
+  exit_indicator: "matching_arch_color"
+  traversal_animation_sec: 0.35
+  car_invisible_during_traversal: true
+  exit_elasticity_scale_punch:
+    scale_up: 1.25
+    scale_down: 1.0
+    duration_sec: 0.2
+  paired_tunnel_colors: ["red", "blue", "green"]   # up to 3 pairs per board
+  blocks_non_edge_entry: true
+
+# ─────────────────────────────────────────
+# ANIMATION
+# ─────────────────────────────────────────
+animation:
+  car_move_to_holder:
+    type: "arc_slide"
+    duration_sec: 0.22
+    easing: "ease_in_out_cubic"
+    height_arc_world: 0.4           # subtle arc during travel
+  car_match_clear:
+    punch_scale_up: 1.3
+    punch_scale_down: 0.0
+    duration_sec: 0.3
+    particle_burst: true
+    sound_cue: "match_pop"
+  car_slide_on_grid:
+    type: "linear_path_slide"
+    speed_world_per_sec: 8.0        # fast but readable
+    min_duration_sec: 0.08
+    max_duration_sec: 0.4
+  tunnel_exit_bounce:
+    type: "elastic_scale"
+    duration_sec: 0.2
+    overshoot_scale: 1.25
+  board_intro:
+    type: "drop_in"
+    stagger_sec: 0.04               # each car drops 40ms after previous
+    drop_height_world: 3.0
+    duration_per_car_sec: 0.3
+  holder_slot_fill:
+    type: "scale_pop"
+    duration_sec: 0.15
+  holder_warning_flash:
+    enabled: true
+    interval_sec: 0.5
+    color_normal: "#FFFFFF"
+    color_warning: "#FFD700"
+    color_critical: "#FF4444"
+  camera_shake_on_fail:
+    enabled: true
+    magnitude: 0.15
+    duration_sec: 0.4
+  path_preview:
+    show_dotted_line: true
+    line_color: "#AAFFAA"
+    line_alpha: 0.7
+    update_on_hover: true
+
+# ─────────────────────────────────────────
+# OBSTACLES
+# ─────────────────────────────────────────
+obstacles:
+  box:
+    description: "Immovable block occupying one cell; cars cannot pass through."
+    passable: false
+    introduction_level: 20
+    visual: "wooden_crate"
+    destructible: false
+
+  wall:
+    description: "Thin barrier on a cell edge; blocks movement along that edge."
+    passable: false
+    placement: "cell_edge"          # placed between two cells
+    introduction_level: 35
+    visual: "stone_wall_segment"
+    destructible: false
+
+  locked_car:
+    description: "A car locked in place; cannot be tapped until unlocked by matching adjacent cars."
+    passable_by_other_cars: false
+    introduction_level: 55
+    unlock_condition: "two_cars_of_same_type_matched_while_in_holder"
+    visual_indicator: "padlock_overlay"
+    unlock_animation_sec: 0.4
+
+  ice:
+    description: "Car frozen in ice; must be tapped twice before it can move."
+    introduction_level: 80
+    taps_to_free: 2
+    visual: "ice_block_overlay"
+    crack_after_first_tap: true
+    free_animation_sec: 0.3
+
+# ─────────────────────────────────────────
+# PATHFINDING
+# ─────────────────────────────────────────
+pathfinding:
+  algorithm: "BFS"                  # Breadth-First Search for shortest orthogonal path
+  movement_directions: ["up", "down", "left", "right"]
+  blocked_by: ["box", "wall_on_edge", "locked_car", "other_car_in_cell"]
+  path_reservation:
+    enabled: true
+    description: >
+      When a car begins moving, its path cells are reserved to prevent
+      other taps from sending cars into the same path simultaneously.
+    reservation_release_on: "car_arrives_or_path_aborted"
+  no_path_feedback:
+    visual: "red_flash_on_tapped_car"
+    haptic: "light_error_vibration"
+    sound: "blocked_click"
+  simultaneous_moves_allowed: false  # sequential only; tap queuing
+  tap_queue_max: 1                   # one queued tap while current move plays
+
+# ─────────────────────────────────────────
+# DAILY REWARDS
+# ─────────────────────────────────────────
+daily_rewards:
+  description: "Log-in streak reward. Resets if player misses a day."
+  cycle_days: 7
+  schedule:
+    day_1:
+      coins: 50
+    day_2:
+      coins: 80
+    day_3:
+      coins: 100
+      booster: {type: "undo", count: 2}
+    day_4:
+      coins: 120
+    day_5:
+      coins: 150
+      booster: {type: "shuffle", count: 1}
+    day_6:
+      coins: 200
+    day_7:
+      coins: 300
+      booster: {type: "magnet", count: 1}
+  grace_period_hours: 4             # claim window each day
+  streak_break_reset_to_day: 1
+  popup_show_on_launch: true
+  first_ever_login_bonus_coins: 200  # generous start
+
+# ─────────────────────────────────────────
+# JOURNEY REWARDS
+# ─────────────────────────────────────────
+journey_rewards:
+  description: "Milestone rewards as player progresses through levels."
+  milestones:
+    - level: 5
+      reward: {coins: 100}
+    - level: 10
+      reward: {coins: 150, booster: {type: "undo", count: 3}}
+    - level: 20
+      reward: {coins: 200}
+    - level: 30
+      reward: {coins: 250, booster: {type: "shuffle", count: 2}}
+    - level: 50
+      reward: {coins: 400}
+    - level: 75
+      reward: {coins: 500, booster: {type: "super_undo", count: 2}}
+    - level: 100
+      reward: {coins: 700}
+    - level: 150
+      reward: {coins: 900, booster: {type: "magnet", count: 3}}
+    - level: 200
+      reward: {coins: 1200}
+    - level: 250
+      reward: {coins: 1500, booster: {type: "magnet", count: 5}}
+  display: "horizontal_milestone_track_in_main_menu"
+  unclaimed_indicator: "pulsing_gift_icon"
+
+# ─────────────────────────────────────────
+# ECONOMY
+# ─────────────────────────────────────────
+economy:
+  currency: "coins"
+  initial_coins: 500                # generous start; reduces early friction
+  max_coins_soft_cap: 99999
+  coin_sources:
+    - source: "level_completion"
+      typical_per_level: 20         # average 2-star reward
+    - source: "daily_reward"
+      typical_per_day: 140          # ~day 3-4 average
+    - source: "journey_milestone"
+      typical_total: 7000           # across 250 levels
+    - source: "first_clear_bonus"
+      typical_total: 3750           # 250 levels x 15
+  booster_store:
+    display: "in_level_pause_menu_and_main_shop"
+    bundle_deals_enabled: true
+    example_bundle:
+      name: "Starter Pack"
+      contents: {undo: 10, shuffle: 5, super_undo: 3, magnet: 3}
+      cost_coins: 500
+
+# ─────────────────────────────────────────
+# CAMERA
+# ─────────────────────────────────────────
+camera:
+  mode: "3D_top_view_fixed"
+  fov_degrees: 45
+  pitch_degrees: 55                 # angled top-down (not pure 90)
+  yaw_degrees: 0                    # board faces player directly
+  distance_from_board_center: 10.0  # world units; adjusted per board size
+  orthographic: false
+  auto_zoom:
+    enabled: true
+    description: "Camera distance scales with board size to keep full board visible."
+    small_board_distance: 8.5
+    medium_board_distance: 10.0
+    large_board_distance: 12.0
+    extra_large_board_distance: 14.0
+  transition_on_level_start_sec: 0.6
+  easing: "ease_out_cubic"
+  shake_enabled: true               # used on fail / critical events
+
+# ─────────────────────────────────────────
+# STATES
+# ─────────────────────────────────────────
+states:
+  game_states:
+    - LOADING
+    - MAIN_MENU
+    - LEVEL_SELECT
+    - LEVEL_INTRO           # board drops in, camera settles
+    - GAMEPLAY              # main interactive state
+    - CAR_MOVING            # path animation playing; input blocked
+    - MATCHING              # match animation playing; input blocked
+    - LEVEL_COMPLETE        # star reveal, reward collection
+    - LEVEL_FAIL            # holder full, no moves
+    - BOOSTER_ACTIVE        # booster animation / selection in progress
+    - PAUSED
+    - DAILY_REWARD_POPUP
+    - JOURNEY_REWARD_POPUP
+    - SETTINGS
+
+  input_allowed_states: ["GAMEPLAY"]
+  transitions:
+    GAMEPLAY -> CAR_MOVING: "valid_tap"
+    CAR_MOVING -> MATCHING: "car_arrives_and_match_triggered"
+    CAR_MOVING -> GAMEPLAY: "car_arrives_no_match"
+    MATCHING -> GAMEPLAY: "match_animation_complete"
+    MATCHING -> LEVEL_COMPLETE: "last_car_matched"
+    GAMEPLAY -> LEVEL_FAIL: "holder_full_detected"
+    LEVEL_FAIL -> GAMEPLAY: "booster_used_to_clear"  # magnet/undo can rescue
+    LEVEL_FAIL -> LEVEL_SELECT: "exit_button"
+
+# ─────────────────────────────────────────
+# ARCHITECTURE (Code Generation Hints)
+# ─────────────────────────────────────────
+architecture:
+  description: >
+    High-level system decomposition to guide code generation.
+    Each component maps to one or more classes.
+
+  grid_system:
+    responsibility: "Owns cell data, car placement, obstacle placement."
+    key_class: "GridManager"
+    layer: "Domain"
+    exposes:
+      - "GetCell(int col, int row) -> CellData"
+      - "PlaceCar(CarData, Vector2Int) -> bool"
+      - "RemoveCar(Vector2Int)"
+      - "IsPassable(Vector2Int) -> bool"
+
+  pathfinding_system:
+    responsibility: "BFS path calculation between two cells."
+    key_class: "PathfindingService"
+    layer: "Domain"
+    exposes:
+      - "FindPath(Vector2Int from, Vector2Int to) -> List<Vector2Int>"
+    depends_on: ["GridManager"]
+
+  path_reservation_system:
+    responsibility: "Reserve / release cells during active moves."
+    key_class: "PathReservationManager"
+    layer: "Domain"
+    exposes:
+      - "ReservePath(List<Vector2Int>, CarData)"
+      - "ReleasePath(CarData)"
+      - "IsCellReserved(Vector2Int) -> bool"
+
+  holder_system:
+    responsibility: "Manage holder slots; trigger match detection."
+    key_class: "HolderManager"
+    layer: "Domain"
+    exposes:
+      - "AddCar(CarData) -> HolderAddResult"
+      - "TriggerMatchCheck()"
+      - "IsFull -> bool"
+    events:
+      - "OnMatchCleared(CarType, int count)"
+      - "OnHolderFull()"
+
+  match_system:
+    responsibility: "Detect and process 3-of-a-kind matches in holder."
+    key_class: "MatchProcessor"
+    layer: "Domain"
+    exposes:
+      - "ProcessHolder(List<CarData>) -> MatchResult"
+    notes: "Stateless; given holder contents, returns matches found."
+
+  obstacle_system:
+    responsibility: "Polymorphic obstacle behaviors (block, wall, lock, ice)."
+    key_class: "ObstacleBase (abstract)"
+    layer: "Domain"
+    subclasses:
+      - "BoxObstacle"
+      - "WallObstacle"
+      - "LockedCarObstacle"
+      - "IceObstacle"
+    exposes:
+      - "IsPassable(Vector2Int from, Vector2Int to) -> bool"
+      - "OnCarInteract(CarData) -> InteractResult"
+
+  tunnel_system:
+    responsibility: "Detect tunnel entry; teleport car to exit cell."
+    key_class: "TunnelController"
+    layer: "Domain"
+    exposes:
+      - "IsTunnelEntrance(Vector2Int) -> bool"
+      - "GetExitCell(Vector2Int entrance) -> Vector2Int"
+    events:
+      - "OnTunnelTraversed(CarData, Vector2Int exit)"
+
+  booster_system:
+    responsibility: "Booster inventory, activation, effect application."
+    key_class: "BoosterManager"
+    layer: "Domain"
+    exposes:
+      - "UseBooster(BoosterType) -> BoosterResult"
+      - "GetCount(BoosterType) -> int"
+
+  temporary_storage:
+    responsibility: "One-slot overflow parking."
+    key_class: "TempStorageController"
+    layer: "Domain"
+    exposes:
+      - "Park(CarData) -> bool"
+      - "Retrieve() -> CarData"
+      - "IsOccupied -> bool"
+
+  game_state_machine:
+    responsibility: "Central FSM; owns state transitions, blocks input."
+    key_class: "GameStateMachine"
+    layer: "Core"
+    pattern: "State"
+
+  scoring_system:
+    responsibility: "Track moves, calculate stars and coin reward."
+    key_class: "ScoringCalculator"
+    layer: "Domain"
+    exposes:
+      - "RecordMove()"
+      - "CalculateStars() -> int"
+      - "CalculateCoinReward() -> int"
+
+  animation_coordinator:
+    responsibility: "Sequence and play car/holder/board animations."
+    key_class: "AnimationCoordinator"
+    layer: "Core"
+    pattern: "Command / Queue"
+    notes: "Emits events when animations complete so FSM can transition."
+
+  daily_reward_system:
+    responsibility: "Persist streak, calculate reward, show popup."
+    key_class: "DailyRewardManager"
+    layer: "Domain"
+
+  journey_reward_system:
+    responsibility: "Track milestones, grant rewards on level completion."
+    key_class: "JourneyRewardManager"
+    layer: "Domain"
+
+  level_data:
+    responsibility: "Serialized level layouts (ScriptableObject or JSON)."
+    key_class: "LevelDataConfig"
+    layer: "Core"
+    pattern: "Config"
+
+  coin_economy:
+    responsibility: "Persist coin balance, handle earn/spend transactions."
+    key_class: "CoinManager"
+    layer: "Core"
+    pattern: "Manager"
+
+# ─────────────────────────────────────────
+# VISUAL / UX RULES
+# ─────────────────────────────────────────
+ux_rules:
+  no_dynamic_ui_creation_in_code: true   # Inspector-assigned SerializeField only
+  forbidden_patterns:
+    - "new GameObject() + AddComponent<Image>()"
+    - "Find()"
+    - "FindObjectOfType() for UI"
+  canvas_settings:
+    render_mode: "Screen Space - Overlay"
+    reference_resolution: "1080x1920"
+    scale_mode: "Scale With Screen Size"
+    match_width_or_height: 0.5
+  input_method: "single_tap_only"
+  feedback_on_blocked_path: "visual + haptic"
+  tutorial_levels: [1, 2, 3, 4, 5]
+  tutorial_style: "highlight_tap_target_with_arrow"
+
+# ─────────────────────────────────────────
+# SCENES
+# ─────────────────────────────────────────
+scenes:
+  - name: "Title"
+    purpose: "Splash / loading screen"
+    required_elements: ["logo", "loading_bar", "version_text"]
+    auto_transition_to: "Main"
+    auto_transition_delay_sec: 2.5
+  - name: "Main"
+    purpose: "Main menu hub"
+    required_elements: ["play_button", "settings_button", "coin_display",
+                        "daily_reward_button", "journey_progress_bar"]
+  - name: "GameScene"
+    purpose: "Active puzzle gameplay"
+    required_elements: ["game_board", "holder_bar", "temp_storage_slot",
+                        "booster_buttons", "pause_button", "star_progress",
+                        "move_counter", "coin_display"]

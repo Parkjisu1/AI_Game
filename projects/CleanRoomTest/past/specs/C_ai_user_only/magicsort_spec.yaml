@@ -1,0 +1,530 @@
+# Magic Sort - Game Balance Sheet / Design Specification
+# Source: AI User Observation Data (BlueStacks ADB gameplay, Level 18)
+# Generation Method: C_ai_user_only (concept + AI observation, no ground truth)
+# Generated: 2026-02-19
+
+game:
+  title: "Magic Sort"
+  genre: "Water / Color Sort Puzzle"
+  platform: "Mobile (Android, iOS)"
+  orientation: "Portrait"
+  art_style: "2D cartoon, glass bottles, dark blue starry background, magical cat theme"
+
+# ─────────────────────────────────────────────
+# CORE MECHANICS
+# ─────────────────────────────────────────────
+core_mechanics:
+  bottle_capacity:
+    layers_per_bottle: 4
+    description: "Each bottle holds exactly 4 liquid layers stacked vertically"
+
+  pour_rules:
+    source_selection: "Tap source bottle to lift it slightly (visual feedback)"
+    target_selection: "Tap target bottle to execute pour"
+    pour_condition_same_color: "Top color of source must match top color of target"
+    pour_condition_empty: "Any color may be poured into a completely empty bottle"
+    pour_amount: "All consecutive matching top layers transfer in one pour"
+    pour_limit: "Cannot pour if target is full (4 layers)"
+    cancel: "Tap the already-selected source bottle again to deselect"
+    deadlock: "Level fails when no valid pour moves remain"
+
+  win_condition: "Every bottle is either completely filled with one color or completely empty"
+  fail_condition: "No valid moves remain and puzzle is unsolved (deadlock state)"
+
+  interaction_model: "Tap-tap (select source, then select target)"
+
+  bottle_layout:
+    layout_style: "Two-row grid (top row + bottom row)"
+    top_row_max_bottles: 7
+    bottom_row_max_bottles: 5
+
+# ─────────────────────────────────────────────
+# LIVES SYSTEM
+# ─────────────────────────────────────────────
+lives_system:
+  max_lives: 5
+  display: "Heart icons at top-center of main screen"
+  life_lost_on: "Level fail (deadlock) or manual give-up"
+  life_not_lost_on: "Completing a level regardless of move count"
+  regeneration:
+    time_per_life_minutes: 30
+    regeneration_cap: 5
+    offline_regeneration: true
+  full_lives_label: "전체 (Full)"
+  refill_options:
+    watch_ad: true
+    purchase_with_coins: false
+    iap_refill: true
+
+# ─────────────────────────────────────────────
+# LEVEL PROGRESSION
+# ─────────────────────────────────────────────
+level_progression:
+  total_levels: 500
+  hand_crafted_levels: 200
+  procedurally_generated_levels: 300
+  level_display_format: "레벨 {N} / Level {N}"
+
+  difficulty_tiers:
+    - tier: 1
+      name: "Beginner"
+      level_range: [1, 10]
+      color_count: 3
+      total_bottles: 5
+      empty_bottles: 2
+      blocker_layers: 0
+      notes: "Tutorial and onboarding levels, no hidden layers"
+
+    - tier: 2
+      name: "Easy"
+      level_range: [11, 30]
+      color_count: 5
+      total_bottles: 7
+      empty_bottles: 2
+      blocker_layers: 0
+      notes: "Introduces basic pour strategy"
+
+    - tier: 3
+      name: "Normal"
+      level_range: [31, 80]
+      color_count: 6
+      total_bottles: 8
+      empty_bottles: 2
+      blocker_layers: 2
+      notes: "Question mark blockers begin appearing"
+
+    - tier: 4
+      name: "Hard"
+      level_range: [81, 150]
+      color_count: 7
+      total_bottles: 9
+      empty_bottles: 2
+      blocker_layers: 4
+      notes: "Multiple bottles with hidden layers"
+
+    - tier: 5
+      name: "Expert"
+      level_range: [151, 300]
+      color_count: 8
+      total_bottles: 10
+      empty_bottles: 2
+      blocker_layers: 6
+      notes: "Strategic depth with many hidden layers"
+
+    - tier: 6
+      name: "Master"
+      level_range: [301, 500]
+      color_count: 9
+      total_bottles: 11
+      empty_bottles: 2
+      blocker_layers: 8
+      notes: "Maximum complexity, mirrors observed Level 18 layout at baseline"
+
+  color_counts_by_level:
+    level_1: 3
+    level_5: 4
+    level_10: 5
+    level_18: 9    # Observed: 9 distinct colors at Level 18
+    level_50: 7
+    level_100: 8
+    level_150: 9
+    level_200: 9
+    max_colors: 9
+
+  observed_at_level_18:
+    bottle_count: 11
+    top_row_bottles: 7
+    bottom_row_bottles: 4
+    empty_bottles: 2
+    color_count: 9
+    blocker_presence: true
+
+  journey_milestones:
+    - level: 10
+      reward_type: "Coins + Booster"
+      reward_amount: 200
+    - level: 15
+      reward_type: "Coins + Booster"
+      reward_amount: 200
+    - level: 25
+      reward_type: "Coins + Booster"
+      reward_amount: 300
+    - level: 30
+      reward_type: "Coins + Booster"
+      reward_amount: 300
+    milestone_interval_after_30: 10
+    milestone_reward_coins_after_30: 200
+
+# ─────────────────────────────────────────────
+# COLOR PALETTE
+# ─────────────────────────────────────────────
+color_palette:
+  total_colors: 9
+  colors:
+    - id: 0
+      name: "Lime Green"
+      hex: "#7ED321"
+    - id: 1
+      name: "Red"
+      hex: "#D0021B"
+    - id: 2
+      name: "Pink"
+      hex: "#FF69B4"
+    - id: 3
+      name: "Orange"
+      hex: "#F5A623"
+    - id: 4
+      name: "Yellow"
+      hex: "#F8E71C"
+    - id: 5
+      name: "Purple"
+      hex: "#9B59B6"
+    - id: 6
+      name: "Dark Blue"
+      hex: "#2C3E8C"
+    - id: 7
+      name: "Brown"
+      hex: "#8B4513"
+    - id: 8
+      name: "Periwinkle / Light Blue"
+      hex: "#7EC8E3"
+
+# ─────────────────────────────────────────────
+# SCORING
+# ─────────────────────────────────────────────
+scoring:
+  system: "Star rating (1–3 stars per level)"
+  currency_earned_per_star: 10
+
+  star_rating_criteria:
+    3_stars:
+      condition: "Solve within par moves"
+      description: "Optimal or near-optimal solution"
+    2_stars:
+      condition: "Solve within par_moves * 1.5"
+      description: "Reasonable but not optimal"
+    1_star:
+      condition: "Solve with any number of moves"
+      description: "Completion only"
+    0_stars:
+      condition: "Level failed (deadlock or quit)"
+
+  par_formula:
+    base: "(color_count * 4) - color_count"
+    description: "Total layers minus one free pour per color group"
+    example_level_18: 27   # (9 * 4) - 9 = 27 par moves
+    blocker_adjustment: "+2 moves per bottle containing blocker layers (uncertainty penalty)"
+
+  move_counter:
+    displayed: true
+    counts_undone_moves: false
+    resets_on_restart: true
+
+  coin_rewards:
+    level_complete_base: 30
+    per_extra_star: 10
+    first_time_3star_bonus: 50
+
+# ─────────────────────────────────────────────
+# BOOSTERS
+# ─────────────────────────────────────────────
+boosters:
+  display: "Bottom bar with purple-tinted icons during gameplay"
+  total_types: 3
+
+  types:
+    - id: "undo"
+      name: "Undo"
+      icon: "Circular arrow"
+      description: "Reverses the last pour action"
+      initial_count: 3
+      max_stack: 10
+      price_coins: 0
+      price_coins_restock: 200
+      restock_amount: 3
+      ad_restock: true
+      ad_restock_amount: 1
+      in_level_usage: true
+      cooldown_seconds: 0
+
+    - id: "shuffle"
+      name: "Shuffle"
+      icon: "Crossing arrows"
+      description: "Randomly redistributes all liquid layers across bottles"
+      initial_count: 3
+      max_stack: 10
+      price_coins: 0
+      price_coins_restock: 300
+      restock_amount: 3
+      ad_restock: true
+      ad_restock_amount: 1
+      in_level_usage: true
+      cooldown_seconds: 0
+      warning: "May create new deadlocks; does not guarantee solvability"
+
+    - id: "add_bottle"
+      name: "Add Bottle"
+      icon: "Bottle with plus sign"
+      description: "Adds one extra empty bottle to the board"
+      initial_count: 0
+      max_stack: 5
+      price_coins: 900
+      price_coins_restock: 900
+      restock_amount: 1
+      ad_restock: false
+      in_level_usage: true
+      cooldown_seconds: 0
+      notes: "Observed price: 900 coins from gameplay"
+
+# ─────────────────────────────────────────────
+# BLOCKERS
+# ─────────────────────────────────────────────
+blockers:
+  total_types: 1
+
+  types:
+    - id: "question_mark"
+      name: "Question Mark Layer"
+      symbol: "?"
+      visual: "Dark/opaque layer with white '?' symbol"
+      description: "Hides the actual color of the liquid layer beneath; player cannot see the color until the blocker is poured past"
+      unlock_level: 31
+      placement_rules:
+        positions_allowed: ["bottom", "second_from_bottom"]
+        max_per_bottle: 2
+        typical_count_per_bottle: 2
+      reveal_condition: "Blocker layer is reached during a pour; actual color revealed at that point"
+      strategic_effect: "Forces probabilistic planning; player must deduce hidden colors from remaining colors"
+      count_observed_level_18: 14
+      notes: "Observed on most bottles in top row at Level 18; approximately 1-2 per bottle"
+
+# ─────────────────────────────────────────────
+# ANIMATION
+# ─────────────────────────────────────────────
+animation:
+  pour_phases:
+    - phase: 1
+      name: "Lift"
+      description: "Selected bottle rises upward slightly to indicate selection"
+      duration_ms: 120
+      easing: "ease_out_cubic"
+      offset_pixels: 12
+
+    - phase: 2
+      name: "Tilt"
+      description: "Source bottle tilts toward target bottle"
+      duration_ms: 180
+      easing: "ease_in_out_sine"
+      tilt_degrees: 45
+
+    - phase: 3
+      name: "Pour Stream"
+      description: "Liquid flows as a stream from source spout to target opening"
+      duration_ms: 300
+      easing: "linear"
+      stream_width_px: 8
+      particle_count: 0
+
+    - phase: 4
+      name: "Fill"
+      description: "Target bottle liquid level rises to show new layer added"
+      duration_ms: 200
+      easing: "ease_out_quad"
+
+    - phase: 5
+      name: "Return"
+      description: "Source bottle tilts back and descends to original position"
+      duration_ms: 150
+      easing: "ease_in_out_sine"
+
+  total_pour_animation_ms: 950
+  selection_lift_pixels: 12
+  selection_lift_duration_ms: 120
+
+  win_animation:
+    type: "Sparkle burst + bottle glow per completed bottle"
+    duration_ms: 1500
+    sequence: "Bottles complete one by one with increasing fanfare"
+
+  blocker_reveal_animation:
+    type: "Question mark dissolves, color fades in"
+    duration_ms: 300
+    easing: "ease_out_expo"
+
+# ─────────────────────────────────────────────
+# MONETIZATION
+# ─────────────────────────────────────────────
+monetization:
+  currencies:
+    - id: "coins"
+      name: "Coins"
+      icon: "Gold star coin"
+      display_position: "Top-left corner"
+      starting_amount: 500
+      observed_amount_at_level_18: 1420
+      soft_currency: true
+      earnable_in_game: true
+
+  coin_sources:
+    level_completion: 30
+    star_bonus_per_star: 10
+    first_time_3star_bonus: 50
+    journey_milestone_reward: 200
+    daily_login_bonus: 50
+    ad_watch_reward: 100
+    achievement_reward: 100
+
+  coin_sinks:
+    add_bottle_booster: 900
+    undo_restock_3x: 200
+    shuffle_restock_3x: 300
+    life_refill_5x: 500
+
+  iap_packages:
+    - id: "starter"
+      name: "Starter Pack"
+      price_usd: 0.99
+      coins: 1000
+      bonus_boosters: 5
+    - id: "small"
+      name: "Small Coins"
+      price_usd: 1.99
+      coins: 2500
+    - id: "medium"
+      name: "Medium Coins"
+      price_usd: 4.99
+      coins: 7000
+    - id: "large"
+      name: "Large Coins"
+      price_usd: 9.99
+      coins: 16000
+    - id: "noads"
+      name: "Remove Ads"
+      price_usd: 2.99
+      coins: 0
+      removes_ads: true
+
+  ads:
+    rewarded_video:
+      reward_coins: 100
+      reward_life: 1
+      reward_booster_undo: 1
+      cooldown_minutes: 5
+    interstitial:
+      trigger: "Every 3 level attempts (fail or complete)"
+      can_be_skipped_after_seconds: 5
+      removed_by_no_ads_iap: true
+    banner:
+      placement: "Bottom of main screen"
+      removed_by_no_ads_iap: true
+
+# ─────────────────────────────────────────────
+# ARCHITECTURE
+# ─────────────────────────────────────────────
+architecture:
+  platform: "Unity (C#)"
+  design_patterns:
+    - pattern: "Singleton"
+      usage: "GameManager, LevelManager, CoinManager, LifeManager, BoosterManager"
+    - pattern: "State Machine"
+      usage: "GameState (Idle, Selecting, Pouring, Win, Fail, Paused)"
+    - pattern: "Command Pattern"
+      usage: "PourCommand with undo stack for Undo booster"
+    - pattern: "Observer / Event System"
+      usage: "OnCoinChanged, OnLifeChanged, OnLevelComplete, OnLevelFail"
+    - pattern: "Object Pool"
+      usage: "Liquid stream particles, bottle highlight effects"
+    - pattern: "Factory"
+      usage: "BottleFactory creates bottle GameObjects from LevelData"
+    - pattern: "ScriptableObject"
+      usage: "LevelData, BoosterConfig, ColorPalette"
+
+  state_management:
+    game_states:
+      - "Idle"
+      - "BottleSelected"
+      - "Pouring"
+      - "LevelComplete"
+      - "LevelFail"
+      - "Paused"
+    state_transitions:
+      Idle_to_BottleSelected: "Tap on non-empty bottle"
+      BottleSelected_to_Idle: "Tap selected bottle again (cancel)"
+      BottleSelected_to_Pouring: "Tap valid target bottle"
+      Pouring_to_Idle: "Pour animation completes, check deadlock"
+      Idle_to_LevelComplete: "All bottles satisfy win condition"
+      Idle_to_LevelFail: "Deadlock detected after move"
+
+  undo_stack:
+    type: "Stack<PourCommand>"
+    max_depth: 30
+    cleared_on: "Level restart, level complete, shuffle booster use"
+
+  level_data_format: "ScriptableObject / JSON"
+  level_data_fields:
+    - level_id
+    - color_count
+    - bottle_count
+    - empty_bottle_count
+    - bottle_contents
+    - blocker_positions
+    - par_moves
+    - tier
+
+  save_system:
+    backend: "PlayerPrefs (local) + optional cloud sync"
+    saved_fields:
+      - current_level
+      - coins
+      - lives
+      - lives_last_regenerated_timestamp
+      - booster_counts
+      - level_star_ratings
+      - settings
+
+  bottle_data_model:
+    class: "BottleData"
+    fields:
+      - "List<ColorLayer> layers  # index 0 = bottom, index 3 = top"
+      - "int capacity = 4"
+      - "bool IsEmpty"
+      - "bool IsFull"
+      - "bool IsSolved  # all same color AND full"
+      - "ColorLayer TopLayer"
+
+  color_layer_model:
+    class: "ColorLayer"
+    fields:
+      - "ColorID colorId"
+      - "bool isBlocker  # true = question mark layer"
+
+  deadlock_detection:
+    algorithm: "After each move, check all (source, target) pairs; if no valid pour exists, trigger LevelFail"
+    check_frequency: "After every completed pour animation"
+
+  ui_components:
+    gameplay:
+      - "CoinDisplay (top-left)"
+      - "LevelLabel (top-center)"
+      - "SettingsButton (top-right)"
+      - "BottleGrid (center)"
+      - "BoosterBar (bottom)"
+      - "MoveCounter (optional, near level label)"
+    main_screen:
+      - "CatCharacterScene (animated)"
+      - "CauldronAnimation"
+      - "PlayButton (center-bottom, shows level number)"
+      - "CoinDisplay (top-left)"
+      - "LivesDisplay (top-center)"
+      - "BottomNavBar (Trophy, Store, Home)"
+
+  scenes:
+    - name: "Title"
+      purpose: "Splash / loading screen"
+      transitions_to: "Main"
+    - name: "Main"
+      purpose: "Main menu with cat characters and cauldron"
+      transitions_to: "GameScene"
+    - name: "GameScene"
+      purpose: "Active puzzle gameplay"
+      transitions_to: "Main (on complete or quit)"

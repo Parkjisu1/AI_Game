@@ -1,0 +1,87 @@
+{
+  "fileName": "GoldPiggy",
+  "filePath": "E:/AIMED/TamplePuzzle/PuzzleAutomation/Assets\\Resources\\Prefabs\\Popup\\GoldPiggy.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 3,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "1058844994873547741",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "f47bb8a98508a43cbb4f9b696386b9ba",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Shine_Light",
+      "rectSize": {
+        "x": 584.0,
+        "y": 426.0
+      },
+      "anchoredPosition": {
+        "x": 37.0,
+        "y": 26.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "GoldPiggy"
+    },
+    {
+      "type": "Image",
+      "fileID": "1058844995128854869",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "da57dd83916fa4b6cbe823098fa4e379",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "GoldPig",
+      "rectSize": {
+        "x": 292.0,
+        "y": 325.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "GoldPiggy"
+    }
+  ],
+  "texts": [],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 3
+}

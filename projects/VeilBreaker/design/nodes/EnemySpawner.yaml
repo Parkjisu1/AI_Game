@@ -1,0 +1,84 @@
+metadata:
+  nodeId: "EnemySpawner"
+  version: "1.0.0"
+  phase: 2
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "DataManager"
+    - "ObjectPool"
+    - "EventManager"
+    - "GameConstants"
+  external:
+    - "UnityEngine"
+    - "System.Collections"
+    - "System.Collections.Generic"
+
+contract:
+  provides:
+    - "void Init(List<Transform> spawnPoints)"
+    - "void StartWave(WaveData waveData)"
+    - "void SpawnBoss(string bossId, Transform spawnPoint)"
+    - "void StopSpawning()"
+    - "int GetAliveEnemyCount()"
+    - "List<EnemyController> GetAliveEnemies()"
+  requires:
+    - "DataManager"
+    - "ObjectPool"
+    - "EventManager"
+
+tags:
+  layer: "Domain"
+  genre: "Idle"
+  role: "Manager"
+  system: "Battle"
+  majorFunctions:
+    - "FlowControl"
+    - "StateControl"
+  minorFunctions:
+    - "Spawn"
+    - "Despawn"
+    - "Iterate"
+    - "Notify"
+
+logicFlow:
+  - step: 1
+    tag: "Assign"
+    action: "Init: 스폰 포인트 목록 저장"
+    next: null
+  - step: 2
+    tag: "StateControl"
+    action: "StartWave: 상태 Spawning으로 전환"
+    next: 3
+  - step: 3
+    tag: "Iterate"
+    action: "waveData.enemies 순차 스폰: WaitForSeconds(spawnInterval) 코루틴"
+    next: 4
+  - step: 4
+    tag: "Spawn"
+    action: "ObjectPool.Spawn(enemyId, spawnPoint.position) → EnemyController.Init(enemyData)"
+    next: null
+  - step: 5
+    tag: "ResponseTrigger"
+    action: "EnemyController 사망 시 OnEnemyDie 이벤트 수신"
+    next: 6
+  - step: 6
+    tag: "ConditionCheck"
+    action: "_aliveEnemyCount == 0이면 WaveComplete 신호 → BattleManager에 통보"
+    next: null
+
+referencePatterns:
+  - source: "db/base/idle/Domain"
+    pattern: "ManagerMoveUpdate, ManagerIdleUpdate - AnimState 기반 적 AI"
+
+codeHints:
+  patterns:
+    - "public class EnemySpawner : MonoBehaviour (Singleton 불필요, BattleManager가 참조)"
+    - "private List<EnemyController> _aliveEnemies = new()"
+    - "IEnumerator SpawnRoutine(WaveData data): foreach enemy → Spawn → WaitForSeconds"
+    - "스폰 포인트: 화면 우측 외부 또는 지정 Transform[]"
+    - "OnEnemyDie: _aliveEnemies.Remove(enemy), count == 0이면 BattleManager.OnWaveCleared()"
+  avoidPatterns:
+    - "Instantiate 직접 사용 금지 → ObjectPool.Spawn 사용"
+    - "모든 적을 한꺼번에 스폰 금지 → 순차 스폰으로 스폰 스트레스 분산"

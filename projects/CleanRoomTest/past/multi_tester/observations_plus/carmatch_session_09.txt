@@ -1,0 +1,155 @@
+## Car Match - 상태/흐름 매핑 분석 (전문가 9)
+
+---
+
+### ⚠️ 세션 캡처 이슈 발견
+
+**모든 6개 스크린샷이 동일한 화면을 캡처하고 있습니다.**
+
+session_09의 모든 이미지(`01_main_menu` ~ `06_fail_popup`)는 앱 최초 실행 시의 **로딩 화면 + ToS 동의 팝업** 상태만을 담고 있습니다. 게임이 완전히 로드되기 전 단계에서 캡처가 반복된 것으로 보입니다.
+
+---
+
+### 1. 실제 관측된 화면
+
+| 화면 ID | 관측 내용 |
+|---------|----------|
+| SPLASH_WITH_TOS | 로딩 화면 위에 ToS 동의 팝업이 오버레이된 초기 상태 |
+
+**캡처된 화면 구성 요소:**
+```
+[배경 레이어]
+- CAR MATCH 로고 (금색 글자)
+- 게임 배경 아트 (장난감 블록, 건물, 하늘)
+- 하단 노란 자동차 일부
+- "Loading.." 텍스트 (하단)
+
+[팝업 레이어 - Welcome Modal]
+- 제목: "Welcome"
+- 본문: Terms of Service + Privacy Policy 동의 안내
+  - "If you are a returning player, please note that these have been recently updated."
+  - "By selecting the ACCEPT button below, you agree to our Terms of Service..."
+- 링크: Terms of Service (밑줄), Privacy Policy (밑줄)
+- 버튼: [ACCEPT] (단일 버튼, 어두운 배경)
+```
+
+**Loading 텍스트 변화 관찰** (유일한 차이):
+- `01`: "Loading.."
+- `02`: "Loading.."
+- `03`: "Loading.."
+- `04`: "Loading"
+- `05`: "Loading.."
+- `06`: "Loading."
+
+→ 로딩 애니메이션의 점(`.`) 변화로, 같은 상태에서 시간만 다르게 캡처된 것을 확인.
+
+---
+
+### 2. 파일명 기반 추론 상태 머신
+
+스크린샷으로 직접 확인은 불가하나, 파일명에서 의도된 상태 목록을 추론합니다.
+
+```
+[총 상태 수: 최소 9개]
+
+STATES:
+  S0: APP_LAUNCH         - 앱 실행
+  S1: LOADING            - 리소스 로딩 중
+  S2: TOS_POPUP          - 약관 동의 팝업 (최초 1회)  ← 유일하게 관측됨
+  S3: MAIN_MENU          - 메인 메뉴 (01_main_menu)
+  S4: GAMEPLAY           - 게임 플레이 중 (02_gameplay)
+  S5: PAUSED             - 일시정지 (03_pause_popup)
+  S6: COMPLETE           - 레벨 완료 (04_complete_popup)
+  S7: FAILED             - 레벨 실패 (06_fail_popup)
+  S8: SETTINGS           - 설정 화면 (05_settings)
+```
+
+---
+
+### 3. 전환 다이어그램 (추론 포함)
+
+```
+[앱 초기화 흐름]
+APP_LAUNCH
+    │ (자동)
+    ▼
+LOADING
+    │ (로드 완료)
+    ▼
+TOS_POPUP ──[ACCEPT 버튼 탭]──► MAIN_MENU
+(최초 실행 시만)                     │
+                                    │ [Play/Start 버튼]
+                                    ▼
+                                GAMEPLAY ◄──────────────────┐
+                                    │                        │
+                    ┌───────────────┼───────────────┐        │
+                    │               │               │        │
+              [Pause 버튼]    [조건: 성공]    [조건: 실패]   │
+                    │               │               │        │
+                    ▼               ▼               ▼        │
+                 PAUSED         COMPLETE          FAILED     │
+                    │               │               │        │
+             [Resume]  [Home]  [Next] [Home]  [Retry] [Home] │
+                    │      │      │      │       │      │    │
+                    └──────┼──────┘      └───────┘      │    │
+                           │                            │    │
+                           ▼                            └────┘
+                        MAIN_MENU
+                           │
+                    [Settings 버튼]
+                           ▼
+                        SETTINGS
+                           │
+                      [뒤로가기/Close]
+                           ▼
+                        MAIN_MENU
+```
+
+---
+
+### 4. 팝업 목록 (추론)
+
+| 팝업 ID | 출현 조건 | 주요 버튼 |
+|---------|----------|----------|
+| TOS_POPUP | 최초 실행 시 (또는 약관 업데이트 후) | ACCEPT |
+| PAUSE_POPUP | 게임 중 Pause 버튼 탭 | Resume, Home, (Restart?) |
+| COMPLETE_POPUP | 모든 차량 매칭 성공 | Next Level, Home |
+| FAIL_POPUP | 시간 초과 또는 이동 횟수 소진 | Retry, Home |
+
+---
+
+### 5. 설정 옵션 (추론)
+
+직접 확인 불가. Car Match 장르 일반적 항목:
+- BGM On/Off
+- SFX On/Off
+- 진동 On/Off
+- 알림 On/Off
+
+---
+
+### 6. 저장 동작 (ToS 팝업 근거)
+
+| 저장 항목 | 근거 |
+|----------|------|
+| ToS 동의 여부 | "returning player" 언급 → 재실행 시 팝업 미출현 |
+| 현재 레벨 진행도 | 표준 Match 게임 패턴 |
+| 설정값 (음량 등) | 표준 저장 패턴 |
+
+---
+
+### 7. 결론 및 권고
+
+```
+관측된 상태:  1개 (LOADING + TOS_POPUP)
+추론된 상태:  8개 (파일명 기반)
+총 예상 상태: 9개
+
+⚠️ 권고사항:
+session_09 캡처가 앱 초기화 단계에서 모두 같은 화면을
+반복 캡처하였습니다. 정확한 상태 분석을 위해
+다음 세션에서 각 화면 전환 후 캡처가 필요합니다:
+- ACCEPT 버튼 탭 후 → 메인 메뉴 도달 확인
+- Play 버튼 탭 후 → 게임플레이 화면 캡처
+- 각 팝업 출현 조건 달성 후 개별 캡처
+```

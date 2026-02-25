@@ -1,0 +1,249 @@
+## 채점 결과
+
+```yaml
+scoring:
+  game: "Car Match"
+  condition: "D1_10"
+  results:
+
+    - id: CM01
+      name: cell_size
+      ground_truth: "1.0"
+      generated: "1.0"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: CM02
+      name: car_types
+      ground_truth: "6"
+      generated: "6"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: CM03
+      name: match_count
+      ground_truth: "3"
+      generated: "3"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: CM04
+      name: movement_speed
+      ground_truth: "5.0"
+      generated: "3.5"
+      score: 0.4
+      note: "3.5 vs 5.0 — 30% 차이, 개념 맞으나 수치 부정확"
+
+    - id: CM05
+      name: model_scale
+      ground_truth: "0.4"
+      generated: "0.3"
+      score: 0.4
+      note: "0.3 vs 0.4 — 25% 차이"
+
+    - id: CM06
+      name: y_offset
+      ground_truth: "0.25"
+      generated: "0.15"
+      score: 0.4
+      note: "0.15 vs 0.25 — 40% 차이"
+
+    - id: CM07
+      name: holder_max_slots
+      ground_truth: "7"
+      generated: "7"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: CM08
+      name: slot_spacing
+      ground_truth: "1.0"
+      generated: "0.8"
+      score: 0.4
+      note: "0.8 vs 1.0 — 20% 차이 경계"
+
+    - id: CM09
+      name: grid_size_progression
+      ground_truth: "4x4→5x5→6x5→6x6→7x6 (5단계)"
+      generated: "4x4→5x5→6x5→6x6→7x6"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: CM10
+      name: scoring_formula
+      ground_truth: "stars * 10"
+      generated: "stars * 10"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: CM11
+      name: star_thresholds
+      ground_truth: "3★=totalCars / 2★=totalCars+5 / 1★=totalCars+10"
+      generated: "3★=totalCars / 2★=totalCars+5 / 1★=totalCars+10"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: CM12
+      name: max_levels
+      ground_truth: "200"
+      generated: "200"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: CM13
+      name: car_sets_formula
+      ground_truth: "3 + (levelId/10), max 8"
+      generated: "3 + (levelId/10), max 8"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: CM14
+      name: booster_types
+      ground_truth: "[undo, shuffle, super_undo, magnet] (4종)"
+      generated: "[undo, shuffle, super_undo, magnet]"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: CM15
+      name: booster_initial_counts
+      ground_truth: "{undo:5, shuffle:5, super_undo:3, magnet:3}"
+      generated: "{undo:5, shuffle:5, super_undo:3, magnet:3}"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: CM16
+      name: initial_coins
+      ground_truth: "500"
+      generated: "500"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: CM17
+      name: move_history_max
+      ground_truth: "50"
+      generated: "35"
+      score: 0.4
+      note: "35 vs 50 — 30% 차이, 개념 맞으나 수치 부정확"
+
+    - id: CM18
+      name: tunnel_spawn_count
+      ground_truth: "3 (Level<35) / 6 (Level≥35)"
+      generated: "3 (Level<35) / 5 (Level>=35)"
+      score: 0.7
+      note: "초반 3 정확, 후반 5 vs 6 — 17% 차이"
+
+    - id: CM19
+      name: tunnel_placement
+      ground_truth: "board edges (top, left, right - not bottom)"
+      generated: "board edges (top, left, right - not bottom)"
+      score: 1.0
+      note: "정확 일치 — 패턴카드 도움으로 정확 파악"
+
+    - id: CM20
+      name: pathfinding_algorithm
+      ground_truth: "A* with Manhattan distance"
+      generated: "A* with Manhattan distance"
+      score: 1.0
+      note: "정확 일치 — 패턴카드에서 알고리즘 명시"
+
+    - id: CM21
+      name: storage_count
+      ground_truth: "2 (left & right)"
+      generated: "2 (left & right)"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: CM22
+      name: daily_reward_progression
+      ground_truth: "7일 스트릭 (50→500코인)"
+      generated: "7일 스트릭 (50→500코인)"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: CM23
+      name: journey_frequency
+      ground_truth: "5레벨마다 마일스톤"
+      generated: "5레벨마다 마일스톤"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: CM24
+      name: camera_angle
+      ground_truth: "70°"
+      generated: "60°"
+      score: 0.4
+      note: "60 vs 70 — 14% 차이이나 시각적 차이 큼"
+
+    - id: CM25
+      name: base_height_5x5
+      ground_truth: "12.0"
+      generated: "10.0"
+      score: 0.4
+      note: "10 vs 12 — 17% 차이"
+
+    - id: CM26
+      name: state_count
+      ground_truth: "5 (Idle/Playing/Paused/Win/Fail)"
+      generated: "5 (Idle/Playing/Paused/Win/Fail)"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: CM27
+      name: namespace
+      ground_truth: "CarMatch"
+      generated: "CarMatch"
+      score: 1.0
+      note: "정확 일치 — 패턴카드에서 네임스페이스 확인"
+
+    - id: CM28
+      name: tap_mechanic
+      ground_truth: "탭 → 차량 홀더로 이동 (경로탐색)"
+      generated: "탭 → 차량 홀더로 이동 (경로탐색)"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: CM29
+      name: fail_condition
+      ground_truth: "Holder full (7) with no possible match"
+      generated: "Holder full (7) with no match"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: CM30
+      name: win_condition
+      ground_truth: "Board empty AND Holder empty AND no pending cars"
+      generated: "Board empty AND Holder empty"
+      score: 0.7
+      note: "핵심 조건 맞으나 'no pending cars' 조건 누락"
+
+    - id: CM31
+      name: pattern_count
+      ground_truth: "8 (Singleton/Pool/StateMachine/Observer/Factory/Command/Strategy/Component)"
+      generated: "6 (Singleton/Pool/StateMachine/Observer/Factory/Command)"
+      score: 0.4
+      note: "6 vs 8 — Strategy/Component 누락"
+
+    - id: CM32
+      name: serialization
+      ground_truth: "PlayerPrefs + JsonUtility (LevelData.json in Resources/)"
+      generated: "PlayerPrefs + JsonUtility (LevelData.json in Resources/)"
+      score: 1.0
+      note: "정확 일치 — 패턴카드에서 직렬화 상세 확인"
+
+  summary:
+    total: 32
+    sum: 26.6
+    average: 0.831
+```
+
+---
+
+### 점수 분포 요약
+
+| 점수 | 파라미터 수 | 해당 항목 |
+|------|-----------|----------|
+| **1.0** Exact | 22 | CM01, CM02, CM03, CM07, CM09, CM10, CM11, CM12, CM13, CM14, CM15, CM16, CM19, CM20, CM21, CM22, CM23, CM26, CM27, CM28, CM29, CM32 |
+| **0.7** Close | 2 | CM18, CM30 |
+| **0.4** Partial | 8 | CM04, CM05, CM06, CM08, CM17, CM24, CM25, CM31 |
+| **0.1** Wrong | 0 | - |
+| **0.0** Missing/Null | 0 | - |

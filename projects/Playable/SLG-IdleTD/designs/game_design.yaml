@@ -1,0 +1,326 @@
+---
+# ============================================================
+# LAYER 1: 게임 기획서 (game_design.yaml)
+# Project  : SLG-IdleTD
+# Platform : playable (HTML5 플레이어블 광고)
+# Created  : 2026-02-22
+# ============================================================
+
+game_overview:
+  title: "SLG-IdleTD"
+  genre: "SLG"
+  sub_genre:
+    - "Idle"
+    - "TowerDefense"
+  platform: "playable"
+  target_user: "midcore"
+  session_length: "30s"
+  one_liner: "타워를 배치하고 업그레이드하여 몰려오는 적 웨이브를 막아라!"
+  references:
+    - "Kingdom Rush (Tower Defense 기본 루프)"
+    - "Clash of Clans (SLG 비주얼 스타일)"
+    - "Idle Tower Defense (자동 공격 + 업그레이드 루프)"
+
+core_experience:
+  main_fun: "타워 배치와 업그레이드를 통한 전략적 방어"
+  emotion_goal: "긴장과 쾌감 - 적이 밀려올 때의 긴장감, 타워로 막아냈을 때의 성취감"
+  core_verbs:
+    - "배치하다 (Place)"
+    - "업그레이드하다 (Upgrade)"
+    - "방어하다 (Defend)"
+    - "쓸어버리다 (Clear)"
+
+core_loop:
+  main_loop:
+    description: "타워 배치 → 적 웨이브 격퇴 → 코인 획득 → 타워 강화"
+    flow:
+      - "빈 슬롯 탭 → 타워 배치 (코인 소모)"
+      - "적 웨이브 자동 행진 시작"
+      - "배치된 타워가 사거리 내 적 자동 공격"
+      - "적 처치 → 코인 드랍"
+      - "타워 탭 → 업그레이드 (코인 소모)"
+      - "Wave 클리어 → 다음 Wave 진입"
+    duration: "30s"
+
+  daily_loop:
+    description: "플레이어블 광고 단회성 플레이"
+    flow:
+      - "튜토리얼(2s) → Wave1 → Wave2 → Wave3 → CTA"
+
+  long_term_loop:
+    description: "CTA 전환 후 실제 게임 설치 유도"
+    flow:
+      - "광고 클리어 또는 실패 → INSTALL NOW CTA 표시"
+      - "사용자 다운로드 → 실제 게임 진입"
+
+session_structure:
+  start_condition: "광고 로드 완료 + 사용자 첫 탭"
+  progress_type: "manual"
+  end_conditions:
+    - "all_waves_clear: 3웨이브 모두 클리어 → Victory"
+    - "base_hp_zero: 적이 기지 도달 횟수 >= 3 → Defeat"
+    - "timer_expired: 30초 경과 → 즉시 CTA"
+  result_handling: "Victory/Defeat 화면 1~2초 표시 후 CTA 오버레이 전환"
+
+monetization:
+  main_bm: "cpi"
+  revenue_sources:
+    - "CTA 클릭 → 앱스토어/구글플레이 설치 전환"
+
+# ============================================================
+# Playable 전용 명세
+# ============================================================
+
+playable_spec:
+  duration: "30s"
+  levels: 3
+  fail_trigger: "wave3"
+  cta_text: "INSTALL NOW"
+  cta_trigger:
+    - "all_waves_clear"
+    - "base_hp <= 0"
+    - "timer >= 30"
+  target_networks:
+    - facebook
+    - meta
+  max_file_size: "2MB"
+  asset_mode: "provided"
+  tech_stack: "canvas"
+
+# ============================================================
+# 맵 레이아웃
+# ============================================================
+
+map_layout:
+  canvas_size: { width: 540, height: 960 }
+  view: "top-down"
+  style: "medieval_fantasy_slg"
+
+  tower_slots:
+    - id: 1
+      pos: { x: 135, y: 250 }
+      label: "경로 위쪽 좌"
+    - id: 2
+      pos: { x: 405, y: 250 }
+      label: "경로 위쪽 우"
+    - id: 3
+      pos: { x: 135, y: 450 }
+      label: "경로 중간 좌"
+    - id: 4
+      pos: { x: 405, y: 450 }
+      label: "경로 중간 우"
+    - id: 5
+      pos: { x: 135, y: 650 }
+      label: "경로 아래 좌"
+    - id: 6
+      pos: { x: 405, y: 650 }
+      label: "경로 아래 우"
+
+  enemy_path:
+    waypoints:
+      - { x: -30,  y: 350, label: "spawn" }
+      - { x: 135,  y: 350, label: "p1" }
+      - { x: 405,  y: 350, label: "p2" }
+      - { x: 405,  y: 550, label: "p3" }
+      - { x: 135,  y: 550, label: "p4" }
+      - { x: 570,  y: 550, label: "base_exit" }
+
+  ui_zones:
+    bottom_hud:
+      y_start: 820
+      height: 140
+      elements:
+        - "코인 표시 (좌측)"
+        - "타워 배치 버튼 (중앙)"
+        - "Wave 표시 (우측)"
+    top_hud:
+      y_start: 0
+      height: 60
+      elements:
+        - "기지 HP 하트 아이콘 (좌)"
+        - "타이머 (우)"
+
+# ============================================================
+# 경제 시스템
+# ============================================================
+
+economy:
+  start_coin: 100
+  costs:
+    tower_place: 50
+    tower_upgrade_lv2: 80
+    tower_upgrade_lv3: 120
+  rewards:
+    enemy_normal: 15
+    enemy_fast: 20
+    enemy_boss: 50
+
+# ============================================================
+# 타워 스탯
+# ============================================================
+
+tower_stats:
+  - level: 1
+    atk: 10
+    attack_interval: 1.0
+    range: 120
+  - level: 2
+    atk: 18
+    attack_interval: 0.8
+    range: 140
+  - level: 3
+    atk: 30
+    attack_interval: 0.6
+    range: 160
+
+# ============================================================
+# 적 스탯
+# ============================================================
+
+enemy_stats:
+  - type: "normal"
+    sprite: "MOB_Cactus01_red_D.png"
+    hp: 40
+    speed: 50
+    reward: 15
+    label: "일반 선인장"
+  - type: "fast"
+    sprite: "MOB_Cactus01_red_D.png"
+    hp: 25
+    speed: 90
+    reward: 20
+    label: "빠른 선인장"
+    scale: 0.8
+  - type: "boss"
+    sprite: "MOB_Boss_Cactus_Crown_D.png"
+    hp: 300
+    speed: 30
+    reward: 50
+    label: "보스 선인장"
+    scale: 1.5
+
+# ============================================================
+# 웨이브 구성
+# ============================================================
+
+waves:
+  - wave: 1
+    label: "Tutorial Wave"
+    difficulty: "easy"
+    enemies:
+      - { type: "normal", count: 5, spawn_interval: 1.5 }
+    tutorial_hint: "TAP TO PLACE TOWER!"
+    guaranteed_clear: true
+
+  - wave: 2
+    label: "Challenge Wave"
+    difficulty: "medium"
+    enemies:
+      - { type: "normal", count: 5, spawn_interval: 1.2 }
+      - { type: "fast",   count: 3, spawn_interval: 0.8, spawn_delay: 5.0 }
+    tutorial_hint: "TAP TOWER TO UPGRADE!"
+    fail_bait: false
+
+  - wave: 3
+    label: "Boss Wave"
+    difficulty: "hard"
+    enemies:
+      - { type: "normal", count: 3, spawn_interval: 1.0 }
+      - { type: "fast",   count: 3, spawn_interval: 0.8, spawn_delay: 3.0 }
+      - { type: "boss",   count: 1, spawn_delay: 8.0 }
+    fail_bait: true
+    note: "보스가 뚫릴 가능성 있음 → 긴장감 → CTA 유도"
+
+# ============================================================
+# 기지(Base) 설정
+# ============================================================
+
+base:
+  max_hp: 3
+  damage_per_leak: 1
+  position: { x: 540, y: 550 }
+  sprite: "WallA.png"
+
+# ============================================================
+# 에셋 목록
+# ============================================================
+
+assets:
+  mode: "provided"
+  source_path: "C:/Users/user/Desktop/Compressed/"
+  items:
+    - file: "Map_2048.png"
+      role: "background"
+      note: "전체 배경 맵 (540x960으로 스케일)"
+    - file: "TowerA.png"
+      role: "tower"
+      note: "타워 스프라이트 (Lv1~3 동일, 크기로 구분)"
+    - file: "WallA.png"
+      role: "base_wall"
+      note: "우측 기지 성벽 장식"
+    - file: "MOB_Cactus01_red_D.png"
+      role: "enemy_normal"
+      note: "일반/빠른 적 스프라이트"
+    - file: "MOB_Boss_Cactus_Crown_D.png"
+      role: "enemy_boss"
+      note: "보스 적 스프라이트"
+    - file: "Arrow.png"
+      role: "projectile"
+      note: "타워 발사 투사체"
+    - file: "Coin.png"
+      role: "coin_icon"
+      note: "HUD 코인 아이콘"
+    - file: "Button.png"
+      role: "ui_button"
+      note: "타워 배치 버튼 배경"
+    - file: "Effect_Star_1.png"
+      role: "hit_effect"
+      note: "투사체 명중 이펙트"
+    - file: "HPSlider.png"
+      role: "hp_bar"
+      note: "적 HP 바"
+
+# ============================================================
+# 게임 플로우
+# ============================================================
+
+game_flow:
+  - step: 1
+    state: "loading"
+    duration: "즉시"
+    description: "에셋 Base64 인라인 로드, 캔버스 초기화"
+
+  - step: 2
+    state: "tutorial"
+    duration: "최대 2s 또는 첫 탭까지"
+    description: "손가락 아이콘이 빈 슬롯 가리킴, 'TAP TO PLACE TOWER!' 텍스트"
+    interaction: "사용자가 슬롯 탭 → 첫 타워 무료 배치"
+
+  - step: 3
+    state: "wave1"
+    duration: "~8s"
+    description: "일반 적 5마리 행진, 타워 자동 사격"
+    tutorial_overlay: "'TAP TOWER TO UPGRADE!' 팝업 (클리어 직후)"
+
+  - step: 4
+    state: "wave2"
+    duration: "~8s"
+    description: "일반 5 + 빠른 3 혼합 웨이브"
+    note: "타워 추가 배치/업그레이드 유도"
+
+  - step: 5
+    state: "wave3"
+    duration: "~10s"
+    description: "보스 등장, 긴장감 고조"
+    note: "보스 HP 바 강조 표시"
+
+  - step: 6
+    state: "result"
+    duration: "1~2s"
+    description: "Victory(별 3개 이펙트) 또는 Defeat(빨간 오버레이)"
+
+  - step: 7
+    state: "cta"
+    description: "INSTALL NOW 버튼 오버레이 전체화면"
+    button_text: "INSTALL NOW"
+    trigger: "result 화면 또는 30초 타이머"

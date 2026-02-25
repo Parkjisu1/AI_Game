@@ -1,0 +1,1779 @@
+{
+  "fileName": "DOTweenAnimation_Advanced",
+  "filePath": "E:/AIMED/Luffy/IdleMoney1/Project/Assets\\Plugins\\Demigiant\\DOTweenPro Examples\\DOTweenAnimation_Advanced.unity",
+  "fileType": "scene",
+  "gameObjectCount": 44,
+  "canvases": [
+    {
+      "type": "Canvas",
+      "fileID": "1260203944",
+      "m_RenderMode": 1,
+      "m_SortingOrder": 0,
+      "gameObjectName": "Canvas (w button controls)",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    }
+  ],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "45542691",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "'Button (ID: move)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Button",
+      "fileID": "323853746",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "'Button (ID: move)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Button",
+      "fileID": "502741619",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "'Button (ID: rotate)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Button",
+      "fileID": "566135256",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "'Button (ID: rotate)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Button",
+      "fileID": "766204081",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "'Button (ID: toRed)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Button",
+      "fileID": "899835912",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "'Button (ID: toRed)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Button",
+      "fileID": "1095596652",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "'Button (ID: move)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Button",
+      "fileID": "1356883402",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Button (DOPlayNext)",
+      "rectSize": {
+        "x": 160.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 82.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Button",
+      "fileID": "1371900812",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "'Button (ID: rotate)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Button",
+      "fileID": "1492174308",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "'Button (ID: toRed)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Button",
+      "fileID": "1619597527",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "'Button (ID: move)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Button",
+      "fileID": "1644045638",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "'Button (ID: rotate)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Button",
+      "fileID": "1839080359",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "'Button (ID: toRed)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    }
+  ],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "45542692",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "'Button (ID: move)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Image",
+      "fileID": "323853747",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "'Button (ID: move)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Image",
+      "fileID": "502741620",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "'Button (ID: rotate)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Image",
+      "fileID": "566135257",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "'Button (ID: rotate)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Image",
+      "fileID": "766204082",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "'Button (ID: toRed)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Image",
+      "fileID": "899835913",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "'Button (ID: toRed)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Image",
+      "fileID": "1095596653",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "'Button (ID: move)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Image",
+      "fileID": "1356883403",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Button (DOPlayNext)",
+      "rectSize": {
+        "x": 160.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 82.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Image",
+      "fileID": "1371900813",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "'Button (ID: rotate)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Image",
+      "fileID": "1492174309",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "'Button (ID: toRed)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Image",
+      "fileID": "1619597528",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "'Button (ID: move)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Image",
+      "fileID": "1644045639",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "'Button (ID: rotate)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 100.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Image",
+      "fileID": "1839080360",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "'Button (ID: toRed)'",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": -100.0,
+        "y": -36.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    }
+  ],
+  "texts": [
+    {
+      "type": "Text",
+      "fileID": "83016931",
+      "m_FontSize": 14.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.196,
+        "g": 0.196,
+        "b": 0.196,
+        "a": 1.0
+      },
+      "m_Text": "'ID: toRed'",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Text",
+      "fileID": "191643492",
+      "m_FontSize": 14.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.196,
+        "g": 0.196,
+        "b": 0.196,
+        "a": 1.0
+      },
+      "m_Text": "'ID: move'",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Text",
+      "fileID": "215583162",
+      "m_FontSize": 14.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.196,
+        "g": 0.196,
+        "b": 0.196,
+        "a": 1.0
+      },
+      "m_Text": "'ID: move'",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Text",
+      "fileID": "386943565",
+      "m_FontSize": 14.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.196,
+        "g": 0.196,
+        "b": 0.196,
+        "a": 1.0
+      },
+      "m_Text": "'ID: toRed'",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Text",
+      "fileID": "467194357",
+      "m_FontSize": 14.0,
+      "m_Alignment": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "'<b>DOPlayAllById (Cube B as target)</b>",
+      "gameObjectName": "Description",
+      "rectSize": {
+        "x": 550.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Text",
+      "fileID": "608072284",
+      "m_FontSize": 14.0,
+      "m_Alignment": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "'<b>DORestartAllById (Cube B as target)</b>",
+      "gameObjectName": "Description",
+      "rectSize": {
+        "x": 550.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Text",
+      "fileID": "645240664",
+      "m_FontSize": 14.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.196,
+        "g": 0.196,
+        "b": 0.196,
+        "a": 1.0
+      },
+      "m_Text": "'ID: move'",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Text",
+      "fileID": "685170977",
+      "m_FontSize": 14.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.196,
+        "g": 0.196,
+        "b": 0.196,
+        "a": 1.0
+      },
+      "m_Text": "'ID: rotate'",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Text",
+      "fileID": "718047503",
+      "m_FontSize": 14.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.196,
+        "g": 0.196,
+        "b": 0.196,
+        "a": 1.0
+      },
+      "m_Text": "'ID: rotate'",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Text",
+      "fileID": "731424939",
+      "m_FontSize": 14.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.196,
+        "g": 0.196,
+        "b": 0.196,
+        "a": 1.0
+      },
+      "m_Text": "'ID: toRed'",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Text",
+      "fileID": "740664256",
+      "m_FontSize": 14.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.196,
+        "g": 0.196,
+        "b": 0.196,
+        "a": 1.0
+      },
+      "m_Text": "'ID: rotate'",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Text",
+      "fileID": "970591915",
+      "m_FontSize": 14.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.196,
+        "g": 0.196,
+        "b": 0.196,
+        "a": 1.0
+      },
+      "m_Text": "DOPlayNext",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Text",
+      "fileID": "1025578321",
+      "m_FontSize": 14.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.196,
+        "g": 0.196,
+        "b": 0.196,
+        "a": 1.0
+      },
+      "m_Text": "'ID: move'",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Text",
+      "fileID": "1158456310",
+      "m_FontSize": 14.0,
+      "m_Alignment": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "'<b>DOPlayById (Cube B as target)</b>",
+      "gameObjectName": "Description",
+      "rectSize": {
+        "x": 550.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Text",
+      "fileID": "1305249264",
+      "m_FontSize": 14.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.196,
+        "g": 0.196,
+        "b": 0.196,
+        "a": 1.0
+      },
+      "m_Text": "'ID: toRed'",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Text",
+      "fileID": "1477055228",
+      "m_FontSize": 14.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.196,
+        "g": 0.196,
+        "b": 0.196,
+        "a": 1.0
+      },
+      "m_Text": "'ID: rotate'",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    },
+    {
+      "type": "Text",
+      "fileID": "1812319722",
+      "m_FontSize": 14.0,
+      "m_Alignment": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "'<b>DORestartById (Cube B as target)</b>",
+      "gameObjectName": "Description",
+      "rectSize": {
+        "x": 550.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DOTweenAnimation_Advanced"
+    }
+  ],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 35
+}

@@ -1,0 +1,473 @@
+{
+  "fileName": "ShowADMoneyWin",
+  "filePath": "E:/AIMED/Luffy/IdleMoney1/Project/Assets\\IdleMoney\\Prefabs\\UI\\Windows\\ShowADMoneyWin.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 23,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [
+    {
+      "type": "CanvasGroup",
+      "fileID": "1942619075035437177",
+      "m_Alpha": 1,
+      "m_Interactable": 1,
+      "m_BlocksRaycasts": 1,
+      "m_IgnoreParentGroups": 0,
+      "gameObjectName": "ShowADMoneyWin",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      }
+    }
+  ],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "4233687877730740949",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "OkBtn",
+      "rectSize": {
+        "x": 200.0,
+        "y": 70.0
+      },
+      "anchoredPosition": {
+        "x": 6.7,
+        "y": -337.8
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShowADMoneyWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "5077629226115016164",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "OkWithADBtn",
+      "rectSize": {
+        "x": 235.0,
+        "y": 119.0
+      },
+      "anchoredPosition": {
+        "x": 11.9,
+        "y": -189.4
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShowADMoneyWin"
+    }
+  ],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "2819010329420399801",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 0.69803923
+      },
+      "m_Sprite": {
+        "fileID": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BlockPanel",
+      "rectSize": {
+        "x": 10000.0,
+        "y": 10000.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShowADMoneyWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "653796914968014780",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "184a158adac6bae49b12a9c40bd69e69",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Type9IconImg",
+      "rectSize": {
+        "x": 221.0,
+        "y": 146.0
+      },
+      "anchoredPosition": {
+        "x": 10.650024,
+        "y": 34.4
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShowADMoneyWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7192763082675617381",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 0.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "d3edc68eb166e4c69a52a94502c2f4a6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "OkBtn",
+      "rectSize": {
+        "x": 200.0,
+        "y": 70.0
+      },
+      "anchoredPosition": {
+        "x": 6.7,
+        "y": -337.8
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShowADMoneyWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "5943634809181945294",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "5a7bef7c791c7b842b5e03aba2d4744a",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "TitleBGImg",
+      "rectSize": {
+        "x": 493.0,
+        "y": 66.0
+      },
+      "anchoredPosition": {
+        "x": 11.5,
+        "y": 218.9
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShowADMoneyWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "423436700207472553",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "d9898a3315e9c4faebe8d39223cf6b65",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Icon",
+      "rectSize": {
+        "x": 40.5,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": -70.9,
+        "y": 5.1
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShowADMoneyWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7476094684689959243",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "9b690423b33944a19b77a840363d1af0",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "OkWithADBtn",
+      "rectSize": {
+        "x": 235.0,
+        "y": 119.0
+      },
+      "anchoredPosition": {
+        "x": 11.9,
+        "y": -189.4
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShowADMoneyWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "2708966341611281060",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "760adde9f007f804aa3f933e0bed858b",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "SpeechBubble",
+      "rectSize": {
+        "x": 747.0,
+        "y": 607.0
+      },
+      "anchoredPosition": {
+        "x": 822.0,
+        "y": -0.79992676
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShowADMoneyWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "262227561874124223",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "7e7559a6c2e3ddc46a90a37cf6d9e0bd",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "ManagerTag",
+      "rectSize": {
+        "x": 220.0,
+        "y": 65.0
+      },
+      "anchoredPosition": {
+        "x": 328.0,
+        "y": -300.5
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShowADMoneyWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "8820196558348453589",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "aafe9f128592fb74ba76e1065eb10b14",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Type9IconImg",
+      "rectSize": {
+        "x": 247.0,
+        "y": 157.0
+      },
+      "anchoredPosition": {
+        "x": 10.650024,
+        "y": 34.4
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShowADMoneyWin"
+    }
+  ],
+  "texts": [],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 23
+}

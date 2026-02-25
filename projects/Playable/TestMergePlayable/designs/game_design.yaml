@@ -1,0 +1,31 @@
+game_overview:
+  title: "Fruit Merge"
+  genre: "Puzzle"
+  sub_genre: ["Merge", "Casual"]
+  platform: "playable"
+  target_user: "casual"
+  session_length: "30s"
+  one_liner: "같은 과일을 합쳐서 더 큰 과일을 만드세요!"
+  references: ["Suika Game", "Watermelon Merge"]
+
+core_experience:
+  main_fun: "같은 과일 합치기의 만족감 + 연쇄 합성 쾌감"
+  emotion_goal: "성취감 → 욕구불만 → 설치 유도"
+  core_verbs: ["드래그", "합치기", "성장"]
+
+playable_spec:
+  duration: "30s"
+  levels: 3
+  fail_trigger: "level3"
+  cta_text: "PLAY NOW!"
+  cta_trigger:
+    - "fail_count >= 2"
+    - "all_levels_clear"
+    - "timer_expired"
+  target_networks:
+    - facebook
+    - ironsource
+    - applovin
+  max_file_size: "2MB"
+  asset_mode: "code_only"
+  tech_stack: "canvas"

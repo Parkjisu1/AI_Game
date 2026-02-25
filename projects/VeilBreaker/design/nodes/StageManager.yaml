@@ -1,0 +1,89 @@
+metadata:
+  nodeId: "StageManager"
+  version: "1.0.0"
+  phase: 2
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "DataManager"
+    - "CurrencyManager"
+    - "EventManager"
+    - "SaveManager"
+    - "GameConstants"
+  external:
+    - "UnityEngine"
+
+contract:
+  provides:
+    - "void StartStage(string stageId)"
+    - "void RetryStage()"
+    - "string GetCurrentStageId()"
+    - "UserStageData GetUserStageData()"
+    - "int GetMaxClearedStage()"
+    - "bool IsStageUnlocked(string stageId)"
+  requires:
+    - "Singleton"
+    - "DataManager"
+    - "EventManager"
+
+tags:
+  layer: "Domain"
+  genre: "Idle"
+  role: "Manager"
+  system: "Stage"
+  majorFunctions:
+    - "FlowControl"
+    - "StateControl"
+    - "ConditionCheck"
+  minorFunctions:
+    - "Assign"
+    - "Validate"
+    - "Notify"
+
+logicFlow:
+  - step: 1
+    tag: "Find"
+    action: "StartStage: DataManager.GetStageData(stageId) 조회"
+    next: 2
+  - step: 2
+    tag: "Validate"
+    action: "IsStageUnlocked 체크"
+    next: 3
+  - step: 3
+    tag: "StateControl"
+    action: "상태 InProgress로 전환"
+    next: 4
+  - step: 4
+    tag: "Notify"
+    action: "EventManager.Publish(OnStageStart, stageData)"
+    next: null
+  - step: 5
+    tag: "ConditionCheck"
+    action: "OnStageComplete 수신 시: 클리어 기록 갱신"
+    next: 6
+  - step: 6
+    tag: "Assign"
+    action: "maxClearedStage 업데이트, 별 3개 판정, 다음 스테이지 해금"
+    next: 7
+  - step: 7
+    tag: "DataSync"
+    action: "SaveManager 저장"
+    next: null
+
+referencePatterns:
+  - source: "CLAUDE.md"
+    pattern: "StageManager - 스테이지 진행, 챕터, 난이도 관리"
+
+codeHints:
+  patterns:
+    - "public class StageManager : Singleton<StageManager>"
+    - "private StageState _state = StageState.Idle"
+    - "private string _currentStageId"
+    - "StartStage: 현재 stageId 저장 → OnStageStart 이벤트 발행"
+    - "스테이지 ID 패턴: '챕터_스테이지' 예: '1_1', '1_10', '2_1'"
+    - "IsStageUnlocked: currentMaxCleared >= stageId - 1"
+  avoidPatterns:
+    - "BattleManager 직접 제어 금지 → 이벤트 기반 통신"
+    - "RetryStage: 동일 stageId로 StartStage 재호출"

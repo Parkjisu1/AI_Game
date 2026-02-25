@@ -1,0 +1,844 @@
+{
+  "fileName": "MachineBuyComponent",
+  "filePath": "E:/AIMED/Luffy/IdleMoney1/Project/Assets\\IdleMoney\\Prefabs\\UI\\SubPages\\MachineBuyComponent.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 25,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "9077746972313064607",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "BuyWithAD",
+      "rectSize": {
+        "x": 248.0,
+        "y": 97.0
+      },
+      "anchoredPosition": {
+        "x": -91.2,
+        "y": -251.90002
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineBuyComponent"
+    },
+    {
+      "type": "Button",
+      "fileID": "2794087399120796761",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "BuyWithMoneyNode",
+      "rectSize": {
+        "x": 202.0,
+        "y": 97.0
+      },
+      "anchoredPosition": {
+        "x": -91.4,
+        "y": -252.10002
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineBuyComponent"
+    },
+    {
+      "type": "Button",
+      "fileID": "9148819319156105832",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "PackageGradeImg",
+      "rectSize": {
+        "x": 230.0,
+        "y": 263.0
+      },
+      "anchoredPosition": {
+        "x": -74.2,
+        "y": 18.1
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineBuyComponent"
+    },
+    {
+      "type": "Button",
+      "fileID": "4655375764999150605",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "HelpNode",
+      "rectSize": {
+        "x": 288.0,
+        "y": 356.0
+      },
+      "anchoredPosition": {
+        "x": -0.4,
+        "y": 31.9
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineBuyComponent"
+    },
+    {
+      "type": "Button",
+      "fileID": "3977853284806051227",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "BuyWithInven",
+      "rectSize": {
+        "x": 202.0,
+        "y": 97.0
+      },
+      "anchoredPosition": {
+        "x": -91.4,
+        "y": -252.1
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineBuyComponent"
+    },
+    {
+      "type": "Button",
+      "fileID": "6511128270216191278",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "HelpBtn",
+      "rectSize": {
+        "x": 29.0,
+        "y": 29.0
+      },
+      "anchoredPosition": {
+        "x": -123.3,
+        "y": 189.5
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineBuyComponent"
+    },
+    {
+      "type": "Button",
+      "fileID": "8500597253540610494",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "BuyWithDiaNode",
+      "rectSize": {
+        "x": 202.0,
+        "y": 97.0
+      },
+      "anchoredPosition": {
+        "x": -91.1,
+        "y": -252.4
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineBuyComponent"
+    }
+  ],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "5531929400947671021",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "9b690423b33944a19b77a840363d1af0",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BuyWithAD",
+      "rectSize": {
+        "x": 248.0,
+        "y": 97.0
+      },
+      "anchoredPosition": {
+        "x": -91.2,
+        "y": -251.90002
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineBuyComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "6390896718886818435",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "d3edc68eb166e4c69a52a94502c2f4a6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BuyWithMoneyNode",
+      "rectSize": {
+        "x": 202.0,
+        "y": 97.0
+      },
+      "anchoredPosition": {
+        "x": -91.4,
+        "y": -252.10002
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineBuyComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "2356784358432000264",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "a061879d5d9b94833b1ef4fd59e471b1",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "PackageGradeImg",
+      "rectSize": {
+        "x": 230.0,
+        "y": 263.0
+      },
+      "anchoredPosition": {
+        "x": -74.2,
+        "y": 18.1
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineBuyComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "7440123366360179808",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 0.5019608
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8cbf0c754bcae4b598aeae1646c5d200",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "HelpNode",
+      "rectSize": {
+        "x": 288.0,
+        "y": 356.0
+      },
+      "anchoredPosition": {
+        "x": -0.4,
+        "y": 31.9
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineBuyComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "2555348223594014089",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "d9898a3315e9c4faebe8d39223cf6b65",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "ADIcon",
+      "rectSize": {
+        "x": 54.0,
+        "y": 40.0
+      },
+      "anchoredPosition": {
+        "x": -62.000015,
+        "y": 6.3
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineBuyComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "1354982368755436220",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "642e4fa7c24bf4ec6b7926e7a9575b04",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BuyWithInven",
+      "rectSize": {
+        "x": 202.0,
+        "y": 97.0
+      },
+      "anchoredPosition": {
+        "x": -91.4,
+        "y": -252.1
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineBuyComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "625334103436258221",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "820965872416645ba98d1002ce7689e9",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Icon1Img",
+      "rectSize": {
+        "x": 32.5,
+        "y": 32.5
+      },
+      "anchoredPosition": {
+        "x": -72.2,
+        "y": 21.500011
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineBuyComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "5292761852568474238",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "4e4bf1922c8e84c348c576ed2e8d4d37",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "MoneyIcon",
+      "rectSize": {
+        "x": 65.0,
+        "y": 65.0
+      },
+      "anchoredPosition": {
+        "x": -41.9,
+        "y": 3.3
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineBuyComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "1281073977874495176",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "443231f66ce804b73a88145340da4146",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Icon2Img",
+      "rectSize": {
+        "x": 20.0,
+        "y": 20.0
+      },
+      "anchoredPosition": {
+        "x": 15.0,
+        "y": 21.700012
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineBuyComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "4982106966175608668",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "321bad4c798c5452ab8926e7d973631b",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "HelpBtn",
+      "rectSize": {
+        "x": 29.0,
+        "y": 29.0
+      },
+      "anchoredPosition": {
+        "x": -123.3,
+        "y": 189.5
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineBuyComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "2040305495318448295",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "fbd6395bee273d747bb4a73785010f7f",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Ribbon",
+      "rectSize": {
+        "x": 253.0,
+        "y": 71.0
+      },
+      "anchoredPosition": {
+        "x": 4.1,
+        "y": 201.6
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineBuyComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "6318167335411980679",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "642e4fa7c24bf4ec6b7926e7a9575b04",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BuyWithDiaNode",
+      "rectSize": {
+        "x": 202.0,
+        "y": 97.0
+      },
+      "anchoredPosition": {
+        "x": -91.1,
+        "y": -252.4
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineBuyComponent"
+    }
+  ],
+  "texts": [],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 25
+}

@@ -1,0 +1,1475 @@
+{
+  "fileName": "SlotControlWin",
+  "filePath": "E:/AIMED/Luffy/IdleMoney1/Project/Assets\\IdleMoney\\Prefabs\\UI\\Windows\\SlotControlWin.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 69,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [
+    {
+      "type": "CanvasGroup",
+      "fileID": "4799025543361450093",
+      "m_Alpha": 1,
+      "m_Interactable": 1,
+      "m_BlocksRaycasts": 1,
+      "m_IgnoreParentGroups": 0,
+      "gameObjectName": "SlotControlWin",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      }
+    }
+  ],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "4876540610540917632",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "ChangeBtn",
+      "rectSize": {
+        "x": 56.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": -103.1,
+        "y": 163.3
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "8790243620071097261",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "UpgradeBtn",
+      "rectSize": {
+        "x": 217.0,
+        "y": 120.0
+      },
+      "anchoredPosition": {
+        "x": 191.0,
+        "y": -312.30002
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "6979957489588379931",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "X5Tgl",
+      "rectSize": {
+        "x": 68.0,
+        "y": 67.0
+      },
+      "anchoredPosition": {
+        "x": 81.6,
+        "y": -45.7
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "5213844173280999780",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "RemoveBtn",
+      "rectSize": {
+        "x": 56.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": 106.2,
+        "y": 163.3
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "6669991365280013393",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "X25Tgl",
+      "rectSize": {
+        "x": 68.0,
+        "y": 67.0
+      },
+      "anchoredPosition": {
+        "x": 168.59998,
+        "y": -45.700012
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "8451011491444362155",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "X1Tgl",
+      "rectSize": {
+        "x": 68.0,
+        "y": 67.0
+      },
+      "anchoredPosition": {
+        "x": -5.0999756,
+        "y": -45.700012
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    }
+  ],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "1622234843293418454",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "eeac12596e644ea4b893ef75d44e4875",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "PowerBoxBG",
+      "rectSize": {
+        "x": 94.0,
+        "y": 70.0
+      },
+      "anchoredPosition": {
+        "x": 301.8,
+        "y": 44.4
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7677017366978875617",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "5f3e55b1d24254a89943448eb2effa6f",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IconImg",
+      "rectSize": {
+        "x": 46.0,
+        "y": 38.0
+      },
+      "anchoredPosition": {
+        "x": -240.7,
+        "y": 0.5
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "5352431328225975096",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.14117648,
+        "g": 0.2901961,
+        "b": 0.16862746,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "228b9829034604390a6a7db4dd2fe3dc",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "CostBGImg",
+      "rectSize": {
+        "x": 185.0,
+        "y": 44.0
+      },
+      "anchoredPosition": {
+        "x": 0.6,
+        "y": -17.8
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "6119873577161506239",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "f4bf4b5292a648b46aebb816537581c5",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "ChangeBtn",
+      "rectSize": {
+        "x": 56.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": -103.1,
+        "y": 163.3
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7120271120965550068",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "26d897f03008743d8ae39a380b732eb3",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Background",
+      "rectSize": {
+        "x": 68.0,
+        "y": 67.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "8552341050927534350",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "37e0cdb3f2b2a4442ba1ea26ae3ce713",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IconImg",
+      "rectSize": {
+        "x": 20.0,
+        "y": 28.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 5.7
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "2752678726513098916",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "26d897f03008743d8ae39a380b732eb3",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Background",
+      "rectSize": {
+        "x": 68.0,
+        "y": 67.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7079890728848019210",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "17fe6e007cbb541b8baf39a9eb082107",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Common",
+      "rectSize": {
+        "x": 272.0,
+        "y": 272.0
+      },
+      "anchoredPosition": {
+        "x": 1.0,
+        "y": 61.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "1820273650714497922",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "5f3e55b1d24254a89943448eb2effa6f",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IconImg",
+      "rectSize": {
+        "x": 46.0,
+        "y": 38.0
+      },
+      "anchoredPosition": {
+        "x": -239.7,
+        "y": 1.5
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "6081117817580118488",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "eeac12596e644ea4b893ef75d44e4875",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "PowerBoxBG",
+      "rectSize": {
+        "x": 94.0,
+        "y": 70.0
+      },
+      "anchoredPosition": {
+        "x": 302.19995,
+        "y": 50.899994
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "2435570008208339341",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "d3edc68eb166e4c69a52a94502c2f4a6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "UpgradeBtn",
+      "rectSize": {
+        "x": 217.0,
+        "y": 120.0
+      },
+      "anchoredPosition": {
+        "x": 191.0,
+        "y": -312.30002
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "4307213026662426246",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "26d897f03008743d8ae39a380b732eb3",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Background",
+      "rectSize": {
+        "x": 68.0,
+        "y": 67.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "8444317157117242244",
+      "m_Type": 3,
+      "m_Color": {
+        "r": 0.764151,
+        "g": 0.5226504,
+        "b": 0.5226504,
+        "a": 0.69803923
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "74be941298e8b4120895f9ef06038969",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "ExpGaugeImgPredict",
+      "rectSize": {
+        "x": 535.0,
+        "y": 23.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "890143493708271708",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "31976cd17436949e38ddc8375462fb6d",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "ExpGaugeBG",
+      "rectSize": {
+        "x": 543.0,
+        "y": 29.0
+      },
+      "anchoredPosition": {
+        "x": 161.2,
+        "y": -190.3
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "5355658733775993191",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "541df258f9b9adc45bdd72d9dbd00597",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "RemoveBtn",
+      "rectSize": {
+        "x": 56.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": 106.2,
+        "y": 163.3
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "4527602055654145665",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "eeac12596e644ea4b893ef75d44e4875",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "FreeLvup_Box",
+      "rectSize": {
+        "x": 184.0,
+        "y": 70.0
+      },
+      "anchoredPosition": {
+        "x": 42.400146,
+        "y": -246.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "4654820049672624020",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 0.69803923
+      },
+      "m_Sprite": {
+        "fileID": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BlockPanel",
+      "rectSize": {
+        "x": 10000.0,
+        "y": 10000.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "8973875983925749207",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.61960787,
+        "g": 0.54509807,
+        "b": 0.44313726,
+        "a": 0.5019608
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "228b9829034604390a6a7db4dd2fe3dc",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "GradeBGImg",
+      "rectSize": {
+        "x": 36.0,
+        "y": 36.0
+      },
+      "anchoredPosition": {
+        "x": -105.2,
+        "y": -44.9
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "3149770329022575570",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "f1accf5e19df07049854a53440819532",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "PowerArrow",
+      "rectSize": {
+        "x": 25.0,
+        "y": 26.0
+      },
+      "anchoredPosition": {
+        "x": -270.5,
+        "y": 20.3
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7010709370791786831",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "f1accf5e19df07049854a53440819532",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "PowerArrow",
+      "rectSize": {
+        "x": 25.0,
+        "y": 26.0
+      },
+      "anchoredPosition": {
+        "x": -270.09998,
+        "y": 20.300165
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "8651878565361006533",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "642e4fa7c24bf4ec6b7926e7a9575b04",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Checkmark",
+      "rectSize": {
+        "x": 68.0,
+        "y": 67.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "5109594800622915575",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "fbf0ee1335f194d38b8c0e1295b58853",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BG",
+      "rectSize": {
+        "x": 912.0,
+        "y": 705.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "4803618544778432",
+      "m_Type": 3,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "74be941298e8b4120895f9ef06038969",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "ExpGaugeImg",
+      "rectSize": {
+        "x": 535.0,
+        "y": 23.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7223605810075804499",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.61960787,
+        "g": 0.54509807,
+        "b": 0.44313726,
+        "a": 0.5019608
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8cbf0c754bcae4b598aeae1646c5d200",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "EfficientBGImg",
+      "rectSize": {
+        "x": 302.0,
+        "y": 85.0
+      },
+      "anchoredPosition": {
+        "x": -285.7,
+        "y": -138.9
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "2165656370492775885",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "0ae3450d6527240a5a4fc3c7dae70b66",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "GradeImg",
+      "rectSize": {
+        "x": 36.0,
+        "y": 36.0
+      },
+      "anchoredPosition": {
+        "x": -1.6,
+        "y": -1.2
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "9189916759559040993",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "642e4fa7c24bf4ec6b7926e7a9575b04",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Checkmark",
+      "rectSize": {
+        "x": 68.0,
+        "y": 67.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "383403445634990373",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "90a53e84fdc0e458b927353112eb09dd",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IconImg",
+      "rectSize": {
+        "x": 31.0,
+        "y": 31.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 5.5
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "3013586688566788294",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.61960787,
+        "g": 0.54509807,
+        "b": 0.44313726,
+        "a": 0.5019608
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "228b9829034604390a6a7db4dd2fe3dc",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "FinalPowerBG",
+      "rectSize": {
+        "x": 543.0,
+        "y": 72.0
+      },
+      "anchoredPosition": {
+        "x": 165.9,
+        "y": -357.6
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "8784196612018611973",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "642e4fa7c24bf4ec6b7926e7a9575b04",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Checkmark",
+      "rectSize": {
+        "x": 68.0,
+        "y": 67.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7845598889364692267",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "4b244c87d58d643e3b659938e0c5d36e",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "MachineStatComponentType3",
+      "rectSize": {
+        "x": 300.0,
+        "y": 425.0
+      },
+      "anchoredPosition": {
+        "x": -289.0,
+        "y": -346.2
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "8394031546516903837",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.61960787,
+        "g": 0.54509807,
+        "b": 0.44313726,
+        "a": 0.5019608
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "228b9829034604390a6a7db4dd2fe3dc",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "BasicPowerBG",
+      "rectSize": {
+        "x": 543.0,
+        "y": 72.0
+      },
+      "anchoredPosition": {
+        "x": 165.5,
+        "y": -270.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SlotControlWin"
+    }
+  ],
+  "texts": [],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 70
+}

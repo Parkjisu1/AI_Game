@@ -1,0 +1,250 @@
+```yaml
+scoring:
+  game: "Tap Shift"
+  condition: "D10"
+  results:
+    - id: TS01
+      name: total_levels
+      ground_truth: "100"
+      generated: "100"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: TS02
+      name: max_lives
+      ground_truth: "3"
+      generated: "3"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: TS03
+      name: max_undo_count
+      ground_truth: "10"
+      generated: "10"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: TS04
+      name: max_hint_count
+      ground_truth: "3"
+      generated: "3"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: TS05
+      name: interstitial_frequency
+      ground_truth: "3레벨마다 1회"
+      generated: "3레벨마다 1회"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: TS06
+      name: arrow_move_speed
+      ground_truth: "15.0 (pixels/units per time unit), duration = distance / (speed * 100), clamp [0.25, 0.7]"
+      generated: "distance_proportional, clamp 0.25~0.70 (raw 상수 15.0 미기재)"
+      score: 0.7
+      note: "이동 방식(거리 비례)과 클램프 값은 정확하나, 핵심 상수 15.0 누락"
+
+    - id: TS07
+      name: max_arrow_clamp
+      ground_truth: "20"
+      generated: "20"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: TS08
+      name: star_rating_system
+      ground_truth: "3성=0회, 2성=1~2회, 1성=3~5회, 0성=6회+"
+      generated: "3성=0회, 2성=1~2회, 1성=3~5회, 0성=6회+"
+      score: 1.0
+      note: "전 구간 임계값 정확히 일치"
+
+    - id: TS09
+      name: base_unit
+      ground_truth: "60.0 (LevelGenerator.cs 그리드 기본 단위)"
+      generated: "1 (논리 픽셀 = 1 단위 추정)"
+      score: 0.1
+      note: "실제값 60.0과 완전히 다름. 1px로 추정한 것은 오류"
+
+    - id: TS10
+      name: position_snap
+      ground_truth: "30.0 (half-unit, 60의 절반)"
+      generated: "50 px"
+      score: 0.4
+      note: "스냅 개념은 맞으나 값 오류 (30.0 vs 50, 약 67% 차이)"
+
+    - id: TS11
+      name: duration_clamp
+      ground_truth: "[0.25, 0.7] seconds"
+      generated: "min 0.25s, max 0.70s"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: TS12
+      name: stretch_phase
+      ground_truth: "first 40%"
+      generated: "0.40 (전체 duration의 40%)"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: TS13
+      name: stretch_max
+      ground_truth: "1.6"
+      generated: "1.60"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: TS14
+      name: snap_phase
+      ground_truth: "last 60%"
+      generated: "0.60"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: TS15
+      name: arrow_colors
+      ground_truth: "up=#4CAF50(Green), down=#F44336(Red), left=#2196F3(Blue), right=#FF9800(Orange)"
+      generated: "up=#00BFFF(cyan-blue), down=#FF6600(orange), left=#44DD66(green), right=#BB44FF(purple)"
+      score: 0.1
+      note: "16진수 색상값 전부 오류, 방향-색상 매핑도 Green/Orange 방향이 뒤바뀜. 색상환 등간격 추정이 실제와 불일치"
+
+    - id: TS16
+      name: head_ratio
+      ground_truth: "0.35 (너비의 35%가 화살표 머리)"
+      generated: "0.35"
+      score: 1.0
+      note: "low confidence 추정이었으나 정확히 일치 (장르 관례 추정이 실측값과 부합)"
+
+    - id: TS17
+      name: shaft_height_ratio
+      ground_truth: "0.55 (높이의 55%가 축 두께)"
+      generated: "0.50 (머리 폭의 50%)"
+      score: 0.7
+      note: "값 차이 약 9%(0.55 vs 0.50)로 20% 이내, 기준 축(height vs head width)이 다르나 근사"
+
+    - id: TS18
+      name: collision_system
+      ground_truth: "AABB sweep-to-boundary, overlap_test=AABB rectangle"
+      generated: "AABB_sweep"
+      score: 1.0
+      note: "핵심 알고리즘 정확히 식별"
+
+    - id: TS19
+      name: performance_complexity
+      ground_truth: "O(n) per tap, n <= 20"
+      generated: "O(n) per tap"
+      score: 1.0
+      note: "복잡도 정확히 일치 (n<=20 상한은 TS07로 커버)"
+
+    - id: TS20
+      name: solver_algorithm
+      ground_truth: "DFS with backtracking"
+      generated: "DFS + backtracking"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: TS21
+      name: ui_reference_resolution
+      ground_truth: "720x1280"
+      generated: "1080x1920"
+      score: 0.1
+      note: "완전히 다른 해상도. 세로형 비율(9:16)만 일치하고 실제 기준 해상도는 720x1280"
+
+    - id: TS22
+      name: total_files
+      ground_truth: "50"
+      generated: "50"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: TS23
+      name: pattern_count
+      ground_truth: "9 (Singleton, ObjectPooling, Command, Observer, Factory, State, TemplateMethod, Adapter, Strategy)"
+      generated: "7 (Factory Pattern, State Pattern 누락)"
+      score: 0.4
+      note: "개념은 맞으나 수량 오류(7 vs 9). Factory와 State 패턴 미식별"
+
+    - id: TS24
+      name: state_count
+      ground_truth: "9 (None, Loading, MainMenu, LevelSelect, Playing, Paused, LevelComplete, LevelFail, Tutorial)"
+      generated: "9 (상한값 채택)"
+      score: 1.0
+      note: "정확히 일치. 상한값 추정이 실제 enum 수와 부합"
+
+    - id: TS25
+      name: serialization_format
+      ground_truth: "PlayerPrefs (LevelStar_{id}, LevelUnlock_{id}, SoundEnabled 등) + JSON (JsonUtility, Resources/Levels/level_NNN.json)"
+      generated: "PlayerPrefs + JSON (레벨 구성 데이터)"
+      score: 0.7
+      note: "엔진과 이중 구조(PlayerPrefs+JSON) 모두 정확. 키 포맷 부분 차이, 코인 항목 과잉 추정"
+
+    - id: TS26
+      name: arrow_directions
+      ground_truth: "4 (up, down, left, right)"
+      generated: "4"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: TS27
+      name: arrow_count_progression
+      ground_truth: "6구간 세분화 공식 (1-5/6-15/16-30/31-50/51-75/76-100), max_clamp=20"
+      generated: "3구간 근사 (초반1~5/중반5~10/후반10~20), max_clamp=20"
+      score: 0.7
+      note: "진행 방향성·상한 클램프 정확, 구체적 구간 공식 및 6단계 세분화 미포착"
+
+    - id: TS28
+      name: grid_size_range
+      ground_truth: "200/280/340/380/420/450 (6단계)"
+      generated: "초반~200, 중반300~400, 후반400~450 (3구간 근사)"
+      score: 0.7
+      note: "전체 범위(200~450)와 말단값 근사 일치. 중간 단계 280/340/380 구체값 미포착"
+
+    - id: TS29
+      name: tap_mechanic
+      ground_truth: "단일 탭 → AABB 히트 테스트 → sweep 충돌 판정 → 이동 또는 0.3s 진동 피드백 + 3단계 햅틱"
+      generated: "단일 탭, AABB 히트 테스트, sweep 충돌 판정, 이동/거부 피드백, 3단계 햅틱"
+      score: 1.0
+      note: "핵심 흐름 전체 정확히 기술"
+
+    - id: TS30
+      name: goal_condition
+      ground_truth: "모든 화살표를 보드 밖으로 밀어내면 클리어"
+      generated: "모든 화살표를 보드 밖으로 밀어내면 클리어"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: TS31
+      name: level_generation
+      ground_truth: "base_unit=60, position_snap=30, size_snap=60, overlap_gap=2, max_attempts=100, max_retries=20, fallback=min(1+lvl/10,8) 세로 적층"
+      generated: "절차적 생성, DFS 풀이 보장, 세로 정렬 폴백, 시도 횟수 제한 (수치값 전부 누락)"
+      score: 0.7
+      note: "핵심 개념(절차적, DFS 검증, 세로 정렬 폴백, 반복 제한) 정확. 구체적 상수값(60/30/2/100/20 등) 미추정"
+
+    - id: TS32
+      name: save_system
+      ground_truth: "PlayerPrefs: LevelStar_{id}, LevelUnlock_{id}, SoundEnabled, MusicEnabled, HapticEnabled, RemainingHints, AdsRemoved"
+      generated: "PlayerPrefs, 레벨별 키, 별점/클리어/코인/힌트/생명 저장"
+      score: 0.7
+      note: "엔진(PlayerPrefs)·레벨별 키 구조 정확. 코인·생명 항목은 GT에 없는 과잉 추정. Sound/Music/Haptic/AdsRemoved 키 미식별"
+
+  summary:
+    total: 32
+    sum: 26.0
+    average: 0.813
+```
+
+---
+
+**채점 요약 분석**
+
+| 점수 | 개수 | 항목 |
+|------|------|------|
+| **1.0** | 20개 | TS01~05, TS07~08, TS11~14, TS16, TS18~20, TS22, TS24, TS26, TS29~30 |
+| **0.7** | 7개 | TS06, TS17, TS25, TS27, TS28, TS31, TS32 |
+| **0.4** | 2개 | TS10, TS23 |
+| **0.1** | 3개 | TS09, TS15, TS21 |
+
+**주요 오류 원인**
+- **TS09 (0.1)**: base_unit을 1로 추정 → 실제 60.0. 그리드 단위를 논리픽셀과 혼동
+- **TS15 (0.1)**: 색상값 전부 오류. 게임 화면 미포착으로 실제 팔레트 확인 불가
+- **TS21 (0.1)**: 기준 해상도를 1080×1920으로 추정 → 실제 720×1280. 흔한 모바일 해상도 중 상위값을 선택한 오류

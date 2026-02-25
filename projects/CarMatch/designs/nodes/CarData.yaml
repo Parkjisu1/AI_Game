@@ -1,0 +1,48 @@
+# AI_기획서 - CarData Model
+nodeId: CarData
+type: class
+layer: Core
+role: Model
+phase: 0
+
+description: "차량 데이터 모델"
+
+using:
+  - System
+  - UnityEngine
+
+attributes:
+  - Serializable
+
+fields:
+  - name: id
+    type: string
+    access: public
+    description: "차량 고유 ID"
+
+  - name: color
+    type: CarColor
+    access: public
+    description: "차량 색상"
+
+  - name: position
+    type: Vector2Int
+    access: public
+    description: "보드 상 위치"
+
+  - name: isCollectable
+    type: bool
+    access: public
+    description: "수집 가능 여부"
+
+  - name: isInHolder
+    type: bool
+    access: public
+    description: "홀더에 있는지 여부"
+
+requires:
+  - CarColor
+
+output:
+  path: "Data/CarData.cs"
+  namespace: "CarMatch"

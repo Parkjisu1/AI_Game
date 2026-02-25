@@ -1,0 +1,6 @@
+playwright>=1.40.0
+pyyaml>=6.0
+
+# Optional: OCR for State Perception (Layer 1)
+# pip install paddlepaddle paddleocr   # Primary OCR (~100MB)
+# pip install pytesseract              # Fallback OCR (needs Tesseract binary)

@@ -1,0 +1,359 @@
+# Magic Sort 밸런스 시트 파라미터 추정
+
+관찰 데이터를 바탕으로 장르 표준값, 관찰된 시스템 구조, 직접 수치를 3계층으로 구분하여 추정합니다.
+
+---
+
+```yaml
+game: "Magic Sort"
+condition: "C10"
+
+# 추정 신뢰도 기준
+# high   : 관찰 데이터에서 직접 확인 또는 장르 내 예외 없는 표준
+# medium : 장르 표준 + 관찰 정황 보강
+# low    : 장르 통계적 추정, 관찰 근거 미약
+# null   : 추론 근거 부재, 게임 보드/내부 미관찰
+
+parameters:
+
+  # ── CORE CONSTANTS ──────────────────────────────────────────────
+
+  - id: MS01
+    name: bottle_max_height
+    value: 4
+    confidence: medium
+    source: >
+      Water Sort / Ball Sort 계열 소팅 퍼즐의 사실상 산업 표준.
+      4층 구조는 장르 내 90% 이상 타이틀이 채택.
+      가마솥 연출(6/10)과 색상 블록 로딩 이미지(6/10)가
+      표준 4층 병 구조와 일치. 게임 보드 직접 미관찰로 medium.
+
+  - id: MS02
+    name: colors_total
+    value: 8
+    confidence: low
+    source: >
+      소팅 퍼즐 팔레트 일반 범위 8~14색.
+      레벨 18(중초반) 플레이어가 챕터 1(1~19)에 위치하며
+      초반 난이도에 적합한 색상 수를 고려해 8색을 하한 추정.
+      게임 보드 미관찰로 직접 확인 불가.
+
+  - id: MS03
+    name: colors_playable
+    value: 6
+    confidence: low
+    source: >
+      레벨 18 기준 추산. 소팅 퍼즐의 전형적 색상 증가 패턴
+      (레벨 1~5: 3색 → 5레벨마다 +1색)을 적용하면
+      레벨 16~20 구간에서 6색 도달.
+      여정 마일스톤 간격(10, 15, 25, 30)이 5레벨 단위를 시사.
+
+  # ── LEVEL GENERATION ────────────────────────────────────────────
+
+  - id: MS04
+    name: builtin_levels
+    value: null
+    confidence: low
+    source: >
+      챕터 2 = 레벨 20~39(20레벨 단위) 확인(9/10).
+      전체 챕터 수 및 총 레벨 수 미관찰.
+      레벨맵·엔드 콘텐츠 화면이 단 한 번도 노출되지 않아
+      총량 추론 불가.
+
+  - id: MS05
+    name: procedural_after_level
+    value: null
+    confidence: low
+    source: >
+      레벨 생성 방식(핸드크래프트 vs 절차적 생성)
+      관찰 데이터에서 구분 불가.
+      게임 보드 미노출(8/10)로 레벨 구조 확인 불가.
+
+  - id: MS06
+    name: max_gen_attempts
+    value: null
+    confidence: low
+    source: >
+      엔지니어링 내부 파라미터. 관찰 가능한 UI/UX 데이터에서
+      추론 불가. 빌드 해시(0e9fe113...) 노출은 QA 빌드 여부만 시사.
+
+  # ── DIFFICULTY ──────────────────────────────────────────────────
+
+  - id: MS07
+    name: difficulty_tier_count
+    value: null
+    confidence: low
+    source: >
+      확인된 챕터: 챕터 1(1~19), 챕터 2 빗자루 비행(20~39).
+      2개 챕터는 확정(9/10)이나 전체 챕터/티어 수 미확인.
+      한국 모바일 퍼즐 평균 10~20 챕터를 감안해도
+      관찰 근거만으로 총수 특정 불가.
+
+  - id: MS08
+    name: tier_color_counts
+    value: null
+    confidence: low
+    source: >
+      게임 보드 미관찰(8/10). 티어별 실제 사용 색상 수 확인 불가.
+      장르 일반 패턴 [4,5,6,7,8] 가정은 가능하나
+      MS03 추정치가 검증되지 않은 상태에서 파생 추정은 신뢰도 부족.
+
+  - id: MS09
+    name: tier_level_ranges
+    value:
+      - [1, 19]       # 챕터 1: 확인(현재 레벨 18 = 챕터 1 내부)
+      - [20, 39]      # 챕터 2 빗자루 비행: 확인(9/10)
+      - [40, 59]      # 추정: 20레벨 단위 패턴 연장
+      - [60, 79]      # 추정
+      - [80, "?"]     # 이후 범위 불확실
+    confidence: low
+    source: >
+      챕터 2 레벨 범위(20~39) 직접 관찰(9/10).
+      현재 레벨 18이 챕터 2 진입 전 → 챕터 1 = 1~19 추론(8/10).
+      이후 챕터는 20레벨 단위 패턴 연장 가정.
+      3챕터 이후는 전적으로 추정, 실제 총 챕터 수 미확인.
+
+  - id: MS10
+    name: par_bonus_values
+    value: null
+    confidence: low
+    source: >
+      게임 보드 및 클리어 화면 미노출(8/10).
+      파 이동 수 대비 보너스 코인/점수 체계 확인 불가.
+      별점 시스템 존재 여부 자체가 불확실(MS23 참조).
+
+  - id: MS11
+    name: par_formula
+    value: null
+    confidence: low
+    source: >
+      게임 보드 미관찰. 파 계산이 이동 수 기반인지,
+      시간 기반인지, 혼합 방식인지 판별 불가.
+
+  # ── VISUAL ──────────────────────────────────────────────────────
+
+  - id: MS12
+    name: max_per_row
+    value: 4
+    confidence: low
+    source: >
+      소팅 퍼즐 표준 레이아웃. 세로 모바일(1/10 관찰)에서
+      4~6병/행 범위 중 4병/행이 가장 일반적.
+      게임 보드 미관찰로 직접 확인 불가.
+
+  - id: MS13
+    name: h_spacing
+    value: null
+    confidence: low
+    source: >
+      게임 보드 미관찰. 수평 간격 수치(px 또는 Unity unit)
+      추론 불가.
+
+  - id: MS14
+    name: v_spacing
+    value: null
+    confidence: low
+    source: >
+      게임 보드 미관찰. 수직 간격 수치 추론 불가.
+
+  # ── ANIMATION ───────────────────────────────────────────────────
+
+  - id: MS15
+    name: pour_total_duration
+    value: 0.5
+    confidence: low
+    source: >
+      소팅 퍼즐 장르 애니메이션 표준 범위 0.3~0.8초.
+      0.5초가 게임 리듬감(너무 빠르지도 느리지도 않음)에서
+      가장 보편적으로 채택되는 값.
+      실제 따르기 애니메이션 미관찰.
+
+  - id: MS16
+    name: lift_height
+    value: null
+    confidence: low
+    source: >
+      게임 보드 미관찰. 선택 시 병이 들어올려지는
+      픽셀/유닛 값 추론 불가.
+
+  - id: MS17
+    name: tilt_angle
+    value: null
+    confidence: low
+    source: >
+      게임 보드 미관찰. 병이 기울어지는 각도(°) 추론 불가.
+      장르 일반적 범위(90~135°)는 알려져 있으나
+      이 게임의 실제 값은 확인 불가.
+
+  # ── ECONOMY ─────────────────────────────────────────────────────
+
+  - id: MS18
+    name: starting_coins
+    value: 0
+    confidence: low
+    source: >
+      현재 코인 1,420(9/10), 전 세션 변화 없음(8/10).
+      여정 레벨 10 코인 보상 수령 확인(9/10) → 유일한 코인 유입.
+      세션 중 코인 소비 미관찰 → 1,420 = 시작 코인 + 레벨 10 보상.
+      모바일 퍼즐 일반 관행(0 시작 후 첫 보상으로 동기 부여)을 고려해 0 추정.
+      레벨 10 보상이 1,420코인 일괄 지급이었을 가능성도 존재.
+
+  - id: MS19
+    name: starting_gems
+    value: null
+    confidence: low
+    source: >
+      젬/다이아몬드 전 세션 미관찰. 프리미엄 재화 존재 여부
+      자체가 불확실(9. 미확인 항목 목록에 명시).
+
+  # ── GAMEPLAY ────────────────────────────────────────────────────
+
+  - id: MS20
+    name: booster_type_count
+    value: 3
+    confidence: low
+    source: >
+      여정 보상에서 확인된 부스터: 되돌리기(Undo) ×1(레벨 25)(9/10).
+      소팅 퍼즐 장르 표준 인게임 부스터 구성:
+      ① Undo(되돌리기) ② Add Slot(추가 병) ③ Hint(힌트).
+      게임 보드 미관찰로 실제 슬롯 UI 미확인(8/10).
+
+  - id: MS21
+    name: booster_initial_counts
+    value: null
+    confidence: low
+    source: >
+      여정 레벨 25 보상(되돌리기 ×1) = 아직 미수령 상태.
+      시작 시 보유 수량은 관찰 데이터에서 확인 불가.
+      일부 게임은 신규 유저 온보딩용 소량 제공(1~3개)하나
+      이 게임의 실제 값 미확정.
+
+  - id: MS22
+    name: undo_max_steps
+    value: 1
+    confidence: low
+    source: >
+      소팅 퍼즐 장르 표준. 되돌리기 부스터 1개 소모 = 1수 되돌리기.
+      테스터 2·7·10이 "되돌리기(Undo)"로 해석(4/10),
+      Undo 계열로 추정 결론(6. 부스터 섹션).
+      게임 보드 미관찰로 연속 Undo 허용 여부 미확인.
+
+  - id: MS26
+    name: blocker_type_count
+    value: null
+    confidence: low
+    source: >
+      게임 보드 미관찰(8/10). 레벨 18(챕터 1 말미)에서
+      블로커 도입 여부 확인 불가.
+      소팅 퍼즐은 일반적으로 중반(레벨 30~50 이후) 블로커 도입.
+      현재 레벨 기준 미도입 가능성이 있으나 단정 불가.
+
+  # ── SCORING ─────────────────────────────────────────────────────
+
+  - id: MS23
+    name: star_rating_3star
+    value: null
+    confidence: low
+    source: >
+      게임 보드 및 클리어 화면 전 세션 미노출(8/10).
+      별점 시스템 자체의 존재 여부 미확인.
+      일부 소팅 퍼즐은 별점 없이 클리어/실패만 적용.
+
+  - id: MS24
+    name: star_rating_2star_threshold
+    value: null
+    confidence: low
+    source: >
+      MS23과 동일. 클리어 화면 미노출로 기준값 추론 불가.
+
+  # ── ALGORITHM ───────────────────────────────────────────────────
+
+  - id: MS25
+    name: hint_scoring_system
+    value: null
+    confidence: low
+    source: >
+      힌트 기능 신뢰도 0/10(7. 특수 기능 표).
+      게임 보드 미노출로 힌트 UI 자체 미확인.
+      힌트 점수화 시스템(이동 제안 우선순위 알고리즘 등) 판별 불가.
+
+  # ── ARCHITECTURE ────────────────────────────────────────────────
+
+  - id: MS27
+    name: save_prefix
+    value: null
+    confidence: low
+    source: >
+      빌드 해시(0e9fe113e528adbc504bbaf56f1b403e)(5/10)와
+      세션 ID 노출(4/10) 확인. QA 빌드 특성 시사.
+      PlayerPrefs 키 접두사 등 저장 아키텍처는
+      화이트박스 접근 없이 추론 불가.
+
+  - id: MS28
+    name: pattern_count
+    value: null
+    confidence: low
+    source: >
+      코드 아키텍처 내부 파라미터. UI 관찰만으로
+      사용된 디자인 패턴(Singleton, Observer 등) 수 추론 불가.
+
+  - id: MS29
+    name: state_count
+    value: 6
+    confidence: low
+    source: >
+      관찰된 화면 상태 최소 4개:
+      ① Loading ② Hub/Home ③ Journey(팝업) ④ Settings(아이콘 확인, 내용 미관찰).
+      게임 보드 미노출이나 Playing/Paused/GameOver 상태 필수 추정.
+      합산: Loading + MainMenu + Playing + Paused + GameClear + GameOver = 6.
+      설정 화면을 별도 상태로 보면 7도 가능.
+
+  # ── GAMEPLAY (continued) ────────────────────────────────────────
+
+  - id: MS30
+    name: pour_mechanic
+    value: "tap_to_select"
+    confidence: medium
+    source: >
+      소팅 퍼즐 장르 표준 인터랙션.
+      [1차 탭: 소스 병 선택 → 들어올림 애니메이션]
+      [2차 탭: 대상 병 선택 → 따르기 애니메이션]
+      모바일 세로 화면(1/10 관찰) + 터치 UI 환경 확인.
+      장르 내 drag-and-drop보다 tap-to-select가 압도적 다수.
+      게임 보드 미관찰이나 장르 표준으로 medium 부여.
+
+  - id: MS31
+    name: win_condition
+    value: "all_bottles_single_color"
+    confidence: high
+    source: >
+      소팅 퍼즐 장르 보편적 승리 조건으로 사실상 예외 없음.
+      타이틀 'Magic Sort'(10/10) + 가마솥(정렬 타겟 추정 3/10) 맥락 일치.
+      '모든 병이 단일 색상으로 완전 채워진 상태 = 클리어'는
+      Water Sort / Ball Sort 계열 공통 정의.
+
+  - id: MS32
+    name: empty_bottles_formula
+    value: 2
+    confidence: medium
+    source: >
+      Water Sort / Ball Sort 계열 표준: 색상 수와 무관하게
+      고정 2개의 빈 병(버퍼 슬롯)을 제공.
+      일부 게임은 고난도에서 1개로 감소하거나
+      부스터로 추가 빈 병을 구매하는 방식 채택.
+      관찰된 '추가 병' 부스터 가능성(MS20)과 정합.
+      게임 보드 미관찰로 직접 확인 불가, medium 부여.
+```
+
+---
+
+## 신뢰도 요약
+
+| 신뢰도 | 파라미터 수 | 해당 파라미터 |
+|--------|------------|--------------|
+| **high** | 1 | MS31 |
+| **medium** | 4 | MS01, MS15, MS30, MS32 |
+| **low (값 있음)** | 14 | MS02, MS03, MS07*, MS09, MS12, MS18, MS20, MS22, MS29, MS03, MS07... |
+| **null** | 13 | MS04~06, MS08, MS10~11, MS13~14, MS16~17, MS19, MS21, MS23~28 |
+
+> **핵심 관찰 한계:** 전 세션에서 실제 게임 보드가 **단 한 번도** 캡처되지 않음(8/10). 이로 인해 병 레이아웃, 색상 수, 애니메이션, 부스터 슬롯, 블로커, 점수 체계 관련 파라미터(MS02~03, MS08, MS10~17, MS20~26, MS32)는 **장르 표준 추정**에 의존하며 실측 검증이 필요합니다.

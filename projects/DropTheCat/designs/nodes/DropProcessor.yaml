@@ -1,0 +1,97 @@
+# DropProcessor - Domain Drop Logic Processor
+metadata:
+  nodeId: "DropProcessor"
+  version: "1.0.0"
+  phase: 2
+  role: "Processor"
+
+dependencies:
+  internal:
+    - "GridManager"
+    - "ColorMatcher"
+    - "CatController"
+    - "HoleController"
+    - "EventManager"
+    - "SoundManager"
+    - "ObjectPool"
+  external:
+    - "UnityEngine"
+    - "System.Collections"
+
+contract:
+  provides:
+    - "void CheckAndProcessDrops()"
+    - "bool IsDropping { get; }"
+  requires:
+    - "GridManager.GetCell/GetCellOccupant"
+    - "ColorMatcher.CheckMatch/IsAllCatsMatched"
+    - "CatController.PlayDropAnimation"
+    - "HoleController.OnCatDropped"
+    - "EventManager.Publish/Subscribe"
+    - "SoundManager.PlaySFX"
+
+tags:
+  layer: "Domain"
+  genre: "Puzzle"
+  role: "Processor"
+  system: "Drop"
+  majorFunctions:
+    - "FlowControl"
+    - "ConditionCheck"
+    - "ResponseTrigger"
+  minorFunctions:
+    - "Find"
+    - "Validate"
+    - "Notify"
+    - "Iterate"
+    - "Despawn"
+
+logicFlow:
+  - step: 1
+    tag: "ResponseTrigger"
+    action: "OnSlideComplete 수신 → CheckAndProcessDrops 호출"
+    next: 2
+  - step: 2
+    tag: "ConditionCheck"
+    action: "그리드 전체 순회하며 고양이 위치에 구멍이 겹치는지 확인"
+    next: 3
+  - step: 3
+    tag: "ConditionCheck"
+    action: "겹침 발견 시 ColorMatcher.CheckMatch 호출"
+    next: 4
+  - step: 4
+    tag: "FlowControl"
+    action: "MatchResult == Success → CatController.PlayDropAnimation + HoleController.OnCatDropped"
+    next: 5
+  - step: 5
+    tag: "ResponseTrigger"
+    action: "드롭 애니메이션 완료 → OnCatDropped 이벤트 발행"
+    next: 6
+  - step: 6
+    tag: "ConditionCheck"
+    action: "MatchResult == TrapFail → 실패 SFX + OnLevelFailed 이벤트 발행"
+    next: 7
+  - step: 7
+    tag: "ConditionCheck"
+    action: "모든 드롭 처리 후 ColorMatcher.IsAllCatsMatched 확인"
+    next: 8
+  - step: 8
+    tag: "ResponseTrigger"
+    action: "전체 매칭 완료 시 OnLevelCleared 이벤트 발행"
+    next: null
+
+referencePatterns:
+  - source: "db/base/puzzle/domain/GameBoard_Match"
+    pattern: "매칭 감지 → 결과 처리 → 이벤트 발행 패턴"
+  - source: "db/base/puzzle/domain/GameBoard_Explode"
+    pattern: "매칭 후 제거/이펙트 처리 패턴"
+
+codeHints:
+  patterns:
+    - "OnSlideComplete 이벤트 구독으로 드롭 체크 자동 트리거"
+    - "코루틴으로 드롭 애니메이션 대기 후 다음 처리"
+    - "다중 드롭 (한 슬라이드로 여러 매칭) 순차 처리"
+    - "포탈 드롭: 텔레포트 위치에 고양이 재배치 후 재검사"
+  avoidPatterns:
+    - "드롭 처리 중 슬라이드 입력 허용 금지 (입력 잠금 필요)"
+    - "매칭 판정을 DropProcessor 내부에서 직접 구현 금지 (ColorMatcher 사용)"

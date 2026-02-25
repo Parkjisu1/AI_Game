@@ -1,0 +1,205 @@
+{
+  "fileName": "Loading",
+  "filePath": "E:/AIMED/Luffy/IdleMoney1/Project/Assets\\IdleMoney\\Scenes\\Loading.unity",
+  "fileType": "scene",
+  "gameObjectCount": 9,
+  "canvases": [
+    {
+      "type": "Canvas",
+      "fileID": "2005241584",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 0,
+      "gameObjectName": "Canvas",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    }
+  ],
+  "canvasScalers": [],
+  "canvasGroups": [
+    {
+      "type": "CanvasGroup",
+      "fileID": "6899145021099732634",
+      "m_Alpha": 1,
+      "m_Interactable": 1,
+      "m_BlocksRaycasts": 1,
+      "m_IgnoreParentGroups": 0,
+      "gameObjectName": "LoadingWin",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      }
+    }
+  ],
+  "buttons": [],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "1208612440807501226",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 0.69803923
+      },
+      "m_Sprite": {
+        "fileID": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BlockPanel",
+      "rectSize": {
+        "x": 10000.0,
+        "y": 10000.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Loading"
+    },
+    {
+      "type": "Image",
+      "fileID": "1599724322424171849",
+      "m_Type": 3,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "5a19fd381af89c44ba2cecc517558ee0",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Progress",
+      "rectSize": {
+        "x": 405.0,
+        "y": 16.0
+      },
+      "anchoredPosition": {
+        "x": 0.1,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Loading"
+    },
+    {
+      "type": "Image",
+      "fileID": "2545541821544510192",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "dd2acca75138a7946aff75b0271fa49e",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Icon",
+      "rectSize": {
+        "x": 425.0,
+        "y": 34.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -79.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Loading"
+    },
+    {
+      "type": "Image",
+      "fileID": "8614912620482470133",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "ee7821eb1e3cb6944b5487e7f2411236",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Image",
+      "rectSize": {
+        "x": 2823.0,
+        "y": 1587.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Loading"
+    }
+  ],
+  "texts": [],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 9
+}

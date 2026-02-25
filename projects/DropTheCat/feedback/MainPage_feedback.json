@@ -1,0 +1,25 @@
+{
+  "nodeId": "MainPage",
+  "genre": "Puzzle",
+  "role": "Handler",
+  "validationResult": "pass",
+  "score": 0.6,
+  "feedbacks": [
+    {
+      "category": "PATTERN.API_MISMATCH",
+      "line": 146,
+      "severity": "warning",
+      "description": "GameManager.Instance == null 대신 !GameManager.HasInstance를 사용해야 합니다.",
+      "suggestion": "if (!GameManager.HasInstance) return;"
+    },
+    {
+      "category": "READABLE.COMPLEXITY",
+      "line": 196,
+      "severity": "warning",
+      "description": "UpdateStarDisplay의 starImages 필터링 로직이 복잡합니다. parent 체크와 sprite 비교로 배경 이미지를 건너뛰는 방식은 프리팹 구조 변경 시 깨질 수 있습니다.",
+      "suggestion": "LevelButton 프리팹에 별도 Image[] stars 필드를 두는 LevelButtonUI 컴포넌트를 사용하는 것을 권장합니다."
+    }
+  ],
+  "contractChanged": false,
+  "timestamp": "2026-02-10T06:30:00Z"
+}

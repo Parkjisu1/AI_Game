@@ -1,0 +1,156 @@
+## Tap Shift: Arrow Escape Puzzle - 상태/흐름 매핑 분석
+
+> **[주의]** session_09의 6개 이미지가 모두 동일한 화면(메인 메뉴 + 약관 다이어그램)으로 캡처되었습니다. 아래 분석은 **실제 확인된 UI 요소** + **해당 화면에서 추론 가능한 상태**를 기반으로 작성합니다.
+
+---
+
+## 1. 화면 목록 (확인/추론)
+
+| # | 상태 ID | 화면명 | 확인 여부 |
+|---|---------|--------|-----------|
+| 1 | `CONSENT_DIALOG` | 약관 동의 팝업 | 직접 확인 |
+| 2 | `MAIN_MENU` | 레벨 맵 + PLAY 버튼 | 직접 확인 |
+| 3 | `GAMEPLAY` | 인게임 플레이 화면 | 파일명 추론 |
+| 4 | `PAUSE_POPUP` | 일시정지 팝업 | 파일명 추론 |
+| 5 | `COMPLETE_POPUP` | 레벨 완료 팝업 | 파일명 추론 |
+| 6 | `FAIL_POPUP` | 실패 팝업 | 파일명 추론 |
+| 7 | `SETTINGS` | 설정 화면/팝업 | 파일명 추론 |
+| 8 | `SHOP` | 상점 화면 | UI 아이콘 추론 |
+| 9 | `DAILY_REWARD_POPUP` | 데일리 선물 팝업 | Claim 버튼 추론 |
+| 10 | `NO_ADS_POPUP` | 광고 제거 구매 팝업 | ADS 버튼 추론 |
+
+---
+
+## 2. 전환 다이어그램 (State Transition Diagram)
+
+```
+[APP_START]
+    |
+    v
+[CONSENT_DIALOG]  <-- 최초 실행 시만
+    | "계속하기" 탭
+    v
+[MAIN_MENU]  <-- 앱 재시작 시 진입점 (저장 상태 복원)
+    |
+    |-- "PLAY" 버튼 탭 -----------------------> [GAMEPLAY]
+    |-- 설정(⚙) 버튼 탭 ---------------------> [SETTINGS] (오버레이)
+    |-- 장바구니(🛒) 버튼 탭 -----------------> [SHOP] (화면전환)
+    |-- "No Ads!" 버튼 탭 -------------------> [NO_ADS_POPUP] (팝업)
+    |-- "Claim" 버튼 탭 ---------------------> [DAILY_REWARD_POPUP] (팝업)
+    |
+[GAMEPLAY]
+    |-- 퍼즐 성공 (모든 화살표 탈출) ---------> [COMPLETE_POPUP]
+    |-- 시간/이동 초과 또는 막힘 -------------> [FAIL_POPUP]
+    |-- 일시정지 버튼 탭 --------------------> [PAUSE_POPUP] (오버레이)
+    |
+[PAUSE_POPUP]
+    |-- "Resume/계속" 탭 --------------------> [GAMEPLAY] (복귀)
+    |-- "Restart/다시하기" 탭 ----------------> [GAMEPLAY] (레벨 초기화)
+    |-- "Home/홈" 탭 -----------------------> [MAIN_MENU]
+    |-- "설정" 탭 (있을 경우) ----------------> [SETTINGS]
+    |
+[COMPLETE_POPUP]
+    |-- "Next/다음" 탭 ----------------------> [GAMEPLAY] (다음 레벨)
+    |-- "Home/홈" 탭 -----------------------> [MAIN_MENU]
+    |-- "Replay/다시하기" 탭 -----------------> [GAMEPLAY] (동일 레벨)
+    |-- 코인/보상 수령 (인라인) --------------> [COMPLETE_POPUP] (애니메이션)
+    |
+[FAIL_POPUP]
+    |-- "Retry/재도전" 탭 -------------------> [GAMEPLAY] (레벨 초기화)
+    |-- "Home/홈" 탭 -----------------------> [MAIN_MENU]
+    |-- 광고 시청 (힌트/추가기회) ------------> [GAMEPLAY] (이어서)
+    |
+[SETTINGS] (오버레이/팝업)
+    |-- 닫기(X) 탭 --------------------------> [이전 화면 복귀]
+    |
+[SHOP]
+    |-- 뒤로가기/닫기 -----------------------> [MAIN_MENU]
+    |
+[DAILY_REWARD_POPUP]
+    |-- 수령 후 닫기 -----------------------> [MAIN_MENU]
+    |
+[NO_ADS_POPUP]
+    |-- 구매 완료/닫기 ----------------------> [MAIN_MENU]
+```
+
+---
+
+## 3. 팝업 목록 및 출현 조건
+
+| 팝업 ID | 출현 조건 | 배경 dim | 확인 여부 |
+|---------|-----------|---------|---------|
+| `CONSENT_DIALOG` | 최초 앱 실행 (동의 기록 없음) | 없음 (오버레이) | 직접 확인 |
+| `PAUSE_POPUP` | 게임 중 일시정지 버튼 탭 | 있음 | 파일명 추론 |
+| `COMPLETE_POPUP` | 레벨 퍼즐 완전 해결 | 있음 | 파일명 추론 |
+| `FAIL_POPUP` | 실패 조건 충족 (이동 소진 등) | 있음 | 파일명 추론 |
+| `DAILY_REWARD_POPUP` | Claim 버튼 탭 (일일 1회) | 있음 | UI 추론 |
+| `NO_ADS_POPUP` | "No Ads!" 버튼 탭 | 있음 | UI 추론 |
+
+---
+
+## 4. 설정 화면 항목 (추론)
+
+메인 메뉴 우상단 ⚙ 아이콘으로 접근. 일반적인 퍼즐 게임 설정:
+
+| 항목 | 타입 | 예상 기본값 |
+|------|------|-----------|
+| 배경음악(BGM) | Toggle ON/OFF | ON |
+| 효과음(SFX) | Toggle ON/OFF | ON |
+| 진동(Vibration) | Toggle ON/OFF | ON |
+| 언어(Language) | 선택 | 기기 언어 |
+| 이용약관(Terms) | 링크 | - |
+| 개인정보처리방침(Privacy) | 링크 | - |
+
+---
+
+## 5. 저장 동작 (Persistent State)
+
+앱 종료 후 재시작 시 보존되어야 하는 상태:
+
+```
+[SAVE DATA]
+├── currentLevel         : int      - 현재 진행 레벨 번호 (예: 14)
+├── unlockedLevels       : int      - 해금된 최고 레벨
+├── coinBalance          : int      - 보유 코인 수 (예: 85)
+├── consentAccepted      : bool     - 약관 동의 여부 (다시 안 보임)
+├── noAdsPurchased       : bool     - 광고 제거 구매 여부
+├── lastDailyRewardDate  : date     - 마지막 Claim 날짜 (일일 제한)
+├── settings.bgm         : bool     - BGM ON/OFF
+├── settings.sfx         : bool     - SFX ON/OFF
+├── settings.vibration   : bool     - 진동 ON/OFF
+└── levelStars[]         : int[]    - 각 레벨 클리어 별점 (있을 경우)
+```
+
+**재시작 시 복원 흐름:**
+- `consentAccepted == true` → `CONSENT_DIALOG` 스킵, `MAIN_MENU` 바로 진입
+- `currentLevel` → 레벨 맵 해당 위치로 스크롤 + 그린 노드 표시
+- `coinBalance` → 상단 HUD에 즉시 반영
+- `noAdsPurchased` → "No Ads!" 버튼 숨김 또는 비활성화
+
+---
+
+## 6. 총 상태 수 요약
+
+| 구분 | 상태 수 |
+|------|--------|
+| 풀 화면 (Full Screen) | 3개 (MainMenu, Gameplay, Shop) |
+| 오버레이 팝업 | 6개 (Consent, Pause, Complete, Fail, DailyReward, NoAds) |
+| 오버레이 패널 | 1개 (Settings) |
+| **총 고유 상태** | **10개** |
+
+```
+총 상태 수: 10개
+├── [풀스크린 화면 3] MAIN_MENU / GAMEPLAY / SHOP
+├── [팝업 오버레이 6] CONSENT / PAUSE / COMPLETE / FAIL / DAILY_REWARD / NO_ADS
+└── [패널 오버레이 1] SETTINGS
+```
+
+---
+
+## 7. 핵심 관찰사항 및 이슈
+
+1. **이미지 캡처 이슈**: 6개 파일이 모두 동일 화면(메인메뉴+약관 팝업)으로 캡처됨. `session_09` 스크린샷 수집 과정에 오류 발생한 것으로 판단.
+2. **레벨 맵 구조**: 수직 스크롤 맵으로 레벨 14(현재, 초록), 레벨 16, 17(잠김, 회색) 확인 → **레벨 선택형 구조** 아님, **순차 진행형**.
+3. **코인 HUD(85)**: 메인메뉴와 게임씬 양쪽에 표시될 가능성 높음 → 전역 HUD 또는 씬 별 독립 UI.
+4. **CONSENT_DIALOG**: 배경 dim 없이 메인메뉴 위에 직접 오버레이 → GDPR/COPPA 최초 동의 전용.
+5. **전환 흐름 중 GAMEPLAY가 핵심 허브**: Pause / Complete / Fail 모두 GAMEPLAY에서 파생됨.

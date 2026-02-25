@@ -1,0 +1,50 @@
+node:
+  name: SpriteFactory
+  layer: Game
+  genre: Puzzle
+  role: Factory
+  file: SpriteFactory.cs
+  namespace: BlockBlast.Game
+
+spec:
+  description: "코드로 Texture2D/Sprite 생성. 프리팹 없이 모든 비주얼 지원"
+  type: static
+  provides:
+    - "CreateSquareSprite"
+    - "CreateRoundedSprite"
+    - "CreateCircleSprite"
+    - "GetColorFromIndex"
+
+  methods:
+    - name: CreateSquareSprite
+      params: [{ name: size, type: int, default: 64 }, { name: color, type: Color }]
+      returns: Sprite
+      static: true
+      logic: "size x size Texture2D 생성, 전체 색상 채우기, Sprite.Create"
+
+    - name: CreateRoundedSprite
+      params: [{ name: size, type: int, default: 64 }, { name: color, type: Color }, { name: radius, type: int, default: 8 }]
+      returns: Sprite
+      static: true
+      logic: "둥근 모서리 사각형 스프라이트"
+
+    - name: CreateCircleSprite
+      params: [{ name: size, type: int, default: 64 }, { name: color, type: Color }]
+      returns: Sprite
+      static: true
+      logic: "원형 스프라이트"
+
+    - name: GetColorFromIndex
+      params: [{ name: index, type: int }]
+      returns: Color
+      static: true
+      logic: "팔레트에서 인덱스로 색상 반환"
+
+  color_palette:
+    - "#FF4444"
+    - "#4488FF"
+    - "#44DD44"
+    - "#FFCC00"
+    - "#BB44FF"
+    - "#FF8800"
+    - "#00CCCC"

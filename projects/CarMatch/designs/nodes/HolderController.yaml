@@ -1,0 +1,111 @@
+# AI_기획서 - HolderController
+nodeId: HolderController
+type: class
+layer: Domain
+role: Controller
+phase: 3c
+
+description: "홀더 상태 관리, 차량 추가/제거, 매칭 검사"
+
+using:
+  - System
+  - System.Collections.Generic
+  - UnityEngine
+
+baseClass: MonoBehaviour
+
+fields:
+  - name: maxSize
+    type: int
+    access: private
+    default: 7
+    description: "홀더 최대 크기"
+
+  - name: cars
+    type: List<CarController>
+    access: private
+    description: "홀더 내 차량 리스트"
+
+  - name: matchChecker
+    type: MatchChecker
+    access: private
+    serializeField: true
+
+  - name: carSlots
+    type: Transform[]
+    access: private
+    serializeField: true
+    description: "차량 배치 슬롯 위치"
+
+provides:
+  - signature: "bool AddCar(CarController car)"
+    description: "홀더에 차량 추가"
+    logic:
+      - "가득 찼으면 false 반환"
+      - "차량을 리스트에 추가"
+      - "차량을 슬롯 위치로 이동"
+      - "같은 색상 차량끼리 정렬"
+      - "매칭 검사 실행"
+      - "true 반환"
+
+  - signature: "void RemoveMatchedCars(List<CarController> matched)"
+    description: "매칭된 차량들 제거"
+    logic:
+      - "각 차량을 리스트에서 제거"
+      - "차량 오브젝트 풀로 반환"
+      - "나머지 차량 재정렬"
+      - "OnMatchFound 이벤트 발생"
+
+  - signature: "bool IsFull()"
+    description: "홀더가 가득 찼는지 확인"
+    logic:
+      - "cars.Count >= maxSize 반환"
+
+  - signature: "int GetCarCount()"
+    description: "현재 차량 수 반환"
+
+  - signature: "void SetMaxSize(int size)"
+    description: "최대 크기 설정"
+
+  - signature: "void Clear()"
+    description: "홀더 초기화"
+
+  - signature: "CarController GetLastCar()"
+    description: "마지막 추가된 차량 반환 (Undo용)"
+
+  - signature: "List<CarController> GetCarsByColor(CarColor color)"
+    description: "특정 색상의 차량 리스트 반환"
+
+private_methods:
+  - signature: "void SortByColor()"
+    description: "같은 색상끼리 정렬"
+    logic:
+      - "색상별로 그룹화"
+      - "연속된 위치에 배치"
+
+  - signature: "void CheckMatch()"
+    description: "매칭 검사 및 처리"
+    logic:
+      - "matchChecker.CheckMatch(cars) 호출"
+      - "매칭된 차량이 있으면 RemoveMatchedCars 호출"
+
+  - signature: "void RearrangeSlots()"
+    description: "슬롯 재배치"
+
+requires:
+  - CarController
+  - MatchChecker
+  - CarColor
+  - ObjectPool
+  - EventBus
+
+events:
+  publish:
+    - OnMatchFound
+    - OnHolderFull
+  subscribe:
+    - OnCarCollected
+
+output:
+  path: "Controller/HolderController.cs"
+  namespace: "CarMatch"

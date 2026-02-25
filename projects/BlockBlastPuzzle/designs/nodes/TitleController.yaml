@@ -1,0 +1,36 @@
+node:
+  name: TitleController
+  layer: Game
+  genre: Puzzle
+  role: Controller
+  file: TitleController.cs
+  namespace: BlockBlast.Game
+
+spec:
+  description: "타이틀 씬. 로고 표시, 로딩 바, Main 씬 전환"
+  provides:
+    - "StartLoading"
+    - "TransitionToMain"
+
+  members:
+    - name: _loadingBar
+      type: UnityEngine.UI.Image
+      access: private
+    - name: _loadingProgress
+      type: float
+      access: private
+
+  methods:
+    - name: Start
+      logic: |
+        코드로 UI 생성:
+          - 배경 (다크 블루)
+          - 타이틀 텍스트 "BLOCK BLAST"
+          - 로딩 바 (하단)
+        로딩 코루틴 시작
+    - name: LoadSequence
+      type: coroutine
+      logic: |
+        가짜 로딩 (2초)
+        진행도 0 → 1.0
+        완료 시 Main 씬 로드

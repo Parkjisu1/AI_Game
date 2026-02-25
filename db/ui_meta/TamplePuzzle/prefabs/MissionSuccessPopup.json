@@ -1,0 +1,122 @@
+{
+  "fileName": "MissionSuccessPopup",
+  "filePath": "E:/AIMED/TamplePuzzle/PuzzleAutomation/Assets\\Resources\\Prefabs\\Popup\\MissionSuccessPopup.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 9,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "4748682761399138592",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "03ec61bfd19d02849b6f0a210adb4f87",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Title_Image",
+      "rectSize": {
+        "x": 980.0,
+        "y": 357.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MissionSuccessPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "8660462956739750430",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "03ec61bfd19d02849b6f0a210adb4f87",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Title_Image_Shadow",
+      "rectSize": {
+        "x": 980.0,
+        "y": 357.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MissionSuccessPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "4673324035649913985",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 0.49019608
+      },
+      "m_Sprite": {
+        "fileID": 10907,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Panel",
+      "rectSize": {
+        "x": 3500.0,
+        "y": 3500.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MissionSuccessPopup"
+    }
+  ],
+  "texts": [],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 10
+}

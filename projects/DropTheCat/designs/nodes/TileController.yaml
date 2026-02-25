@@ -1,0 +1,74 @@
+# TileController - Domain Tile Object Controller
+metadata:
+  nodeId: "TileController"
+  version: "1.0.0"
+  phase: 1
+  role: "Controller"
+
+dependencies:
+  internal:
+    - "GridManager"
+    - "ObjectPool"
+  external:
+    - "UnityEngine"
+    - "DG.Tweening"
+
+contract:
+  provides:
+    - "void Init(CellType cellType, CatColor color, Vector2Int gridPos)"
+    - "void SlideTo(Vector3 targetWorldPos, System.Action onComplete)"
+    - "void SetState(TileState state)"
+    - "TileState CurrentState { get; }"
+    - "CellType CellType { get; }"
+    - "CatColor HoleColor { get; }"
+    - "Vector2Int GridPosition { get; set; }"
+    - "bool IsSliding { get; }"
+    - "bool CanSlide { get; }"
+  requires:
+    - "GridManager.GridToWorld"
+    - "ObjectPool (반환용)"
+
+tags:
+  layer: "Domain"
+  genre: "Puzzle"
+  role: "Controller"
+  system: "Grid"
+  majorFunctions:
+    - "StateControl"
+    - "FlowControl"
+  minorFunctions:
+    - "Assign"
+    - "Validate"
+
+logicFlow:
+  - step: 1
+    tag: "StateControl"
+    action: "Init - 셀 타입/색상에 따라 스프라이트 설정, 위치 배치"
+    next: 2
+  - step: 2
+    tag: "ConditionCheck"
+    action: "SlideTo 호출 시 현재 상태 확인 (Locked/Frozen이면 불가)"
+    next: 3
+  - step: 3
+    tag: "FlowControl"
+    action: "DOTween.DOMove로 목표 위치까지 이동 애니메이션 실행"
+    next: 4
+  - step: 4
+    tag: "StateControl"
+    action: "이동 완료 콜백에서 GridPosition 업데이트, Idle 상태 복귀"
+    next: null
+
+referencePatterns:
+  - source: "db/base/puzzle/domain/Tile"
+    pattern: "MonoBehaviour 기반 타일, x/y 좌표, 이동 경로, 상태 관리"
+
+codeHints:
+  patterns:
+    - "public class TileController : MonoBehaviour"
+    - "SpriteRenderer로 비주얼 관리"
+    - "DOTween DOMove 사용 (duration 0.2~0.3초)"
+    - "enum TileState { Idle, Sliding, Locked, Frozen }"
+    - "enum CellType { HoleTile, BlockerTile, IceTile, ArrowTile, PortalTile, SwitchTile, LockedTile }"
+  avoidPatterns:
+    - "transform.position 직접 변경 금지 (DOTween 사용)"
+    - "Update에서 매 프레임 위치 계산 금지"

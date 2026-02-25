@@ -1,0 +1,85 @@
+{
+  "fileName": "UI_FX_SupplyBoost",
+  "filePath": "E:/AIMED/Luffy/IdleMoney1/Project/Assets\\IdleMoney\\Prefabs\\InGame\\FX\\UI_FX_SupplyBoost.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 14,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "2273384303134973312",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 0.14901961
+      },
+      "m_Sprite": {
+        "fileID": 0
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "BackBlack",
+      "rectSize": {
+        "x": 3000.0,
+        "y": 3000.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "UI_FX_SupplyBoost"
+    },
+    {
+      "type": "Image",
+      "fileID": "1908355105865155957",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "5358615208cae05469695f04b0c11833",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "FX_Font",
+      "rectSize": {
+        "x": 582.0,
+        "y": 336.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 700.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "UI_FX_SupplyBoost"
+    }
+  ],
+  "texts": [],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 14
+}

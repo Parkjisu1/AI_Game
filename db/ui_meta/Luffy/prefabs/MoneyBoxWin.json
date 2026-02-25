@@ -1,0 +1,590 @@
+{
+  "fileName": "MoneyBoxWin",
+  "filePath": "E:/AIMED/Luffy/IdleMoney1/Project/Assets\\IdleMoney\\Prefabs\\UI\\Windows\\MoneyBoxWin.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 26,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [
+    {
+      "type": "CanvasGroup",
+      "fileID": "1942619075035437177",
+      "m_Alpha": 1,
+      "m_Interactable": 1,
+      "m_BlocksRaycasts": 1,
+      "m_IgnoreParentGroups": 0,
+      "gameObjectName": "MoneyBoxWin",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 250.0,
+        "y": 302.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      }
+    }
+  ],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "7571204180184760135",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "UseGoldBtn",
+      "rectSize": {
+        "x": 217.0,
+        "y": 120.0
+      },
+      "anchoredPosition": {
+        "x": -5.7,
+        "y": -209.7
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MoneyBoxWin"
+    }
+  ],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "2819010329420399801",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 0.69803923
+      },
+      "m_Sprite": {
+        "fileID": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BlockPanel",
+      "rectSize": {
+        "x": 10000.0,
+        "y": 10000.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MoneyBoxWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "5051431916288829223",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "167e9f63de86ad0489262a68dff2ef7e",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IconImg",
+      "rectSize": {
+        "x": 65.0,
+        "y": 51.0
+      },
+      "anchoredPosition": {
+        "x": -35.6,
+        "y": -0.3
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MoneyBoxWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "3511743916597251960",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "5a7bef7c791c7b842b5e03aba2d4744a",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "TitleImg",
+      "rectSize": {
+        "x": 380.0,
+        "y": 50.0
+      },
+      "anchoredPosition": {
+        "x": 0.4,
+        "y": 173.5
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MoneyBoxWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "1521165880168167295",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "4b244c87d58d643e3b659938e0c5d36e",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Layout",
+      "rectSize": {
+        "x": 920.0,
+        "y": 500.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -64.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MoneyBoxWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "1765697863723257145",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "fbf0ee1335f194d38b8c0e1295b58853",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BG",
+      "rectSize": {
+        "x": 978.0,
+        "y": 666.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MoneyBoxWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "5036160520696325894",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "15fa7927999a4b642b3851099e526c9e",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "MoneyBox_2",
+      "rectSize": {
+        "x": 157.3,
+        "y": 167.7
+      },
+      "anchoredPosition": {
+        "x": -362.0,
+        "y": -115.6
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MoneyBoxWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "2963058773546343977",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "aa6c1616b78c23a4aa76ae2115babbab",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "MoneyBox",
+      "rectSize": {
+        "x": 373.0,
+        "y": 288.0
+      },
+      "anchoredPosition": {
+        "x": -195.4,
+        "y": -75.4
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MoneyBoxWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "303767938033749213",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "167e9f63de86ad0489262a68dff2ef7e",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IconImg",
+      "rectSize": {
+        "x": 52.0,
+        "y": 40.8
+      },
+      "anchoredPosition": {
+        "x": -59.8,
+        "y": 8.100031
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MoneyBoxWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7351588008874027266",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "15fa7927999a4b642b3851099e526c9e",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "MoneyBox_3",
+      "rectSize": {
+        "x": 121.0,
+        "y": 129.0
+      },
+      "anchoredPosition": {
+        "x": -186.4,
+        "y": -8.4
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MoneyBoxWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "8519709840046217127",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "39527ab54ce834960a2408d6209938b4",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Bubble",
+      "rectSize": {
+        "x": 432.0,
+        "y": 165.0
+      },
+      "anchoredPosition": {
+        "x": -168.3,
+        "y": 152.1
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MoneyBoxWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "5197572142823841617",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "a79706d536346df439d9f5cd66e103c4",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "MoneyBox_1",
+      "rectSize": {
+        "x": 222.3,
+        "y": 183.3
+      },
+      "anchoredPosition": {
+        "x": -20.40005,
+        "y": -120.5
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MoneyBoxWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "486174428880341528",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.61960787,
+        "g": 0.54509807,
+        "b": 0.44313726,
+        "a": 0.5019608
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8cbf0c754bcae4b598aeae1646c5d200",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Stat1BG",
+      "rectSize": {
+        "x": 265.0,
+        "y": 62.0
+      },
+      "anchoredPosition": {
+        "x": -4.700012,
+        "y": 46.1
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MoneyBoxWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "4440915714505107726",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.61960787,
+        "g": 0.54509807,
+        "b": 0.44313726,
+        "a": 0.5019608
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8cbf0c754bcae4b598aeae1646c5d200",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Stat2BG",
+      "rectSize": {
+        "x": 265.0,
+        "y": 62.0
+      },
+      "anchoredPosition": {
+        "x": -4.700012,
+        "y": -91.6
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MoneyBoxWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "2464127656922652946",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "d3edc68eb166e4c69a52a94502c2f4a6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "UseGoldBtn",
+      "rectSize": {
+        "x": 217.0,
+        "y": 120.0
+      },
+      "anchoredPosition": {
+        "x": -5.7,
+        "y": -209.7
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MoneyBoxWin"
+    }
+  ],
+  "texts": [],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 28
+}

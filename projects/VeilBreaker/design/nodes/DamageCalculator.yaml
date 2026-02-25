@@ -1,0 +1,70 @@
+metadata:
+  nodeId: "DamageCalculator"
+  version: "1.0.0"
+  phase: 2
+  role: "Calculator"
+
+dependencies:
+  internal:
+    - "DataManager"
+    - "GameConstants"
+  external: []
+
+contract:
+  provides:
+    - "DamageResult Calculate(HeroStats attacker, EnemyStats defender)"
+    - "DamageResult CalculateSkill(HeroStats attacker, EnemyStats defender, SkillData skill)"
+    - "float GetAttributeMultiplier(AttributeType atkAttr, AttributeType defAttr)"
+    - "bool IsCritical(float critRate)"
+  requires:
+    - "DataManager"
+    - "GameConstants"
+
+tags:
+  layer: "Domain"
+  genre: "Idle"
+  role: "Calculator"
+  system: "Battle"
+  majorFunctions:
+    - "ValueModification"
+    - "ConditionCheck"
+  minorFunctions:
+    - "Calculate"
+    - "Compare"
+
+logicFlow:
+  - step: 1
+    tag: "Calculate"
+    action: "baseDamage = max(1, attacker.atk - defender.def)"
+    next: 2
+  - step: 2
+    tag: "Calculate"
+    action: "attrMultiplier = GetAttributeMultiplier(atkAttr, defAttr)"
+    next: 3
+  - step: 3
+    tag: "ConditionCheck"
+    action: "IsCritical: Random.Range(0f, 1f) < critRate"
+    next: 4
+  - step: 4
+    tag: "Calculate"
+    action: "finalDamage = baseDamage * attrMultiplier * (isCritical ? 1.5f : 1f)"
+    next: 5
+  - step: 5
+    tag: "Assign"
+    action: "DamageResult { amount = (int)finalDamage, isCritical, attribute } 반환"
+    next: null
+
+referencePatterns:
+  - source: "CLAUDE.md"
+    pattern: "DamageCalculator - 데미지 공식, 크리티컬, 속성 보정 계산"
+
+codeHints:
+  patterns:
+    - "public static class DamageCalculator (싱글톤 불필요, static class)"
+    - "public struct DamageResult { public int amount; public bool isCritical; public AttributeType attribute; }"
+    - "속성 상성: 화>목>수>화>전(중립) → 2D 배열 또는 Dictionary<(Attr,Attr), float>"
+    - "GameConstants.Battle.AttributeAdvantage = 1.25f / Disadvantage = 0.8f"
+    - "방어 관통: attacker.armorPenetration이 있으면 effectiveDef = max(0, def * (1 - penetration))"
+  avoidPatterns:
+    - "Random 사용 시 UnityEngine.Random 사용 (System.Random 금지)"
+    - "데미지 최솟값 반드시 1 보장 (max 적용)"

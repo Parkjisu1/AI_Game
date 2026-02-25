@@ -1,0 +1,28 @@
+# AI_기획서 - ObstacleType Enum
+nodeId: ObstacleType
+type: enum
+layer: Core
+role: Enum
+phase: 0
+
+description: "장애물 타입 열거형"
+
+values:
+  - name: None
+    value: 0
+  - name: Wall
+    value: 1
+    description: "통과 불가 정적 장애물"
+  - name: Box
+    value: 2
+    description: "밀 수 있는 장애물"
+  - name: Elevator
+    value: 3
+    description: "차량을 이동시키는 장애물"
+  - name: Tunnel
+    value: 4
+    description: "차량을 다른 위치로 이동"
+
+output:
+  path: "Enums/ObstacleType.cs"
+  namespace: "CarMatch"

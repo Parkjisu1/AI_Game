@@ -1,0 +1,347 @@
+{
+  "fileName": "SellOffWin",
+  "filePath": "E:/AIMED/Luffy/IdleMoney1/Project/Assets\\IdleMoney\\Prefabs\\UI\\Windows\\SellOffWin.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 14,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [
+    {
+      "type": "CanvasGroup",
+      "fileID": "6899145019717594192",
+      "m_Alpha": 1,
+      "m_Interactable": 1,
+      "m_BlocksRaycasts": 1,
+      "m_IgnoreParentGroups": 0,
+      "gameObjectName": "SellOffWin",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      }
+    }
+  ],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "1239429743306604176",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "BtnOK",
+      "rectSize": {
+        "x": 217.0,
+        "y": 120.0
+      },
+      "anchoredPosition": {
+        "x": -0.9,
+        "y": -275.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SellOffWin"
+    }
+  ],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "1108856799146693349",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "c0ea7a3119865364aa29ac0c982be17f",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "GoldImg",
+      "rectSize": {
+        "x": 252.0,
+        "y": 200.0
+      },
+      "anchoredPosition": {
+        "x": 437.0,
+        "y": -35.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SellOffWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "1239429741837275648",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "2b698730905ab488d9ad06b91e5ebb05",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BG",
+      "rectSize": {
+        "x": 3000.0,
+        "y": 3000.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SellOffWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "1239429743306604175",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "d3edc68eb166e4c69a52a94502c2f4a6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BtnOK",
+      "rectSize": {
+        "x": 217.0,
+        "y": 120.0
+      },
+      "anchoredPosition": {
+        "x": -0.9,
+        "y": -275.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SellOffWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "1239429743693648284",
+      "m_Type": 2,
+      "m_Color": {
+        "r": 0.8784314,
+        "g": 0.33333334,
+        "b": 0.43529412,
+        "a": 0.5019608
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "10d716444145246df85846c6cc8aea20",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "PatternImg",
+      "rectSize": {
+        "x": 3000.0,
+        "y": 3000.0
+      },
+      "anchoredPosition": {
+        "x": -3.0,
+        "y": -35.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SellOffWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "4076800633351729506",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 0.9411765,
+        "b": 0.8039216,
+        "a": 0.8
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "7e4510361cbb64212aa4d75e33ec2e6b",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "FlareEffect",
+      "rectSize": {
+        "x": 335.0,
+        "y": 335.0
+      },
+      "anchoredPosition": {
+        "x": 1.0,
+        "y": -23.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SellOffWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7620017587034535402",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "db91af7d2472ac54e92c42576c915572",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "PaperImg",
+      "rectSize": {
+        "x": 248.0,
+        "y": 301.0
+      },
+      "anchoredPosition": {
+        "x": -442.0,
+        "y": -12.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SellOffWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "3330440795720414762",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "c7a3af39f74f77b44b9053587fc585c8",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "MoneyImg",
+      "rectSize": {
+        "x": 404.0,
+        "y": 242.0
+      },
+      "anchoredPosition": {
+        "x": 1.0,
+        "y": -35.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SellOffWin"
+    }
+  ],
+  "texts": [],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 14
+}

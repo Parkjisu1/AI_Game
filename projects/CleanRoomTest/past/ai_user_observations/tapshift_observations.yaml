@@ -1,0 +1,116 @@
+# Tap Shift - AI User Observation Data
+# Source: BlueStacks gameplay via ADB screenshot capture + interaction
+# Method: AI player observed game screens, menus, gameplay mechanics through visual analysis
+game: "Tap Shift"
+observation_method: "AI_User_BlueStacks_ADB"
+sessions_played: 1
+levels_observed: [14]
+
+observations:
+  game_identity:
+    title: "Tap Shift"
+    subtitle: "Pull Arrows to Escape"
+    genre: "Arrow puzzle / path-clearing puzzle"
+    art_style: "2D flat design with neon-colored arrows on dark background"
+    orientation: "Portrait"
+    platform: "Mobile (Android)"
+    monetization_visible: "Ads (banner at bottom), No Ads purchase option, in-app shop (cart icon)"
+
+  level_progression:
+    observed_levels: "14, 15, 16, 17 visible in level select"
+    level_select_style: "Vertical scrolling path with numbered circles connected by lines"
+    current_level: 14
+    level_status_indicators:
+      - "Green circle: completed/available level (14)"
+      - "Gray/blue circle: locked or future level (16, 17)"
+      - "Pink/red circle with skull icon: failed level (15)"
+    play_button: "Large green PLAY button at bottom of level select"
+    estimated_total_levels: "At least 17+, likely 50-100+ based on genre standards"
+
+  gameplay_mechanics:
+    board_type: "2D grid/pixel-based board with colored arrows"
+    arrow_types: "Directional arrows (up, down, left, right, U-turns, L-shapes)"
+    arrow_colors_observed:
+      - "Red"
+      - "Green (lime)"
+      - "Blue (dark)"
+      - "Cyan (light blue)"
+      - "Pink/Magenta"
+      - "Orange"
+      - "Yellow"
+      - "Light blue/gray"
+    color_count: "~8-9 distinct colors"
+    interaction_method: "Tap on arrow to activate/remove it"
+    goal_marker: "Letter 'G' visible on board (likely Goal position)"
+    board_bottom: "Collector/receiver area with colored outlines (pink, gray, yellow)"
+    arrow_behavior: "Arrows follow paths defined by their shape (straight, L-bend, U-turn)"
+    wrong_tap_penalty: "Tapping wrong arrow loses a life (observed: 3 hearts -> 2 hearts after wrong tap)"
+    arrows_removed_on_tap: "Tapped arrows disappear, leaving dot pattern where they were"
+
+  lives_system:
+    max_lives: 3
+    display: "Heart icons at top center"
+    life_lost_on: "Wrong tap / incorrect arrow selection"
+    visual_feedback: "Heart turns dark/empty when lost"
+
+  boosters:
+    count: 3
+    types:
+      - name: "Hint (magnifying glass icon)"
+        initial_count: 1
+        description: "Likely shows which arrow to tap next"
+      - name: "Hand pointer icon"
+        initial_count: 1
+        description: "Possibly auto-solves one step or shows correct tap"
+      - name: "Hashtag icon"
+        initial_count: "infinity symbol"
+        description: "Unlimited use booster, possibly undo or restart"
+
+  ui_layout:
+    top_bar:
+      - "Back button (left arrow, top-left)"
+      - "Restart button (circular arrow, top-left)"
+      - "3 heart icons (top-center)"
+      - "Settings gear (top-right)"
+    bottom_area:
+      - "3 booster icons with count badges"
+      - "Ad banner strip at very bottom"
+    level_select_top:
+      - "Coin count with + button (85 coins observed)"
+      - "Shop/cart icon"
+      - "Settings gear"
+    level_select_right:
+      - "No Ads button (ADS circle icon)"
+      - "Gift claim button (Claim with gift boxes)"
+
+  currency:
+    type: "Coins (gold coin icon)"
+    observed_amount: 85
+    earn_method: "Likely from level completion"
+    spend_method: "Likely for boosters, continue after failure"
+
+  scoring:
+    type: "Stars per level (inferred from genre)"
+    criteria: "Likely based on number of wrong taps or time"
+    level_completion: "Clear all arrows from board by tapping correct sequence"
+
+  difficulty_observations:
+    level_14:
+      arrow_count: "~20-25 arrows visible"
+      color_variety: "~8 colors used"
+      board_complexity: "High - many overlapping arrow paths"
+      receivers: "3 collector boxes at bottom"
+    general_trend: "Level 14 already has high complexity, suggesting early levels are simpler"
+
+  special_features:
+    - "Skull icon on failed levels in level select"
+    - "Gift claim system (visible in level select)"
+    - "No Ads purchase option"
+    - "In-app shop"
+    - "Restart button for quick retry"
+
+  inferred_mechanics:
+    win_condition: "Remove all arrows by tapping them in correct order to reach goal G"
+    fail_condition: "Lose all 3 lives from wrong taps"
+    core_loop: "Select level -> tap arrows in sequence -> clear board -> earn stars/coins -> next level"
+    puzzle_type: "Path-based arrow puzzle where order matters"

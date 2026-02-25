@@ -1,0 +1,825 @@
+# Magic Sort - Game Balance Sheet / Design Specification
+# Spec Type: D1 (AI User Observations + Level 1 Design Intent Pattern Card)
+# Source A: ai_user_observations/magicsort_observations.yaml
+# Source B: pattern_cards/level1_design_intent/magicsort_patterns.yaml
+# Generated: 2026-02-19
+# Clean Room: No original source code referenced.
+
+game: "Magic Sort"
+spec_version: "1.0.0"
+genre: "Water/Color Sort Puzzle"
+platform: "Mobile (Android/iOS)"
+orientation: "Portrait"
+
+# ============================================================
+# 1. CORE MECHANICS
+# ============================================================
+core_mechanics:
+  bottle:
+    capacity: 4                     # layers per bottle (observed: 4 layers)
+    max_colors_per_bottle: 4        # a full bottle holds exactly 4 same-color units
+    min_bottles: 3                  # smallest puzzle (tutorial)
+    max_bottles: 14                 # hard-tier upper bound
+    empty_bottles_per_puzzle: 2     # always 2 empty buffer bottles (observed at level 18)
+    bottles_per_row_max: 7          # max bottles in a single row (observed: top row 7)
+    rows: 2                         # grid is always 2 rows
+
+  colors:
+    min_colors: 2                   # tutorial level 1
+    max_colors: 12                  # procedural hard tier ceiling
+    colors_at_level_18: 9           # directly observed
+    palette:
+      - name: "lime_green"
+        hex: "#7ED957"
+      - name: "red"
+        hex: "#E63946"
+      - name: "pink"
+        hex: "#FF85A1"
+      - name: "orange"
+        hex: "#FF9B3E"
+      - name: "yellow"
+        hex: "#FFD166"
+      - name: "purple"
+        hex: "#9B5DE5"
+      - name: "dark_blue"
+        hex: "#2D4E8A"
+      - name: "brown"
+        hex: "#8B5E3C"
+      - name: "periwinkle"
+        hex: "#A8C8E8"
+      - name: "teal"
+        hex: "#3ABFBF"
+      - name: "magenta"
+        hex: "#D72483"
+      - name: "light_green"
+        hex: "#B5EAD7"
+
+  pour_rules:
+    trigger: "tap_to_select_then_tap_target"   # two-tap input scheme
+    valid_pour_conditions:
+      - "target bottle is not full (< 4 layers)"
+      - "top color of source equals top color of target"
+      - "target bottle is empty (any color may be poured)"
+    invalid_pour_auto_block: true               # invalid taps do nothing, no penalty
+    pour_unit: "all_matching_top_layers"        # all consecutive same-color top layers move together
+    selection_visual: "bottle_lifts_8px_upward" # observed: selected bottle lifts slightly
+    deselect_same_tap: true                     # tapping selected bottle again deselects it
+
+  win_condition:
+    rule: "all_bottles_single_color_or_empty"
+    check_per_pour: true            # check win state after every pour action
+    completed_bottle_visual: "bounce_and_scale_punch"
+
+  fail_condition:
+    rule: "no_valid_pour_exists"    # deadlock detection required
+    deadlock_check_on_every_move: true
+    on_deadlock_action: "show_fail_dialog_with_retry_or_booster_options"
+
+  special_rules:
+    undo_restores_full_pour: true           # one undo reverts the entire pour action
+    undo_history_depth: 30                  # allow deep backtracking
+    completed_bottle_locked: true           # fully sorted bottle cannot be poured from
+
+
+# ============================================================
+# 2. LIVES SYSTEM
+# ============================================================
+lives_system:
+  max_lives: 5                      # observed: 5 hearts displayed
+  display_label: "전체"             # "Full" in Korean observed
+  life_lost_on: "level_fail"        # lose 1 life when retrying after deadlock or manual give-up
+  regen_time_minutes: 30            # 1 life per 30 minutes (industry standard)
+  regen_cap: 5                      # stops regenerating at max
+  infinite_lives_ad_duration_minutes: 30   # watch ad -> 30 min infinite lives
+  starting_lives: 5                 # fresh install starts full
+
+
+# ============================================================
+# 3. LEVEL PROGRESSION
+# ============================================================
+level_progression:
+  total_handcrafted_levels: 150     # hand-designed levels; beyond this is procedural
+  procedural_levels: "unlimited"    # procedural generation after level 150
+  milestone_rewards:                # journey reward milestones (observed at levels 10,15,25,30)
+    - level: 10
+      reward: { coins: 500, booster_undo: 2 }
+    - level: 15
+      reward: { coins: 750, booster_shuffle: 2 }
+    - level: 25
+      reward: { coins: 1000, booster_add_bottle: 1 }
+    - level: 30
+      reward: { coins: 1500, booster_undo: 3, booster_shuffle: 1 }
+    - level: 50
+      reward: { coins: 2000, gems: 10, booster_add_bottle: 2 }
+    - level: 75
+      reward: { coins: 3000, gems: 15 }
+    - level: 100
+      reward: { coins: 5000, gems: 25, booster_add_bottle: 3 }
+
+  difficulty_tiers:
+    - tier: 1
+      name: "Tutorial"
+      level_range: [1, 5]
+      color_count: 2
+      bottle_count: 4               # 2 color bottles + 2 empty
+      empty_bottles: 2
+      blockers_enabled: false
+      par_moves_base: 6
+
+    - tier: 2
+      name: "Beginner"
+      level_range: [6, 20]
+      color_count_range: [3, 5]
+      bottle_count_range: [5, 8]    # N color bottles + 2 empty
+      empty_bottles: 2
+      blockers_enabled: false
+      par_moves_base: 10
+      color_counts_per_level:
+        6:  3
+        7:  3
+        8:  4
+        10: 4
+        12: 5
+        15: 5
+        18: 5                       # observed at level 18 but with blockers pushing complexity
+
+    - tier: 3
+      name: "Intermediate"
+      level_range: [21, 60]
+      color_count_range: [5, 8]
+      bottle_count_range: [7, 10]
+      empty_bottles: 2
+      blockers_enabled: true
+      blocker_types_allowed: ["question_mark", "ice"]
+      par_moves_base: 16
+
+    - tier: 4
+      name: "Advanced"
+      level_range: [61, 120]
+      color_count_range: [8, 10]
+      bottle_count_range: [10, 13]
+      empty_bottles: 2
+      blockers_enabled: true
+      blocker_types_allowed: ["question_mark", "ice", "carpet", "curtain", "frog", "duck"]
+      par_moves_base: 22
+
+    - tier: 5
+      name: "Expert"
+      level_range: [121, 150]
+      color_count_range: [10, 12]
+      bottle_count_range: [12, 14]
+      empty_bottles: 2
+      blockers_enabled: true
+      blocker_types_allowed: ["all"]
+      par_moves_base: 28
+
+    - tier: 6
+      name: "Endless"
+      level_range: [151, 99999]
+      color_count_range: [8, 12]
+      bottle_count_range: [10, 14]
+      empty_bottles: 2
+      blockers_enabled: true
+      blocker_types_allowed: ["all"]
+      procedurally_generated: true
+      par_moves_base: 24
+
+  # Actual color count observed at level 18 = 9 (with question mark blockers)
+  observed_level_18:
+    bottle_count: 11
+    top_row_bottles: 7
+    bottom_row_bottles: 4
+    empty_bottles: 2
+    color_count: 9
+    blocker_type: "question_mark"
+    blocker_placement: "1_to_2_layers_per_bottle_in_top_row"
+
+
+# ============================================================
+# 4. SCORING
+# ============================================================
+scoring:
+  system: "star_rating"
+  max_stars: 3
+
+  par_formula:
+    # Par = base_moves * (1 + (color_count - 2) * 0.3)
+    # Rounded to nearest integer, minimum 4
+    description: "par scales with color count to account for puzzle complexity"
+    formula: "floor(base_moves * (1 + (color_count - 2) * 0.30))"
+    example_tier2_5colors: 13        # floor(10 * (1 + 3*0.30)) = floor(10 * 1.9) = 19 → tuned to 13
+    example_tier3_7colors: 22
+    example_tier4_9colors: 30
+    blocker_par_bonus: 2             # add 2 per blocker type present in puzzle
+
+  star_rating_criteria:
+    three_stars:
+      condition: "moves_used <= par"
+      description: "Solved within or at par move count"
+    two_stars:
+      condition: "moves_used <= floor(par * 1.5)"
+      description: "Solved within 1.5x par"
+    one_star:
+      condition: "moves_used > floor(par * 1.5)"
+      description: "Solved but exceeded 1.5x par"
+    no_stars:
+      condition: "level_not_completed"
+
+  rewards:
+    base_coin_per_star:
+      one_star: 20
+      two_stars: 40
+      three_stars: 60
+    first_clear_bonus_coins: 50     # extra coins for first-time completion
+    replay_max_reward_pct: 50       # replaying for more stars gives 50% of difference
+    xp_per_level_clear: 10
+    xp_per_star: 5
+
+  performance_display:
+    show_move_count: true
+    show_par: true
+    show_star_animation: true       # stars pop in one by one on level complete screen
+    show_coin_earned: true
+
+
+# ============================================================
+# 5. BOOSTERS
+# ============================================================
+boosters:
+  display_location: "bottom_bar"
+  icon_style: "purple_rounded_icons"  # observed
+
+  types:
+    - id: "undo"
+      name: "Undo"
+      icon: "circular_arrow"          # observed
+      initial_free_count: 3           # observed: count = 3
+      cost_coins: 200                 # purchase 3 more for 200 coins
+      cost_gems: 0
+      bundle_size: 3                  # buy 3 at a time
+      function: "revert_last_pour_action"
+      undo_depth: 1                   # 1 use = 1 move reverted
+      usable_during_deadlock: true
+      cooldown_seconds: 0
+
+    - id: "shuffle"
+      name: "Shuffle"
+      icon: "crossing_arrows"         # observed
+      initial_free_count: 3           # observed: count = 3
+      cost_coins: 400
+      cost_gems: 0
+      bundle_size: 2
+      function: "randomize_all_non_complete_bottle_contents"
+      preserves_completed_bottles: true
+      guarantees_solvable: true       # shuffle must produce a solvable state
+      usable_during_deadlock: true
+      cooldown_seconds: 0
+
+    - id: "add_bottle"
+      name: "Add Bottle"
+      icon: "bottle_plus"             # observed
+      initial_free_count: 0           # observed: count = 0
+      cost_coins: 900                 # observed: 900 coins
+      cost_gems: 5
+      bundle_size: 1
+      function: "add_one_empty_bottle_to_board"
+      max_additional_bottles: 2       # can add at most 2 extra bottles per level
+      usable_during_deadlock: true
+      cooldown_seconds: 0
+
+    - id: "hint"
+      name: "Hint"
+      icon: "lightbulb"
+      initial_free_count: 2
+      cost_coins: 300
+      cost_gems: 0
+      bundle_size: 3
+      function: "highlight_best_next_pour"
+      highlight_duration_seconds: 3.0
+      cooldown_seconds: 0
+
+    - id: "color_remover"
+      name: "Color Remover"
+      icon: "eraser_wand"
+      initial_free_count: 0
+      cost_coins: 0
+      cost_gems: 15
+      bundle_size: 1
+      function: "remove_all_layers_of_selected_color_from_board"
+      usable_during_deadlock: false
+      cooldown_seconds: 0
+
+  booster_shop:
+    currencies_accepted: ["coins", "gems"]
+    bundle_discounts:
+      - quantity: 5
+        discount_pct: 10
+      - quantity: 10
+        discount_pct: 20
+
+
+# ============================================================
+# 6. BLOCKERS
+# ============================================================
+blockers:
+  system: "polymorphic_blocker_components"  # each blocker is an independent behavior module
+
+  types:
+    - id: "question_mark"
+      name: "Question Mark"
+      symbol: "?"
+      observed: true                          # confirmed by AI user observation
+      description: "Dark layer with '?' symbol hiding the actual color beneath. Player cannot see the hidden color until the layer above it is removed."
+      visual: "dark_translucent_layer_with_white_question_mark"
+      layers_affected: "single_layer_per_blocker_instance"
+      observed_count_per_bottle: "1_to_2"
+      placement: "bottom_layers_of_bottle"
+      unlock_condition: "the_hidden_layer_becomes_the_top_layer_and_is_poured_normally"
+      effect_on_pour: "hidden_color_revealed_when_poured"
+      strategic_impact: "forces_probabilistic_reasoning_about_hidden_colors"
+      introduced_tier: 3                      # appears from tier 3 (level 21+)
+      max_per_bottle: 2
+      max_per_level: 8
+
+    - id: "ice"
+      name: "Ice Block"
+      symbol: "snowflake"
+      description: "A layer is encased in ice. The layer cannot be poured until the ice is broken. Ice breaks when an adjacent pour action involves the iced bottle."
+      visual: "crystalline_ice_overlay_on_layer"
+      unlock_condition: "player_pours_into_or_from_the_iced_bottle_once"
+      effect_on_pour: "blocked_until_unlocked_then_becomes_normal"
+      strategic_impact: "forces_planning_a_break_action_before_using_frozen_layer"
+      introduced_tier: 3
+      max_per_bottle: 1
+      max_per_level: 6
+
+    - id: "carpet"
+      name: "Carpet"
+      symbol: "carpet_roll"
+      description: "A carpet is laid across one or more layers. The carpet must be 'rolled up' by filling the bottles it covers with a matching color beneath."
+      visual: "patterned_carpet_strip_overlaid_on_layers"
+      unlock_condition: "fill_covered_position_with_correct_color_segment"
+      effect_on_pour: "layers_under_carpet_are_accessible_only_after_carpet_lifted"
+      strategic_impact: "introduces_area_constraint_requiring_color_coordination"
+      introduced_tier: 4
+      max_per_bottle: 1
+      max_per_level: 4
+
+    - id: "curtain"
+      name: "Curtain"
+      symbol: "curtain"
+      description: "A curtain obscures the entire bottle contents. All layers inside are hidden. Curtain is removed when the bottle is completely filled with a single color."
+      visual: "fabric_curtain_drawn_over_bottle"
+      unlock_condition: "bottle_completely_filled_with_one_color"
+      effect_on_pour: "cannot_see_contents_until_fully_sorted"
+      strategic_impact: "extreme_hidden_information_variant"
+      introduced_tier: 4
+      max_per_puzzle: 2
+
+    - id: "plaster"
+      name: "Plaster"
+      symbol: "bandage_cross"
+      description: "A plaster seals a specific layer slot. The slot cannot receive liquid until the plaster is removed by pouring the exact correct color onto it."
+      visual: "white_adhesive_bandage_over_layer_slot"
+      unlock_condition: "pour_matching_color_into_sealed_slot"
+      effect_on_pour: "sealed_slot_blocked_unless_correct_color"
+      strategic_impact: "color_gating_mechanic"
+      introduced_tier: 4
+      max_per_bottle: 2
+      max_per_level: 5
+
+    - id: "frog"
+      name: "Frog"
+      symbol: "frog_emoji"
+      description: "A frog sits on top of a bottle. Each valid pour action involving any bottle causes the frog to hop to an adjacent bottle, potentially blocking or unblocking paths."
+      visual: "cartoon_frog_perched_on_bottle_cap"
+      unlock_condition: "frog_hops_away_from_bottle_naturally"
+      effect_on_pour: "bottle_with_frog_cannot_be_source_or_target"
+      movement_pattern: "hops_clockwise_through_row_each_turn"
+      introduced_tier: 4
+      max_per_level: 2
+
+    - id: "duck"
+      name: "Duck"
+      symbol: "duck_emoji"
+      description: "A rubber duck floats on top of the liquid in a bottle, blocking pours into that bottle. It can be moved to an adjacent empty slot by tapping."
+      visual: "rubber_duck_floating_atop_bottle_liquid"
+      unlock_condition: "tap_duck_to_move_it_or_fill_bottle_it_sits_on"
+      effect_on_pour: "prevents_incoming_pours_while_present"
+      movement_pattern: "player_taps_duck_to_move_to_adjacent_bottle"
+      introduced_tier: 4
+      max_per_level: 2
+
+    - id: "key_lock"
+      name: "Key-Lock"
+      symbol: "key_padlock"
+      description: "A padlock on a bottle can only be opened with a key item found in another bottle. Player must pour out layers of the key-bottle to expose and collect the key."
+      visual: "padlock_icon_on_bottle_with_matching_key_in_another_bottle"
+      unlock_condition: "collect_key_by_emptying_key_bottle_then_tap_locked_bottle"
+      effect_on_pour: "locked_bottle_is_inert_until_unlocked"
+      introduced_tier: 5
+      max_per_level: 2
+
+    - id: "vine"
+      name: "Vine / Ivy"
+      symbol: "vine_leaf"
+      description: "Ivy grows across two bottles, linking them. The linked bottles can only be poured simultaneously. Vine is removed when both bottles are cleared."
+      visual: "green_vine_connecting_two_bottle_necks"
+      unlock_condition: "both_linked_bottles_empty_or_single_color"
+      effect_on_pour: "both_bottles_must_be_valid_source_and_target_at_same_time"
+      introduced_tier: 5
+      max_per_level: 2
+
+
+# ============================================================
+# 7. HINT SYSTEM
+# ============================================================
+hint_system:
+  algorithm: "scored_move_evaluation"
+  description: "Evaluate all valid pours, score them by multiple criteria, recommend the highest scoring move."
+
+  scoring_weights:
+    completes_bottle:
+      weight: 100
+      description: "Pour that results in a bottle becoming single-color full"
+    extends_same_color_run:
+      weight: 40
+      description: "Pouring same-color layers on top of existing same-color stack"
+    empties_bottle:
+      weight: 30
+      description: "Pour that completely empties a bottle, freeing a buffer slot"
+    unblocks_blocker:
+      weight: 50
+      description: "Pour that removes or reveals a blocker layer"
+    creates_valid_future_move:
+      weight: 20
+      description: "Pour that enables at least one additional valid pour afterward"
+    prevents_deadlock:
+      weight: 60
+      description: "Pour that avoids a detected deadlock state"
+    moves_to_empty_bottle:
+      weight: 5
+      description: "Moving to an empty bottle (lower priority, preserves buffers)"
+    wastes_buffer:
+      weight: -25
+      description: "Pour that fills an empty buffer with a color already scattered"
+
+  priority_resolution:
+    tie_breaking: "prefer_fewer_future_deadlock_states"
+    lookahead_depth: 3              # evaluate 3 moves ahead for tie-breaking
+    max_candidates_shown: 1         # hint shows the single best move
+    highlight_source: true
+    highlight_target: true
+    highlight_color: "#FFFF00"      # yellow glow on suggested bottles
+    highlight_duration_seconds: 3.0
+
+  hint_cooldown_seconds: 1.5        # minimum time between consecutive hint uses
+
+
+# ============================================================
+# 8. ANIMATION
+# ============================================================
+animation:
+  pour_phases:
+    - phase: 1
+      name: "select_lift"
+      description: "Selected bottle lifts upward to indicate selection"
+      duration_ms: 120
+      y_offset_px: 8
+      easing: "ease_out_quad"
+
+    - phase: 2
+      name: "travel_arc"
+      description: "Source bottle moves in arc toward target bottle position"
+      duration_ms: 200
+      arc_height_px: 24
+      easing: "ease_in_out_sine"
+
+    - phase: 3
+      name: "tilt"
+      description: "Source bottle tilts to pouring angle above target"
+      duration_ms: 100
+      tilt_degrees: 115
+      easing: "ease_out_cubic"
+
+    - phase: 4
+      name: "pour_liquid"
+      description: "Liquid flows from source into target bottle as animated stream"
+      duration_ms: 250            # scales with number of layers poured: +60ms per extra layer
+      layer_interval_ms: 60
+      stream_width_px: 12
+      easing: "linear"
+
+    - phase: 5
+      name: "return"
+      description: "Source bottle returns to original position and upright orientation"
+      duration_ms: 180
+      easing: "ease_in_out_back"
+
+  total_pour_duration_ms_single_layer: 850   # phases 1-5 for 1 layer
+  total_pour_duration_ms_four_layers: 1030   # phases 1-5 for 4 layers
+
+  completion_effects:
+    bottle_complete:
+      scale_punch: true
+      scale_peak: 1.18
+      scale_duration_ms: 200
+      bounce_count: 2
+      bounce_damping: 0.6
+      particle_burst: true
+      particle_count: 12
+      particle_colors: "match_bottle_color"
+      sound: "bottle_complete_chime"
+
+    level_complete:
+      delay_after_last_pour_ms: 300
+      star_pop_interval_ms: 350       # stars appear one by one
+      coin_rain_duration_ms: 1200
+      confetti: true
+      confetti_colors: ["#FFD166", "#7ED957", "#FF85A1", "#9B5DE5"]
+      sound: "level_complete_fanfare"
+
+  selection_visual:
+    lift_y_px: 8
+    tint_overlay_alpha: 0.25
+    tint_color: "#FFFFFF"
+    lift_duration_ms: 120
+
+  invalid_pour_feedback:
+    shake_amplitude_px: 6
+    shake_count: 3
+    shake_duration_ms: 200
+    sound: "invalid_pour_buzz"
+
+  deadlock_detection_flash:
+    color: "#FF4444"
+    flash_count: 2
+    flash_duration_ms: 300
+
+  frame_rate_target: 60
+
+
+# ============================================================
+# 9. MONETIZATION
+# ============================================================
+monetization:
+  currencies:
+    primary:
+      id: "coins"
+      name: "Coins"
+      icon: "gold_star_coin"      # observed: gold star coin icon
+      display_location: "top_left"
+      starting_amount: 1420       # observed amount at level 18 session start
+      hard_cap: 9999999
+
+    secondary:
+      id: "gems"
+      name: "Gems"
+      icon: "blue_crystal_gem"
+      display_location: "top_right_secondary"
+      starting_amount: 10
+      hard_cap: 99999
+      iap_only: false             # also earnable through milestones
+
+  starting_amounts:
+    coins: 500                    # fresh install grant (separate from observed play amount)
+    gems: 5
+    booster_undo: 3               # observed: 3 free undo on install
+    booster_shuffle: 3            # observed: 3 free shuffle on install
+    booster_add_bottle: 0         # observed: 0 add-bottle on install
+    booster_hint: 2
+    booster_color_remover: 0
+
+  reward_schedule:
+    level_clear_coins_by_stars:
+      one_star: 20
+      two_stars: 40
+      three_stars: 60
+    first_clear_bonus_coins: 50
+    daily_login_coins:
+      day_1: 100
+      day_2: 150
+      day_3: 200
+      day_4: 250
+      day_5: 350
+      day_6: 500
+      day_7: 750                  # weekly streak bonus
+    ad_reward_coins: 200          # rewarded video ad
+    ad_reward_booster_chance: 0.3 # 30% chance ad gives a booster instead of coins
+
+  iap_packages:
+    - id: "starter_pack"
+      display_name: "Starter Pack"
+      price_usd: 1.99
+      coins: 2000
+      gems: 20
+      boosters: { undo: 5, shuffle: 3, add_bottle: 2 }
+      one_time_offer: true
+
+    - id: "coin_pack_small"
+      display_name: "Small Coin Pack"
+      price_usd: 0.99
+      coins: 1000
+      gems: 0
+
+    - id: "coin_pack_medium"
+      display_name: "Medium Coin Pack"
+      price_usd: 2.99
+      coins: 3500
+      gems: 10
+
+    - id: "coin_pack_large"
+      display_name: "Large Coin Pack"
+      price_usd: 6.99
+      coins: 9000
+      gems: 30
+
+    - id: "no_ads"
+      display_name: "Remove Ads"
+      price_usd: 3.99
+      removes_interstitial_ads: true
+      keeps_rewarded_ads: true    # player can still opt in for rewards
+
+    - id: "gems_pack_small"
+      display_name: "Gem Pack"
+      price_usd: 1.99
+      gems: 50
+
+  ad_types:
+    interstitial:
+      trigger: "every_3_level_fails"
+      max_per_session: 5
+      cooldown_between_ads_seconds: 120
+    rewarded:
+      triggers:
+        - "watch_to_continue_after_fail"
+        - "watch_for_coin_reward"
+        - "watch_for_booster_reward"
+      always_optional: true
+
+  economy_balance:
+    coin_sink_add_bottle: 900     # observed: 900 coins
+    coin_sink_undo_bundle: 200
+    coin_sink_shuffle_bundle: 400
+    coin_sink_hint_bundle: 300
+    avg_coins_per_level: 55       # 3-star: 60 + first clear bonus 50 averaged over replays
+    levels_to_afford_add_bottle: 17  # approx 900/55 = 16.4 levels
+
+
+# ============================================================
+# 10. ARCHITECTURE
+# ============================================================
+architecture:
+  design_patterns:
+    dependency_injection:
+      framework: "manual_DI_container"
+      description: "Central DI container instantiates and wires all services at startup. No service locator anti-pattern."
+      container_class: "GameContainer"
+      registered_services:
+        - "ILevelDataProvider"
+        - "IDifficultyConfig"
+        - "IHintCalculator"
+        - "IBlockerRegistry"
+        - "IEconomyService"
+        - "IBoosterService"
+        - "IAnimationController"
+        - "ILivesService"
+        - "IProgressionService"
+
+    signal_bus:
+      description: "Decoupled event system. Emitters do not reference receivers directly."
+      signals:
+        - "OnPourValidated(source_index, target_index, layers)"
+        - "OnPourExecuted(source_index, target_index)"
+        - "OnBottleCompleted(bottle_index, color)"
+        - "OnLevelCompleted(stars, moves_used, coins_earned)"
+        - "OnLevelFailed(fail_reason)"
+        - "OnDeadlockDetected()"
+        - "OnBlockerUnlocked(bottle_index, blocker_type)"
+        - "OnBoosterUsed(booster_id)"
+        - "OnCoinBalanceChanged(old_amount, new_amount)"
+        - "OnLivesChanged(old_count, new_count)"
+        - "OnHintRequested()"
+        - "OnHintHighlighted(source_index, target_index)"
+        - "OnUndoExecuted(restore_state)"
+
+    state_machine:
+      description: "Finite State Machine governs the overall game session lifecycle."
+      states:
+        - id: "IDLE"
+          description: "Waiting for player input, no bottle selected"
+          transitions:
+            - trigger: "tap_bottle" -> "BOTTLE_SELECTED"
+
+        - id: "BOTTLE_SELECTED"
+          description: "Source bottle highlighted, waiting for target selection"
+          transitions:
+            - trigger: "tap_same_bottle" -> "IDLE"
+            - trigger: "tap_valid_target" -> "POURING"
+            - trigger: "tap_invalid_target" -> "IDLE"
+
+        - id: "POURING"
+          description: "Pour animation playing, input blocked"
+          transitions:
+            - trigger: "animation_complete AND level_complete" -> "LEVEL_COMPLETE"
+            - trigger: "animation_complete AND deadlock" -> "DEADLOCK"
+            - trigger: "animation_complete" -> "IDLE"
+
+        - id: "DEADLOCK"
+          description: "No valid moves remain, show fail dialog"
+          transitions:
+            - trigger: "use_booster" -> "IDLE"
+            - trigger: "retry" -> "LEVEL_LOADING"
+            - trigger: "quit" -> "MAIN_MENU"
+
+        - id: "LEVEL_COMPLETE"
+          description: "Level cleared, showing completion screen"
+          transitions:
+            - trigger: "next_level" -> "LEVEL_LOADING"
+            - trigger: "replay" -> "LEVEL_LOADING"
+
+        - id: "LEVEL_LOADING"
+          description: "Loading next or same level data"
+          transitions:
+            - trigger: "load_complete" -> "IDLE"
+
+        - id: "MAIN_MENU"
+          description: "Player on main screen"
+          transitions:
+            - trigger: "play_pressed" -> "LEVEL_LOADING"
+
+    blocker_system:
+      pattern: "polymorphic_component"
+      interface: "IBlocker"
+      methods:
+        - "bool CanPourFrom(BottleState bottle)"
+        - "bool CanPourInto(BottleState bottle)"
+        - "void OnPourAttempt(BottleState bottle, PourContext ctx)"
+        - "bool IsUnlocked(BottleState bottle, GameState state)"
+        - "void OnUnlocked(BottleState bottle)"
+      registry: "BlockerRegistry"
+      description: "Each blocker type is an independent class implementing IBlocker. BlockerRegistry maps blocker IDs to instances. New blockers added without modifying existing code."
+
+    pour_validation_separation:
+      validator_class: "PourValidator"
+      executor_class: "PourExecutor"
+      description: "Validation (rule checking) is strictly separated from execution (state mutation). PourValidator returns a PourResult; PourExecutor consumes it."
+      pour_result_fields:
+        - "bool IsValid"
+        - "int LayerCount"
+        - "Color Color"
+        - "int SourceIndex"
+        - "int TargetIndex"
+        - "string InvalidReason"
+
+  state_management:
+    bottle_state_class: "BottleState"
+    fields:
+      - "int[] Layers"              # color indices from bottom to top
+      - "IBlocker[] BlockerSlots"   # per-layer blockers
+      - "bool IsComplete"
+      - "int TopLayerIndex"         # cached for O(1) access
+      - "int LayerCount"
+    game_state_class: "GameState"
+    fields:
+      - "BottleState[] Bottles"
+      - "int MoveCount"
+      - "int LevelIndex"
+      - "bool IsDeadlock"
+      - "Stack<GameState> UndoHistory"  # depth: 30
+
+    immutable_snapshots: true       # UndoHistory stores deep copies for safe revert
+
+  module_separation:
+    level_data_provider:
+      interface: "ILevelDataProvider"
+      responsibility: "Load level layout, color assignments, blocker placements from data files"
+      data_format: "JSON"
+
+    difficulty_config:
+      interface: "IDifficultyConfig"
+      responsibility: "Supply per-tier parameters (color counts, bottle counts, par moves, allowed blockers)"
+
+    hint_calculator:
+      interface: "IHintCalculator"
+      responsibility: "Score all valid moves and return top recommendation"
+      uses_lookahead: true
+      lookahead_depth: 3
+
+    deadlock_detector:
+      class: "DeadlockDetector"
+      responsibility: "Determine if any valid pour exists in current GameState"
+      algorithm: "iterate_all_source_target_pairs_check_PourValidator"
+      complexity: "O(N^2) where N = bottle count"
+      max_bottles: 14               # worst case 14*14 = 196 checks, acceptable
+
+  grid_layout:
+    system: "two_row_grid"
+    row_0_max_bottles: 7
+    row_1_max_bottles: 7
+    bottle_spacing_dp: 12
+    bottle_width_dp: 52
+    bottle_height_dp: 120
+    grid_top_margin_dp: 80
+    grid_bottom_margin_dp: 20
+    centering: "horizontal_center_per_row"

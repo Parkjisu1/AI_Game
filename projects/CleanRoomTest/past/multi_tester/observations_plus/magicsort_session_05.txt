@@ -1,0 +1,140 @@
+## Magic Sort - 시각 측정 분석 보고서 (전문가 5)
+
+---
+
+### 중요 관찰: 모든 6개 이미지 동일 화면
+
+6개 파일 전부 **로딩/동의 화면(Loading + Welcome Dialog)**을 캡처한 것으로, 실제 게임플레이 화면(격자, 홀더, 병 등)은 포함되어 있지 않습니다. 파일명은 다르지만 내용은 동일하며, 하단 "로딩 중..." 애니메이션의 점 개수만 다릅니다.
+
+---
+
+### 1. 화면 해상도 및 비율
+
+```
+추정 해상도: 540 × 960 px
+화면 비율: 9:16 (0.5625)
+방향: 세로(Portrait)
+```
+
+---
+
+### 2. 로고 영역 (상단)
+
+```
+MAGIC SORT 로고
+  center_x:    270 px
+  top_y:        65 px
+  bottom_y:    175 px
+  width:       ~225 px
+  height:      ~110 px
+
+로고 색상:
+  메인 글자:  #4DD9D9 (청록/Teal)
+  글자 외곽:  #FFFFFF (흰색 stroke)
+  그림자:     #2A6666
+```
+
+---
+
+### 3. Welcome 다이얼로그 박스
+
+```
+left_x:       80 px
+right_x:      460 px
+top_y:        265 px
+bottom_y:     700 px
+width:        380 px
+height:       435 px
+corner_radius: ~20 px
+
+배경색:       #282828 (반투명 다크 그레이, alpha ~90%)
+텍스트 색:    #FFFFFF
+링크 색:      #5B9BD5 (밑줄 파란색)
+```
+
+---
+
+### 4. ACCEPT 버튼
+
+```
+left_x:       128 px
+right_x:      412 px
+width:        284 px
+height:        56 px
+top_y:        605 px
+bottom_y:     661 px
+center_y:     633 px
+corner_radius: ~28 px (완전 타원형)
+
+버튼 배경:    #3D3D3D (다크 그레이)
+텍스트:       #FFFFFF, Bold, ~18px
+```
+
+---
+
+### 5. 하단 로딩 영역
+
+```
+"로딩 중.." 텍스트:
+  center_x:   270 px
+  y:          862 px
+  font_size:  ~16 px
+  색상:       #FFFFFF (반투명)
+
+디버그 숫자 (268435982):
+  y:          880 px
+  font_size:  ~12 px
+
+해시 텍스트 (0e9fe113...):
+  y:          900 px
+  font_size:  ~11 px
+```
+
+---
+
+### 6. 배경 색상 분석
+
+```
+배경 오버레이:   #3A2C08 (다크 앰버/브라운, ~75% opacity)
+원본 배경 추정:  #6B4E10 (황금빛 브라운)
+
+배경에 보이는 오브젝트:
+  오렌지 볼:    #E8A020
+  퍼플 오브젝트: #8B3FAF
+  청록 링:      #00C8C8
+  황금 코인:    #F5C842
+```
+
+---
+
+### 7. 이미지별 차이점 (6개 파일)
+
+| 파일 | 차이점 |
+|------|--------|
+| 01_small_grid_clean.png | "로딩 중.." (점 2개) |
+| 02_grid_detail.png | "로딩 중." (점 1개) |
+| 03_medium_grid.png | "로딩 중 중" (변형) |
+| 04_larger_grid.png | "로딩 중.." (점 2개) |
+| 05_ui_overlay.png | "로딩 중..." (점 3개) |
+| 06_settings_ui.png | "로딩 중..." (점 3개) |
+
+---
+
+### 경고: 측정 불가 항목
+
+다음 항목은 **게임플레이 화면이 없어 측정 불가**:
+
+```
+❌ 격자/보드 크기 (grid_width, grid_height)
+❌ 셀 크기 및 셀 간격 (cell_size, cell_gap)
+❌ 오브젝트 크기 (model_scale)
+❌ 홀더/병 슬롯 위치 (holder_y, slot_spacing)
+❌ 게임 HUD 바 높이 (top_bar_height, bottom_bar_height)
+❌ 보드 시작 Y 오프셋 (board_start_y)
+```
+
+---
+
+### 권고 사항
+
+세션 05의 스크린샷이 모두 앱 초기 로딩 화면(동의 팝업)에서 멈춰 있습니다. **실제 게임 격자 측정을 위해서는 ACCEPT 버튼 이후 게임 진입 화면 스크린샷이 필요합니다.**

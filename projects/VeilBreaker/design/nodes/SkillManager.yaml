@@ -1,0 +1,77 @@
+metadata:
+  nodeId: "SkillManager"
+  version: "1.0.0"
+  phase: 2
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "DataManager"
+    - "CurrencyManager"
+    - "EventManager"
+  external:
+    - "System.Collections.Generic"
+
+contract:
+  provides:
+    - "List<SkillData> GetHeroSkills(string heroId)"
+    - "bool LevelUpSkill(string heroId, string skillId)"
+    - "bool EquipSkill(string heroId, string skillId, int slot)"
+    - "bool CanActivate(string heroId, string skillId)"
+    - "void ResetCooldown(string heroId, string skillId)"
+    - "float GetCooldownRemain(string heroId, string skillId)"
+  requires:
+    - "Singleton"
+    - "DataManager"
+    - "CurrencyManager"
+
+tags:
+  layer: "Domain"
+  genre: "Idle"
+  role: "Manager"
+  system: "Skill"
+  majorFunctions:
+    - "StateControl"
+    - "ConditionCheck"
+    - "ValueModification"
+  minorFunctions:
+    - "Validate"
+    - "Assign"
+    - "Calculate"
+
+logicFlow:
+  - step: 1
+    tag: "Validate"
+    action: "LevelUpSkill: 최대 스킬 레벨(10) 체크, SkillStone 잔액 체크"
+    next: 2
+  - step: 2
+    tag: "Assign"
+    action: "CurrencyManager.SpendCurrency(SkillStone, cost)"
+    next: 3
+  - step: 3
+    tag: "Assign"
+    action: "skill.level += 1, 스킬 데미지/효과 갱신"
+    next: null
+  - step: 4
+    tag: "ConditionCheck"
+    action: "CanActivate: cooldownRemain <= 0 AND 스킬 조건 충족"
+    next: null
+  - step: 5
+    tag: "Calculate"
+    action: "Update: 전투 중 모든 스킬 쿨타임 -= Time.deltaTime"
+    next: null
+
+referencePatterns:
+  - source: "CLAUDE.md"
+    pattern: "SkillManager - 스킬 장착, 레벨업, 쿨타임 관리"
+
+codeHints:
+  patterns:
+    - "public class SkillManager : Singleton<SkillManager>"
+    - "private Dictionary<string, float[]> _cooldowns = new() // heroId → cooldownRemains[slot]"
+    - "쿨타임 업데이트는 BattleManager Update에서 SkillManager.UpdateCooldowns(Time.deltaTime) 호출"
+    - "EquipSkill: 최대 3슬롯, 슬롯 초과 시 가장 오래된 스킬 교체"
+  avoidPatterns:
+    - "쿨타임을 MonoBehaviour Update에서 직접 관리 금지 → SkillManager 중앙화"
+    - "스킬 효과(데미지 공식)를 SkillManager에 포함 금지 → DamageCalculator 위임"

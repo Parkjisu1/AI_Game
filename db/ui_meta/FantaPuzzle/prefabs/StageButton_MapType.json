@@ -1,0 +1,275 @@
+{
+  "fileName": "StageButton_MapType",
+  "filePath": "E:/AIMED/FantaPuzzle/PuzzleAutomation2/Assets\\6.Prefabs\\StageType\\StageButtonType\\StageButton_MapType.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 7,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "5311561964194474882",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "StageButton",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "StageButton_MapType"
+    }
+  ],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "5311561962348156686",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Star1",
+      "rectSize": {
+        "x": 20.0,
+        "y": 20.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 36.3
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "StageButton_MapType"
+    },
+    {
+      "type": "Image",
+      "fileID": "5311561963424401250",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Mission",
+      "rectSize": {
+        "x": 20.0,
+        "y": 20.0
+      },
+      "anchoredPosition": {
+        "x": 45.8,
+        "y": -47.1
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "StageButton_MapType"
+    },
+    {
+      "type": "Image",
+      "fileID": "5311561963617127235",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Star2",
+      "rectSize": {
+        "x": 20.0,
+        "y": 20.0
+      },
+      "anchoredPosition": {
+        "x": -36.3,
+        "y": 36.3
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "StageButton_MapType"
+    },
+    {
+      "type": "Image",
+      "fileID": "5311561963982280727",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Star3",
+      "rectSize": {
+        "x": 20.0,
+        "y": 20.0
+      },
+      "anchoredPosition": {
+        "x": 35.4,
+        "y": 36.3
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "StageButton_MapType"
+    },
+    {
+      "type": "Image",
+      "fileID": "5311561964194474883",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "StageButton",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "StageButton_MapType"
+    }
+  ],
+  "texts": [
+    {
+      "type": "Text",
+      "fileID": "5311561963718967029",
+      "m_FontSize": 40.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.19607843,
+        "g": 0.19607843,
+        "b": 0.19607843,
+        "a": 1.0
+      },
+      "m_Text": "1000",
+      "gameObjectName": "StageNumber",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "StageButton_MapType"
+    }
+  ],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 7
+}

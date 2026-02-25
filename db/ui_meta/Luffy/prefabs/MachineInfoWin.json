@@ -1,0 +1,2195 @@
+{
+  "fileName": "MachineInfoWin",
+  "filePath": "E:/AIMED/Luffy/IdleMoney1/Project/Assets\\IdleMoney\\Prefabs\\UI\\Windows\\MachineInfoWin.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 70,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [
+    {
+      "type": "CanvasGroup",
+      "fileID": "8303730085667835332",
+      "m_Alpha": 1,
+      "m_Interactable": 1,
+      "m_BlocksRaycasts": 1,
+      "m_IgnoreParentGroups": 0,
+      "gameObjectName": "MachineInfoWin",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      }
+    }
+  ],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "8355744608896503002",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "GachaTgl",
+      "rectSize": {
+        "x": 150.0,
+        "y": 80.0
+      },
+      "anchoredPosition": {
+        "x": 442.6,
+        "y": -96.8
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "750996871743424320",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Grade3Tgl",
+      "rectSize": {
+        "x": 150.0,
+        "y": 80.0
+      },
+      "anchoredPosition": {
+        "x": 586.0,
+        "y": -86.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "1765697863943526735",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Grade1Tgl",
+      "rectSize": {
+        "x": 150.0,
+        "y": 80.0
+      },
+      "anchoredPosition": {
+        "x": 126.1,
+        "y": -96.8
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "4208171039211487860",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "NewPlayBtn",
+      "rectSize": {
+        "x": 50.0,
+        "y": 50.0
+      },
+      "anchoredPosition": {
+        "x": -389.0,
+        "y": 162.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "49834829893785063",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "InfoBtn",
+      "rectSize": {
+        "x": 29.0,
+        "y": 29.0
+      },
+      "anchoredPosition": {
+        "x": -388.6,
+        "y": 86.3
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "3313714600997285594",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Grade4Tgl",
+      "rectSize": {
+        "x": 150.0,
+        "y": 80.0
+      },
+      "anchoredPosition": {
+        "x": 801.0,
+        "y": -86.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "4358785426867960543",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "switchBtn",
+      "rectSize": {
+        "x": 74.0,
+        "y": 74.0
+      },
+      "anchoredPosition": {
+        "x": 488.0,
+        "y": -5.2
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "6276867101848896331",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Grade5Tgl",
+      "rectSize": {
+        "x": 150.0,
+        "y": 80.0
+      },
+      "anchoredPosition": {
+        "x": 1017.0,
+        "y": -86.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "1945529281429933650",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Grade2Tgl",
+      "rectSize": {
+        "x": 150.0,
+        "y": 80.0
+      },
+      "anchoredPosition": {
+        "x": 370.0,
+        "y": -86.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "9124976936945816026",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "CollectionTgl",
+      "rectSize": {
+        "x": 150.0,
+        "y": 80.0
+      },
+      "anchoredPosition": {
+        "x": 691.2,
+        "y": -86.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "sourceFile": "MachineInfoWin"
+    }
+  ],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "8680316943978107725",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "13a73f1cd0f8a1f4ca82bde4bd0f74f2",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "NewTag_4",
+      "rectSize": {
+        "x": 65.25,
+        "y": 33.0
+      },
+      "anchoredPosition": {
+        "x": -117.29995,
+        "y": 82.99997
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "1391403886390501944",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "13a73f1cd0f8a1f4ca82bde4bd0f74f2",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "NewTag",
+      "rectSize": {
+        "x": 65.25,
+        "y": 33.0
+      },
+      "anchoredPosition": {
+        "x": -155.49995,
+        "y": 93.80002
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "3187935198368725288",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8573b3e7cb75544e983508996c95bf53",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Checkmark",
+      "rectSize": {
+        "x": 220.0,
+        "y": 93.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "8495537183311012358",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "51471f9b4fc7b43d8ae8e8512e393bcd",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Background",
+      "rectSize": {
+        "x": 220.0,
+        "y": 93.0
+      },
+      "anchoredPosition": {
+        "x": 21.900002,
+        "y": -0.29999924
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "220285827260275613",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "51471f9b4fc7b43d8ae8e8512e393bcd",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Background",
+      "rectSize": {
+        "x": 220.0,
+        "y": 93.0
+      },
+      "anchoredPosition": {
+        "x": 36.9,
+        "y": -0.29999924
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7795499270644670585",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "13a73f1cd0f8a1f4ca82bde4bd0f74f2",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "NewTag_2",
+      "rectSize": {
+        "x": 65.25,
+        "y": 33.0
+      },
+      "anchoredPosition": {
+        "x": -151.69995,
+        "y": 82.99997
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "1765697863723257145",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "fbf0ee1335f194d38b8c0e1295b58853",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BG",
+      "rectSize": {
+        "x": 3000.0,
+        "y": 720.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "1765697864427245644",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "5d13a587690944c3788be10b179255db",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IconImg",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": -586.5,
+        "y": -8.600006
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "1765697864595635279",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "51471f9b4fc7b43d8ae8e8512e393bcd",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Background",
+      "rectSize": {
+        "x": 220.0,
+        "y": 93.0
+      },
+      "anchoredPosition": {
+        "x": 4.0,
+        "y": 10.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "1765697865229258597",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8573b3e7cb75544e983508996c95bf53",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Checkmark",
+      "rectSize": {
+        "x": 220.0,
+        "y": 93.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.2
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7337300696736629840",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "0d2cdd65b17314b5fa78e32be7a82bb9",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "NotiIcon_3",
+      "rectSize": {
+        "x": 45.0,
+        "y": 45.0
+      },
+      "anchoredPosition": {
+        "x": 39.0,
+        "y": 78.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "321381470451954528",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "cee175d7707fea44b9bd28c60f79e304",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "NewPlayBtn",
+      "rectSize": {
+        "x": 50.0,
+        "y": 50.0
+      },
+      "anchoredPosition": {
+        "x": -389.0,
+        "y": 162.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "5028636543049343413",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "e6800eb8c3dffb846ae742a7475f6a20",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "GradeIcon2",
+      "rectSize": {
+        "x": 61.0,
+        "y": 56.0
+      },
+      "anchoredPosition": {
+        "x": -151.5,
+        "y": 43.9
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "428367655159710522",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "0d2cdd65b17314b5fa78e32be7a82bb9",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "NotiIcon_4",
+      "rectSize": {
+        "x": 45.0,
+        "y": 45.0
+      },
+      "anchoredPosition": {
+        "x": 54.0,
+        "y": 78.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "250102116977807303",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "51471f9b4fc7b43d8ae8e8512e393bcd",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Background",
+      "rectSize": {
+        "x": 220.0,
+        "y": 93.0
+      },
+      "anchoredPosition": {
+        "x": 4.0,
+        "y": 10.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "9097906693845155219",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "0d2cdd65b17314b5fa78e32be7a82bb9",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "NotiIcon_1",
+      "rectSize": {
+        "x": 45.0,
+        "y": 45.0
+      },
+      "anchoredPosition": {
+        "x": 10.4,
+        "y": 77.8
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "42878265573527504",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "321bad4c798c5452ab8926e7d973631b",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "InfoBtn",
+      "rectSize": {
+        "x": 29.0,
+        "y": 29.0
+      },
+      "anchoredPosition": {
+        "x": -388.6,
+        "y": 86.3
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "5589027997848331619",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "31976cd17436949e38ddc8375462fb6d",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Progress",
+      "rectSize": {
+        "x": 742.0,
+        "y": 40.0
+      },
+      "anchoredPosition": {
+        "x": 7.1,
+        "y": 87.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "4545418924819384056",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "7f9be3cf6f3e74e1e9ec85256b6ea80b",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "GradeIcon1",
+      "rectSize": {
+        "x": 60.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": -133.0,
+        "y": 55.8
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "5092293252419507444",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "0d2cdd65b17314b5fa78e32be7a82bb9",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "NotiIcon",
+      "rectSize": {
+        "x": 45.0,
+        "y": 45.0
+      },
+      "anchoredPosition": {
+        "x": 23.8,
+        "y": 89.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "724950811956907119",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 0.69803923
+      },
+      "m_Sprite": {
+        "fileID": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BlockPanel",
+      "rectSize": {
+        "x": 10000.0,
+        "y": 10000.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "1559787739956614074",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "0ae3450d6527240a5a4fc3c7dae70b66",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "GradeIcon2",
+      "rectSize": {
+        "x": 60.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": -145.0,
+        "y": 45.00001
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "3719495910991201220",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "ScrollView",
+      "rectSize": {
+        "x": 1250.0,
+        "y": 480.0
+      },
+      "anchoredPosition": {
+        "x": 639.0,
+        "y": -483.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7354795544094458963",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "13a73f1cd0f8a1f4ca82bde4bd0f74f2",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "NewTag_1",
+      "rectSize": {
+        "x": 65.25,
+        "y": 33.0
+      },
+      "anchoredPosition": {
+        "x": -167.29996,
+        "y": 78.3
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "1327776033790591734",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "e428607aa7318e541abe29c746641d65",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "GradeIcon1",
+      "rectSize": {
+        "x": 60.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": -139.6,
+        "y": 55.9
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "6198677234181021287",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8573b3e7cb75544e983508996c95bf53",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Checkmark",
+      "rectSize": {
+        "x": 220.0,
+        "y": 93.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.2
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "222293892060183111",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "fff8730d9197444c497645b623e28a3e",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "GradeIcon5",
+      "rectSize": {
+        "x": 60.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": -95.0,
+        "y": 45.00001
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "2750754573237751626",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "13a73f1cd0f8a1f4ca82bde4bd0f74f2",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "NewTag",
+      "rectSize": {
+        "x": 65.25,
+        "y": 33.0
+      },
+      "anchoredPosition": {
+        "x": -154.0,
+        "y": 89.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "670710805817717175",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "0d2cdd65b17314b5fa78e32be7a82bb9",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "NotiIcon_2",
+      "rectSize": {
+        "x": 45.0,
+        "y": 45.0
+      },
+      "anchoredPosition": {
+        "x": 23.0,
+        "y": 78.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7444737396134968226",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "51471f9b4fc7b43d8ae8e8512e393bcd",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Background",
+      "rectSize": {
+        "x": 220.0,
+        "y": 93.0
+      },
+      "anchoredPosition": {
+        "x": 5.800003,
+        "y": -0.29999924
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "5742234527946785547",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "ae419cfab9b04f44e9587cce703f3194",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "BtnClose",
+      "rectSize": {
+        "x": 44.0,
+        "y": 45.0
+      },
+      "anchoredPosition": {
+        "x": 0.2,
+        "y": 5.4
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "3940054129972269532",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8573b3e7cb75544e983508996c95bf53",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Checkmark",
+      "rectSize": {
+        "x": 220.0,
+        "y": 93.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "6429968697987494838",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "0d2cdd65b17314b5fa78e32be7a82bb9",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "NotiIcon",
+      "rectSize": {
+        "x": 45.0,
+        "y": 45.0
+      },
+      "anchoredPosition": {
+        "x": 19.300003,
+        "y": 88.79999
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "5403146116285671412",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "21bb2a6906630438eb79ad964cb5e764",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "switchBtn",
+      "rectSize": {
+        "x": 74.0,
+        "y": 74.0
+      },
+      "anchoredPosition": {
+        "x": 488.0,
+        "y": -5.2
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "8963315975356763032",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "0d2cdd65b17314b5fa78e32be7a82bb9",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "NotiIcon_1",
+      "rectSize": {
+        "x": 45.0,
+        "y": 45.0
+      },
+      "anchoredPosition": {
+        "x": 6.899994,
+        "y": 78.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "336592520226014776",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "4011250ca837c4e9faef33673df7433b",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "GradeIcon3",
+      "rectSize": {
+        "x": 60.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": -130.0,
+        "y": 45.00001
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "6279619605483497825",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "293abf9c7eb11452bba6cb0dc68a7117",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "GradeIcon4",
+      "rectSize": {
+        "x": 60.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": -115.0,
+        "y": 45.00001
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "5568236928277597481",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "51471f9b4fc7b43d8ae8e8512e393bcd",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Background",
+      "rectSize": {
+        "x": 220.0,
+        "y": 93.0
+      },
+      "anchoredPosition": {
+        "x": -9.0,
+        "y": -0.5
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "3355272706408243725",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8573b3e7cb75544e983508996c95bf53",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Checkmark",
+      "rectSize": {
+        "x": 220.0,
+        "y": 93.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "3283656546572939722",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "13a73f1cd0f8a1f4ca82bde4bd0f74f2",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "NewTag_1",
+      "rectSize": {
+        "x": 65.25,
+        "y": 33.0
+      },
+      "anchoredPosition": {
+        "x": -167.29996,
+        "y": 82.99997
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "90614022296500527",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8573b3e7cb75544e983508996c95bf53",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Checkmark",
+      "rectSize": {
+        "x": 220.0,
+        "y": 93.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "180192375972040164",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "13a73f1cd0f8a1f4ca82bde4bd0f74f2",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "NewTag_3",
+      "rectSize": {
+        "x": 65.25,
+        "y": 33.0
+      },
+      "anchoredPosition": {
+        "x": -137.0,
+        "y": 83.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "5888580172780261552",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8573b3e7cb75544e983508996c95bf53",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Checkmark",
+      "rectSize": {
+        "x": 220.0,
+        "y": 93.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "3498997339018656920",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "51471f9b4fc7b43d8ae8e8512e393bcd",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Background",
+      "rectSize": {
+        "x": 220.0,
+        "y": 93.0
+      },
+      "anchoredPosition": {
+        "x": -9.0,
+        "y": -0.5
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "sourceFile": "MachineInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "3590941912159434134",
+      "m_Type": 3,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "14597d9fc82a0dd4a901143a17e5dfaf",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "gaugeImg",
+      "rectSize": {
+        "x": 736.0,
+        "y": 34.0
+      },
+      "anchoredPosition": {
+        "x": -0.3,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineInfoWin"
+    }
+  ],
+  "texts": [],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 74
+}

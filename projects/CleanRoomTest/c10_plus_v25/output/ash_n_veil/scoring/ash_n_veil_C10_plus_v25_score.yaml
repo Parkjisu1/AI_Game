@@ -1,0 +1,279 @@
+scoring:
+  game: "Ash N Veil: Fast Idle Action"
+  genre: "Idle RPG"
+  condition: "C10_plus_v25"
+  scored_by: "source_code_comparison"
+  scored_date: "2026-02-24"
+  source: "D:\\AshAndVeil_recent\\PPM\\Assets\\Scripts\\"
+
+  results:
+    # ===================== A. 진행 구조 =====================
+
+    - id: ANV01
+      name: max_chapter
+      ground_truth: "server_data (동적, MapChart.cs)"
+      generated: null
+      score: 0.0
+      note: "Missing — AI 미확인, GT도 서버 데이터"
+
+    - id: ANV02
+      name: stages_per_chapter
+      ground_truth: "server_data (챕터마다 가변, MapChart.cs:30-34)"
+      generated: 5
+      score: 0.4
+      note: "Partial — 챕터1 관찰 기준으로 맞으나 실제는 챕터마다 다를 수 있음"
+
+    - id: ANV03
+      name: boss_frequency
+      ground_truth: "server_data (데이터 드리븐, BossMonsterChart.cs)"
+      generated: 5
+      score: 0.4
+      note: "Partial — 챕터1 관찰 기준. 실제는 고정 패턴이 아닌 데이터 드리븐"
+
+    - id: ANV04
+      name: auto_battle_unlock
+      ground_truth: "ContentsLockType.Account_Level (ChartData.cs:362)"
+      generated: "Lv.3"
+      score: 0.7
+      note: "Close — 해금 유형(Account_Level) 정확. 구체적 레벨값은 서버 config"
+
+    - id: ANV05
+      name: difficulty_modes
+      ground_truth: "N/A (시스템 없음)"
+      generated: null
+      score: 0.7
+      note: "Close — AI가 미확인으로 보류 = 올바른 판단 (시스템 자체 부재)"
+
+    # ===================== B. 캐릭터 성장 =====================
+
+    - id: ANV06
+      name: base_hp_lv1
+      ground_truth: "server_data (BasicStat chart, stat_key=1008)"
+      generated: 195
+      score: 0.4
+      note: "Partial — 회귀분석 역산값. 방법론 합리적이나 서버값 미확인"
+
+    - id: ANV07
+      name: base_atk_lv1
+      ground_truth: "server_data (BasicStat chart, stat_key=1000)"
+      generated: 18
+      score: 0.4
+      note: "Partial — 회귀분석 역산값. 관찰 데이터와 일관적이나 서버값 미확인"
+
+    - id: ANV08
+      name: hp_growth_formula
+      ground_truth: "누적 테이블: HP(Lv) = BasicStat[HP] + SUM(LevelUp[1..Lv]) (LevelUpChart.cs:42-55)"
+      generated: "HP ≈ 197 + 26 × (Lv - 1)"
+      score: 0.4
+      note: "Partial — 방향 맞음. 실제는 선형이 아닌 레벨별 개별 증가분 누적 테이블"
+
+    - id: ANV09
+      name: atk_growth_formula
+      ground_truth: "누적 테이블: ATK(Lv) = BasicStat[ATK] + SUM(LevelUp[1..Lv]) (LevelUpChart.cs:42-55)"
+      generated: "ATK ≈ 18 + 0.55 × (Lv - 1)"
+      score: 0.4
+      note: "Partial — 구조 유사. 선형 근사 vs 실제 누적 테이블"
+
+    - id: ANV10
+      name: exp_curve_formula
+      ground_truth: "server_data (LevelUpInfo.exp 필드)"
+      generated: null
+      score: 0.0
+      note: "Missing — AI 미확인"
+
+    # ===================== C. 장비 시스템 =====================
+
+    - id: ANV11
+      name: gear_slot_count
+      ground_truth: 15
+      generated: 7
+      score: 0.4
+      note: "Partial — AI는 초반 화면 7슬롯만 관찰. 실제 15 (장비7+악세서리8, EquippedData.cs:14-28)"
+
+    - id: ANV12
+      name: gear_grade_count
+      ground_truth: 8
+      generated: null
+      score: 0.0
+      note: "Missing — AI 미확인. Tier enum 8등급 (ItemChart.cs:104-114)"
+
+    - id: ANV13
+      name: enhance_max_level
+      ground_truth: "per_item_dynamic (InventoryData.cs:254-266)"
+      generated: null
+      score: 0.0
+      note: "Missing — AI 미확인"
+
+    - id: ANV14
+      name: enhance_cost_formula
+      ground_truth: "스크롤 소모 방식 (ScrollType enum, ItemChart.cs:95-101)"
+      generated: null
+      score: 0.0
+      note: "Missing — AI 미확인. 골드 비용이 아닌 스크롤 소비 시스템"
+
+    # ===================== D. 전투 =====================
+
+    - id: ANV15
+      name: active_skill_count
+      ground_truth: 6
+      generated: 3
+      score: 0.4
+      note: "Partial — Lv.10까지 3슬롯 관찰. 최대 6 (SkillData.cs:37 presetSlotCount=6)"
+
+    - id: ANV16
+      name: skill_cooldown_range
+      ground_truth: "server_data (float cooltime, 스킬별 개별)"
+      generated: "0.0 ~ 13.6"
+      score: 0.7
+      note: "Close — 관찰된 쿨타임 수치는 실제 게임 값. 전체 범위의 부분이나 정확"
+
+    - id: ANV17
+      name: auto_attack_speed
+      ground_truth: "config('character_basic_att_spd')+stat, interval=1/speed (StatChart.cs:141)"
+      generated: "1.0 ~ 1.5"
+      score: 0.4
+      note: "Partial — 체감 범위 합리적이나 속도 배수 체계 파악 못함"
+
+    - id: ANV18
+      name: damage_formula
+      ground_truth: "(ATK+buff)×(1+cri)×(1+superCri)×(1+finalAtk)×(1+weakness)-flat-% (CharacterPlayer.cs:650-720)"
+      generated: null
+      score: 0.0
+      note: "Missing — AI 미확인"
+
+    - id: ANV19
+      name: critical_rate
+      ground_truth: "float 0.0~1.0, level/equip dependent (CharacterPlayer.cs:690)"
+      generated: "5 ~ 15"
+      score: 0.4
+      note: "Partial — 퍼센트 범위 추정은 합리적이나 저장 형식/의존 관계 미파악"
+
+    - id: ANV20
+      name: critical_multiplier
+      ground_truth: "additive bonus, effective=1+criDamage, +superCrit (CharacterPlayer.cs:692)"
+      generated: "1.5 ~ 2.0"
+      score: 0.4
+      note: "Partial — 1.5~2.0 범위는 criDamage=0.5~1.0에 해당하여 합리적. superCrit 미인지"
+
+    # ===================== E. 가챠/소환 =====================
+
+    - id: ANV21
+      name: gacha_cost_1x
+      ground_truth: "config별 4종 가격 (avatar/pet/wand/artifact, PopupSummon.cs:75-102)"
+      generated: null
+      score: 0.0
+      note: "Missing — AI 미확인"
+
+    - id: ANV22
+      name: gacha_cost_10x
+      ground_truth: "1x × 10, 할인 없음 (PopupSummon.cs:112)"
+      generated: null
+      score: 0.0
+      note: "Missing — AI 미확인"
+
+    - id: ANV23
+      name: gacha_ssr_rate
+      ground_truth: "server_data (GachaInfo.gacha_rate, Tier별/Type별)"
+      generated: null
+      score: 0.0
+      note: "Missing — AI 미확인"
+
+    - id: ANV24
+      name: gacha_pity_count
+      ground_truth: "등급별 3단계 천장 (epic/legendary/mythic)"
+      generated: null
+      score: 0.0
+      note: "Missing — AI 미확인"
+
+    # ===================== F. 경제 =====================
+
+    - id: ANV25
+      name: currency_types
+      ground_truth: 9
+      generated: 2
+      score: 0.1
+      note: "Wrong — AI는 HUD의 Gem+Gold만 관찰. 실제 9종 (GoodsChart.cs:7-24)"
+
+    - id: ANV26
+      name: idle_gold_per_min
+      ground_truth: "server_data (OfflineRewardChart, level dependent)"
+      generated: null
+      score: 0.0
+      note: "Missing — AI 미확인"
+
+    - id: ANV27
+      name: idle_max_accumulation
+      ground_truth: "config('offline_reward_max_time') 초 단위 (OfflineRewardData.cs:143)"
+      generated: null
+      score: 0.0
+      note: "Missing — AI 미확인"
+
+    - id: ANV28
+      name: attendance_days
+      ground_truth: "server_data (AttendanceChart.day)"
+      generated: null
+      score: 0.0
+      note: "Missing — AI 미확인"
+
+    - id: ANV29
+      name: daily_quest_count
+      ground_truth: "server_data (MissionChart, type=daily)"
+      generated: null
+      score: 0.0
+      note: "Missing — AI 미확인"
+
+    # ===================== G. 시스템 =====================
+
+    - id: ANV30
+      name: pet_system_exists
+      ground_truth: true
+      generated: null
+      score: 0.0
+      note: "Missing — AI 미확인. PetChart.cs/PetData.cs 완전 구현"
+
+    - id: ANV31
+      name: ui_reference_resolution
+      ground_truth: "1080x1920"
+      generated: "1080x1920"
+      score: 1.0
+      note: "Exact — GameManager.cs:245 defaultRate=1080f/1920f 정확 일치"
+
+    - id: ANV32
+      name: state_count
+      ground_truth: "2 scenes + multi-page UI (EditorBuildSettings.asset)"
+      generated: 6
+      score: 0.4
+      note: "Partial — Unity 씬 2개 + 5+ UI 페이지. AI 추정 6은 주요 페이지 수에 근접"
+
+  summary:
+    total: 32
+    exact_count: 1
+    close_count: 3
+    partial_count: 12
+    wrong_count: 1
+    missing_count: 15
+
+    # Exact(1.0)×1 + Close(0.7)×3 + Partial(0.4)×12 + Wrong(0.1)×1 + Missing(0.0)×15
+    # = 1.0 + 2.1 + 4.8 + 0.1 + 0.0 = 8.0
+    sum: 8.0
+    average: 0.250
+
+    # ============================================================
+    # 결론
+    # ============================================================
+    #
+    # C10+ v2.5 Idle RPG 정확도: 25.0%
+    #
+    # 비교:
+    #   퍼즐 3종: 89.5% (자사 게임, 전체 UI 접근, 소스 GT)
+    #   Idle RPG: 25.0% (외부 게임, UI 잠금, 서버 데이터)
+    #
+    # 정확도 저하 원인:
+    #   1. Missing 15개(47%) — ADB로 UI 진입 실패 (가챠/상점/방치/펫)
+    #   2. Partial 12개(38%) — 초반 관찰 범위 한계 (7/15슬롯, 3/6스킬)
+    #   3. 서버 의존 — 32개 중 ~18개 파라미터의 수치가 서버에만 존재
+    #
+    # 개선 방향:
+    #   1. Human Capture → 모든 UI 화면 접근 가능 (Missing 해소)
+    #   2. 고레벨 데이터 추가 → Partial → Close 향상
+    #   3. 런타임 데이터 덤프 → 서버 데이터 확보

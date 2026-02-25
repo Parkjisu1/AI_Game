@@ -1,0 +1,76 @@
+# Ash & Veil — Game Profile
+# Genre: RPG
+# Used with: play-adb --profile data/games/ash_n_veil/profile.yaml
+
+game_id: ash_n_veil
+game_name: "Ash & Veil"
+package_name: studio.gameberry.anv
+genre: rpg
+
+gauge_overrides:
+  hp:
+    hsv_lower: [35, 100, 100]
+    hsv_upper: [85, 255, 255]
+    color_rgb: [76, 175, 80]
+  mp:
+    hsv_lower: [100, 100, 100]
+    hsv_upper: [130, 255, 255]
+    color_rgb: [33, 150, 243]
+  xp:
+    hsv_lower: [20, 100, 100]
+    hsv_upper: [35, 255, 255]
+    color_rgb: [255, 193, 7]
+
+screen_rois:
+  battle:
+    hp_bar:
+      region: [50, 60, 400, 20]
+      type: gauge
+      gauge_name: hp
+    mp_bar:
+      region: [50, 85, 400, 15]
+      type: gauge
+      gauge_name: mp
+    stage_number:
+      region: [400, 30, 280, 40]
+      type: ocr
+      numeric: true
+      category: stats
+  lobby:
+    gold:
+      region: [800, 20, 200, 35]
+      type: ocr
+      numeric: true
+      category: resources
+    gem:
+      region: [800, 60, 200, 35]
+      type: ocr
+      numeric: true
+      category: resources
+    level:
+      region: [20, 20, 80, 30]
+      type: ocr
+      numeric: true
+      category: stats
+  menu_shop:
+    gold:
+      region: [800, 20, 200, 35]
+      type: ocr
+      numeric: true
+      category: resources
+  menu_character:
+    atk:
+      region: [600, 300, 150, 30]
+      type: ocr
+      numeric: true
+      category: stats
+    def:
+      region: [600, 340, 150, 30]
+      type: ocr
+      numeric: true
+      category: stats
+    level:
+      region: [200, 100, 80, 30]
+      type: ocr
+      numeric: true
+      category: stats

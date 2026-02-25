@@ -1,0 +1,252 @@
+```yaml
+scoring:
+  game: "Car Match"
+  condition: "D10"
+  results:
+    - id: CM01
+      name: cell_size
+      ground_truth: "1.0 (Unity world units)"
+      generated: "1.0 (Unity world units)"
+      score: 1.0
+      note: "정확히 일치. 낮은 신뢰도로 역산 추정했으나 정답 도출"
+
+    - id: CM02
+      name: car_types
+      ground_truth: "6 (Taxi, TractorPolice, Truck, Firetruck, GarbageTruck, HatchbackSports)"
+      generated: "8 (레벨 진행 최댓값 기준 채택)"
+      score: 0.4
+      note: "전체 자동차 풀은 6종이나 난이도 진행의 '최대 약 8' 수치를 전체 풀로 오해. 개념은 맞으나 값 오류 (6 vs 8)"
+
+    - id: CM03
+      name: match_count
+      ground_truth: "3 (consecutive same type)"
+      generated: "3"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: CM04
+      name: movement_speed
+      ground_truth: "5.0 (world units per second)"
+      generated: "5.0 (units/second)"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: CM05
+      name: model_scale
+      ground_truth: "0.4"
+      generated: "0.4"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: CM06
+      name: y_offset
+      ground_truth: "0.25 (model_y_offset)"
+      generated: "0.25"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: CM07
+      name: holder_max_slots
+      ground_truth: "7 (default, customizable per level)"
+      generated: "7"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: CM08
+      name: slot_spacing
+      ground_truth: "1.0"
+      generated: "1.0 (low confidence, 역산 추정)"
+      score: 1.0
+      note: "신뢰도 낮은 역산 추정이었으나 정확한 값 도출"
+
+    - id: CM09
+      name: grid_size_progression
+      ground_truth: "4x4(1-10) / 5x5(11-30) / 6x5(31-60) / 6x6(61-100) / 7x6(101+)"
+      generated: "동일 5단계 진행"
+      score: 1.0
+      note: "5단계 격자 크기 및 레벨 범위 모두 정확히 일치"
+
+    - id: CM10
+      name: scoring_formula
+      ground_truth: "coins = stars * 10"
+      generated: "coins = stars × 10"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: CM11
+      name: star_thresholds
+      ground_truth: "3★: totalCars / 2★: totalCars+5 / 1★: totalCars+10"
+      generated: "3★: taps≤total_cars / 2★: taps≤total_cars+5 / 1★: taps≤total_cars+10"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: CM12
+      name: max_levels
+      ground_truth: "200"
+      generated: "200 (medium confidence)"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: CM13
+      name: car_sets_formula
+      ground_truth: "3 + (levelId / 10), max 8"
+      generated: "floor(3 + level / 10), max: 8"
+      score: 1.0
+      note: "의미적으로 동일 (floor 명시 추가는 동등)"
+
+    - id: CM14
+      name: booster_types
+      ground_truth: "undo(0) / shuffle(1) / super_undo(2) / magnet(3)"
+      generated: "undo(0) / shuffle(1) / power_undo(2) / magnet(3)"
+      score: 0.7
+      note: "4종 모두 올바르게 식별, 기능 설명 일치. id:2 명칭만 super_undo → power_undo로 미세 차이"
+
+    - id: CM15
+      name: booster_initial_counts
+      ground_truth: "undo:5, shuffle:5, super_undo:3, magnet:3"
+      generated: "min:3, max:5, 타입별 동일 지급으로 표현"
+      score: 0.4
+      note: "범위(3~5)는 커버하나 타입별 차등 지급(undo/shuffle:5 vs super_undo/magnet:3) 미포착, '동일 지급' 가정 오류"
+
+    - id: CM16
+      name: initial_coins
+      ground_truth: "500"
+      generated: "500"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: CM17
+      name: move_history_max
+      ground_truth: "50"
+      generated: "50"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: CM18
+      name: tunnel_spawn_count
+      ground_truth: "spawn_count_low:3 (Level<35) / spawn_count_high:6 (Level≥35) / spawn_queue_unit:3"
+      generated: "3 (단일 값, 레벨별 총량 다름 언급)"
+      score: 0.4
+      note: "3-car 세트 단위 정확, '레벨별 차이' 인지함. 그러나 고레벨(≥35) spawn_count_high:6 미포착"
+
+    - id: CM19
+      name: tunnel_placement
+      ground_truth: "board edges (top, left, right - not bottom)"
+      generated: "allowed: [top, left, right], excluded: bottom"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: CM20
+      name: pathfinding_algorithm
+      ground_truth: "A*(Manhattan), 4방향, path_reservation:true, waypoint_merge_threshold:0.99, fallback_max:3"
+      generated: "A*(Manhattan) + BFS검증 + fallback≤3cells + reservation + waypoint merging"
+      score: 0.7
+      note: "핵심 개념 모두 포착. waypoint merge 임계값(0.99 dot product) 미명시가 유일한 누락"
+
+    - id: CM21
+      name: storage_count
+      ground_truth: "count:2, capacity_each:1, indices:[0,1]"
+      generated: "2 (slots, 각 1칸 용량)"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: CM22
+      name: daily_reward_progression
+      ground_truth: "7일 주기 / day1:50 / day2:75 / day3:100 / day4:150 / day5:200 / day6:300 / day7:500"
+      generated: "7일 주기 / min:50 / max:500 / '선형 증가'"
+      score: 0.7
+      note: "7일 주기 및 min/max 범위 정확. 실제 증가 패턴은 가속(50→75→100→150→200→300→500)이나 '선형 증가'로 단순화"
+
+    - id: CM23
+      name: journey_frequency
+      ground_truth: "every 5 levels, coins = 200 + (levelId * 10)"
+      generated: "every 5 levels, coins = 200 + (level × 10)"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: CM24
+      name: camera_angle
+      ground_truth: "70 degrees"
+      generated: "70 degrees"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: CM25
+      name: base_height_5x5
+      ground_truth: "12.0 (Unity world units)"
+      generated: "7.0 (low confidence, 역산 추정)"
+      score: 0.4
+      note: "카메라 높이 개념은 정확. 값 7.0 vs 12.0으로 약 42% 오차 (20% 초과). 역산 공식의 UI/홀더 여백 계수 과소 적용"
+
+    - id: CM26
+      name: state_count
+      ground_truth: "5 (Idle, Playing, Paused, Win, Fail)"
+      generated: "5 (Idle, Playing, Paused, Win, Fail)"
+      score: 1.0
+      note: "개수 및 상태명 모두 정확히 일치"
+
+    - id: CM27
+      name: namespace
+      ground_truth: "CarMatch"
+      generated: "CarMatch (medium confidence, 게임 타이틀 파스칼케이스 추정)"
+      score: 1.0
+      note: "추정이었으나 정확히 일치"
+
+    - id: CM28
+      name: tap_mechanic
+      ground_truth: "(명시적 필드 없음, 아키텍처에서 암시)"
+      generated: "3D Raycast: ScreenPointToRay → Physics.Raycast → Car 컴포넌트 감지"
+      score: 0.7
+      note: "Ground Truth에 명시적 필드 부재. Unity 3D CarController 기반 아키텍처에서 Raycast는 유일한 표준 접근법으로 논리적으로 정확. 소스 직접 검증 불가로 감점"
+
+    - id: CM29
+      name: fail_condition
+      ground_truth: "Holder full (7) with no possible match"
+      generated: "holder_slots_full AND match_impossible (홀더 7칸 점유 AND 매칭 불가)"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: CM30
+      name: win_condition
+      ground_truth: "Board empty AND Holder empty AND no pending cars"
+      generated: "board_empty AND holder_empty AND tunnel_queue_empty"
+      score: 1.0
+      note: "정확히 일치 (no pending cars = tunnel_queue_empty)"
+
+    - id: CM31
+      name: pattern_count
+      ground_truth: "8 (Singleton, Object Pool, State Machine, Observer/Pub-Sub, Factory, Command, Strategy, Component)"
+      generated: "8 (Singleton을 영구/씬한정 2종으로 분리 계산)"
+      score: 0.7
+      note: "최종 개수 8로 일치. 8종 패턴 모두 올바르게 식별. 단, Singleton을 2종으로 분리 계산하여 Component를 빠뜨리는 열거 오류 발생"
+
+    - id: CM32
+      name: serialization
+      ground_truth: "LevelData.json(Resources/) + PlayerPrefs(CarMatchUserData key) + JsonUtility"
+      generated: "JSON(Resources folder) + PlayerPrefs(단일 키에 JSON 직렬화)"
+      score: 0.7
+      note: "구조(JSON+Resources, PlayerPrefs+JSON) 정확. PlayerPrefs 키 이름 'CarMatchUserData' 미포착, JsonUtility 명시 누락"
+
+  summary:
+    total: 32
+    sum: 27.8
+    average: 0.869
+```
+
+---
+
+**채점 결과 분석**
+
+| 등급 | 개수 | 해당 파라미터 |
+|------|------|--------------|
+| 1.0 (Exact) | 22 | CM01, 03~13, 16~17, 19, 21, 23~24, 26~27, 29~30 |
+| 0.7 (Close) | 6 | CM14, 20, 22, 28, 31, 32 |
+| 0.4 (Partial) | 4 | CM02, 15, 18, 25 |
+| 0.1 / 0.0 | 0 | — |
+
+**오답 패턴 요약**
+
+- **CM02 (0.4)**: 난이도 진행의 활성 최대치(8)를 전체 자동차 풀 수로 혼동 → 실제 6종
+- **CM15 (0.4)**: 부스터별 차등 지급(5/5/3/3) 미파악, 균등 지급 가정
+- **CM18 (0.4)**: 레벨 35+ 구간 스폰 수 6 미포착, 저레벨 기준값 3만 채택
+- **CM25 (0.4)**: 카메라 높이 역산 시 UI 오버레이·홀더 여백 계수 과소평가 (7.0 vs 12.0)

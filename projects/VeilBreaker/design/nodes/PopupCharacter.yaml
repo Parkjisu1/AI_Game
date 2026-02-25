@@ -1,0 +1,74 @@
+metadata:
+  nodeId: "PopupCharacter"
+  version: "1.0.0"
+  phase: 3
+  role: "UX"
+
+dependencies:
+  internal:
+    - "UISystem"
+    - "CharacterManager"
+    - "CurrencyManager"
+    - "EventManager"
+  external:
+    - "UnityEngine"
+    - "UnityEngine.UI"
+    - "TMPro"
+
+contract:
+  provides:
+    - "void Open(object data)"
+    - "void Close()"
+    - "void RefreshHeroInfo(string heroId)"
+  requires:
+    - "UISystem"
+    - "CharacterManager"
+
+tags:
+  layer: "Game"
+  genre: "Idle"
+  role: "UX"
+  system: "UI"
+  majorFunctions:
+    - "DataSync"
+    - "ResponseTrigger"
+  minorFunctions:
+    - "Assign"
+
+logicFlow:
+  - step: 1
+    tag: "Assign"
+    action: "Open: heroId 저장, CharacterManager에서 영웅 데이터 로드, UI 초기화"
+    next: null
+  - step: 2
+    tag: "ResponseTrigger"
+    action: "레벨업 버튼: CharacterManager.LevelUpHero(heroId)"
+    next: null
+  - step: 3
+    tag: "ResponseTrigger"
+    action: "별 강화 버튼: CharacterManager.StarUpHero(heroId)"
+    next: null
+  - step: 4
+    tag: "ResponseTrigger"
+    action: "OnCharacterLevelUp 수신: RefreshHeroInfo()"
+    next: null
+
+referencePatterns:
+  - source: "CLAUDE.md"
+    pattern: "PopupCharacter - 영웅 상세/강화 팝업"
+
+codeHints:
+  patterns:
+    - "public class PopupCharacter : PopupBase"
+    - "[SerializeField] private TextMeshProUGUI _heroNameText"
+    - "[SerializeField] private TextMeshProUGUI _levelText"
+    - "[SerializeField] private TextMeshProUGUI _atkText"
+    - "[SerializeField] private TextMeshProUGUI _defText"
+    - "[SerializeField] private TextMeshProUGUI _hpText"
+    - "[SerializeField] private Button _levelUpButton"
+    - "[SerializeField] private Button _starUpButton"
+    - "[SerializeField] private Image _heroPortrait"
+    - "[SerializeField] private EquipmentSlotUI[] _equipSlots (6개)"
+    - "Open: data는 heroId string으로 캐스팅"
+  avoidPatterns:
+    - "영웅 스탯 직접 수정 금지 → CharacterManager 메서드 경유"

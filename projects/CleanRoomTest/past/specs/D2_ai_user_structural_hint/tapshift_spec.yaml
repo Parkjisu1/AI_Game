@@ -1,0 +1,583 @@
+# Tap Shift - Game Balance Sheet / Design Specification
+# Source Tier: D2 - AI User Observation + Structural Hint Pattern Card (Level 2)
+# Method: Visual gameplay observation (BlueStacks/ADB) cross-referenced with structural design hints
+# Generation Date: 2026-02-19
+# Clean Room Note: No original source code referenced. All values derived from observation data
+#                  and structural hint anchors, refined to specific integers/floats.
+
+game: "Tap Shift"
+version_spec: "1.0.0"
+spec_tier: "D2_ai_user_structural_hint"
+
+# =============================================================================
+# CORE MECHANICS
+# =============================================================================
+core_mechanics:
+  board:
+    # Pattern card: ~200px early, ~300-400px mid, ~400-450px late (pixel-based 2D board)
+    # Observation: portrait orientation, 2D grid layout; level 14 shows ~3 receiver boxes at bottom
+    # Resolution baseline: 1080x1920 (standard portrait mobile)
+    type: "pixel_based_2d"
+    orientation: "portrait"
+    # Board width spans full usable width minus padding; height is roughly 55% of screen height
+    early_size_px: 200          # levels 1-20: ~200px square board
+    mid_size_px: 350            # levels 21-60: ~350px square board
+    late_size_px: 430           # levels 61-100: ~430px square board
+    padding_px: 32              # board edge padding from screen sides
+    receiver_area_height_px: 80 # collector strip at board bottom
+    receiver_count_max: 4       # observed 3 at level 14; max 4 at highest difficulty
+
+  arrows:
+    # Observation: up/down/left/right + L-shapes + U-turns confirmed
+    # Pattern card: vertical arrows move up/down, horizontal arrows move left/right
+    direction_types: ["up", "down", "left", "right"]
+    shape_variants: ["straight", "L_bend", "U_turn"]
+    direction_rule: "arrow_orientation_matches_travel_axis"
+    # Pattern card: max ~20 arrows; observation level 14 showed ~20-25 (upper end of range)
+    max_arrows_per_level: 20
+    min_arrows_per_level: 1
+    # Arrow entity fields
+    entity_fields: ["position_x", "position_y", "width", "height", "direction", "color"]
+
+  colors:
+    # Observation: 8-9 distinct colors confirmed by visual analysis
+    count: 8
+    palette:
+      - id: 0
+        name: "red"
+        hex: "#FF3B3B"
+      - id: 1
+        name: "lime_green"
+        hex: "#39FF14"
+      - id: 2
+        name: "dark_blue"
+        hex: "#1A4FBB"
+      - id: 3
+        name: "cyan"
+        hex: "#00E5FF"
+      - id: 4
+        name: "pink_magenta"
+        hex: "#FF2D9E"
+      - id: 5
+        name: "orange"
+        hex: "#FF8C00"
+      - id: 6
+        name: "yellow"
+        hex: "#FFE600"
+      - id: 7
+        name: "light_blue_gray"
+        hex: "#8BBFD4"
+    # Colors introduced gradually as difficulty increases
+    colors_by_phase:
+      levels_1_10:   2   # red, lime_green only
+      levels_11_20:  4   # + dark_blue, cyan
+      levels_21_40:  6   # + pink_magenta, orange
+      levels_41_60:  7   # + yellow
+      levels_61_100: 8   # all 8 colors
+
+  collision_system:
+    # Pattern card: AABB sweep - sweep in travel direction, check overlap, block if any arrow in path
+    algorithm: "AABB_sweep"
+    method: "sweep_to_boundary_in_travel_direction"
+    # On tap: sweep arrow from current position to board edge in its direction
+    # If any other arrow's AABB overlaps the sweep path -> movement blocked
+    # Performance: O(n) per tap (n = arrow count, max 20 -> negligible cost)
+    complexity_per_tap: "O(n)"
+    blocked_feedback: "shake_animation"   # exponential decay vibration on block
+    successful_move_result: "arrow_exits_board"
+    # Arrow removed from board when it successfully exits the boundary
+    removal_trigger: "exits_board_boundary"
+
+  solver_algorithm:
+    # Pattern card: DFS + backtracking for puzzle validation
+    # Ensures every generated level is solvable before saving
+    type: "DFS_backtracking"
+    purpose: "solvability_validation_at_level_generation"
+    strategy_pattern: true          # solver is Strategy-pattern swappable
+    max_generation_attempts: 100    # cap to prevent infinite generation loops
+    fallback_layout: "simple_vertical_stack"  # guaranteed-solvable fallback
+    # Fallback: stack all arrows vertically in a single column, each pointing upward
+
+# =============================================================================
+# LIVES SYSTEM
+# =============================================================================
+lives_system:
+  # Observation: 3 hearts confirmed, wrong tap removes one heart
+  max_lives: 3
+  display: "heart_icons_top_center"
+  life_lost_on: "wrong_tap_blocked_arrow"
+  # Wrong tap = tapping an arrow that cannot move (path blocked)
+  visual_feedback: "heart_turns_dark_empty"
+  fail_condition: "all_lives_lost"
+
+  hints:
+    # Pattern card: ~3 hints default; observation confirmed 1 hint + 1 pointer booster
+    # Reconciliation: 3 total hint-class consumables (hint + pointer share this pool conceptually)
+    # Hint consumable (magnifying glass): shows next optimal tap
+    max_hints: 3
+    initial_hints: 3
+    hint_animation_pulses: 3        # target arrow pulses 3 times
+    hint_pulse_scale_min: 1.0
+    hint_pulse_scale_max: 1.15
+    hint_pulse_duration_sec: 0.4    # per pulse cycle
+    hint_highlight_color_hex: "#FFFFFF"
+
+  undo:
+    # Pattern card: Command pattern, max ~10 undos; observation: hashtag icon = unlimited restart/undo
+    # Reconciliation: undo limited to 10 per level; hashtag = restart (infinite uses)
+    max_undo: 10
+    implementation: "command_pattern_history_stack"
+    undo_icon: "hashtag"
+    undo_initial_count: -1          # -1 = unlimited (infinity symbol observed)
+    restart_is_free: true
+
+# =============================================================================
+# LEVEL PROGRESSION
+# =============================================================================
+level_progression:
+  # Pattern card: ~100 levels, 5-6 difficulty bands
+  # Observation: at least 17 levels visible, genre standard 50-100+; using 100
+  total_levels: 100
+  level_select_style: "vertical_scrolling_path_with_numbered_circles"
+  status_indicators:
+    completed: "green_circle"
+    failed: "pink_red_circle_with_skull"
+    locked: "gray_blue_circle"
+
+  difficulty_ranges:
+    # Pattern card provides pixel-size anchors and arrow count ranges
+    # Mapped to specific level bands with grid/arrow parameters
+
+    - band: 1
+      name: "tutorial"
+      level_range: [1, 10]
+      arrow_count_min: 1
+      arrow_count_max: 5
+      board_size_px: 200
+      # Small board: ~5x5 effective grid at 40px per cell
+      cell_size_px: 40
+      colors_available: 2
+      directions_available: ["up", "down"]   # horizontal introduced later
+      shape_variants_available: ["straight"]
+      receiver_count: 1
+
+    - band: 2
+      name: "easy"
+      level_range: [11, 25]
+      arrow_count_min: 4
+      arrow_count_max: 8
+      board_size_px: 260
+      cell_size_px: 40
+      colors_available: 4
+      directions_available: ["up", "down", "left", "right"]
+      shape_variants_available: ["straight", "L_bend"]
+      receiver_count: 2
+
+    - band: 3
+      name: "medium"
+      level_range: [26, 50]
+      arrow_count_min: 7
+      arrow_count_max: 12
+      board_size_px: 340
+      cell_size_px: 40
+      colors_available: 6
+      directions_available: ["up", "down", "left", "right"]
+      shape_variants_available: ["straight", "L_bend", "U_turn"]
+      receiver_count: 2
+
+    - band: 4
+      name: "hard"
+      level_range: [51, 75]
+      arrow_count_min: 11
+      arrow_count_max: 16
+      board_size_px: 400
+      cell_size_px: 40
+      colors_available: 7
+      directions_available: ["up", "down", "left", "right"]
+      shape_variants_available: ["straight", "L_bend", "U_turn"]
+      receiver_count: 3
+
+    - band: 5
+      name: "expert"
+      level_range: [76, 90]
+      arrow_count_min: 15
+      arrow_count_max: 18
+      board_size_px: 420
+      cell_size_px: 40
+      colors_available: 8
+      directions_available: ["up", "down", "left", "right"]
+      shape_variants_available: ["straight", "L_bend", "U_turn"]
+      receiver_count: 3
+
+    - band: 6
+      name: "master"
+      level_range: [91, 100]
+      arrow_count_min: 18
+      arrow_count_max: 20
+      board_size_px: 430
+      cell_size_px: 43    # slightly larger cell to keep board readable
+      colors_available: 8
+      directions_available: ["up", "down", "left", "right"]
+      shape_variants_available: ["straight", "L_bend", "U_turn"]
+      receiver_count: 4
+
+  win_condition: "all_arrows_removed_from_board"
+  fail_condition: "all_lives_lost_before_clearing"
+  core_loop: "select_level -> tap_arrows_in_sequence -> clear_board -> earn_stars_coins -> next_level"
+
+# =============================================================================
+# SCORING
+# =============================================================================
+scoring:
+  # Pattern card: 0-3 star system based on wrong tap count; specific thresholds confirmed
+  type: "star_rating_per_level"
+  criteria: "wrong_tap_count"
+  persistence: "PlayerPrefs_per_level_key"
+  implementation: "static_utility_method"
+
+  star_rating:
+    - stars: 3
+      label: "Perfect"
+      wrong_taps_max: 0       # zero wrong taps
+    - stars: 2
+      label: "Good"
+      wrong_taps_min: 1
+      wrong_taps_max: 2       # 1 or 2 wrong taps
+    - stars: 1
+      label: "Clear"
+      wrong_taps_min: 3
+      wrong_taps_max: 5       # 3 to 5 wrong taps
+    - stars: 0
+      label: "Fail"
+      wrong_taps_min: 6       # 6+ wrong taps = 0 stars (level failed via lives lost)
+
+  coin_rewards:
+    star_3: 30
+    star_2: 20
+    star_1: 10
+    star_0: 0                 # failed levels yield no coins
+
+  star_animation:
+    display_order: "sequential"
+    interval_per_star_sec: 0.3   # pattern card: ~0.3s per star gap
+    scale_in_from: 0.0
+    scale_in_to: 1.0
+    easing: "ease_out_back"
+
+# =============================================================================
+# BOOSTERS
+# =============================================================================
+boosters:
+  # Observation: 3 booster slots confirmed (magnifying glass, hand pointer, hashtag)
+  count: 3
+
+  types:
+    - id: "hint"
+      name: "Hint"
+      icon: "magnifying_glass"
+      initial_count: 3          # pattern card: ~3 default; observation showed 1, reconciled to 3 starting
+      effect: "highlight_next_optimal_arrow_with_pulse_animation"
+      consumable: true
+      cost_coins: 50            # purchase price per unit in shop
+      pack_size: 5              # IAP hint pack size (pattern card: ~5 per pack)
+
+    - id: "auto_step"
+      name: "Auto Step"
+      icon: "hand_pointer"
+      initial_count: 3          # pattern card: ~3 hints total shared pool; separate slot = 3 each
+      effect: "auto_execute_one_correct_tap_step"
+      consumable: true
+      cost_coins: 80
+      pack_size: 5
+
+    - id: "undo"
+      name: "Undo / Restart"
+      icon: "hashtag"
+      initial_count: -1         # observation: infinity symbol = unlimited
+      effect: "undo_last_move_or_restart_level"
+      consumable: false         # free/unlimited
+      cost_coins: 0
+
+  shop_currency: "coins"
+  booster_display: "bottom_bar_with_count_badge"
+
+# =============================================================================
+# ANIMATION
+# =============================================================================
+animation:
+  # All values derived from pattern card structural hints, refined to exact numbers
+
+  arrow_move:
+    # Duration: distance-based, clamped to [0.25, 0.7] seconds
+    duration_min_sec: 0.25
+    duration_max_sec: 0.70
+    # Phase 1 - stretch (first 40% of duration): scale in travel axis, ease-out sine
+    stretch_phase_ratio: 0.40
+    stretch_max_scale: 1.6        # pattern card: ~1.6x maximum stretch
+    stretch_easing: "ease_out_sine"
+    # Phase 2 - snap back (remaining 60%): return to 1.0 scale while reaching destination
+    snap_phase_ratio: 0.60
+    snap_target_scale: 1.0
+    snap_easing: "ease_in_quadratic"
+    exit_board_fade_duration_sec: 0.15  # quick fade as arrow exits boundary
+
+  blocked_feedback:
+    # Pattern card: ~0.3s damped oscillation when tap is rejected
+    duration_sec: 0.30
+    type: "damped_oscillation"
+    decay_type: "exponential_decay"
+    oscillation_count: 3          # 3 back-and-forth shakes
+    max_offset_px: 8              # peak shake displacement in pixels
+    haptic_strength: "medium"
+
+  hint_pulse:
+    # Pattern card: ~3 pulses, scale 1.0-1.15, color highlight
+    pulse_count: 3
+    scale_min: 1.0
+    scale_max: 1.15
+    pulse_duration_sec: 0.40      # per full pulse cycle (expand + contract)
+    easing: "ease_in_out_sine"
+    highlight_color_hex: "#FFFFFF"
+    highlight_alpha: 0.85
+
+  popup:
+    # Pattern card: scale 0.8->1.0, ease-out-back, ~0.25s
+    open_scale_from: 0.80
+    open_scale_to: 1.00
+    open_duration_sec: 0.25
+    open_easing: "ease_out_back"
+    close_scale_from: 1.00
+    close_scale_to: 0.80
+    close_duration_sec: 0.20
+    close_easing: "ease_in_quadratic"
+    backdrop_fade_duration_sec: 0.20
+
+  page_transition:
+    # Pattern card: fade in/out ~0.2s each
+    fade_out_duration_sec: 0.20
+    fade_in_duration_sec: 0.20
+    easing: "linear"
+
+  star_reveal:
+    # Pattern card: sequential, ~0.3s per star
+    type: "sequential"
+    per_star_delay_sec: 0.30
+    per_star_scale_from: 0.0
+    per_star_scale_to: 1.0
+    per_star_duration_sec: 0.25
+    easing: "ease_out_back"
+
+  level_clear:
+    # Board clear flash before results popup
+    flash_duration_sec: 0.15
+    flash_color_hex: "#FFFFFF"
+    flash_alpha_peak: 0.6
+    results_popup_delay_sec: 0.50  # delay after clear before showing results
+
+  haptic_levels:
+    light:   "arrow_tap_accepted"
+    medium:  "arrow_blocked_wrong_tap"
+    heavy:   "level_failed_all_lives_lost"
+
+# =============================================================================
+# MONETIZATION
+# =============================================================================
+monetization:
+  currencies:
+    - id: "coins"
+      name: "Coins"
+      icon: "gold_coin"
+      observed_starting_amount: 85    # observed in session at level 14
+
+  starting_coins: 100                 # new player starting balance (85 observed mid-game -> ~100 start)
+
+  coin_rewards:
+    level_complete_base: 10           # minimum (1-star clear)
+    level_complete_2star: 20
+    level_complete_3star: 30
+    daily_gift: 50                    # gift claim system observed in level select
+    ad_reward: 30                     # rewarded ad grant
+
+  ad_system:
+    banner:
+      position: "bottom"
+      always_visible: true            # observation: banner strip always at bottom
+      provider: "AdMob"
+    interstitial:
+      # Pattern card: every ~3 levels
+      frequency_levels: 3             # show interstitial every 3 level completions
+      on_level_fail: true             # also show on life-lost fail (optional)
+    rewarded:
+      trigger: "continue_after_fail"
+      trigger_alt: "earn_coins"
+      reward_type: "coins"
+      reward_amount: 30
+    no_ads_iap:
+      removes: ["banner", "interstitial"]
+      keeps: ["rewarded"]             # rewarded ads stay (player-initiated)
+
+  iap_products:
+    - id: "no_ads"
+      name: "Remove Ads"
+      type: "non_consumable"
+      effect: "removes_banner_and_interstitial_ads"
+    - id: "hint_pack_small"
+      name: "Hint Pack"
+      type: "consumable"
+      # Pattern card: ~5 hints per pack
+      hint_count: 5
+      auto_step_count: 5
+
+  service_abstraction:
+    ad_interface: "IAdService"
+    iap_interface: "IIAPService"
+    manager_singleton: "MonetizationManager"
+    conditional_compile_symbol_ads: "GOOGLE_MOBILE_ADS"
+    simulation_fallback: true         # #else block with Debug.Log simulation
+
+  gift_system:
+    type: "daily_login_gift"
+    ui_location: "level_select_right_panel"
+    reward_type: "coins"
+    reward_amount: 50
+
+# =============================================================================
+# ARCHITECTURE
+# =============================================================================
+architecture:
+  resolution:
+    reference_width: 1080
+    reference_height: 1920
+    canvas_scaler: "scale_with_screen_size"
+    match_width_or_height: 0.5
+
+  frame_rate:
+    target_fps: 60
+    vsync: false                      # mobile: manual target preferred
+
+  file_count_estimate: 50             # pattern card: ~50 files
+  layer_count: 3
+
+  layers:
+    core:
+      description: "Genre-agnostic foundation"
+      systems:
+        - "Singleton<T>"
+        - "EventBus"
+        - "ObjectPool<T>"
+        - "UtilityStatics"
+
+    domain:
+      description: "Reusable game domain systems"
+      systems:
+        - "ArrowEntity"
+        - "ArrowAnimator"
+        - "ArrowValidator"
+        - "BoardManager"
+        - "InputHandler"
+        - "LevelConfig"
+        - "LevelLoader"
+        - "LevelProgress"
+        - "PuzzleCommand"
+        - "PuzzleHistory"
+        - "PuzzleSolver"
+        - "PuzzleState"
+        - "HintSystem"
+        - "LivesSystem"
+
+    game:
+      description: "Project-specific UI and monetization"
+      systems:
+        - "GameHUD"
+        - "MainPage"
+        - "LevelSelectPage"
+        - "GamePage"
+        - "ResultPopup"
+        - "SettingsPopup"
+        - "ShopPopup"
+        - "MonetizationManager"
+        - "AdService"
+        - "IAPService"
+
+  design_patterns:
+    - pattern: "Singleton<T>"
+      usage: "GameManager, LevelManager, SoundManager, PopupManager, MonetizationManager"
+      note: "Generic, DontDestroyOnLoad"
+
+    - pattern: "Object_Pooling"
+      usage: "Arrow factory and recycling pool"
+      note: "ArrowPool reuses arrow GameObjects"
+
+    - pattern: "Command"
+      usage: "Move commands stored in history stack for undo"
+      implementation: "PuzzleCommand + PuzzleHistory"
+      max_history: 10
+
+    - pattern: "Observer_EventBus"
+      usage: "Central event manager decouples systems"
+      note: "e.g., OnArrowMoved, OnLevelCleared, OnLifeLost events"
+
+    - pattern: "Template_Method"
+      usage: "BasePopup and BasePage handle open/close animation lifecycle"
+
+    - pattern: "Adapter"
+      usage: "IAdService and IIAPService abstract SDK implementations"
+
+    - pattern: "Strategy"
+      usage: "PuzzleSolver algorithm swappable (DFS default)"
+
+  game_states:
+    # Pattern card: ~8-9 enum states
+    count: 9
+    states:
+      - "Menu"
+      - "LevelSelect"
+      - "Playing"
+      - "Paused"
+      - "Clear"
+      - "Failed"
+      - "Tutorial"
+      - "Cutscene"
+      - "Loading"
+
+  input:
+    method: "tap_only"              # observation: tap, no drag/swipe
+    drag_enabled: false
+    dedicated_class: "InputHandler"
+    hit_test_method: "AABB_point_in_rect"
+    haptic_enabled: true
+    haptic_platform_differential: true   # different vibration durations per platform
+
+  persistence:
+    engine: "PlayerPrefs"
+    keys:
+      level_stars: "Level_{id}_Stars"
+      level_unlocked: "Level_{id}_Unlocked"
+      hint_count: "Booster_Hint_Count"
+      auto_step_count: "Booster_AutoStep_Count"
+      no_ads_purchased: "IAP_NoAds"
+      coin_balance: "Currency_Coins"
+
+  scenes:
+    - name: "Title"
+      file: "Title.unity"
+      purpose: "splash_and_loading"
+      auto_transitions_to: "Main"
+    - name: "Main"
+      file: "Main.unity"
+      purpose: "main_menu"
+      buttons: ["Play", "Settings", "Shop"]
+    - name: "GameScene"
+      file: "GameScene.unity"
+      purpose: "gameplay"
+      required_objects:
+        - "Main Camera"
+        - "Canvas (Screen Space Overlay)"
+        - "EventSystem"
+        - "Managers (empty GameObject with all Manager components)"
+
+  sdk_compile_guards:
+    ads: "GOOGLE_MOBILE_ADS"
+    iap: "UNITY_IAP"
+    analytics: "FIREBASE_ANALYTICS"
+    rule: "using directives MUST be inside #if blocks"

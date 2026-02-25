@@ -1,0 +1,27 @@
+node:
+  name: MainMenuController
+  layer: Game
+  genre: Puzzle
+  role: Controller
+  file: MainMenuController.cs
+  namespace: BlockBlast.Game
+
+spec:
+  description: "메인 메뉴. Play/Settings 버튼, 최고 점수 표시"
+  provides:
+    - "OnPlayButton"
+    - "OnSettingsButton"
+    - "ShowHighScore"
+
+  methods:
+    - name: Start
+      logic: |
+        코드로 메인 메뉴 UI 생성:
+          - 타이틀 텍스트 "BLOCK BLAST"
+          - 최고 점수 표시
+          - Play 버튼 → GameScene 로드
+          - Settings 버튼 → 설정 팝업
+    - name: OnPlayButton
+      logic: "SceneManager.LoadScene(GameScene)"
+    - name: OnSettingsButton
+      logic: "설정 팝업 표시"

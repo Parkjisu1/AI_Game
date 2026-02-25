@@ -1,0 +1,78 @@
+metadata:
+  nodeId: "PopupResult"
+  version: "1.0.0"
+  phase: 3
+  role: "UX"
+
+dependencies:
+  internal:
+    - "UISystem"
+    - "StageManager"
+    - "EventManager"
+    - "GameConstants"
+  external:
+    - "UnityEngine"
+    - "UnityEngine.UI"
+    - "TMPro"
+
+contract:
+  provides:
+    - "void Open(object data)"
+    - "void Close()"
+    - "void ShowClearResult(StageResult result)"
+    - "void ShowFailResult()"
+  requires:
+    - "UISystem"
+    - "StageManager"
+
+tags:
+  layer: "Game"
+  genre: "Idle"
+  role: "UX"
+  system: "UI"
+  majorFunctions:
+    - "ResponseTrigger"
+    - "StateControl"
+  minorFunctions:
+    - "Assign"
+    - "Notify"
+
+logicFlow:
+  - step: 1
+    tag: "ResponseTrigger"
+    action: "OnStageComplete 수신: ShowClearResult(result), 별 3개 판정 UI"
+    next: null
+  - step: 2
+    tag: "ResponseTrigger"
+    action: "OnStageFail 수신: ShowFailResult(), 리트라이/로비 버튼 표시"
+    next: null
+  - step: 3
+    tag: "ResponseTrigger"
+    action: "다음 스테이지 버튼: StageManager.StartStage(nextId)"
+    next: null
+  - step: 4
+    tag: "ResponseTrigger"
+    action: "리트라이 버튼: StageManager.RetryStage()"
+    next: null
+  - step: 5
+    tag: "ResponseTrigger"
+    action: "로비 버튼: UISystem.OpenPage<PageLobby>()"
+    next: null
+
+referencePatterns:
+  - source: "CLAUDE.md"
+    pattern: "PopupResult - 전투 결과 팝업"
+
+codeHints:
+  patterns:
+    - "public class PopupResult : PopupBase"
+    - "[SerializeField] private GameObject _clearPanel"
+    - "[SerializeField] private GameObject _failPanel"
+    - "[SerializeField] private Image[] _starImages (3개)"
+    - "[SerializeField] private TextMeshProUGUI _goldRewardText"
+    - "[SerializeField] private Button _nextStageButton"
+    - "[SerializeField] private Button _retryButton"
+    - "[SerializeField] private Button _lobbyButton"
+    - "ShowClearResult: _clearPanel.SetActive(true), _failPanel.SetActive(false)"
+  avoidPatterns:
+    - "클리어/실패 패널을 같은 GameObject에서 컴포넌트 활성화로 처리 금지 → 별도 패널"

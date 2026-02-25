@@ -1,0 +1,249 @@
+## 채점 결과
+
+```yaml
+scoring:
+  game: "Magic Sort"
+  condition: "C10_plus"
+  results:
+
+    - id: MS01
+      name: bottle_max_height
+      ground_truth: "4"
+      generated: "4"
+      score: 1.0
+      note: "정확 일치 — 병 높이 4칸 직접 관찰"
+
+    - id: MS02
+      name: colors_total
+      ground_truth: "17"
+      generated: "17"
+      score: 1.0
+      note: "정확 일치 — 전체 색상 17종 카운팅 완료"
+
+    - id: MS03
+      name: colors_playable
+      ground_truth: "13"
+      generated: "13"
+      score: 1.0
+      note: "정확 일치 — 플레이 가능 색상 13종 확인"
+
+    - id: MS04
+      name: builtin_levels
+      ground_truth: "10"
+      generated: "10"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: MS05
+      name: procedural_after_level
+      ground_truth: "10"
+      generated: "10"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: MS06
+      name: max_gen_attempts
+      ground_truth: "100"
+      generated: "null"
+      score: 0.0
+      note: "내부 구현 파라미터 — 생성 시도 횟수 관찰 불가"
+
+    - id: MS07
+      name: difficulty_tier_count
+      ground_truth: "3"
+      generated: "3"
+      score: 1.0
+      note: "정확 일치 — 3단계 난이도 티어 관찰"
+
+    - id: MS08
+      name: tier_color_counts
+      ground_truth: "[4, 7, 10]"
+      generated: "[4, 7, 10]"
+      score: 1.0
+      note: "정확 일치 — 각 티어별 색상 수 정확 카운팅"
+
+    - id: MS09
+      name: tier_level_ranges
+      ground_truth: "Default:1-20 / Hard:21-60 / SuperHard:61+"
+      generated: "Default:1-20 / Hard:21-60 / SuperHard:61+"
+      score: 1.0
+      note: "정확 일치 — 티어별 레벨 범위 확인"
+
+    - id: MS10
+      name: par_bonus_values
+      ground_truth: "[5, 3, 0]"
+      generated: "[5, 3, 0]"
+      score: 1.0
+      note: "정확 일치 — par 보너스 값 관찰"
+
+    - id: MS11
+      name: par_formula
+      ground_truth: "basePar = colorCount * 3 + par_bonus"
+      generated: "basePar = colorCount * 3 + bonus"
+      score: 1.0
+      note: "정확 일치 — par 공식 역산 확인"
+
+    - id: MS12
+      name: max_per_row
+      ground_truth: "5"
+      generated: "5"
+      score: 1.0
+      note: "정확 일치 — 행당 최대 5병 배치 관찰"
+
+    - id: MS13
+      name: h_spacing
+      ground_truth: "1.5"
+      generated: "1.5"
+      score: 1.0
+      note: "정확 일치 — 수평 간격 정밀 측정"
+
+    - id: MS14
+      name: v_spacing
+      ground_truth: "2.5"
+      generated: "2.5"
+      score: 1.0
+      note: "정확 일치 — 수직 간격 정밀 측정"
+
+    - id: MS15
+      name: pour_total_duration
+      ground_truth: "0.4"
+      generated: "0.4s"
+      score: 1.0
+      note: "정확 일치 — 붓기 애니메이션 정밀 프레임 카운팅"
+
+    - id: MS16
+      name: lift_height
+      ground_truth: "1.5"
+      generated: "1.4~1.6"
+      score: 0.7
+      note: "범위 1.4~1.6 vs 1.5 — 범위 내 중앙값 일치"
+
+    - id: MS17
+      name: tilt_angle
+      ground_truth: "60"
+      generated: "58~62°"
+      score: 0.7
+      note: "58~62 vs 60 — 범위 내 중앙값 근접"
+
+    - id: MS18
+      name: starting_coins
+      ground_truth: "100"
+      generated: "100"
+      score: 1.0
+      note: "정확 일치 — 초기 코인 100 확인"
+
+    - id: MS19
+      name: starting_gems
+      ground_truth: "5"
+      generated: "5"
+      score: 1.0
+      note: "정확 일치 — 초기 젬 5개 확인"
+
+    - id: MS20
+      name: booster_type_count
+      ground_truth: "5"
+      generated: "5"
+      score: 1.0
+      note: "정확 일치 — 부스터 5종 관찰"
+
+    - id: MS21
+      name: booster_initial_counts
+      ground_truth: "extra_bottle:3, shuffle:3, undo:5, hint:5, color_clear:1"
+      generated: "extra_bottle:3, shuffle:3, undo:5, hint:5, color_clear:1"
+      score: 1.0
+      note: "정확 일치 — 부스터 초기 수량 모두 확인"
+
+    - id: MS22
+      name: undo_max_steps
+      ground_truth: "50"
+      generated: "50"
+      score: 1.0
+      note: "정확 일치 — Undo 최대 50회 정확 측정"
+
+    - id: MS23
+      name: star_rating_3star
+      ground_truth: "moveCount <= par"
+      generated: "moveCount <= par"
+      score: 1.0
+      note: "정확 일치 — 최적 이동수 이내 3성 확인"
+
+    - id: MS24
+      name: star_rating_2star_threshold
+      ground_truth: "moveCount <= par * 1.5"
+      generated: "moveCount <= par * 1.5"
+      score: 1.0
+      note: "정확 일치 — 2성 임계값 확인"
+
+    - id: MS25
+      name: hint_scoring_system
+      ground_truth: "completing_bottle:100, monochromatic_target:50, emptying_origin:30, non_empty_target:20, origin_becomes_mono:15, per_layer_moved:10, empty_target_penalty:-5"
+      generated: "completing_bottle:100, monochromatic_target:50, emptying_origin:30, non_empty_target:20, origin_becomes_mono:15, per_layer_moved:10, empty_target_penalty:-5"
+      score: 1.0
+      note: "정확 일치 — 힌트 스코어링 시스템 역산"
+
+    - id: MS26
+      name: blocker_type_count
+      ground_truth: "18"
+      generated: "18"
+      score: 1.0
+      note: "정확 일치 — 블로커 18종 모두 식별"
+
+    - id: MS27
+      name: save_prefix
+      ground_truth: "MS_"
+      generated: "null"
+      score: 0.0
+      note: "소스코드 접근 불가 — 저장 접두사 관찰 불가"
+
+    - id: MS28
+      name: pattern_count
+      ground_truth: "9 (Singleton/SignalBus/StateMachine/Command/DI/ObjectPool/Strategy/Observer/MVC)"
+      generated: "null"
+      score: 0.0
+      note: "소스코드 접근 불가 — 디자인 패턴 수 관찰 불가"
+
+    - id: MS29
+      name: state_count
+      ground_truth: "6 (Playing/Paused/Win/Stuck/Lose/Quit)"
+      generated: "6 (Playing/Paused/Win/Stuck/Lose/Quit)"
+      score: 1.0
+      note: "정확 일치 — 6개 상태 모두 관찰"
+
+    - id: MS30
+      name: pour_mechanic
+      ground_truth: "(tap 기반, 명시값 없음)"
+      generated: "tap 기반 물약 붓기"
+      score: 1.0
+      note: "정확 일치 — 탭으로 병 선택 후 대상 병에 붓기 메커니즘 관찰"
+
+    - id: MS31
+      name: win_condition
+      ground_truth: "All bottles full+monochromatic OR empty"
+      generated: "All bottles full+monochromatic OR empty"
+      score: 1.0
+      note: "정확 일치 — 승리 조건 정확 관찰"
+
+    - id: MS32
+      name: empty_bottles_formula
+      ground_truth: "2 (모든 티어 고정값)"
+      generated: "2 (모든 티어 고정)"
+      score: 1.0
+      note: "정확 일치 — 빈 병 2개 고정 관찰"
+
+  summary:
+    total: 32
+    sum: 28.4
+    average: 0.887
+```
+
+---
+
+### 점수 분포 요약
+
+| 점수 | 파라미터 수 | 해당 항목 |
+|------|-----------|----------|
+| **1.0** Exact | 27 | MS01, MS02, MS03, MS04, MS05, MS07, MS08, MS09, MS10, MS11, MS12, MS13, MS14, MS15, MS18, MS19, MS20, MS21, MS22, MS23, MS24, MS25, MS26, MS29, MS30, MS31, MS32 |
+| **0.7** Close | 2 | MS16, MS17 |
+| **0.4** Partial | 0 | - |
+| **0.1** Wrong | 0 | - |
+| **0.0** Missing/Null | 3 | MS06, MS27, MS28 |

@@ -1,0 +1,152 @@
+[
+  {
+    "type": "LayoutGroup",
+    "fileID": "1438134125",
+    "m_Spacing": 0.0,
+    "m_Padding": {
+      "m_Left": 0,
+      "m_Right": 0,
+      "m_Top": 0,
+      "m_Bottom": 0
+    },
+    "m_ChildAlignment": 1,
+    "gameObjectName": "LayoutGroup",
+    "rectSize": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 140.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "SampleScene"
+  },
+  {
+    "type": "LayoutGroup",
+    "fileID": "7474655153884608012",
+    "m_Spacing": 23.0,
+    "m_Padding": {
+      "m_Left": 0,
+      "m_Right": 0,
+      "m_Top": 0,
+      "m_Bottom": 0
+    },
+    "m_ChildAlignment": 4,
+    "gameObjectName": "RewardCards",
+    "rectSize": {
+      "x": 1240.0,
+      "y": 365.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "GachaResultWin"
+  },
+  {
+    "type": "LayoutGroup",
+    "fileID": "3273709241690038195",
+    "m_Spacing": 23.0,
+    "m_Padding": {
+      "m_Left": 0,
+      "m_Right": 0,
+      "m_Top": 0,
+      "m_Bottom": 0
+    },
+    "m_ChildAlignment": 4,
+    "gameObjectName": "RewardCards",
+    "rectSize": {
+      "x": 1240.0,
+      "y": 365.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "GachaResultWin"
+  },
+  {
+    "type": "LayoutGroup",
+    "fileID": "6668849397268402257",
+    "m_Spacing": 5.0,
+    "m_Padding": {
+      "m_Left": 0,
+      "m_Right": 0,
+      "m_Top": 0,
+      "m_Bottom": 0
+    },
+    "m_ChildAlignment": 1,
+    "gameObjectName": "Content",
+    "rectSize": {
+      "x": 0.0,
+      "y": 1550.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 50.0
+    },
+    "anchorMin": {
+      "x": 0.0,
+      "y": 1.0
+    },
+    "anchorMax": {
+      "x": 1.0,
+      "y": 1.0
+    },
+    "sourceFile": "MachineGachaProbWin"
+  },
+  {
+    "type": "LayoutGroup",
+    "fileID": "2823476623319967824",
+    "m_Spacing": 10.0,
+    "m_Padding": {
+      "m_Left": 0,
+      "m_Right": 0,
+      "m_Top": 0,
+      "m_Bottom": 0
+    },
+    "m_ChildAlignment": 0,
+    "gameObjectName": "Content",
+    "rectSize": {
+      "x": 0.0,
+      "y": 950.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.0,
+      "y": 1.0
+    },
+    "anchorMax": {
+      "x": 1.0,
+      "y": 1.0
+    },
+    "sourceFile": "WorldGuideWin"
+  }
+]

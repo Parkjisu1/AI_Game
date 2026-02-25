@@ -1,0 +1,36 @@
+{
+  "RPG": [
+    {
+      "ruleId": "buff-stack-limit",
+      "category": "LOGIC.WRONG_CALC",
+      "pattern": "버프 무한 중첩",
+      "solution": "maxStack 제한 추가",
+      "frequency": 0
+    },
+    {
+      "ruleId": "damage-calc-order",
+      "category": "LOGIC.WRONG_CALC",
+      "pattern": "데미지 계산 순서 오류",
+      "solution": "기본 → 버프 → 크리티컬 → 방어 순서",
+      "frequency": 0
+    }
+  ],
+  "Idle": [
+    {
+      "ruleId": "offline-time-overflow",
+      "category": "LOGIC.WRONG_CALC",
+      "pattern": "오프라인 시간 무제한",
+      "solution": "maxOfflineHours 제한",
+      "frequency": 0
+    }
+  ],
+  "Merge": [
+    {
+      "ruleId": "grid-boundary-check",
+      "category": "LOGIC.OFF_BY_ONE",
+      "pattern": "그리드 범위 초과",
+      "solution": "IsValidPosition 체크",
+      "frequency": 0
+    }
+  ]
+}

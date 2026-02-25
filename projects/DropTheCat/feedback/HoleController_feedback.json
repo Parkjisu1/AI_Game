@@ -1,0 +1,18 @@
+{
+  "nodeId": "HoleController",
+  "genre": "Puzzle",
+  "role": "Controller",
+  "validationResult": "pass",
+  "score": 0.6,
+  "feedbacks": [
+    {
+      "category": "PATTERN.API_MISMATCH",
+      "line": 75,
+      "severity": "warning",
+      "description": "EventManager.Instance != null 대신 EventManager.HasInstance를 사용해야 합니다. Singleton의 Instance getter는 applicationIsQuitting 시 경고 로그를 출력하는 부작용이 있습니다. CurrencyManager 등 다른 파일에서는 HasInstance를 사용하고 있어 일관성이 깨집니다.",
+      "suggestion": "if (EventManager.Instance != null) -> if (EventManager.HasInstance) 로 변경하고, 이후 EventManager.Instance.Publish 호출."
+    }
+  ],
+  "contractChanged": false,
+  "timestamp": "2026-02-10T04:45:00Z"
+}

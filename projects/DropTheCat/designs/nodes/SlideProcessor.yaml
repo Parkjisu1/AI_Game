@@ -1,0 +1,105 @@
+# SlideProcessor - Domain Slide Logic Processor
+metadata:
+  nodeId: "SlideProcessor"
+  version: "1.0.0"
+  phase: 2
+  role: "Processor"
+
+dependencies:
+  internal:
+    - "GridManager"
+    - "TileController"
+    - "ObstacleManager"
+    - "EventManager"
+    - "SoundManager"
+  external:
+    - "UnityEngine"
+
+contract:
+  provides:
+    - "void ProcessSlide(Vector2Int tileGridPos, SlideDirection direction)"
+    - "bool CanSlide(Vector2Int tileGridPos, SlideDirection direction)"
+    - "Vector2Int CalculateSlideTarget(Vector2Int fromPos, SlideDirection direction)"
+    - "void UndoLastSlide()"
+    - "bool IsProcessing { get; }"
+    - "List<SlideRecord> GetMoveHistory()"
+    - "void ClearHistory()"
+  requires:
+    - "GridManager.GetCell/SetCellState/IsInBounds"
+    - "TileController.SlideTo/CanSlide"
+    - "ObstacleManager.CanSlideThrough"
+    - "EventManager.Publish"
+    - "SoundManager.PlaySFX"
+
+tags:
+  layer: "Domain"
+  genre: "Puzzle"
+  role: "Processor"
+  system: "Slide"
+  majorFunctions:
+    - "FlowControl"
+    - "ConditionCheck"
+    - "StateControl"
+  minorFunctions:
+    - "Calculate"
+    - "Validate"
+    - "Find"
+    - "Notify"
+
+logicFlow:
+  - step: 1
+    tag: "ConditionCheck"
+    action: "ProcessSlide - IsProcessing 확인 → 이미 처리 중이면 무시"
+    next: 2
+  - step: 2
+    tag: "ConditionCheck"
+    action: "CanSlide 확인 - 타일이 슬라이드 가능한 타입인지, Locked/Frozen 아닌지"
+    next: 3
+  - step: 3
+    tag: "ConditionCheck"
+    action: "ArrowTile인 경우 허용된 방향인지 확인"
+    next: 4
+  - step: 4
+    tag: "FlowControl"
+    action: "CalculateSlideTarget - 해당 방향으로 셀을 순회하며 벽/다른타일/블로커에 닿을 때까지 이동"
+    next: 5
+  - step: 5
+    tag: "ConditionCheck"
+    action: "이동 거리가 0이면 (제자리) 슬라이드 무시"
+    next: 6
+  - step: 6
+    tag: "StateControl"
+    action: "SlideRecord 생성 (from, to, tileId) → moveHistory에 추가"
+    next: 7
+  - step: 7
+    tag: "FlowControl"
+    action: "GridManager 셀 상태 업데이트 (from 비움, to에 타일 배치)"
+    next: 8
+  - step: 8
+    tag: "FlowControl"
+    action: "TileController.SlideTo 호출 → 애니메이션 시작"
+    next: 9
+  - step: 9
+    tag: "ResponseTrigger"
+    action: "애니메이션 완료 콜백에서 OnSlideComplete + OnMovePerformed 이벤트 발행"
+    next: 10
+  - step: 10
+    tag: "FlowControl"
+    action: "경로상 IceTile 체크 → ObstacleManager.OnTilePassedOver 호출"
+    next: null
+
+referencePatterns:
+  - source: "db/base/puzzle/domain/GameBoard_Handle"
+    pattern: "터치 입력 → 방향 판정 → 이동 처리 패턴"
+  - source: "db/base/puzzle/domain/Swap"
+    pattern: "이동 기록 저장 (Undo 지원)"
+
+codeHints:
+  patterns:
+    - "enum SlideDirection { Up, Down, Left, Right }"
+    - "SlideRecord { tileId, fromPos, toPos, direction }"
+    - "while 루프로 목표 위치 계산: while(IsInBounds && IsEmpty && CanSlideThrough) pos += dirVector"
+    - "Stack<SlideRecord> moveHistory (Undo 지원)"
+  avoidPatterns:
+    - "Physics Raycast 기반 슬라이드 금지 (그리드 로직만 사용)"
+    - "동시 다중 슬라이드 허용 금지 (한번에 하나)"

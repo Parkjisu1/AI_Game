@@ -1,0 +1,1016 @@
+# =============================================================================
+# Drop the Cat (빠지냥이) - System Specification (Layer 2)
+# =============================================================================
+# Version: 1.0.0
+# Total Systems: 25
+# Phase 0 (Core): 5 | Phase 1 (Domain-Base): 6 | Phase 2 (Domain-Upper): 7 | Phase 3 (Game): 7
+# =============================================================================
+
+system_list:
+  Core:
+    - Singleton
+    - EventManager
+    - ObjectPool
+    - SaveManager
+    - SoundManager
+  Domain:
+    - GridManager
+    - TileController
+    - CatController
+    - HoleController
+    - ObstacleManager
+    - SlideProcessor
+    - ColorMatcher
+    - DropProcessor
+    - LevelManager
+    - LevelDataProvider
+    - BoosterManager
+    - ScoreCalculator
+    - CurrencyManager
+  Game:
+    - GameManager
+    - TitlePage
+    - MainPage
+    - GamePage
+    - LevelClearPopup
+    - LevelFailPopup
+    - ShopPopup
+
+# =============================================================================
+# Systems Detail
+# =============================================================================
+systems:
+
+  # ===========================================================================
+  # Phase 0: Core (장르 무관 기반)
+  # ===========================================================================
+
+  - nodeId: "Singleton"
+    layer: "Core"
+    genre: "Generic"
+    role: "Base"
+    purpose: "싱글톤 패턴 기본 클래스. 모든 Manager의 베이스"
+    responsibilities:
+      - "인스턴스 유일성 보장"
+      - "DontDestroyOnLoad 처리"
+      - "전역 접근점 제공"
+    states: []
+    behaviors:
+      - trigger: "Awake 호출"
+        action: "기존 인스턴스 확인 후 중복 시 Destroy"
+        result: "유일 인스턴스 유지"
+    relations:
+      uses: []
+      usedBy:
+        - "EventManager"
+        - "SaveManager"
+        - "SoundManager"
+        - "GridManager"
+        - "LevelManager"
+        - "BoosterManager"
+        - "CurrencyManager"
+        - "GameManager"
+      publishes: []
+      subscribes: []
+
+  - nodeId: "EventManager"
+    layer: "Core"
+    genre: "Generic"
+    role: "Manager"
+    purpose: "전역 이벤트 발행/구독 시스템. 시스템 간 느슨한 결합 제공"
+    responsibilities:
+      - "이벤트 등록/해제"
+      - "이벤트 발행"
+      - "타입 안전한 이벤트 전달"
+    states: []
+    behaviors:
+      - trigger: "Subscribe<T> 호출"
+        action: "이벤트 타입에 콜백 등록"
+        result: "해당 이벤트 발생 시 콜백 실행"
+      - trigger: "Publish<T> 호출"
+        action: "등록된 모든 콜백에 이벤트 데이터 전달"
+        result: "구독자들이 이벤트 수신"
+      - trigger: "Unsubscribe<T> 호출"
+        action: "콜백 등록 해제"
+        result: "더 이상 이벤트를 수신하지 않음"
+    relations:
+      uses:
+        - "Singleton"
+      usedBy:
+        - "GridManager"
+        - "SlideProcessor"
+        - "DropProcessor"
+        - "LevelManager"
+        - "GameManager"
+        - "ScoreCalculator"
+        - "BoosterManager"
+      publishes: []
+      subscribes: []
+
+  - nodeId: "ObjectPool"
+    layer: "Core"
+    genre: "Generic"
+    role: "Pool"
+    purpose: "게임오브젝트 풀링. 타일, 고양이, 이펙트 등의 반복 생성/파괴 최적화"
+    responsibilities:
+      - "오브젝트 사전 생성 (Pre-warm)"
+      - "오브젝트 대여/반환"
+      - "풀 크기 동적 조절"
+    states:
+      - "Empty (사용 가능한 오브젝트 없음)"
+      - "Available (오브젝트 대여 가능)"
+    behaviors:
+      - trigger: "Get 호출"
+        action: "비활성 오브젝트 활성화 후 반환, 없으면 새로 생성"
+        result: "활성화된 게임오브젝트 반환"
+      - trigger: "Release 호출"
+        action: "오브젝트 비활성화 후 풀에 반환"
+        result: "오브젝트 재사용 가능 상태"
+    relations:
+      uses: []
+      usedBy:
+        - "GridManager"
+        - "TileController"
+        - "CatController"
+        - "HoleController"
+        - "DropProcessor"
+      publishes: []
+      subscribes: []
+
+  - nodeId: "SaveManager"
+    layer: "Core"
+    genre: "Generic"
+    role: "Manager"
+    purpose: "로컬 저장/불러오기. PlayerPrefs 래핑"
+    responsibilities:
+      - "레벨 진행도 저장/불러오기"
+      - "코인/보유 아이템 저장"
+      - "설정값 저장"
+      - "데이터 무결성 검증"
+    states: []
+    behaviors:
+      - trigger: "Save 호출"
+        action: "데이터를 JSON 직렬화 후 PlayerPrefs에 저장"
+        result: "데이터 영구 저장"
+      - trigger: "Load 호출"
+        action: "PlayerPrefs에서 데이터 로드 후 역직렬화"
+        result: "저장된 데이터 복원"
+    relations:
+      uses:
+        - "Singleton"
+      usedBy:
+        - "LevelManager"
+        - "CurrencyManager"
+        - "BoosterManager"
+        - "GameManager"
+      publishes: []
+      subscribes: []
+
+  - nodeId: "SoundManager"
+    layer: "Core"
+    genre: "Generic"
+    role: "Manager"
+    purpose: "BGM/SFX 재생 관리"
+    responsibilities:
+      - "BGM 재생/정지/페이드"
+      - "SFX 재생"
+      - "볼륨 조절"
+      - "사운드 On/Off 설정"
+    states:
+      - "Muted"
+      - "Playing"
+    behaviors:
+      - trigger: "PlayBGM 호출"
+        action: "현재 BGM 페이드 아웃 후 새 BGM 페이드 인"
+        result: "BGM 전환"
+      - trigger: "PlaySFX 호출"
+        action: "SFX AudioSource에서 OneShot 재생"
+        result: "효과음 재생"
+    relations:
+      uses:
+        - "Singleton"
+        - "SaveManager"
+      usedBy:
+        - "SlideProcessor"
+        - "DropProcessor"
+        - "GameManager"
+        - "GamePage"
+        - "LevelClearPopup"
+      publishes: []
+      subscribes: []
+
+  # ===========================================================================
+  # Phase 1: Domain - Base (Core만 의존)
+  # ===========================================================================
+
+  - nodeId: "GridManager"
+    layer: "Domain"
+    genre: "Puzzle"
+    role: "Manager"
+    purpose: "그리드 생성 및 관리. 셀 위치 계산, 그리드 상태 관리"
+    responsibilities:
+      - "그리드 초기화 (크기, 셀 타입 배치)"
+      - "월드 좌표 ↔ 그리드 좌표 변환"
+      - "셀 상태 조회/변경"
+      - "인접 셀 탐색"
+      - "그리드 유효성 검증"
+    states:
+      - "Uninitialized"
+      - "Ready"
+      - "Processing (슬라이드/드롭 처리 중)"
+    behaviors:
+      - trigger: "InitGrid(levelData) 호출"
+        action: "레벨 데이터 기반으로 그리드 생성, 셀 타입 배치"
+        result: "그리드 초기화 완료, 셀 배열 생성"
+      - trigger: "GetCell(x, y) 호출"
+        action: "좌표의 셀 정보 반환"
+        result: "CellData 반환"
+      - trigger: "SetCellState(x, y, state) 호출"
+        action: "셀 상태 업데이트"
+        result: "셀 데이터 변경"
+      - trigger: "WorldToGrid(worldPos) 호출"
+        action: "월드 좌표를 그리드 좌표로 변환"
+        result: "Vector2Int 반환"
+      - trigger: "GridToWorld(gridPos) 호출"
+        action: "그리드 좌표를 월드 좌표로 변환"
+        result: "Vector3 반환"
+    relations:
+      uses:
+        - "Singleton"
+        - "EventManager"
+        - "ObjectPool"
+      usedBy:
+        - "TileController"
+        - "CatController"
+        - "HoleController"
+        - "SlideProcessor"
+        - "DropProcessor"
+        - "ObstacleManager"
+        - "GamePage"
+      publishes:
+        - "OnGridInitialized"
+        - "OnCellStateChanged"
+      subscribes: []
+
+  - nodeId: "LevelDataProvider"
+    layer: "Domain"
+    genre: "Puzzle"
+    role: "Provider"
+    purpose: "레벨 데이터 로딩 및 제공. JSON 레벨 파일 파싱"
+    responsibilities:
+      - "레벨 JSON 파일 로드"
+      - "레벨 데이터 파싱 (그리드 크기, 셀 배치, 고양이/구멍 위치)"
+      - "레벨 데이터 캐싱"
+      - "레벨 유효성 검증"
+    states: []
+    behaviors:
+      - trigger: "LoadLevel(levelNumber) 호출"
+        action: "Resources에서 레벨 JSON 로드 후 파싱"
+        result: "LevelData 객체 반환"
+      - trigger: "GetLevelData(levelNumber) 호출"
+        action: "캐시된 레벨 데이터 반환, 없으면 로드"
+        result: "LevelData 반환"
+    relations:
+      uses: []
+      usedBy:
+        - "LevelManager"
+        - "GridManager"
+      publishes: []
+      subscribes: []
+
+  - nodeId: "CurrencyManager"
+    layer: "Domain"
+    genre: "Generic"
+    role: "Manager"
+    purpose: "코인 및 재화 관리"
+    responsibilities:
+      - "코인 잔액 관리"
+      - "코인 추가/차감"
+      - "잔액 부족 검증"
+      - "저장/불러오기"
+    states: []
+    behaviors:
+      - trigger: "AddCoins(amount) 호출"
+        action: "코인 잔액 증가 후 저장"
+        result: "잔액 업데이트, OnCoinChanged 이벤트 발행"
+      - trigger: "SpendCoins(amount) 호출"
+        action: "잔액 확인 후 차감"
+        result: "성공/실패 반환, OnCoinChanged 이벤트 발행"
+      - trigger: "GetBalance() 호출"
+        action: "현재 잔액 반환"
+        result: "int 반환"
+    relations:
+      uses:
+        - "Singleton"
+        - "SaveManager"
+        - "EventManager"
+      usedBy:
+        - "BoosterManager"
+        - "ShopPopup"
+        - "LevelClearPopup"
+        - "GameManager"
+      publishes:
+        - "OnCoinChanged"
+      subscribes: []
+
+  - nodeId: "TileController"
+    layer: "Domain"
+    genre: "Puzzle"
+    role: "Controller"
+    purpose: "개별 타일 오브젝트 제어. 타일 비주얼 및 상태 관리"
+    responsibilities:
+      - "타일 초기화 (타입, 색상, 위치)"
+      - "타일 이동 애니메이션"
+      - "타일 상태 표시 (잠김, 얼음 등)"
+      - "타일 터치/드래그 감지"
+    states:
+      - "Idle"
+      - "Sliding"
+      - "Locked"
+      - "Frozen"
+    behaviors:
+      - trigger: "Init(cellType, color, gridPos) 호출"
+        action: "타일 비주얼 및 속성 초기화"
+        result: "타일 표시 완료"
+      - trigger: "SlideTo(targetPos) 호출"
+        action: "DOTween으로 목표 위치까지 이동 애니메이션"
+        result: "이동 완료 콜백"
+      - trigger: "SetState(state) 호출"
+        action: "타일 시각적 상태 변경"
+        result: "외관 업데이트"
+    relations:
+      uses:
+        - "GridManager"
+        - "ObjectPool"
+      usedBy:
+        - "SlideProcessor"
+        - "GridManager"
+      publishes: []
+      subscribes: []
+
+  - nodeId: "CatController"
+    layer: "Domain"
+    genre: "Puzzle"
+    role: "Controller"
+    purpose: "고양이 오브젝트 제어. 색상, 위치, 드롭 애니메이션 관리"
+    responsibilities:
+      - "고양이 초기화 (색상, 그리드 위치)"
+      - "고양이 비주얼 표시 (색상별 스프라이트)"
+      - "드롭 애니메이션 재생"
+      - "아이들 애니메이션 (대기 중 미세 움직임)"
+    states:
+      - "Idle (대기)"
+      - "Dropping (드롭 중)"
+      - "Cleared (클리어됨)"
+    behaviors:
+      - trigger: "Init(color, gridPos) 호출"
+        action: "고양이 색상 및 위치 설정"
+        result: "고양이 표시"
+      - trigger: "PlayDropAnimation() 호출"
+        action: "구멍에 빠지는 드롭 애니메이션 재생"
+        result: "애니메이션 완료 후 Cleared 상태"
+      - trigger: "PlayIdleAnimation() 호출"
+        action: "대기 중 미세 움직임 애니메이션"
+        result: "고양이 생동감 표현"
+    relations:
+      uses:
+        - "GridManager"
+        - "ObjectPool"
+      usedBy:
+        - "DropProcessor"
+        - "ColorMatcher"
+        - "GridManager"
+      publishes: []
+      subscribes: []
+
+  - nodeId: "HoleController"
+    layer: "Domain"
+    genre: "Puzzle"
+    role: "Controller"
+    purpose: "구멍 오브젝트 제어. 색상 표시 및 드롭 수신 시각 효과"
+    responsibilities:
+      - "구멍 초기화 (색상, 위치, 타일 소속)"
+      - "구멍 색상 비주얼 표시"
+      - "드롭 수신 시 이펙트 재생"
+      - "매칭 완료 시 비활성화"
+    states:
+      - "Active (드롭 대기)"
+      - "Matched (매칭 완료)"
+    behaviors:
+      - trigger: "Init(color, gridPos) 호출"
+        action: "구멍 색상 및 위치 설정"
+        result: "구멍 표시"
+      - trigger: "OnCatDropped() 호출"
+        action: "드롭 성공 이펙트 재생"
+        result: "Matched 상태로 전환"
+    relations:
+      uses:
+        - "GridManager"
+        - "ObjectPool"
+      usedBy:
+        - "DropProcessor"
+        - "ColorMatcher"
+        - "GridManager"
+      publishes: []
+      subscribes: []
+
+  # ===========================================================================
+  # Phase 2: Domain - Upper (다른 Domain 의존)
+  # ===========================================================================
+
+  - nodeId: "SlideProcessor"
+    layer: "Domain"
+    genre: "Puzzle"
+    role: "Processor"
+    purpose: "타일 슬라이드 로직 처리. 입력 → 이동 가능 판정 → 이동 실행"
+    responsibilities:
+      - "터치/드래그 입력으로 슬라이드 방향 판정"
+      - "슬라이드 가능 여부 검증 (블로커, 잠김, 방향 제한)"
+      - "타일 이동 목표 위치 계산 (벽/타일에 막힐 때까지)"
+      - "이동 실행 및 그리드 상태 업데이트"
+      - "이동 완료 후 드롭 체크 요청"
+    states:
+      - "Idle"
+      - "Processing"
+    behaviors:
+      - trigger: "플레이어가 타일을 드래그"
+        action: "드래그 방향 계산 → 해당 방향으로 슬라이드 가능 판정"
+        result: "가능 시 슬라이드 실행, 불가 시 무시"
+      - trigger: "슬라이드 가능 판정 통과"
+        action: "목표 위치까지 연속 셀 검사 후 최종 위치 결정"
+        result: "TileController.SlideTo 호출"
+      - trigger: "슬라이드 완료"
+        action: "그리드 셀 상태 업데이트 → 드롭 체크 이벤트 발행"
+        result: "OnSlideComplete 이벤트"
+    relations:
+      uses:
+        - "GridManager"
+        - "TileController"
+        - "ObstacleManager"
+        - "EventManager"
+        - "SoundManager"
+      usedBy:
+        - "GamePage"
+        - "GameManager"
+      publishes:
+        - "OnSlideComplete"
+        - "OnMovePerformed"
+      subscribes: []
+
+  - nodeId: "ColorMatcher"
+    layer: "Domain"
+    genre: "Puzzle"
+    role: "Validator"
+    purpose: "색상 매칭 판정. 고양이와 구멍의 색상 일치 여부 확인"
+    responsibilities:
+      - "고양이-구멍 색상 일치 판정"
+      - "레인보우(특수) 구멍 판정"
+      - "함정 구멍 판정 (색상 불일치 = 실패)"
+      - "전체 매칭 완료 여부 확인"
+    states: []
+    behaviors:
+      - trigger: "CheckMatch(cat, hole) 호출"
+        action: "고양이 색상과 구멍 색상 비교"
+        result: "MatchResult (Success/Fail/Trap) 반환"
+      - trigger: "IsAllCatsMatched() 호출"
+        action: "남은 고양이가 없는지 확인"
+        result: "bool 반환"
+    relations:
+      uses:
+        - "CatController"
+        - "HoleController"
+        - "GridManager"
+      usedBy:
+        - "DropProcessor"
+      publishes: []
+      subscribes: []
+
+  - nodeId: "DropProcessor"
+    layer: "Domain"
+    genre: "Puzzle"
+    role: "Processor"
+    purpose: "드롭 처리. 슬라이드 후 고양이-구멍 겹침 감지 → 색상 매칭 → 드롭 실행"
+    responsibilities:
+      - "슬라이드 완료 후 드롭 가능 위치 검사"
+      - "고양이 아래에 구멍이 왔는지 확인"
+      - "색상 매칭 판정 요청"
+      - "드롭 애니메이션 트리거"
+      - "드롭 결과(성공/함정) 이벤트 발행"
+    states:
+      - "Idle"
+      - "Checking"
+      - "Dropping"
+    behaviors:
+      - trigger: "OnSlideComplete 수신"
+        action: "이동된 타일 영역에서 고양이-구멍 겹침 검사"
+        result: "겹침 발견 시 매칭 판정 진행"
+      - trigger: "매칭 성공"
+        action: "CatController.PlayDropAnimation → 그리드에서 제거"
+        result: "OnCatDropped 이벤트 발행"
+      - trigger: "함정 매칭 (색상 불일치)"
+        action: "실패 이펙트 → 레벨 실패 이벤트 발행"
+        result: "OnLevelFailed 이벤트"
+      - trigger: "전체 고양이 드롭 완료"
+        action: "레벨 클리어 이벤트 발행"
+        result: "OnLevelCleared 이벤트"
+    relations:
+      uses:
+        - "GridManager"
+        - "ColorMatcher"
+        - "CatController"
+        - "HoleController"
+        - "EventManager"
+        - "SoundManager"
+        - "ObjectPool"
+      usedBy:
+        - "GameManager"
+      publishes:
+        - "OnCatDropped"
+        - "OnLevelCleared"
+        - "OnLevelFailed"
+      subscribes:
+        - "OnSlideComplete"
+
+  - nodeId: "ObstacleManager"
+    layer: "Domain"
+    genre: "Puzzle"
+    role: "Manager"
+    purpose: "장애물 생성 및 상태 관리. 블로커, 포탈, 얼음, 잠금 등"
+    responsibilities:
+      - "레벨 데이터 기반 장애물 배치"
+      - "장애물 상태 관리 (얼음 내구도, 잠금 조건 등)"
+      - "슬라이드 가능 여부에 장애물 영향 반영"
+      - "포탈 쌍 관리"
+      - "스위치-타일 연결 관리"
+    states: []
+    behaviors:
+      - trigger: "InitObstacles(levelData) 호출"
+        action: "레벨 데이터에서 장애물 정보 추출 후 배치"
+        result: "장애물 오브젝트 생성 및 그리드에 등록"
+      - trigger: "CanSlideThrough(x, y, direction) 호출"
+        action: "해당 위치의 장애물이 슬라이드를 허용하는지 판정"
+        result: "bool 반환"
+      - trigger: "OnTilePassedOver(x, y) 호출"
+        action: "타일이 해당 위치를 지나갔을 때 장애물 상태 업데이트 (얼음 감소 등)"
+        result: "장애물 상태 변경"
+      - trigger: "OnCatDropped(position) 호출"
+        action: "드롭 위치 인접 잠긴 타일 해제 조건 확인"
+        result: "조건 충족 시 잠금 해제"
+    relations:
+      uses:
+        - "GridManager"
+        - "EventManager"
+      usedBy:
+        - "SlideProcessor"
+        - "DropProcessor"
+        - "GridManager"
+      publishes:
+        - "OnObstacleStateChanged"
+        - "OnTileUnlocked"
+      subscribes:
+        - "OnCatDropped"
+        - "OnSlideComplete"
+
+  - nodeId: "LevelManager"
+    layer: "Domain"
+    genre: "Puzzle"
+    role: "Manager"
+    purpose: "레벨 진행 관리. 현재 레벨, 클리어 상태, 레벨 전환"
+    responsibilities:
+      - "현재 레벨 번호 관리"
+      - "레벨 로드 요청"
+      - "레벨 클리어/실패 처리"
+      - "레벨 진행도 저장"
+      - "별점 기록 관리"
+      - "다음 레벨 해금"
+    states:
+      - "Loading"
+      - "Playing"
+      - "Cleared"
+      - "Failed"
+    behaviors:
+      - trigger: "LoadLevel(levelNumber) 호출"
+        action: "LevelDataProvider에서 데이터 로드 → GridManager 초기화 요청"
+        result: "레벨 준비 완료"
+      - trigger: "OnLevelCleared 수신"
+        action: "별점 계산 → 진행도 저장 → 다음 레벨 해금"
+        result: "클리어 결과 데이터 반환"
+      - trigger: "OnLevelFailed 수신"
+        action: "실패 처리 → 리트라이 옵션 제공"
+        result: "실패 데이터 반환"
+      - trigger: "NextLevel() 호출"
+        action: "현재 레벨 + 1 로드"
+        result: "다음 레벨 시작"
+    relations:
+      uses:
+        - "Singleton"
+        - "LevelDataProvider"
+        - "GridManager"
+        - "SaveManager"
+        - "EventManager"
+      usedBy:
+        - "GameManager"
+        - "MainPage"
+        - "LevelClearPopup"
+      publishes:
+        - "OnLevelLoaded"
+        - "OnLevelProgressUpdated"
+      subscribes:
+        - "OnLevelCleared"
+        - "OnLevelFailed"
+
+  - nodeId: "ScoreCalculator"
+    layer: "Domain"
+    genre: "Puzzle"
+    role: "Calculator"
+    purpose: "점수 및 별점 계산. 이동 횟수 기반 별점 판정"
+    responsibilities:
+      - "이동 횟수 카운트"
+      - "최적 이동 횟수 대비 별점 계산"
+      - "최종 점수 산출"
+    states: []
+    behaviors:
+      - trigger: "IncrementMove() 호출"
+        action: "이동 횟수 +1"
+        result: "현재 이동 횟수 업데이트"
+      - trigger: "CalculateStars(moves, optimalMoves) 호출"
+        action: "이동 횟수와 최적 이동 횟수 비교하여 별점 산출"
+        result: "1~3 별점 반환"
+      - trigger: "Reset() 호출"
+        action: "이동 횟수 초기화"
+        result: "카운터 리셋"
+    relations:
+      uses:
+        - "EventManager"
+      usedBy:
+        - "LevelManager"
+        - "GamePage"
+      publishes:
+        - "OnMoveCountChanged"
+      subscribes:
+        - "OnMovePerformed"
+
+  - nodeId: "BoosterManager"
+    layer: "Domain"
+    genre: "Puzzle"
+    role: "Manager"
+    purpose: "부스터 아이템 관리. 보유량, 사용, 구매"
+    responsibilities:
+      - "부스터별 보유량 관리"
+      - "부스터 사용 가능 여부 판정"
+      - "부스터 사용 효과 적용"
+      - "부스터 구매 (코인/광고)"
+    states: []
+    behaviors:
+      - trigger: "UseBooster(boosterId) 호출"
+        action: "보유량 확인 → 차감 → 효과 적용"
+        result: "부스터 효과 실행"
+      - trigger: "Hint 부스터 사용"
+        action: "최적 이동 계산 → 화살표 UI 표시"
+        result: "힌트 표시"
+      - trigger: "Undo 부스터 사용"
+        action: "마지막 이동 기록에서 역이동 실행"
+        result: "이전 상태 복원"
+      - trigger: "Magnet 부스터 사용"
+        action: "선택한 고양이 → 가장 가까운 같은 색 구멍으로 즉시 드롭"
+        result: "고양이 즉시 클리어"
+      - trigger: "Shuffle 부스터 사용"
+        action: "구멍 타일 위치를 랜덤 재배치"
+        result: "그리드 상태 변경"
+    relations:
+      uses:
+        - "Singleton"
+        - "SaveManager"
+        - "CurrencyManager"
+        - "EventManager"
+        - "GridManager"
+      usedBy:
+        - "GamePage"
+        - "GameManager"
+      publishes:
+        - "OnBoosterUsed"
+        - "OnBoosterCountChanged"
+      subscribes: []
+
+  # ===========================================================================
+  # Phase 3: Game Layer (프로젝트 특화)
+  # ===========================================================================
+
+  - nodeId: "GameManager"
+    layer: "Game"
+    genre: "Puzzle"
+    role: "Manager"
+    purpose: "게임 전체 흐름 제어. 씬 전환, 게임 상태 FSM"
+    responsibilities:
+      - "게임 전체 상태 FSM (Title → Main → Game → Result)"
+      - "씬 전환 관리"
+      - "레벨 시작/종료 오케스트레이션"
+      - "일시정지/재개"
+      - "광고 표시 타이밍 제어"
+    states:
+      - "Title"
+      - "Main"
+      - "Loading"
+      - "Playing"
+      - "Paused"
+      - "Result"
+    behaviors:
+      - trigger: "앱 시작"
+        action: "Title 상태 → 로딩 완료 후 Main 전환"
+        result: "메인 메뉴 표시"
+      - trigger: "StartLevel(levelNumber) 호출"
+        action: "Loading → LevelManager.LoadLevel → Playing 전환"
+        result: "게임플레이 시작"
+      - trigger: "OnLevelCleared 수신"
+        action: "Playing → Result → LevelClearPopup 표시"
+        result: "결과 화면 표시"
+      - trigger: "OnLevelFailed 수신"
+        action: "Playing → Result → LevelFailPopup 표시"
+        result: "실패 화면 표시"
+      - trigger: "Pause/Resume"
+        action: "Time.timeScale 조절 → PausePopup 표시/숨김"
+        result: "일시정지/재개"
+    relations:
+      uses:
+        - "Singleton"
+        - "LevelManager"
+        - "SlideProcessor"
+        - "DropProcessor"
+        - "BoosterManager"
+        - "CurrencyManager"
+        - "SaveManager"
+        - "SoundManager"
+        - "EventManager"
+      usedBy: []
+      publishes:
+        - "OnGameStateChanged"
+      subscribes:
+        - "OnLevelCleared"
+        - "OnLevelFailed"
+
+  - nodeId: "TitlePage"
+    layer: "Game"
+    genre: "Puzzle"
+    role: "Handler"
+    purpose: "타이틀 화면 UI. 로고 표시, 로딩, 자동 전환"
+    responsibilities:
+      - "게임 로고 표시"
+      - "로딩 진행률 표시"
+      - "초기 데이터 로드 완료 후 메인으로 전환"
+    states:
+      - "Loading"
+      - "Ready"
+    behaviors:
+      - trigger: "씬 로드"
+        action: "로고 표시 → 데이터 로딩 → 로딩바 업데이트"
+        result: "로딩 완료 시 Main 씬 전환"
+    relations:
+      uses:
+        - "GameManager"
+      usedBy: []
+      publishes: []
+      subscribes: []
+
+  - nodeId: "MainPage"
+    layer: "Game"
+    genre: "Puzzle"
+    role: "Handler"
+    purpose: "메인 메뉴 UI. 레벨 맵, 코인 표시, 메뉴 버튼"
+    responsibilities:
+      - "레벨 맵 스크롤 표시 (해금/잠금/별점)"
+      - "코인 잔액 표시"
+      - "설정/상점 버튼"
+      - "데일리 보너스 버튼"
+    states: []
+    behaviors:
+      - trigger: "화면 진입"
+        action: "현재 진행도 기반 레벨 맵 표시, 코인 잔액 로드"
+        result: "메인 메뉴 표시"
+      - trigger: "레벨 버튼 터치"
+        action: "GameManager.StartLevel 호출"
+        result: "게임 씬 전환"
+    relations:
+      uses:
+        - "LevelManager"
+        - "CurrencyManager"
+        - "GameManager"
+        - "EventManager"
+      usedBy: []
+      publishes: []
+      subscribes:
+        - "OnCoinChanged"
+        - "OnLevelProgressUpdated"
+
+  - nodeId: "GamePage"
+    layer: "Game"
+    genre: "Puzzle"
+    role: "Handler"
+    purpose: "게임플레이 UI. 그리드 표시, 입력 처리, 상단/하단 UI"
+    responsibilities:
+      - "그리드 보드 표시"
+      - "터치/드래그 입력 감지 및 SlideProcessor로 전달"
+      - "이동 횟수 표시"
+      - "레벨 번호 표시"
+      - "부스터 버튼 바"
+      - "일시정지 버튼"
+    states: []
+    behaviors:
+      - trigger: "게임 시작"
+        action: "그리드 시각적 렌더링, UI 초기화"
+        result: "게임플레이 화면 표시"
+      - trigger: "터치/드래그 입력"
+        action: "입력 좌표 → 그리드 좌표 변환 → SlideProcessor 전달"
+        result: "슬라이드 처리 시작"
+      - trigger: "부스터 버튼 터치"
+        action: "BoosterManager.UseBooster 호출"
+        result: "부스터 효과 적용"
+      - trigger: "OnMoveCountChanged 수신"
+        action: "이동 횟수 UI 업데이트"
+        result: "UI 갱신"
+    relations:
+      uses:
+        - "GridManager"
+        - "SlideProcessor"
+        - "BoosterManager"
+        - "ScoreCalculator"
+        - "SoundManager"
+        - "EventManager"
+      usedBy: []
+      publishes: []
+      subscribes:
+        - "OnMoveCountChanged"
+        - "OnBoosterCountChanged"
+        - "OnGridInitialized"
+
+  - nodeId: "LevelClearPopup"
+    layer: "Game"
+    genre: "Puzzle"
+    role: "Handler"
+    purpose: "레벨 클리어 팝업. 별점, 보상, 다음 레벨 버튼"
+    responsibilities:
+      - "별점 애니메이션 표시"
+      - "코인 보상 표시 및 지급"
+      - "다음 레벨 버튼"
+      - "공유 버튼"
+      - "인터스티셜 광고 표시 (주기적)"
+    states: []
+    behaviors:
+      - trigger: "팝업 표시"
+        action: "별점 + 보상 데이터 수신 → 애니메이션 재생"
+        result: "클리어 결과 화면 표시"
+      - trigger: "다음 레벨 버튼"
+        action: "LevelManager.NextLevel 호출"
+        result: "다음 레벨 시작"
+    relations:
+      uses:
+        - "LevelManager"
+        - "CurrencyManager"
+        - "SoundManager"
+        - "GameManager"
+      usedBy: []
+      publishes: []
+      subscribes:
+        - "OnLevelCleared"
+
+  - nodeId: "LevelFailPopup"
+    layer: "Game"
+    genre: "Puzzle"
+    role: "Handler"
+    purpose: "레벨 실패 팝업. 리트라이, 광고 힌트 옵션"
+    responsibilities:
+      - "실패 메시지 표시"
+      - "리트라이 버튼"
+      - "리워드 광고 시청으로 힌트 획득"
+      - "나가기 버튼"
+    states: []
+    behaviors:
+      - trigger: "팝업 표시"
+        action: "실패 원인 표시"
+        result: "실패 화면 표시"
+      - trigger: "리트라이 버튼"
+        action: "현재 레벨 재로드"
+        result: "레벨 재시작"
+      - trigger: "광고 시청 버튼"
+        action: "리워드 광고 표시 → 성공 시 힌트 부스터 지급"
+        result: "부스터 획득 후 레벨 계속"
+    relations:
+      uses:
+        - "LevelManager"
+        - "BoosterManager"
+        - "GameManager"
+      usedBy: []
+      publishes: []
+      subscribes:
+        - "OnLevelFailed"
+
+  - nodeId: "ShopPopup"
+    layer: "Game"
+    genre: "Puzzle"
+    role: "Handler"
+    purpose: "상점 팝업. 코인팩, 부스터, 광고 제거 구매"
+    responsibilities:
+      - "코인팩 목록 표시"
+      - "부스터 팩 목록 표시"
+      - "광고 제거 구매 버튼"
+      - "IAP 구매 처리"
+      - "구매 복원"
+    states: []
+    behaviors:
+      - trigger: "팝업 표시"
+        action: "상품 목록 로드 및 표시"
+        result: "상점 화면 표시"
+      - trigger: "상품 구매 버튼"
+        action: "IAP 또는 코인 결제 처리"
+        result: "아이템 지급"
+    relations:
+      uses:
+        - "CurrencyManager"
+        - "BoosterManager"
+      usedBy: []
+      publishes: []
+      subscribes:
+        - "OnCoinChanged"
+
+# =============================================================================
+# Event Contracts (시스템 간 이벤트 목록)
+# =============================================================================
+events:
+  - name: "OnGridInitialized"
+    publisher: "GridManager"
+    subscribers: ["GamePage"]
+    data: "GridData (gridSize, cellPositions)"
+
+  - name: "OnCellStateChanged"
+    publisher: "GridManager"
+    subscribers: ["ObstacleManager"]
+    data: "CellChangeData (x, y, oldState, newState)"
+
+  - name: "OnSlideComplete"
+    publisher: "SlideProcessor"
+    subscribers: ["DropProcessor", "ObstacleManager"]
+    data: "SlideData (tileId, fromPos, toPos, direction)"
+
+  - name: "OnMovePerformed"
+    publisher: "SlideProcessor"
+    subscribers: ["ScoreCalculator"]
+    data: "null"
+
+  - name: "OnCatDropped"
+    publisher: "DropProcessor"
+    subscribers: ["ObstacleManager", "GameManager"]
+    data: "DropData (catColor, position)"
+
+  - name: "OnLevelCleared"
+    publisher: "DropProcessor"
+    subscribers: ["LevelManager", "GameManager", "LevelClearPopup"]
+    data: "ClearData (moveCount, stars, coinReward)"
+
+  - name: "OnLevelFailed"
+    publisher: "DropProcessor"
+    subscribers: ["LevelManager", "GameManager", "LevelFailPopup"]
+    data: "FailData (reason)"
+
+  - name: "OnLevelLoaded"
+    publisher: "LevelManager"
+    subscribers: ["GameManager"]
+    data: "LevelData"
+
+  - name: "OnLevelProgressUpdated"
+    publisher: "LevelManager"
+    subscribers: ["MainPage"]
+    data: "ProgressData (maxClearedLevel, totalStars)"
+
+  - name: "OnCoinChanged"
+    publisher: "CurrencyManager"
+    subscribers: ["MainPage", "ShopPopup", "GamePage"]
+    data: "CoinData (balance, delta)"
+
+  - name: "OnMoveCountChanged"
+    publisher: "ScoreCalculator"
+    subscribers: ["GamePage"]
+    data: "int moveCount"
+
+  - name: "OnBoosterUsed"
+    publisher: "BoosterManager"
+    subscribers: ["GameManager"]
+    data: "BoosterData (boosterId)"
+
+  - name: "OnBoosterCountChanged"
+    publisher: "BoosterManager"
+    subscribers: ["GamePage"]
+    data: "BoosterCountData (boosterId, count)"
+
+  - name: "OnObstacleStateChanged"
+    publisher: "ObstacleManager"
+    subscribers: ["GridManager"]
+    data: "ObstacleData (x, y, obstacleType, newState)"
+
+  - name: "OnTileUnlocked"
+    publisher: "ObstacleManager"
+    subscribers: ["GridManager"]
+    data: "UnlockData (x, y)"
+
+  - name: "OnGameStateChanged"
+    publisher: "GameManager"
+    subscribers: []
+    data: "GameState (newState)"

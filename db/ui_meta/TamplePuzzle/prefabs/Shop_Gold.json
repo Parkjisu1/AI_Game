@@ -1,0 +1,345 @@
+{
+  "fileName": "Shop_Gold",
+  "filePath": "E:/AIMED/TamplePuzzle/PuzzleAutomation/Assets\\Prefabs\\Popup\\Shop_Gold.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 8,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "4147414371115312940",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "PriceBg",
+      "rectSize": {
+        "x": 284.0,
+        "y": 114.0
+      },
+      "anchoredPosition": {
+        "x": 275.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Shop_Gold"
+    }
+  ],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "1984765436336660851",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "c8114c550da46490fa4864167f8f56ca",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BoxImage",
+      "rectSize": {
+        "x": 203.0,
+        "y": 196.0
+      },
+      "anchoredPosition": {
+        "x": -337.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Shop_Gold"
+    },
+    {
+      "type": "Image",
+      "fileID": "1984765436582885198",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "4a164fa08f0884cb29b2ffe9b0dd157d",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Shop_Gold",
+      "rectSize": {
+        "x": 1033.0,
+        "y": 284.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "sourceFile": "Shop_Gold"
+    },
+    {
+      "type": "Image",
+      "fileID": "1984765437022005852",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "755cbeef374c94f4b8331bb3fc414d85",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Nice",
+      "rectSize": {
+        "x": 176.0,
+        "y": 141.0
+      },
+      "anchoredPosition": {
+        "x": -391.0,
+        "y": 37.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Shop_Gold"
+    },
+    {
+      "type": "Image",
+      "fileID": "1984765437599189238",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "45d1718d22d474e0586a5b166b60fef4",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "GoldText",
+      "rectSize": {
+        "x": 309.0,
+        "y": 140.0
+      },
+      "anchoredPosition": {
+        "x": -90.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Shop_Gold"
+    },
+    {
+      "type": "Image",
+      "fileID": "1984765438277143529",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "a8f793432821847e394f4ef3addec847",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "PriceBg",
+      "rectSize": {
+        "x": 284.0,
+        "y": 114.0
+      },
+      "anchoredPosition": {
+        "x": 275.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Shop_Gold"
+    }
+  ],
+  "texts": [
+    {
+      "type": "Text",
+      "fileID": "1984765436955620343",
+      "m_FontSize": 48.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "200000",
+      "gameObjectName": "Gold",
+      "rectSize": {
+        "x": 255.3,
+        "y": 75.7
+      },
+      "anchoredPosition": {
+        "x": 10.0,
+        "y": 20.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Shop_Gold"
+    },
+    {
+      "type": "Text",
+      "fileID": "1984765437146371967",
+      "m_FontSize": 30.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.9716981,
+        "g": 0.7984844,
+        "b": 0.0,
+        "a": 1.0
+      },
+      "m_Text": "Bonus(100000)",
+      "gameObjectName": "BonusGold",
+      "rectSize": {
+        "x": 255.3,
+        "y": 75.7
+      },
+      "anchoredPosition": {
+        "x": 10.0,
+        "y": -27.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Shop_Gold"
+    },
+    {
+      "type": "Text",
+      "fileID": "1984765438253810583",
+      "m_FontSize": 45.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "\\100,000",
+      "gameObjectName": "Price",
+      "rectSize": {
+        "x": 259.7,
+        "y": 63.74
+      },
+      "anchoredPosition": {
+        "x": 0.61,
+        "y": 1.37
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Shop_Gold"
+    }
+  ],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 8
+}

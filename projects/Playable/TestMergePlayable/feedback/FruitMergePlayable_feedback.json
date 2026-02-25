@@ -1,0 +1,106 @@
+{
+  "nodeId": "FruitMergePlayable",
+  "genre": "Playable",
+  "platform": "playable",
+  "validationResult": "pass",
+  "fileSize": "25.94kb",
+  "checks": {
+    "isolation": {
+      "result": "pass",
+      "details": {
+        "externalFetch": false,
+        "externalXHR": false,
+        "externalAxios": false,
+        "externalScriptTags": false,
+        "externalStylesheets": false,
+        "externalImages": false,
+        "webSocket": false,
+        "eventSource": false,
+        "ctaWindowOpen": true,
+        "note": "All assets are code-drawn via Canvas 2D API. No external resources. CTA uses window.open() which is allowed."
+      }
+    },
+    "interaction": {
+      "result": "pass_with_warning",
+      "details": {
+        "touchstart": true,
+        "touchmove": true,
+        "touchend": true,
+        "mousedown": true,
+        "mousemove": true,
+        "mouseup": true,
+        "preventDefault": true,
+        "doubleTapZoomPrevented": true,
+        "passiveFalseOnTouch": true,
+        "noAutoPlay": true,
+        "note": "Game starts in 'title' state and requires user tap to begin. Level transitions after win/fail use setTimeout(1500ms) to auto-advance - this is acceptable for result screens. Core gameplay requires drag input."
+      }
+    },
+    "cta": {
+      "result": "pass_with_warning",
+      "details": {
+        "ctaElementExists": true,
+        "ctaHasOnClick": true,
+        "ctaUrlSet": true,
+        "ctaUrlValue": "https://example.com/store",
+        "ctaUrlIsPlaceholder": true,
+        "ctaOverlayOnGameOver": true,
+        "ctaVisualEmphasis": true,
+        "ctaAnimation": "pulse 1.2s ease-in-out infinite",
+        "ctaConfigUrlUnused": true,
+        "note": "CONFIG.ctaUrl is defined but not wired to the CTA button - button hardcodes the URL in HTML onclick. Both values match ('https://example.com/store') but CONFIG.ctaUrl is dead code. URL is a placeholder and must be replaced before production."
+      }
+    },
+    "sizeAndSpec": {
+      "result": "pass",
+      "details": {
+        "fileSizeBytes": 26562,
+        "fileSizeKB": 25.94,
+        "fileSizeMB": 0.0253,
+        "viewportMetaTag": true,
+        "canvasSetup": true,
+        "devicePixelRatioHandled": true,
+        "resizeHandler": true,
+        "usesRequestAnimationFrame": true,
+        "usesSetInterval": false,
+        "rafStopsOnCTA": true,
+        "note": "File is 25.94 KB, well within all platform limits. Uses requestAnimationFrame exclusively. RAF loop correctly terminates when state === 'cta'."
+      }
+    }
+  },
+  "feedbacks": [
+    {
+      "category": "CTA",
+      "severity": "warning",
+      "description": "CTA URL 'https://example.com/store' is a placeholder value. Both CONFIG.ctaUrl and the button's inline onclick contain this placeholder.",
+      "suggestion": "Replace 'https://example.com/store' with the actual store URL (e.g., App Store or Google Play link) before production deployment. Also wire the button onclick to use CONFIG.ctaUrl for single-source configuration: onclick=\"window.open(CONFIG.ctaUrl,'_blank')\""
+    },
+    {
+      "category": "CTA",
+      "severity": "info",
+      "description": "CONFIG.ctaUrl is defined at line 42 but is never referenced by any code. The CTA button at line 26 hardcodes the URL directly in the HTML onclick attribute.",
+      "suggestion": "Remove the dead CONFIG.ctaUrl property or wire the button to use it. Keeping CONFIG as the single source of truth makes the URL easier to update."
+    },
+    {
+      "category": "Interaction",
+      "severity": "info",
+      "description": "Level transitions after win/fail states auto-advance after 1500ms via setTimeout without requiring additional user input (lines 362-384 in checkLevelEnd()).",
+      "suggestion": "This is industry-standard behavior for result screens and does not violate the no-auto-play rule since core gameplay still requires explicit drag input. No change required, but consider adding a 'tap to continue' prompt for stricter platforms."
+    },
+    {
+      "category": "Isolation",
+      "severity": "info",
+      "description": "All graphics are rendered via Canvas 2D API using programmatic drawing. No image assets, fonts from CDN, or any external resources are loaded.",
+      "suggestion": "No action required. This is an ideal self-contained implementation."
+    }
+  ],
+  "networkCompliance": {
+    "facebook": true,
+    "ironsource": true,
+    "applovin": true,
+    "unityAds": true,
+    "google": true,
+    "note": "File size 25.94 KB is well below all platform limits (Facebook: 2MB, others: 5MB)"
+  },
+  "timestamp": "2026-02-19T00:00:00.000Z"
+}

@@ -1,0 +1,230 @@
+```yaml
+game: "Magic Sort"
+condition: "D1_10"
+parameters:
+
+  - id: MS01
+    name: bottle_max_height
+    value: "4"
+    confidence: high
+    source: >
+      관찰: 병 높이 4칸 확인 + 패턴카드: 병 구조 참조
+
+  - id: MS02
+    name: colors_total
+    value: "15"
+    confidence: medium
+    source: >
+      관찰: 색상 카운팅 + 패턴카드: 색상 팔레트 가이드
+
+  - id: MS03
+    name: colors_playable
+    value: "12"
+    confidence: medium
+    source: >
+      관찰: 동시 출현 색상 + 패턴카드: 플레이 가능 색상 수
+
+  - id: MS04
+    name: builtin_levels
+    value: "10"
+    confidence: high
+    source: >
+      관찰: 고정 레벨 10개 확인 + 패턴카드: 레벨 구조
+
+  - id: MS05
+    name: procedural_after_level
+    value: "10"
+    confidence: high
+    source: >
+      관찰: 레벨 11부터 변화 + 패턴카드: 절차적 생성 전환점
+
+  - id: MS06
+    name: max_gen_attempts
+    value: "50~100"
+    confidence: low
+    source: >
+      패턴카드: 절차적 생성 시도 횟수 가이드라인 참조(정확도 한계)
+
+  - id: MS07
+    name: difficulty_tier_count
+    value: "3"
+    confidence: high
+    source: >
+      관찰: 3단계 난이도 확인 + 패턴카드: 난이도 시스템 구조
+
+  - id: MS08
+    name: tier_color_counts
+    value: "[4, 7, 10]"
+    confidence: high
+    source: >
+      관찰: 티어별 색상 수 카운팅 + 패턴카드: 티어 색상 수 [4, 7, 10] 명시
+
+  - id: MS09
+    name: tier_level_ranges
+    value: "Default:1-18 / Hard:19-55 / SuperHard:56+"
+    confidence: medium
+    source: >
+      관찰: 난이도 전환 레벨 관찰 + 패턴카드: 티어 구간 가이드 참조
+
+  - id: MS10
+    name: par_bonus_values
+    value: "[5, 3, 0]"
+    confidence: high
+    source: >
+      관찰: par 보너스 역산 + 패턴카드: 보너스 시스템 구조
+
+  - id: MS11
+    name: par_formula
+    value: "basePar = colorCount * 3 + bonus"
+    confidence: high
+    source: >
+      관찰: par 공식 역산 + 패턴카드: 밸런스 공식 구조
+
+  - id: MS12
+    name: max_per_row
+    value: "5"
+    confidence: high
+    source: >
+      관찰: 행당 최대 5병 확인 + 패턴카드: 레이아웃 구조
+
+  - id: MS13
+    name: h_spacing
+    value: "1.2"
+    confidence: low
+    source: >
+      관찰: 수평 간격 추정 + 패턴카드: 레이아웃 파라미터
+
+  - id: MS14
+    name: v_spacing
+    value: "2.2"
+    confidence: medium
+    source: >
+      관찰: 수직 간격 픽셀 측정 + 패턴카드: 레이아웃 파라미터 참조
+
+  - id: MS15
+    name: pour_total_duration
+    value: "0.3s"
+    confidence: low
+    source: >
+      관찰: 붓기 시간 추정 + 패턴카드: 애니메이션 파라미터(정확도 한계)
+
+  - id: MS16
+    name: lift_height
+    value: "1.0"
+    confidence: low
+    source: >
+      관찰: 들어올리기 높이 추정 + 패턴카드: 리프트 파라미터
+
+  - id: MS17
+    name: tilt_angle
+    value: "45°"
+    confidence: low
+    source: >
+      관찰: 기울기 각도 추정 + 패턴카드: 틸트 파라미터
+
+  - id: MS18
+    name: starting_coins
+    value: "100"
+    confidence: high
+    source: >
+      관찰: 초기 코인 확인 + 패턴카드: 초기 경제 설정
+
+  - id: MS19
+    name: starting_gems
+    value: "5"
+    confidence: high
+    source: >
+      관찰: 초기 젬 확인 + 패턴카드: 초기 경제 설정
+
+  - id: MS20
+    name: booster_type_count
+    value: "5"
+    confidence: high
+    source: >
+      관찰: 5종 부스터 확인 + 패턴카드: 부스터 시스템 구조
+
+  - id: MS21
+    name: booster_initial_counts
+    value: "extra_bottle:3, shuffle:3, undo:5, hint:5, color_clear:1"
+    confidence: high
+    source: >
+      관찰: 부스터 수량 확인 + 패턴카드: 부스터 경제 구조
+
+  - id: MS22
+    name: undo_max_steps
+    value: "30"
+    confidence: low
+    source: >
+      관찰: Undo 횟수 테스트 + 패턴카드: Undo 스택 구조
+
+  - id: MS23
+    name: star_rating_3star
+    value: "moveCount <= par"
+    confidence: high
+    source: >
+      관찰: 3성 조건 확인 + 패턴카드: 평가 시스템
+
+  - id: MS24
+    name: star_rating_2star_threshold
+    value: "moveCount <= par * 1.5"
+    confidence: high
+    source: >
+      관찰: 2성 조건 역산 + 패턴카드: 평가 시스템 참조
+
+  - id: MS25
+    name: hint_scoring_system
+    value: "completing_bottle:100, monochromatic_target:50, emptying_origin:30, non_empty_target:20, per_layer_moved:10"
+    confidence: medium
+    source: >
+      관찰: 힌트 우선순위 분석 + 패턴카드: 스코어링 시스템 구조
+
+  - id: MS26
+    name: blocker_type_count
+    value: "12~15"
+    confidence: low
+    source: >
+      관찰: 블로커 종류 카운팅(일부 미발견) + 패턴카드: 블로커 시스템 구조
+
+  - id: MS27
+    name: save_prefix
+    value: "MS_"
+    confidence: high
+    source: >
+      패턴카드: 저장 시스템 키 접두사 'MS_' 명시
+
+  - id: MS28
+    name: pattern_count
+    value: "7 (Singleton/SignalBus/StateMachine/Command/ObjectPool/Strategy/Observer)"
+    confidence: medium
+    source: >
+      패턴카드: 디자인 패턴 목록 참조 — 7개 식별, DI/MVC 미식별
+
+  - id: MS29
+    name: state_count
+    value: "6 (Playing/Paused/Win/Stuck/Lose/Quit)"
+    confidence: high
+    source: >
+      관찰: 상태 전환 확인 + 패턴카드: 상태 머신 구조
+
+  - id: MS30
+    name: pour_mechanic
+    value: "tap 기반 물약 붓기"
+    confidence: high
+    source: >
+      관찰: 메커니즘 직접 확인 + 패턴카드: 소트 퍼즐 메커니즘
+
+  - id: MS31
+    name: win_condition
+    value: "All bottles full+monochromatic OR empty"
+    confidence: high
+    source: >
+      관찰: 승리 조건 확인 + 패턴카드: 승리 조건 구조
+
+  - id: MS32
+    name: empty_bottles_formula
+    value: "2 (모든 티어 고정)"
+    confidence: high
+    source: >
+      관찰: 빈 병 수 확인 + 패턴카드: 빈 병 고정값 2 명시
+
+```

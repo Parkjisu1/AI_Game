@@ -1,0 +1,82 @@
+metadata:
+  nodeId: "InventoryManager"
+  version: "1.0.0"
+  phase: 2
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "DataManager"
+    - "CurrencyManager"
+    - "EventManager"
+    - "SaveManager"
+  external:
+    - "System.Collections.Generic"
+    - "System.Linq"
+
+contract:
+  provides:
+    - "List<UserItemData> GetItems(ItemType filter = ItemType.All)"
+    - "void AddItem(string itemId, int count)"
+    - "bool UseItem(string itemId, int count)"
+    - "int GetItemCount(string itemId)"
+    - "List<UserItemData> GetSortedItems(SortType sort)"
+  requires:
+    - "Singleton"
+    - "DataManager"
+    - "EventManager"
+
+tags:
+  layer: "Domain"
+  genre: "Idle"
+  role: "Manager"
+  system: "Inventory"
+  majorFunctions:
+    - "StateControl"
+    - "ValueModification"
+  minorFunctions:
+    - "Find"
+    - "Aggregate"
+    - "Validate"
+
+logicFlow:
+  - step: 1
+    tag: "Find"
+    action: "AddItem: _items에서 itemId 탐색"
+    next: 2
+  - step: 2
+    tag: "Assign"
+    action: "존재하면 count += amount / 없으면 신규 항목 추가"
+    next: 3
+  - step: 3
+    tag: "DataSync"
+    action: "SaveManager 저장"
+    next: null
+  - step: 4
+    tag: "Validate"
+    action: "UseItem: GetItemCount >= count 체크"
+    next: 5
+  - step: 5
+    tag: "Assign"
+    action: "count -= amount, 0이하면 항목 제거"
+    next: 6
+  - step: 6
+    tag: "Assign"
+    action: "아이템 효과 적용 (타입별 분기: ExpPotion → CharacterManager, GoldPouch → CurrencyManager)"
+    next: null
+
+referencePatterns:
+  - source: "CLAUDE.md"
+    pattern: "InventoryManager - 아이템 수납, 필터, 정렬"
+
+codeHints:
+  patterns:
+    - "public class InventoryManager : Singleton<InventoryManager>"
+    - "private Dictionary<string, int> _items = new() // itemId → count"
+    - "GetItems(filter): _items.Where(x => GetItemType(x.Key) == filter).ToList()"
+    - "GetSortedItems(sort): sort == SortType.Grade → 등급 내림차순 정렬"
+    - "UseItem 효과: DataManager.GetItemData(itemId).effectType으로 분기"
+  avoidPatterns:
+    - "장비는 InventoryManager가 아닌 EquipmentManager에서 관리"
+    - "아이템 스택 무한 허용 (maxStack 체크 추가 권장)"

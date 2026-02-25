@@ -1,0 +1,18 @@
+{
+  "nodeId": "CharacterManager",
+  "genre": "Idle",
+  "role": "Manager",
+  "validationResult": "pass",
+  "score": 0.6,
+  "feedbacks": [
+    {
+      "category": "PATTERN.STRUCTURE",
+      "line": 320,
+      "severity": "fixed",
+      "description": "[FIXED] 중복 CurrencyManager static class 및 ICurrencyService 인터페이스 제거. 'using VeilBreaker.Economy;' 추가로 직접 참조로 교체.",
+      "suggestion": null
+    }
+  ],
+  "contractChanged": false,
+  "timestamp": "2026-02-24T00:00:00Z"
+}

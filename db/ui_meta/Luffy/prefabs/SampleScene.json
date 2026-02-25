@@ -1,0 +1,849 @@
+{
+  "fileName": "SampleScene",
+  "filePath": "E:/AIMED/Luffy/IdleMoney1/Project/Assets\\Goranee\\3thParty\\AppIconChangerUnity-2.2.0\\AppIconChangerUnity-2.2.0\\Assets\\AppIconChanger\\Samples~\\Demo\\SampleScene.unity",
+  "fileType": "scene",
+  "gameObjectCount": 18,
+  "canvases": [
+    {
+      "type": "Canvas",
+      "fileID": "888514716",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 0,
+      "gameObjectName": "Canvas",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    }
+  ],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "70775112",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Button (3)",
+      "rectSize": {
+        "x": 400.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "sourceFile": "SampleScene"
+    },
+    {
+      "type": "Button",
+      "fileID": "244373644",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Button (1)",
+      "rectSize": {
+        "x": 400.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "sourceFile": "SampleScene"
+    },
+    {
+      "type": "Button",
+      "fileID": "249599565",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Button (4)",
+      "rectSize": {
+        "x": 400.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "sourceFile": "SampleScene"
+    },
+    {
+      "type": "Button",
+      "fileID": "569788736",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Button",
+      "rectSize": {
+        "x": 400.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "sourceFile": "SampleScene"
+    },
+    {
+      "type": "Button",
+      "fileID": "1355837214",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Button (2)",
+      "rectSize": {
+        "x": 400.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "sourceFile": "SampleScene"
+    },
+    {
+      "type": "Button",
+      "fileID": "1528764177",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Button (5)",
+      "rectSize": {
+        "x": 400.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "sourceFile": "SampleScene"
+    }
+  ],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "70775113",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Button (3)",
+      "rectSize": {
+        "x": 400.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "sourceFile": "SampleScene"
+    },
+    {
+      "type": "Image",
+      "fileID": "244373645",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Button (1)",
+      "rectSize": {
+        "x": 400.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "sourceFile": "SampleScene"
+    },
+    {
+      "type": "Image",
+      "fileID": "249599566",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Button (4)",
+      "rectSize": {
+        "x": 400.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "sourceFile": "SampleScene"
+    },
+    {
+      "type": "Image",
+      "fileID": "569788737",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Button",
+      "rectSize": {
+        "x": 400.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "sourceFile": "SampleScene"
+    },
+    {
+      "type": "Image",
+      "fileID": "1355837215",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Button (2)",
+      "rectSize": {
+        "x": 400.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "sourceFile": "SampleScene"
+    },
+    {
+      "type": "Image",
+      "fileID": "1528764178",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Button (5)",
+      "rectSize": {
+        "x": 400.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "sourceFile": "SampleScene"
+    }
+  ],
+  "texts": [
+    {
+      "type": "Text",
+      "fileID": "22558531",
+      "m_FontSize": 28.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.11372549,
+        "g": 0.16862746,
+        "b": 0.33333334,
+        "a": 1.0
+      },
+      "m_Text": "ChangeIcon(\"demo_green\")",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "SampleScene"
+    },
+    {
+      "type": "Text",
+      "fileID": "101798659",
+      "m_FontSize": 28.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.11372549,
+        "g": 0.16862746,
+        "b": 0.33333334,
+        "a": 1.0
+      },
+      "m_Text": "GetAlternateIconName",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "SampleScene"
+    },
+    {
+      "type": "Text",
+      "fileID": "330210458",
+      "m_FontSize": 28.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.11372549,
+        "g": 0.16862746,
+        "b": 0.33333334,
+        "a": 1.0
+      },
+      "m_Text": "ChangeIconToDefault()",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "SampleScene"
+    },
+    {
+      "type": "Text",
+      "fileID": "506236472",
+      "m_FontSize": 28.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.11372549,
+        "g": 0.16862746,
+        "b": 0.33333334,
+        "a": 1.0
+      },
+      "m_Text": "ChangeIcon(\"demo_red\")",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "SampleScene"
+    },
+    {
+      "type": "Text",
+      "fileID": "665594831",
+      "m_FontSize": 28.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.11372549,
+        "g": 0.16862746,
+        "b": 0.33333334,
+        "a": 1.0
+      },
+      "m_Text": "GetSupportsAlternateIcons",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "SampleScene"
+    },
+    {
+      "type": "Text",
+      "fileID": "1030631190",
+      "m_FontSize": 28.0,
+      "m_Alignment": 0,
+      "m_Color": {
+        "r": 0.11372549,
+        "g": 0.16862746,
+        "b": 0.33333334,
+        "a": 1.0
+      },
+      "m_Text": "'StatusText",
+      "gameObjectName": "StatusText",
+      "rectSize": {
+        "x": 450.0,
+        "y": 80.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 204.00003
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SampleScene"
+    },
+    {
+      "type": "Text",
+      "fileID": "1259719665",
+      "m_FontSize": 28.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.11372549,
+        "g": 0.16862746,
+        "b": 0.33333334,
+        "a": 1.0
+      },
+      "m_Text": "ChangeIcon(\"demo_blue\")",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "SampleScene"
+    }
+  ],
+  "layoutGroups": [
+    {
+      "type": "LayoutGroup",
+      "fileID": "1438134125",
+      "m_Spacing": 0.0,
+      "m_Padding": {
+        "m_Left": 0,
+        "m_Right": 0,
+        "m_Top": 0,
+        "m_Bottom": 0
+      },
+      "m_ChildAlignment": 1,
+      "gameObjectName": "LayoutGroup",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 140.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "SampleScene"
+    }
+  ],
+  "contentSizeFitters": [],
+  "rectTransformCount": 15
+}

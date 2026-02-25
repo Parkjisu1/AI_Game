@@ -1,0 +1,18 @@
+{
+  "nodeId": "DataManager",
+  "genre": "Idle",
+  "role": "Manager",
+  "validationResult": "pass",
+  "score": 0.6,
+  "feedbacks": [
+    {
+      "category": "PATTERN.STRUCTURE",
+      "line": 1,
+      "severity": "warning",
+      "description": "DataManager.cs가 1163줄로 God Class 임계값(1000줄)을 초과함. Chart 데이터 접근 메서드와 User 데이터 업데이트 메서드가 모두 단일 파일에 존재. Contract 충족은 완료되어 PASS 처리하나 향후 partial class 분할 권장.",
+      "suggestion": "향후 리팩토링: DataManager_Chart.cs, DataManager_User.cs, DataManager_Init.cs로 partial class 분할"
+    }
+  ],
+  "contractChanged": false,
+  "timestamp": "2026-02-24T00:00:00Z"
+}

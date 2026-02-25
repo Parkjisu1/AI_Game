@@ -1,0 +1,250 @@
+```yaml
+scoring:
+  game: "Magic Sort"
+  condition: "C10"
+  results:
+    - id: MS01
+      name: bottle_max_height
+      ground_truth: "4"
+      generated: "4"
+      score: 1.0
+      note: "정확히 일치. 장르 표준(4층)이 실제 정답과 동일."
+
+    - id: MS02
+      name: colors_total
+      ground_truth: "17"
+      generated: "8"
+      score: 0.1
+      note: "완전히 다름. 17색(NONE·GRAY·BLACK·RAINBOW 포함) vs 추정 8색. 플레이어블 색상과 전체 색상 개념도 혼동."
+
+    - id: MS03
+      name: colors_playable
+      ground_truth: "13"
+      generated: "6"
+      score: 0.1
+      note: "완전히 다름. 실제 13색 vs 추정 6색. 53% 과소 추정."
+
+    - id: MS04
+      name: builtin_levels
+      ground_truth: "10"
+      generated: "null"
+      score: 0.0
+      note: "누락. 빌트인 레벨 10개 정보 없음."
+
+    - id: MS05
+      name: procedural_after_level
+      ground_truth: "10"
+      generated: "null"
+      score: 0.0
+      note: "누락. 절차적 생성 시작 레벨(10 이후) 정보 없음."
+
+    - id: MS06
+      name: max_gen_attempts
+      ground_truth: "100"
+      generated: "null"
+      score: 0.0
+      note: "누락. 내부 엔지니어링 파라미터로 외부 관찰 불가 판단은 타당하나 값 미제시."
+
+    - id: MS07
+      name: difficulty_tier_count
+      ground_truth: "3"
+      generated: "null"
+      score: 0.0
+      note: "누락. 실제 3단계(Default/Hard/SuperHard) vs null. 챕터 수를 티어 수로 잘못 접근."
+
+    - id: MS08
+      name: tier_color_counts
+      ground_truth: "[4, 7, 10]"
+      generated: "null"
+      score: 0.0
+      note: "누락. Default:4, Hard:7, SuperHard:10 모두 미추정."
+
+    - id: MS09
+      name: tier_level_ranges
+      ground_truth: "Default:1-20, Hard:21-60, SuperHard:61+"
+      generated: "[[1,19],[20,39],[40,39],[60,79],[80,?]]"
+      score: 0.1
+      note: "구조 자체가 다름. 3티어(20/40/나머지) vs 5그룹(20레벨 균등 분할). 첫 구간 1~19(실제 1~20)만 근사, 이후 완전 오류."
+
+    - id: MS10
+      name: par_bonus_values
+      ground_truth: "Default:5, Hard:3, SuperHard:0"
+      generated: "null"
+      score: 0.0
+      note: "누락."
+
+    - id: MS11
+      name: par_formula
+      ground_truth: "basePar = colorCount * 3 + par_bonus"
+      generated: "null"
+      score: 0.0
+      note: "누락."
+
+    - id: MS12
+      name: max_per_row
+      ground_truth: "5"
+      generated: "4"
+      score: 0.7
+      note: "근접. 4 vs 5, 차이 20%(경계값). 방향은 맞고 세부값만 1 차이."
+
+    - id: MS13
+      name: h_spacing
+      ground_truth: "1.5"
+      generated: "null"
+      score: 0.0
+      note: "누락."
+
+    - id: MS14
+      name: v_spacing
+      ground_truth: "2.5"
+      generated: "null"
+      score: 0.0
+      note: "누락."
+
+    - id: MS15
+      name: pour_total_duration
+      ground_truth: "0.4"
+      generated: "0.5"
+      score: 0.4
+      note: "부분 일치. 애니메이션 범위(0.3~0.8초) 개념은 맞으나 0.5 vs 0.4로 25% 초과 오차."
+
+    - id: MS16
+      name: lift_height
+      ground_truth: "1.5"
+      generated: "null"
+      score: 0.0
+      note: "누락."
+
+    - id: MS17
+      name: tilt_angle
+      ground_truth: "60"
+      generated: "null"
+      score: 0.0
+      note: "누락. 장르 범위(90~135°) 추정만 있고 실제 60° 미제시."
+
+    - id: MS18
+      name: starting_coins
+      ground_truth: "100"
+      generated: "0"
+      score: 0.1
+      note: "완전히 다름. 0 vs 100. 관찰 코인 1,420을 레벨 보상 누적으로 해석해 시작값 0 추정했으나 실제 시작값은 100."
+
+    - id: MS19
+      name: starting_gems
+      ground_truth: "5"
+      generated: "null"
+      score: 0.0
+      note: "누락. 젬 존재 여부 자체를 미확인으로 처리."
+
+    - id: MS20
+      name: booster_type_count
+      ground_truth: "5"
+      generated: "3"
+      score: 0.4
+      note: "부분 일치. 부스터 개념 인지 + Undo 확인, 그러나 3종 추정(실제 5종: extra_bottle/shuffle/undo/hint/color_clear). 40% 과소."
+
+    - id: MS21
+      name: booster_initial_counts
+      ground_truth: "extra_bottle:3, shuffle:3, undo:5, hint:5, color_clear:1"
+      generated: "null"
+      score: 0.0
+      note: "누락."
+
+    - id: MS22
+      name: undo_max_steps
+      ground_truth: "50"
+      generated: "1"
+      score: 0.1
+      note: "완전히 다름. 개념 오해: 실제는 LIFO 스택 최대 깊이(50수) vs 부스터 1회당 1수 되돌리기로 잘못 해석."
+
+    - id: MS23
+      name: star_rating_3star
+      ground_truth: "moveCount <= par"
+      generated: "null"
+      score: 0.0
+      note: "누락. 별점 시스템 존재 자체를 미확인 처리."
+
+    - id: MS24
+      name: star_rating_2star_threshold
+      ground_truth: "moveCount <= par * 1.5"
+      generated: "null"
+      score: 0.0
+      note: "누락."
+
+    - id: MS25
+      name: hint_scoring_system
+      ground_truth: "completing_bottle:100, monochromatic_target:50, emptying_origin:30, non_empty_target:20, origin_becomes_mono:15, per_layer_moved:10, empty_target_penalty:-5"
+      generated: "null"
+      score: 0.0
+      note: "누락. 7단계 가중치 체계 전혀 추정 불가."
+
+    - id: MS26
+      name: blocker_type_count
+      ground_truth: "18"
+      generated: "null"
+      score: 0.0
+      note: "누락. 중반 이후 도입 가능성만 언급, 실제 18종 미추정."
+
+    - id: MS27
+      name: save_prefix
+      ground_truth: "MS_"
+      generated: "null"
+      score: 0.0
+      note: "누락. 화이트박스 없이 추론 불가 판단은 타당."
+
+    - id: MS28
+      name: pattern_count
+      ground_truth: "9"
+      generated: "null"
+      score: 0.0
+      note: "누락. 아키텍처 패턴 수(Singleton/SignalBus/FSM/Command/DI/Pool/Strategy/Observer/MVC = 9종) 미추정."
+
+    - id: MS29
+      name: state_count
+      ground_truth: "6"
+      generated: "6"
+      score: 1.0
+      note: "정확히 일치. Playing/Paused/Win/Stuck/Lose/Quit = 6. 추론 경로(Loading+MainMenu+Playing+Paused+Clear+Over)가 달라도 결과 동일."
+
+    - id: MS30
+      name: pour_mechanic
+      ground_truth: "(implicit) tap_to_select"
+      generated: "tap_to_select"
+      score: 0.7
+      note: "근접. GT에 명시적 필드 없으나 조건(Origin→Target 2-tap)과 일치. 장르 표준 추론이 정확."
+
+    - id: MS31
+      name: win_condition
+      ground_truth: "All bottles full+monochromatic OR empty"
+      generated: "all_bottles_single_color"
+      score: 0.7
+      note: "근접. 핵심 개념(단일 색상 완성) 일치. 'OR empty(빈 병 포함)' 조건 누락이 유일한 차이."
+
+    - id: MS32
+      name: empty_bottles_formula
+      ground_truth: "2"
+      generated: "2"
+      score: 1.0
+      note: "정확히 일치. 전 레벨 empty:2 고정 확인, 장르 표준 추론과 일치."
+
+  summary:
+    total: 32
+    sum: 6.4
+    average: 0.200
+```
+
+---
+
+**채점 요약**
+
+| 점수대 | 파라미터 수 | 해당 ID |
+|--------|------------|---------|
+| 1.0 (Exact) | 3 | MS01, MS29, MS32 |
+| 0.7 (Close) | 3 | MS12, MS30, MS31 |
+| 0.4 (Partial) | 2 | MS15, MS20 |
+| 0.1 (Wrong) | 5 | MS02, MS03, MS09, MS18, MS22 |
+| 0.0 (Missing) | 19 | MS04~08, MS10~11, MS13~14, MS16~17, MS19, MS21, MS23~28 |
+
+**핵심 분석:**
+- **장점:** 게임플레이 메커닉(MS30·MS31), 아키텍처 상태 수(MS29), 기본 구조(MS01·MS32) 등 외부 관찰 가능한 *개념적* 파라미터는 정확
+- **약점:** `colors_total(17→8)`, `undo_max_steps(50→1)` 등 숫자 상수는 내부 코드 없이 대부분 추정 불가 또는 오류 — null 처리가 오답보다 낫다는 점에서 19개 null은 전략적으로 옳은 판단

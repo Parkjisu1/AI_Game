@@ -1,0 +1,80 @@
+metadata:
+  nodeId: "HUD"
+  version: "1.0.0"
+  phase: 3
+  role: "UX"
+
+dependencies:
+  internal:
+    - "EventManager"
+    - "BattleManager"
+    - "StageManager"
+    - "GameConstants"
+  external:
+    - "UnityEngine"
+    - "UnityEngine.UI"
+    - "TMPro"
+
+contract:
+  provides:
+    - "void Init()"
+    - "void UpdateHeroHpBar(string heroId, float ratio)"
+    - "void ShowBossHpBar(float ratio)"
+    - "void HideBossHpBar()"
+    - "void UpdateCurrencyDisplay(CurrencyType type, long amount)"
+    - "void UpdateStageLabel(string stageId)"
+  requires:
+    - "EventManager"
+    - "BattleManager"
+
+tags:
+  layer: "Game"
+  genre: "Idle"
+  role: "UX"
+  system: "UI"
+  majorFunctions:
+    - "DataSync"
+    - "ResponseTrigger"
+  minorFunctions:
+    - "Assign"
+    - "Notify"
+
+logicFlow:
+  - step: 1
+    tag: "Assign"
+    action: "Awake: EventManager 구독 등록"
+    next: null
+  - step: 2
+    tag: "ResponseTrigger"
+    action: "OnCurrencyChanged: gold/gem TMP 텍스트 갱신"
+    next: null
+  - step: 3
+    tag: "ResponseTrigger"
+    action: "OnHeroDie: 해당 영웅 hp bar Slider.value = 0"
+    next: null
+  - step: 4
+    tag: "ResponseTrigger"
+    action: "OnBossSpawn: bossHpBar 게임오브젝트 활성화"
+    next: null
+  - step: 5
+    tag: "DataSync"
+    action: "OnStageStart: 스테이지 라벨 텍스트 갱신"
+    next: null
+
+referencePatterns:
+  - source: "CLAUDE.md"
+    pattern: "HUD - [SerializeField] 기반 Inspector 연결"
+
+codeHints:
+  patterns:
+    - "public class HUD : MonoBehaviour"
+    - "[SerializeField] private TextMeshProUGUI _goldText"
+    - "[SerializeField] private TextMeshProUGUI _gemText"
+    - "[SerializeField] private Slider _bossHpBar"
+    - "[SerializeField] private Slider[] _heroHpBars"
+    - "[SerializeField] private TextMeshProUGUI _stageLabel"
+    - "void OnEnable() { EventManager.Subscribe(Events.OnCurrencyChanged, OnCurrencyChanged); }"
+    - "void OnDisable() { EventManager.Unsubscribe(Events.OnCurrencyChanged, OnCurrencyChanged); }"
+  avoidPatterns:
+    - "Find/FindObjectOfType로 Text 참조 금지 → [SerializeField] 사용"
+    - "Update에서 매 프레임 UI 갱신 금지 → 이벤트 기반 갱신"

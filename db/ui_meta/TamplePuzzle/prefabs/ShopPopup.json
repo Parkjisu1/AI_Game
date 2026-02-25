@@ -1,0 +1,3425 @@
+{
+  "fileName": "ShopPopup",
+  "filePath": "E:/AIMED/TamplePuzzle/PuzzleAutomation/Assets\\Resources\\Prefabs\\Popup\\ShopPopup.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 90,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "5097478934098751027",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Button",
+      "fileID": "4447804336638674528",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Button",
+      "fileID": "1945450220120543408",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Reward (1)",
+      "rectSize": {
+        "x": 284.0,
+        "y": 114.0
+      },
+      "anchoredPosition": {
+        "x": 275.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Button",
+      "fileID": "1358636893",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "GoldBg",
+      "rectSize": {
+        "x": 284.0,
+        "y": 114.0
+      },
+      "anchoredPosition": {
+        "x": 275.0,
+        "y": 21.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Button",
+      "fileID": "1474386559",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Coins",
+      "rectSize": {
+        "x": 490.0,
+        "y": 188.0
+      },
+      "anchoredPosition": {
+        "x": -247.0,
+        "y": 398.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Button",
+      "fileID": "893467595708561729",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Reward",
+      "rectSize": {
+        "x": 284.0,
+        "y": 114.0
+      },
+      "anchoredPosition": {
+        "x": 275.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Button",
+      "fileID": "5847739345076994260",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Scrollbar Vertical",
+      "rectSize": {
+        "x": -1.0999985,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.95929635,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Button",
+      "fileID": "1623920586",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Item",
+      "rectSize": {
+        "x": 490.0,
+        "y": 188.0
+      },
+      "anchoredPosition": {
+        "x": 252.0,
+        "y": 398.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Button",
+      "fileID": "1756007584",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "GoldBg",
+      "rectSize": {
+        "x": 284.0,
+        "y": 114.0
+      },
+      "anchoredPosition": {
+        "x": 275.0,
+        "y": 17.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Button",
+      "fileID": "382445354223303796",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Button",
+      "fileID": "977963157",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Close",
+      "rectSize": {
+        "x": 133.0,
+        "y": 139.0
+      },
+      "anchoredPosition": {
+        "x": 467.0,
+        "y": 725.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Button",
+      "fileID": "781780238",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "GoldBg",
+      "rectSize": {
+        "x": 284.0,
+        "y": 114.0
+      },
+      "anchoredPosition": {
+        "x": 275.0,
+        "y": 21.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Button",
+      "fileID": "1768902493890619243",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Restore",
+      "rectSize": {
+        "x": 148.0,
+        "y": 135.0
+      },
+      "anchoredPosition": {
+        "x": 275.0,
+        "y": 742.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    }
+  ],
+  "scrollRects": [
+    {
+      "type": "ScrollRect",
+      "fileID": "5847739346455433041",
+      "m_Horizontal": 0,
+      "m_Vertical": 1,
+      "m_Inertia": 1,
+      "m_DecelerationRate": 0.135,
+      "m_ScrollSensitivity": 1.0,
+      "gameObjectName": "Scroll View",
+      "rectSize": {
+        "x": 1080.0,
+        "y": 1207.4
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -269.5
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    }
+  ],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "378837203155675550",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "4bc9f6f7d041d394aad724bc28e091e1",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Effect",
+      "rectSize": {
+        "x": 128.0,
+        "y": 166.0
+      },
+      "anchoredPosition": {
+        "x": -205.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "8337175441810983431",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "4bc9f6f7d041d394aad724bc28e091e1",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Effect",
+      "rectSize": {
+        "x": 128.0,
+        "y": 166.0
+      },
+      "anchoredPosition": {
+        "x": -205.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "1281450420565909955",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "7ea5e86a6939b45cfa557881b58626cb",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Reward (1)",
+      "rectSize": {
+        "x": 284.0,
+        "y": 114.0
+      },
+      "anchoredPosition": {
+        "x": 275.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "2514642988862026939",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "ea1bcddcb51f645bdbf79a0893753358",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image",
+      "rectSize": {
+        "x": 88.0,
+        "y": 72.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "3714269518160178097",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "b96de7137631445e4aeafc44303bae45",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "CountDownBoxRoot",
+      "rectSize": {
+        "x": 261.58,
+        "y": 44.97
+      },
+      "anchoredPosition": {
+        "x": 273.85,
+        "y": 79.49
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739344523867054",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "78973d1d226c44ed8a29e1f2e34446f0",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Cross",
+      "rectSize": {
+        "x": 217.0,
+        "y": 131.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -30.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739344539344137",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "a8f793432821847e394f4ef3addec847",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "GoldBg",
+      "rectSize": {
+        "x": 284.0,
+        "y": 114.0
+      },
+      "anchoredPosition": {
+        "x": 275.0,
+        "y": 21.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739344589005015",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "acd9b525a2112469ebe630f4c3962d50",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Coins",
+      "rectSize": {
+        "x": 490.0,
+        "y": 188.0
+      },
+      "anchoredPosition": {
+        "x": -247.0,
+        "y": 398.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739344592092222",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "78973d1d226c44ed8a29e1f2e34446f0",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Item",
+      "rectSize": {
+        "x": 217.0,
+        "y": 131.0
+      },
+      "anchoredPosition": {
+        "x": -68.0,
+        "y": -30.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739344592885315",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "c8114c550da46490fa4864167f8f56ca",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "GoldImage",
+      "rectSize": {
+        "x": 203.0,
+        "y": 196.0
+      },
+      "anchoredPosition": {
+        "x": -337.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739344740975559",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "14d5e553161f4854d941e5aa90b81404",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image",
+      "rectSize": {
+        "x": 123.0,
+        "y": 130.0
+      },
+      "anchoredPosition": {
+        "x": -15.0,
+        "y": 50.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739344766083810",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "68aa300ec99ee407a96a002f45441f5d",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Handle",
+      "rectSize": {
+        "x": 20.0,
+        "y": 20.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739344791912596",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "7ea5e86a6939b45cfa557881b58626cb",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Reward",
+      "rectSize": {
+        "x": 284.0,
+        "y": 114.0
+      },
+      "anchoredPosition": {
+        "x": 275.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739344806086169",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "45d1718d22d474e0586a5b166b60fef4",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "FreeCoinTextRoot",
+      "rectSize": {
+        "x": 309.0,
+        "y": 140.0
+      },
+      "anchoredPosition": {
+        "x": -90.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739344809378605",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "c8114c550da46490fa4864167f8f56ca",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image",
+      "rectSize": {
+        "x": 75.5,
+        "y": 72.9
+      },
+      "anchoredPosition": {
+        "x": -70.0,
+        "y": 2.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739344882550396",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "19303ee11b085a148a6d2d2eaa0c83c3",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "CountBg",
+      "rectSize": {
+        "x": 57.0,
+        "y": 61.0
+      },
+      "anchoredPosition": {
+        "x": 78.0,
+        "y": 2.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739344943524973",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "d6a4ccc4f43454649a91d7883421b003",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BoxImage",
+      "rectSize": {
+        "x": 167.8,
+        "y": 141.29
+      },
+      "anchoredPosition": {
+        "x": -337.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739344972077873",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "c8114c550da46490fa4864167f8f56ca",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image",
+      "rectSize": {
+        "x": 75.5,
+        "y": 72.9
+      },
+      "anchoredPosition": {
+        "x": -70.0,
+        "y": 2.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739345039167052",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "dbcb079fcef7448ccbe6879f425c45dd",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Gold",
+      "rectSize": {
+        "x": 433.0,
+        "y": 117.0
+      },
+      "anchoredPosition": {
+        "x": -275.0,
+        "y": 725.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739345076994259",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "68aa300ec99ee407a96a002f45441f5d",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Scrollbar Vertical",
+      "rectSize": {
+        "x": -1.0999985,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.95929635,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739345084632806",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "14d5e553161f4854d941e5aa90b81404",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Item",
+      "rectSize": {
+        "x": 123.0,
+        "y": 130.0
+      },
+      "anchoredPosition": {
+        "x": -15.0,
+        "y": 50.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739345102240558",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "eeb04db56a9fe47a8b9332d979662a7a",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "EffectImage",
+      "rectSize": {
+        "x": 358.0,
+        "y": 358.0
+      },
+      "anchoredPosition": {
+        "x": -316.0,
+        "y": 15.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739345189942649",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "4a164fa08f0884cb29b2ffe9b0dd157d",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Reward",
+      "rectSize": {
+        "x": 1033.0,
+        "y": 284.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -159.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739345192533321",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "a1d4964b3ce7c48c596c762b93e462ad",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Background",
+      "rectSize": {
+        "x": 1080.0,
+        "y": 1759.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -81.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739345229537867",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "5048e3f02a9b943bab0916353ad3ea04",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Item",
+      "rectSize": {
+        "x": 129.0,
+        "y": 129.0
+      },
+      "anchoredPosition": {
+        "x": 2.0,
+        "y": 47.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739345254022970",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "d98d7b144017b461c9d45ba06864b12c",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "EffectImage",
+      "rectSize": {
+        "x": 358.0,
+        "y": 358.0
+      },
+      "anchoredPosition": {
+        "x": -316.0,
+        "y": 15.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739345345705372",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "c97c51a9484a84f4ca36191985cc258a",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Item",
+      "rectSize": {
+        "x": 490.0,
+        "y": 188.0
+      },
+      "anchoredPosition": {
+        "x": 252.0,
+        "y": 398.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739345390244180",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "78973d1d226c44ed8a29e1f2e34446f0",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "ColorBomb",
+      "rectSize": {
+        "x": 217.0,
+        "y": 131.0
+      },
+      "anchoredPosition": {
+        "x": 290.0,
+        "y": -30.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739345473533686",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "a8f793432821847e394f4ef3addec847",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "GoldBg",
+      "rectSize": {
+        "x": 284.0,
+        "y": 114.0
+      },
+      "anchoredPosition": {
+        "x": 275.0,
+        "y": 17.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739345480532708",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "4a164fa08f0884cb29b2ffe9b0dd157d",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Reward",
+      "rectSize": {
+        "x": 1033.0,
+        "y": 284.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -159.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739345588894471",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "78973d1d226c44ed8a29e1f2e34446f0",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "OneDetroy",
+      "rectSize": {
+        "x": 217.0,
+        "y": 131.0
+      },
+      "anchoredPosition": {
+        "x": -290.0,
+        "y": -30.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739345594301300",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "c8114c550da46490fa4864167f8f56ca",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image",
+      "rectSize": {
+        "x": 75.5,
+        "y": 72.9
+      },
+      "anchoredPosition": {
+        "x": -70.0,
+        "y": 2.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739345604648988",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "cda4e8721a3044705a1b5ade21f3a5fa",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Item",
+      "rectSize": {
+        "x": 117.0,
+        "y": 114.0
+      },
+      "anchoredPosition": {
+        "x": -1.0,
+        "y": 40.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739345623750173",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "ac74f3e20cb704695b813a25e591366e",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "HavingItemCount",
+      "rectSize": {
+        "x": 960.0,
+        "y": 166.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 63.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739345702855333",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "33674a527fca34fd3af3a61a52f61a6c",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Nice",
+      "rectSize": {
+        "x": 176.0,
+        "y": 141.0
+      },
+      "anchoredPosition": {
+        "x": -391.0,
+        "y": 37.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739345774166042",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "3e58dacef26e345718347a7c970ea256",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "OneDestroy",
+      "rectSize": {
+        "x": 1033.0,
+        "y": 374.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 140.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739345821057987",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "19303ee11b085a148a6d2d2eaa0c83c3",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "CountBg",
+      "rectSize": {
+        "x": 57.0,
+        "y": 61.0
+      },
+      "anchoredPosition": {
+        "x": 78.0,
+        "y": 1.9999752
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739345838729606",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "c8114c550da46490fa4864167f8f56ca",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Gold",
+      "rectSize": {
+        "x": 173.9,
+        "y": 167.9
+      },
+      "anchoredPosition": {
+        "x": -185.6,
+        "y": -1.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739345945764205",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "1fc2cc8839e404c8681e79e53a76e3da",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "TopBG",
+      "rectSize": {
+        "x": 1080.0,
+        "y": 254.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 687.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739346061914994",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "5048e3f02a9b943bab0916353ad3ea04",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image",
+      "rectSize": {
+        "x": 138.0,
+        "y": 138.0
+      },
+      "anchoredPosition": {
+        "x": -1.0,
+        "y": 50.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739346069884180",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "3e58dacef26e345718347a7c970ea256",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "ColorBomb",
+      "rectSize": {
+        "x": 1033.0,
+        "y": 374.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -520.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739346093835008",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "19303ee11b085a148a6d2d2eaa0c83c3",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "CountBg",
+      "rectSize": {
+        "x": 57.0,
+        "y": 61.0
+      },
+      "anchoredPosition": {
+        "x": 78.0,
+        "y": 1.9999752
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739346098899979",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10907,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Panel",
+      "rectSize": {
+        "x": 3000.0,
+        "y": 3000.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739346128698837",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "dd12871ba99da4889874bd9711371063",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "EffectImage",
+      "rectSize": {
+        "x": 358.0,
+        "y": 358.0
+      },
+      "anchoredPosition": {
+        "x": -316.0,
+        "y": 15.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739346258546564",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "78973d1d226c44ed8a29e1f2e34446f0",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Item",
+      "rectSize": {
+        "x": 217.0,
+        "y": 131.0
+      },
+      "anchoredPosition": {
+        "x": -68.0,
+        "y": -30.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739346259964609",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "5ede88732b53f4190a67b23161800e2b",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Close",
+      "rectSize": {
+        "x": 133.0,
+        "y": 139.0
+      },
+      "anchoredPosition": {
+        "x": 467.0,
+        "y": 725.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739346284166028",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "78973d1d226c44ed8a29e1f2e34446f0",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Item",
+      "rectSize": {
+        "x": 217.0,
+        "y": 131.0
+      },
+      "anchoredPosition": {
+        "x": -68.0,
+        "y": -30.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739346302639187",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "33674a527fca34fd3af3a61a52f61a6c",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Nice",
+      "rectSize": {
+        "x": 176.0,
+        "y": 141.0
+      },
+      "anchoredPosition": {
+        "x": -391.0,
+        "y": 37.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739346342804643",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "45d1718d22d474e0586a5b166b60fef4",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "FreeBoxTextRoot",
+      "rectSize": {
+        "x": 309.0,
+        "y": 140.0
+      },
+      "anchoredPosition": {
+        "x": -90.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739346358256016",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "cda4e8721a3044705a1b5ade21f3a5fa",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image",
+      "rectSize": {
+        "x": 117.0,
+        "y": 114.0
+      },
+      "anchoredPosition": {
+        "x": -1.0,
+        "y": 40.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739346361404516",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "9d372e26e85cd48fdb52309833afb487",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image",
+      "rectSize": {
+        "x": 70.3,
+        "y": 75.5
+      },
+      "anchoredPosition": {
+        "x": 155.0,
+        "y": -1.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739346420032148",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10917,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Viewport",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739346455433040",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 0.392
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "68aa300ec99ee407a96a002f45441f5d",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Scroll View",
+      "rectSize": {
+        "x": 1080.0,
+        "y": 1207.4
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -269.5
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739346583945048",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "a8f793432821847e394f4ef3addec847",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "GoldBg",
+      "rectSize": {
+        "x": 284.0,
+        "y": 114.0
+      },
+      "anchoredPosition": {
+        "x": 275.0,
+        "y": 21.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739346641945864",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "ea1bcddcb51f645bdbf79a0893753358",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Image",
+      "rectSize": {
+        "x": 88.0,
+        "y": 72.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5847739346645732906",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "3e58dacef26e345718347a7c970ea256",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Cross",
+      "rectSize": {
+        "x": 1033.0,
+        "y": 374.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "5000962607316258948",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "b96de7137631445e4aeafc44303bae45",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "CountDownGoldRoot",
+      "rectSize": {
+        "x": 261.58,
+        "y": 44.97
+      },
+      "anchoredPosition": {
+        "x": 273.84998,
+        "y": 79.48999
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "7782783432906585513",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "155d55a5ee1c64467a7d3d14c239d6bb",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Restore",
+      "rectSize": {
+        "x": 148.0,
+        "y": 135.0
+      },
+      "anchoredPosition": {
+        "x": 275.0,
+        "y": 742.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    }
+  ],
+  "texts": [
+    {
+      "type": "Text",
+      "fileID": "8832437106813323226",
+      "m_FontSize": 30.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "0:00:00",
+      "gameObjectName": "CountDownBox",
+      "rectSize": {
+        "x": 221.84,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 2.65,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "5847739344510472957",
+      "m_FontSize": 55.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "1000",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 150.24,
+        "y": 75.7
+      },
+      "anchoredPosition": {
+        "x": 40.0,
+        "y": 3.4064
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "5847739344930472711",
+      "m_FontSize": 62.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.990566,
+        "g": 0.93102807,
+        "b": 0.0,
+        "a": 1.0
+      },
+      "m_Text": "x3",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 160.0,
+        "y": 80.5
+      },
+      "anchoredPosition": {
+        "x": 140.0,
+        "y": 45.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "5847739344966727751",
+      "m_FontSize": 35.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.9716981,
+        "g": 0.7984844,
+        "b": 0.0,
+        "a": 1.0
+      },
+      "m_Text": "FREE BOX",
+      "gameObjectName": "Text (1)",
+      "rectSize": {
+        "x": 255.3,
+        "y": 75.7
+      },
+      "anchoredPosition": {
+        "x": 8.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "5847739344989999493",
+      "m_FontSize": 68.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.5647059,
+        "g": 0.5647059,
+        "b": 0.5647059,
+        "a": 1.0
+      },
+      "m_Text": "ITEM",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 431.8,
+        "y": 121.0
+      },
+      "anchoredPosition": {
+        "x": -1.3,
+        "y": 17.3
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "5847739345054337104",
+      "m_FontSize": 62.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.990566,
+        "g": 0.93102807,
+        "b": 0.0,
+        "a": 1.0
+      },
+      "m_Text": "x3",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 160.0,
+        "y": 80.5
+      },
+      "anchoredPosition": {
+        "x": 140.0,
+        "y": 45.000004
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "5847739345249183141",
+      "m_FontSize": 30.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "15",
+      "gameObjectName": "Count",
+      "rectSize": {
+        "x": 48.93,
+        "y": 48.22
+      },
+      "anchoredPosition": {
+        "x": 0.37,
+        "y": 1.9
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "5847739345387542200",
+      "m_FontSize": 55.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "1000",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 151.77,
+        "y": 75.7
+      },
+      "anchoredPosition": {
+        "x": 35.0,
+        "y": 3.4064
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "5847739345527742002",
+      "m_FontSize": 68.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 1.0,
+        "g": 0.91764706,
+        "b": 0.0,
+        "a": 1.0
+      },
+      "m_Text": "COINS",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 431.8,
+        "y": 121.0
+      },
+      "anchoredPosition": {
+        "x": -1.3,
+        "y": 17.3
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "5847739345561674267",
+      "m_FontSize": 55.0,
+      "m_Alignment": 5,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "200000",
+      "gameObjectName": "text",
+      "rectSize": {
+        "x": 226.82,
+        "y": 90.0
+      },
+      "anchoredPosition": {
+        "x": -2.41,
+        "y": 0.2
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "5847739345664155349",
+      "m_FontSize": 55.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "1000",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 150.35,
+        "y": 75.7
+      },
+      "anchoredPosition": {
+        "x": 35.0,
+        "y": 3.4064
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "5847739345703304391",
+      "m_FontSize": 48.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "100",
+      "gameObjectName": "GoldValue",
+      "rectSize": {
+        "x": 134.2,
+        "y": 75.7
+      },
+      "anchoredPosition": {
+        "x": 9.0,
+        "y": 17.7
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "5847739345848729322",
+      "m_FontSize": 62.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.990566,
+        "g": 0.93102807,
+        "b": 0.0,
+        "a": 1.0
+      },
+      "m_Text": "x3",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 160.0,
+        "y": 80.5
+      },
+      "anchoredPosition": {
+        "x": 140.0,
+        "y": 45.000004
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "5847739346325737116",
+      "m_FontSize": 30.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.9716981,
+        "g": 0.7984844,
+        "b": 0.0,
+        "a": 1.0
+      },
+      "m_Text": "FREE GOLD",
+      "gameObjectName": "Text (1)",
+      "rectSize": {
+        "x": 255.3,
+        "y": 75.7
+      },
+      "anchoredPosition": {
+        "x": 8.0,
+        "y": -29.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "5847739346389332277",
+      "m_FontSize": 30.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "15",
+      "gameObjectName": "Count",
+      "rectSize": {
+        "x": 48.93,
+        "y": 48.22
+      },
+      "anchoredPosition": {
+        "x": 0.37,
+        "y": 1.9
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "5847739346430669191",
+      "m_FontSize": 30.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "15",
+      "gameObjectName": "Count",
+      "rectSize": {
+        "x": 48.93,
+        "y": 48.22
+      },
+      "anchoredPosition": {
+        "x": 0.37,
+        "y": 1.9
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "5847739346495374054",
+      "m_FontSize": 48.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "100",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 134.2,
+        "y": 75.7
+      },
+      "anchoredPosition": {
+        "x": 9.0,
+        "y": 17.7
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "7415214352393604944",
+      "m_FontSize": 30.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "Restore",
+      "gameObjectName": "text",
+      "rectSize": {
+        "x": 150.0,
+        "y": 80.0
+      },
+      "anchoredPosition": {
+        "x": 8.9,
+        "y": -66.3
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "5603942384540343710",
+      "m_FontSize": 30.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "3:00:00",
+      "gameObjectName": "CountDownGold",
+      "rectSize": {
+        "x": 221.84,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 2.65,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "ShopPopup"
+    }
+  ],
+  "layoutGroups": [
+    {
+      "type": "LayoutGroup",
+      "fileID": "5847739346281268468",
+      "m_Spacing": -45.0,
+      "m_Padding": {
+        "m_Left": 0,
+        "m_Right": 0,
+        "m_Top": 0,
+        "m_Bottom": 0
+      },
+      "m_ChildAlignment": 1,
+      "gameObjectName": "Content",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "ShopPopup"
+    }
+  ],
+  "contentSizeFitters": [
+    {
+      "type": "ContentSizeFitter",
+      "fileID": "5847739346281268467",
+      "m_HorizontalFit": 0,
+      "m_VerticalFit": 2,
+      "gameObjectName": "Content",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "ShopPopup"
+    }
+  ],
+  "rectTransformCount": 97
+}

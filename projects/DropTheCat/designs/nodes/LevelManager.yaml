@@ -1,0 +1,89 @@
+# LevelManager - Domain Level Flow Manager
+metadata:
+  nodeId: "LevelManager"
+  version: "1.0.0"
+  phase: 2
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "LevelDataProvider"
+    - "GridManager"
+    - "SaveManager"
+    - "EventManager"
+  external:
+    - "UnityEngine"
+
+contract:
+  provides:
+    - "void LoadLevel(int levelNumber)"
+    - "void RetryLevel()"
+    - "void NextLevel()"
+    - "int CurrentLevel { get; }"
+    - "int MaxClearedLevel { get; }"
+    - "int GetStars(int levelNumber)"
+    - "int GetTotalStars()"
+    - "bool IsLevelUnlocked(int levelNumber)"
+    - "LevelState CurrentState { get; }"
+  requires:
+    - "Singleton<LevelManager>"
+    - "LevelDataProvider.LoadLevel"
+    - "GridManager.InitGrid/ClearGrid"
+    - "SaveManager.Save/Load"
+    - "EventManager.Subscribe/Publish"
+
+tags:
+  layer: "Domain"
+  genre: "Puzzle"
+  role: "Manager"
+  system: "Level"
+  majorFunctions:
+    - "FlowControl"
+    - "StateControl"
+    - "DataSync"
+  minorFunctions:
+    - "Calculate"
+    - "Validate"
+    - "Assign"
+    - "Notify"
+
+logicFlow:
+  - step: 1
+    tag: "FlowControl"
+    action: "LoadLevel - LevelDataProvider에서 데이터 로드 → GridManager.InitGrid 호출"
+    next: 2
+  - step: 2
+    tag: "StateControl"
+    action: "상태를 Playing으로 변경 → OnLevelLoaded 이벤트 발행"
+    next: 3
+  - step: 3
+    tag: "ResponseTrigger"
+    action: "OnLevelCleared 수신 → 별점 저장 → MaxClearedLevel 업데이트 → 진행도 저장"
+    next: 4
+  - step: 4
+    tag: "DataSync"
+    action: "SaveManager로 진행도/별점 영구 저장 → OnLevelProgressUpdated 발행"
+    next: 5
+  - step: 5
+    tag: "ResponseTrigger"
+    action: "OnLevelFailed 수신 → 상태를 Failed로 변경"
+    next: 6
+  - step: 6
+    tag: "FlowControl"
+    action: "RetryLevel - 현재 레벨 재로드, NextLevel - CurrentLevel+1 로드"
+    next: null
+
+referencePatterns:
+  - source: "db/base/puzzle/domain/HomeScene"
+    pattern: "레벨 진행도 관리, 씬 전환 패턴"
+
+codeHints:
+  patterns:
+    - "public class LevelManager : Singleton<LevelManager>"
+    - "enum LevelState { Loading, Playing, Cleared, Failed }"
+    - "SaveData { maxClearedLevel, stars: Dictionary<int,int> }"
+    - "const string SAVE_KEY = \"level_progress\""
+  avoidPatterns:
+    - "레벨 데이터 직접 파싱 금지 (LevelDataProvider 사용)"
+    - "그리드 직접 조작 금지 (GridManager 사용)"

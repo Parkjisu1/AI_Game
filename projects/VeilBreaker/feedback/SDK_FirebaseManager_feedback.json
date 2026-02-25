@@ -1,0 +1,18 @@
+{
+  "nodeId": "FirebaseManager",
+  "genre": "Idle",
+  "role": "Manager",
+  "validationResult": "pass",
+  "score": 0.6,
+  "feedbacks": [
+    {
+      "category": "PATTERN.STRUCTURE",
+      "line": 1,
+      "severity": "info",
+      "description": "SDK using 문(Firebase, Firebase.Analytics)이 올바르게 #if FIREBASE_ANALYTICS 블록 안에 포함되어 있음. #else 시뮬레이션 모드 구현 완료.",
+      "suggestion": null
+    }
+  ],
+  "contractChanged": false,
+  "timestamp": "2026-02-24T00:00:00Z"
+}

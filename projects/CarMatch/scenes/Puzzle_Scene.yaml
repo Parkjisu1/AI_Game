@@ -1,0 +1,680 @@
+# ============================================================
+# CarMatch - Puzzle Scene YAML 명세서
+# 생성일: 2026-02-11
+# 목적: SceneBuilder가 참조하는 오브젝트 계층/컴포넌트/필드 연결 정의
+# ============================================================
+
+scene:
+  name: Puzzle
+  path: Assets/0.Scenes/Puzzle.unity
+  resolution: { width: 1080, height: 1920 }
+
+# ============================================================
+# 레이아웃 상수
+# ============================================================
+layout:
+  top_bar_height: 0.065       # 6.5% (125px)
+  booster_bar_height: 0.08    # 8% (154px)
+  safe_area_top: 0.025
+  safe_area_bottom: 0.015
+
+fonts:
+  H1: 56
+  H2: 46
+  H3: 38
+  H4: 32
+  BODY_LARGE: 28
+  BODY: 24
+  BODY_SMALL: 20
+  CAPTION: 18
+
+colors:
+  PRIMARY: "#2952CC"
+  SUCCESS: "#4CAF50"
+  WARNING: "#E67E22"
+  ERROR: "#E53935"
+  ACCENT: "#FF9800"
+  PANEL: "rgba(0.16, 0.32, 0.8, 0.95)"
+  PANEL_LIGHT: "#FFF8E7"
+  BG_SKY: "rgb(0.2, 0.6, 0.95)"
+  DIM: "rgba(0, 0, 0, 0.7)"
+  GOLD: "rgb(1, 0.84, 0)"
+  SIDEBAR: "#213870"
+
+popup_sizes:
+  SMALL: { width: 700, height: 500 }     # PausePopup
+  MEDIUM: { width: 850, height: 900 }    # ResultPopup
+  FULL: { width: 950, height: 1400 }
+
+# ============================================================
+# 카메라 (3D 뷰 — 보드 + 홀더 전체 조망)
+# ============================================================
+camera:
+  position: [2, 12, -1]
+  rotation: [70, 0, 0]         # 위에서 아래로 70도 내려다봄
+  field_of_view: 45
+  background_color: BG_SKY
+  clear_flags: SolidColor
+  description: >
+    X=2: 5x5 보드 중앙 (0~4),
+    Y=12: 높이 12유닛 (전체 조망),
+    Z=-1: 보드 뒤쪽으로 약간 후퇴 (홀더까지 보이도록)
+
+directional_light:
+  rotation: [50, -30, 0]
+
+# ============================================================
+# 매니저 (Main 씬과 동일 구조)
+# ============================================================
+managers:
+  parent: Managers
+  children:
+    - { name: EventBus, component: EventBus }
+    - { name: ObjectPool, component: ObjectPool }
+    - { name: DataManager, component: DataManager }
+    - { name: SoundManager, component: SoundManager }
+    - { name: SceneLoader, component: SceneLoader }
+    - { name: LevelManager, component: LevelManager }
+
+# ============================================================
+# 3D 게임 오브젝트 (보드, 홀더, 스토리지)
+# ============================================================
+game_objects:
+
+  # ----------------------------------------
+  # Board (보드 — 3D 월드 루트)
+  # ----------------------------------------
+  - name: Board
+    position: [0, 0, 0]
+    components:
+      - BoardManager
+      - StageStateHandler
+      - BoosterProcessor
+    children:
+
+      - name: BoardVisual
+        position: [0, 0, 0]
+        children:
+
+          - name: Base
+            type: Plane
+            position: [2, -0.05, 2]      # 5x5 보드 중앙
+            scale: [0.515, 1, 0.515]      # Plane은 10x10이므로 0.515 ≈ 5.15유닛
+            material: "road texture (white)"
+
+          - name: "VLine_{0~5}"
+            count: 6
+            type: Cube
+            description: "세로 그리드 선 (x=i-0.5 위치)"
+            position_pattern: ["i - 0.5", 0.01, 2]
+            scale: [0.03, 0.02, 5]
+            color: [0.5, 0.5, 0.55]
+
+          - name: "HLine_{0~5}"
+            count: 6
+            type: Cube
+            description: "가로 그리드 선 (z=i-0.5 위치)"
+            position_pattern: [2, 0.01, "i - 0.5"]
+            scale: [5, 0.02, 0.03]
+            color: [0.5, 0.5, 0.55]
+
+          - name: "Cell_{x}_{y}"
+            count: "gridSize.x * gridSize.y"   # 기본 5x5 = 25개
+            type: Quad
+            description: "바닥 셀 타일"
+            position_pattern: ["x", 0.005, "y"]
+            rotation: [90, 0, 0]
+            scale: [0.92, 0.92, 1]
+            material: "cell road texture"
+
+  # ----------------------------------------
+  # Holder (홀더 — 매칭 슬롯 7개)
+  # ----------------------------------------
+  - name: Holder
+    position: [2, 0, -2]                    # 보드 아래(Z-) 2유닛
+    component: HolderController
+    children:
+
+      - name: Background
+        type: Cube
+        local_position: [0, -0.1, 0]
+        scale: [7.5, 0.15, 1.3]            # 7슬롯 + 여유
+        material: "parking texture (gray)"
+
+      - name: SlotsParent
+        description: "7개 슬롯의 부모 Transform"
+        connect_to: HolderController.slotsParent
+
+      - name: "Slot_{0~6}"
+        count: 7
+        description: "주차 슬롯"
+        position_formula: "x = i - 3.5 + 0.5, y = 0.2, z = 0"
+        # Slot_0: (-3, 0.2, 0), Slot_3: (0, 0.2, 0), Slot_6: (3, 0.2, 0)
+        parent: SlotsParent
+        children:
+          - name: Visual
+            type: Cube
+            local_position: [0, -0.15, 0]
+            scale: [0.85, 0.05, 0.85]
+            color: [0.3, 0.32, 0.38]
+          - name: LeftLine
+            type: Cube
+            local_position: [-0.4, -0.12, 0]
+            scale: [0.04, 0.02, 0.8]
+            color: [0.9, 0.85, 0.4]        # 금색 주차선
+          - name: RightLine
+            type: Cube
+            local_position: [0.4, -0.12, 0]
+            scale: [0.04, 0.02, 0.8]
+            color: [0.9, 0.85, 0.4]
+
+  # ----------------------------------------
+  # Storage (좌/우 임시 보관소)
+  # ----------------------------------------
+  - name: LeftStorage
+    position: [-1, 0, -3.5]
+    component: StorageController
+    children:
+      - name: Background
+        type: Cube
+        local_position: [0, -0.1, 0]
+        scale: [1.2, 0.15, 1.2]
+        color: [0.3, 0.4, 0.5]
+      - name: SlotPosition
+        local_position: [0, 0.2, 0]
+        connect_to: StorageController.slotTransform
+      - name: FrontLine
+        type: Cube
+        local_position: [0, -0.08, 0.55]
+        scale: [1.1, 0.04, 0.06]
+        color: [0.2, 0.8, 0.4]             # 초록 테두리
+      - name: BackLine
+        type: Cube
+        local_position: [0, -0.08, -0.55]
+        scale: [1.1, 0.04, 0.06]
+        color: [0.2, 0.8, 0.4]
+
+  - name: RightStorage
+    position: [5, 0, -3.5]
+    component: StorageController
+    children: "(LeftStorage와 동일 구조)"
+
+# ============================================================
+# Canvas (UI 오버레이)
+# ============================================================
+canvas:
+  render_mode: ScreenSpaceOverlay
+  canvas_scaler:
+    ui_scale_mode: ScaleWithScreenSize
+    reference_resolution: [1080, 1920]
+    match_width_or_height: 0.5
+
+  root_component:
+    name: PuzzlePage
+    component: PuzzlePage
+    anchors: stretch
+
+  children:
+
+    # ----------------------------------------
+    # 1. TopBar (상단 HUD)
+    # ----------------------------------------
+    - name: TopBar
+      anchors: { left: 0, bottom: 0.91, right: 1, top: 0.975 }
+      background: PANEL
+      layout:
+        type: HorizontalLayoutGroup
+        padding: [20, 20, 10, 10]
+        spacing: 15
+        child_alignment: MiddleLeft
+        child_force_expand_width: false
+        child_force_expand_height: true
+      children:
+
+        - name: HomeButton
+          type: icon_button
+          icon: "home.png"
+          fallback_emoji: "🏠"
+          preferred_width: 80
+          color: [0.35, 0.38, 0.45, 0.9]
+          connect_to: PuzzlePage.homeButton
+
+        - name: LevelDisplay
+          preferred_width: 150
+          background: PRIMARY
+          corner_radius: 12
+          children:
+            - name: LevelText
+              type: text
+              text: "Level 31"
+              font_size: H4
+              font_style: Bold
+              alignment: Center
+              connect_to: PuzzlePage.levelText
+
+        - name: Spacer
+          type: layout_element
+          flexible_width: 1
+
+        - name: MoveDisplay
+          preferred_width: 140
+          background: [0.2, 0.5, 0.8, 0.95]
+          corner_radius: 12
+          children:
+            - name: MoveText
+              type: text
+              text: "Moves: 0"
+              font_size: BODY
+              alignment: Center
+              connect_to: PuzzlePage.moveCountText
+
+        - name: CoinDisplay
+          preferred_width: 130
+          background: [0.9, 0.75, 0.2, 0.95]
+          corner_radius: 12
+          layout:
+            type: HorizontalLayoutGroup
+            padding: [10, 10, 5, 5]
+            spacing: 6
+          children:
+            - name: CoinIcon
+              type: text
+              text: "🪙"
+              font_size: BODY_LARGE
+              preferred_width: 35
+            - name: CoinText
+              type: text
+              text: "160"
+              font_size: BODY
+              font_style: Bold
+              alignment: Left
+              flexible_width: 1
+
+        - name: PauseButton
+          type: icon_button
+          icon: "gear.png"
+          fallback_emoji: "⚙"
+          preferred_width: 80
+          color: [0.35, 0.38, 0.45, 0.9]
+          connect_to: PuzzlePage.pauseButton
+
+    # ----------------------------------------
+    # 2. BoosterBar (하단 부스터 버튼)
+    # ----------------------------------------
+    - name: BoosterBar
+      anchors: { left: 0.05, bottom: 0.015, right: 0.95, top: 0.095 }
+      layout:
+        type: HorizontalLayoutGroup
+        padding: [25, 25, 8, 8]
+        spacing: 15
+        child_alignment: MiddleCenter
+        child_force_expand_width: true
+        child_force_expand_height: true
+      children:
+
+        - name: UndoButton
+          type: booster_button
+          booster_type: Undo
+          icon: "return.png"
+          fallback_emoji: "↩"
+          label: "Undo"
+          count: 3
+          connect_to: PuzzlePage.undoButton  # BoosterButton 컴포넌트
+
+        - name: ShuffleButton
+          type: booster_button
+          booster_type: Shuffle
+          icon: "random.png"
+          fallback_emoji: "🔀"
+          label: "Shuffle"
+          count: 3
+          connect_to: PuzzlePage.shuffleButton
+
+        - name: SuperUndoButton
+          type: booster_button
+          booster_type: SuperUndo
+          icon: "rewind.png"
+          fallback_emoji: "⏪"
+          label: "Super"
+          count: 3
+          connect_to: PuzzlePage.superUndoButton
+
+        - name: MagnetButton
+          type: booster_button
+          booster_type: Magnet
+          icon: "magnet.png"
+          fallback_emoji: "🧲"
+          label: "Magnet"
+          count: 3
+          connect_to: PuzzlePage.magnetButton
+
+    # ----------------------------------------
+    # 3. PausePopup (일시정지)
+    # ----------------------------------------
+    - name: PausePopup
+      active: false
+      component: PausePopup
+      add_component: CanvasGroup
+      anchors: stretch
+      overlay_color: DIM
+      connect_to: PuzzlePage.pausePopup
+      children:
+        - name: Panel
+          size: SMALL                       # 700x500, 화면 중앙
+          background: PANEL
+          children:
+
+            - name: Title
+              type: text
+              text: "⏸ PAUSED"
+              anchors: { left: 0.1, bottom: 0.8, right: 0.9, top: 0.95 }
+              font_size: H2
+              font_style: Bold
+
+            - name: ResumeButton
+              type: button
+              text: "▶ RESUME"
+              anchors: { left: 0.1, bottom: 0.55, right: 0.9, top: 0.75 }
+              background: SUCCESS
+              font_size: H4
+              connect_to: PausePopup.resumeButton
+
+            - name: RetryButton
+              type: button
+              text: "🔄 RETRY"
+              anchors: { left: 0.1, bottom: 0.3, right: 0.9, top: 0.5 }
+              background: WARNING
+              font_size: H4
+              connect_to: PausePopup.retryButton
+
+            - name: HomeButton
+              type: button
+              text: "🏠 HOME"
+              anchors: { left: 0.1, bottom: 0.05, right: 0.9, top: 0.25 }
+              background: [0.45, 0.48, 0.55]
+              font_size: H4
+              connect_to: PausePopup.homeButton
+
+    # ----------------------------------------
+    # 4. ResultPopup (결과 — 승리/실패 공용)
+    # ----------------------------------------
+    - name: ResultPopup
+      active: false
+      component: ResultPopup
+      add_component: CanvasGroup
+      anchors: stretch
+      overlay_color: DIM
+      connect_to: PuzzlePage.resultPopup
+      children:
+        - name: Panel
+          size: MEDIUM                      # 850x900, 화면 중앙
+          background: PANEL
+          connect_to: ResultPopup.panel
+          children:
+
+            - name: TitleText
+              type: text
+              text: "🎉 STAGE CLEAR!"
+              anchors: { left: 0.05, bottom: 0.82, right: 0.95, top: 0.95 }
+              font_size: H2
+              font_style: Bold
+              connect_to: ResultPopup.titleText
+
+            - name: WinContent
+              active: true
+              anchors: { left: 0.1, bottom: 0.35, right: 0.9, top: 0.78 }
+              connect_to: ResultPopup.winContent
+              children:
+                - name: Stars
+                  type: text
+                  text: "⭐⭐⭐"
+                  font_size: 72
+                  color: ACCENT
+                  alignment: Center
+                  description: >
+                    TODO: stars 필드(GameObject[])로 개별 별 오브젝트 연결 필요.
+                    현재 텍스트 1개로 대체.
+
+            - name: FailContent
+              active: false
+              anchors: { left: 0.1, bottom: 0.35, right: 0.9, top: 0.78 }
+              connect_to: ResultPopup.failContent
+              children:
+                - name: FailText
+                  type: text
+                  text: "😢 Try Again!"
+                  font_size: H3
+
+            - name: CoinRewardText
+              type: text
+              text: "+50 🪙"
+              anchors: { left: 0.2, bottom: 0.2, right: 0.8, top: 0.33 }
+              font_size: H3
+              color: GOLD
+              connect_to: ResultPopup.coinRewardText
+              description: "승리 시 코인 보상 표시"
+
+            - name: RetryButton
+              type: button
+              text: "🔄 RETRY"
+              anchors: { left: 0.08, bottom: 0.06, right: 0.47, top: 0.18 }
+              background: WARNING
+              font_size: BODY_LARGE
+              connect_to: ResultPopup.retryButton
+
+            - name: NextButton
+              type: button
+              text: "▶ NEXT"
+              anchors: { left: 0.53, bottom: 0.06, right: 0.92, top: 0.18 }
+              background: SUCCESS
+              font_size: BODY_LARGE
+              connect_to: ResultPopup.nextButton
+
+            - name: WatchAdButton
+              type: button
+              text: "🎬 Continue (Ad)"
+              anchors: { left: 0.15, bottom: 0.06, right: 0.85, top: 0.18 }
+              background: ACCENT
+              font_size: BODY_LARGE
+              active: false
+              connect_to: ResultPopup.watchAdButton
+              description: "실패 시에만 표시. 광고 시청으로 이어하기"
+
+    # ----------------------------------------
+    # 5. CongratulationPopup (축하 연출)
+    # ----------------------------------------
+    - name: CongratulationPopup
+      active: false
+      component: CongratulationPopup
+      add_component: CanvasGroup
+      anchors: stretch
+      connect_to: PuzzlePage.congratulationPopup
+      description: >
+        스테이지 클리어 시 짧은 축하 연출 (1.5초).
+        텍스트 스케일업 + 꽃가루 파티클.
+      children:
+        - name: CongratsText
+          type: text
+          text: "CLEAR!"
+          font_size: H1
+          font_style: Bold
+          color: GOLD
+          alignment: Center
+          connect_to: CongratulationPopup.congratsText
+
+        - name: LevelText
+          type: text
+          text: "Level 31"
+          font_size: H2
+          color: white
+          alignment: Center
+          connect_to: CongratulationPopup.levelText
+
+    # ----------------------------------------
+    # 6. TutorialPopup (튜토리얼)
+    # ----------------------------------------
+    - name: TutorialPopup
+      active: false
+      component: TutorialPopup
+      add_component: CanvasGroup
+      anchors: stretch
+      connect_to: PuzzlePage.tutorialPopup
+      description: >
+        풀스크린 오버레이. dimBackground + highlightMask로 특정 영역 하이라이트.
+        현재 SceneBuilder에서 상세 구조 미구현.
+      fields_needed:
+        panel: "메인 패널 GameObject"
+        titleText: "튜토리얼 제목 TextMeshProUGUI"
+        messageText: "설명 텍스트 TextMeshProUGUI"
+        continueButton: "계속 Button"
+        continueButtonText: "계속 버튼 텍스트 TextMeshProUGUI"
+        skipButton: "건너뛰기 Button"
+        highlightMask: "하이라이트 영역 RectTransform"
+        dimBackground: "어두운 배경 Image"
+        gameBoardTarget: "보드 하이라이트 대상 RectTransform"
+        slotAreaTarget: "슬롯 하이라이트 대상 RectTransform"
+        boosterButtonTarget: "부스터 하이라이트 대상 RectTransform"
+
+# ============================================================
+# 프리팹 연결 (BoardManager에 할당)
+# ============================================================
+prefab_connections:
+  BoardManager:
+    carPrefab: "Assets/Resources/Prefabs/Car.prefab (CarController)"
+    obstaclePrefab: "Assets/Resources/Prefabs/Obstacle.prefab (ObstacleController)"
+    tunnelPrefab: "Assets/Resources/Prefabs/Tunnel.prefab (TunnelController)"
+    cellSize: 1.0
+
+# ============================================================
+# 필드 연결 종합 (connect_to 요약)
+# ============================================================
+field_connections:
+
+  BoardManager:
+    carPrefab: "Car.prefab → CarController"
+    obstaclePrefab: "Obstacle.prefab → ObstacleController"
+    tunnelPrefab: "Tunnel.prefab → TunnelController"
+    cellSize: 1.0
+
+  StageStateHandler:
+    boardManager: "Board (BoardManager)"
+    holderController: "Holder (HolderController)"
+
+  BoosterProcessor:
+    boardManager: "Board (BoardManager)"
+    holderController: "Holder (HolderController)"
+
+  HolderController:
+    maxSize: 7
+    slotSpacing: 1.0
+    slotsParent: "Holder > SlotsParent (Transform)"
+    leftStorage: "LeftStorage (StorageController)"
+    rightStorage: "RightStorage (StorageController)"
+
+  StorageController_Left:
+    slotTransform: "LeftStorage > SlotPosition (Transform)"
+    storageIndex: 0
+    maxCapacity: 1
+
+  StorageController_Right:
+    slotTransform: "RightStorage > SlotPosition (Transform)"
+    storageIndex: 1
+    maxCapacity: 1
+
+  PuzzlePage:
+    boardManager: "Board (BoardManager)"
+    holderController: "Holder (HolderController)"
+    stageStateHandler: "Board (StageStateHandler)"
+    boosterProcessor: "Board (BoosterProcessor)"
+    levelText: "TopBar > LevelDisplay > LevelText (TextMeshProUGUI)"
+    moveCountText: "TopBar > MoveDisplay > MoveText (TextMeshProUGUI)"
+    homeButton: "TopBar > HomeButton (Button)"
+    pauseButton: "TopBar > PauseButton (Button)"
+    undoButton: "BoosterBar > UndoButton (BoosterButton)"
+    shuffleButton: "BoosterBar > ShuffleButton (BoosterButton)"
+    superUndoButton: "BoosterBar > SuperUndoButton (BoosterButton)"
+    magnetButton: "BoosterBar > MagnetButton (BoosterButton)"
+    pausePopup: "PausePopup (PausePopup)"
+    resultPopup: "ResultPopup (ResultPopup)"
+    tutorialPopup: "TutorialPopup (TutorialPopup)"
+    congratulationPopup: "CongratulationPopup (CongratulationPopup)"
+    # progressBar: TODO — 미구현
+
+  PausePopup:
+    canvasGroup: "self (CanvasGroup)"
+    resumeButton: "Panel > ResumeButton (Button)"
+    retryButton: "Panel > RetryButton (Button)"
+    homeButton: "Panel > HomeButton (Button)"
+    settingsButton: "TODO — 미구현"
+    settingsPopup: "TODO — 미구현"
+
+  ResultPopup:
+    canvasGroup: "self (CanvasGroup)"
+    panel: "Panel (GameObject)"
+    titleText: "Panel > TitleText (TextMeshProUGUI)"
+    winContent: "Panel > WinContent (GameObject)"
+    failContent: "Panel > FailContent (GameObject)"
+    stars: "TODO — 개별 별 GameObject[] 미구현 (현재 텍스트 1개)"
+    retryButton: "Panel > RetryButton (Button)"
+    nextButton: "Panel > NextButton (Button)"
+    homeButton: "TODO — 미구현"
+    coinRewardText: "Panel > CoinRewardText (TextMeshProUGUI)"
+    watchAdButton: "Panel > WatchAdButton (Button)"
+
+  CongratulationPopup:
+    canvasGroup: "self (CanvasGroup)"
+    congratsText: "CongratsText (TextMeshProUGUI)"
+    levelText: "LevelText (TextMeshProUGUI)"
+    confettiImages: "TODO — 미구현"
+    confettiParticle: "TODO — 미구현"
+
+  BoosterButton:  # 4개 공통 구조
+    boosterType: "enum BoosterType (Undo/Shuffle/SuperUndo/Magnet)"
+    button: "self (Button)"
+    icon: "IconContainer > Icon (Image)"
+    countText: "Count (TextMeshProUGUI)"
+    lockOverlay: "TODO — 잠금 오버레이 미구현"
+
+# ============================================================
+# 알려진 이슈 / TODO
+# ============================================================
+known_issues:
+
+  - id: 1
+    description: "ResultPopup.stars — 개별 별 GameObject[] 미구현, 텍스트 1개로 대체중"
+    severity: medium
+    suggestion: "3개 별 이미지(Star_0, Star_1, Star_2) 생성 → stars[] 배열 연결"
+
+  - id: 2
+    description: "ResultPopup.homeButton — 미연결"
+    severity: low
+
+  - id: 3
+    description: "ResultPopup.watchAdButton — 오브젝트는 있으나 실패 시 전환 로직 미확인"
+    severity: medium
+
+  - id: 4
+    description: "PausePopup.settingsButton, settingsPopup — 미연결"
+    severity: low
+    suggestion: "PausePopup에 Settings 버튼 추가 또는 필드 제거"
+
+  - id: 5
+    description: "CongratulationPopup.confettiImages, confettiParticle — 미구현"
+    severity: low
+
+  - id: 6
+    description: "TutorialPopup 내부 구조 전체 미구현"
+    severity: medium
+
+  - id: 7
+    description: "PuzzlePage.progressBar — 프로그레스 바 UI 오브젝트 미생성"
+    severity: medium
+
+  - id: 8
+    description: "BoosterButton.lockOverlay — 잠금 오버레이 미구현"
+    severity: low
+
+  - id: 9
+    description: "MatchEffect (UX) — parentCanvas, gameCamera 연결 미구현"
+    severity: medium
+    suggestion: "MatchEffect 컴포넌트를 PuzzlePage나 Board에 추가 후 연결"

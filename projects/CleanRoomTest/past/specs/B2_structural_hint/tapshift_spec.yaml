@@ -1,0 +1,763 @@
+################################################################################
+# TapShift - Complete Game Balance Sheet
+# Tier: B2 - Structural Hint
+# Version: 1.0.0
+# Platform: Mobile (iOS / Android)
+# Genre: Casual Puzzle
+#
+# All "약 (approx)" hints converted to specific final values.
+# Derivation notes inline where a decision was made.
+################################################################################
+
+game:
+  name: "TapShift"
+  version: "1.0.0"
+  platform: "mobile"
+  tier: "B2_structural_hint"
+
+# ==============================================================================
+# 1. DIFFICULTY PROGRESSION
+# Hint: ~100 levels, 5-6 segments
+#   Early  : arrows 1-5,  board ~200px wide
+#   Mid    : arrows 5-10, board 300-400px wide
+#   Late   : arrows 10-20, board 400-450px wide
+#   Max cap: ~20 arrows
+#   Tall boards prefer up/down; wide boards prefer left/right
+# Decision: 100 levels, 5 segments (even split across segments)
+# ==============================================================================
+difficulty_progression:
+  total_levels: 100
+
+  # Reference cell_size = 90px (derived from board_width constraints, see core_constants)
+  # Board cols/rows chosen so that col * 90 fits within the width band per segment.
+  # Early  200px → 2 cols doesn't leave room for a real puzzle; use 4 cols (360px, fits phone)
+  # Mid    300-400px → 5 cols = 450px (edge of range, good for mid puzzles)
+  # Late   400-450px → 5 cols = 450px wide, 8 rows tall (portrait stretch = up/down bias)
+  # Max    450px → same 5 cols, 9 rows for expert density
+
+  level_ranges:
+    - range: [1, 15]
+      label: "tutorial"
+      board_cols: 4
+      board_rows: 5
+      board_width_px: 360      # 4 * 90
+      board_height_px: 450     # 5 * 90
+      arrow_count_min: 1
+      arrow_count_max: 5
+      direction_bias: "none"
+      fallback_sort: "vertical"
+      undo_limit: 10
+      hint_available: true
+
+    - range: [16, 35]
+      label: "easy"
+      board_cols: 4
+      board_rows: 6
+      board_width_px: 360      # 4 * 90
+      board_height_px: 540     # 6 * 90
+      arrow_count_min: 5
+      arrow_count_max: 8
+      direction_bias: "none"
+      fallback_sort: "vertical"
+      undo_limit: 10
+      hint_available: true
+
+    - range: [36, 60]
+      label: "medium"
+      board_cols: 5
+      board_rows: 6
+      board_width_px: 450      # 5 * 90
+      board_height_px: 540     # 6 * 90
+      arrow_count_min: 5
+      arrow_count_max: 10
+      direction_bias: "none"
+      fallback_sort: "vertical"
+      undo_limit: 10
+      hint_available: true
+
+    - range: [61, 80]
+      label: "hard"
+      board_cols: 5
+      board_rows: 7
+      board_width_px: 450      # 5 * 90
+      board_height_px: 630     # 7 * 90
+      arrow_count_min: 10
+      arrow_count_max: 15
+      direction_bias: "tall_prefers_vertical"   # tall board → up/down bias
+      direction_bias_weight: 0.6                # 60% chance up/down when tall
+      fallback_sort: "vertical"
+      undo_limit: 10
+      hint_available: true
+
+    - range: [81, 100]
+      label: "expert"
+      board_cols: 5
+      board_rows: 9
+      board_width_px: 450      # 5 * 90
+      board_height_px: 810     # 9 * 90 — seam at ~450px wide, tall board
+      arrow_count_min: 10
+      arrow_count_max: 20
+      direction_bias: "tall_prefers_vertical"
+      direction_bias_weight: 0.65
+      fallback_sort: "vertical"
+      undo_limit: 10
+      hint_available: true
+
+  max_arrow_clamp: 20    # Hard cap, hint: "상한 약 20"
+
+  direction_assignment_rule: >
+    If board_height > board_width: bias direction toward UP/DOWN by direction_bias_weight.
+    Otherwise: equal probability 0.25 per direction.
+    "세로 긴=상/하, 가로 긴=좌/우" → implemented via bias_weight, not strict exclusion.
+
+# ==============================================================================
+# 2. CORE CONSTANTS
+# Hints:
+#   max hints   ~3
+#   max undo    ~10 (Command pattern ~10 undo)
+#   max lives   ~3
+#   tap O(n) → n = arrow_count (AABB sweep per arrow per tap)
+#   interstitial ~3 levels
+# ==============================================================================
+core_constants:
+  max_lives: 3                    # Hint: "생명 최대 약 3개"
+  life_restore_interval_minutes: 30
+  max_undo_steps: 10              # Hint: "Command 패턴 약 10회 되돌리기"
+  hint_count_initial: 3           # Hint: "힌트 약 3개"
+  hint_pulse_count: 3             # Hint: "약 3회 펄스 애니메이션"
+  max_hint_charges: 3             # Max storable hint charges
+  total_levels: 100
+  cell_size_pixels: 90            # Derived: 5 cols * 90 = 450px ≤ 450px late-band cap
+  tap_cooldown_seconds: 0.12      # Slightly above 1 frame at 60fps; prevents double-tap
+  target_frame_rate: 60
+  board_padding_pixels: 32        # Margin between board and screen edge
+  interstitial_every_n_levels: 3  # Hint: "전면광고 약 3레벨마다"
+  solver_max_attempts: 1000       # Hint: "최대 시도 제한" — DFS+backtrack iteration cap
+  collision_complexity: "O(n)"    # Hint: "탭당 O(n)" — AABB sweep per tap over n arrows
+
+# ==============================================================================
+# 3. STAR RATING
+# Hint: 3stars=실수0, 2stars=1~2회, 1star=3~5회, 0star=6+
+# "실수" = mistakes (extra taps beyond the optimal solution)
+# extra_taps = actual_taps - optimal_taps
+# ==============================================================================
+star_rating:
+  metric: "extra_taps"
+  description: >
+    Stars are determined by how many taps over the optimal solution the player used.
+    extra_taps = actual_taps - optimal_taps (optimal computed by DFS+backtracking solver).
+
+  thresholds:
+    three_stars:
+      extra_taps_max: 0
+      label: "Perfect"
+      description: "No mistakes — solved in exactly optimal taps"
+    two_stars:
+      extra_taps_min: 1
+      extra_taps_max: 2
+      label: "Good"
+      description: "1 or 2 extra taps beyond optimal"
+    one_star:
+      extra_taps_min: 3
+      extra_taps_max: 5
+      label: "Clear"
+      description: "3 to 5 extra taps beyond optimal"
+    zero_stars:
+      extra_taps_min: 6
+      label: "Struggled"
+      description: "6 or more extra taps — level cleared but no star awarded"
+
+  note: >
+    Level is always marked Cleared regardless of star count.
+    Next level unlocks on first clear (star count irrelevant for progression).
+
+# ==============================================================================
+# 4. LEVEL GENERATION
+# Hints:
+#   DFS + backtracking for solvability validation
+#   Fallback = vertical sort
+#   Max attempt limit
+# ==============================================================================
+level_generation:
+  cell_size_pixels: 90             # matches core_constants.cell_size_pixels
+  position_snap: 1                 # 1 grid unit
+  size_unit: 1                     # Each arrow occupies exactly 1 cell
+
+  placement:
+    max_placement_attempts_per_arrow: 50
+    max_full_board_retries: 20
+
+  solvability_check:
+    algorithm: "DFS_backtracking"  # Hint: "DFS+백트래킹 풀이 검증"
+    description: >
+      Depth-First Search with backtracking over tap sequences.
+      State = frozenset of (col, row, direction) for all remaining arrows.
+      A tap is valid if the arrow moves ≥1 cell.
+      Goal = empty board (all arrows ejected).
+    max_attempts: 1000             # Hint: "최대 시도 제한"
+    timeout_ms: 2000
+    rejection_policy: >
+      If no solution found within max_attempts or timeout, apply fallback.
+
+  fallback_rule:
+    name: "vertical_sort"          # Hint: "폴백=세로 정렬"
+    description: >
+      If DFS solver fails to verify a generated layout, rebuild the board
+      by placing arrows sorted top-to-bottom in their columns so that
+      each row in a column is occupied contiguously. This guarantees a
+      trivially solvable board (tap from top, each arrow slides up and exits).
+    min_arrow_count_after_fallback: 1
+
+  direction_rules:
+    - "Arrows pointing toward the nearest board edge with a clear path are preferred at placement time (ensures at least 1 immediately ejectable arrow)"
+    - "At least 1 arrow must be immediately ejectable at game start (deadlock prevention)"
+    - "Each cell holds at most 1 arrow"
+    - "Arrows never overlap blockers"
+    - "Tall board (rows > cols): assign UP/DOWN with direction_bias_weight probability"
+    - "Wide board (cols >= rows): equal 0.25 probability per direction"
+
+  optimal_solution_storage:
+    format: "array of [col, row] integer pairs (0-indexed)"
+    field_name: "optimalTapSequence"
+    example: "[[2,0],[0,3],[4,1]]"
+
+# ==============================================================================
+# 5. ANIMATION
+# Hints:
+#   Move: 0.25-0.7s total. First 40% = stretch (max 1.6x, ease-out sine).
+#         Last 60% = snap (ease-in quadratic).
+#   Blocked: ~0.3s damped shake
+#   Hint: 3 pulses, scale 1.0-1.15
+#   Popup: 0.8→1.0, ease-out-back, ~0.25s
+#   Page fade: ~0.2s
+#   Star: ~0.3s intervals
+#
+# Movement duration range: 0.25s (short path) to 0.7s (long path)
+# Stretch phase = 40% of total duration
+# Snap/slide phase = 60% of total duration
+# ==============================================================================
+animation:
+
+  arrow_movement:
+    # Duration linearly mapped: min 0.25s (1-cell move) to 0.7s (max board diagonal)
+    duration_min_seconds: 0.25    # Hint lower bound
+    duration_max_seconds: 0.70    # Hint upper bound
+    duration_formula: >
+      t = lerp(0.25, 0.70, clamp01((path_cells - 1) / (max_board_cells - 1)))
+      where max_board_cells = max(board_cols, board_rows) - 1
+    phases:
+      stretch:
+        proportion: 0.40          # First 40% of total duration
+        scale_max: 1.60           # Hint: "최대 1.6배"
+        scale_axis: "movement_axis"   # Scale along direction of travel
+        scale_perpendicular: 0.88     # Slight squash on perpendicular axis for squash-and-stretch
+        easing: "ease_out_sine"   # Hint: "ease-out sine"
+      snap:
+        proportion: 0.60          # Remaining 60% of total duration
+        easing: "ease_in_quadratic"  # Hint: "ease-in quadratic"
+        scale_return_to: 1.0
+        overshoot: 1.04           # Tiny overshoot on arrival for snappy feel
+
+  blocked_feedback:
+    duration_seconds: 0.30        # Hint: "막힘 약 0.3초 감쇠"
+    type: "damped_oscillation"    # Hint: "감쇠" = damped
+    amplitude_pixels: 8           # Initial shake offset
+    frequency_hz: 18              # Oscillations per second (3 full cycles in 0.3s ≈ 18Hz gives ~5 half-swings)
+    decay_curve: "exponential"    # Amplitude * e^(-decay_rate * t)
+    decay_rate: 12.0              # Chosen so amplitude ≈ 5% at t=0.3s: e^(-12*0.3) ≈ 0.027
+
+  hint_animation:
+    pulse_count: 3                # Hint: "약 3회 펄스"
+    scale_min: 1.0                # Hint: "1.0~1.15 스케일"
+    scale_max: 1.15               # Hint upper bound
+    pulse_period_seconds: 0.45    # Each pulse cycle (expand + contract)
+    total_duration_seconds: 1.35  # 3 * 0.45
+    easing: "ease_in_out_sine"
+    color_tint_hex: "#FFD700"
+
+  popup_animation:
+    scale_from: 0.80              # Hint: "0.8→1.0"
+    scale_to: 1.00
+    duration_seconds: 0.25        # Hint: "약 0.25초"
+    easing: "ease_out_back"       # Hint explicit
+    ease_out_back_overshoot: 1.70  # Standard ease-out-back overshoot coefficient
+
+  page_fade:
+    duration_seconds: 0.20        # Hint: "페이지 fade 약 0.2초"
+    easing: "ease_in_out_quad"
+
+  star_reveal:
+    delay_between_stars_seconds: 0.30   # Hint: "별 약 0.3초 간격"
+    scale_from: 0.0
+    scale_to: 1.0
+    per_star_duration_seconds: 0.25
+    easing: "ease_out_back"
+    ease_out_back_overshoot: 1.70
+
+  level_clear_sequence:
+    last_arrow_exit_wait_seconds: 0.35    # Brief pause after last arrow exits
+    star_reveal_start_delay_seconds: 0.70 # Wait before showing stars
+    result_popup_delay_seconds: 1.70      # After last star revealed (3 stars * 0.3s + margin)
+
+# ==============================================================================
+# 6. ARROW COLORS
+# Hint: 4 directions, each distinct color. "방향 right 그대로" = 0° rotation baseline
+# ==============================================================================
+arrow_colors:
+  right: "#F5A623"    # Warm orange — base/native direction, no rotation
+  up:    "#4A90D9"    # Sky blue
+  left:  "#7ED321"    # Lime green
+  down:  "#D0021B"    # Deep red
+
+  blocked_flash: "#FF4444"    # Tint during blocked shake
+  hint_highlight: "#FFD700"   # Tint during hint pulse
+  tap_confirm_flash: "#FFFFFF" # Brief white flash on valid tap
+  board_background: "#1C1C2E"
+  cell_normal: "#2A2A42"
+  board_grid_line: "#3A3A5C"
+
+# ==============================================================================
+# 7. ARROW RENDERING
+# Hints:
+#   Head ~35%  of cell height
+#   Shaft ~55% of cell height (leaving ~10% margin total)
+#   Default direction: RIGHT (0°)
+#   Rotations: right=0°, up=90°(CCW), left=180°, down=-90° (=270°)
+#   Note: hint says "up=90, left=180, down=-90" — these are CCW rotation degrees
+# ==============================================================================
+arrow_rendering:
+  cell_size_pixels: 90              # matches core_constants
+
+  # Proportions (of cell_size)
+  head_height_ratio: 0.35           # Hint: "head 약 35%"  → 31.5px
+  shaft_height_ratio: 0.55          # Hint: "shaft 약 55%" → 49.5px
+  # Total drawn height = 0.35 + 0.55 = 0.90 * 90 = 81px (9px margin each cap side)
+  shaft_width_ratio: 0.28           # Shaft width = 0.28 * 90 = 25.2px
+  head_base_width_ratio: 0.62       # Arrowhead base = 0.62 * 90 = 55.8px
+  corner_radius_pixels: 4
+
+  default_direction: "RIGHT"        # Hint: "기본 방향 RIGHT"
+
+  rotation_degrees:                 # Hint explicit values
+    right:  0                       # "방향 right 그대로"
+    up:     90                      # Hint: "up=90"
+    left:   180                     # Hint: "left=180"
+    down:   -90                     # Hint: "down=-90" (equivalent to 270°)
+
+  outline:
+    enabled: true
+    width_pixels: 2
+    color_hex: "#00000055"
+
+  shadow:
+    enabled: true
+    offset_x_pixels: 2
+    offset_y_pixels: -2
+    blur_radius_pixels: 4
+    color_hex: "#00000040"
+
+# ==============================================================================
+# 8. HAPTIC
+# Hint: light / medium / heavy — 3 tiers
+# ==============================================================================
+haptic:
+  tiers:
+    light:
+      intensity: "light"
+      use_cases:
+        - "Valid tap — arrow begins moving"
+        - "Undo action"
+        - "Hint activated"
+    medium:
+      intensity: "medium"
+      use_cases:
+        - "Arrow exits board (single arrow clear)"
+        - "Button press on popups"
+    heavy:
+      intensity: "heavy"
+      use_cases:
+        - "Level complete (all arrows cleared)"
+        - "Star awarded (3-star clear)"
+
+  blocked_pattern:
+    type: "double_pulse"
+    tier: "light"
+    pulse_count: 2
+    pulse_gap_ms: 50
+    use_case: "Arrow is blocked and cannot move"
+
+  enabled_by_default: true
+  player_pref_key: "TapShift_Settings_HapticOn"
+
+# ==============================================================================
+# 9. COLLISION
+# Hints:
+#   AABB sweep — per-tap O(n) where n = arrow count
+#   Each tap triggers sweep for tapped arrow, then resolves chain if arrows push
+# ==============================================================================
+collision:
+  method: "AABB_grid_sweep"        # Hint: "AABB sweep 충돌"
+  complexity_per_tap: "O(n)"       # Hint: "탭당 O(n)" — n = current arrow count
+  max_arrows_on_board: 20          # Caps O(n) at O(20) = constant in practice
+
+  algorithm:
+    step_1: "Identify tapped cell → look up arrow at (col, row)"
+    step_2: "Get direction vector: RIGHT=(+1,0), UP=(0,+1), LEFT=(-1,0), DOWN=(0,-1)"
+    step_3: "Sweep: advance (col+dir.x, row+dir.y) step by step"
+    step_4: "For each stepped cell: if occupied by another arrow → stop (blocked); if out of bounds → arrow exits"
+    step_5: "If path length == 0: trigger blocked_feedback, no movement"
+    step_6: "If path length >= 1: move arrow to final cell (or remove if exits)"
+    step_7: "Update grid data structure O(1) per cell stepped"
+    step_8: "Check win condition: if grid empty → LevelComplete"
+
+  grid_structure: "2D array [cols][rows] of nullable ArrowData"
+  board_edge_exit: >
+    Arrow moves to the last valid in-bounds cell, then is removed from grid
+    and returned to the Object Pool on next frame.
+  chain_reactions: false    # Arrows do not push other arrows; only blocked feedback
+
+# ==============================================================================
+# 10. UI
+# ==============================================================================
+ui:
+  reference_resolution:
+    width: 1080
+    height: 1920
+  scale_mode: "ScaleWithScreenSize"
+  match_width_or_height: 0.5
+  pixels_per_unit: 100
+
+  sorting_layers:
+    background: 0
+    board: 10
+    arrows: 20
+    particles: 30
+    hud: 40
+    popup_overlay: 50
+    popup: 60
+    toast: 70
+    loading_screen: 80
+
+  screens:
+    - id: "TitleScreen"
+      description: "Splash + logo; auto-transitions to MainMenu after 1.5s"
+      auto_transition_delay_seconds: 1.5
+    - id: "MainMenuScreen"
+      description: "Level select grid, settings button, shop button, total stars display"
+    - id: "GameScreen"
+      description: "Game board + HUD: undo button, hint button, level number, pause button, star row"
+    - id: "PausePopup"
+      description: "Resume, Restart, Home"
+    - id: "ResultPopup"
+      description: "Stars (animated), tap count, best stars, next level / retry buttons"
+    - id: "SettingsPopup"
+      description: "Music toggle, SFX toggle, haptic toggle"
+    - id: "ShopPopup"
+      description: "IAP products, ad-based hint refill button"
+
+  level_select_grid:
+    columns: 5
+    cell_size_pixels: 150
+    cell_gap_pixels: 12
+    levels_per_page: 30
+    locked_alpha: 0.40
+
+  hud_elements:
+    undo_button:
+      shows_remaining_count: true
+      disabled_alpha: 0.35
+    hint_button:
+      shows_remaining_count: true
+      disabled_alpha: 0.35
+    lives_display:
+      max_icons: 3
+      empty_icon_alpha: 0.30
+
+# ==============================================================================
+# 11. PERSISTENCE
+# Hint: PlayerPrefs 저장
+# ==============================================================================
+persistence:
+  backend: "PlayerPrefs"
+  key_prefix: "TS"    # Short prefix to save key length
+
+  keys:
+    # Per-level records
+    - key: "TS_L_Stars_{idx}"
+      type: "int"
+      range: "[0, 3]"
+      description: "Best star count for level idx"
+
+    - key: "TS_L_Taps_{idx}"
+      type: "int"
+      description: "Fewest extra taps for level idx (int.MaxValue if never cleared)"
+
+    # Progress
+    - key: "TS_P_Unlocked"
+      type: "int"
+      description: "Highest unlocked level index (0-based); starts at 0"
+
+    # Consumables
+    - key: "TS_P_Hints"
+      type: "int"
+      default: 3
+      description: "Current hint charges"
+
+    - key: "TS_P_Undos"
+      type: "int"
+      default: 10
+      description: "Current undo-step allowance (resets to 10 each level start)"
+      note: "Undo is per-session, not cross-session consumable. Lives are the cross-session resource."
+
+    - key: "TS_P_Lives"
+      type: "int"
+      default: 3
+      description: "Current life count"
+
+    - key: "TS_P_LivesTS"
+      type: "string"
+      description: "ISO 8601 UTC timestamp of last life restore event"
+
+    # Settings
+    - key: "TS_S_Music"
+      type: "int"
+      default: 1
+      description: "Music enabled: 1=on, 0=off"
+
+    - key: "TS_S_Sfx"
+      type: "int"
+      default: 1
+      description: "SFX enabled: 1=on, 0=off"
+
+    - key: "TS_S_Haptic"
+      type: "int"
+      default: 1
+      description: "Haptic enabled: 1=on, 0=off"
+
+    # Ads / IAP
+    - key: "TS_A_LevelsCleared"
+      type: "int"
+      default: 0
+      description: "Levels cleared since last interstitial (resets to 0 after ad shown)"
+
+    - key: "TS_I_NoAds"
+      type: "int"
+      default: 0
+      description: "1 = remove-ads purchased; interstitials suppressed permanently"
+
+# ==============================================================================
+# 12. MONETIZATION
+# Hints:
+#   전면광고 약 3레벨마다 → interstitial every 3 completions
+#   IAP: 힌트팩 (소모품, 약 5개) + 광고제거 (비소모품)
+#   인터페이스 추상화 (IAdService, IIAPService)
+#   조건부 컴파일
+# ==============================================================================
+monetization:
+
+  interstitial_ads:
+    frequency_levels: 3           # Hint: "전면광고 약 3레벨마다"
+    skip_on_levels: [1, 2, 3]    # No ads in tutorial
+    cooldown_seconds: 120         # At least 2 min between interstitials
+    suppressed_if_no_ads_purchased: true
+
+  rewarded_ads:
+    hint_refill:
+      enabled: true
+      hints_per_view: 3
+      max_views_per_day: 5
+    extra_life:
+      enabled: true
+      lives_per_view: 1
+      max_views_per_day: 3
+
+  iap_products:
+    # Consumables — hint pack, ~5 per pack (hint: "소모품 약 5개")
+    - id: "com.tapshift.hints_pack_s"
+      type: "consumable"
+      price_usd: 0.99
+      quantity: 5                 # Hint: "약 5개"
+      item: "hint"
+      description: "5 Hint Charges"
+
+    - id: "com.tapshift.hints_pack_m"
+      type: "consumable"
+      price_usd: 1.99
+      quantity: 15
+      item: "hint"
+      description: "15 Hint Charges"
+
+    - id: "com.tapshift.hints_pack_l"
+      type: "consumable"
+      price_usd: 3.99
+      quantity: 40
+      item: "hint"
+      description: "40 Hint Charges"
+
+    # Non-consumable — remove ads (hint: "광고제거 비소모품")
+    - id: "com.tapshift.remove_ads"
+      type: "non_consumable"
+      price_usd: 1.99
+      description: "Remove all interstitial ads permanently"
+      grants: "TS_I_NoAds = 1"
+
+  service_interfaces:
+    # Hint: "인터페이스 추상화 (IAdService, IIAPService)"
+    - name: "IAdService"
+      methods:
+        - "void ShowInterstitial(Action onComplete)"
+        - "void ShowRewarded(Action<bool> onResult)"
+        - "bool IsRewardedReady()"
+        - "bool IsInterstitialReady()"
+
+    - name: "IIAPService"
+      methods:
+        - "void Purchase(string productId, Action<bool> onResult)"
+        - "bool IsOwned(string productId)"
+        - "void RestorePurchases(Action<bool> onResult)"
+
+  conditional_compilation:
+    # Hint: "조건부 컴파일"
+    admob_symbol: "GOOGLE_MOBILE_ADS"
+    unity_iap_symbol: "UNITY_IAP"
+    stub_behavior: >
+      In #else blocks: IAdService returns immediately with success=true (simulated),
+      IIAPService Purchase returns success=false with Debug.Log.
+
+# ==============================================================================
+# 13. ARCHITECTURE
+# Hints:
+#   ~50 files
+#   Singleton<T> (DontDestroyOnLoad)
+#   Object Pooling
+#   Command pattern
+#   Observer / EventBus
+#   Template Method
+#   Adapter (IAdService, IIAPService)
+#   Strategy
+#   ~8-9 states
+#   3-Layer: Core / Domain / Game
+# ==============================================================================
+architecture:
+
+  estimated_file_count: 50        # Hint: "약 50파일"
+
+  design_patterns:
+    - pattern: "Singleton<T>"
+      note: "DontDestroyOnLoad. Hint: 'Singleton<T>(DontDestroyOnLoad)'"
+    - pattern: "Object Pool"
+      note: "Reuse ArrowView GameObjects; avoid Instantiate/Destroy during gameplay"
+    - pattern: "Command"
+      note: "MoveCommand stored in UndoStack (max 10 steps). Hint: 'Command 패턴 약 10회'"
+    - pattern: "Observer / EventBus"
+      note: "Decoupled state change notifications (e.g., OnArrowExited, OnLevelComplete)"
+    - pattern: "Template Method"
+      note: "BaseGameState defines Execute/Exit hooks; concrete states override"
+    - pattern: "Adapter"
+      note: "IAdService + IIAPService adapters for AdMob/UnityIAP. Hint explicit."
+    - pattern: "Strategy"
+      note: "ISolverStrategy → DFSSolver / BFSSolver swappable for level gen vs. hint"
+
+  state_machine:
+    # Hint: "약 8~9개 상태"
+    state_count: 9
+    states:
+      - name: "Boot"
+        description: "App launch; load PlayerPrefs, init singletons, transition to Title"
+      - name: "Title"
+        description: "Splash screen; auto-advance to MainMenu after 1.5s"
+      - name: "MainMenu"
+        description: "Level select visible; no game logic running"
+      - name: "Idle"
+        description: "Board displayed; awaiting player tap input"
+      - name: "Animating"
+        description: "One or more arrows in motion; input blocked"
+      - name: "Hint"
+        description: "Hint arrow pulsing; input accepted only on hinted arrow or dismiss"
+      - name: "Paused"
+        description: "Pause popup open; game time frozen"
+      - name: "LevelComplete"
+        description: "All arrows cleared; star reveal sequence playing"
+      - name: "Loading"
+        description: "Async scene/level load in progress; loading overlay shown"
+
+  three_layer_structure:
+    Core:
+      description: "장르 무관 기반 — genre-agnostic infrastructure"
+      files:
+        - "Singleton.cs"
+        - "ObjectPool.cs"
+        - "EventBus.cs"
+        - "SceneLoader.cs"
+        - "AudioManager.cs"
+        - "HapticManager.cs"
+        - "TimerService.cs"
+        - "CoroutineRunner.cs"
+
+    Domain:
+      description: "재사용 도메인 — puzzle game domain logic, no Unity UI dependency"
+      files:
+        - "BoardModel.cs"
+        - "ArrowData.cs"           # Struct: col, row, direction, id
+        - "MoveCommand.cs"         # ICommand: Execute / Undo
+        - "UndoStack.cs"           # Stack<MoveCommand>, max_steps = 10
+        - "DFSSolver.cs"           # ISolverStrategy — DFS+backtracking, hint: 'DFS+백트래킹'
+        - "BFSSolver.cs"           # ISolverStrategy — BFS for optimal path length
+        - "ISolverStrategy.cs"     # Strategy interface
+        - "LevelDefinition.cs"     # ScriptableObject: board layout, optimal solution
+        - "LevelValidator.cs"      # Calls solver to verify solvability
+        - "StarRatingCalculator.cs"
+
+    Game:
+      description: "프로젝트 특화 — Unity MonoBehaviour, UI, scene-specific"
+      files:
+        - "GameManager.cs"         # State machine root
+        - "BoardController.cs"     # Touch input → MoveCommand dispatch
+        - "BoardView.cs"           # Renders BoardModel; owns ArrowView pool
+        - "ArrowView.cs"           # Visual + animation for single arrow
+        - "ArrowAnimator.cs"       # Stretch/snap tween logic
+        - "LevelDataManager.cs"
+        - "PlayerDataManager.cs"
+        - "UIManager.cs"           # Screen stack push/pop
+        - "GameScreen.cs"
+        - "MainMenuScreen.cs"
+        - "TitleScreen.cs"
+        - "PausePopup.cs"
+        - "ResultPopup.cs"
+        - "SettingsPopup.cs"
+        - "ShopPopup.cs"
+        - "HUDView.cs"
+        - "LevelSelectGrid.cs"
+        - "AdManager.cs"           # Adapter: IAdService implementation
+        - "IAPManager.cs"          # Adapter: IIAPService implementation
+        - "IAdService.cs"
+        - "IIAPService.cs"
+        - "AdMobService.cs"        # #if GOOGLE_MOBILE_ADS
+        - "UnityIAPService.cs"     # #if UNITY_IAP
+        - "BaseGameState.cs"       # Template Method base
+        - "IdleState.cs"
+        - "AnimatingState.cs"
+        - "HintState.cs"
+        - "PausedState.cs"
+        - "LevelCompleteState.cs"
+        - "LoadingState.cs"
+        - "BootState.cs"
+        - "TitleState.cs"
+        - "MainMenuState.cs"
+        - "VFXController.cs"       # Particle burst on arrow exit / level clear
+        - "SFXCatalog.cs"          # AudioClip references
+        - "LevelGenerator.cs"      # Procedural layout builder (uses DFSSolver)
+        - "SceneBuilder.cs"        # Editor/ — auto-build Title/Main/Game scenes
+
+  serialization:
+    level_data: "ScriptableObject (LevelDefinition.asset per level)"
+    runtime_save: "PlayerPrefs (see persistence section)"
+    level_fields:
+      - "int levelIndex"
+      - "int boardCols"
+      - "int boardRows"
+      - "ArrowData[] arrows"
+      - "int[] blockerCols"
+      - "int[] blockerRows"
+      - "int optimalTapCount"
+      - "Vector2Int[] optimalTapSequence"

@@ -1,0 +1,152 @@
+{
+  "fileName": "MissionBlock_Popup",
+  "filePath": "E:/AIMED/FantaPuzzle/PuzzleAutomation2/Assets\\6.Prefabs\\MissionBlock\\MissionBlock_Popup.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 5,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "2151571063181873252",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "90fcda5bc2ee14874aebcd5e6e517bce",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "MissionBlock_Popup",
+      "rectSize": {
+        "x": 180.0,
+        "y": 180.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "sourceFile": "MissionBlock_Popup"
+    },
+    {
+      "type": "Image",
+      "fileID": "8350152261742323003",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "595c82b6d7a574d0b877563c74083b32",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Complete",
+      "rectSize": {
+        "x": 50.0,
+        "y": 50.0
+      },
+      "anchoredPosition": {
+        "x": 33.0,
+        "y": -30.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MissionBlock_Popup"
+    },
+    {
+      "type": "Image",
+      "fileID": "8350152262545789297",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Cross",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MissionBlock_Popup"
+    }
+  ],
+  "texts": [
+    {
+      "type": "Text",
+      "fileID": "2151571063740501515",
+      "m_FontSize": 60.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "15",
+      "gameObjectName": "Amout",
+      "rectSize": {
+        "x": 89.28,
+        "y": 78.51
+      },
+      "anchoredPosition": {
+        "x": 29.0,
+        "y": -32.2
+      },
+      "anchorMin": {
+        "x": 1.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 0.0
+      },
+      "sourceFile": "MissionBlock_Popup"
+    }
+  ],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 5
+}

@@ -1,0 +1,56 @@
+# Singleton - Core Base Class
+metadata:
+  nodeId: "Singleton"
+  version: "1.0.0"
+  phase: 0
+  role: "Base"
+
+dependencies:
+  internal: []
+  external:
+    - "UnityEngine"
+
+contract:
+  provides:
+    - "static T Instance (전역 접근점)"
+    - "DontDestroyOnLoad 보장"
+  requires: []
+
+tags:
+  layer: "Core"
+  genre: "Generic"
+  role: "Base"
+  system: "Infrastructure"
+  majorFunctions:
+    - "StateControl"
+  minorFunctions:
+    - "Validate"
+    - "Assign"
+
+logicFlow:
+  - step: 1
+    tag: "ConditionCheck"
+    action: "Awake에서 기존 인스턴스 존재 여부 확인"
+    next: 2
+  - step: 2
+    tag: "StateControl"
+    action: "인스턴스 없으면 자신을 할당, 있으면 Destroy"
+    next: 3
+  - step: 3
+    tag: "FlowControl"
+    action: "DontDestroyOnLoad(gameObject) 호출"
+    next: null
+
+referencePatterns:
+  - source: "Generic Core"
+    pattern: "Singleton<T> MonoBehaviour 기반, Awake에서 인스턴스 관리"
+
+codeHints:
+  patterns:
+    - "public class Singleton<T> : MonoBehaviour where T : MonoBehaviour"
+    - "private static T _instance"
+    - "public static T Instance => _instance"
+    - "protected virtual void Awake() { if (_instance != null && _instance != this) { Destroy(gameObject); return; } _instance = this as T; DontDestroyOnLoad(gameObject); }"
+  avoidPatterns:
+    - "new 키워드로 싱글톤 생성 금지"
+    - "static 클래스로 구현 금지 (MonoBehaviour 필요)"

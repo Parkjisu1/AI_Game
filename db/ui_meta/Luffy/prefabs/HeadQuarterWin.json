@@ -1,0 +1,685 @@
+{
+  "fileName": "HeadQuarterWin",
+  "filePath": "E:/AIMED/Luffy/IdleMoney1/Project/Assets\\IdleMoney\\Prefabs\\UI\\Windows\\HeadQuarterWin.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 37,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [
+    {
+      "type": "CanvasGroup",
+      "fileID": "6091167944022156877",
+      "m_Alpha": 1,
+      "m_Interactable": 1,
+      "m_BlocksRaycasts": 1,
+      "m_IgnoreParentGroups": 0,
+      "gameObjectName": "HeadQuarterWin",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  ],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "393134742868885697",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "UseGoldBtn",
+      "rectSize": {
+        "x": 217.0,
+        "y": 120.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -261.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HeadQuarterWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "9216950438944786518",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "ShowDetailBtn",
+      "rectSize": {
+        "x": 217.0,
+        "y": 120.0
+      },
+      "anchoredPosition": {
+        "x": 0.7,
+        "y": -261.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HeadQuarterWin"
+    }
+  ],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "5561467628954741000",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "5a7bef7c791c7b842b5e03aba2d4744a",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "TitleImg",
+      "rectSize": {
+        "x": 380.0,
+        "y": 50.0
+      },
+      "anchoredPosition": {
+        "x": 0.39997578,
+        "y": 236.40002
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HeadQuarterWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "4678459637018631462",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.61960787,
+        "g": 0.54509807,
+        "b": 0.44313726,
+        "a": 0.5019608
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8cbf0c754bcae4b598aeae1646c5d200",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Stat2BG",
+      "rectSize": {
+        "x": 265.0,
+        "y": 62.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -152.1
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HeadQuarterWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "9189203594162398126",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "167e9f63de86ad0489262a68dff2ef7e",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IconImg",
+      "rectSize": {
+        "x": 52.0,
+        "y": 40.8
+      },
+      "anchoredPosition": {
+        "x": -64.1,
+        "y": 5.799994
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HeadQuarterWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7278147544438880652",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "d3edc68eb166e4c69a52a94502c2f4a6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "UseGoldBtn",
+      "rectSize": {
+        "x": 217.0,
+        "y": 120.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -261.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HeadQuarterWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "6720490563961718812",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "fbf0ee1335f194d38b8c0e1295b58853",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BG",
+      "rectSize": {
+        "x": 3000.0,
+        "y": 720.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HeadQuarterWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7700771265633372309",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "7e7559a6c2e3ddc46a90a37cf6d9e0bd",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "NameTagImg",
+      "rectSize": {
+        "x": 250.0,
+        "y": 70.0
+      },
+      "anchoredPosition": {
+        "x": -461.3,
+        "y": -308.4
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HeadQuarterWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "5933969073999124867",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "23690fda47ef79e48a5f3c64a635bfee",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IconImg",
+      "rectSize": {
+        "x": 200.0,
+        "y": 200.0
+      },
+      "anchoredPosition": {
+        "x": 4.7,
+        "y": -7.7
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HeadQuarterWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "1840492052951562171",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "167e9f63de86ad0489262a68dff2ef7e",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IconImg",
+      "rectSize": {
+        "x": 65.0,
+        "y": 51.0
+      },
+      "anchoredPosition": {
+        "x": -38.6,
+        "y": 0.6
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HeadQuarterWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "2649640499309362634",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "5a7bef7c791c7b842b5e03aba2d4744a",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "TitleImg",
+      "rectSize": {
+        "x": 380.0,
+        "y": 50.0
+      },
+      "anchoredPosition": {
+        "x": 0.4,
+        "y": 236.4
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HeadQuarterWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "4036343353714014398",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "4b244c87d58d643e3b659938e0c5d36e",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "BG",
+      "rectSize": {
+        "x": 400.0,
+        "y": 550.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -61.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HeadQuarterWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "1966131147002206705",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "39527ab54ce834960a2408d6209938b4",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "BubbleImg",
+      "rectSize": {
+        "x": 410.0,
+        "y": 190.0
+      },
+      "anchoredPosition": {
+        "x": -423.0,
+        "y": 118.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HeadQuarterWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "2143806028619736629",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "d3edc68eb166e4c69a52a94502c2f4a6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "ShowDetailBtn",
+      "rectSize": {
+        "x": 217.0,
+        "y": 120.0
+      },
+      "anchoredPosition": {
+        "x": 0.7,
+        "y": -261.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HeadQuarterWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7433384515249113259",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.61960787,
+        "g": 0.54509807,
+        "b": 0.44313726,
+        "a": 0.5019608
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8cbf0c754bcae4b598aeae1646c5d200",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Stat1BG",
+      "rectSize": {
+        "x": 265.0,
+        "y": 62.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -12.2
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HeadQuarterWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "2843987497913113479",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "2283191078a9cf848acd0b2a1caeb4db",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IconImg",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 52.0,
+        "y": -12.8
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.5
+      },
+      "sourceFile": "HeadQuarterWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "1147401413059729136",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "4b244c87d58d643e3b659938e0c5d36e",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "BG",
+      "rectSize": {
+        "x": 400.0,
+        "y": 550.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -61.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HeadQuarterWin"
+    }
+  ],
+  "texts": [],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 38
+}

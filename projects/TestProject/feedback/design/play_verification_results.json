@@ -1,0 +1,91 @@
+{
+  "mode": "mass",
+  "project": "TestProject",
+  "timestamp": "2026-02-25T07:43:01.963Z",
+  "total_personas": 50,
+  "persona_distribution": [
+    {
+      "type": "casual",
+      "weight": 0.7,
+      "count": 35
+    },
+    {
+      "type": "hardcore",
+      "weight": 0.15,
+      "count": 8
+    },
+    {
+      "type": "whale",
+      "weight": 0.05,
+      "count": 3
+    },
+    {
+      "type": "newbie",
+      "weight": 0.08,
+      "count": 4
+    },
+    {
+      "type": "returning",
+      "weight": 0.02,
+      "count": 1
+    }
+  ],
+  "aggregate_results": [
+    {
+      "persona_type": "casual",
+      "instance_count": 35,
+      "avg_session_length": 196,
+      "avg_retention_d1": 0.345,
+      "avg_daily_spend": 0.009,
+      "median_churn_day": 9,
+      "engagement_score": 2.76
+    },
+    {
+      "persona_type": "hardcore",
+      "instance_count": 8,
+      "avg_session_length": 446,
+      "avg_retention_d1": 0.568,
+      "avg_daily_spend": 0.0747,
+      "median_churn_day": 6,
+      "engagement_score": 7.38
+    },
+    {
+      "persona_type": "whale",
+      "instance_count": 3,
+      "avg_session_length": 435,
+      "avg_retention_d1": 0.51,
+      "avg_daily_spend": 0.5253,
+      "median_churn_day": 5,
+      "engagement_score": 6.12
+    },
+    {
+      "persona_type": "newbie",
+      "instance_count": 4,
+      "avg_session_length": 142,
+      "avg_retention_d1": 0.214,
+      "avg_daily_spend": 0,
+      "median_churn_day": 13,
+      "engagement_score": 1.28
+    },
+    {
+      "persona_type": "returning",
+      "instance_count": 1,
+      "avg_session_length": 306,
+      "avg_retention_d1": 0.439,
+      "avg_daily_spend": 0.0965,
+      "median_churn_day": 6,
+      "engagement_score": 4.83
+    }
+  ],
+  "weighted_aggregate": {
+    "session_length": 243.3,
+    "retention_d1": 0.378,
+    "daily_spend": 0.0457
+  },
+  "outlier_flags": [],
+  "summary": {
+    "total_instances": 50,
+    "whale_revenue_pct": 57.5,
+    "overall_status": "PASS"
+  }
+}

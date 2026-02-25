@@ -1,0 +1,216 @@
+# Magic Sort - Ground Truth
+# 원본 소스코드에서 추출한 모든 밸런스 상수 및 게임 파라미터
+# Source: E:\AI_WORK_FLOW_TEST\MagicSort_Ori\MagicSort\Assets\Scripts\
+
+version: "1.0"
+game: "Magic Sort"
+package: "com.grandgames.magicsort"
+extraction_date: "2026-02-19"
+
+# ============================================================
+# A. BOTTLE & WATER SYSTEM
+# ============================================================
+bottle_system:
+  max_height: 4                    # BottleConfig.cs:15
+  colors_total: 17                 # GameEnums.cs:6-26
+  colors_playable: 13              # LevelDataProvider.cs:199-217
+  color_list:
+    - { name: "LBLUE", id: 0 }
+    - { name: "DBLUE", id: 1 }
+    - { name: "ORANGE", id: 2 }
+    - { name: "LGREEN", id: 3 }
+    - { name: "DGREEN", id: 4 }
+    - { name: "WHITE", id: 5 }
+    - { name: "WINE", id: 6 }
+    - { name: "BROWN", id: 7 }
+    - { name: "YELLOW", id: 8 }
+    - { name: "VIOLET", id: 9 }
+    - { name: "PINK", id: 10 }
+    - { name: "RED", id: 11 }
+    - { name: "NONE", id: 12 }
+    - { name: "GRAY", id: 13 }
+    - { name: "BLACK", id: -1 }
+    - { name: "RAINBOW1", id: 14 }
+    - { name: "RAINBOW2", id: 15 }
+    - { name: "RAINBOW3", id: 16 }
+  water_per_color: 4               # totalWaters = colorCount * 4
+
+# ============================================================
+# B. LEVEL STRUCTURE
+# ============================================================
+level_structure:
+  builtin_levels: 10               # LevelDataProvider.cs:253-356
+  procedural_after: 10
+  max_gen_attempts: 100            # LevelDataProvider.cs:19
+
+  builtin_data:
+    - { level: 1, difficulty: "Default", colors: 2, bottles: 2, empty: 2, total: 4, par: 14 }
+    - { level: 2, difficulty: "Default", colors: 2, bottles: 2, empty: 2, total: 4, par: 12 }
+    - { level: 3, difficulty: "Default", colors: 3, bottles: 3, empty: 2, total: 5, par: 15 }
+    - { level: 4, difficulty: "Default", colors: 3, bottles: 3, empty: 2, total: 5, par: 14 }
+    - { level: 5, difficulty: "Default", colors: 3, bottles: 3, empty: 2, total: 5, par: 16 }
+    - { level: 6, difficulty: "Default", colors: 4, bottles: 4, empty: 2, total: 6, par: 18 }
+    - { level: 7, difficulty: "Default", colors: 4, bottles: 4, empty: 2, total: 6, par: 20 }
+    - { level: 8, difficulty: "Default", colors: 5, bottles: 5, empty: 2, total: 7, par: 22 }
+    - { level: 9, difficulty: "Hard", colors: 5, bottles: 5, empty: 2, total: 7, par: 20 }
+    - { level: 10, difficulty: "Hard", colors: 6, bottles: 6, empty: 2, total: 8, par: 25 }
+
+# ============================================================
+# C. DIFFICULTY PROGRESSION
+# ============================================================
+difficulty:
+  tiers:
+    - { name: "Default", level_range: "1-20", color_count: 4, empty_bottles: 2, par_bonus: 5 }
+    - { name: "Hard", level_range: "21-60", color_count: 7, empty_bottles: 2, par_bonus: 3 }
+    - { name: "SuperHard", level_range: "61+", color_count: 10, empty_bottles: 2, par_bonus: 0 }
+  par_formula: "basePar = colorCount * 3 + par_bonus"
+  # Source: LevelDifficultyService.cs:10-37, LevelDataProvider.cs:219-247
+
+# ============================================================
+# D. GRID LAYOUT
+# ============================================================
+grid_layout:
+  max_per_row: 5                   # BottleCollection.cs:28
+  h_spacing: 1.5                   # BottleCollection.cs:26
+  v_spacing: 2.5                   # BottleCollection.cs:27
+  last_row_centered: true
+
+# ============================================================
+# E. ANIMATION TIMINGS
+# ============================================================
+animation:
+  pour_total_duration: 0.4         # PourProcessor.cs:15
+  lift_height: 1.5                 # PourProcessor.cs:16
+  tilt_angle: 60                   # PourProcessor.cs:17 (degrees)
+
+  phases:  # BottleAnimationConfig.cs:13-54
+    lift:
+      height: 1.5
+      duration: 0.15
+    move:
+      duration: 0.2
+      offset: 0.5
+    tilt:
+      angle: 60
+      duration: 0.1
+    pour:
+      duration_per_layer: 0.12
+      delay: 0.05
+    return:
+      duration: 0.2
+    completion_bounce:
+      height: 0.3
+      duration: 0.25
+      scale_punch: 0.1
+    selection:
+      lift_y: 0.3
+      duration: 0.1
+
+  selection:
+    tint_color: [1.0, 1.0, 0.7, 1.0]  # BottleItem.cs:22
+    lift_height: 0.3                    # BottleItem.cs:23
+
+# ============================================================
+# F. CURRENCY & REWARDS
+# ============================================================
+currency:
+  starting_coins: 100              # CurrencyManager.cs:22
+  starting_gems: 5                 # CurrencyManager.cs:23
+  reward_per_level:
+    coins: 50                      # LevelConfigModel.cs:13
+    exp: 10                        # LevelConfigModel.cs:14
+
+# ============================================================
+# G. BOOSTERS
+# ============================================================
+boosters:
+  initial_inventory:
+    extra_bottle: 3                # BoosterManager.cs:186
+    shuffle: 3                     # BoosterManager.cs:187
+    undo: 5                        # BoosterManager.cs:188
+    hint: 5                        # BoosterManager.cs:189
+    color_clear: 1                 # BoosterManager.cs:190
+
+# ============================================================
+# H. UNDO SYSTEM
+# ============================================================
+undo:
+  max_steps: 50                    # UndoManager.cs:80
+  method: "LIFO stack"
+
+# ============================================================
+# I. STAR RATING
+# ============================================================
+star_rating:  # LevelManager.cs:405-422
+  three_stars: "moveCount <= par"
+  two_stars: "moveCount <= par * 1.5"
+  one_star: "else"
+
+# ============================================================
+# J. HINT SCORING
+# ============================================================
+hint_scoring:  # HintCalculator.cs:140-194
+  completing_bottle: 100
+  monochromatic_target: 50
+  emptying_origin: 30
+  non_empty_target: 20
+  origin_becomes_mono: 15
+  per_layer_moved: 10
+  empty_target_penalty: -5
+
+# ============================================================
+# K. BLOCKER TYPES (18종)
+# ============================================================
+blocker_types:
+  - { name: "Ice", description: "Splits water, breaks on adjacent completion" }
+  - { name: "Carpet", description: "Hidden, revealed on pour-over" }
+  - { name: "Curtain", description: "Revealed on pour, tap to damage" }
+  - { name: "Plaster", description: "HP 2, cracks then breaks" }
+  - { name: "Clay", description: "HP 1, destroyed by rotation/pour" }
+  - { name: "Tag", description: "Color-associated, removed on color match" }
+  - { name: "Generator", description: "Stack of colors, pops one at a time" }
+  - { name: "Woodbox", description: "Locked, requires matching key" }
+  - { name: "Frog", description: "Mobile blocker between bottles" }
+  - { name: "Duck", description: "Sits in bottle, captured in DuckHouse" }
+  - { name: "Ivy", description: "Color-binding, locks to specific color" }
+  - { name: "Safe", description: "Requires N completions to unlock, default 3" }
+  - { name: "MagicSeal", description: "Seals bottle until condition met" }
+  - { name: "Toggle", description: "Visibility toggles each turn" }
+  - { name: "Switch", description: "Group-linked simultaneous toggle" }
+  - { name: "Snitch", description: "Cross-level intelligence item" }
+  - { name: "QuestionMark", description: "Random hidden color" }
+  - { name: "Blob", description: "Daily level exclusive" }
+  safe_default_completions: 3      # BlockerBase.cs:219
+
+# ============================================================
+# L. WIN/LOSE CONDITIONS
+# ============================================================
+conditions:
+  win: "All bottles full+monochromatic OR empty"
+  stuck: "No valid pour moves AND not won"
+  pour_rules:
+    - "Origin != Target"
+    - "Origin has water"
+    - "Target top color matches OR target empty"
+    - "Cannot pour monochromatic to empty"
+
+# ============================================================
+# M. ARCHITECTURE SUMMARY
+# ============================================================
+architecture:
+  patterns:
+    - "Singleton<T>"
+    - "SignalBus (pub/sub events)"
+    - "StateMachine<T> (FSM)"
+    - "Command Pattern (undo)"
+    - "DI Container"
+    - "Object Pool"
+    - "Strategy Pattern"
+    - "Observer Pattern"
+    - "MVC separation"
+  layers:
+    core: ["Singleton", "SignalBus", "StateMachine", "DIContainer", "SaveManager", "ColorService"]
+    domain: ["LevelManager", "BottleItem", "PourValidator", "PourProcessor", "CompletionChecker", "UndoManager", "HintCalculator", "BlockerBase (18 types)", "BoosterManager", "CurrencyManager"]
+    game: ["GamePlayController", "SelectionManager", "PopUpService", "HomeStateManager"]
+  states: ["Playing", "Paused", "Win", "Stuck", "Lose", "Quit"]
+  save_prefix: "MS_"

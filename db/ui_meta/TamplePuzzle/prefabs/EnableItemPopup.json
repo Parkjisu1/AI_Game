@@ -1,0 +1,216 @@
+{
+  "fileName": "EnableItemPopup",
+  "filePath": "E:/AIMED/TamplePuzzle/PuzzleAutomation/Assets\\Resources\\Prefabs\\Popup\\EnableItemPopup.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 8,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "8352387368293971741",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "262a9c513a3684f4b80d97d1fd3b74eb",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "ItemExplain",
+      "rectSize": {
+        "x": 1080.0,
+        "y": 503.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 1.0
+      },
+      "sourceFile": "EnableItemPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "8352387368765389135",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 0.39215687
+      },
+      "m_Sprite": {
+        "fileID": 10907,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Panel",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 0.09682102
+      },
+      "sourceFile": "EnableItemPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "8352387369755566774",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "64f1d0623659a4f03acbcfed64c24f74",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "ItemImage",
+      "rectSize": {
+        "x": 358.0,
+        "y": 358.0
+      },
+      "anchoredPosition": {
+        "x": -311.0,
+        "y": -85.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "EnableItemPopup"
+    }
+  ],
+  "texts": [
+    {
+      "type": "Text",
+      "fileID": "8352387368424396512",
+      "m_FontSize": 35.0,
+      "m_Alignment": 3,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "\"\\uB3C4\\uB07C\\uB294 \\uBE14\\uB7ED \\uD558\\uB098\\uB97C \\uC5C6\\uC568 \\uC218",
+      "gameObjectName": "ItemExplain",
+      "rectSize": {
+        "x": 524.2,
+        "y": 157.7
+      },
+      "anchoredPosition": {
+        "x": 438.3,
+        "y": -48.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "EnableItemPopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "8352387369393046171",
+      "m_FontSize": 65.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.67058825,
+        "g": 0.78039217,
+        "b": 0.8509804,
+        "a": 1.0
+      },
+      "m_Text": "ITEM",
+      "gameObjectName": "Title",
+      "rectSize": {
+        "x": 230.0,
+        "y": 75.0
+      },
+      "anchoredPosition": {
+        "x": 16.6,
+        "y": 134.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "EnableItemPopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "8352387370032117822",
+      "m_FontSize": 55.0,
+      "m_Alignment": 6,
+      "m_Color": {
+        "r": 1.0,
+        "g": 0.8248069,
+        "b": 0.0,
+        "a": 1.0
+      },
+      "m_Text": "Cross Bomb",
+      "gameObjectName": "ItemName",
+      "rectSize": {
+        "x": 410.7,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 382.5,
+        "y": 89.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "EnableItemPopup"
+    }
+  ],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 8
+}

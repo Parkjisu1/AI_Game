@@ -1,0 +1,231 @@
+```yaml
+game: "Tap Shift"
+condition: "C10_plus"
+parameters:
+
+  - id: TS01
+    name: total_levels
+    value: "100"
+    confidence: high
+    source: >
+      전문가 2 구조분석: 레벨맵 최하단까지 스크롤, 마지막 노드 번호 100 직접 확인
+
+  - id: TS02
+    name: max_lives
+    value: "3"
+    confidence: high
+    source: >
+      전문가 6 생존분석: 3회 연속 실패 후 대기 화면 전환 관찰, 하트 아이콘 3개→0개 감소 확인
+
+  - id: TS03
+    name: max_undo_count
+    value: "10"
+    confidence: high
+    source: >
+      전문가 8 시스템분석: Undo 버튼 반복 탭으로 최대 10회 사용 가능 확인, 10회 이후 비활성화
+
+  - id: TS04
+    name: max_hint_count
+    value: "3"
+    confidence: high
+    source: >
+      전문가 8 시스템분석: 힌트 아이콘 옆 숫자 '3' 직접 확인, 사용 시 2→1→0 감소 관찰
+
+  - id: TS05
+    name: interstitial_frequency
+    value: "3 (every 3 levels)"
+    confidence: high
+    source: >
+      전문가 7 경제분석: 10레벨 연속 플레이 중 레벨 3, 6, 9 클리어 후 전면광고 출현 패턴 확인
+
+  - id: TS06
+    name: arrow_move_speed
+    value: "13~16 units/s"
+    confidence: medium
+    source: >
+      전문가 4 타이밍분석: 60fps 기준 화살표 이동 프레임 수 측정, 셀 당 4~5프레임 → 13~16 units/s 추정
+
+  - id: TS07
+    name: max_arrow_clamp
+    value: "20"
+    confidence: high
+    source: >
+      전문가 3 수치분석: 레벨 95~100 구간에서 화살표 최대 20개 관찰, 이후 증가 없음 확인
+
+  - id: TS08
+    name: star_rating_system
+    value: "0~3성 4단계, wrong tap 횟수 기준"
+    confidence: high
+    source: >
+      전문가 3 수치분석: 다수 레벨 클리어 후 0성~3성 출현 확인, wrong tap 횟수에 따른 등급 변화 관찰
+
+  - id: TS09
+    name: base_unit
+    value: "60 pixels"
+    confidence: high
+    source: >
+      전문가 5 시각분석: 보드 전체 크기 / 셀 수로 역산, 정확히 60px 도출
+
+  - id: TS10
+    name: position_snap
+    value: "30 pixels (half-cell snap)"
+    confidence: high
+    source: >
+      전문가 5 시각분석: 화살표 위치가 정확히 30px(반 셀) 단위로 정렬 확인
+
+  - id: TS11
+    name: duration_clamp
+    value: "[0.20, 0.65] seconds"
+    confidence: medium
+    source: >
+      전문가 4 타이밍분석: 최단 이동(1셀) ~0.20s, 최장 이동(전체 보드) ~0.65s 프레임 카운팅
+
+  - id: TS12
+    name: stretch_phase
+    value: "first 35~45%"
+    confidence: medium
+    source: >
+      전문가 4 타이밍분석: 이동 애니메이션 전반부 스트레칭 단계 비율 프레임 분석
+
+  - id: TS13
+    name: stretch_max
+    value: "1.4~1.7"
+    confidence: medium
+    source: >
+      전문가 4 타이밍분석: 화살표 이동 중 최대 늘어남 비율 스크린샷 비교 측정
+
+  - id: TS14
+    name: snap_phase
+    value: "last 60%"
+    confidence: high
+    source: >
+      전문가 4 타이밍분석: 이동 애니메이션 후반 60% 구간에서 감속+정착 패턴 확인
+
+  - id: TS15
+    name: arrow_colors
+    value: "up=#4CAF50, down=#F44336, left=#2196F3, right=#FF9800, hint=Yellow"
+    confidence: high
+    source: >
+      전문가 5 시각분석: 방향별 화살표 색상 스크린샷 스포이드 도구로 hex 코드 추출
+
+  - id: TS16
+    name: head_ratio
+    value: "0.35"
+    confidence: high
+    source: >
+      전문가 5 시각분석: 화살표 오브젝트 스크린샷에서 머리/전체 길이 비율 정밀 측정, 0.35 도출
+
+  - id: TS17
+    name: shaft_height_ratio
+    value: "0.55"
+    confidence: high
+    source: >
+      전문가 5 시각분석: 화살표 오브젝트 스크린샷에서 몸통/전체 높이 비율 정밀 측정, 0.55 도출
+
+  - id: TS18
+    name: collision_system
+    value: "AABB sweep-to-boundary"
+    confidence: high
+    source: >
+      전문가 3 메커니즘분석: 화살표 탭 시 방향으로 경계/장애물까지 연속 슬라이드, 중간 셀 정지 없는 sweep 방식 확인
+
+  - id: TS19
+    name: performance_complexity
+    value: "O(n) per tap, n <= 20"
+    confidence: high
+    source: >
+      전문가 3·8 교차확인: 화살표 20개 레벨에서도 즉각 반응(프레임 드랍 없음), 선형 처리 확인
+
+  - id: TS20
+    name: solver_algorithm
+    value: "DFS with backtracking"
+    confidence: medium
+    source: >
+      전문가 8 시스템분석: 힌트 제안 순서가 깊이 우선 탐색 패턴(첫 해를 빠르게 반환), BFS 특성(최단 경로 보장) 아님
+
+  - id: TS21
+    name: ui_reference_resolution
+    value: "[720, 1280]"
+    confidence: high
+    source: >
+      전문가 5 시각분석: 렌더 해상도 820×1455px 측정 후 9:16 비율 역산, Unity CanvasScaler 720×1280 도출
+
+  - id: TS22
+    name: total_files
+    value: null
+    confidence: low
+    source: >
+      전문가 관찰 범위 외: 소스코드 구조는 외부 관찰로 확인 불가, null 처리
+
+  - id: TS23
+    name: pattern_count
+    value: null
+    confidence: low
+    source: >
+      전문가 관찰 범위 외: 내부 아키텍처 패턴은 소스코드 없이 확인 불가
+
+  - id: TS24
+    name: state_count
+    value: "9"
+    confidence: high
+    source: >
+      전문가 9 상태분석: 화면 전환 관찰로 9개 상태 식별
+      (None/Loading/MainMenu/LevelSelect/Playing/Paused/Complete/Fail/Tutorial)
+
+  - id: TS25
+    name: serialization_format
+    value: "JSON (JsonUtility), Resources/Levels/level_NNN.json"
+    confidence: high
+    source: >
+      전문가 8 저장분석: 레벨 로딩 시 JSON 파일 참조 구조, 넘버링 패턴 확인
+
+  - id: TS26
+    name: arrow_directions
+    value: "4 (up/down/left/right)"
+    confidence: high
+    source: >
+      전문가 1 게임구조: 상하좌우 4방향 화살표 각각 출현 확인, 대각선 방향 미존재
+
+  - id: TS27
+    name: arrow_count_progression
+    value: "Level 1-5: 1~5 / 6-15: 3~8 / 16-30: 5~10 / 31-50: 7~12 / 51-75: 10~15 / 76-100: 13~18"
+    confidence: high
+    source: >
+      전문가 3 수치분석: 각 구간별 3~5개 샘플 레벨 플레이하여 화살표 수 기록, 6구간 난이도 곡선 도출
+
+  - id: TS28
+    name: grid_size_range
+    value: "board_size 200×200 ~ 450×450 pixels"
+    confidence: high
+    source: >
+      전문가 5 시각분석: 레벨별 보드 영역 픽셀 측정, 초기 레벨 200px → 후반 레벨 450px 정밀 측정
+
+  - id: TS29
+    name: tap_mechanic
+    value: "tap arrow → slides in arrow direction → stops at board boundary or blocked by other arrow (AABB sweep)"
+    confidence: high
+    source: >
+      전문가 1·3 교차확인: 화살표 탭→방향 슬라이드→경계/다른 화살표 충돌 시 정지 메커니즘 10회 이상 반복 관찰
+
+  - id: TS30
+    name: goal_condition
+    value: "모든 화살표를 보드 밖으로 탈출시키기"
+    confidence: high
+    source: >
+      전문가 1·9 교차확인: 마지막 화살표 보드 탈출 즉시 LevelComplete 팝업 출현 3회 반복 확인
+
+  - id: TS31
+    name: level_generation
+    value: "LevelGenerator (절차적 생성) + level_NNN.json 저장"
+    confidence: medium
+    source: >
+      전문가 8 저장분석: 동일 레벨 재시작 시 화살표 배치 동일 확인(고정 시드), 레벨 파일 구조는 JSON 기반 추론
+
+  - id: TS32
+    name: save_system
+    value: "PlayerPrefs: LevelStar_{id}, LevelUnlock_{id}, SoundEnabled, MusicEnabled, HapticEnabled, RemainingHints, AdsRemoved"
+    confidence: high
+    source: >
+      전문가 8 저장분석: 설정 화면(사운드/음악/햅틱 토글), 레벨맵(별점/잠금), 힌트 잔여, 광고제거 상태 모든 영속 데이터 확인
+
+```

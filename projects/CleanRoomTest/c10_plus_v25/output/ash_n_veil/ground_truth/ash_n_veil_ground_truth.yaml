@@ -1,0 +1,301 @@
+# ============================================================
+# Ash N Veil: Fast Idle Action - Ground Truth (소스코드 추출)
+# ============================================================
+#
+# 용도: C10+ 방법론 정확도 검증
+# 추출: 소스코드 직접 분석 (D:\AshAndVeil_recent\PPM\Assets\Scripts\)
+# 추출일: 2026-02-24
+#
+# 참고: 서버 사이드 데이터(chart tables)는 코드에 하드코딩되어 있지 않음.
+#       코드에서 확인 가능한 구조적 Ground Truth만 추출.
+#
+# ============================================================
+
+version: "1.0"
+game: "Ash N Veil: Fast Idle Action"
+package: "studio.gameberry.anv"
+extraction_date: "2026-02-24"
+
+parameters:
+
+  # ============================================================
+  # A. 진행 구조 (Progression)
+  # ============================================================
+
+  - id: ANV01
+    name: max_chapter
+    ai_estimate: null
+    actual_value: "server_data"
+    source: "MapChart.cs — rows.GroupBy(x => x.key)로 챕터 동적 로드. 챕터 수는 서버 Chart 테이블에 의존"
+    note: "코드에 하드코딩 없음. Map rows 데이터가 서버에서 로드됨"
+
+  - id: ANV02
+    name: stages_per_chapter
+    ai_estimate: 5
+    actual_value: "server_data"
+    source: "MapChart.cs:30-34 — GetChapterInfosByIdx()가 key별 area_no 그룹 반환. 스테이지 수는 챕터마다 가변"
+    note: "챕터마다 다를 수 있음. AI 추정 5는 관찰된 챕터1 기준"
+
+  - id: ANV03
+    name: boss_frequency
+    ai_estimate: 5
+    actual_value: "server_data"
+    source: "BossMonsterChart.cs — boss_no/region 필드로 보스 정의. 등장 빈도는 Map 데이터에 의존"
+    note: "보스 위치는 데이터 드리븐. 매 N스테이지 패턴이 아닐 수 있음"
+
+  - id: ANV04
+    name: auto_battle_unlock
+    ai_estimate: "Lv.3"
+    actual_value: "Account_Level (서버 config)"
+    source: "ChartData.cs:262,277 — MenuTouchType.AutoBattle + ContentsLockType.Account_Level (line 362). open_val은 서버 Config에서 로드"
+    note: "해금 조건 유형은 Account_Level 확인. 구체적 레벨값은 서버 데이터"
+
+  - id: ANV05
+    name: difficulty_modes
+    ai_estimate: null
+    actual_value: "N/A"
+    source: "소스코드 전체 검색 — 난이도 선택 UI/시스템 미발견"
+    note: "게임에 난이도 모드 시스템 없음. 레벨 기반 스케일링만 존재"
+
+  # ============================================================
+  # B. 캐릭터 성장 (Growth)
+  # ============================================================
+
+  - id: ANV06
+    name: base_hp_lv1
+    ai_estimate: 195
+    actual_value: "server_data"
+    source: "StatChart.cs:151 — data.stat.hp = GetStat(level, StatType.HP). GetStat(line 209-237)이 BasicStat + LevelUp + 장비 등 합산"
+    note: "base HP는 BasicStat chart의 stat_key=1008 행. 서버에서 로드"
+
+  - id: ANV07
+    name: base_atk_lv1
+    ai_estimate: 18
+    actual_value: "server_data"
+    source: "StatChart.cs:152 — data.stat.atk = GetStat(level, StatType.ATK). StatType.ATK = 1000"
+    note: "base ATK는 BasicStat chart의 stat_key=1000 행. 서버에서 로드"
+
+  - id: ANV08
+    name: hp_growth_formula
+    ai_estimate: "HP ≈ 197 + 26 × (Lv - 1)"
+    actual_value: "HP(Lv) = BasicStat[HP] + SUM(LevelUp[1..Lv].stat_value where stat_key==1008)"
+    source: "LevelUpChart.cs:42-55 — GetStat()가 level 이하 모든 LevelUpInfo 행의 stat 값 누적 합산"
+    note: "선형이 아닌 누적 테이블 방식. 각 레벨마다 다른 증가분 가능. AI의 선형 추정은 관찰 범위 내 근사값"
+
+  - id: ANV09
+    name: atk_growth_formula
+    ai_estimate: "ATK ≈ 18 + 0.55 × (Lv - 1)"
+    actual_value: "ATK(Lv) = BasicStat[ATK] + SUM(LevelUp[1..Lv].stat_value where stat_key==1000)"
+    source: "LevelUpChart.cs:42-55 — HP와 동일한 누적 합산 구조"
+    note: "ATK도 선형 공식이 아닌 레벨별 개별 증가분 테이블. AI의 선형 근사는 Lv.1~10 범위에서의 관찰 근사"
+
+  - id: ANV10
+    name: exp_curve_formula
+    ai_estimate: null
+    actual_value: "server_data (LevelUpInfo.exp 필드)"
+    source: "LevelUpChart.cs:5-19 — LevelUpInfo 구조체에 exp 필드 존재. 레벨별 요구 경험치는 서버 테이블"
+    note: "공식이 아닌 레벨별 개별 EXP 값 테이블"
+
+  # ============================================================
+  # C. 장비 시스템 (Equipment)
+  # ============================================================
+
+  - id: ANV11
+    name: gear_slot_count
+    ai_estimate: 7
+    actual_value: 15
+    source: "EquippedData.cs:14-28 — weapon/helmet/armor/boots/cloak/quiver/gloves(7) + arrowHead/talisman/seal/medal/ring/necklace/earrings/bracelet(8) = 15슬롯"
+    note: "AI는 초반 캐릭터 화면에서 보이는 7슬롯만 관찰. 나머지 8슬롯(악세서리)은 이후 해금"
+
+  - id: ANV12
+    name: gear_grade_count
+    ai_estimate: null
+    actual_value: 8
+    source: "ItemChart.cs:104-114 — enum Tier { common, uncommon, rare, epic, legendary, mythic, special, legendary_c } = 8등급"
+    note: "common(일반)/uncommon(고급)/rare(희귀)/epic(영웅)/legendary(전설)/mythic(신화)/special(특별)/legendary_c(전설C)"
+
+  - id: ANV13
+    name: enhance_max_level
+    ai_estimate: null
+    actual_value: "per_item_dynamic"
+    source: "InventoryData.cs:254-266 — MaxLevel = Equipment chart의 enhan_level 최대값. 아이템마다 다름"
+    note: "장비마다 강화 최대 레벨이 다름. 서버 Equipment 테이블에 의존"
+
+  - id: ANV14
+    name: enhance_cost_formula
+    ai_estimate: null
+    actual_value: "scroll_consumable_system"
+    source: "ItemChart.cs:95-101,263-285 — ScrollType enum(weapon/armor/special_equip/accessory). EnhancementRateInfo에 enhancement_rate(성공률) 포함"
+    note: "골드 비용 공식이 아닌 스크롤 소모 방식. 스크롤 종류별 성공률이 강화 레벨에 따라 다름"
+
+  # ============================================================
+  # D. 전투 (Combat)
+  # ============================================================
+
+  - id: ANV15
+    name: active_skill_count
+    ai_estimate: 3
+    actual_value: 6
+    source: "SkillData.cs:37 — public const int presetSlotCount = 6"
+    note: "최대 6슬롯. AI는 Lv.10까지 3슬롯만 해금된 상태를 관찰"
+
+  - id: ANV16
+    name: skill_cooldown_range
+    ai_estimate: "0.0 ~ 13.6"
+    actual_value: "server_data (AshActiveSkillChart/HeroSkillChart의 float cooltime 필드)"
+    source: "AshActiveSkillChart.cs, HeroSkillChart.cs — float cooltime 필드"
+    note: "쿨타임은 스킬마다 개별 설정. AI 관찰 범위(0.0~13.6s)는 Lv.3~9에서 관찰된 부분 범위"
+
+  - id: ANV17
+    name: auto_attack_speed
+    ai_estimate: "1.0 ~ 1.5"
+    actual_value: "config('character_basic_att_spd') + stat_growth"
+    source: "StatChart.cs:141 — data.atkSpeed = Config.Get('character_basic_att_spd') + GetStat(level, StatType.Attack_Speed)"
+    note: "기본 공속은 서버 config. 레벨/장비/버프로 변동. interval = 1.0 / atkSpeed"
+
+  - id: ANV18
+    name: damage_formula
+    ai_estimate: null
+    actual_value: "damage = (baseATK + buffATK) × (1 + criDamage if crit) × (1 + superCriDamage if supercrit) × (1 + finalAtkInc) × (1 + weakness) - flatDmgReduction - percentDmgReduction"
+    source: "CharacterPlayer.cs:650-720 — 전체 데미지 계산 로직"
+    note: "크리티컬/슈퍼크리티컬/최종공격력증가/약점/피해감소 5단계 적용"
+
+  - id: ANV19
+    name: critical_rate
+    ai_estimate: "5 ~ 15"
+    actual_value: "float (0.0~1.0), level/equipment dependent"
+    source: "CharacterPlayer.cs:690 — criRate.IsSuccess() 체크. ExtensionMethods.cs:1396-1399 — Random.Range(0,100000) < percent*100000"
+    note: "0.0~1.0 소수 저장 (0.15 = 15%). 레벨/장비/버프로 변동. AI 추정 5~15%는 초반 범위로 합리적"
+
+  - id: ANV20
+    name: critical_multiplier
+    ai_estimate: "1.5 ~ 2.0"
+    actual_value: "additive bonus (criDamage field). effective = 1 + criDamage"
+    source: "CharacterPlayer.cs:692 — realDamage += realDamage * criDamage → 즉 총 배율 = 1 + criDamage"
+    note: "criDamage=0.5이면 1.5배, =1.0이면 2.0배. 추가로 superCrit 별도 존재"
+
+  # ============================================================
+  # E. 가챠/소환 (Gacha)
+  # ============================================================
+
+  - id: ANV21
+    name: gacha_cost_1x
+    ai_estimate: null
+    actual_value: "config('avatar_gacha_amount'/'pet_gacha_amount'/'wand_gacha_amount'/'artifact_gacha_amount')"
+    source: "PopupSummon.cs:75,84,93,102 — 4종 소환별 개별 가격. 서버 Config에서 로드"
+    note: "소환 종류: avatar/pet/wand/artifact 4종. 각각 가격 다름"
+
+  - id: ANV22
+    name: gacha_cost_10x
+    ai_estimate: null
+    actual_value: "1x_price × 10 (할인 없음)"
+    source: "PopupSummon.cs:112 — _btnMulti.SetPrice(goodsType, price * 10)"
+    note: "10연차 = 단가 × 10. 할인율 없음"
+
+  - id: ANV23
+    name: gacha_ssr_rate
+    ai_estimate: null
+    actual_value: "server_data (GachaInfo.gacha_rate per Tier)"
+    source: "GachaChart.cs:11-17 — GachaInfo 구조체에 tier + gacha_rate 필드. Tier별/GachaType별 개별 확률"
+    note: "확률은 서버 테이블. Tier enum: common~mythic 7등급별 확률 배정"
+
+  - id: ANV24
+    name: gacha_pity_count
+    ai_estimate: null
+    actual_value: "server_data (epic/legendary/mythic별 별도 천장)"
+    source: "AvatarChart.cs:244-248, PetChart.cs:244-248 — epic_fusion_reward_count / legendary_fusion_reward_count / mythic_fusion_reward_count"
+    note: "등급별 별도 천장 시스템. epic/legendary/mythic 3단계 천장 존재"
+
+  # ============================================================
+  # F. 경제 (Economy)
+  # ============================================================
+
+  - id: ANV25
+    name: currency_types
+    ai_estimate: 2
+    actual_value: 9
+    source: "GoodsChart.cs:7-24 — enum GoodsType { Gem=2000, Gold=2001, MagicShard=2002, BlackEssence=2003, RoyalCoin=2004, Pact=2005, EventNewYear26=2991, WebShopCoin=2993, Mileage=2999 }"
+    note: "주요 재화 6종 + 이벤트/웹샵/마일리지 3종 = 9종. AI는 HUD에 보이는 Gem+Gold 2종만 관찰"
+
+  - id: ANV26
+    name: idle_gold_per_min
+    ai_estimate: null
+    actual_value: "server_data (OfflineRewardChart, level dependent)"
+    source: "OfflineRewardData.cs:189 — chart = GetChart<OfflineReward>()[level - 1]. 레벨별 보상량 테이블"
+    note: "방치 보상은 계정 레벨에 따라 다름. 고정값이 아닌 레벨 테이블"
+
+  - id: ANV27
+    name: idle_max_accumulation
+    ai_estimate: null
+    actual_value: "config('offline_reward_max_time') (초 단위)"
+    source: "OfflineRewardData.cs:143 — var maxSec = config.GetInt('offline_reward_max_time')"
+    note: "초 단위로 서버 config에 저장. UI에서 /3600 변환하여 시간 표시"
+
+  - id: ANV28
+    name: attendance_days
+    ai_estimate: null
+    actual_value: "server_data (AttendanceChart.day 필드)"
+    source: "AttendanceChart.cs — AttendanceInfo.day 필드. 주기는 서버 데이터"
+    note: "출석 시스템 존재 확인. ClaimContents.Attendance 열거값 존재 (ChartData.cs:311)"
+
+  - id: ANV29
+    name: daily_quest_count
+    ai_estimate: null
+    actual_value: "server_data (MissionChart, type=daily 행 수)"
+    source: "QuestData.cs — chart.rows.Where(x => x.type == category).ToArray()"
+    note: "일일/주간/반복 미션 존재 확인 (ChartData.cs:288-290). 개수는 서버 데이터"
+
+  # ============================================================
+  # G. 시스템 (System)
+  # ============================================================
+
+  - id: ANV30
+    name: pet_system_exists
+    ai_estimate: null
+    actual_value: true
+    source: "PetChart.cs, PetData.cs — 완전한 펫 시스템 구현. GachaType.pet 열거값, ContentsManager.IsUnlock(ContentObj.Category.Pet_gacha)"
+    note: "펫 차트/데이터/가챠 모두 구현됨. 초반에 잠금 상태"
+
+  - id: ANV31
+    name: ui_reference_resolution
+    ai_estimate: "1080x1920"
+    actual_value: "1080x1920"
+    source: "GameManager.cs:245 — defaultRate = 1080f / 1920f"
+    note: "AI 추정 정확. 1080×1920 세로 기준 해상도"
+
+  - id: ANV32
+    name: state_count
+    ai_estimate: 6
+    actual_value: "2 scenes + multi-page system"
+    source: "EditorBuildSettings.asset — 0.Loading, 1.Main 2개 씬. PageTitle/PageLobby/LoadingPage 등 페이지 시스템"
+    note: "Unity 씬은 2개. UI 페이지/팝업으로 화면 전환 관리. AI가 추정한 6개 상태는 주요 UI 페이지 수에 근접"
+
+# ============================================================
+# 소스코드 분석 요약
+# ============================================================
+#
+# 확정 가능 (코드에서 직접 추출):
+#   ANV05: N/A (난이도 없음)
+#   ANV08: 누적 테이블 공식 (LevelUpChart)
+#   ANV09: 누적 테이블 공식 (LevelUpChart)
+#   ANV11: 15슬롯 (EquippedData)
+#   ANV12: 8등급 (Tier enum)
+#   ANV14: 스크롤 소모 방식 (ScrollType)
+#   ANV15: 6슬롯 (presetSlotCount)
+#   ANV18: 복합 데미지 공식 (CharacterPlayer)
+#   ANV22: 1x × 10 (할인 없음)
+#   ANV25: 9종 재화 (GoodsType enum)
+#   ANV30: true (펫 시스템 존재)
+#   ANV31: 1080x1920 (GameManager)
+#   ANV32: 2씬 + 페이지 시스템
+#
+# 서버 의존 (코드에 수치 없음):
+#   ANV01~03: 맵/챕터/보스 데이터
+#   ANV04: auto_battle 해금 레벨값
+#   ANV06~07: base HP/ATK 수치
+#   ANV10: EXP 테이블
+#   ANV13: 강화 최대 레벨
+#   ANV16~17: 쿨타임/공속 기본값
+#   ANV19~20: 크리티컬 확률/배율 초기값
+#   ANV21,23~24: 가챠 비용/확률/천장
+#   ANV26~29: 방치보상/출석/퀘스트 수치

@@ -1,0 +1,574 @@
+################################################################################
+# Magic Sort - Complete Game Balance Sheet
+# Mobile Casual Puzzle Game
+# Generated: 2026-02-19
+################################################################################
+
+bottle_system:
+  max_height: 4                   # Maximum layers (water units) each bottle can hold
+  total_colors: 12                # Total distinct colors in the game across all levels
+  playable_colors: 8              # Max colors used simultaneously in any single level
+  water_per_color: 4              # Units of water per color (always equals max_height)
+  colors:
+    - id: 0   name: "Red"        hex: "#E63946"
+    - id: 1   name: "Blue"       hex: "#457B9D"
+    - id: 2   name: "Green"      hex: "#2DC653"
+    - id: 3   name: "Yellow"     hex: "#F4D35E"
+    - id: 4   name: "Purple"     hex: "#9B5DE5"
+    - id: 5   name: "Orange"     hex: "#F77F00"
+    - id: 6   name: "Pink"       hex: "#FF85A1"
+    - id: 7   name: "Teal"       hex: "#00B4D8"
+    - id: 8   name: "Brown"      hex: "#8B4513"
+    - id: 9   name: "Gray"       hex: "#6C757D"
+    - id: 10  name: "Lime"       hex: "#9EF01A"
+    - id: 11  name: "Magenta"    hex: "#D62598"
+
+################################################################################
+# LEVEL STRUCTURE
+################################################################################
+
+level_structure:
+  builtin_levels: 100             # Hand-crafted levels before procedural generation
+  procedural_after: 100           # Level index at which procedural generation begins
+  max_gen_attempts: 50            # Max solver attempts before falling back to simpler config
+
+  # Hand-crafted level definitions (first 10 shown in full)
+  # Format: colors (number of distinct colors), bottles (total bottle count),
+  #         empty (empty bottle count included in bottles), par (target move count)
+  builtin_level_data:
+    - level: 1
+      colors: 2
+      bottles: 4      # 2 color bottles + 2 empty
+      empty: 2
+      par: 6
+      layout_hint: "tutorial_pour"
+      initial_state:  # top-to-bottom layer order per bottle
+        - [0, 1, 0, 1]   # Bottle A: Red/Blue/Red/Blue
+        - [1, 0, 1, 0]   # Bottle B: Blue/Red/Blue/Red
+        - []              # Bottle C: empty
+        - []              # Bottle D: empty
+
+    - level: 2
+      colors: 2
+      bottles: 4
+      empty: 2
+      par: 7
+      initial_state:
+        - [0, 0, 1, 1]
+        - [1, 1, 0, 0]
+        - []
+        - []
+
+    - level: 3
+      colors: 3
+      bottles: 5      # 3 color bottles + 2 empty
+      empty: 2
+      par: 10
+      initial_state:
+        - [0, 1, 2, 0]
+        - [1, 2, 0, 1]
+        - [2, 0, 1, 2]
+        - []
+        - []
+
+    - level: 4
+      colors: 3
+      bottles: 5
+      empty: 2
+      par: 12
+      initial_state:
+        - [0, 2, 1, 0]
+        - [2, 1, 0, 2]
+        - [1, 0, 2, 1]
+        - []
+        - []
+
+    - level: 5
+      colors: 4
+      bottles: 6      # 4 color bottles + 2 empty
+      empty: 2
+      par: 15
+      initial_state:
+        - [0, 1, 2, 3]
+        - [3, 2, 1, 0]
+        - [1, 3, 0, 2]
+        - [2, 0, 3, 1]
+        - []
+        - []
+
+    - level: 6
+      colors: 4
+      bottles: 6
+      empty: 2
+      par: 17
+      initial_state:
+        - [0, 0, 1, 2]
+        - [3, 1, 2, 3]
+        - [2, 3, 0, 1]
+        - [1, 2, 3, 0]
+        - []
+        - []
+
+    - level: 7
+      colors: 4
+      bottles: 6
+      empty: 2
+      par: 18
+      initial_state:
+        - [0, 3, 1, 2]
+        - [2, 1, 3, 0]
+        - [3, 2, 0, 1]
+        - [1, 0, 2, 3]
+        - []
+        - []
+
+    - level: 8
+      colors: 5
+      bottles: 7      # 5 color bottles + 2 empty
+      empty: 2
+      par: 22
+      initial_state:
+        - [0, 1, 2, 3]
+        - [4, 0, 3, 2]
+        - [1, 4, 0, 3]
+        - [2, 3, 4, 1]
+        - [3, 2, 1, 4]
+        - []
+        - []
+
+    - level: 9
+      colors: 5
+      bottles: 7
+      empty: 2
+      par: 24
+      initial_state:
+        - [0, 2, 4, 1]
+        - [3, 1, 0, 4]
+        - [4, 3, 2, 0]
+        - [1, 4, 3, 2]
+        - [2, 0, 1, 3]
+        - []
+        - []
+
+    - level: 10
+      colors: 5
+      bottles: 7
+      empty: 2
+      par: 26
+      initial_state:
+        - [0, 1, 3, 4]
+        - [2, 4, 0, 1]
+        - [4, 2, 1, 3]
+        - [3, 0, 4, 2]
+        - [1, 3, 2, 0]
+        - []
+        - []
+
+################################################################################
+# DIFFICULTY TIERS
+################################################################################
+
+difficulty:
+  tiers:
+    - name: "Novice"
+      level_range: [1, 20]
+      colors: 2          # distinct colors per level
+      empty_bottles: 2
+      par_formula: "colors * 4 + 2"    # e.g., 2*4+2 = 10
+      blockers_enabled: false
+      max_bottle_count: 4
+
+    - name: "Apprentice"
+      level_range: [21, 50]
+      colors: 3
+      empty_bottles: 2
+      par_formula: "colors * 5 + 3"    # e.g., 3*5+3 = 18
+      blockers_enabled: false
+      max_bottle_count: 5
+
+    - name: "Adept"
+      level_range: [51, 100]
+      colors: 4
+      empty_bottles: 2
+      par_formula: "colors * 5 + 4"    # e.g., 4*5+4 = 24
+      blockers_enabled: true
+      blocker_chance: 0.20             # 20% of bottles may have a blocker
+      max_bottle_count: 6
+
+    - name: "Expert"
+      level_range: [101, 200]
+      colors: 5
+      empty_bottles: 2
+      par_formula: "colors * 6 + 5"    # e.g., 5*6+5 = 35
+      blockers_enabled: true
+      blocker_chance: 0.30
+      max_bottle_count: 7
+
+    - name: "Master"
+      level_range: [201, 400]
+      colors: 6
+      empty_bottles: 2
+      par_formula: "colors * 6 + 6"    # e.g., 6*6+6 = 42
+      blockers_enabled: true
+      blocker_chance: 0.35
+      max_bottle_count: 8
+
+    - name: "Grandmaster"
+      level_range: [401, 999999]
+      colors: 7          # caps at 7 (procedural cap, never uses color 11 alone)
+      empty_bottles: 2
+      par_formula: "colors * 7 + 8"    # e.g., 7*7+8 = 57
+      blockers_enabled: true
+      blocker_chance: 0.40
+      max_bottle_count: 9
+
+################################################################################
+# GRID LAYOUT
+################################################################################
+
+grid_layout:
+  max_per_row: 5                  # Maximum bottles displayed per row
+  h_spacing: 90                   # Horizontal spacing between bottle centers (pixels, 1080px canvas)
+  v_spacing: 200                  # Vertical spacing between rows (pixels)
+  bottle_width: 70                # Bottle sprite width (pixels)
+  bottle_height: 180              # Bottle sprite height (pixels)
+  centering: "horizontal_center"  # Rows are centered horizontally on screen
+  top_margin: 120                 # Distance from top of play area to first row top (pixels)
+  bottom_margin: 80               # Distance from bottom of play area to last row bottom (pixels)
+  overflow_rule: "add_row"        # When bottles exceed max_per_row, wrap to new row
+  max_rows: 3                     # Maximum number of rows before layout scales down
+  scale_down_threshold: 3         # Row count that triggers proportional scale reduction
+  min_scale: 0.70                 # Minimum scale factor applied to bottle sprites
+
+################################################################################
+# ANIMATION
+################################################################################
+
+animation:
+  pour_total_duration: 0.65       # Total seconds for a full pour animation
+
+  # Phase durations (seconds) - must sum <= pour_total_duration
+  phases:
+    lift:   0.10                  # Selected bottle rises vertically
+    move:   0.15                  # Bottle slides horizontally to target
+    tilt:   0.08                  # Bottle rotates to pour angle
+    pour:   0.24                  # Water flows into target bottle
+    return: 0.08                  # Bottle tilts back upright then moves back to slot
+
+  lift_height: 40                 # Pixels the selected bottle rises during lift phase
+  tilt_angle: 110                 # Degrees the bottle rotates for pouring (clockwise)
+  water_flow_rate: 4              # Layers transferred per second during pour phase
+
+  selection_feedback:
+    scale_up: 1.08                # Scale multiplier when bottle is selected
+    scale_duration: 0.10          # Seconds to reach selected scale
+    glow_alpha: 0.85              # Glow overlay alpha on selected bottle
+    bounce_on_invalid: true       # Shake animation when invalid pour is attempted
+    shake_duration: 0.20          # Seconds for invalid-tap shake
+    shake_magnitude: 6            # Pixels of shake displacement
+
+  completion:
+    bottle_bounce_height: 12      # Pixels bottle bounces on single-bottle completion
+    bottle_bounce_duration: 0.30  # Seconds for completion bounce
+    level_clear_delay: 0.80       # Seconds after last bottle completes before clear screen
+    particle_burst_count: 40      # Number of particles emitted per completed bottle
+
+  water_fill:
+    fill_speed: 6.0               # Layers-per-second visual fill animation in target bottle
+
+################################################################################
+# CURRENCY
+################################################################################
+
+currency:
+  starting_coins: 200
+  starting_gems: 5
+
+  reward_per_level:
+    coins_base: 20                # Coins awarded on first clear of any level
+    coins_per_star: 5             # Additional coins per star earned (max +15 for 3 stars)
+    exp_base: 10                  # EXP awarded on first clear
+    exp_per_star: 3               # Additional EXP per star earned
+
+  replay_reward:
+    coins: 5                      # Coins on replaying already-cleared level
+    exp: 0                        # No EXP for replays
+
+  shop_rates:
+    gem_to_coin: 10               # 1 gem = 10 coins conversion (soft exchange)
+    iap_gem_pack_small:  [60,  "$0.99"]
+    iap_gem_pack_medium: [330, "$4.99"]
+    iap_gem_pack_large:  [750, "$9.99"]
+
+################################################################################
+# BOOSTERS
+################################################################################
+
+boosters:
+  - id: "undo"
+    name: "Undo"
+    description: "Revert the last pour move"
+    cost_gems: 0                  # Free via in-level undo button (limited to max_undo_steps)
+    cost_coins: 0
+    initial_inventory: 0          # Tracked separately via undo system
+    icon: "icon_undo"
+
+  - id: "hint"
+    name: "Hint"
+    description: "Highlights the best next move (source and destination bottles)"
+    cost_gems: 1
+    cost_coins: 0
+    initial_inventory: 3          # Players start with 3 free hints
+    icon: "icon_hint"
+
+  - id: "extra_bottle"
+    name: "Extra Bottle"
+    description: "Adds one additional empty bottle to the current level"
+    cost_gems: 2
+    cost_coins: 0
+    initial_inventory: 1
+    icon: "icon_extra_bottle"
+
+  - id: "color_bomb"
+    name: "Color Bomb"
+    description: "Tap a bottle to instantly clear all water of one selected color from it, scattering to compatible bottles"
+    cost_gems: 3
+    cost_coins: 0
+    initial_inventory: 0
+    icon: "icon_color_bomb"
+
+  - id: "magic_wand"
+    name: "Magic Wand"
+    description: "Instantly completes one randomly chosen bottle that is closest to completion"
+    cost_gems: 5
+    cost_coins: 0
+    initial_inventory: 0
+    icon: "icon_magic_wand"
+
+  - id: "shuffle"
+    name: "Shuffle"
+    description: "Randomly redistributes all water layers across all non-completed bottles"
+    cost_gems: 4
+    cost_coins: 0
+    initial_inventory: 0
+    icon: "icon_shuffle"
+
+################################################################################
+# UNDO SYSTEM
+################################################################################
+
+undo:
+  max_steps: 3                    # Maximum consecutive undos without spending gems
+  additional_undo_cost_gems: 1    # Cost to unlock 1 additional undo after max_steps reached
+  method: "stack"                 # Implementation: command pattern stack
+  stack_limit: 30                 # Max states stored in undo stack per session
+
+################################################################################
+# STAR RATING
+################################################################################
+
+star_rating:
+  basis: "move_count"             # Stars rated by how many moves player used vs par
+  formula: "moves_used / par"     # Ratio determines star bracket
+
+  thresholds:
+    three_stars:
+      max_ratio: 1.0              # moves_used <= par  → 3 stars
+    two_stars:
+      max_ratio: 1.5              # par < moves_used <= par*1.5 → 2 stars
+    one_star:
+      max_ratio: 999              # moves_used > par*1.5 → 1 star (any clear = at least 1)
+
+  # Example: par=20, used=18 → ratio=0.90 → 3 stars
+  # Example: par=20, used=28 → ratio=1.40 → 2 stars
+  # Example: par=20, used=35 → ratio=1.75 → 1 star
+
+################################################################################
+# HINT SCORING (Move Evaluation)
+################################################################################
+
+hint_scoring:
+  # Weights used by hint system to rank candidate moves (higher = better)
+  weights:
+    completes_destination_bottle: 100    # Move fills a bottle to single-color completion
+    empties_origin_bottle: 80            # Move completely empties the source bottle
+    matching_color_on_top: 50            # Source top color matches destination top color
+    increases_consolidation: 30          # Move reduces number of distinct color segments in destination
+    frees_blocked_bottle: 40             # Move unlocks a blocker on the origin bottle
+    creates_empty_slot: 60              # Move results in a fully empty bottle
+    destination_is_empty: 10            # Bonus for pouring into an empty bottle (enables flexibility)
+    no_benefit: -10                      # Move has no measurable board improvement
+    splits_color: -30                    # Move would split a contiguous same-color block
+
+  # Tie-breaking rule: if two moves share the same score, prefer the one with the
+  # smaller bottle index (leftmost, top-to-bottom reading order)
+  tiebreak: "lowest_bottle_index"
+
+################################################################################
+# BLOCKER TYPES
+################################################################################
+
+blocker_types:
+  - id: "lock"
+    name: "Lock"
+    description: "A padlock seals the top of the bottle. The top layer cannot be poured OUT until the lock is removed. Removing requires pouring the CORRECT matching color into the bottle once."
+    introduced_level: 51
+    removal_condition: "pour matching color into locked bottle once"
+    affects: "outgoing pours blocked"
+
+  - id: "ice"
+    name: "Ice"
+    description: "A single water layer is frozen solid. It cannot be poured out and acts as a barrier; layers above it can still be poured if they are free. Melts after 2 pours are made INTO the same bottle."
+    introduced_level: 61
+    removal_condition: "2 successful pours into the bottle containing ice layer"
+    affects: "frozen layer immovable; layers above it are still pourable"
+
+  - id: "stopper"
+    name: "Stopper"
+    description: "A cork stopper is jammed in the bottle neck. Only 1 layer can be poured out per action (instead of the normal same-color cascade). Removed after 3 total pours out of the bottle."
+    introduced_level: 75
+    removal_condition: "3 pours out of the stoppered bottle"
+    affects: "pour quantity limited to 1 layer per action"
+
+  - id: "mud"
+    name: "Mud"
+    description: "The bottom layer of the bottle is mud-coated and cannot be moved until all layers above it have been poured out. Once exposed as the sole remaining layer it can be poured normally."
+    introduced_level: 90
+    removal_condition: "all other layers above mud layer removed"
+    affects: "bottom layer locked until bottle has only 1 layer left"
+
+  - id: "chain"
+    name: "Chain"
+    description: "Two bottles are chained together. A pour action on one also forces a simultaneous pour from the other chained bottle into a third bottle (if space exists). Chains break after 4 pours involving either bottle."
+    introduced_level: 110
+    removal_condition: "4 pour actions involving either chained bottle"
+    affects: "linked bottle also pours simultaneously"
+    max_chains_per_level: 1
+
+  - id: "rainbow_layer"
+    name: "Rainbow Layer"
+    description: "A special iridescent layer that mimics any color for matching purposes. It can be poured into any bottle regardless of top color but, once placed, permanently adopts the color of whatever it lands on top of."
+    introduced_level: 130
+    removal_condition: "not a blocker to remove; it is a wildcard layer"
+    affects: "matches any color for pour eligibility"
+
+  - id: "bubble"
+    name: "Bubble"
+    description: "A layer encased in a bubble floats to the top of its bottle regardless of pour order. It must be popped by being successfully poured OUT of the bottle once; until then it rises to position 1 each turn."
+    introduced_level: 150
+    removal_condition: "poured out successfully one time"
+    affects: "always rises to top of its bottle each turn"
+
+################################################################################
+# WIN / LOSS / POUR CONDITIONS
+################################################################################
+
+conditions:
+  win:
+    rule: "all_bottles_single_color_or_empty"
+    description: "Every bottle in the level is either completely empty or contains exactly 4 layers of the same color"
+    check_timing: "after_each_pour_animation_completes"
+
+  stuck:
+    rule: "no_valid_moves_exist"
+    description: "No possible pour can be made: every non-empty bottle's top layer has no valid destination (all other bottles are full or their top layer color doesn't match and they are not empty)"
+    action: "display_stuck_dialog"
+    stuck_dialog_options:
+      - "Use Shuffle booster"
+      - "Use Extra Bottle booster"
+      - "Restart level"
+      - "Quit to menu"
+
+  pour_rules:
+    - id: "pour_rule_1"
+      rule: "source_must_be_non_empty"
+      description: "Cannot pour from an empty bottle"
+
+    - id: "pour_rule_2"
+      rule: "destination_must_not_be_full"
+      description: "Cannot pour into a bottle that already has 4 layers"
+
+    - id: "pour_rule_3"
+      rule: "color_match_or_empty_destination"
+      description: "Can only pour into a bottle if the destination is empty OR the destination's top layer color equals the source's top layer color"
+
+    - id: "pour_rule_4"
+      rule: "cascade_same_color"
+      description: "When pouring, ALL consecutive same-color layers at the top of the source bottle are transferred in one action, up to the available space in the destination (Stopper blocker overrides this to 1)"
+
+    - id: "pour_rule_5"
+      rule: "cannot_pour_into_self"
+      description: "Tapping the same bottle twice deselects it; no self-pour is possible"
+
+    - id: "pour_rule_6"
+      rule: "cannot_pour_completed_bottle"
+      description: "A bottle flagged as 'completed' (single-color full) cannot be used as source or destination"
+
+################################################################################
+# ARCHITECTURE
+################################################################################
+
+architecture:
+  patterns:
+    - "Singleton<T> (GameManager, AudioManager, DataManager, LevelLoader)"
+    - "ObjectPool<BottleView> (recycle bottle view objects between levels)"
+    - "Command (PourCommand, UndoStack)"
+    - "Observer / UnityEvent (game state change notifications)"
+    - "State Machine (GameStateMachine: Idle, Selecting, Animating, Checking, Paused, Win, Stuck)"
+    - "Factory (LevelFactory for procedural generation)"
+    - "ScriptableObject (LevelData, ColorPalette, BlockerConfig, BoosterConfig)"
+
+  layers:
+    core:
+      - "Singleton<T>"
+      - "ObjectPool<T>"
+      - "GameStateMachine"
+      - "AudioManager"
+      - "SaveManager"
+      - "EventBus"
+
+    domain:
+      - "BottleModel (data: layers[], isCompleted, blockerType)"
+      - "BoardModel (list of BottleModels, level metadata)"
+      - "PourCalculator (valid pour check, cascade count)"
+      - "HintCalculator (scored move list)"
+      - "ProcLevelGenerator (generates random solvable boards)"
+      - "UndoStack (PourCommand stack)"
+      - "CurrencyManager (coins, gems, persist)"
+      - "BoosterManager (inventory, apply booster)"
+      - "StarRatingCalculator"
+
+    game:
+      - "GameManager (orchestrates flow)"
+      - "LevelLoader (loads builtin or procedural LevelData)"
+      - "BottleController (input, selection, trigger pour)"
+      - "BottleView (visual, animation, water fill)"
+      - "BoardView (layout, instantiate/recycle BottleViews)"
+      - "UIManager (HUD, star display, move counter)"
+      - "HUD (gems, coins, moves, booster buttons)"
+      - "WinPopup"
+      - "StuckPopup"
+      - "PausePopup"
+      - "ShopPopup"
+
+  states:
+    - "Idle"           # No bottle selected, awaiting player input
+    - "Selecting"      # One bottle selected, awaiting destination tap
+    - "Animating"      # Pour animation in progress, input blocked
+    - "Checking"       # Post-pour: evaluate win/stuck conditions
+    - "Win"            # Level cleared, show win popup
+    - "Stuck"          # No valid moves, show stuck dialog
+    - "Paused"         # Game paused, overlay shown
+
+  save_prefix: "MagicSort_"       # PlayerPrefs / file key prefix
+  serialization: "JSON"           # Save format for level progress, currency, inventory
+  save_keys:
+    level_progress: "MagicSort_LevelProgress"   # int: highest level unlocked
+    star_data:      "MagicSort_Stars"            # JSON array: star counts per level index
+    coins:          "MagicSort_Coins"            # int
+    gems:           "MagicSort_Gems"             # int
+    booster_hint:   "MagicSort_Booster_Hint"     # int: inventory count
+    booster_extra:  "MagicSort_Booster_Extra"    # int: inventory count
+    booster_bomb:   "MagicSort_Booster_Bomb"     # int: inventory count
+    booster_wand:   "MagicSort_Booster_Wand"     # int: inventory count
+    booster_shuffle:"MagicSort_Booster_Shuffle"  # int: inventory count

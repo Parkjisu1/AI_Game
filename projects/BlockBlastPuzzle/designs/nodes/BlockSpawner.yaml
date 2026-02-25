@@ -1,0 +1,50 @@
+node:
+  name: BlockSpawner
+  layer: Domain
+  genre: Puzzle
+  role: Factory
+  file: BlockSpawner.cs
+  namespace: BlockBlast.Domain
+
+spec:
+  description: "3개의 후보 블록 생성/관리. 모두 배치 후 새 세트 생성"
+  base_class: "Singleton<BlockSpawner>"
+  provides:
+    - "SpawnCandidates"
+    - "RemoveCandidate"
+    - "HasValidPlacement"
+    - "GetCandidates"
+  requires:
+    - "BlockData"
+    - "BlockVisual"
+    - "SpriteFactory"
+    - "GameBoard"
+
+  constants:
+    - { name: CANDIDATE_COUNT, value: 3 }
+    - { name: CANDIDATE_SCALE, value: 0.6f }
+
+  members:
+    - name: _candidates
+      type: "List<BlockVisual>"
+      access: private
+    - name: _candidateParent
+      type: Transform
+      access: private
+
+  methods:
+    - name: SpawnCandidates
+      logic: |
+        3개 랜덤 블록 생성
+        화면 하단 균등 배치
+        각 BlockVisual에 드래그 핸들러 연결
+    - name: RemoveCandidate
+      params: [{ name: block, type: BlockVisual }]
+      logic: |
+        배치된 블록 제거
+        모두 배치되면 새 세트 생성
+    - name: HasAnyValidPlacement
+      returns: bool
+      logic: "남은 후보 중 배치 가능한 것이 있는지"
+    - name: RemainingCount
+      returns: int

@@ -1,0 +1,85 @@
+{
+  "fileName": "Gacha_Yellow",
+  "filePath": "E:/AIMED/Luffy/IdleMoney1/Project/Assets\\IdleMoney\\Prefabs\\UI\\Gacha_Yellow.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 11,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "9069898865926596644",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 0.0
+      },
+      "m_Sprite": {
+        "fileID": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Back_1",
+      "rectSize": {
+        "x": 3000.0,
+        "y": 2000.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Gacha_Yellow"
+    },
+    {
+      "type": "Image",
+      "fileID": "9069898866522427549",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 0.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "4c8f1e50ed97795438ab578a63535f4a",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "CardLight",
+      "rectSize": {
+        "x": 256.0,
+        "y": 289.0
+      },
+      "anchoredPosition": {
+        "x": -16.1,
+        "y": -0.4
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Gacha_Yellow"
+    }
+  ],
+  "texts": [],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 12
+}

@@ -1,0 +1,68 @@
+# HoleController - Domain Hole Object Controller
+metadata:
+  nodeId: "HoleController"
+  version: "1.0.0"
+  phase: 1
+  role: "Controller"
+
+dependencies:
+  internal:
+    - "GridManager"
+    - "ObjectPool"
+  external:
+    - "UnityEngine"
+
+contract:
+  provides:
+    - "void Init(CatColor color, Vector2Int gridPos)"
+    - "void OnCatDropped()"
+    - "void PlayMatchEffect()"
+    - "CatColor Color { get; }"
+    - "Vector2Int GridPosition { get; set; }"
+    - "HoleState CurrentState { get; }"
+    - "bool IsMatched { get; }"
+    - "bool IsRainbow { get; }"
+    - "bool IsTrap { get; }"
+  requires:
+    - "GridManager.GridToWorld"
+    - "ObjectPool (이펙트 생성)"
+
+tags:
+  layer: "Domain"
+  genre: "Puzzle"
+  role: "Controller"
+  system: "Hole"
+  majorFunctions:
+    - "StateControl"
+  minorFunctions:
+    - "Assign"
+    - "Notify"
+    - "Spawn"
+
+logicFlow:
+  - step: 1
+    tag: "StateControl"
+    action: "Init - 색상에 따라 구멍 비주얼 설정 (테두리/이펙트 색상)"
+    next: 2
+  - step: 2
+    tag: "StateControl"
+    action: "OnCatDropped - Matched 상태로 전환 → 매칭 성공 이펙트 재생"
+    next: 3
+  - step: 3
+    tag: "FlowControl"
+    action: "PlayMatchEffect - 파티클 이펙트 + 색상 플래시"
+    next: null
+
+referencePatterns:
+  - source: "db/base/puzzle/domain/DontMoveHoleTile"
+    pattern: "구멍/고정 타일 패턴, 매칭 후 상태 변경"
+
+codeHints:
+  patterns:
+    - "public class HoleController : MonoBehaviour"
+    - "enum HoleState { Active, Matched }"
+    - "구멍은 타일의 자식으로 배치 (타일과 함께 이동)"
+    - "SpriteRenderer 색상 = CatColor에 매핑된 Color"
+  avoidPatterns:
+    - "구멍 단독 이동 금지 (타일 소속으로만 이동)"
+    - "매칭 완료된 구멍 재사용 금지"

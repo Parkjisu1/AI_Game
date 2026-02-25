@@ -1,0 +1,242 @@
+{
+  "fileName": "MainMenuHUDWin",
+  "filePath": "E:/AIMED/Luffy/IdleMoney1/Project/Assets\\IdleMoney\\Prefabs\\UI\\Windows\\MainMenuHUDWin.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 23,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [
+    {
+      "type": "CanvasGroup",
+      "fileID": "5587567103888057948",
+      "m_Alpha": 1,
+      "m_Interactable": 1,
+      "m_BlocksRaycasts": 1,
+      "m_IgnoreParentGroups": 0,
+      "gameObjectName": "MainMenuHUDWin",
+      "rectSize": {
+        "x": 1280.0,
+        "y": 768.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  ],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "6212714524987413351",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "SizableBG",
+      "rectSize": {
+        "x": 805.4989,
+        "y": 134.0
+      },
+      "anchoredPosition": {
+        "x": 535.0,
+        "y": 91.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MainMenuHUDWin"
+    }
+  ],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "5700068478527528669",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "15bb235f6fc938649b6419a3cdae7693",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "SizableBG",
+      "rectSize": {
+        "x": 805.4989,
+        "y": 134.0
+      },
+      "anchoredPosition": {
+        "x": 535.0,
+        "y": 91.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MainMenuHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "1860704950579435371",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "76d9ed7d45a5b674891c427838476fe6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "LockBG",
+      "rectSize": {
+        "x": 700.0,
+        "y": 134.0
+      },
+      "anchoredPosition": {
+        "x": 535.0,
+        "y": 91.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MainMenuHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "741288940052984591",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "a7026b6cc8365493c820329f8236c17b",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "SizableBtn",
+      "rectSize": {
+        "x": 25.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 372.0,
+        "y": -1.3
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MainMenuHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "8971160453691602123",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "0d2cdd65b17314b5fa78e32be7a82bb9",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "icon_Notification",
+      "rectSize": {
+        "x": 30.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 28.099976,
+        "y": 67.70001
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MainMenuHUDWin"
+    }
+  ],
+  "texts": [],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 21
+}

@@ -1,0 +1,95 @@
+# GameManager - Game Flow Controller
+metadata:
+  nodeId: "GameManager"
+  version: "1.0.0"
+  phase: 3
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "LevelManager"
+    - "SlideProcessor"
+    - "DropProcessor"
+    - "BoosterManager"
+    - "CurrencyManager"
+    - "SaveManager"
+    - "SoundManager"
+    - "EventManager"
+  external:
+    - "UnityEngine"
+    - "UnityEngine.SceneManagement"
+
+contract:
+  provides:
+    - "void StartLevel(int levelNumber)"
+    - "void RetryLevel()"
+    - "void GoToMain()"
+    - "void PauseGame()"
+    - "void ResumeGame()"
+    - "void QuitGame()"
+    - "GameState CurrentState { get; }"
+    - "bool IsPaused { get; }"
+  requires:
+    - "Singleton<GameManager>"
+    - "LevelManager.LoadLevel/RetryLevel/NextLevel"
+    - "SlideProcessor.IsProcessing"
+    - "DropProcessor.IsDropping"
+    - "BoosterManager.ResetLevelUsage"
+    - "CurrencyManager.AddCoins"
+    - "SaveManager (설정 관리)"
+    - "SoundManager.PlayBGM"
+    - "EventManager.Subscribe/Publish"
+
+tags:
+  layer: "Game"
+  genre: "Puzzle"
+  role: "Manager"
+  system: "GameFlow"
+  majorFunctions:
+    - "FlowControl"
+    - "StateControl"
+  minorFunctions:
+    - "Notify"
+    - "Validate"
+    - "Assign"
+
+logicFlow:
+  - step: 1
+    tag: "StateControl"
+    action: "앱 시작 → Title 상태 → 초기 로딩 → Main 상태 전환"
+    next: 2
+  - step: 2
+    tag: "FlowControl"
+    action: "StartLevel - Loading 상태 → LevelManager.LoadLevel → ScoreCalculator.Reset → BoosterManager.ResetLevelUsage → Playing 상태"
+    next: 3
+  - step: 3
+    tag: "FlowControl"
+    action: "Playing 중 OnLevelCleared 수신 → CoinReward 지급 → Result 상태 → LevelClearPopup 표시"
+    next: 4
+  - step: 4
+    tag: "FlowControl"
+    action: "Playing 중 OnLevelFailed 수신 → Result 상태 → LevelFailPopup 표시"
+    next: 5
+  - step: 5
+    tag: "StateControl"
+    action: "PauseGame - Time.timeScale = 0, ResumeGame - Time.timeScale = 1"
+    next: 6
+  - step: 6
+    tag: "FlowControl"
+    action: "GoToMain - 그리드 정리 → Main 상태 → 메인 씬 로드"
+    next: null
+
+referencePatterns:
+  - source: "Generic Core"
+    pattern: "FSM 기반 게임 흐름 제어, 씬 전환 관리"
+
+codeHints:
+  patterns:
+    - "public class GameManager : Singleton<GameManager>"
+    - "enum GameState { Title, Main, Loading, Playing, Paused, Result }"
+    - "씬 전환: SceneManager.LoadScene (Title, Main, GameScene)"
+    - "인터스티셜 광고: 매 N레벨 클리어 후 표시 (카운터 관리)"
+  avoidPatterns:
+    - "게임 로직 직접 구현 금지 (각 시스템에 위임)"
+    - "Update에서 상태 체크 금지 (이벤트 기반)"

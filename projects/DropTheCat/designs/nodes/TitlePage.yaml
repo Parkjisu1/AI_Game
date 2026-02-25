@@ -1,0 +1,59 @@
+# TitlePage - Game Title Screen
+metadata:
+  nodeId: "TitlePage"
+  version: "1.0.0"
+  phase: 3
+  role: "Handler"
+
+dependencies:
+  internal:
+    - "GameManager"
+  external:
+    - "UnityEngine"
+    - "UnityEngine.UI"
+    - "System.Collections"
+
+contract:
+  provides:
+    - "void ShowLoading()"
+    - "void UpdateProgress(float progress)"
+  requires:
+    - "GameManager.GoToMain (로딩 완료 시 전환)"
+
+tags:
+  layer: "Game"
+  genre: "Puzzle"
+  role: "Handler"
+  system: "UI"
+  majorFunctions:
+    - "FlowControl"
+  minorFunctions:
+    - "Assign"
+    - "Delay"
+
+logicFlow:
+  - step: 1
+    tag: "FlowControl"
+    action: "씬 Start - 로고 표시 → 로딩 코루틴 시작"
+    next: 2
+  - step: 2
+    tag: "FlowControl"
+    action: "초기 데이터 로드 (SaveManager, LevelDataProvider 초기화)"
+    next: 3
+  - step: 3
+    tag: "FlowControl"
+    action: "로딩 완료 → 페이드 아웃 → Main 씬 전환"
+    next: null
+
+referencePatterns:
+  - source: "Generic Game"
+    pattern: "로딩 화면 + 진행바 + 자동 씬 전환"
+
+codeHints:
+  patterns:
+    - "public class TitlePage : MonoBehaviour"
+    - "SerializeField: Image logo, Slider loadingBar, Text versionText"
+    - "코루틴으로 AsyncOperation 진행률 표시"
+    - "최소 로딩 시간 (2초) 보장으로 스플래시 경험"
+  avoidPatterns:
+    - "게임 로직 초기화를 여기서 하지 말 것 (GameManager 담당)"

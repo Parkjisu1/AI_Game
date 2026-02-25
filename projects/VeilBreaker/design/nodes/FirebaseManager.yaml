@@ -1,0 +1,105 @@
+metadata:
+  nodeId: "FirebaseManager"
+  version: "1.0.0"
+  phase: 3
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "EventManager"
+    - "GameConstants"
+  external:
+    - "UnityEngine"
+    - "#if FIREBASE_ANALYTICS: Firebase"
+    - "#if FIREBASE_ANALYTICS: Firebase.Analytics"
+
+contract:
+  provides:
+    - "void Init()"
+    - "void LogEvent(string name)"
+    - "void LogEvent(string name, Dictionary<string, object> parameters)"
+    - "void LogStageClear(string stageId)"
+    - "void LogGachaPull(string bannerId, string result)"
+    - "void LogIAPPurchase(string productId, double price)"
+  requires:
+    - "Singleton"
+
+tags:
+  layer: "Game"
+  genre: "Generic"
+  role: "Manager"
+  system: "SDK"
+  majorFunctions:
+    - "DataSync"
+    - "ResourceTransfer"
+  minorFunctions:
+    - "Notify"
+
+logicFlow:
+  - step: 1
+    tag: "StateControl"
+    action: "#if FIREBASE_ANALYTICS: FirebaseApp.CheckAndFixDependenciesAsync()"
+    next: 2
+  - step: 2
+    tag: "Assign"
+    action: "성공 시 _isInitialized = true / #else: Debug.Log 시뮬레이션 모드"
+    next: null
+  - step: 3
+    tag: "DataSync"
+    action: "LogEvent: #if → FirebaseAnalytics.LogEvent / #else → Debug.Log"
+    next: null
+  - step: 4
+    tag: "ResponseTrigger"
+    action: "OnStageComplete 수신: LogStageClear(stageId)"
+    next: null
+
+referencePatterns:
+  - source: "CLAUDE.md"
+    pattern: "Firebase Analytics SDK 13.7.0 - ParameterItemId → 'item_id' 문자열 사용"
+  - source: "CLAUDE.md"
+    pattern: "조건부 컴파일: using 문도 #if 블록 안에 포함"
+
+codeHints:
+  patterns:
+    - |
+      #if FIREBASE_ANALYTICS
+      using Firebase;
+      using Firebase.Analytics;
+      #endif
+
+      public class FirebaseManager : Singleton<FirebaseManager>
+      {
+      #if FIREBASE_ANALYTICS
+          private bool _isInitialized;
+
+          public void Init()
+          {
+              FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
+                  if (task.Result == DependencyStatus.Available) {
+                      _isInitialized = true;
+                      FirebaseAnalytics.SetAnalyticsCollectionEnabled(true);
+                  }
+              });
+          }
+
+          public void LogEvent(string name, Dictionary<string, object> parameters = null)
+          {
+              if (!_isInitialized) return;
+              if (parameters == null) {
+                  FirebaseAnalytics.LogEvent(name);
+              } else {
+                  var ps = parameters.Select(kv => new Parameter(kv.Key, kv.Value.ToString())).ToArray();
+                  FirebaseAnalytics.LogEvent(name, ps);
+              }
+          }
+      #else
+          public void Init() => Debug.Log("[Firebase Sim] Initialized");
+          public void LogEvent(string name, Dictionary<string, object> p = null) => Debug.Log($"[Firebase Sim] Event: {name}");
+      #endif
+      }
+    - "ParameterItemId → 'item_id' 문자열 직접 사용 (SDK 13.7.0+)"
+    - "minSdkVersion >= 24 필수"
+  avoidPatterns:
+    - "using 문을 #if 블록 밖에 배치 금지"
+    - "FirebaseAnalytics.ParameterItemId 상수 사용 금지 → 'item_id' 직접 사용"

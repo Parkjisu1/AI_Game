@@ -1,0 +1,249 @@
+## 채점 결과
+
+```yaml
+scoring:
+  game: "Magic Sort"
+  condition: "D1_10"
+  results:
+
+    - id: MS01
+      name: bottle_max_height
+      ground_truth: "4"
+      generated: "4"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: MS02
+      name: colors_total
+      ground_truth: "17"
+      generated: "15"
+      score: 0.7
+      note: "15 vs 17 — 12% 차이, Close"
+
+    - id: MS03
+      name: colors_playable
+      ground_truth: "13"
+      generated: "12"
+      score: 0.7
+      note: "12 vs 13 — 8% 차이, Close"
+
+    - id: MS04
+      name: builtin_levels
+      ground_truth: "10"
+      generated: "10"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: MS05
+      name: procedural_after_level
+      ground_truth: "10"
+      generated: "10"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: MS06
+      name: max_gen_attempts
+      ground_truth: "100"
+      generated: "50~100"
+      score: 0.4
+      note: "범위가 넓고 GT 100은 포함하나 정확도 낮음"
+
+    - id: MS07
+      name: difficulty_tier_count
+      ground_truth: "3"
+      generated: "3"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: MS08
+      name: tier_color_counts
+      ground_truth: "[4, 7, 10]"
+      generated: "[4, 7, 10]"
+      score: 1.0
+      note: "정확 일치 — 패턴카드로 정확한 티어별 색상 수 확인"
+
+    - id: MS09
+      name: tier_level_ranges
+      ground_truth: "Default:1-20 / Hard:21-60 / SuperHard:61+"
+      generated: "Default:1-18 / Hard:19-55 / SuperHard:56+"
+      score: 0.7
+      note: "구간 구분 맞고 전환점 근접 (18 vs 20, 55 vs 60 — 각 10~17% 차이)"
+
+    - id: MS10
+      name: par_bonus_values
+      ground_truth: "[5, 3, 0]"
+      generated: "[5, 3, 0]"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: MS11
+      name: par_formula
+      ground_truth: "basePar = colorCount * 3 + par_bonus"
+      generated: "basePar = colorCount * 3 + bonus"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: MS12
+      name: max_per_row
+      ground_truth: "5"
+      generated: "5"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: MS13
+      name: h_spacing
+      ground_truth: "1.5"
+      generated: "1.2"
+      score: 0.4
+      note: "1.2 vs 1.5 — 20% 차이 경계"
+
+    - id: MS14
+      name: v_spacing
+      ground_truth: "2.5"
+      generated: "2.2"
+      score: 0.7
+      note: "2.2 vs 2.5 — 12% 차이, Close"
+
+    - id: MS15
+      name: pour_total_duration
+      ground_truth: "0.4"
+      generated: "0.3s"
+      score: 0.4
+      note: "0.3 vs 0.4 — 25% 차이, 개념 맞으나 수치 차이"
+
+    - id: MS16
+      name: lift_height
+      ground_truth: "1.5"
+      generated: "1.0"
+      score: 0.4
+      note: "1.0 vs 1.5 — 33% 차이"
+
+    - id: MS17
+      name: tilt_angle
+      ground_truth: "60"
+      generated: "45°"
+      score: 0.4
+      note: "45 vs 60 — 25% 차이"
+
+    - id: MS18
+      name: starting_coins
+      ground_truth: "100"
+      generated: "100"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: MS19
+      name: starting_gems
+      ground_truth: "5"
+      generated: "5"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: MS20
+      name: booster_type_count
+      ground_truth: "5"
+      generated: "5"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: MS21
+      name: booster_initial_counts
+      ground_truth: "extra_bottle:3, shuffle:3, undo:5, hint:5, color_clear:1"
+      generated: "extra_bottle:3, shuffle:3, undo:5, hint:5, color_clear:1"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: MS22
+      name: undo_max_steps
+      ground_truth: "50"
+      generated: "30"
+      score: 0.4
+      note: "30 vs 50 — 40% 차이"
+
+    - id: MS23
+      name: star_rating_3star
+      ground_truth: "moveCount <= par"
+      generated: "moveCount <= par"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: MS24
+      name: star_rating_2star_threshold
+      ground_truth: "moveCount <= par * 1.5"
+      generated: "moveCount <= par * 1.5"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: MS25
+      name: hint_scoring_system
+      ground_truth: "completing_bottle:100, monochromatic_target:50, emptying_origin:30, non_empty_target:20, origin_becomes_mono:15, per_layer_moved:10, empty_target_penalty:-5"
+      generated: "completing_bottle:100, monochromatic_target:50, emptying_origin:30, non_empty_target:20, per_layer_moved:10"
+      score: 0.7
+      note: "주요 가중치 맞으나 origin_becomes_mono(15), empty_target_penalty(-5) 누락"
+
+    - id: MS26
+      name: blocker_type_count
+      ground_truth: "18"
+      generated: "12~15"
+      score: 0.4
+      note: "12~15 vs 18 — 17~33% 차이, 개념 맞으나 수치 부족"
+
+    - id: MS27
+      name: save_prefix
+      ground_truth: "MS_"
+      generated: "MS_"
+      score: 1.0
+      note: "정확 일치 — 패턴카드에서 저장 접두사 확인"
+
+    - id: MS28
+      name: pattern_count
+      ground_truth: "9 (Singleton/SignalBus/StateMachine/Command/DI/ObjectPool/Strategy/Observer/MVC)"
+      generated: "7 (Singleton/SignalBus/StateMachine/Command/ObjectPool/Strategy/Observer)"
+      score: 0.4
+      note: "7 vs 9 — DI, MVC 누락, 주요 패턴 식별"
+
+    - id: MS29
+      name: state_count
+      ground_truth: "6 (Playing/Paused/Win/Stuck/Lose/Quit)"
+      generated: "6 (Playing/Paused/Win/Stuck/Lose/Quit)"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: MS30
+      name: pour_mechanic
+      ground_truth: "(tap 기반, 명시값 없음)"
+      generated: "tap 기반 물약 붓기"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: MS31
+      name: win_condition
+      ground_truth: "All bottles full+monochromatic OR empty"
+      generated: "All bottles full+monochromatic OR empty"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: MS32
+      name: empty_bottles_formula
+      ground_truth: "2 (모든 티어 고정값)"
+      generated: "2 (모든 티어 고정)"
+      score: 1.0
+      note: "정확 일치 — 패턴카드에서 고정값 확인"
+
+  summary:
+    total: 32
+    sum: 25.7
+    average: 0.803
+```
+
+---
+
+### 점수 분포 요약
+
+| 점수 | 파라미터 수 | 해당 항목 |
+|------|-----------|----------|
+| **1.0** Exact | 19 | MS01, MS04, MS05, MS07, MS08, MS10, MS11, MS12, MS18, MS19, MS20, MS21, MS23, MS24, MS27, MS29, MS30, MS31, MS32 |
+| **0.7** Close | 5 | MS02, MS03, MS09, MS14, MS25 |
+| **0.4** Partial | 8 | MS06, MS13, MS15, MS16, MS17, MS22, MS26, MS28 |
+| **0.1** Wrong | 0 | - |
+| **0.0** Missing/Null | 0 | - |

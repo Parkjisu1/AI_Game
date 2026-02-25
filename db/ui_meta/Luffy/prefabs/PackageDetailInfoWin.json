@@ -1,0 +1,752 @@
+{
+  "fileName": "PackageDetailInfoWin",
+  "filePath": "E:/AIMED/Luffy/IdleMoney1/Project/Assets\\IdleMoney\\Prefabs\\UI\\Windows\\PackageDetailInfoWin.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 25,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [
+    {
+      "type": "CanvasGroup",
+      "fileID": "6899145019717594192",
+      "m_Alpha": 1,
+      "m_Interactable": 1,
+      "m_BlocksRaycasts": 1,
+      "m_IgnoreParentGroups": 0,
+      "gameObjectName": "PackageDetailInfoWin",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      }
+    }
+  ],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "1239429743306604176",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "BtnOK",
+      "rectSize": {
+        "x": 217.0,
+        "y": 120.0
+      },
+      "anchoredPosition": {
+        "x": -0.9,
+        "y": -282.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageDetailInfoWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "6249191010721388763",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "AlreadyBuyImg",
+      "rectSize": {
+        "x": 217.0,
+        "y": 120.0
+      },
+      "anchoredPosition": {
+        "x": -0.9,
+        "y": -282.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageDetailInfoWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "468350007900918094",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "PrivacyPolicy",
+      "rectSize": {
+        "x": 200.0,
+        "y": 40.0
+      },
+      "anchoredPosition": {
+        "x": 436.39996,
+        "y": 69.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageDetailInfoWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "7640019212305247453",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "PurchaseDesc_BtnBG",
+      "rectSize": {
+        "x": 200.0,
+        "y": 80.0
+      },
+      "anchoredPosition": {
+        "x": 436.39996,
+        "y": 93.5
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageDetailInfoWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "1817804917931233495",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "TermsOfService",
+      "rectSize": {
+        "x": 200.0,
+        "y": 40.0
+      },
+      "anchoredPosition": {
+        "x": 436.39996,
+        "y": 111.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageDetailInfoWin"
+    }
+  ],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "1239429741837275648",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "52806427203615b40b52203f18fcfe11",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BG",
+      "rectSize": {
+        "x": 3000.0,
+        "y": 3000.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageDetailInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "1239429743306604175",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "d3edc68eb166e4c69a52a94502c2f4a6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BtnOK",
+      "rectSize": {
+        "x": 217.0,
+        "y": 120.0
+      },
+      "anchoredPosition": {
+        "x": -0.9,
+        "y": -282.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageDetailInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "1239429743693648284",
+      "m_Type": 2,
+      "m_Color": {
+        "r": 0.8784314,
+        "g": 0.33333334,
+        "b": 0.43529412,
+        "a": 0.5019608
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "10d716444145246df85846c6cc8aea20",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "PatternImg",
+      "rectSize": {
+        "x": 3000.0,
+        "y": 3000.0
+      },
+      "anchoredPosition": {
+        "x": -3.0,
+        "y": -35.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageDetailInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "8089322397921125233",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "b4d7ba85a8c4b9d4195fc42dd1b12973",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "PackageIconImg",
+      "rectSize": {
+        "x": 350.0,
+        "y": 398.0
+      },
+      "anchoredPosition": {
+        "x": -617.6,
+        "y": 0.3
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageDetailInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "5365176740389861159",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 0.0
+      },
+      "m_Sprite": {
+        "fileID": 0
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "PackageImagesBG",
+      "rectSize": {
+        "x": 870.0,
+        "y": 398.0
+      },
+      "anchoredPosition": {
+        "x": 172.6,
+        "y": -5.6
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageDetailInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "5163384257883950487",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "eccb8c233c3b14b9ea3d9243f05d0828",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "AlreadyBuyImg",
+      "rectSize": {
+        "x": 217.0,
+        "y": 120.0
+      },
+      "anchoredPosition": {
+        "x": -0.9,
+        "y": -282.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageDetailInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "9050593594860848714",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "51471f9b4fc7b43d8ae8e8512e393bcd",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "PrivacyPolicy",
+      "rectSize": {
+        "x": 200.0,
+        "y": 40.0
+      },
+      "anchoredPosition": {
+        "x": 436.39996,
+        "y": 69.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageDetailInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "6841377377107235682",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.3019608,
+        "g": 0.08235294,
+        "b": 0.29803923,
+        "a": 0.5019608
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8cbf0c754bcae4b598aeae1646c5d200",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "DescBG",
+      "rectSize": {
+        "x": 870.0,
+        "y": 398.0
+      },
+      "anchoredPosition": {
+        "x": 172.5,
+        "y": -5.5
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageDetailInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "8796832525492624924",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "51471f9b4fc7b43d8ae8e8512e393bcd",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "PurchaseDesc_BtnBG",
+      "rectSize": {
+        "x": 200.0,
+        "y": 80.0
+      },
+      "anchoredPosition": {
+        "x": 436.39996,
+        "y": 93.5
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageDetailInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "8996636189031336815",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "648630e64155c4243859d1bb60722834",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "PackageIconBG",
+      "rectSize": {
+        "x": 350.0,
+        "y": 398.0
+      },
+      "anchoredPosition": {
+        "x": -617.6,
+        "y": 0.3
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageDetailInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "1207476146562497193",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "3a6fe23f831c9df42b002debc1155403",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "TagImg",
+      "rectSize": {
+        "x": 212.0,
+        "y": 67.0
+      },
+      "anchoredPosition": {
+        "x": -128.40002,
+        "y": 140.90002
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageDetailInfoWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "2777539342649895549",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "51471f9b4fc7b43d8ae8e8512e393bcd",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "TermsOfService",
+      "rectSize": {
+        "x": 200.0,
+        "y": 40.0
+      },
+      "anchoredPosition": {
+        "x": 436.39996,
+        "y": 111.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageDetailInfoWin"
+    }
+  ],
+  "texts": [],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 29
+}

@@ -1,0 +1,54 @@
+node:
+  name: ScoreCalculator
+  layer: Domain
+  genre: Puzzle
+  role: Calculator
+  file: ScoreCalculator.cs
+  namespace: BlockBlast.Domain
+
+spec:
+  description: "점수 계산: 기본 셀 점수 + 줄 클리어 보너스 + 콤보 배율"
+  provides:
+    - "CalculatePlacementScore"
+    - "CalculateLineClearScore"
+    - "GetComboMultiplier"
+
+  constants:
+    - { name: BASE_SCORE_PER_CELL, value: 10 }
+    - { name: LINE_CLEAR_BONUS, value: 100 }
+    - { name: MULTI_LINE_2, value: 300 }
+    - { name: MULTI_LINE_3, value: 600 }
+    - { name: MULTI_LINE_4, value: 1000 }
+    - { name: MULTI_LINE_5_PLUS, value: 2000 }
+
+  members:
+    - name: _currentCombo
+      type: int
+      access: private
+    - name: _totalScore
+      type: int
+      access: private
+
+  methods:
+    - name: CalculatePlacementScore
+      params: [{ name: cellCount, type: int }]
+      returns: int
+      logic: "cellCount * BASE_SCORE_PER_CELL"
+    - name: CalculateLineClearScore
+      params: [{ name: lineCount, type: int }]
+      returns: int
+      logic: |
+        기본: lineCount * LINE_CLEAR_BONUS
+        멀티라인 보너스 추가
+        콤보 배율 적용
+        콤보 증가
+    - name: GetComboMultiplier
+      returns: float
+      logic: "1->1.0, 2->1.5, 3->2.0, 4->3.0, 5+->4.0"
+    - name: ResetCombo
+      logic: "콤보 카운터 0으로"
+    - name: AddScore
+      params: [{ name: points, type: int }]
+      logic: "총점 갱신 + 이벤트 발행"
+    - name: Reset
+      logic: "점수, 콤보 모두 초기화"

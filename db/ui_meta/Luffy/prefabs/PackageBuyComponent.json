@@ -1,0 +1,379 @@
+{
+  "fileName": "PackageBuyComponent",
+  "filePath": "E:/AIMED/Luffy/IdleMoney1/Project/Assets\\IdleMoney\\Prefabs\\UI\\SubPages\\PackageBuyComponent.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 14,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "9148819319156105832",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "PackageImg",
+      "rectSize": {
+        "x": 282.0,
+        "y": 325.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -11.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageBuyComponent"
+    },
+    {
+      "type": "Button",
+      "fileID": "8753879881180187593",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "CommonBG",
+      "rectSize": {
+        "x": 308.0,
+        "y": 430.0
+      },
+      "anchoredPosition": {
+        "x": -1.9,
+        "y": -69.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageBuyComponent"
+    }
+  ],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "2356784358432000264",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "1965fb9587ba0aa45a87d089fe9d1854",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "PackageImg",
+      "rectSize": {
+        "x": 282.0,
+        "y": 325.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -11.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageBuyComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "3403787314301664521",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "ef562ac3758ba584dbd7f7cebb03b106",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Ribbon_New",
+      "rectSize": {
+        "x": 90.0,
+        "y": 92.0
+      },
+      "anchoredPosition": {
+        "x": 94.2,
+        "y": 110.59
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageBuyComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "4064544238816824781",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "2528b3cd09c5fbb4e8347e12c661276b",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Ribbon_BestValue",
+      "rectSize": {
+        "x": 90.0,
+        "y": 92.0
+      },
+      "anchoredPosition": {
+        "x": 94.2,
+        "y": 110.59
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageBuyComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "6856922934075247262",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "6c8d8fa36dda7754a812facf135723f3",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "CommonBG",
+      "rectSize": {
+        "x": 308.0,
+        "y": 430.0
+      },
+      "anchoredPosition": {
+        "x": -1.9,
+        "y": -69.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageBuyComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "6845280247679448490",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "a49a1fae0b8d0e343bcd1de8b495ffad",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Ribbon_Hot",
+      "rectSize": {
+        "x": 90.0,
+        "y": 92.0
+      },
+      "anchoredPosition": {
+        "x": 94.2,
+        "y": 110.59
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageBuyComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "2849079817657808673",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "3a6fe23f831c9df42b002debc1155403",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "TagImg",
+      "rectSize": {
+        "x": 212.0,
+        "y": 67.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -177.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageBuyComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "3276087138750388478",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "2528b3cd09c5fbb4e8347e12c661276b",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Ribbon_Best",
+      "rectSize": {
+        "x": 90.0,
+        "y": 92.0
+      },
+      "anchoredPosition": {
+        "x": 94.2,
+        "y": 110.59
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "PackageBuyComponent"
+    }
+  ],
+  "texts": [],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 14
+}

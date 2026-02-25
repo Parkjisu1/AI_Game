@@ -1,0 +1,309 @@
+{
+  "fileName": "StageButton_CloseTypeGroup",
+  "filePath": "E:/AIMED/TamplePuzzle/PuzzleAutomation/Assets\\Prefabs\\StageType\\StageButtonType\\StageButton_CloseTypeGroup.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 8,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "4195038168310347593",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "StageGroupButton",
+      "rectSize": {
+        "x": 1000.0,
+        "y": 200.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -100.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 1.0
+      },
+      "sourceFile": "StageButton_CloseTypeGroup"
+    }
+  ],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "4195038166994109666",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "GroupStars",
+      "rectSize": {
+        "x": 100.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 230.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "StageButton_CloseTypeGroup"
+    },
+    {
+      "type": "Image",
+      "fileID": "4195038168310347592",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "StageGroupButton",
+      "rectSize": {
+        "x": 1000.0,
+        "y": 200.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -100.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 1.0
+      },
+      "sourceFile": "StageButton_CloseTypeGroup"
+    }
+  ],
+  "texts": [
+    {
+      "type": "Text",
+      "fileID": "4195038167172651393",
+      "m_FontSize": 60.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.19607843,
+        "g": 0.19607843,
+        "b": 0.19607843,
+        "a": 1.0
+      },
+      "m_Text": "990 - 1000",
+      "gameObjectName": "StageGroupNumberRange",
+      "rectSize": {
+        "x": -654.1,
+        "y": -106.0
+      },
+      "anchoredPosition": {
+        "x": -223.0,
+        "y": -24.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "StageButton_CloseTypeGroup"
+    },
+    {
+      "type": "Text",
+      "fileID": "4195038168092965430",
+      "m_FontSize": 70.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.19607843,
+        "g": 0.19607843,
+        "b": 0.19607843,
+        "a": 1.0
+      },
+      "m_Text": "0 / 60",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 180.9,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 385.6,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "StageButton_CloseTypeGroup"
+    },
+    {
+      "type": "Text",
+      "fileID": "4195038168440250846",
+      "m_FontSize": 70.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.19607843,
+        "g": 0.19607843,
+        "b": 0.19607843,
+        "a": 1.0
+      },
+      "m_Text": "55",
+      "gameObjectName": "StageGroupNumber",
+      "rectSize": {
+        "x": -888.8,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": -147.0,
+        "y": 42.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "StageButton_CloseTypeGroup"
+    },
+    {
+      "type": "Text",
+      "fileID": "4195038168787218865",
+      "m_FontSize": 70.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.19607843,
+        "g": 0.19607843,
+        "b": 0.19607843,
+        "a": 1.0
+      },
+      "m_Text": "\"\\uB358\\uC804\"",
+      "gameObjectName": "StageGroup",
+      "rectSize": {
+        "x": -824.9,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": -277.8,
+        "y": 42.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "StageButton_CloseTypeGroup"
+    }
+  ],
+  "layoutGroups": [
+    {
+      "type": "GridLayoutGroup",
+      "fileID": "4195038168279801852",
+      "m_CellSize": {
+        "x": 200.0,
+        "y": 200.0
+      },
+      "m_Spacing": {
+        "x": 0.0,
+        "y": -10.0
+      },
+      "m_Constraint": 1,
+      "m_ConstraintCount": 5,
+      "m_Padding": {
+        "m_Left": 0,
+        "m_Right": 0,
+        "m_Top": 0,
+        "m_Bottom": 0
+      },
+      "m_ChildAlignment": 1,
+      "gameObjectName": "StageButtonRoot",
+      "rectSize": {
+        "x": 1080.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -266.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 1.0
+      },
+      "sourceFile": "StageButton_CloseTypeGroup"
+    }
+  ],
+  "contentSizeFitters": [],
+  "rectTransformCount": 8
+}

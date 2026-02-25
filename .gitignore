@@ -1,0 +1,37 @@
+# Runtime / Cache
+virtual_player/data/cache/
+virtual_player/data/temp/
+virtual_player/data/db/
+virtual_player/data/recordings/*/frames/
+temp/
+nul
+
+# DB (large JSON files - manage separately)
+db/base/
+db/expert/
+db/design/base/
+db/design/expert/
+
+# Downloads / SDK binaries
+downloads/
+firebase_sdk/
+Embedding_backup/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

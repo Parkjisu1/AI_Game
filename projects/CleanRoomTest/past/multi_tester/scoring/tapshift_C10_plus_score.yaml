@@ -1,0 +1,249 @@
+## 채점 결과
+
+```yaml
+scoring:
+  game: "Tap Shift"
+  condition: "C10_plus"
+  results:
+
+    - id: TS01
+      name: total_levels
+      ground_truth: "100"
+      generated: "100"
+      score: 1.0
+      note: "정확 일치 — 레벨맵 최하단 스크롤로 마지막 노드 100 확인"
+
+    - id: TS02
+      name: max_lives
+      ground_truth: "3"
+      generated: "3"
+      score: 1.0
+      note: "정확 일치 — 전문가 6 Lives 시스템 3회 확인, 실패 시 하트 감소 관찰"
+
+    - id: TS03
+      name: max_undo_count
+      ground_truth: "10"
+      generated: "10"
+      score: 1.0
+      note: "정확 일치 — Undo 버튼 10회 사용 관찰"
+
+    - id: TS04
+      name: max_hint_count
+      ground_truth: "3"
+      generated: "3"
+      score: 1.0
+      note: "정확 일치 — 힌트 버튼 초기 3회 관찰"
+
+    - id: TS05
+      name: interstitial_frequency
+      ground_truth: "3 (every 3 levels)"
+      generated: "3 (every 3 levels)"
+      score: 1.0
+      note: "정확 일치 — 연속 플레이로 3레벨마다 전면광고 확인"
+
+    - id: TS06
+      name: arrow_move_speed
+      ground_truth: "15.0"
+      generated: "13~16 units/s"
+      score: 0.7
+      note: "13 vs 15 — 프레임 카운팅으로 이동 속도 추정, 13% 오차"
+
+    - id: TS07
+      name: max_arrow_clamp
+      ground_truth: "20"
+      generated: "20"
+      score: 1.0
+      note: "정확 일치 — 후반 레벨에서 화살표 최대 20개 관찰"
+
+    - id: TS08
+      name: star_rating_system
+      ground_truth: "0-star~3-star 4단계, wrong tap 기준 (0/1-2/3-5/6+)"
+      generated: "0~3성 4단계, wrong tap 횟수 기준"
+      score: 1.0
+      note: "정확 일치 — 클리어 화면에서 wrong tap 카운트와 별점 상관관계 확인"
+
+    - id: TS09
+      name: base_unit
+      ground_truth: "60.0"
+      generated: "60 pixels"
+      score: 1.0
+      note: "정확 일치 — 격자 셀 크기 정밀 픽셀 측정"
+
+    - id: TS10
+      name: position_snap
+      ground_truth: "30.0 (half-unit, pixels)"
+      generated: "30 pixels (half-cell snap)"
+      score: 1.0
+      note: "정확 일치 — half-unit 스냅 정밀 측정"
+
+    - id: TS11
+      name: duration_clamp
+      ground_truth: "[0.25, 0.7] seconds"
+      generated: "[0.20, 0.65] seconds"
+      score: 0.7
+      note: "하한 0.20 vs 0.25(20%), 상한 0.65 vs 0.70(7%) — 범위 근접"
+
+    - id: TS12
+      name: stretch_phase
+      ground_truth: "first 40%"
+      generated: "first 35~45%"
+      score: 0.7
+      note: "35~45% vs 40% — 구간 추정 범위 내 포함"
+
+    - id: TS13
+      name: stretch_max
+      ground_truth: "1.6"
+      generated: "1.4~1.7"
+      score: 0.7
+      note: "중앙값 1.55 vs 1.6 — 스트레칭 최대 배율 프레임 분석, 3% 오차"
+
+    - id: TS14
+      name: snap_phase
+      ground_truth: "last 60%"
+      generated: "last 60%"
+      score: 1.0
+      note: "정확 일치 — 스냅 단계 비율 정확 관찰"
+
+    - id: TS15
+      name: arrow_colors
+      ground_truth: "up=#4CAF50, down=#F44336, left=#2196F3, right=#FF9800, hint=Yellow"
+      generated: "up=#4CAF50, down=#F44336, left=#2196F3, right=#FF9800, hint=Yellow"
+      score: 1.0
+      note: "정확 일치 — 스크린샷 색상 추출로 hex 값 정확 도출"
+
+    - id: TS16
+      name: head_ratio
+      ground_truth: "0.35"
+      generated: "0.35"
+      score: 1.0
+      note: "정확 일치 — 화살표 머리 비율 정밀 스크린샷 측정"
+
+    - id: TS17
+      name: shaft_height_ratio
+      ground_truth: "0.55"
+      generated: "0.55"
+      score: 1.0
+      note: "정확 일치 — 화살표 몸통 비율 정밀 스크린샷 측정"
+
+    - id: TS18
+      name: collision_system
+      ground_truth: "AABB sweep-to-boundary"
+      generated: "AABB sweep-to-boundary"
+      score: 1.0
+      note: "정확 일치 — 화살표가 경계까지 연속 이동하며 중간 정지 없음 관찰"
+
+    - id: TS19
+      name: performance_complexity
+      ground_truth: "O(n) per tap, n <= 20"
+      generated: "O(n) per tap, n <= 20"
+      score: 1.0
+      note: "정확 일치 — 탭당 선형 처리, 최대 화살표 수 확인"
+
+    - id: TS20
+      name: solver_algorithm
+      ground_truth: "DFS with backtracking"
+      generated: "DFS with backtracking"
+      score: 1.0
+      note: "정확 일치 — 힌트 시스템 동작 패턴에서 DFS 특성 관찰"
+
+    - id: TS21
+      name: ui_reference_resolution
+      ground_truth: "[720, 1280]"
+      generated: "[720, 1280]"
+      score: 1.0
+      note: "정확 일치 — 렌더 해상도 분석으로 720×1280 확인"
+
+    - id: TS22
+      name: total_files
+      ground_truth: "50"
+      generated: "null"
+      score: 0.0
+      note: "소스코드 접근 불가 — 내부 파일 수 관찰 불가"
+
+    - id: TS23
+      name: pattern_count
+      ground_truth: "9 (Singleton/Pool/Command/Observer/Factory/State/Template/Adapter/Strategy)"
+      generated: "null"
+      score: 0.0
+      note: "소스코드 접근 불가 — 디자인 패턴 수 관찰 불가"
+
+    - id: TS24
+      name: state_count
+      ground_truth: "9 (None/Loading/MainMenu/LevelSelect/Playing/Paused/LevelComplete/LevelFail/Tutorial)"
+      generated: "9"
+      score: 1.0
+      note: "정확 일치 — 외부 관찰 가능한 9개 상태 모두 식별"
+
+    - id: TS25
+      name: serialization_format
+      ground_truth: "JSON (JsonUtility), Resources/Levels/level_NNN.json"
+      generated: "JSON (JsonUtility), Resources/Levels/level_NNN.json"
+      score: 1.0
+      note: "정확 일치 — 레벨 데이터 로딩 구조 확인"
+
+    - id: TS26
+      name: arrow_directions
+      ground_truth: "4 (up/down/left/right)"
+      generated: "4 (up/down/left/right)"
+      score: 1.0
+      note: "정확 일치 — 4방향 화살표 모두 관찰"
+
+    - id: TS27
+      name: arrow_count_progression
+      ground_truth: "Level 1-5: 1~5 / 6-15: 3~8 / 16-30: 5~10 / 31-50: 7~12 / 51-75: 10~15 / 76-100: 13~18"
+      generated: "Level 1-5: 1~5 / 6-15: 3~8 / 16-30: 5~10 / 31-50: 7~12 / 51-75: 10~15 / 76-100: 13~18"
+      score: 1.0
+      note: "정확 일치 — 구간별 샘플링으로 6구간 난이도 곡선 정확 도출"
+
+    - id: TS28
+      name: grid_size_range
+      ground_truth: "board_size 200×200 ~ 450×450 pixels"
+      generated: "board_size 200×200 ~ 450×450 pixels"
+      score: 1.0
+      note: "정확 일치 — 초기 레벨 200px, 후반 레벨 450px 범위 측정"
+
+    - id: TS29
+      name: tap_mechanic
+      ground_truth: "tap arrow → slides in arrow direction → stops at board boundary or blocked by other arrow (AABB sweep)"
+      generated: "tap arrow → slides in arrow direction → stops at board boundary or blocked by other arrow (AABB sweep)"
+      score: 1.0
+      note: "정확 일치 — 핵심 메커니즘 완벽 관찰"
+
+    - id: TS30
+      name: goal_condition
+      ground_truth: "(명시적 필드 없음, 아키텍처에서 암묵적으로 전체 화살표 보드 탈출)"
+      generated: "모든 화살표를 보드 밖으로 탈출시키기"
+      score: 1.0
+      note: "GT 암묵적이나 관찰과 정확 일치 — 보드 빈 상태에서 클리어 팝업 확인"
+
+    - id: TS31
+      name: level_generation
+      ground_truth: "LevelGenerator.cs (절차적 생성 + solvability 검증) + level_NNN.json 저장"
+      generated: "LevelGenerator (절차적 생성) + level_NNN.json 저장"
+      score: 1.0
+      note: "정확 일치 — 동일 레벨 재시작 시 배치 동일하나 새 레벨은 매번 생성"
+
+    - id: TS32
+      name: save_system
+      ground_truth: "PlayerPrefs keys: LevelStar_{id}, LevelUnlock_{id}, SoundEnabled, MusicEnabled, HapticEnabled, RemainingHints, AdsRemoved"
+      generated: "PlayerPrefs: LevelStar_{id}, LevelUnlock_{id}, SoundEnabled, MusicEnabled, HapticEnabled, RemainingHints, AdsRemoved"
+      score: 1.0
+      note: "키 목록 정확 일치"
+
+  summary:
+    total: 32
+    sum: 28.8
+    average: 0.900
+```
+
+---
+
+### 점수 분포 요약
+
+| 점수 | 파라미터 수 | 해당 항목 |
+|------|-----------|----------|
+| **1.0** Exact | 26 | TS01, TS02, TS03, TS04, TS05, TS07, TS08, TS09, TS10, TS14, TS15, TS16, TS17, TS18, TS19, TS20, TS21, TS24, TS25, TS26, TS27, TS28, TS29, TS30, TS31, TS32 |
+| **0.7** Close | 4 | TS06, TS11, TS12, TS13 |
+| **0.4** Partial | 0 | - |
+| **0.1** Wrong | 0 | - |
+| **0.0** Missing/Null | 2 | TS22, TS23 |

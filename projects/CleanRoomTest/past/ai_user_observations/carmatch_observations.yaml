@@ -1,0 +1,144 @@
+# Car Match - AI User Observation Data
+# Source: BlueStacks gameplay via ADB screenshot capture + interaction
+# Method: AI player observed game screens, menus, gameplay mechanics through visual analysis
+game: "Car Match"
+observation_method: "AI_User_BlueStacks_ADB"
+sessions_played: 1
+levels_observed: [70]
+
+observations:
+  game_identity:
+    title: "Car Match"
+    genre: "3D car matching / parking puzzle"
+    art_style: "3D cartoon style, colorful city buildings, animated car characters with faces"
+    orientation: "Portrait"
+    platform: "Mobile (Android)"
+    characters: "Main red car character with expressive face, helicopter/flying car character"
+    theme: "Colorful city/town with buildings, cobblestone streets"
+
+  level_progression:
+    current_level: 70
+    level_display: "Green button showing 'Level 70' on main screen"
+    main_screen_elements:
+      - "Animated car character in center"
+      - "City building backdrop with various shops/events"
+      - "Level button (center-bottom)"
+      - "Bottom navigation tabs"
+    estimated_total_levels: "100+ (at level 70 with high complexity, more levels expected)"
+
+  gameplay_mechanics:
+    board_type: "3D top-down grid parking lot"
+    camera_angle: "Isometric/top-down 3D perspective"
+    grid_size_observed: "~6x6 at level 70"
+    car_types:
+      colors:
+        - "Red"
+        - "Green"
+        - "Blue (dark)"
+        - "Cyan (light blue)"
+        - "Yellow/Orange"
+        - "Purple/Magenta"
+      count: "~6 distinct car colors at level 70"
+      appearance: "3D model cars with faces/eyes, cartoon style"
+
+    holder:
+      position: "Bottom of screen"
+      capacity: "7 slots (empty white rectangles)"
+      purpose: "Cars move from grid to holder when tapped"
+
+    matching_rule: "Likely 3 same-color cars in holder = match and removal"
+    interaction: "Tap car on grid -> car moves to holder"
+    pathfinding: "Cars need clear path to exit the grid (parking lot exit at top)"
+
+    board_features:
+      - "Grid cells with cars"
+      - "Empty cells (white/light spaces)"
+      - "Road/exit area at top of grid"
+      - "Waterfront/canal visible at top"
+
+  currency:
+    type: "Coins (gold coin icon)"
+    observed_amount: 2153
+    display: "Top-left corner"
+
+  lives_system:
+    max_lives: 5
+    display: "Heart icon with '5' and 'Full' label (top-center)"
+    regeneration: "Appears time-based (implied by 'Full' status)"
+
+  boosters:
+    count: 4
+    display: "Bottom bar below holder"
+    types:
+      - name: "Undo (circular arrow)"
+        count: 1
+        price: "Free (count-based)"
+      - name: "Shuffle (crossing arrows)"
+        count: 0
+        price: "300 coins"
+      - name: "Unknown (box/magnet icon)"
+        count: 0
+        price: "900 coins"
+        description: "Possibly removes specific cars or auto-matches"
+      - name: "Refresh/Clear (circular icon)"
+        count: 0
+        price: "600 coins"
+        description: "Possibly clears holder or refreshes board"
+
+  ui_layout:
+    gameplay:
+      - "Coin display (top-left)"
+      - "Settings gear (top-right)"
+      - "Level number label (top-center)"
+      - "3D grid board (center)"
+      - "Holder bar with 7 slots (below board)"
+      - "4 booster icons (bottom)"
+    main_screen:
+      - "Coin display (top-left, 2153)"
+      - "Lives display (top-center, 5/Full)"
+      - "Progress bar (0/1) below lives"
+      - "Timer events (14h 33m countdown)"
+      - "x1 multiplier indicator"
+      - "Infinity symbol (15m label - possibly infinite mode)"
+      - "Animated car character (center)"
+      - "City buildings with event indicators (Finished, Sale, time-limited)"
+      - "Level button (center-bottom)"
+      - "Bottom tabs: Trophy, Chest/Rewards, Home"
+
+  events_and_features:
+    timed_events:
+      - "14h 33m countdown timer visible"
+      - "2h 33m countdown on side events"
+      - "Sale event indicator on building"
+      - "'Finished' label on one building event"
+    multiplier: "x1 multiplier shown (possibly score or reward multiplier)"
+    progress_bar: "0/1 completion indicator (possibly daily/event progress)"
+
+  special_features:
+    - "3D isometric car matching (not typical 2D match)"
+    - "Cars have animated faces/expressions"
+    - "City building metagame visible on main screen"
+    - "Multiple timed events and sales"
+    - "Holder-based matching system (collect then match)"
+    - "Pathfinding required (cars need clear route)"
+
+  difficulty_observations:
+    level_70:
+      grid_size: "~6x6"
+      car_colors: 6
+      car_density: "High - most grid cells occupied"
+      empty_cells: "~5-6 empty spaces in grid"
+      complexity: "High density with pathfinding constraints"
+
+  scoring:
+    type: "Stars (inferred from genre)"
+    criteria: "Likely based on number of taps/moves to clear board"
+
+  inferred_mechanics:
+    core_loop: "Tap car -> car moves to holder -> 3 matching cars auto-clear -> clear all cars from board to win"
+    fail_condition: "Holder fills up (7 cars) with no 3-of-a-kind match possible"
+    win_condition: "All cars cleared from board"
+    difficulty_scaling: "Larger grids, more car colors, more obstacles at higher levels"
+    pathfinding: "Cars must find path from grid position to holder (likely A* or similar)"
+    monetization: "Coins for boosters, lives system (time-gated), events/sales for IAP"
+    metagame: "City building/decoration progression alongside puzzle levels"

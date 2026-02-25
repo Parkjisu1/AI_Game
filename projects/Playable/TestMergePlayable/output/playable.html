@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Fruit Merge - Playable Ad</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#1a1a2e;touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+canvas{display:block;position:absolute;top:0;left:0;width:100%;height:100%}
+#cta-overlay{display:none;position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:100;flex-direction:column;justify-content:center;align-items:center;font-family:'Segoe UI',sans-serif}
+#cta-overlay.show{display:flex}
+.cta-title{color:#fff;font-size:28px;font-weight:800;text-align:center;margin-bottom:8px;text-shadow:0 2px 8px rgba(0,0,0,0.5)}
+.cta-subtitle{color:#ccc;font-size:16px;text-align:center;margin-bottom:32px}
+.cta-score{color:#FFD700;font-size:22px;font-weight:700;margin-bottom:24px}
+.cta-btn{background:linear-gradient(135deg,#FF6B35,#FF2E63);color:#fff;border:none;padding:18px 48px;font-size:22px;font-weight:800;border-radius:50px;cursor:pointer;box-shadow:0 4px 20px rgba(255,46,99,0.5);animation:pulse 1.2s ease-in-out infinite;letter-spacing:1px}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+</style>
+</head>
+<body>
+<canvas id="game"></canvas>
+<div id="cta-overlay">
+  <div class="cta-title">CAN YOU MAKE A WATERMELON?</div>
+  <div class="cta-score" id="cta-score"></div>
+  <div class="cta-subtitle">Download now and prove your skills!</div>
+  <button class="cta-btn" onclick="window.open('https://example.com/store','_blank')">PLAY NOW!</button>
+</div>
+<script>
+(function(){
+"use strict";
+
+// ═══════════════════════════════════════
+//  CONFIG
+// ═══════════════════════════════════════
+const CONFIG = {
+  designW: 540,
+  designH: 960,
+  gridCols: 4,
+  gridRows: 4,
+  cellSize: 100,
+  cellGap: 8,
+  ctaUrl: 'https://example.com/store'
+};
+
+// ═══════════════════════════════════════
+//  FRUIT TIERS (code_only asset mode)
+// ═══════════════════════════════════════
+const FRUITS = [
+  { level: 1, name: 'Cherry',     color: '#FF4444', inner: '#CC2222', radius: 22, emoji: null },
+  { level: 2, name: 'Strawberry', color: '#FF6B9D', inner: '#D44A7A', radius: 26, emoji: null },
+  { level: 3, name: 'Grape',      color: '#9B59B6', inner: '#7D3C98', radius: 30, emoji: null },
+  { level: 4, name: 'Orange',     color: '#FF9F43', inner: '#E67E22', radius: 34, emoji: null },
+  { level: 5, name: 'Watermelon', color: '#2ECC71', inner: '#27AE60', radius: 40, emoji: null }
+];
+
+// ═══════════════════════════════════════
+//  LEVEL DATA
+// ═══════════════════════════════════════
+const LEVELS = [
+  { // Level 1 - Tutorial (guaranteed win)
+    movesLimit: 99,
+    mergeGoal: 1,
+    grid: [
+      [0, 0, 0, 0],
+      [0, 1, 0, 0],
+      [0, 1, 0, 0],
+      [0, 0, 0, 0]
+    ]
+  },
+  { // Level 2 - Medium
+    movesLimit: 5,
+    mergeGoal: 3,
+    grid: [
+      [1, 1, 0, 0],
+      [0, 0, 2, 0],
+      [0, 2, 0, 1],
+      [3, 0, 0, 0]
+    ]
+  },
+  { // Level 3 - Hard (fail bait)
+    movesLimit: 3,
+    mergeGoal: 3,
+    grid: [
+      [1, 0, 3, 0],
+      [0, 3, 0, 2],
+      [2, 0, 1, 0],
+      [0, 4, 0, 1]
+    ]
+  }
+];
+
+// ═══════════════════════════════════════
+//  CANVAS SETUP
+// ═══════════════════════════════════════
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+let W, H, scale, offsetX, offsetY;
+
+function resize() {
+  canvas.width = window.innerWidth * (window.devicePixelRatio || 1);
+  canvas.height = window.innerHeight * (window.devicePixelRatio || 1);
+  W = canvas.width;
+  H = canvas.height;
+  const scaleX = W / CONFIG.designW;
+  const scaleY = H / CONFIG.designH;
+  scale = Math.min(scaleX, scaleY);
+  offsetX = (W - CONFIG.designW * scale) / 2;
+  offsetY = (H - CONFIG.designH * scale) / 2;
+}
+window.addEventListener('resize', resize);
+resize();
+
+// ═══════════════════════════════════════
+//  GAME STATE
+// ═══════════════════════════════════════
+let state = 'title'; // title | tutorial | playing | levelTransition | result | cta
+let currentLevel = 0;
+let movesLeft = 0;
+let mergeCount = 0;
+let failCount = 0;
+let totalMerges = 0;
+let levelStartTime = 0;
+let stateTimer = 0;
+
+// Grid cells: 2D array of { fruitLevel: 0-5 (0=empty) }
+let cells = [];
+// Drag state
+let dragging = null; // { col, row, fruitLevel, startX, startY, curX, curY }
+// Animation state
+let animations = []; // { type, x, y, t, duration, ... }
+// Tutorial hand
+let tutorialTarget = null; // { fromCol, fromRow, toCol, toRow }
+
+// ═══════════════════════════════════════
+//  TWEEN SYSTEM (Reference: merge-game Tweens.ts)
+// ═══════════════════════════════════════
+const tweens = [];
+function addTween(obj, props, duration, easing, onComplete) {
+  const start = {};
+  for (const key in props) start[key] = obj[key];
+  tweens.push({ obj, start, end: props, duration, elapsed: 0, easing: easing || 'easeOut', onComplete });
+}
+function updateTweens(dt) {
+  for (let i = tweens.length - 1; i >= 0; i--) {
+    const tw = tweens[i];
+    tw.elapsed += dt;
+    let t = Math.min(tw.elapsed / tw.duration, 1);
+    if (tw.easing === 'easeOut') t = 1 - Math.pow(1 - t, 3);
+    else if (tw.easing === 'easeIn') t = t * t * t;
+    else if (tw.easing === 'backOut') { const c = 1.7; t = 1 + (--t) * t * ((c + 1) * t + c); }
+    else if (tw.easing === 'bounce') { t = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+    for (const key in tw.end) {
+      tw.obj[key] = tw.start[key] + (tw.end[key] - tw.start[key]) * t;
+    }
+    if (tw.elapsed >= tw.duration) {
+      for (const key in tw.end) tw.obj[key] = tw.end[key];
+      if (tw.onComplete) tw.onComplete();
+      tweens.splice(i, 1);
+    }
+  }
+}
+
+// ═══════════════════════════════════════
+//  PARTICLE SYSTEM (merge effect)
+// ═══════════════════════════════════════
+const particles = [];
+function spawnMergeParticles(x, y, color) {
+  for (let i = 0; i < 12; i++) {
+    const angle = (Math.PI * 2 / 12) * i + Math.random() * 0.3;
+    const speed = 80 + Math.random() * 120;
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      life: 0.6 + Math.random() * 0.3,
+      maxLife: 0.6 + Math.random() * 0.3,
+      radius: 3 + Math.random() * 4,
+      color
+    });
+  }
+}
+function updateParticles(dt) {
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx * dt;
+    p.y += p.vy * dt;
+    p.vy += 200 * dt; // gravity
+    p.life -= dt;
+    if (p.life <= 0) particles.splice(i, 1);
+  }
+}
+
+// ═══════════════════════════════════════
+//  GRID HELPERS (Reference: merge-game Grid.ts)
+// ═══════════════════════════════════════
+function gridOriginX() { return (CONFIG.designW - (CONFIG.gridCols * (CONFIG.cellSize + CONFIG.cellGap) - CONFIG.cellGap)) / 2; }
+function gridOriginY() { return 260; }
+function cellCenterX(col) { return gridOriginX() + col * (CONFIG.cellSize + CONFIG.cellGap) + CONFIG.cellSize / 2; }
+function cellCenterY(row) { return gridOriginY() + row * (CONFIG.cellSize + CONFIG.cellGap) + CONFIG.cellSize / 2; }
+
+function initLevel(levelIdx) {
+  const level = LEVELS[levelIdx];
+  cells = [];
+  for (let r = 0; r < CONFIG.gridRows; r++) {
+    cells[r] = [];
+    for (let c = 0; c < CONFIG.gridCols; c++) {
+      cells[r][c] = {
+        fruitLevel: level.grid[r][c],
+        scaleAnim: { s: 0 }, // for cell appear animation
+        highlight: 0
+      };
+      addTween(cells[r][c].scaleAnim, { s: 1 }, 400 + (r * CONFIG.gridCols + c) * 40, 'backOut');
+    }
+  }
+  movesLeft = level.movesLimit;
+  mergeCount = 0;
+  dragging = null;
+  levelStartTime = performance.now();
+
+  // Tutorial hand target
+  if (levelIdx === 0) {
+    tutorialTarget = { fromCol: 1, fromRow: 2, toCol: 1, toRow: 1 };
+  } else {
+    tutorialTarget = null;
+  }
+}
+
+function findAdjacentSame(col, row) {
+  const fl = cells[row][col].fruitLevel;
+  if (fl === 0) return null;
+  const dirs = [[0,-1],[0,1],[-1,0],[1,0]];
+  for (const [dc, dr] of dirs) {
+    const nc = col + dc, nr = row + dr;
+    if (nc >= 0 && nc < CONFIG.gridCols && nr >= 0 && nr < CONFIG.gridRows) {
+      if (cells[nr][nc].fruitLevel === fl) return { col: nc, row: nr };
+    }
+  }
+  return null;
+}
+
+// ═══════════════════════════════════════
+//  INPUT HANDLER (Reference: merge-game Item.ts pointer events)
+// ═══════════════════════════════════════
+function screenToDesign(sx, sy) {
+  const rect = canvas.getBoundingClientRect();
+  const px = (sx - rect.left) / rect.width * W;
+  const py = (sy - rect.top) / rect.height * H;
+  return { x: (px - offsetX) / scale, y: (py - offsetY) / scale };
+}
+
+function hitTestCell(dx, dy) {
+  for (let r = 0; r < CONFIG.gridRows; r++) {
+    for (let c = 0; c < CONFIG.gridCols; c++) {
+      const cx = cellCenterX(c), cy = cellCenterY(r);
+      if (Math.abs(dx - cx) < CONFIG.cellSize / 2 && Math.abs(dy - cy) < CONFIG.cellSize / 2) {
+        return { col: c, row: r };
+      }
+    }
+  }
+  return null;
+}
+
+function onPointerDown(sx, sy) {
+  const { x, y } = screenToDesign(sx, sy);
+
+  if (state === 'title') {
+    state = currentLevel === 0 ? 'tutorial' : 'playing';
+    stateTimer = 0;
+    initLevel(currentLevel);
+    return;
+  }
+
+  if (state === 'result') return;
+
+  if (state === 'tutorial' || state === 'playing') {
+    const hit = hitTestCell(x, y);
+    if (hit && cells[hit.row][hit.col].fruitLevel > 0) {
+      dragging = {
+        col: hit.col, row: hit.row,
+        fruitLevel: cells[hit.row][hit.col].fruitLevel,
+        startX: cellCenterX(hit.col), startY: cellCenterY(hit.row),
+        curX: x, curY: y
+      };
+      cells[hit.row][hit.col].fruitLevel = 0;
+    }
+  }
+}
+
+function onPointerMove(sx, sy) {
+  if (!dragging) return;
+  const { x, y } = screenToDesign(sx, sy);
+  dragging.curX = x;
+  dragging.curY = y;
+}
+
+function onPointerUp(sx, sy) {
+  if (!dragging) return;
+  const { x, y } = screenToDesign(sx, sy);
+  const hit = hitTestCell(x, y);
+
+  let merged = false;
+  if (hit) {
+    const target = cells[hit.row][hit.col];
+    if (target.fruitLevel === dragging.fruitLevel && !(hit.col === dragging.col && hit.row === dragging.row)) {
+      // MERGE! (Reference: GridController.ts merge method)
+      const newLevel = Math.min(dragging.fruitLevel + 1, FRUITS.length);
+      target.fruitLevel = newLevel;
+      target.scaleAnim.s = 0.5;
+      addTween(target.scaleAnim, { s: 1 }, 300, 'backOut');
+
+      const mx = cellCenterX(hit.col), my = cellCenterY(hit.row);
+      spawnMergeParticles(mx, my, FRUITS[dragging.fruitLevel - 1].color);
+      spawnMergeParticles(mx, my, FRUITS[Math.min(newLevel, FRUITS.length) - 1].color);
+
+      // Score text animation
+      animations.push({
+        type: 'scoreText', x: mx, y: my - 20,
+        text: '+' + (newLevel * 10),
+        t: 0, duration: 0.8,
+        color: FRUITS[Math.min(newLevel, FRUITS.length) - 1].color
+      });
+
+      mergeCount++;
+      totalMerges++;
+      merged = true;
+
+      if (state === 'tutorial' && mergeCount >= 1) {
+        state = 'playing';
+        tutorialTarget = null;
+      }
+    } else if (target.fruitLevel === 0) {
+      // Drop in empty cell
+      target.fruitLevel = dragging.fruitLevel;
+    } else {
+      // Return to original
+      cells[dragging.row][dragging.col].fruitLevel = dragging.fruitLevel;
+    }
+  } else {
+    // Out of grid - return
+    cells[dragging.row][dragging.col].fruitLevel = dragging.fruitLevel;
+  }
+
+  if (merged) {
+    movesLeft--;
+    checkLevelEnd();
+  } else if (hit && !(hit.col === dragging.col && hit.row === dragging.row) && cells[hit.row][hit.col].fruitLevel !== 0) {
+    // Swap attempt to non-matching - return to original
+    cells[dragging.row][dragging.col].fruitLevel = dragging.fruitLevel;
+    cells[hit.row][hit.col].fruitLevel = cells[hit.row][hit.col].fruitLevel; // keep
+  }
+
+  dragging = null;
+}
+
+function checkLevelEnd() {
+  const level = LEVELS[currentLevel];
+  if (mergeCount >= level.mergeGoal) {
+    // WIN
+    state = 'result';
+    stateTimer = 0;
+    animations.push({ type: 'levelClear', t: 0, duration: 1.5 });
+    setTimeout(() => {
+      if (currentLevel < LEVELS.length - 1) {
+        currentLevel++;
+        state = 'playing';
+        initLevel(currentLevel);
+      } else {
+        showCTA();
+      }
+    }, 1500);
+  } else if (movesLeft <= 0) {
+    // FAIL
+    failCount++;
+    state = 'result';
+    stateTimer = 0;
+    animations.push({ type: 'levelFail', t: 0, duration: 1.5 });
+    setTimeout(() => {
+      if (failCount >= 2) {
+        showCTA();
+      } else {
+        initLevel(currentLevel);
+        state = 'playing';
+      }
+    }, 1500);
+  }
+}
+
+function showCTA() {
+  state = 'cta';
+  const scoreEl = document.getElementById('cta-score');
+  scoreEl.textContent = 'Score: ' + (totalMerges * 10) + ' pts';
+  document.getElementById('cta-overlay').classList.add('show');
+}
+
+// Event listeners - touch + mouse (Reference: playable-coder.md interaction rules)
+canvas.addEventListener('mousedown', e => { e.preventDefault(); onPointerDown(e.clientX, e.clientY); });
+canvas.addEventListener('mousemove', e => { e.preventDefault(); onPointerMove(e.clientX, e.clientY); });
+canvas.addEventListener('mouseup', e => { e.preventDefault(); onPointerUp(e.clientX, e.clientY); });
+canvas.addEventListener('touchstart', e => { e.preventDefault(); const t = e.touches[0]; onPointerDown(t.clientX, t.clientY); }, { passive: false });
+canvas.addEventListener('touchmove', e => { e.preventDefault(); const t = e.touches[0]; onPointerMove(t.clientX, t.clientY); }, { passive: false });
+canvas.addEventListener('touchend', e => { e.preventDefault(); const t = e.changedTouches[0]; onPointerUp(t.clientX, t.clientY); }, { passive: false });
+
+// Prevent double-tap zoom
+document.addEventListener('dblclick', e => e.preventDefault());
+
+// ═══════════════════════════════════════
+//  RENDER
+// ═══════════════════════════════════════
+function drawFruit(x, y, fruitLevel, size) {
+  if (fruitLevel <= 0 || fruitLevel > FRUITS.length) return;
+  const f = FRUITS[fruitLevel - 1];
+  const r = f.radius * size;
+
+  // Shadow
+  ctx.beginPath();
+  ctx.arc(x + 2, y + 3, r, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(0,0,0,0.2)';
+  ctx.fill();
+
+  // Main body
+  const grad = ctx.createRadialGradient(x - r * 0.3, y - r * 0.3, r * 0.1, x, y, r);
+  grad.addColorStop(0, lightenColor(f.color, 30));
+  grad.addColorStop(0.7, f.color);
+  grad.addColorStop(1, f.inner);
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, Math.PI * 2);
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // Highlight
+  ctx.beginPath();
+  ctx.arc(x - r * 0.25, y - r * 0.25, r * 0.35, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255,255,255,0.3)';
+  ctx.fill();
+
+  // Level number
+  ctx.fillStyle = '#fff';
+  ctx.font = `bold ${Math.round(r * 0.9)}px 'Segoe UI', sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(fruitLevel.toString(), x, y + 1);
+}
+
+function lightenColor(hex, percent) {
+  const num = parseInt(hex.slice(1), 16);
+  const r = Math.min(255, (num >> 16) + percent);
+  const g = Math.min(255, ((num >> 8) & 0xFF) + percent);
+  const b = Math.min(255, (num & 0xFF) + percent);
+  return `rgb(${r},${g},${b})`;
+}
+
+function drawGrid() {
+  const ox = gridOriginX(), oy = gridOriginY();
+  const cs = CONFIG.cellSize, cg = CONFIG.cellGap;
+
+  // Board background
+  const bw = CONFIG.gridCols * (cs + cg) - cg + 24;
+  const bh = CONFIG.gridRows * (cs + cg) - cg + 24;
+  ctx.fillStyle = 'rgba(255,255,255,0.08)';
+  roundRect(ctx, ox - 12, oy - 12, bw, bh, 16);
+  ctx.fill();
+
+  // Cells
+  for (let r = 0; r < CONFIG.gridRows; r++) {
+    for (let c = 0; c < CONFIG.gridCols; c++) {
+      const cell = cells[r][c];
+      const cx = ox + c * (cs + cg), cy = oy + r * (cs + cg);
+      const s = cell.scaleAnim.s;
+
+      ctx.save();
+      ctx.translate(cx + cs / 2, cy + cs / 2);
+      ctx.scale(s, s);
+
+      // Cell bg
+      ctx.fillStyle = cell.highlight > 0 ? 'rgba(255,255,100,0.2)' : 'rgba(255,255,255,0.05)';
+      roundRect(ctx, -cs / 2, -cs / 2, cs, cs, 12);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+      ctx.lineWidth = 1;
+      roundRect(ctx, -cs / 2, -cs / 2, cs, cs, 12);
+      ctx.stroke();
+
+      // Fruit
+      if (cell.fruitLevel > 0) {
+        drawFruit(0, 0, cell.fruitLevel, s);
+      }
+
+      ctx.restore();
+
+      if (cell.highlight > 0) cell.highlight -= 0.02;
+    }
+  }
+}
+
+function drawDragging() {
+  if (!dragging) return;
+  // Highlight matching cells
+  for (let r = 0; r < CONFIG.gridRows; r++) {
+    for (let c = 0; c < CONFIG.gridCols; c++) {
+      if (cells[r][c].fruitLevel === dragging.fruitLevel) {
+        cells[r][c].highlight = 1;
+      }
+    }
+  }
+  drawFruit(dragging.curX, dragging.curY, dragging.fruitLevel, 1.15);
+}
+
+function drawTutorialHand(time) {
+  if (!tutorialTarget) return;
+  const { fromCol, fromRow, toCol, toRow } = tutorialTarget;
+  const fx = cellCenterX(fromCol), fy = cellCenterY(fromRow);
+  const tx = cellCenterX(toCol), ty = cellCenterY(toRow);
+
+  const t = (Math.sin(time * 3) + 1) / 2; // 0~1 oscillation
+  const hx = fx + (tx - fx) * t;
+  const hy = fy + (ty - fy) * t;
+
+  // Hand icon (pointing finger shape)
+  ctx.save();
+  ctx.translate(hx + 15, hy + 15);
+  ctx.fillStyle = 'rgba(255,255,255,0.9)';
+  // Finger
+  ctx.beginPath();
+  ctx.moveTo(0, -20);
+  ctx.lineTo(8, 0);
+  ctx.lineTo(12, 15);
+  ctx.lineTo(8, 25);
+  ctx.lineTo(-8, 25);
+  ctx.lineTo(-12, 15);
+  ctx.lineTo(-8, 0);
+  ctx.closePath();
+  ctx.fill();
+  // Circle at fingertip
+  ctx.beginPath();
+  ctx.arc(0, -20, 8, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+
+  // Arrow
+  ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+  ctx.lineWidth = 3;
+  ctx.setLineDash([6, 4]);
+  ctx.beginPath();
+  ctx.moveTo(fx, fy);
+  ctx.lineTo(tx, ty);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Label
+  ctx.fillStyle = '#FFD700';
+  ctx.font = "bold 20px 'Segoe UI', sans-serif";
+  ctx.textAlign = 'center';
+  const labelY = Math.min(fy, ty) - 60;
+  ctx.fillText('DRAG TO MERGE!', CONFIG.designW / 2, labelY);
+}
+
+function drawUI() {
+  // Top bar
+  ctx.fillStyle = '#fff';
+  ctx.font = "bold 24px 'Segoe UI', sans-serif";
+  ctx.textAlign = 'left';
+  ctx.fillText('Level ' + (currentLevel + 1), 24, 60);
+
+  ctx.textAlign = 'right';
+  if (LEVELS[currentLevel] && LEVELS[currentLevel].movesLimit < 99) {
+    ctx.fillText('Moves: ' + movesLeft, CONFIG.designW - 24, 60);
+  }
+
+  // Merge progress bar
+  if (state === 'playing' || state === 'tutorial') {
+    const level = LEVELS[currentLevel];
+    const barW = CONFIG.designW - 48;
+    const barH = 20;
+    const barX = 24, barY = 80;
+    const progress = Math.min(mergeCount / level.mergeGoal, 1);
+
+    ctx.fillStyle = 'rgba(255,255,255,0.1)';
+    roundRect(ctx, barX, barY, barW, barH, 10);
+    ctx.fill();
+
+    const grad = ctx.createLinearGradient(barX, 0, barX + barW * progress, 0);
+    grad.addColorStop(0, '#FF6B35');
+    grad.addColorStop(1, '#FF2E63');
+    ctx.fillStyle = grad;
+    roundRect(ctx, barX, barY, barW * progress, barH, 10);
+    ctx.fill();
+
+    ctx.fillStyle = '#fff';
+    ctx.font = "bold 13px 'Segoe UI', sans-serif";
+    ctx.textAlign = 'center';
+    ctx.fillText(mergeCount + ' / ' + level.mergeGoal + ' merges', CONFIG.designW / 2, barY + 15);
+  }
+
+  // Score
+  ctx.fillStyle = '#FFD700';
+  ctx.font = "bold 18px 'Segoe UI', sans-serif";
+  ctx.textAlign = 'center';
+  ctx.fillText('Score: ' + (totalMerges * 10), CONFIG.designW / 2, 130);
+}
+
+function drawTitleScreen(time) {
+  // Logo
+  ctx.fillStyle = '#fff';
+  ctx.font = "bold 48px 'Segoe UI', sans-serif";
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('FRUIT MERGE', CONFIG.designW / 2, 300);
+
+  // Animated fruits
+  for (let i = 0; i < 5; i++) {
+    const angle = time * 0.5 + (Math.PI * 2 / 5) * i;
+    const rx = 100, ry = 60;
+    const fx = CONFIG.designW / 2 + Math.cos(angle) * rx;
+    const fy = 430 + Math.sin(angle) * ry;
+    drawFruit(fx, fy, i + 1, 0.8 + Math.sin(time * 2 + i) * 0.1);
+  }
+
+  // Tap to start
+  const alpha = (Math.sin(time * 4) + 1) / 2;
+  ctx.globalAlpha = 0.5 + alpha * 0.5;
+  ctx.fillStyle = '#fff';
+  ctx.font = "bold 26px 'Segoe UI', sans-serif";
+  ctx.fillText('TAP TO START', CONFIG.designW / 2, 600);
+  ctx.globalAlpha = 1;
+
+  // Subtitle
+  ctx.fillStyle = '#aaa';
+  ctx.font = "16px 'Segoe UI', sans-serif";
+  ctx.fillText('Match same fruits to merge them!', CONFIG.designW / 2, 650);
+}
+
+function drawAnimations(dt) {
+  for (let i = animations.length - 1; i >= 0; i--) {
+    const a = animations[i];
+    a.t += dt;
+    const progress = Math.min(a.t / a.duration, 1);
+
+    if (a.type === 'scoreText') {
+      ctx.globalAlpha = 1 - progress;
+      ctx.fillStyle = a.color;
+      ctx.font = "bold 24px 'Segoe UI', sans-serif";
+      ctx.textAlign = 'center';
+      ctx.fillText(a.text, a.x, a.y - progress * 40);
+      ctx.globalAlpha = 1;
+    } else if (a.type === 'levelClear') {
+      ctx.fillStyle = `rgba(46, 204, 113, ${0.3 * (1 - progress)})`;
+      ctx.fillRect(0, 0, CONFIG.designW, CONFIG.designH);
+      ctx.fillStyle = '#fff';
+      ctx.font = "bold 42px 'Segoe UI', sans-serif";
+      ctx.textAlign = 'center';
+      ctx.globalAlpha = 1 - progress;
+      ctx.fillText('LEVEL CLEAR!', CONFIG.designW / 2, CONFIG.designH / 2);
+      ctx.globalAlpha = 1;
+    } else if (a.type === 'levelFail') {
+      ctx.fillStyle = `rgba(255, 68, 68, ${0.3 * (1 - progress)})`;
+      ctx.fillRect(0, 0, CONFIG.designW, CONFIG.designH);
+      ctx.fillStyle = '#fff';
+      ctx.font = "bold 42px 'Segoe UI', sans-serif";
+      ctx.textAlign = 'center';
+      ctx.globalAlpha = 1 - progress;
+      ctx.fillText('TRY AGAIN!', CONFIG.designW / 2, CONFIG.designH / 2);
+      ctx.globalAlpha = 1;
+    }
+
+    if (a.t >= a.duration) animations.splice(i, 1);
+  }
+}
+
+function drawParticles() {
+  for (const p of particles) {
+    const alpha = p.life / p.maxLife;
+    ctx.globalAlpha = alpha;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.radius * alpha, 0, Math.PI * 2);
+    ctx.fillStyle = p.color;
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
+
+function roundRect(c, x, y, w, h, r) {
+  c.beginPath();
+  c.moveTo(x + r, y);
+  c.lineTo(x + w - r, y);
+  c.quadraticCurveTo(x + w, y, x + w, y + r);
+  c.lineTo(x + w, y + h - r);
+  c.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  c.lineTo(x + r, y + h);
+  c.quadraticCurveTo(x, y + h, x, y + h - r);
+  c.lineTo(x, y + r);
+  c.quadraticCurveTo(x, y, x + r, y);
+  c.closePath();
+}
+
+// ═══════════════════════════════════════
+//  BACKGROUND
+// ═══════════════════════════════════════
+function drawBackground() {
+  const grad = ctx.createLinearGradient(0, 0, 0, CONFIG.designH);
+  grad.addColorStop(0, '#16213e');
+  grad.addColorStop(0.5, '#1a1a2e');
+  grad.addColorStop(1, '#0f3460');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, CONFIG.designW, CONFIG.designH);
+
+  // Subtle pattern dots
+  ctx.fillStyle = 'rgba(255,255,255,0.02)';
+  for (let x = 0; x < CONFIG.designW; x += 30) {
+    for (let y = 0; y < CONFIG.designH; y += 30) {
+      ctx.beginPath();
+      ctx.arc(x, y, 1.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+}
+
+// ═══════════════════════════════════════
+//  MAIN LOOP (requestAnimationFrame)
+// ═══════════════════════════════════════
+let lastTime = performance.now();
+
+function gameLoop(now) {
+  const dt = Math.min((now - lastTime) / 1000, 0.05); // cap delta
+  lastTime = now;
+  stateTimer += dt;
+
+  // Update
+  updateTweens(dt);
+  updateParticles(dt);
+
+  // Render
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  ctx.translate(offsetX, offsetY);
+  ctx.scale(scale, scale);
+
+  drawBackground();
+
+  if (state === 'title') {
+    drawTitleScreen(stateTimer);
+  } else {
+    drawGrid();
+    drawDragging();
+    drawParticles();
+    drawAnimations(dt);
+    drawUI();
+    if (state === 'tutorial') drawTutorialHand(stateTimer);
+  }
+
+  ctx.restore();
+
+  if (state !== 'cta') requestAnimationFrame(gameLoop);
+}
+
+requestAnimationFrame(gameLoop);
+
+})();
+</script>
+</body>
+</html>

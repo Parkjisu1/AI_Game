@@ -1,0 +1,704 @@
+[
+  {
+    "sourceFile": "SampleScene",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "888514716",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 0,
+      "gameObjectName": "Canvas",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "UIRootTemplate",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "6162132083044790835",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 0,
+      "gameObjectName": "HUD",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "UIRootTemplate",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "4686112341841968039",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 2,
+      "gameObjectName": "Popup",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "UIRootTemplate",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "4129825450665925802",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 1,
+      "gameObjectName": "Modeless",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "_Loading",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "1749383312",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 0,
+      "gameObjectName": "Canvas",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "_Title",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "2055173724",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 0,
+      "gameObjectName": "Canvas",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "UIRoot",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "6162132083044790835",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 0,
+      "gameObjectName": "HUD",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "UIRoot",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "4686112341841968039",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 3,
+      "gameObjectName": "Popup",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "UIRoot",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "6616695638211130769",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 2,
+      "gameObjectName": "HUD2",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "UIRoot",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "4341892551028506175",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 5,
+      "gameObjectName": "TempOver",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "UIRoot",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "1160415616759146485",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 4,
+      "gameObjectName": "UIEffects",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "UIRoot",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "4129825450665925802",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 1,
+      "gameObjectName": "Modeless",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "ProductHPContainerWin",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "2332524570910732356",
+      "m_RenderMode": 2,
+      "m_SortingOrder": 80,
+      "gameObjectName": "Canvas",
+      "rectSize": {
+        "x": 1280.0,
+        "y": 720.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "ProductionLineWin",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "2332524570910732356",
+      "m_RenderMode": 2,
+      "m_SortingOrder": 10,
+      "gameObjectName": "Canvas",
+      "rectSize": {
+        "x": 1280.0,
+        "y": 720.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "ProfitTextContainerWin",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "2332524570910732356",
+      "m_RenderMode": 2,
+      "m_SortingOrder": 200,
+      "gameObjectName": "Canvas",
+      "rectSize": {
+        "x": 1280.0,
+        "y": 720.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "WorldLineStatusWin",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "2332524570910732356",
+      "m_RenderMode": 2,
+      "m_SortingOrder": 10,
+      "gameObjectName": "Canvas",
+      "rectSize": {
+        "x": 1280.0,
+        "y": 720.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "Intro",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "973754481",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 0,
+      "gameObjectName": "Canvas",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "Loading",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "2005241584",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 0,
+      "gameObjectName": "Canvas",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "Title",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "2055173724",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 0,
+      "gameObjectName": "Canvas",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "BannerBottom",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "2511819091764556577",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 500,
+      "gameObjectName": "BannerBottom",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "BannerTop",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "2511819091764556577",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 500,
+      "gameObjectName": "BannerTop",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "Interstitial",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "2511819091764556577",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 999,
+      "gameObjectName": "Interstitial",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "Rewarded",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "2511819091764556577",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 999,
+      "gameObjectName": "Rewarded",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "DOTweenAnimation_Advanced",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "1260203944",
+      "m_RenderMode": 1,
+      "m_SortingOrder": 0,
+      "gameObjectName": "Canvas (w button controls)",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "DOTweenAnimation_Basics",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "1260203944",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 0,
+      "gameObjectName": "Canvas (contains animated objects)",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  },
+  {
+    "sourceFile": "DOTweenPath",
+    "canvas": {
+      "type": "Canvas",
+      "fileID": "1260203944",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 0,
+      "gameObjectName": "Canvas",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "canvasScalers": []
+  }
+]

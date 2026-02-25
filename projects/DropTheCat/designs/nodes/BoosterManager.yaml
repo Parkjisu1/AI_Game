@@ -1,0 +1,84 @@
+# BoosterManager - Domain Booster Item Manager
+metadata:
+  nodeId: "BoosterManager"
+  version: "1.0.0"
+  phase: 2
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "SaveManager"
+    - "CurrencyManager"
+    - "EventManager"
+    - "GridManager"
+  external:
+    - "UnityEngine"
+    - "System.Collections.Generic"
+
+contract:
+  provides:
+    - "bool UseBooster(BoosterId boosterId)"
+    - "bool CanUseBooster(BoosterId boosterId)"
+    - "int GetBoosterCount(BoosterId boosterId)"
+    - "void AddBooster(BoosterId boosterId, int count)"
+    - "bool PurchaseBooster(BoosterId boosterId)"
+    - "void ResetLevelUsage()"
+  requires:
+    - "Singleton<BoosterManager>"
+    - "SaveManager.Save/Load"
+    - "CurrencyManager.SpendCoins"
+    - "EventManager.Publish"
+    - "GridManager (Hint/Shuffle 용)"
+
+tags:
+  layer: "Domain"
+  genre: "Puzzle"
+  role: "Manager"
+  system: "Booster"
+  majorFunctions:
+    - "StateControl"
+    - "ResourceTransfer"
+    - "FlowControl"
+  minorFunctions:
+    - "Validate"
+    - "Calculate"
+    - "Assign"
+    - "Notify"
+
+logicFlow:
+  - step: 1
+    tag: "ConditionCheck"
+    action: "UseBooster - 보유량 > 0 && 레벨당 사용 횟수 미초과 확인"
+    next: 2
+  - step: 2
+    tag: "ResourceTransfer"
+    action: "보유량 차감 → 레벨 사용 횟수 증가 → 저장"
+    next: 3
+  - step: 3
+    tag: "FlowControl"
+    action: "부스터 타입별 효과 분기: Hint→최적이동계산, Undo→이전상태복원, Magnet→즉시드롭, Shuffle→구멍재배치, Reset→레벨리셋"
+    next: 4
+  - step: 4
+    tag: "ResponseTrigger"
+    action: "OnBoosterUsed + OnBoosterCountChanged 이벤트 발행"
+    next: 5
+  - step: 5
+    tag: "ResourceTransfer"
+    action: "PurchaseBooster - CurrencyManager.SpendCoins → 성공 시 AddBooster"
+    next: null
+
+referencePatterns:
+  - source: "db/base/puzzle/domain/SpecialItemButton"
+    pattern: "아이템 사용 버튼 + 수량 관리 패턴"
+
+codeHints:
+  patterns:
+    - "public class BoosterManager : Singleton<BoosterManager>"
+    - "enum BoosterId { Hint, Undo, Reset, Magnet, Shuffle }"
+    - "Dictionary<BoosterId, int> boosterCounts"
+    - "Dictionary<BoosterId, int> levelUsageCounts (레벨별 사용 제한)"
+    - "Dictionary<BoosterId, int> boosterCosts (코인 비용)"
+  avoidPatterns:
+    - "부스터 효과를 BoosterManager에서 직접 구현 금지 (각 시스템 호출)"
+    - "무제한 사용 허용 금지 (레벨당 제한 준수)"

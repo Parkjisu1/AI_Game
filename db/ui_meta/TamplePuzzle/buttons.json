@@ -1,0 +1,7181 @@
+[
+  {
+    "type": "Button",
+    "fileID": "993543796",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "GoldCountdown",
+    "rectSize": {
+      "x": 270.0,
+      "y": 189.0
+    },
+    "anchoredPosition": {
+      "x": -2.0,
+      "y": -4.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "GameScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "1143369241",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "IngameGoldPig",
+    "rectSize": {
+      "x": 226.0,
+      "y": 223.0
+    },
+    "anchoredPosition": {
+      "x": 417.0,
+      "y": -10.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "GameScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "1285441714",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "RewardItem",
+    "rectSize": {
+      "x": 240.0,
+      "y": 200.0
+    },
+    "anchoredPosition": {
+      "x": -415.3,
+      "y": -18.15
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "GameScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "1684108655",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "GoldStore",
+    "rectSize": {
+      "x": 395.05,
+      "y": 77.23999
+    },
+    "anchoredPosition": {
+      "x": 13.0,
+      "y": 16.0
+    },
+    "anchorMin": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMax": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "sourceFile": "GameScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "4064432438571346023",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "GoldStore",
+    "rectSize": {
+      "x": 395.05,
+      "y": 77.23999
+    },
+    "anchoredPosition": {
+      "x": 13.0,
+      "y": 16.0
+    },
+    "anchorMin": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMax": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "sourceFile": "GameScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "6223300147488466478",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Setting",
+    "rectSize": {
+      "x": 153.0,
+      "y": 163.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": -80.0
+    },
+    "anchorMin": {
+      "x": 0.0,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.0,
+      "y": 0.5
+    },
+    "sourceFile": "GameScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "7942759050681968834",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Item2Background",
+    "rectSize": {
+      "x": 186.9,
+      "y": 187.8
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": -13.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "GameScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "7942759051535874854",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Setting",
+    "rectSize": {
+      "x": 153.0,
+      "y": 163.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 7.6293945e-06
+    },
+    "anchorMin": {
+      "x": 0.0,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.0,
+      "y": 0.5
+    },
+    "sourceFile": "GameScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "7942759051572913018",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Item1Background",
+    "rectSize": {
+      "x": 186.9,
+      "y": 187.8
+    },
+    "anchoredPosition": {
+      "x": -195.0,
+      "y": -13.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "GameScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "7942759051711738406",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Item3Background",
+    "rectSize": {
+      "x": 186.9,
+      "y": 187.8
+    },
+    "anchoredPosition": {
+      "x": 195.0,
+      "y": -13.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "GameScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "543467511",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Image",
+    "rectSize": {
+      "x": 399.6,
+      "y": 241.2
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 437.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "HomeScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "592710386",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Image (1)",
+    "rectSize": {
+      "x": 590.9,
+      "y": 241.2
+    },
+    "anchoredPosition": {
+      "x": -5.5,
+      "y": 737.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "HomeScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "935777687",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Image (2)",
+    "rectSize": {
+      "x": 399.6,
+      "y": 241.2
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 152.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "HomeScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "1651176817",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "TitleBackground",
+    "rectSize": {
+      "x": 2048.0,
+      "y": 2732.4456
+    },
+    "anchoredPosition": {
+      "x": 39.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "HomeScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "166908088",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "RemoveAds",
+    "rectSize": {
+      "x": 151.0,
+      "y": 154.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 1.0,
+      "y": 1.0
+    },
+    "anchorMax": {
+      "x": 1.0,
+      "y": 1.0
+    },
+    "sourceFile": "LobbyScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "376548701",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "GoldStore",
+    "rectSize": {
+      "x": 395.05,
+      "y": 77.24
+    },
+    "anchoredPosition": {
+      "x": -320.85,
+      "y": -11.38
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "LobbyScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "526662179",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "SpecialPackage",
+    "rectSize": {
+      "x": 193.6,
+      "y": 150.1
+    },
+    "anchoredPosition": {
+      "x": 281.4,
+      "y": -13.1
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "LobbyScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "529003593",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "OurGameLink",
+    "rectSize": {
+      "x": 144.4,
+      "y": 83.4
+    },
+    "anchoredPosition": {
+      "x": 467.8,
+      "y": -80.1492
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "LobbyScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "723922599",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "FacebookLink",
+    "rectSize": {
+      "x": 131.4,
+      "y": 138.4
+    },
+    "anchoredPosition": {
+      "x": 320.0,
+      "y": -71.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "LobbyScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "773262213",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Reward",
+    "rectSize": {
+      "x": 185.0,
+      "y": 156.0
+    },
+    "anchoredPosition": {
+      "x": -20.8,
+      "y": -7.4
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "LobbyScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "902766316",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "VIP_Membership",
+    "rectSize": {
+      "x": 147.9,
+      "y": 134.9
+    },
+    "anchoredPosition": {
+      "x": 170.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "LobbyScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "1201908303",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Setting",
+    "rectSize": {
+      "x": 153.0,
+      "y": 163.0
+    },
+    "anchoredPosition": {
+      "x": 270.0,
+      "y": 15.9999695
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "LobbyScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "1259777310",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "RewardBox",
+    "rectSize": {
+      "x": 201.0,
+      "y": 170.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 16.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "LobbyScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "1541990974",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "InAppShop",
+    "rectSize": {
+      "x": 198.0,
+      "y": 169.0
+    },
+    "anchoredPosition": {
+      "x": -270.0,
+      "y": 15.9999695
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "LobbyScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "1679016827",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Button",
+    "rectSize": {
+      "x": 189.4,
+      "y": 122.8
+    },
+    "anchoredPosition": {
+      "x": -14.8,
+      "y": 23.6
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "LobbyScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "1958171710",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Button",
+    "rectSize": {
+      "x": 75.8,
+      "y": 75.8
+    },
+    "anchoredPosition": {
+      "x": -123.1,
+      "y": 27.5
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "LobbyScene"
+  },
+  {
+    "type": "Button",
+    "fileID": "4415703054918645549",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "MaxInterstitialCloseButton",
+    "rectSize": {
+      "x": 250.0,
+      "y": 100.0
+    },
+    "anchoredPosition": {
+      "x": -200.0,
+      "y": -100.0
+    },
+    "anchorMin": {
+      "x": 1.0,
+      "y": 1.0
+    },
+    "anchorMax": {
+      "x": 1.0,
+      "y": 1.0
+    },
+    "sourceFile": "Interstitial"
+  },
+  {
+    "type": "Button",
+    "fileID": "87227930114769318",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "MaxRewardButton",
+    "rectSize": {
+      "x": 300.0,
+      "y": 100.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": -150.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "Rewarded"
+  },
+  {
+    "type": "Button",
+    "fileID": "4415703054918645549",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "MaxRewardedCloseButton",
+    "rectSize": {
+      "x": 250.0,
+      "y": 100.0
+    },
+    "anchoredPosition": {
+      "x": -200.0,
+      "y": -100.0
+    },
+    "anchorMin": {
+      "x": 1.0,
+      "y": 1.0
+    },
+    "anchorMax": {
+      "x": 1.0,
+      "y": 1.0
+    },
+    "sourceFile": "Rewarded"
+  },
+  {
+    "type": "Button",
+    "fileID": "11403988",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Item",
+    "rectSize": {
+      "x": 0.0,
+      "y": 20.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.0,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 1.0,
+      "y": 0.5
+    },
+    "sourceFile": "UIFakeStoreCanvas"
+  },
+  {
+    "type": "Button",
+    "fileID": "11409678",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Dropdown",
+    "rectSize": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMax": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "sourceFile": "UIFakeStoreCanvas"
+  },
+  {
+    "type": "Button",
+    "fileID": "11432268",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Button2",
+    "rectSize": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMax": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "sourceFile": "UIFakeStoreCanvas"
+  },
+  {
+    "type": "Button",
+    "fileID": "11435002",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Scrollbar",
+    "rectSize": {
+      "x": 20.0,
+      "y": 0.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 1.0,
+      "y": 0.0
+    },
+    "anchorMax": {
+      "x": 1.0,
+      "y": 1.0
+    },
+    "sourceFile": "UIFakeStoreCanvas"
+  },
+  {
+    "type": "Button",
+    "fileID": "11490762",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Button1",
+    "rectSize": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMax": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "sourceFile": "UIFakeStoreCanvas"
+  },
+  {
+    "type": "Button",
+    "fileID": "8823284",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Login",
+    "rectSize": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMax": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "sourceFile": "IAP Demo"
+  },
+  {
+    "type": "Button",
+    "fileID": "59199788",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Restore",
+    "rectSize": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMax": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "sourceFile": "IAP Demo"
+  },
+  {
+    "type": "Button",
+    "fileID": "383114982",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Validate",
+    "rectSize": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMax": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "sourceFile": "IAP Demo"
+  },
+  {
+    "type": "Button",
+    "fileID": "1706115445",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.47794116,
+        "g": 0.47794116,
+        "b": 0.47794116,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Receipt Button",
+    "rectSize": {
+      "x": 50.0,
+      "y": 30.0
+    },
+    "anchoredPosition": {
+      "x": -65.0,
+      "y": -10.0
+    },
+    "anchorMin": {
+      "x": 1.0,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 1.0,
+      "y": 0.5
+    },
+    "sourceFile": "IAP Demo"
+  },
+  {
+    "type": "Button",
+    "fileID": "1970439085",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 0.11074164,
+        "g": 0.7352941,
+        "b": 0.05947233,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.48269895,
+        "g": 0.9117647,
+        "b": 0.485658,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Purchase Button",
+    "rectSize": {
+      "x": 60.0,
+      "y": 30.0
+    },
+    "anchoredPosition": {
+      "x": -5.0,
+      "y": -10.0
+    },
+    "anchorMin": {
+      "x": 1.0,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 1.0,
+      "y": 0.5
+    },
+    "sourceFile": "IAP Demo"
+  },
+  {
+    "type": "Button",
+    "fileID": "6601826892635890197",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Shop",
+    "rectSize": {
+      "x": 433.0,
+      "y": 117.0
+    },
+    "anchoredPosition": {
+      "x": -291.0,
+      "y": 706.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionFailPopup_Lose"
+  },
+  {
+    "type": "Button",
+    "fileID": "3991184690331302035",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Retry",
+    "rectSize": {
+      "x": 378.0,
+      "y": 158.0
+    },
+    "anchoredPosition": {
+      "x": -258.0,
+      "y": -227.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionFailPopup_Lose"
+  },
+  {
+    "type": "Button",
+    "fileID": "5225765059856344519",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "CloseBtn",
+    "rectSize": {
+      "x": 92.0,
+      "y": 98.0
+    },
+    "anchoredPosition": {
+      "x": 477.0,
+      "y": 706.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionFailPopup_Lose"
+  },
+  {
+    "type": "Button",
+    "fileID": "5427405208406253626",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "RewardAds",
+    "rectSize": {
+      "x": 492.0,
+      "y": 158.0
+    },
+    "anchoredPosition": {
+      "x": 204.0,
+      "y": -227.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionFailPopup_Lose"
+  },
+  {
+    "type": "Button",
+    "fileID": "4147414371115312940",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "PriceBg",
+    "rectSize": {
+      "x": 284.0,
+      "y": 114.0
+    },
+    "anchoredPosition": {
+      "x": 275.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "Shop_Gold"
+  },
+  {
+    "type": "Button",
+    "fileID": "8863161220483088905",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "PriceBg",
+    "rectSize": {
+      "x": 181.66,
+      "y": 72.92
+    },
+    "anchoredPosition": {
+      "x": 264.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "CompleteShop_FreeBox"
+  },
+  {
+    "type": "Button",
+    "fileID": "3141794526369615469",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "PriceBg",
+    "rectSize": {
+      "x": 181.66,
+      "y": 72.92
+    },
+    "anchoredPosition": {
+      "x": 264.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "CompleteShop_FreeGold"
+  },
+  {
+    "type": "Button",
+    "fileID": "1196450290066074049",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "PriceBg",
+    "rectSize": {
+      "x": 181.66,
+      "y": 72.92
+    },
+    "anchoredPosition": {
+      "x": 264.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "CompleteShop_Gold"
+  },
+  {
+    "type": "Button",
+    "fileID": "8558817190799529815",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "PriceBg",
+    "rectSize": {
+      "x": 182.0,
+      "y": 90.0
+    },
+    "anchoredPosition": {
+      "x": 264.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "CompleteShop_Package"
+  },
+  {
+    "type": "Button",
+    "fileID": "2330338435773220144",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "PriceBg",
+    "rectSize": {
+      "x": 181.66,
+      "y": 72.92
+    },
+    "anchoredPosition": {
+      "x": 264.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "CompleteShop_RemoveAds"
+  },
+  {
+    "type": "Button",
+    "fileID": "4575559229925328382",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 0.3137255,
+        "g": 0.3137255,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.3137255,
+        "g": 0.3137255,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.15548226,
+        "g": 0.09033466,
+        "b": 0.6603774,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.3137255,
+        "g": 0.3137255,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.3137255,
+        "g": 0.3137255,
+        "b": 1.0,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Scrollbar",
+    "rectSize": {
+      "x": 50.0,
+      "y": 1450.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 1.0,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 1.0,
+      "y": 0.5
+    },
+    "sourceFile": "Stage_CloseType"
+  },
+  {
+    "type": "Button",
+    "fileID": "685011858784437577",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 0.0,
+        "g": 1.0,
+        "b": 0.020097671,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.0,
+        "g": 1.0,
+        "b": 0.019607844,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.24158953,
+        "g": 0.5754717,
+        "b": 0.24813622,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.0,
+        "g": 1.0,
+        "b": 0.019607844,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.0,
+        "g": 1.0,
+        "b": 0.019607844,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Scrollbar",
+    "rectSize": {
+      "x": 50.0,
+      "y": 1450.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 1.0,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 1.0,
+      "y": 0.5
+    },
+    "sourceFile": "Stage_MapType"
+  },
+  {
+    "type": "Button",
+    "fileID": "818630152178416909",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "StageButton",
+    "rectSize": {
+      "x": 200.0,
+      "y": 200.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "StageButton_CloseType"
+  },
+  {
+    "type": "Button",
+    "fileID": "4195038168310347593",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "StageGroupButton",
+    "rectSize": {
+      "x": 1000.0,
+      "y": 200.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 1.0
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 1.0
+    },
+    "sourceFile": "StageButton_CloseTypeGroup"
+  },
+  {
+    "type": "Button",
+    "fileID": "5311561964194474882",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "StageButton",
+    "rectSize": {
+      "x": 100.0,
+      "y": 100.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "StageButton_MapType"
+  },
+  {
+    "type": "Button",
+    "fileID": "2216925268774968427",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "OkButton",
+    "rectSize": {
+      "x": 688.0,
+      "y": 189.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": -538.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "DailyRewardPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "8656317099104209551",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "TextBackground",
+    "rectSize": {
+      "x": 417.0,
+      "y": 167.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": -244.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "DailyRewardPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "1608273963455916799",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "OpenAds",
+    "rectSize": {
+      "x": 306.7,
+      "y": 132.0
+    },
+    "anchoredPosition": {
+      "x": 371.7,
+      "y": -4.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "DailyRewardPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "7694395901583604255",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "OpenAds",
+    "rectSize": {
+      "x": 861.0,
+      "y": 153.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": -231.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "GameQuitPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "4338836895527578946",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Yes",
+    "rectSize": {
+      "x": 306.8,
+      "y": 117.3
+    },
+    "anchoredPosition": {
+      "x": 251.4,
+      "y": -225.3
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "GameQuitPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "6610674929474499788",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "CloseBtn",
+    "rectSize": {
+      "x": 92.0,
+      "y": 98.0
+    },
+    "anchoredPosition": {
+      "x": 477.0,
+      "y": 792.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "GameQuitPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "8613105821760664267",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "OpenAds",
+    "rectSize": {
+      "x": 306.7,
+      "y": 132.0
+    },
+    "anchoredPosition": {
+      "x": 371.7,
+      "y": -4.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "GameQuitPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "7567542470971744986",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "No",
+    "rectSize": {
+      "x": 492.0,
+      "y": 158.0
+    },
+    "anchoredPosition": {
+      "x": -216.0,
+      "y": -205.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "GameQuitPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "7264597200651349080",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "bg",
+    "rectSize": {
+      "x": 861.0,
+      "y": 153.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": -231.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "GameQuitPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "4572670246737285756",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "RewardButton",
+    "rectSize": {
+      "x": 378.0,
+      "y": 158.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": -436.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "GoldPigPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "4572670247103000229",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "CloseBtn",
+    "rectSize": {
+      "x": 92.0,
+      "y": 98.0
+    },
+    "anchoredPosition": {
+      "x": 455.0,
+      "y": 666.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "GoldPigPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "8572472867434442259",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "OpenAds",
+    "rectSize": {
+      "x": 306.7,
+      "y": 132.0
+    },
+    "anchoredPosition": {
+      "x": 371.7,
+      "y": -4.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "GoldPigPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "394743988889248355",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "'Close '",
+    "rectSize": {
+      "x": 92.0,
+      "y": 98.0
+    },
+    "anchoredPosition": {
+      "x": 436.25006,
+      "y": 182.49988
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "InGameMenuPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "7594457356689494592",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Home",
+    "rectSize": {
+      "x": 320.0,
+      "y": 130.0
+    },
+    "anchoredPosition": {
+      "x": -175.0,
+      "y": -143.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "InGameMenuPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "7594457356905488201",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Restart",
+    "rectSize": {
+      "x": 320.0,
+      "y": 130.0
+    },
+    "anchoredPosition": {
+      "x": 183.0,
+      "y": 13.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "InGameMenuPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "7594457357749461549",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "MoreGames",
+    "rectSize": {
+      "x": 320.0,
+      "y": 130.0
+    },
+    "anchoredPosition": {
+      "x": 183.0,
+      "y": -143.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "InGameMenuPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "7594457357937632638",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "BGM",
+    "rectSize": {
+      "x": 320.0,
+      "y": 130.0
+    },
+    "anchoredPosition": {
+      "x": -175.0,
+      "y": -299.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "InGameMenuPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "2276506093846982845",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "OpenAds",
+    "rectSize": {
+      "x": 306.7,
+      "y": 132.0
+    },
+    "anchoredPosition": {
+      "x": 371.7,
+      "y": -4.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "InGameMenuPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "7594457358276126852",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Continue",
+    "rectSize": {
+      "x": 320.0,
+      "y": 130.0
+    },
+    "anchoredPosition": {
+      "x": -175.0,
+      "y": 13.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "InGameMenuPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "7594457358485722616",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Sound",
+    "rectSize": {
+      "x": 320.0,
+      "y": 130.0
+    },
+    "anchoredPosition": {
+      "x": 183.0,
+      "y": -299.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "InGameMenuPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "5270290830529563426",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "BGM",
+    "rectSize": {
+      "x": 320.0,
+      "y": 130.0
+    },
+    "anchoredPosition": {
+      "x": -175.0,
+      "y": -133.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "LobbyMenuPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "3184325050530772817",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "OpenAds",
+    "rectSize": {
+      "x": 306.7,
+      "y": 132.0
+    },
+    "anchoredPosition": {
+      "x": 371.7,
+      "y": -4.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "LobbyMenuPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "5270290831111846820",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Sound",
+    "rectSize": {
+      "x": 320.0,
+      "y": 130.0
+    },
+    "anchoredPosition": {
+      "x": 183.0,
+      "y": -133.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "LobbyMenuPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "7949716550827091872",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "'Close '",
+    "rectSize": {
+      "x": 92.0,
+      "y": 98.0
+    },
+    "anchoredPosition": {
+      "x": 436.25006,
+      "y": 182.49988
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "LobbyMenuPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "787555522881346862",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "RightArrow",
+    "rectSize": {
+      "x": 83.0,
+      "y": 109.0
+    },
+    "anchoredPosition": {
+      "x": 433.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionCompletePopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "8088378028512407955",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "BoxBG",
+    "rectSize": {
+      "x": 349.0,
+      "y": 242.0
+    },
+    "anchoredPosition": {
+      "x": 191.0,
+      "y": 100.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionCompletePopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "2982032432797738686",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Retry",
+    "rectSize": {
+      "x": 378.0,
+      "y": 158.0
+    },
+    "anchoredPosition": {
+      "x": -263.0,
+      "y": -141.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionCompletePopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "3971905712519488735",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "GoldPigBG",
+    "rectSize": {
+      "x": 349.0,
+      "y": 242.0
+    },
+    "anchoredPosition": {
+      "x": -231.0,
+      "y": 100.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionCompletePopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "2982032433155527303",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Next",
+    "rectSize": {
+      "x": 492.0,
+      "y": 158.0
+    },
+    "anchoredPosition": {
+      "x": 196.0,
+      "y": -141.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionCompletePopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "386699168130844215",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "OpenAds",
+    "rectSize": {
+      "x": 861.0,
+      "y": 153.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": -192.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionCompletePopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "1121825014466107596",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "CloseBtn",
+    "rectSize": {
+      "x": 92.0,
+      "y": 98.0
+    },
+    "anchoredPosition": {
+      "x": 477.0,
+      "y": 881.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionCompletePopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "8010641662522549975",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "RemoveAds",
+    "rectSize": {
+      "x": 151.0,
+      "y": 154.0
+    },
+    "anchoredPosition": {
+      "x": -383.0,
+      "y": 731.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionCompletePopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "7193635306700844012",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "SpecialPackage",
+    "rectSize": {
+      "x": 227.0,
+      "y": 176.0
+    },
+    "anchoredPosition": {
+      "x": -383.0,
+      "y": 731.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionCompletePopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "3802482813366699003",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "bg",
+    "rectSize": {
+      "x": 861.0,
+      "y": 153.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": -231.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionCompletePopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "8400056338182242429",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "LeftArrow",
+    "rectSize": {
+      "x": 83.0,
+      "y": 109.0
+    },
+    "anchoredPosition": {
+      "x": -433.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionCompletePopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "7928397283656819373",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "PriceBg",
+    "rectSize": {
+      "x": 182.0,
+      "y": 90.0
+    },
+    "anchoredPosition": {
+      "x": 264.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionCompletePopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "574238714611761229",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "bg",
+    "rectSize": {
+      "x": 861.0,
+      "y": 153.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": -231.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionFailPopup_Continue"
+  },
+  {
+    "type": "Button",
+    "fileID": "4075269880658146847",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Shop",
+    "rectSize": {
+      "x": 433.0,
+      "y": 117.0
+    },
+    "anchoredPosition": {
+      "x": -291.0,
+      "y": 792.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionFailPopup_Continue"
+  },
+  {
+    "type": "Button",
+    "fileID": "5702753521654246495",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "OpenAds",
+    "rectSize": {
+      "x": 861.0,
+      "y": 153.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": -231.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionFailPopup_Continue"
+  },
+  {
+    "type": "Button",
+    "fileID": "8291899343638176678",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Continue",
+    "rectSize": {
+      "x": 492.0,
+      "y": 158.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": -205.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionFailPopup_Continue"
+  },
+  {
+    "type": "Button",
+    "fileID": "4453970694362170248",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "OpenAds",
+    "rectSize": {
+      "x": 306.7,
+      "y": 132.0
+    },
+    "anchoredPosition": {
+      "x": 371.7,
+      "y": -4.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionFailPopup_Continue"
+  },
+  {
+    "type": "Button",
+    "fileID": "4731634628098700720",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "CloseBtn",
+    "rectSize": {
+      "x": 92.0,
+      "y": 98.0
+    },
+    "anchoredPosition": {
+      "x": 477.0,
+      "y": 792.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionFailPopup_Continue"
+  },
+  {
+    "type": "Button",
+    "fileID": "3855510405450152115",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Ads",
+    "rectSize": {
+      "x": 386.0,
+      "y": 132.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": -298.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "7717147037527603247",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Image",
+    "rectSize": {
+      "x": 3000.0,
+      "y": 3000.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "MissionPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "7802418680879005236",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "LaterReview",
+    "rectSize": {
+      "x": 540.0,
+      "y": 130.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": -30.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "ReviewPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "7802418681519904405",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Review",
+    "rectSize": {
+      "x": 540.0,
+      "y": 130.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 130.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "ReviewPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "7802418682117054379",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "NoReview",
+    "rectSize": {
+      "x": 540.0,
+      "y": 130.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": -195.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "ReviewPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "7802418682744827364",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Close",
+    "rectSize": {
+      "x": 92.0,
+      "y": 98.0
+    },
+    "anchoredPosition": {
+      "x": 349.0,
+      "y": 672.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "ReviewPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "7255062797738157209",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "OpenAds",
+    "rectSize": {
+      "x": 306.7,
+      "y": 132.0
+    },
+    "anchoredPosition": {
+      "x": 371.7,
+      "y": -4.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "ReviewPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "1803483003627028155",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "OpenAds",
+    "rectSize": {
+      "x": 306.7,
+      "y": 132.0
+    },
+    "anchoredPosition": {
+      "x": 371.7,
+      "y": -4.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "RewardBoxPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "1438802611753236600",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "GetButton",
+    "rectSize": {
+      "x": 378.0,
+      "y": 158.0
+    },
+    "anchoredPosition": {
+      "x": -203.0,
+      "y": -495.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "RewardBoxPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "4834202415700546431",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "RewardButton",
+    "rectSize": {
+      "x": 378.0,
+      "y": 158.0
+    },
+    "anchoredPosition": {
+      "x": 224.0,
+      "y": -495.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "RewardBoxPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "962708537150217628",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "OpenButton",
+    "rectSize": {
+      "x": 431.0,
+      "y": 158.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": -495.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "RewardBoxPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "5097478934098751027",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "sourceFile": "ShopPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "4447804336638674528",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "sourceFile": "ShopPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "1945450220120543408",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Reward (1)",
+    "rectSize": {
+      "x": 284.0,
+      "y": 114.0
+    },
+    "anchoredPosition": {
+      "x": 275.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "ShopPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "1358636893",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "GoldBg",
+    "rectSize": {
+      "x": 284.0,
+      "y": 114.0
+    },
+    "anchoredPosition": {
+      "x": 275.0,
+      "y": 21.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "ShopPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "1474386559",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Coins",
+    "rectSize": {
+      "x": 490.0,
+      "y": 188.0
+    },
+    "anchoredPosition": {
+      "x": -247.0,
+      "y": 398.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "ShopPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "893467595708561729",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Reward",
+    "rectSize": {
+      "x": 284.0,
+      "y": 114.0
+    },
+    "anchoredPosition": {
+      "x": 275.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "ShopPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "5847739345076994260",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Scrollbar Vertical",
+    "rectSize": {
+      "x": -1.0999985,
+      "y": 0.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.95929635,
+      "y": 0.0
+    },
+    "anchorMax": {
+      "x": 1.0,
+      "y": 1.0
+    },
+    "sourceFile": "ShopPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "1623920586",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Item",
+    "rectSize": {
+      "x": 490.0,
+      "y": 188.0
+    },
+    "anchoredPosition": {
+      "x": 252.0,
+      "y": 398.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "ShopPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "1756007584",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "GoldBg",
+    "rectSize": {
+      "x": 284.0,
+      "y": 114.0
+    },
+    "anchoredPosition": {
+      "x": 275.0,
+      "y": 17.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "ShopPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "382445354223303796",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "sourceFile": "ShopPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "977963157",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Close",
+    "rectSize": {
+      "x": 133.0,
+      "y": 139.0
+    },
+    "anchoredPosition": {
+      "x": 467.0,
+      "y": 725.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "ShopPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "781780238",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "GoldBg",
+    "rectSize": {
+      "x": 284.0,
+      "y": 114.0
+    },
+    "anchoredPosition": {
+      "x": 275.0,
+      "y": 21.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "ShopPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "1768902493890619243",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Restore",
+    "rectSize": {
+      "x": 148.0,
+      "y": 135.0
+    },
+    "anchoredPosition": {
+      "x": 275.0,
+      "y": 742.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "ShopPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "1421428486873210866",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "CloseBtn",
+    "rectSize": {
+      "x": 92.0,
+      "y": 98.0
+    },
+    "anchoredPosition": {
+      "x": 455.0,
+      "y": 666.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "SpecialPackagePopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "1421428487312810795",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "RewardButton",
+    "rectSize": {
+      "x": 378.0,
+      "y": 158.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": -578.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "SpecialPackagePopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "4999187682536604124",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "OpenAds",
+    "rectSize": {
+      "x": 306.7,
+      "y": 132.0
+    },
+    "anchoredPosition": {
+      "x": 371.7,
+      "y": -4.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "TutorialPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "4673324036567032211",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "OkButton",
+    "rectSize": {
+      "x": 378.0,
+      "y": 158.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": -436.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "sourceFile": "TutorialPopup"
+  },
+  {
+    "type": "Button",
+    "fileID": "1824906632",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 0.3137255,
+        "g": 0.3137255,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.3137255,
+        "g": 0.3137255,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.15548226,
+        "g": 0.09033466,
+        "b": 0.6603774,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.3137255,
+        "g": 0.3137255,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.3137255,
+        "g": 0.3137255,
+        "b": 1.0,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "Scrollbar",
+    "rectSize": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "anchorMin": {
+      "x": 0.95,
+      "y": 0.3
+    },
+    "anchorMax": {
+      "x": 1.0,
+      "y": 0.7
+    },
+    "sourceFile": "Stage_OpenType"
+  },
+  {
+    "type": "Button",
+    "fileID": "2376601118365904531",
+    "m_Colors": {
+      "m_NormalColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_HighlightedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_PressedColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 1.0
+      },
+      "m_SelectedColor": {
+        "r": 0.9607843,
+        "g": 0.9607843,
+        "b": 0.9607843,
+        "a": 1.0
+      },
+      "m_DisabledColor": {
+        "r": 0.78431374,
+        "g": 0.78431374,
+        "b": 0.78431374,
+        "a": 0.5019608
+      }
+    },
+    "m_Navigation": {
+      "m_Mode": 3
+    },
+    "m_Interactable": 1,
+    "gameObjectName": "StageButton",
+    "rectSize": {
+      "x": 230.0,
+      "y": 231.0
+    },
+    "anchoredPosition": {
+      "x": 0.0,
+      "y": -100.0
+    },
+    "anchorMin": {
+      "x": 0.5,
+      "y": 1.0
+    },
+    "anchorMax": {
+      "x": 0.5,
+      "y": 1.0
+    },
+    "sourceFile": "StageButton_OpenType"
+  }
+]

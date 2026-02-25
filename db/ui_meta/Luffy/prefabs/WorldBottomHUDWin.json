@@ -1,0 +1,717 @@
+{
+  "fileName": "WorldBottomHUDWin",
+  "filePath": "E:/AIMED/Luffy/IdleMoney1/Project/Assets\\IdleMoney\\Prefabs\\UI\\Windows\\WorldBottomHUDWin.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 24,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "5344278317427850541",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "ReturnBtn",
+      "rectSize": {
+        "x": 141.0,
+        "y": 125.0
+      },
+      "anchoredPosition": {
+        "x": 419.9,
+        "y": 141.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "WorldBottomHUDWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "705383563278712985",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "MoneyBoxBtn",
+      "rectSize": {
+        "x": 141.0,
+        "y": 125.0
+      },
+      "anchoredPosition": {
+        "x": 127.0,
+        "y": 141.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "WorldBottomHUDWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "7916812266652618057",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "LabBtn",
+      "rectSize": {
+        "x": 141.0,
+        "y": 125.0
+      },
+      "anchoredPosition": {
+        "x": 273.5,
+        "y": 141.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "WorldBottomHUDWin"
+    }
+  ],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "6369124424164508444",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.14509805,
+        "g": 0.05882353,
+        "b": 0.03529412,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "c844abceb464b4834890be00cf8572e7",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Goods1BG",
+      "rectSize": {
+        "x": 152.0,
+        "y": 35.0
+      },
+      "anchoredPosition": {
+        "x": 170.0,
+        "y": 111.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "WorldBottomHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "5633468617811660734",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "0d2cdd65b17314b5fa78e32be7a82bb9",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "NotiIcon_1",
+      "rectSize": {
+        "x": 37.5,
+        "y": 37.5
+      },
+      "anchoredPosition": {
+        "x": 63.3,
+        "y": 62.6
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "WorldBottomHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "6008387159043369373",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "51471f9b4fc7b43d8ae8e8512e393bcd",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "ReturnBtn",
+      "rectSize": {
+        "x": 141.0,
+        "y": 125.0
+      },
+      "anchoredPosition": {
+        "x": 419.9,
+        "y": 141.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "WorldBottomHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7219536040720544295",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "51471f9b4fc7b43d8ae8e8512e393bcd",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "MoneyBoxBtn",
+      "rectSize": {
+        "x": 141.0,
+        "y": 125.0
+      },
+      "anchoredPosition": {
+        "x": 127.0,
+        "y": 141.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "WorldBottomHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7488872222945043009",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "f1accf5e19df07049854a53440819532",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "ArrowAnim",
+      "rectSize": {
+        "x": 60.0,
+        "y": 62.4
+      },
+      "anchoredPosition": {
+        "x": -146.5,
+        "y": 94.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "WorldBottomHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "5392233972107032458",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "51471f9b4fc7b43d8ae8e8512e393bcd",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "LabBtn",
+      "rectSize": {
+        "x": 141.0,
+        "y": 125.0
+      },
+      "anchoredPosition": {
+        "x": 273.5,
+        "y": 141.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "WorldBottomHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "6099181341800392459",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "c9845155bb612a94fadb2750791ff3d2",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "MoneyBoxIconImg",
+      "rectSize": {
+        "x": 110.0,
+        "y": 115.0
+      },
+      "anchoredPosition": {
+        "x": 0.6999512,
+        "y": 31.700012
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "WorldBottomHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "1997595142590842360",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "f1accf5e19df07049854a53440819532",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "ArrowAnim",
+      "rectSize": {
+        "x": 60.0,
+        "y": 62.4
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 94.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "WorldBottomHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "6276800755834095097",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "167e9f63de86ad0489262a68dff2ef7e",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IconImg",
+      "rectSize": {
+        "x": 65.0,
+        "y": 51.0
+      },
+      "anchoredPosition": {
+        "x": -67.6,
+        "y": -1.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "WorldBottomHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "6311056990872321387",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "cac732064d0901c459b15d2e6f8f33b9",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "MoneyBoxIconImg",
+      "rectSize": {
+        "x": 110.0,
+        "y": 115.0
+      },
+      "anchoredPosition": {
+        "x": -0.3,
+        "y": 31.7
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "WorldBottomHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "6222198879141873760",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "0d2cdd65b17314b5fa78e32be7a82bb9",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "NotiIcon",
+      "rectSize": {
+        "x": 37.5,
+        "y": 37.5
+      },
+      "anchoredPosition": {
+        "x": 63.1,
+        "y": 62.6
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "WorldBottomHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "8714660812532669744",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "efeb9f8511d05024d85274c700b23738",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "ReturnIconImg",
+      "rectSize": {
+        "x": 113.0,
+        "y": 108.0
+      },
+      "anchoredPosition": {
+        "x": -0.3,
+        "y": 31.7
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "WorldBottomHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "3737639795694999509",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.14509805,
+        "g": 0.05882353,
+        "b": 0.03529412,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "c844abceb464b4834890be00cf8572e7",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Goods2BG",
+      "rectSize": {
+        "x": 152.0,
+        "y": 35.0
+      },
+      "anchoredPosition": {
+        "x": 354.0,
+        "y": 111.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "WorldBottomHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "219188690897327184",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "677d2488f264ee04facd72ee5e21e993",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IconImg",
+      "rectSize": {
+        "x": 50.0,
+        "y": 47.0
+      },
+      "anchoredPosition": {
+        "x": -70.6,
+        "y": -1.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "WorldBottomHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7611492652585513093",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "0d2cdd65b17314b5fa78e32be7a82bb9",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "NotiIcon_1",
+      "rectSize": {
+        "x": 37.5,
+        "y": 37.5
+      },
+      "anchoredPosition": {
+        "x": 63.3,
+        "y": 62.6
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "WorldBottomHUDWin"
+    }
+  ],
+  "texts": [],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 24
+}

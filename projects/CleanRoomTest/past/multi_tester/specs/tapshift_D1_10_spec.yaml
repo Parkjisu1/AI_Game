@@ -1,0 +1,231 @@
+```yaml
+game: "Tap Shift"
+condition: "D1_10"
+parameters:
+
+  - id: TS01
+    name: total_levels
+    value: "100"
+    confidence: high
+    source: >
+      관찰: 레벨맵 마지막 노드 100 확인 + 패턴카드: 레벨 구조 참조
+
+  - id: TS02
+    name: max_lives
+    value: "3"
+    confidence: high
+    source: >
+      관찰: 게임플레이 중 하트 3개 확인 + 패턴카드: Lives 시스템 표준 구조 참조
+
+  - id: TS03
+    name: max_undo_count
+    value: "10"
+    confidence: high
+    source: >
+      관찰: Undo 버튼 반복 사용으로 10회 최대 확인 + 패턴카드: Undo 스택 구조 참조
+
+  - id: TS04
+    name: max_hint_count
+    value: "3"
+    confidence: high
+    source: >
+      관찰: 힌트 아이콘 옆 숫자 3 확인 + 패턴카드: 소모형 힌트 시스템 구조
+
+  - id: TS05
+    name: interstitial_frequency
+    value: "3 (every 3 levels)"
+    confidence: high
+    source: >
+      관찰: 3레벨마다 전면광고 패턴 확인 + 패턴카드: 광고 빈도 설계 참조
+
+  - id: TS06
+    name: arrow_move_speed
+    value: "12.0"
+    confidence: medium
+    source: >
+      관찰: 이동 속도 프레임 추정 + 패턴카드: 이동 애니메이션 파라미터 참조
+
+  - id: TS07
+    name: max_arrow_clamp
+    value: "18~20"
+    confidence: medium
+    source: >
+      관찰: 후반 레벨 화살표 수 관찰 + 패턴카드: 난이도 스케일링 참조
+
+  - id: TS08
+    name: star_rating_system
+    value: "0~3성, wrong tap 기준 4단계"
+    confidence: high
+    source: >
+      관찰: 클리어 화면 별점 체계 확인 + 패턴카드: 평가 시스템 구조
+
+  - id: TS09
+    name: base_unit
+    value: "50.0"
+    confidence: medium
+    source: >
+      관찰: 격자 크기 역산 + 패턴카드: 유닛 크기 설계 참조
+
+  - id: TS10
+    name: position_snap
+    value: "30.0 (half-unit)"
+    confidence: high
+    source: >
+      관찰: 스냅 위치 관찰 + 패턴카드: 격자 스냅 시스템 구조 참조
+
+  - id: TS11
+    name: duration_clamp
+    value: "[0.20, 0.55] seconds"
+    confidence: low
+    source: >
+      관찰: 프레임 카운팅 + 패턴카드: 이동 타이밍 범위(정확도 한계)
+
+  - id: TS12
+    name: stretch_phase
+    value: "first 35%"
+    confidence: medium
+    source: >
+      관찰: 애니메이션 단계 구분 추정 + 패턴카드: 스트레치 애니메이션 구조 참조
+
+  - id: TS13
+    name: stretch_max
+    value: "1.4"
+    confidence: medium
+    source: >
+      관찰: 스트레칭 비율 시각 추정 + 패턴카드: 스트레치 파라미터 참조
+
+  - id: TS14
+    name: snap_phase
+    value: "last 60%"
+    confidence: high
+    source: >
+      관찰: 이동 후반 감속 구간 확인 + 패턴카드: snap phase 비율
+
+  - id: TS15
+    name: arrow_colors
+    value: "up=green, down=red, left=blue, right=orange, hint=yellow"
+    confidence: medium
+    source: >
+      관찰: 방향별 색상 구분 확인 + 패턴카드: 색상 코딩 시스템
+
+  - id: TS16
+    name: head_ratio
+    value: "0.25"
+    confidence: low
+    source: >
+      관찰: 화살표 비율 시각 추정 + 패턴카드: 오브젝트 비율 설계(정확도 한계)
+
+  - id: TS17
+    name: shaft_height_ratio
+    value: "0.50"
+    confidence: medium
+    source: >
+      관찰: 화살표 몸통 비율 추정 + 패턴카드: 오브젝트 비율 참조
+
+  - id: TS18
+    name: collision_system
+    value: "AABB sweep-to-boundary"
+    confidence: high
+    source: >
+      관찰: 화살표 연속 이동 관찰 + 패턴카드: 격자 기반 sweep 충돌 판정 패턴 참조
+
+  - id: TS19
+    name: performance_complexity
+    value: "O(n) per tap, n <= 20"
+    confidence: high
+    source: >
+      관찰: 대규모 레벨 즉각 반응 확인 + 패턴카드: 성능 복잡도 명시
+
+  - id: TS20
+    name: solver_algorithm
+    value: "DFS with backtracking"
+    confidence: high
+    source: >
+      관찰: 힌트 동작 패턴 + 패턴카드: 솔버 알고리즘 DFS 명시
+
+  - id: TS21
+    name: ui_reference_resolution
+    value: "[720, 1280]"
+    confidence: high
+    source: >
+      관찰: 화면 비율 확인 + 패턴카드: Unity CanvasScaler 기준 해상도 720×1280 명시
+
+  - id: TS22
+    name: total_files
+    value: "45~50"
+    confidence: medium
+    source: >
+      패턴카드: 프로젝트 규모별 파일 수 가이드라인 참조, Arrow Escape 중규모
+
+  - id: TS23
+    name: pattern_count
+    value: "7~8 (Singleton/Pool/Command/Observer/Factory/State/Strategy + α)"
+    confidence: medium
+    source: >
+      패턴카드: 디자인 패턴 목록 참조 — Singleton/Pool/Command/Observer/Factory/State/Strategy 확인,
+      Template/Adapter 미식별
+
+  - id: TS24
+    name: state_count
+    value: "8"
+    confidence: medium
+    source: >
+      관찰: 화면 전환 8개 확인 + 패턴카드: 상태 머신 구조 참조
+
+  - id: TS25
+    name: serialization_format
+    value: "JSON (JsonUtility), Resources/Levels/"
+    confidence: medium
+    source: >
+      관찰: 레벨 로딩 구조 확인 + 패턴카드: 직렬화 형식 참조
+
+  - id: TS26
+    name: arrow_directions
+    value: "4 (up/down/left/right)"
+    confidence: high
+    source: >
+      관찰: 4방향 화살표 직접 확인
+
+  - id: TS27
+    name: arrow_count_progression
+    value: "Level 1-5: 1~5 / 6-15: 3~8 / 16-30: 5~10 / 31-50: 7~12 / 51-75: 10~15 / 76-100: 13~18"
+    confidence: high
+    source: >
+      관찰: 구간별 샘플 플레이 + 패턴카드: 난이도 곡선 구간 범위 명시
+
+  - id: TS28
+    name: grid_size_range
+    value: "board_size 200×200 ~ 420×420 pixels"
+    confidence: medium
+    source: >
+      관찰: 보드 크기 픽셀 측정 + 패턴카드: 격자 크기 설계
+
+  - id: TS29
+    name: tap_mechanic
+    value: "tap arrow → slides in arrow direction → stops at board boundary or blocked by other arrow"
+    confidence: high
+    source: >
+      관찰: 메커니즘 반복 관찰 + 패턴카드: Arrow Escape 메커니즘 패턴 참조
+
+  - id: TS30
+    name: goal_condition
+    value: "모든 화살표를 보드 밖으로 탈출"
+    confidence: high
+    source: >
+      관찰: 클리어 조건 직접 확인 + 패턴카드: 탈출 퍼즐 승리 조건
+
+  - id: TS31
+    name: level_generation
+    value: "절차적 생성 + JSON 저장"
+    confidence: medium
+    source: >
+      관찰: 레벨 구조 확인 + 패턴카드: 레벨 생성 시스템 패턴
+
+  - id: TS32
+    name: save_system
+    value: "PlayerPrefs: LevelStar_{id}, LevelUnlock_{id}, SoundEnabled, MusicEnabled, HapticEnabled, RemainingHints, AdsRemoved"
+    confidence: high
+    source: >
+      관찰: 설정 화면 토글 + 레벨 진행 영속성 확인 + 패턴카드: 저장 시스템 키 구조
+
+```

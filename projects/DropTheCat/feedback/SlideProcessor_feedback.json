@@ -1,0 +1,12 @@
+{
+  "nodeId": "SlideProcessor",
+  "genre": "Puzzle",
+  "role": "Processor",
+  "validationResult": "pass",
+  "score": 0.6,
+  "feedbacks": [],
+  "contractChanged": false,
+  "previousResult": "fail",
+  "fixApplied": "Dictionary<Vector2Int, TileController> _tileMap 추가. ProcessSlide에서 tile.SlideTo(targetWorldPos, callback) 호출 구현. UndoLastSlide에서도 역방향 tile.SlideTo 적용. CanSlide에서 TileController.CanSlide 추가 확인. RegisterTile/UnregisterTile/ClearTileMap 메서드 추가.",
+  "timestamp": "2026-02-10T05:45:00Z"
+}

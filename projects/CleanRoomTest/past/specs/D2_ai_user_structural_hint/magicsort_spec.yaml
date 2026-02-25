@@ -1,0 +1,717 @@
+# Magic Sort - Game Balance Sheet / Design Specification
+# Category: D2 (AI User Observation + Structural Hint Pattern Card)
+# Sources:
+#   - AI User Observation: magicsort_observations.yaml (BlueStacks/ADB session, Level 18)
+#   - Pattern Card Level 2: magicsort_patterns.yaml (structural_hint, no source code)
+# Method: Pattern card numeric ranges anchored by AI user visual confirmation
+# Generated: 2026-02-19
+
+game: "Magic Sort"
+spec_version: "1.0.0"
+spec_category: "D2_ai_user_structural_hint"
+
+# ============================================================
+# CORE MECHANICS
+# ============================================================
+core_mechanics:
+  bottle_capacity:
+    layers_per_bottle: 4          # Confirmed: AI user observed "4 layers" + pattern card "최대 약 4층"
+    description: "Each bottle holds exactly 4 liquid layer slots stacked vertically"
+
+  playable_colors:
+    standard_count: 13            # Pattern card: "약 13가지 플레이어블 색상"
+    special_colors:
+      - name: "Rainbow"
+        description: "Wildcard color that matches any other color for pour purposes"
+    ai_user_observed_at_level_18: 9   # Visual confirmation: 9 distinct colors seen at level 18
+    color_palette:
+      - "Green (lime)"
+      - "Red"
+      - "Pink"
+      - "Orange"
+      - "Yellow"
+      - "Purple"
+      - "Blue (dark)"
+      - "Brown"
+      - "Light blue / periwinkle"
+      - "Teal"
+      - "Magenta"
+      - "Gray"
+      - "White"
+
+  pour_rules:
+    valid_conditions:
+      - "Source bottle is not the same as target bottle"
+      - "Source bottle has at least 1 liquid layer"
+      - "Target bottle top color matches source top color, OR target bottle is empty"
+      - "Target bottle has at least 1 empty layer slot available"
+    forbidden_moves:
+      - condition: "Source bottle is already single-color and fully filled"
+        target: "Empty bottle"
+        reason: "Prevent meaningless moves that gain no progress (anti-trivial move rule)"
+    pour_quantity:
+      description: "All consecutive matching top layers from source pour simultaneously"
+      example: "If source has [Red, Red, Blue, Green], pouring transfers 2 Red layers at once"
+
+  special_rules:
+    win_condition: "All bottles in the puzzle are either (a) completely filled with a single color, OR (b) completely empty"
+    deadlock_condition: "No valid pour exists across all bottle pairs AND win condition is not met"
+    deadlock_handling: "Trigger StuckState in FSM; offer hint or retry prompt to player"
+    selection_model: "Tap-tap two-step: first tap selects source (bottle lifts), second tap selects target"
+
+# ============================================================
+# LIVES SYSTEM
+# ============================================================
+lives_system:
+  max_lives: 5                    # Confirmed: AI user observed "5 hearts with 전체 label"
+  display_label: "전체"           # Korean label observed on main screen
+  regen_time_minutes: 30          # Standard mobile genre convention; not directly observed
+  lives_lost_on: "Level failed (deadlock with no valid retry, or manual quit after depleting moves)"
+  lives_not_lost_on: "Level restart before first move"
+  lives_display_location: "Top-center of main screen"
+
+# ============================================================
+# LEVEL PROGRESSION
+# ============================================================
+level_progression:
+  builtin_levels: 10              # Pattern card: "첫 약 10레벨: 수작업 설계된 빌트인 레벨"
+  description: "First 10 levels are hand-crafted to guarantee controlled learning curve; beyond that, procedural generation"
+
+  difficulty_tiers:
+    easy:
+      level_range: [1, 20]        # Pattern card: "약 1~20레벨"
+      color_count: 4              # Pattern card: "색상 약 4개"
+      empty_bottles: 2            # Pattern card: "빈 병 2개" (consistent across all tiers)
+      total_bottles_formula: "color_count + empty_bottles"  # e.g. 4+2 = 6 bottles
+      typical_total_bottles: 6
+      blockers_enabled: false
+      notes: "Introductory tier; no blockers, low color count, all colors visible"
+
+    hard:
+      level_range: [21, 60]       # Pattern card: "약 21~60레벨"
+      color_count: 7              # Pattern card: "색상 약 7개"
+      empty_bottles: 2
+      typical_total_bottles: 9    # 7 color bottles + 2 empty
+      blockers_enabled: true
+      blocker_types_allowed: ["QuestionMark", "Carpet", "Ice"]
+      notes: "Mid tier; blockers introduced, more colors, higher strategic depth"
+
+    super_hard:
+      level_range: [61, 999999]   # Pattern card: "약 61레벨+" (procedurally unlimited)
+      color_count: 10             # Pattern card: "색상 약 10개"; AI user observed 9 at level 18 → 10 is Super Hard ceiling
+      empty_bottles: 2
+      typical_total_bottles: 12   # 10 color bottles + 2 empty
+      blockers_enabled: true
+      blocker_types_allowed: "all"
+      notes: "Endgame tier; all 18 blocker types available, maximum color complexity"
+
+  par_formula:
+    description: "Target move count (par) per level, used for star rating"
+    formula: "par = (color_count * 3) + difficulty_bonus"
+    difficulty_bonus:
+      easy: 2                     # Small buffer for early players
+      hard: 4                     # More allowance due to blockers
+      super_hard: 6               # Maximum allowance due to blocker complexity
+    examples:
+      - tier: easy
+        color_count: 4
+        par: 14                   # (4*3) + 2 = 14
+      - tier: hard
+        color_count: 7
+        par: 25                   # (7*3) + 4 = 25
+      - tier: super_hard
+        color_count: 10
+        par: 36                   # (10*3) + 6 = 36
+
+  max_gen_attempts: 100           # Pattern card: "최대 약 100회 시도 후 실패 처리"
+  gen_failure_fallback: "Fall back to nearest available builtin/pre-validated procedural level from cache"
+
+  journey_milestones:             # AI user confirmed: "milestones at levels 10, 15, 25, 30"
+    observed: [10, 15, 25, 30]
+    reward_types: ["Coins", "Boosters"]
+    milestone_interval_estimate: 5  # Estimated interval between major milestones
+
+# ============================================================
+# SCORING
+# ============================================================
+scoring:
+  star_rating:
+    three_stars:
+      condition: "moves <= par"
+      description: "Optimal or perfect solution"
+    two_stars:
+      condition: "moves <= par * 1.5"
+      multiplier: 1.5             # Pattern card: "파 * 약 1.5"
+      description: "Near-optimal solution"
+    one_star:
+      condition: "moves > par * 1.5"
+      description: "Completed but inefficiently"
+    zero_stars:
+      condition: "Level not completed"
+
+  star_calculation_location: "LevelManager internal method (not exposed to UI layer directly)"
+
+  rewards:
+    level_clear_coins: 50         # Pattern card: "코인 약 50" (fixed per clear)
+    level_clear_xp: 10            # Pattern card: "경험치 약 10" (fixed per clear)
+    reward_type: "Fixed (not scaled by star count)"
+    notes: "Coins awarded on any clear regardless of star count; star count affects meta-progression feel only"
+
+# ============================================================
+# BOOSTERS
+# ============================================================
+boosters:
+  manager_class: "BoosterManager"
+  manager_responsibility: "Inventory tracking, usage gating, purchase validation"
+
+  types:
+    undo:
+      display_name: "Undo"
+      icon: "Circular arrow icon"
+      description: "Reverses the last pour action; LIFO stack-based"
+      initial_free_count: 3       # AI user confirmed: "count: 3" observed in session
+      stack_limit: 50             # Pattern card: "LIFO 스택, 최대 약 50단계"
+      currency: "free_charge"     # Uses from free stock; then purchase required
+      coin_price: null            # Not purchasable individually with coins in observed session
+      gem_price: 5                # Estimated gem price for additional charges
+
+    shuffle:
+      display_name: "Shuffle"
+      icon: "Crossing arrows icon"
+      description: "Randomly redistributes all liquid layers across bottles; resets board state"
+      initial_free_count: 3       # AI user confirmed: "count: 3" observed in session
+      currency: "free_charge"
+      coin_price: null
+      gem_price: 5
+
+    add_bottle:
+      display_name: "Add Bottle"
+      icon: "Bottle+ icon"
+      description: "Adds one extra empty bottle to the current puzzle board"
+      initial_free_count: 0       # AI user confirmed: "count: 0" at time of observation
+      currency: "coins"
+      coin_price: 900             # AI user confirmed: "900 coins" price tag observed
+      gem_price: null
+      notes: "Only booster observed with explicit coin price label in UI"
+
+    hint:
+      display_name: "Hint"
+      icon: "Lightbulb / wand icon"
+      description: "HintCalculator evaluates all valid pours and highlights the highest-scoring move"
+      initial_free_count: 1       # Pattern card: "각 약 1~5개"; conservative estimate for hint
+      currency: "free_charge"
+      coin_price: null
+      gem_price: 3
+
+    color_remove:
+      display_name: "Color Remove"
+      icon: "Eraser / X-color icon"
+      description: "Removes all layers of a selected color from the entire board"
+      initial_free_count: 1       # Pattern card: "각 약 1~5개"
+      currency: "free_charge"
+      coin_price: null
+      gem_price: 8
+
+  total_booster_types: 5         # Pattern card: "약 5종: 추가 병, 셔플, 되돌리기, 힌트, 색상 제거"
+
+# ============================================================
+# BLOCKERS
+# ============================================================
+blockers:
+  base_class: "BlockerBase"
+  pattern: "Strategy pattern - each blocker implements BlockerBase, behavior swappable"
+  total_types: 18                 # Pattern card: "BlockerBase 추상 클래스에서 약 18종 파생"
+
+  physical_blockers:
+    ice:
+      id: "Ice"
+      display_name: "Ice Block"
+      description: "Freezes a liquid layer in place; cannot be poured until released"
+      removal_condition: "An adjacent bottle completes (becomes single-color full)"
+      hp: 1
+      category: "physical"
+      notes: "Encourages solving neighboring bottles first"
+
+    carpet:
+      id: "Carpet"
+      display_name: "Carpet"
+      description: "Covers a layer, hiding its color; cover is removed when a pour passes over it"
+      removal_condition: "Any pour action involving this bottle layer (pour into or out of)"
+      hp: 1
+      category: "physical"
+      notes: "Layer revealed after first interaction"
+
+    curtain:
+      id: "Curtain"
+      display_name: "Curtain"
+      description: "Blocks visibility; removed by both a pour action AND a tap input"
+      removal_condition: "Pour action + explicit tap on the blocker"
+      hp: 1
+      category: "physical"
+      notes: "Two-step removal requires deliberate player action"
+
+    plaster:
+      id: "Plaster"
+      display_name: "Plaster / Bandage"
+      description: "Hard physical seal on a layer requiring multiple pours to break"
+      removal_condition: "Hit by 2 pour actions"
+      hp: 2                       # Pattern card: "HP 약 2"
+      category: "physical"
+      notes: "Most durable standard physical blocker"
+
+    chain:
+      id: "Chain"
+      display_name: "Chain"
+      description: "Locks a bottle or layer; must be broken by matching color poured on top"
+      removal_condition: "Pour matching color onto chained layer"
+      hp: 1
+      category: "physical"
+
+    lid:
+      id: "Lid"
+      display_name: "Lid / Cap"
+      description: "Seals the top of a bottle; no pouring in or out until removed"
+      removal_condition: "Complete an adjacent bottle with matching color"
+      hp: 1
+      category: "physical"
+
+  conditional_blockers:
+    tag:
+      id: "Tag"
+      display_name: "Color Tag"
+      description: "Labeled with a target color; removed when that specific color is poured onto this layer"
+      removal_condition: "Pour the tagged color onto this layer"
+      hp: 1
+      category: "conditional"
+
+    vault:
+      id: "Vault"
+      display_name: "Vault / Safe"
+      description: "Sturdy container requiring multiple bottle completions nearby to unlock"
+      removal_condition: "3 bottles completed (any color) in the puzzle"
+      completion_count_required: 3  # Pattern card: "약 3회 완성으로 해제"
+      category: "conditional"
+
+    key_box:
+      id: "KeyBox"
+      display_name: "Key & Box Pair"
+      description: "Two-object mechanic: a Key blocker and a Box blocker are linked; pour the key color to unlock the box"
+      removal_condition: "Pour the key's color into the linked box bottle"
+      category: "conditional"
+      components: ["Key", "Box"]
+      notes: "Pair-based; both objects must be present in the same puzzle"
+
+    color_bomb:
+      id: "ColorBomb"
+      display_name: "Color Bomb"
+      description: "When triggered by a matching pour, removes all layers of that color from the board"
+      removal_condition: "Pour matching color onto the bomb layer"
+      category: "conditional"
+
+    magnet:
+      id: "Magnet"
+      display_name: "Magnet"
+      description: "Attracts the nearest matching color layer toward itself each turn"
+      removal_condition: "Absorb a full matching-color layer (fills the magnet slot)"
+      category: "conditional"
+
+  creature_blockers:
+    frog:
+      id: "Frog"
+      display_name: "Frog"
+      description: "A living creature sitting on a layer; jumps between bottles when poured upon"
+      removal_condition: "Pour liquid onto the frog's current layer; frog hops to an adjacent bottle"
+      behavior: "Moves between bottles rather than being destroyed; must be maneuvered to an exit bottle"
+      category: "creature"
+
+    duck:
+      id: "Duck"
+      display_name: "Duck"
+      description: "Occupies a bottle layer; must be guided to its dedicated duck-house bottle"
+      removal_condition: "Guide duck to the designated duck-house bottle via sequential pours"
+      category: "creature"
+      requires_special_bottle: true  # Puzzle must include a duck-house bottle
+
+    snail:
+      id: "Snail"
+      display_name: "Snail"
+      description: "Slowly moves down one layer per turn; blocks the layer it occupies"
+      removal_condition: "Reaches the bottom of the bottle, then disappears"
+      category: "creature"
+      movement: "Descends 1 layer per pour action anywhere in the puzzle"
+
+  special_blockers:
+    question_mark:
+      id: "QuestionMark"
+      display_name: "Question Mark (?) Block"
+      description: "Hides the actual color of a layer; color unknown until blocker is cleared"
+      removal_condition: "Pour any liquid onto or out of this layer; reveals random color underneath"
+      category: "special"
+      observed: true              # Confirmed by AI user at Level 18: "Question mark (?) blocker"
+      observed_placement: "1-2 '?' layers per bottle, typically in bottom positions"
+      notes: "Most commonly introduced blocker; creates strategic uncertainty"
+
+    toggle:
+      id: "Toggle"
+      display_name: "Toggle Block"
+      description: "Alternates between blocking and passable states each turn"
+      removal_condition: "Hit in passable state with a matching pour"
+      category: "special"
+      behavior: "Visible/blocked state flips every pour action anywhere in puzzle"
+
+    switch:
+      id: "Switch"
+      display_name: "Switch Block"
+      description: "Toggling one switch affects all linked switch blocks in the same group simultaneously"
+      removal_condition: "Activate all switches in the group in the correct sequence"
+      category: "special"
+      behavior: "Group-linked toggle; activating one changes state of entire connected group"
+
+    mirror:
+      id: "Mirror"
+      display_name: "Mirror"
+      description: "Reflects a pour action to a mirrored bottle position simultaneously"
+      removal_condition: "Complete the mirrored bottle (both sides filled single-color)"
+      category: "special"
+
+    gravity_flip:
+      id: "GravityFlip"
+      display_name: "Gravity Flip"
+      description: "Reverses the fill direction of a bottle so liquid stacks from top down"
+      removal_condition: "Fill the bottle completely with a single color under reversed gravity"
+      category: "special"
+
+    sand:
+      id: "Sand"
+      display_name: "Sand Block"
+      description: "Falls to the bottom of the bottle each turn, displacing liquid layers"
+      removal_condition: "Pour liquid from below to push sand out; or use Color Remove booster"
+      category: "special"
+      behavior: "Settles to lowest empty layer each pour action"
+
+# ============================================================
+# HINT SYSTEM
+# ============================================================
+hint_system:
+  calculator_class: "HintCalculator"
+  method: "Score all valid pour actions, highlight the highest-scoring move"
+
+  scoring_weights:
+    completes_bottle:
+      score: 100
+      description: "Pour that will make a bottle fully single-color (win contribution highest priority)"
+    pour_to_single_color_target:
+      score: 60
+      description: "Target bottle is already single-color; pour reinforces existing color group"
+    empties_source_bottle:
+      score: 40
+      description: "Pour that completely empties the source bottle (frees a slot)"
+    layer_count_bonus:
+      score_per_layer: 5
+      description: "Each additional layer being poured in the action adds bonus points"
+    pour_to_empty_bottle:
+      score: -10
+      description: "Slight penalty for pouring into an empty bottle (causes unnecessary color scattering)"
+    blocker_interaction:
+      score: 20
+      description: "Pour that removes or advances removal of a blocker (valuable strategic action)"
+
+  output: "Highlights source bottle with glow effect and draws arrow/indicator toward best target"
+
+# ============================================================
+# ANIMATION
+# ============================================================
+animation:
+  pour_phases:
+    total_duration_seconds: 0.45  # Pattern card: "전체 약 0.4~0.5초" → center value 0.45
+
+    lift:
+      description: "Source bottle lifts upward to indicate selection and prepare for pour"
+      height_units: 1.5           # Pattern card: "약 1.5 단위 위로 들어올림"
+      duration_seconds: 0.15      # Pattern card: "약 0.15초"
+      easing: "EaseOutCubic"
+
+    move:
+      description: "Source bottle moves horizontally to position above target bottle"
+      duration_seconds: 0.20      # Pattern card: "약 0.2초"
+      easing: "EaseInOutQuad"
+
+    tilt:
+      description: "Source bottle tilts to pour angle"
+      tilt_degrees: 60            # Pattern card: "약 60도 기울이기"
+      duration_seconds: 0.10      # Pattern card: "약 0.1초"
+      easing: "EaseOutQuad"
+
+    pour:
+      description: "Liquid visually transfers layer by layer from source to target"
+      duration_per_layer_seconds: 0.12  # Pattern card: "층당 약 0.12초"
+      easing: "Linear"
+      notes: "Total pour duration scales with number of layers transferred (1-4 layers = 0.12~0.48s)"
+
+    return:
+      description: "Source bottle returns to original board position"
+      duration_seconds: 0.20      # Pattern card: "약 0.2초"
+      easing: "EaseInOutQuad"
+
+  completion_bounce:
+    description: "Celebratory animation when a bottle becomes single-color full"
+    jump_height_units: 0.3        # Pattern card: "약 0.3 높이 점프"
+    scale_punch: 0.1              # Pattern card: "약 0.1 스케일 펀치" (scale += 0.1 then spring back)
+    duration_seconds: 0.25        # Pattern card: "약 0.25초"
+    easing: "EaseOutBounce"
+
+  selection_lift:
+    description: "Bottle lifts when first tapped to show it is selected"
+    height_units: 0.3             # Pattern card: "약 0.3 위로"; AI user: "bottle lifts slightly upward"
+    duration_seconds: 0.10        # Pattern card: "약 0.1초"
+    easing: "EaseOutBack"
+    tint_change: true             # AI user confirmed: "틴트 색상 변경" on selection
+
+  config_class: "BottleAnimationConfig"
+  config_notes: "All timing, height, and angle values centralized in BottleAnimationConfig data struct (ScriptableObject)"
+
+# ============================================================
+# MONETIZATION
+# ============================================================
+monetization:
+  dual_currency:
+    coins:
+      display_name: "Coins"
+      icon: "Gold star coin icon"
+      display_location: "Top-left corner of gameplay and main screen"
+      starting_amount: 1500       # Pattern card: "코인 약 100" initial; AI user observed 1420 mid-session → starting 1500 is plausible pre-spend amount
+      earn_sources:
+        - "Level clear reward: +50 coins"
+        - "Journey milestone rewards"
+        - "Ad watch rewards"
+      spend_on:
+        - "Add Bottle booster: 900 coins"
+      note_ai_user: "1420 coins observed at Level 18; implies earning ~50/level net after booster spend"
+
+    gems:
+      display_name: "Gems"
+      icon: "Diamond / gem icon"
+      display_location: "Top area alongside coins"
+      starting_amount: 5          # Pattern card: "젬 약 5"
+      earn_sources:
+        - "IAP packages"
+        - "Journey milestone rewards (rare)"
+        - "Achievement rewards"
+      spend_on:
+        - "Premium boosters: 3~8 gems"
+        - "Life refill"
+        - "Continue after deadlock"
+
+  reward_schedule:
+    per_level_clear:
+      coins: 50                   # Pattern card: "코인 약 50"
+      xp: 10                      # Pattern card: "경험치 약 10"
+    milestone_rewards:            # AI user confirmed milestones at 10, 15, 25, 30
+      level_10:
+        coins: 200
+        boosters: {undo: 2, shuffle: 1}
+      level_15:
+        coins: 300
+        boosters: {add_bottle: 1}
+      level_25:
+        coins: 500
+        boosters: {undo: 2, shuffle: 2, hint: 1}
+      level_30:
+        coins: 400
+        gems: 5
+        boosters: {color_remove: 1}
+
+  currency_manager_class: "CurrencyManager"
+  currency_manager_pattern: "Singleton"
+  currency_manager_responsibility: "Add/subtract currency, validate balance, persist via SaveManager"
+
+# ============================================================
+# ARCHITECTURE
+# ============================================================
+architecture:
+  dependency_injection:
+    pattern: "DI Container"
+    description: "Central IoC container registers and resolves all service dependencies"
+    benefit: "Decouples modules; enables unit testing with mock implementations"
+    scope_types: ["Singleton", "Transient", "Scoped"]
+
+  signal_bus:
+    pattern: "SignalBus (Pub/Sub)"
+    description: "Event broker that allows systems to communicate without direct references"
+    benefit: "Minimizes coupling between Domain and Game layers"
+    example_signals:
+      - "OnBottleCompleted(bottleId)"
+      - "OnLevelWin(stars, moves)"
+      - "OnCurrencyChanged(type, newAmount)"
+      - "OnBlockerRemoved(blockerId, bottleId)"
+      - "OnBoosterUsed(boosterType)"
+      - "OnPourExecuted(sourceId, targetId, layersMoved)"
+
+  state_machine:
+    pattern: "StateMachine<T>"
+    description: "FSM managing the high-level game state lifecycle"
+    state_count: 6                # Pattern card: "약 6개"
+    states:
+      - name: "Playing"
+        description: "Normal gameplay; player input accepted"
+      - name: "Paused"
+        description: "Game paused via settings; input blocked"
+      - name: "Animating"
+        description: "Pour or completion animation in progress; input blocked"
+      - name: "Win"
+        description: "Level completed; win UI shown, rewards granted"
+      - name: "Stuck"
+        description: "Deadlock detected; no valid moves; hint/retry prompt shown"
+      - name: "Menu"
+        description: "Main menu / home screen state"
+
+  command_pattern:
+    pattern: "Command"
+    description: "Each pour action is encapsulated as a PourCommand with execute/undo methods"
+    undo_stack: "LIFO stack, max 50 entries"    # Pattern card: "LIFO 스택, 최대 약 50단계"
+    manager_class: "UndoManager"
+
+  object_pool:
+    pattern: "Object Pool"
+    description: "Bottle view GameObjects recycled between levels to avoid GC spikes"
+    pool_class: "BottlePool"
+
+  strategy_pattern:
+    pattern: "Strategy"
+    description: "Each of the 18 blocker types is a concrete strategy implementing BlockerBase"
+    benefit: "New blocker types added without modifying existing blocker code"
+
+  mvc_separation:
+    model: "Pure C# data classes (BottleData, LevelData, BlockerData) - no Unity dependencies"
+    view: "MonoBehaviour view classes (BottleView, BoardView) - only visual/animation"
+    controller: "Controller classes coordinate model updates and signal emission"
+
+  layers:
+    core:
+      description: "장르 무관 기반 시스템"
+      classes:
+        - "Singleton<T>"
+        - "SignalBus"
+        - "StateMachine<T>"
+        - "DIContainer"
+        - "SaveManager"
+        - "ColorService"
+
+    domain:
+      description: "재사용 가능한 게임 도메인 시스템"
+      classes:
+        - "LevelManager"
+        - "LevelDifficultyService"
+        - "LevelDataProvider"
+        - "BottleItem"
+        - "PourValidator"
+        - "PourExecutor"
+        - "CompletionChecker"
+        - "UndoManager"
+        - "HintCalculator"
+        - "BlockerBase + 18 concrete blockers"
+        - "BoosterManager"
+        - "CurrencyManager"
+
+    game:
+      description: "프로젝트 특화 게임 레이어"
+      classes:
+        - "GameplayController"
+        - "SelectionManager"
+        - "PopupService"
+        - "HomeStateManager"
+        - "BottleView"
+        - "BoardView"
+        - "BottleAnimationConfig"
+
+  save_system:
+    backend: "PlayerPrefs"
+    prefix: "MS_"                 # Pattern card: "접두사(약 'MS_') + 키 방식"
+    key_examples:
+      - "MS_CurrentLevel"
+      - "MS_CoinAmount"
+      - "MS_GemAmount"
+      - "MS_UndoCount"
+      - "MS_ShuffleCount"
+      - "MS_AddBottleCount"
+      - "MS_HintCount"
+      - "MS_ColorRemoveCount"
+      - "MS_Stars_{levelId}"
+      - "MS_BestMoves_{levelId}"
+    manager_class: "SaveManager"
+    manager_pattern: "Singleton"
+    notes: "All save/load routed through SaveManager to allow future migration to cloud save"
+
+# ============================================================
+# LEVEL LAYOUT REFERENCE
+# ============================================================
+level_layout_reference:
+  observed_at_level_18:
+    source: "AI User Observation"
+    top_row_bottles: 7
+    bottom_row_bottles: 4
+    total_bottles: 11             # AI user confirmed: "11 bottles total"
+    empty_bottles: 2              # AI user confirmed: "2 empty bottles"
+    color_bottles: 9              # 11 - 2 = 9
+    color_count: 9
+    blocker_coverage: "Question mark layers on most bottles in top row (1-2 per bottle)"
+    complexity_assessment: "High - 9 colors + hidden layers = significant strategic depth"
+
+  layout_rules:
+    total_bottles_formula: "color_count + empty_bottles"
+    empty_bottles_constant: 2     # Fixed at 2 across all difficulty tiers
+    bottle_grid: "Two-row layout; dynamic column count based on total bottle count"
+    max_bottles_per_row: 7        # Observed max; layout wraps to second row
+
+# ============================================================
+# UI LAYOUT REFERENCE
+# ============================================================
+ui_layout:
+  gameplay_screen:
+    top_left: "Coin display (coin icon + amount)"
+    top_center: "Level number label"
+    top_right: "Settings gear button (purple circular)"
+    center: "Bottle grid (2 rows)"
+    bottom: "Booster bar (5 booster slots)"
+
+  main_screen:
+    background: "Character scene - 3 cats + cauldron, dark blue starry background"
+    center_bottom: "Green PLAY button showing current level number"
+    top_left: "Coin display"
+    top_center: "Lives display (5 hearts)"
+    bottom_navigation:
+      - "Trophy icon (leaderboard / achievements)"
+      - "Castle / Store icon"
+      - "Home icon"
+
+  art_style:
+    theme: "Magical / potion theme"
+    aesthetic: "2D cartoon with glass bottles"
+    background: "Dark blue starry night"
+    characters: "3 cat characters (blue cat, brown/orange cat, small kitten)"
+    orientation: "Portrait"
+    canvas_resolution: "1080x1920 (standard portrait mobile)"
+
+# ============================================================
+# CONFIDENCE METADATA
+# ============================================================
+confidence:
+  overall: "medium-high"
+  notes: |
+    - Core mechanics (bottle capacity=4, lives=5, tap-tap interaction): HIGH confidence (directly observed)
+    - Blocker QuestionMark type: HIGH (directly observed at Level 18)
+    - Add Bottle price (900 coins): HIGH (directly observed in UI)
+    - Undo/Shuffle initial count (3): HIGH (directly observed)
+    - Booster total types (5): HIGH (pattern card + observation aligned)
+    - Blocker total types (18): MEDIUM (pattern card states "약 18종"; not all directly observed)
+    - Par formula (color*3 + bonus): MEDIUM (pattern card structural hint; formula untested)
+    - Animation timings: MEDIUM (pattern card "약" values; precise tuning needed)
+    - Starting coin amount (1500): MEDIUM (AI user observed 1420 mid-session; 1500 estimated start)
+    - Starting gem amount (5): MEDIUM (pattern card only; not visually confirmed)
+    - Difficulty tier level ranges: MEDIUM (pattern card structural hint)
+    - Hint scoring weights: LOW-MEDIUM (derived from pattern card priority description)
+    - 14 non-observed blocker types: LOW (inferred from pattern card categories; names/mechanics estimated)
+  clean_room_compliance: |
+    No original source code referenced. All values derived exclusively from:
+    1. AI User visual gameplay observation (BlueStacks/ADB, Level 18 session)
+    2. Level 2 Structural Hint Pattern Card (design insights only, no code)

@@ -1,0 +1,65 @@
+# AI_기획서 - LevelData Model
+nodeId: LevelData
+type: class
+layer: Core
+role: Model
+phase: 0
+
+description: "레벨 데이터 모델"
+
+using:
+  - System
+  - System.Collections.Generic
+  - UnityEngine
+
+attributes:
+  - Serializable
+
+fields:
+  - name: levelId
+    type: int
+    access: public
+    description: "레벨 ID"
+
+  - name: gridSize
+    type: Vector2Int
+    access: public
+    description: "보드 크기"
+
+  - name: holderSize
+    type: int
+    access: public
+    default: 7
+    description: "홀더 최대 크기"
+
+  - name: cars
+    type: List<CarSpawnData>
+    access: public
+    description: "차량 스폰 데이터"
+
+  - name: obstacles
+    type: List<ObstacleSpawnData>
+    access: public
+    description: "장애물 스폰 데이터"
+
+nested_classes:
+  - name: CarSpawnData
+    attributes: [Serializable]
+    fields:
+      - {name: color, type: CarColor, access: public}
+      - {name: position, type: Vector2Int, access: public}
+
+  - name: ObstacleSpawnData
+    attributes: [Serializable]
+    fields:
+      - {name: type, type: ObstacleType, access: public}
+      - {name: position, type: Vector2Int, access: public}
+      - {name: targetPosition, type: Vector2Int, access: public, description: "터널 출구 위치"}
+
+requires:
+  - CarColor
+  - ObstacleType
+
+output:
+  path: "Data/LevelData.cs"
+  namespace: "CarMatch"

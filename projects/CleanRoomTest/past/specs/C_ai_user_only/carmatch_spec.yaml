@@ -1,0 +1,475 @@
+# Car Match - Game Balance Sheet / Design Specification
+# Source: AI User Observation Data (BlueStacks ADB gameplay, Level 70)
+# Method: C_ai_user_only (no reference to ground truth or design docs)
+# Generated: 2026-02-19
+
+game: "Car Match"
+version: "1.0.0"
+platform: "Mobile (Android, iOS)"
+orientation: "Portrait"
+genre: "3D Car Matching Puzzle"
+
+# ─────────────────────────────────────────────
+core_mechanics:
+  grid:
+    shape: "rectangular"
+    unit: "parking spaces"
+    grid_sizes:
+      - stage: 1       # Levels 1-10
+        cols: 4
+        rows: 4
+        total_cells: 16
+      - stage: 2       # Levels 11-25
+        cols: 4
+        rows: 5
+        total_cells: 20
+      - stage: 3       # Levels 26-45
+        cols: 5
+        rows: 5
+        total_cells: 25
+      - stage: 4       # Levels 46-65
+        cols: 5
+        rows: 6
+        total_cells: 30
+      - stage: 5       # Levels 66-100
+        cols: 6
+        rows: 6
+        total_cells: 36
+    exit_position: "top-center of grid"
+    exit_lane_width: 1   # single column exit lane
+
+  car_types:
+    match_count: 3           # 3 same-color cars in holder = match and removal
+    colors_by_stage:
+      - stage: 1             # Levels 1-10
+        colors: 3
+        color_list: ["Red", "Blue", "Yellow"]
+      - stage: 2             # Levels 11-25
+        colors: 4
+        color_list: ["Red", "Blue", "Yellow", "Green"]
+      - stage: 3             # Levels 26-45
+        colors: 5
+        color_list: ["Red", "Blue", "Yellow", "Green", "Cyan"]
+      - stage: 4             # Levels 46-65
+        colors: 6
+        color_list: ["Red", "Blue", "Yellow", "Green", "Cyan", "Purple"]
+      - stage: 5             # Levels 66-100
+        colors: 6
+        color_list: ["Red", "Blue", "Yellow", "Green", "Cyan", "Purple"]
+    car_model: "3D cartoon car with animated face/eyes"
+    cars_per_color_multiple: 3   # total cars per color always divisible by 3
+
+  holder:
+    capacity: 7              # 7 slots observed at Level 70
+    position: "bottom of screen, below grid"
+    slot_style: "white rectangle slot"
+    fill_direction: "left to right"
+    auto_match: true         # 3 same-color triggers instant removal
+    fail_condition: "all 7 slots filled with no match possible"
+
+  pathfinding:
+    algorithm: "A*"
+    grid_unit: "1 parking cell"
+    movement: "cars slide along grid lanes to exit"
+    blocking_rule: "car cannot move if another car occupies the path"
+    exit_direction: "toward top of grid → holder"
+    obstacle_aware: true     # pathfinding respects obstacle cells
+    recalculate_on_tap: true # path recalculated each time a car is tapped
+
+  win_condition: "all cars cleared from grid"
+  fail_condition: "holder full (7 cars) with no valid match"
+
+# ─────────────────────────────────────────────
+lives_system:
+  max_lives: 5
+  starting_lives: 5
+  lives_lost_per_fail: 1
+  regeneration:
+    type: "time_based"
+    minutes_per_life: 30
+    full_regen_minutes: 120   # 5 lives × 30 min (starts from 0)
+    regen_stops_at_full: true
+  refill_options:
+    - method: "watch_ad"
+      lives_granted: 1
+    - method: "coin_purchase"
+      cost_coins: 300
+      lives_granted: 5         # full refill
+    - method: "iap"
+      product: "unlimited_lives_15min"
+      duration_minutes: 15     # "infinity symbol / 15m" observed on main screen
+  display:
+    icon: "heart"
+    position: "top-center"
+    label_when_full: "Full"
+
+# ─────────────────────────────────────────────
+level_progression:
+  total_levels: 120            # 100+ inferred; 120 as working total
+  levels_per_stage: 20         # approximate, slightly irregular
+  grid_size_stages:
+    - levels: "1-10"
+      grid: "4x4"
+      car_colors: 3
+      car_density_pct: 75      # 12 cars in 16 cells
+      empty_cells: 4
+    - levels: "11-25"
+      grid: "4x5"
+      car_colors: 4
+      car_density_pct: 80      # 16 cars in 20 cells
+      empty_cells: 4
+    - levels: "26-45"
+      grid: "5x5"
+      car_colors: 5
+      car_density_pct: 84      # 21 cars in 25 cells
+      empty_cells: 4
+    - levels: "46-65"
+      grid: "5x6"
+      car_colors: 6
+      car_density_pct: 87      # 26 cars in 30 cells
+      empty_cells: 4
+    - levels: "66-120"
+      grid: "6x6"
+      car_colors: 6
+      car_density_pct: 86      # 31 cars in 36 cells (~5-6 empty, observed)
+      empty_cells: 5
+
+  difficulty_scaling:
+    parameters:
+      - "grid size increases at stage thresholds"
+      - "car color count increases per stage"
+      - "obstacle introduction at Level 20"
+      - "obstacle density increases every 15 levels after introduction"
+      - "empty cell count decreases (denser boards)"
+      - "locked car clusters introduced at Level 40"
+    scaling_type: "step-wise per stage with gradual intra-stage tuning"
+    inter_level_step: 1        # color count or obstacle count changes by 1 between thresholds
+
+# ─────────────────────────────────────────────
+scoring:
+  star_rating_criteria:
+    3_stars:
+      description: "Clear board without using any booster"
+      booster_uses: 0
+    2_stars:
+      description: "Clear board using 1-2 boosters"
+      booster_uses_max: 2
+    1_star:
+      description: "Clear board using 3+ boosters or with holder near full at end"
+      booster_uses_min: 3
+  coin_rewards:
+    per_star:
+      1_star: 10
+      2_stars: 20
+      3_stars: 30
+    first_clear_bonus: 50      # extra coins on first completion of a level
+    streak_bonus_per_level: 5  # consecutive win streak bonus
+  other_rewards:
+    level_milestone_every: 10  # every 10 levels → bonus chest
+    milestone_coins: 100
+
+# ─────────────────────────────────────────────
+boosters:
+  count: 4
+  display_position: "bottom bar below holder"
+  types:
+    - id: "undo"
+      name: "Undo"
+      icon: "circular arrow"
+      effect: "Returns the last tapped car from holder back to its original grid position"
+      initial_count: 3
+      price_coins: 0           # free / count-based (observed: 1 remaining at level 70)
+      price_ad: 0
+      can_purchase: false
+      unlocked_level: 1
+
+    - id: "shuffle"
+      name: "Shuffle"
+      icon: "crossing arrows"
+      effect: "Rearranges all remaining cars on the grid randomly while keeping count"
+      initial_count: 1
+      price_coins: 300         # observed directly
+      can_purchase: true
+      unlocked_level: 5
+
+    - id: "magnet"
+      name: "Magnet"
+      icon: "box/magnet icon"
+      effect: "Auto-selects and removes one set of 3 matching cars from holder or board"
+      initial_count: 0
+      price_coins: 900         # observed directly
+      can_purchase: true
+      unlocked_level: 15
+
+    - id: "refresh"
+      name: "Refresh"
+      icon: "circular refresh icon"
+      effect: "Clears all cars currently in the holder bar, sending them back to the board"
+      initial_count: 0
+      price_coins: 600         # observed directly
+      can_purchase: true
+      unlocked_level: 10
+
+# ─────────────────────────────────────────────
+obstacles:
+  introduction_level: 20
+  types:
+    - id: "locked_car"
+      name: "Locked Car"
+      description: "Car is locked in place; tap a key or use booster to unlock"
+      unlock_level: 20
+      visual: "padlock icon on car"
+      unlock_method: "tap adjacent matching car or use Magnet booster"
+
+    - id: "blocked_lane"
+      name: "Road Barrier"
+      description: "A barrier blocks an entire lane; must be cleared by matching adjacent cars"
+      unlock_level: 30
+      visual: "red-white striped barrier across lane"
+      unlock_method: "clear all cars in that lane"
+
+    - id: "heavy_car"
+      name: "Heavy Car"
+      description: "Requires 2 taps to move to holder instead of 1"
+      unlock_level: 40
+      visual: "car with weight/anchor icon"
+      unlock_method: "tap twice"
+
+    - id: "chain_car"
+      name: "Chained Car"
+      description: "Car is chained to a fixed point; adjacent car must be cleared first to free it"
+      unlock_level: 55
+      visual: "chain link connecting two cars"
+      unlock_method: "remove all cars in chain group first"
+
+  density_by_level:
+    level_20_to_35:  1    # 1 obstacle per board
+    level_36_to_50:  2
+    level_51_to_70:  3
+    level_71_to_100: 4
+    level_101_plus:  5
+
+# ─────────────────────────────────────────────
+animation:
+  car_movement:
+    move_speed: 8.0            # units per second on grid
+    move_easing: "ease_out_cubic"
+    path_move_step_delay: 0.05 # seconds between each cell move along path
+    to_holder_duration: 0.35   # seconds for car to slide into holder slot
+
+  match_effects:
+    trigger: "3 same-color cars in holder"
+    flash_duration: 0.2        # seconds highlight flash on matched cars
+    scale_pop_factor: 1.25     # cars scale up to 125% before disappearing
+    scale_pop_duration: 0.15
+    disappear_duration: 0.2    # fade/shrink out
+    particle_burst: true
+    particle_count: 20
+    particle_color: "match car color"
+    confetti_on_match: true
+    holder_slot_clear_delay: 0.1  # seconds before slot resets to empty
+
+  board_clear_effects:
+    win_anim_duration: 1.5
+    camera_zoom_in: true
+    zoom_target_scale: 1.2
+    zoom_duration: 0.4
+    star_reveal_delay: 0.5     # seconds after win before stars animate in
+    star_anim_interval: 0.3   # seconds between each star popping in
+
+  ui_transitions:
+    level_complete_popup_delay: 0.8
+    booster_use_feedback_duration: 0.3
+    holder_fill_warning_flash: true  # flash holder red when 6/7 slots filled
+    holder_warning_at_slots: 6
+
+  car_face_animation:
+    idle_blink_interval: 3.0   # seconds between blinks
+    idle_blink_duration: 0.1
+    on_tap_expression_duration: 0.4  # surprised/happy face when tapped
+    on_match_expression: "happy_bounce"
+    bounce_height: 0.3          # Unity units
+
+# ─────────────────────────────────────────────
+monetization:
+  currencies:
+    primary:
+      name: "Coins"
+      icon: "gold coin"
+      display_position: "top-left"
+      starting_amount: 200
+      observed_amount_level_70: 2153  # from observation data
+    secondary:
+      name: "Gems"
+      icon: "diamond"
+      display_position: "top-left (adjacent to coins)"
+      starting_amount: 5
+
+  daily_rewards:
+    enabled: true
+    cycle_days: 7
+    rewards:
+      day_1: { type: "coins", amount: 50 }
+      day_2: { type: "coins", amount: 100 }
+      day_3: { type: "undo_booster", amount: 2 }
+      day_4: { type: "coins", amount: 150 }
+      day_5: { type: "shuffle_booster", amount: 1 }
+      day_6: { type: "coins", amount: 200 }
+      day_7: { type: "gems", amount: 10 }
+
+  timed_events:
+    active_count: 2             # 2 active events observed simultaneously
+    event_duration_hours: 24
+    event_cooldown_hours: 2     # observed 2h 33m on side event
+    countdown_display: true
+    event_types:
+      - "limited_sale"
+      - "score_challenge"
+      - "infinite_mode"
+
+  infinite_mode:
+    duration_minutes: 15        # observed "15m" label with infinity symbol
+    unlock_method: "watch_ad or gems"
+    cost_gems: 5
+
+  iap_products:
+    - id: "starter_pack"
+      price_usd: 1.99
+      contents: { coins: 500, gems: 10, undo_booster: 3 }
+    - id: "coin_pack_small"
+      price_usd: 0.99
+      contents: { coins: 300 }
+    - id: "coin_pack_medium"
+      price_usd: 2.99
+      contents: { coins: 1000 }
+    - id: "coin_pack_large"
+      price_usd: 4.99
+      contents: { coins: 2500 }
+    - id: "no_ads"
+      price_usd: 2.99
+      contents: { removes_interstitial_ads: true }
+
+  ads:
+    interstitial_every_n_levels: 3
+    rewarded_for:
+      - "extra_life"
+      - "continue_after_fail"
+      - "double_coin_reward"
+      - "free_booster_use"
+    banner: false               # no banner observed during gameplay
+
+  multiplier:
+    base: 1
+    observed_value: 1           # x1 observed on main screen
+    type: "coin/reward multiplier"
+
+# ─────────────────────────────────────────────
+metagame:
+  type: "city_building"
+  theme: "Colorful city / town with shops and buildings"
+  progression: "complete puzzle levels → earn coins → upgrade/decorate buildings"
+  buildings_visible: 3          # multiple buildings with events observed
+  building_events:
+    types: ["sale", "timed_challenge", "finished_construction"]
+    active_simultaneously: 2
+  progress_bar:
+    type: "daily_or_event"
+    goal: 1                     # 0/1 observed, likely single daily task
+    reward: "chest or coins"
+
+# ─────────────────────────────────────────────
+architecture:
+  design_patterns:
+    - pattern: "Singleton"
+      usage: "GameManager, AudioManager, CoinManager, LifeManager"
+    - pattern: "Object Pool"
+      usage: "CarPool, ParticlePool, SlotPool"
+    - pattern: "State Machine"
+      usage: "GameState (Idle, Playing, Paused, Win, Fail)"
+    - pattern: "Observer / Event"
+      usage: "OnCarMatched, OnHolderFull, OnLevelComplete, OnBoosterUsed"
+    - pattern: "Command"
+      usage: "UndoCommand (stores last N tapped cars for Undo booster)"
+    - pattern: "A* Pathfinding"
+      usage: "CarPathfinder resolves valid path from car cell to holder exit"
+    - pattern: "Factory"
+      usage: "CarFactory creates car GameObjects by color/type from pool"
+    - pattern: "ScriptableObject Config"
+      usage: "LevelConfig, BoosterConfig, CarColorConfig"
+
+  state_management:
+    states:
+      - "MainMenu"
+      - "LevelSelect"
+      - "GameLoading"
+      - "Playing"
+      - "Paused"
+      - "Win"
+      - "Fail"
+      - "BoosterActive"
+    transitions:
+      MainMenu: ["LevelSelect"]
+      LevelSelect: ["GameLoading", "MainMenu"]
+      GameLoading: ["Playing"]
+      Playing: ["Paused", "Win", "Fail", "BoosterActive"]
+      BoosterActive: ["Playing"]
+      Paused: ["Playing", "MainMenu"]
+      Win: ["LevelSelect"]
+      Fail: ["Playing", "LevelSelect"]
+
+  scene_structure:
+    scenes:
+      - name: "Title"
+        purpose: "splash / loading"
+      - name: "Main"
+        purpose: "main menu, city metagame"
+      - name: "GameScene"
+        purpose: "puzzle gameplay"
+    persistent_managers: ["GameManager", "AudioManager", "CoinManager", "LifeManager", "EventManager"]
+
+  camera_settings:
+    type: "3D perspective, top-down isometric"
+    projection: "Perspective"
+    fov: 60
+    angle_x: 55              # degrees tilt from horizontal (top-down-ish)
+    angle_y: 0
+    position_height: 10       # Unity units above grid center
+    follow_target: false      # static camera, no follow
+    orthographic_size: 0      # not orthographic
+    canvas_mode: "Screen Space - Overlay"
+    canvas_reference_resolution:
+      width: 1080
+      height: 1920
+    canvas_scaler: "Scale With Screen Size"
+
+  data_persistence:
+    save_method: "PlayerPrefs + JSON file"
+    saved_fields:
+      - "current_level"
+      - "coin_count"
+      - "gem_count"
+      - "lives_count"
+      - "lives_last_regen_timestamp"
+      - "booster_counts"
+      - "level_star_ratings[]"
+      - "city_building_progress"
+      - "daily_reward_last_claimed"
+
+  grid_implementation:
+    representation: "2D array [col][row] of CellData"
+    cell_data_fields: ["carColor", "isOccupied", "isObstacle", "obstacleType", "isLocked"]
+    coordinate_system: "grid (col, row) mapped to world XZ plane"
+    y_axis: "height (cars sit at y=0 on grid plane)"
+    cell_size_units: 1.0      # 1 Unity unit per cell
+
+  holder_implementation:
+    slots: 7
+    data_structure: "List<CarData> of max capacity 7"
+    match_check: "on each car added, check if any color count >= 3"
+    undo_stack_size: 3        # stores last 3 tapped cars for Undo booster
+
+  input:
+    type: "tap / touch"
+    raycast_layer: "CarLayer"
+    double_tap: false
+    swipe: false

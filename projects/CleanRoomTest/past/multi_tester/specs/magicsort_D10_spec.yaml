@@ -1,0 +1,245 @@
+```yaml
+game: "Magic Sort"
+condition: "D10"
+parameters:
+  - id: MS01
+    name: bottle_max_height
+    value: 4
+    confidence: high
+    source: "패턴 카드 core_loop: '병 엔티티: 최대 약 4층 높이의 스택 구조'"
+
+  - id: MS02
+    name: colors_total
+    value: 14
+    confidence: medium
+    source: "패턴 카드: '약 13가지 플레이어블 색상 + 특수 색상(무지개 등)' — 무지개 최소 1종 특수 색상 추가. '등' 표현으로 추가 특수 색상 존재 가능, 보수적으로 +1 적용"
+
+  - id: MS03
+    name: colors_playable
+    value: 13
+    confidence: high
+    source: "패턴 카드 core_loop: '색상: 약 13가지 플레이어블 색상'"
+
+  - id: MS04
+    name: builtin_levels
+    value: 10
+    confidence: medium
+    source: "패턴 카드 difficulty_progression: '첫 약 10레벨: 수작업 설계된 빌트인 레벨 (학습 곡선 보장)'"
+
+  - id: MS05
+    name: procedural_after_level
+    value: 11
+    confidence: medium
+    source: "패턴 카드: '첫 약 10레벨 이후: 절차적 생성' — 빌트인 구간(~10) 직후인 11레벨부터 절차적 생성 개시로 추정"
+
+  - id: MS06
+    name: max_gen_attempts
+    value: 100
+    confidence: high
+    source: "패턴 카드 difficulty_progression: '최대 약 100회 시도 후 실패 처리'"
+
+  - id: MS07
+    name: difficulty_tier_count
+    value: 3
+    confidence: high
+    source: "패턴 카드 difficulty_progression: '3단계 난이도 티어' — Easy / Hard / Super Hard 명시"
+
+  - id: MS08
+    name: tier_color_counts
+    value:
+      easy: 4
+      hard: 7
+      super_hard: 10
+    confidence: high
+    source: "패턴 카드 difficulty_progression: Easy 약 4개, Hard 약 7개, Super Hard 약 10개 명시"
+
+  - id: MS09
+    name: tier_level_ranges
+    value:
+      easy: [1, 20]
+      hard: [21, 60]
+      super_hard: [61, "+∞"]
+    confidence: high
+    source: "패턴 카드 difficulty_progression: Easy 약 1~20, Hard 약 21~60, Super Hard 약 61레벨+ 명시. 관찰 데이터의 레벨 18(Easy 구간), 레벨 20~39 챕터(Hard 전환점)와 일치"
+
+  - id: MS10
+    name: par_bonus_values
+    value:
+      easy: 3
+      hard: 5
+      super_hard: 8
+    confidence: low
+    source: "패턴 카드: '색상 수 × 약 3 + 난이도별 보너스' — 보너스 수치 미명시. 색상 수 증가에 비례해 완주 여유분이 늘어나는 일반적 퍼즐 설계 원칙을 적용해 추정 (Easy +3, Hard +5, Super Hard +8)"
+
+  - id: MS11
+    name: par_formula
+    value: "colors_count × 3 + difficulty_bonus"
+    confidence: high
+    source: "패턴 카드 difficulty_progression: '파(목표 이동 수): 색상 수 * 약 3 + 난이도별 보너스'"
+
+  - id: MS12
+    name: max_per_row
+    value: 5
+    confidence: low
+    source: "패턴 카드 미명시. Super Hard 기준 최대 병 수 = 10색 + 2빈 = 12병. 모바일 세로 화면(1080×1920) 레이아웃에서 5×3 그리드가 가독성/접근성 최적으로 추정. 소팅 퍼즐 장르 관례(4~6병/행) 참고"
+
+  - id: MS13
+    name: h_spacing
+    value: 1.3
+    confidence: low
+    source: "패턴 카드 미명시. Unity 월드 단위 기준, 병 폭 약 0.8~1.0 단위 + 여백 0.3 단위로 추정. 선택 리프트(MS16=1.5) 및 기울기(MS17=60°) 시 인접 병과 충돌하지 않을 최솟값 고려"
+
+  - id: MS14
+    name: v_spacing
+    value: 2.0
+    confidence: low
+    source: "패턴 카드 미명시. 병 최대 높이 4층(MS01=4), 층당 약 0.4 단위 가정 시 병 총 높이 ≈ 1.6. 행 간 여백 0.4 포함 약 2.0 단위로 추정"
+
+  - id: MS15
+    name: pour_total_duration
+    value: 0.45
+    confidence: high
+    source: "패턴 카드 animation_feel: '따르기 전체 과정 약 0.4~0.5초' — 중간값 0.45 채택. 단, 하위 단계(Lift 0.15s + Move 0.2s + Tilt 0.1s + Pour 0.12s/층 + Return 0.2s) 합산 시 초과됨 → 일부 페이즈 병렬 실행(Lift↔Move 오버랩 등) 추정"
+
+  - id: MS16
+    name: lift_height
+    value: 1.5
+    confidence: high
+    source: "패턴 카드 animation_feel: 'Lift: 원본 병 약 1.5 단위 위로 들어올림 (약 0.15초)'"
+
+  - id: MS17
+    name: tilt_angle
+    value: 60
+    confidence: high
+    source: "패턴 카드 animation_feel: 'Tilt: 약 60도 기울이기 (약 0.1초)'"
+
+  - id: MS18
+    name: starting_coins
+    value: 100
+    confidence: high
+    source: "패턴 카드 monetization: '초기 재화: 코인 약 100'. 관찰 데이터의 현재 코인 1420(레벨 18 기준)과 비교하면 레벨당 약 70코인 누적 획득과 정합(레벨 클리어 보상 약 50코인 × ~18판 + 여정 보상)"
+
+  - id: MS19
+    name: starting_gems
+    value: 5
+    confidence: high
+    source: "패턴 카드 monetization: '초기 재화: 젬 약 5'. 관찰 데이터에서 젬 UI 미확인 — 초기값 이후 변동 없거나 별도 표시 구역에 위치할 가능성"
+
+  - id: MS20
+    name: booster_type_count
+    value: 5
+    confidence: high
+    source: "패턴 카드 special_mechanics: '약 5종: 추가 병, 셔플, 되돌리기, 힌트, 색상 제거' — 5종 명시 열거"
+
+  - id: MS21
+    name: booster_initial_counts
+    value:
+      extra_bottle: 2
+      shuffle: 2
+      undo: 3
+      hint: 5
+      color_remove: 1
+    confidence: low
+    source: "패턴 카드: '초기 무료 제공: 각 약 1~5개' — 종류별 수량 미명시. 힌트(가장 빈번 사용) 최다 5개, 색상 제거(강력) 최소 1개, 나머지 2~3개로 차등 배분 추정. 총합 13개"
+
+  - id: MS22
+    name: undo_max_steps
+    value: 50
+    confidence: high
+    source: "패턴 카드 special_mechanics: '되돌리기: LIFO 스택, 최대 약 50단계'. 관찰 데이터의 Undo 부스터(레벨 25 보상)와 별도 — 스택 단계 수와 부스터 충전 개수는 다른 개념"
+
+  - id: MS23
+    name: star_rating_3star
+    value: "moves <= par"
+    confidence: high
+    source: "패턴 카드 scoring: '3성: 이동 수 <= 파'"
+
+  - id: MS24
+    name: star_rating_2star_threshold
+    value: 1.5
+    confidence: high
+    source: "패턴 카드 scoring: '2성: 이동 수 <= 파 * 약 1.5' — 1성은 그 외(이동 수 > par × 1.5). 즉 3성/2성/1성 3단계 별점 체계"
+
+  - id: MS25
+    name: hint_scoring_system
+    value:
+      calculator_class: "HintCalculator"
+      method: "가능한 모든 따르기 후보를 점수화 후 최고점 선택"
+      priority_order:
+        1: "병 완성 기여 (최고점) — 대상 병이 단색으로 채워지는 이동"
+        2: "단색 대상 병으로 따르기 — 정렬 진행에 직접 기여"
+        3: "원본 병 비우기 — 빈 슬롯 확보"
+        4: "층 수 기반 가산 — 많은 층 이동일수록 소폭 가점"
+      penalty: "빈 병을 대상으로 하는 이동 약간 감점 (불필요한 색상 분산 억제)"
+    confidence: high
+    source: "패턴 카드 special_mechanics hint_system: 'HintCalculator가 가능한 모든 수를 점수화, 병 완성(최고점) > 단색 대상 > 원본 비우기 > 층 수, 빈 대상 병 약간 감점'"
+
+  - id: MS26
+    name: blocker_type_count
+    value: 18
+    confidence: high
+    source: "패턴 카드 special_mechanics: 'BlockerBase 추상 클래스에서 약 18종 파생' — 물리(얼음·카펫·커튼·석고), 조건부(태그·금고·열쇠-상자), 생물(개구리·오리), 특수(토글·스위치·물음표) 계열 예시 포함"
+
+  - id: MS27
+    name: save_prefix
+    value: "MS_"
+    confidence: medium
+    source: "패턴 카드 architecture: '접두사(약 \"MS_\") + 키 방식으로 PlayerPrefs 활용' — '약' 표현으로 정확값 보장 불가. 게임명 Magic Sort 이니셜과 일치하여 신뢰도 medium 유지"
+
+  - id: MS28
+    name: pattern_count
+    value: 8
+    confidence: medium
+    source: "패턴 카드 architecture 디자인 패턴 열거: ① Singleton<T> ② SignalBus (pub/sub) ③ StateMachine<T> ④ Command ⑤ DI Container ⑥ Object Pool ⑦ Strategy ⑧ MVC — 8종 명시. 실제 구현에 추가 패턴 존재 가능"
+
+  - id: MS29
+    name: state_count
+    value: 6
+    confidence: medium
+    source: "패턴 카드 architecture: '게임 상태 FSM (Playing, Paused, Win, Stuck 등 약 6개)' — Playing/Paused/Win/Stuck 4종 명시, '등'으로 2종 추가 존재 암시 (예: Loading, Ready)"
+
+  - id: MS30
+    name: pour_mechanic
+    value:
+      interaction_model: "탭-탭 2단계 선택 (1탭: 원본 병 선택 → 2탭: 대상 병 선택 → 자동 실행)"
+      selection_feedback: "선택된 병 약 0.3 단위 리프트 + 틴트 색상 변경"
+      validation_class: "PourValidator (따르기 사전 판정 전담)"
+      pour_rules:
+        - "원본 != 대상 (동일 병 재선택 시 해제)"
+        - "원본에 물(색상 레이어) 1개 이상 존재"
+        - "대상 최상단 색상 == 원본 최상단 색상 OR 대상이 완전 빈 병"
+        - "단색 꽉찬 병 → 빈 병으로의 이동 금지 (무의미한 이동 차단)"
+      deadlock_condition: "유효한 따르기 후보 0개 AND 승리 조건 미충족 → Stuck 상태 전환"
+    confidence: high
+    source: "패턴 카드 core_loop 따르기 규칙 + input_system 탭-탭 방식 + SelectionManager·PourValidator 클래스 구조"
+
+  - id: MS31
+    name: win_condition
+    value: "모든 병이 단색 꽉참(full mono-color) OR 빈 상태(empty) — 혼합 색상 병 0개"
+    confidence: high
+    source: "패턴 카드 core_loop: '승리 조건: 모든 병이 단색 꽉참 OR 빈 상태'"
+
+  - id: MS32
+    name: empty_bottles_formula
+    value:
+      formula: "fixed = 2"
+      detail: "Easy / Hard / Super Hard 전 티어 공통 빈 병 2개 고정"
+      note: "색상 수 증가에도 빈 병 수 불변 — 색상 수 증가로 난이도를 조절하고 해결 경로는 빈 병 2개로 일정하게 제한"
+    confidence: high
+    source: "패턴 카드 difficulty_progression: Easy '빈 병 2개', Hard '빈 병 2개', Super Hard '빈 병 2개' — 3티어 모두 동일값 명시"
+```
+
+---
+
+**추정 신뢰도 요약**
+
+| 신뢰도 | 파라미터 수 | 해당 ID |
+|--------|------------|---------|
+| **high** | 22개 | MS01, MS03, MS06, MS07, MS08, MS09, MS11, MS15, MS16, MS17, MS18, MS19, MS20, MS22, MS23, MS24, MS25, MS26, MS30, MS31, MS32, MS04\* |
+| **medium** | 5개 | MS02, MS05, MS27, MS28, MS29 |
+| **low** | 5개 | MS10, MS12, MS13, MS14, MS21 |
+
+**낮은 신뢰도 파라미터 주의사항**
+- **MS10** (par_bonus): 공식 구조는 명확하나 티어별 가산치 미명시 — 실제 플레이 데이터로 역산 필요
+- **MS12~14** (레이아웃 수치): 패턴 카드에 시각 레이아웃 구체값 없음 — 구현 시 Unity Inspector에서 조정 필요
+- **MS21** (부스터 초기 수량): 범위(1~5)만 제시, 종류별 배분 불명 — A/B 테스트 대상 파라미터

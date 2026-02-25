@@ -1,0 +1,87 @@
+metadata:
+  nodeId: "GachaManager"
+  version: "1.0.0"
+  phase: 2
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "DataManager"
+    - "CurrencyManager"
+    - "EventManager"
+    - "SaveManager"
+    - "Util"
+  external:
+    - "System.Collections.Generic"
+
+contract:
+  provides:
+    - "List<GachaItem> Pull(string bannerId, int count)"
+    - "int GetPityCount(string bannerId)"
+    - "GachaData GetBannerData(string bannerId)"
+    - "List<GachaData> GetActiveBanners()"
+  requires:
+    - "Singleton"
+    - "DataManager"
+    - "CurrencyManager"
+    - "EventManager"
+
+tags:
+  layer: "Domain"
+  genre: "Idle"
+  role: "Manager"
+  system: "Gacha"
+  majorFunctions:
+    - "ResourceTransfer"
+    - "ConditionCheck"
+    - "ValueModification"
+  minorFunctions:
+    - "Calculate"
+    - "Validate"
+    - "Notify"
+
+logicFlow:
+  - step: 1
+    tag: "Validate"
+    action: "Pull: Gem 잔액 체크 (1회 300Gem, 10회 3000Gem)"
+    next: 2
+  - step: 2
+    tag: "Assign"
+    action: "CurrencyManager.SpendCurrency(Gem, cost)"
+    next: 3
+  - step: 3
+    tag: "Iterate"
+    action: "count 횟수만큼 반복: 확률 계산 실행"
+    next: 4
+  - step: 4
+    tag: "ConditionCheck"
+    action: "pityCount >= hardPity(100)이면 SSR 강제 / >= softPity(80)이면 SSR 확률 증가"
+    next: 5
+  - step: 5
+    tag: "Calculate"
+    action: "Util.WeightedRandom(grades) 호출로 등급 결정, 해당 등급 풀에서 아이템 랜덤 선택"
+    next: 6
+  - step: 6
+    tag: "Assign"
+    action: "pityCount 갱신 (SSR 획득 시 리셋), SaveManager 저장"
+    next: 7
+  - step: 7
+    tag: "Notify"
+    action: "EventManager.Publish(OnGachaResult, results)"
+    next: null
+
+referencePatterns:
+  - source: "CLAUDE.md"
+    pattern: "GachaManager - 천장(pity) 80/100, SSR 0.5%~4.5%"
+
+codeHints:
+  patterns:
+    - "public class GachaManager : Singleton<GachaManager>"
+    - "private Dictionary<string, int> _pityCounters = new() // bannerId → pityCount"
+    - "Soft pity (80): SSR 확률 = 기본 + (pity - 80) * 6% per pull"
+    - "Hard pity (100): 강제 SSR"
+    - "GachaItem: { string id; GachaItemType type; Grade grade; }"
+  avoidPatterns:
+    - "확률을 하드코딩 금지 → GachaTable 참조"
+    - "pityCount를 SSR이 아닌 Legend에도 리셋하지 말고 등급별 별도 관리 고려"

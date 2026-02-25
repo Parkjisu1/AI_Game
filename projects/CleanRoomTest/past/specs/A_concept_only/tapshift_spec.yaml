@@ -1,0 +1,538 @@
+################################################################################
+# TapShift - Complete Game Balance Sheet
+# Version: 1.0.0
+# Platform: Mobile (iOS / Android)
+# Genre: Casual Puzzle
+################################################################################
+
+game:
+  name: "TapShift"
+  version: "1.0.0"
+  platform: "mobile"
+
+# ==============================================================================
+# 1. DIFFICULTY PROGRESSION
+# ==============================================================================
+difficulty_progression:
+  total_levels: 200
+
+  level_ranges:
+    - range: [1, 20]
+      label: "tutorial"
+      board_size: { cols: 4, rows: 4 }
+      arrow_count: { min: 2, max: 4 }
+      directions_allowed: ["up", "down", "left", "right"]
+      blockers: 0
+      guaranteed_solvable_in_moves: 4
+
+    - range: [21, 60]
+      label: "easy"
+      board_size: { cols: 5, rows: 5 }
+      arrow_count: { min: 4, max: 6 }
+      directions_allowed: ["up", "down", "left", "right"]
+      blockers: 0
+      guaranteed_solvable_in_moves: 7
+
+    - range: [61, 120]
+      label: "medium"
+      board_size: { cols: 5, rows: 6 }
+      arrow_count: { min: 6, max: 9 }
+      directions_allowed: ["up", "down", "left", "right"]
+      blockers: 1
+      guaranteed_solvable_in_moves: 12
+
+    - range: [121, 160]
+      label: "hard"
+      board_size: { cols: 6, rows: 6 }
+      arrow_count: { min: 9, max: 12 }
+      directions_allowed: ["up", "down", "left", "right"]
+      blockers: 2
+      guaranteed_solvable_in_moves: 18
+
+    - range: [161, 200]
+      label: "expert"
+      board_size: { cols: 6, rows: 7 }
+      arrow_count: { min: 12, max: 16 }
+      directions_allowed: ["up", "down", "left", "right"]
+      blockers: 3
+      guaranteed_solvable_in_moves: 25
+
+  max_arrow_clamp: 16
+
+# ==============================================================================
+# 2. CORE CONSTANTS
+# ==============================================================================
+core_constants:
+  max_lives: 5
+  life_restore_interval_minutes: 30
+  max_undo_count: 3
+  max_hint_count: 3
+  total_levels: 200
+  interstitial_frequency: 3          # Show interstitial every N level completions
+  arrow_move_speed: 18.0             # World units per second (slide speed)
+  arrow_shake_duration: 0.35         # Seconds for blocked shake animation
+  arrow_shake_intensity: 8.0         # Pixels of shake offset amplitude
+  board_padding: 40                  # Pixels between board edge and screen edge
+  popup_fade_duration: 0.25          # Seconds for popup alpha fade-in/out
+  target_frame_rate: 60              # FPS lock
+  cell_size_pixels: 120              # Logical pixels per board cell
+  tap_cooldown_seconds: 0.1          # Min seconds between consecutive taps
+
+# ==============================================================================
+# 3. STAR RATING
+# ==============================================================================
+star_rating:
+  metric: "tap_count"
+  description: "Stars awarded based on how many taps the player used vs. the optimal solution tap count"
+
+  thresholds:
+    three_stars:
+      condition: "tap_count <= optimal_taps"
+      description: "Solved in optimal or fewer taps"
+    two_stars:
+      condition: "tap_count <= optimal_taps * 1.5"
+      description: "Solved within 1.5x optimal taps"
+    one_star:
+      condition: "tap_count <= optimal_taps * 2.5"
+      description: "Solved within 2.5x optimal taps"
+    zero_stars:
+      condition: "tap_count > optimal_taps * 2.5"
+      description: "Solved but used more than 2.5x optimal taps (level technically cleared, no stars awarded)"
+
+  formula_example:
+    optimal_taps: 6
+    three_star_max: 6
+    two_star_max: 9
+    one_star_max: 15
+    zero_star: 16+
+
+# ==============================================================================
+# 4. LEVEL GENERATION
+# ==============================================================================
+level_generation:
+  base_unit: 1                       # 1 cell = 1 unit in grid coordinates
+  position_snap: 1                   # Snap to integer grid coordinates
+  size_snap: 1                       # All arrows occupy exactly 1 cell
+  overlap_gap: 0                     # No gap required; cells are exclusive (no overlap allowed)
+  max_placement_attempts: 100        # Attempts per arrow before giving up
+  max_retries: 10                    # Full board rebuild retries if placement fails
+
+  fallback_rules:
+    - "If placement fails after max_placement_attempts, reduce arrow_count by 1 and retry"
+    - "If max_retries exceeded, fall back to hand-authored level for that level index"
+    - "Minimum arrow_count is always 2 regardless of fallback"
+
+  solvability_check:
+    algorithm: "BFS"
+    description: "Breadth-First Search over board states; each state is a frozenset of (col, row, direction) tuples"
+    max_states_visited: 50000
+    timeout_ms: 2000
+    rejection_policy: "Reject and regenerate if no solution found within max_states_visited or timeout"
+
+  direction_rules:
+    - "Each cell may contain at most 1 arrow"
+    - "Arrow direction is chosen from [up, down, left, right] with equal probability (0.25 each)"
+    - "An arrow pointing toward the board edge with no blockers in path is immediately ejectable (valid start state)"
+    - "At least 1 arrow must be immediately ejectable at game start to avoid dead-lock on first tap"
+    - "Blocker cells are static; arrows cannot enter blocker cells"
+    - "Blockers placed only after arrows are placed; blockers never occlude initially-ejectable arrows"
+
+  optimal_solution_storage:
+    format: "array of (col, row) integer pairs"
+    example: "[[2,3],[0,1],[4,2]]"
+
+# ==============================================================================
+# 5. ANIMATION
+# ==============================================================================
+animation:
+  arrow_movement:
+    duration_formula: "distance_cells / arrow_move_speed"
+    description: "duration = number of cells traveled / 18.0 units_per_second"
+    example_1_cell: 0.056            # seconds (1/18)
+    example_4_cells: 0.222           # seconds (4/18)
+    min_duration_clamp: 0.05         # Never shorter than 50ms
+    max_duration_clamp: 0.6          # Never longer than 600ms
+    phases:
+      stretch:
+        description: "Arrow scales up slightly in movement direction before sliding"
+        scale_x_multiplier: 1.2
+        scale_y_multiplier: 0.85
+        duration: 0.05               # seconds
+      slide:
+        description: "Arrow moves at constant speed to destination"
+        easing: "Linear"
+      snap:
+        description: "Arrow scales back to 1.0 on arrival or exit"
+        scale_x_multiplier: 1.0
+        scale_y_multiplier: 1.0
+        duration: 0.08               # seconds
+        easing: "EaseOutBack"
+        overshoot: 1.05              # Slight overshoot factor for snap feel
+
+  blocked_feedback:
+    type: "shake"
+    duration: 0.35                   # seconds (matches arrow_shake_duration)
+    intensity: 8.0                   # pixels (matches arrow_shake_intensity)
+    oscillation_frequency: 20.0      # Hz (cycles per second)
+    easing: "EaseOutSine"
+    color_flash:
+      enabled: true
+      color_hex: "#FF4444"
+      flash_duration: 0.15           # seconds
+
+  hint_animation:
+    pulse_count: 3
+    scale_min: 0.9
+    scale_max: 1.15
+    pulse_duration: 0.4              # seconds per pulse cycle
+    color_tint_hex: "#FFD700"
+    glow_radius_pixels: 12
+    easing: "EaseInOutSine"
+
+  popup_animation:
+    fade_in_duration: 0.25           # seconds
+    fade_out_duration: 0.2           # seconds
+    scale_in_from: 0.85
+    scale_in_to: 1.0
+    easing_in: "EaseOutBack"
+    easing_out: "EaseInQuad"
+
+  page_fade:
+    duration: 0.3                    # seconds for scene/page crossfade
+    easing: "EaseInOutQuad"
+
+  star_reveal:
+    delay_between_stars: 0.3         # seconds
+    scale_in_from: 0.0
+    scale_in_to: 1.0
+    scale_in_duration: 0.25          # seconds per star
+    easing: "EaseOutElastic"
+    elastic_overshoot: 1.2
+    particle_burst_count: 12         # Particles emitted per star pop
+
+  level_clear_sequence:
+    last_arrow_exit_delay: 0.4       # Pause after final arrow exits (seconds)
+    result_popup_appear_delay: 0.8   # Delay before result popup shows (seconds)
+
+# ==============================================================================
+# 6. ARROW COLORS
+# ==============================================================================
+arrow_colors:
+  up:    "#4A90D9"    # Blue
+  down:  "#E74C3C"    # Red
+  left:  "#2ECC71"    # Green
+  right: "#F39C12"    # Orange
+  blocked_tint: "#FF4444"   # Tint applied during blocked shake
+  hint_tint:    "#FFD700"   # Tint applied during hint pulse
+  selected:     "#FFFFFF"   # Brief flash on successful tap
+  background:   "#1A1A2E"   # Board background
+  cell_normal:  "#2D2D4E"   # Empty cell color
+  cell_blocker: "#4A4A6A"   # Blocker cell color
+  board_border: "#6C6C9C"   # Board grid line color
+
+# ==============================================================================
+# 7. ARROW RENDERING
+# ==============================================================================
+arrow_rendering:
+  cell_size_pixels: 120
+  head_ratio: 0.45           # Arrowhead height = 0.45 * cell_size = 54px
+  shaft_height_ratio: 0.55   # Shaft height = 0.55 * cell_size = 66px
+  shaft_width_ratio: 0.3     # Shaft width = 0.3 * cell_size = 36px
+  head_width_ratio: 0.65     # Arrowhead base width = 0.65 * cell_size = 78px
+  corner_radius_pixels: 6    # Rounded corners on shaft
+
+  rotation_mapping:
+    up:    0      # degrees (north, native draw direction)
+    right: 90     # degrees clockwise
+    down:  180    # degrees
+    left:  270    # degrees
+
+  outline:
+    enabled: true
+    width_pixels: 2
+    color_hex: "#00000066"   # Semi-transparent black
+
+  shadow:
+    enabled: true
+    offset_x: 2
+    offset_y: -2
+    blur_radius: 4
+    color_hex: "#00000040"
+
+# ==============================================================================
+# 8. HAPTIC
+# ==============================================================================
+haptic:
+  light:
+    duration_ms: 10
+    use_case: "Successful tap / arrow starts moving"
+  medium:
+    duration_ms: 30
+    use_case: "Arrow exits board (clear progress)"
+  heavy:
+    duration_ms: 60
+    use_case: "Level complete / all arrows cleared"
+  blocked:
+    duration_ms: 20
+    pattern: "double_pulse"     # Two 20ms pulses, 30ms apart
+    use_case: "Arrow blocked, cannot move"
+  hint:
+    duration_ms: 15
+    use_case: "Hint activated"
+  undo:
+    duration_ms: 15
+    use_case: "Undo activated"
+
+# ==============================================================================
+# 9. COLLISION
+# ==============================================================================
+collision:
+  detection_method: "grid_cell_raycast"
+  description: >
+    Pure grid-based collision. When an arrow is tapped, cast a ray from its
+    current cell in its direction. Iterate cell by cell until either the board
+    edge or an occupied cell is found. No Unity Physics involved.
+  steps:
+    1: "Get arrow's (col, row) and direction vector (e.g., up = (0, +1))"
+    2: "Step: next_col = col + dir.x, next_row = row + dir.y"
+    3: "Check grid[next_col][next_row]: if empty, add to path; if occupied (arrow or blocker), stop before that cell"
+    4: "Check if path leads to board edge (col < 0, col >= cols, row < 0, row >= rows): arrow exits"
+    5: "If path length == 0 (immediately blocked), trigger blocked_feedback; no movement"
+    6: "Move arrow along path, then update grid"
+  grid_data_structure: "2D array of nullable ArrowData (col x row)"
+  board_edge_exit: "Arrow moves to edge cell, then is removed from grid and destroyed/pooled"
+
+# ==============================================================================
+# 10. UI
+# ==============================================================================
+ui:
+  reference_resolution:
+    width: 1080
+    height: 1920
+  scale_mode: "ScaleWithScreenSize"
+  match_width_or_height: 0.5         # Balance between width and height matching
+  pixels_per_unit: 100
+
+  sorting_orders:
+    background: 0
+    board: 10
+    arrows: 20
+    fx_particles: 30
+    hud: 40
+    popup_overlay: 50
+    popup: 60
+    toast: 70
+    loading_screen: 80
+
+  screens:
+    - id: "TitleScreen"
+      description: "Splash + logo, auto-transitions to MainMenu after 2.0 seconds"
+      transition_delay_seconds: 2.0
+    - id: "MainMenuScreen"
+      description: "Level select grid, settings button, shop button"
+    - id: "GameScreen"
+      description: "Game board + HUD (undo, hint, level label, pause)"
+    - id: "PausePopup"
+      description: "Resume, Restart, Home buttons"
+    - id: "ResultPopup"
+      description: "Stars display, tap_count, best record, next/retry buttons"
+    - id: "SettingsPopup"
+      description: "Music toggle, SFX toggle, haptic toggle"
+    - id: "ShopPopup"
+      description: "IAP products, ad-based hint/undo refill"
+
+  level_select_grid:
+    columns: 5
+    cell_size_pixels: 160
+    cell_gap_pixels: 16
+    levels_per_page: 30
+    locked_alpha: 0.4
+
+# ==============================================================================
+# 11. PERSISTENCE
+# ==============================================================================
+persistence:
+  format: "PlayerPrefs"
+  key_naming_pattern: "TapShift_{Category}_{Identifier}"
+
+  keys:
+    - key: "TapShift_Level_BestStars_{levelIndex}"
+      type: "int"
+      description: "Best star count for level N (0-3)"
+    - key: "TapShift_Level_BestTaps_{levelIndex}"
+      type: "int"
+      description: "Fewest taps used to clear level N"
+    - key: "TapShift_Progress_HighestUnlocked"
+      type: "int"
+      description: "Index of highest unlocked level (0-based)"
+    - key: "TapShift_Player_UndoCount"
+      type: "int"
+      description: "Current undo charges remaining"
+    - key: "TapShift_Player_HintCount"
+      type: "int"
+      description: "Current hint charges remaining"
+    - key: "TapShift_Player_Lives"
+      type: "int"
+      description: "Current life count"
+    - key: "TapShift_Player_LivesTimestamp"
+      type: "string"
+      description: "ISO 8601 UTC timestamp of last life restore event"
+    - key: "TapShift_Settings_MusicOn"
+      type: "int"
+      description: "1 = music on, 0 = off"
+    - key: "TapShift_Settings_SfxOn"
+      type: "int"
+      description: "1 = SFX on, 0 = off"
+    - key: "TapShift_Settings_HapticOn"
+      type: "int"
+      description: "1 = haptic on, 0 = off"
+    - key: "TapShift_Ads_CompletionCount"
+      type: "int"
+      description: "Total level completions since last interstitial (for frequency gating)"
+    - key: "TapShift_IAP_NoAds"
+      type: "int"
+      description: "1 = no-ads purchased, 0 = not purchased"
+
+# ==============================================================================
+# 12. MONETIZATION
+# ==============================================================================
+monetization:
+  ad_frequency:
+    interstitial_every_n_completions: 3
+    rewarded_ad_for_hint_refill: true     # +3 hints per rewarded ad
+    rewarded_ad_for_undo_refill: true     # +3 undos per rewarded ad
+    rewarded_ad_for_continue: true        # After fail, watch ad to continue with current board
+    interstitial_cooldown_seconds: 180    # Min seconds between two interstitials
+    no_interstitial_on_levels: [1, 2, 3] # No ads on first 3 levels (tutorial)
+
+  iap_products:
+    - id: "com.tapshift.noads"
+      type: "non_consumable"
+      price_usd: 1.99
+      description: "Remove all interstitial ads permanently"
+      grants:
+        - "TapShift_IAP_NoAds = 1"
+
+    - id: "com.tapshift.hints_small"
+      type: "consumable"
+      price_usd: 0.99
+      description: "5 hint charges"
+      quantity: 5
+      item: "hint"
+
+    - id: "com.tapshift.hints_large"
+      type: "consumable"
+      price_usd: 2.99
+      description: "20 hint charges"
+      quantity: 20
+      item: "hint"
+
+    - id: "com.tapshift.undos_small"
+      type: "consumable"
+      price_usd: 0.99
+      description: "5 undo charges"
+      quantity: 5
+      item: "undo"
+
+    - id: "com.tapshift.undos_large"
+      type: "consumable"
+      price_usd: 2.99
+      description: "20 undo charges"
+      quantity: 20
+      item: "undo"
+
+    - id: "com.tapshift.starter_pack"
+      type: "consumable"
+      price_usd: 1.99
+      description: "Starter Pack: 10 hints + 10 undos + no-ads (one-time offer)"
+      quantity_hint: 10
+      quantity_undo: 10
+      grants_no_ads: true
+      one_time_offer: true
+
+# ==============================================================================
+# 13. ARCHITECTURE
+# ==============================================================================
+architecture:
+  design_patterns:
+    - "Singleton (managers)"
+    - "Observer / Event Bus (game state changes)"
+    - "Command (undo stack)"
+    - "Strategy (solver algorithm injection)"
+    - "Object Pool (arrow GameObjects)"
+    - "State Machine (game session states)"
+    - "Factory (arrow creation)"
+    - "MVC (board model / board view / board controller split)"
+
+  singletons:
+    - "GameManager"        # Session lifecycle, state machine
+    - "LevelDataManager"   # Level definitions, BFS solution cache
+    - "PlayerDataManager"  # Lives, hint/undo counts, progress (PlayerPrefs)
+    - "AudioManager"       # BGM + SFX, pooled AudioSource
+    - "HapticManager"      # Haptic feedback abstraction
+    - "AdManager"          # Interstitial + Rewarded ad gating
+    - "IAPManager"         # Unity IAP wrapper
+    - "SceneLoader"        # Async scene load with fade
+
+  layer_structure:
+    Core:
+      - "Singleton<T>"
+      - "ObjectPool<T>"
+      - "EventBus"
+      - "SceneLoader"
+      - "AudioManager"
+      - "HapticManager"
+    Domain:
+      - "BoardModel"        # Grid state (2D array)
+      - "ArrowData"         # Struct: col, row, direction
+      - "LevelDefinition"   # ScriptableObject: arrows, board size, optimal solution
+      - "BoardSolver"       # BFS solver
+      - "MoveCommand"       # Undo-able command
+      - "UndoStack"         # Stack<MoveCommand>
+    Game:
+      - "GameManager"
+      - "BoardController"   # Input -> MoveCommand dispatch
+      - "BoardView"         # Renders BoardModel state
+      - "ArrowView"         # Individual arrow visual + animation
+      - "LevelDataManager"
+      - "PlayerDataManager"
+      - "UIManager"         # Screen/popup stack
+      - "AdManager"
+      - "IAPManager"
+
+  states:
+    - "Idle"               # Board displayed, waiting for tap
+    - "Animating"          # Arrow(s) in motion, input blocked
+    - "LevelComplete"      # All arrows cleared, result sequence playing
+    - "Paused"             # Pause popup open
+    - "Hint"               # Hint arrow pulsing, waiting for tap or dismiss
+    - "Loading"            # Scene/level loading in progress
+
+  solver_algorithm:
+    name: "BFS (Breadth-First Search)"
+    state_representation: "FrozenSet of (col, row, direction) tuples"
+    initial_state: "All arrows' positions and directions at level start"
+    goal_state: "Empty set (no arrows remain on board)"
+    branching_factor: "Number of currently movable arrows"
+    max_states: 50000
+    timeout_ms: 2000
+    output: "Ordered list of (col, row) taps representing optimal solution"
+    usage:
+      - "Level generation: verify solvability"
+      - "Hint system: return next optimal tap from current board state"
+      - "Star rating: optimal_taps = length of BFS solution from initial state"
+
+  serialization_format:
+    level_files: "ScriptableObject (LevelDefinition.asset)"
+    level_fields:
+      - "int levelIndex"
+      - "int boardCols"
+      - "int boardRows"
+      - "ArrowData[] arrows"
+      - "int[] blockerCols"
+      - "int[] blockerRows"
+      - "int optimalTapCount"
+      - "int[] solutionColSequence"
+      - "int[] solutionRowSequence"
+    runtime_state: "PlayerPrefs (see persistence section)"
+    ad_hoc_serialization: "JsonUtility for cloud save (future)"

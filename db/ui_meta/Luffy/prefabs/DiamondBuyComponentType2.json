@@ -1,0 +1,414 @@
+{
+  "fileName": "DiamondBuyComponentType2",
+  "filePath": "E:/AIMED/Luffy/IdleMoney1/Project/Assets\\IdleMoney\\Prefabs\\UI\\SubPages\\DiamondBuyComponentType2.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 15,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "1586419088875925305",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "BuyWithRealMonyNode",
+      "rectSize": {
+        "x": 202.0,
+        "y": 97.0
+      },
+      "anchoredPosition": {
+        "x": -0.9999757,
+        "y": -47.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DiamondBuyComponentType2"
+    },
+    {
+      "type": "Button",
+      "fileID": "8500597253540610494",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "BuyWithRealMonyNode",
+      "rectSize": {
+        "x": 202.0,
+        "y": 97.0
+      },
+      "anchoredPosition": {
+        "x": -0.9999757,
+        "y": -47.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DiamondBuyComponentType2"
+    }
+  ],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "3512449077242232894",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.34117648,
+        "g": 0.67058825,
+        "b": 0.9019608,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "648630e64155c4243859d1bb60722834",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Under",
+      "rectSize": {
+        "x": 302.0,
+        "y": 215.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -251.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DiamondBuyComponentType2"
+    },
+    {
+      "type": "Image",
+      "fileID": "4273009465663432274",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.34117648,
+        "g": 0.67058825,
+        "b": 0.9019608,
+        "a": 0.5019608
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8cbf0c754bcae4b598aeae1646c5d200",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "BG2",
+      "rectSize": {
+        "x": 302.0,
+        "y": 215.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DiamondBuyComponentType2"
+    },
+    {
+      "type": "Image",
+      "fileID": "6856922934075247262",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.34117648,
+        "g": 0.67058825,
+        "b": 0.9019608,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "648630e64155c4243859d1bb60722834",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Upper",
+      "rectSize": {
+        "x": 302.0,
+        "y": 215.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DiamondBuyComponentType2"
+    },
+    {
+      "type": "Image",
+      "fileID": "700396710331199513",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "688ef9fe0ad72c744983b45500a145d7",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "DiaIconImg",
+      "rectSize": {
+        "x": 175.0,
+        "y": 175.0
+      },
+      "anchoredPosition": {
+        "x": -43.0,
+        "y": 2.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DiamondBuyComponentType2"
+    },
+    {
+      "type": "Image",
+      "fileID": "4193275317437660691",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "688ef9fe0ad72c744983b45500a145d7",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "DiaIconImg",
+      "rectSize": {
+        "x": 175.0,
+        "y": 175.0
+      },
+      "anchoredPosition": {
+        "x": -43.0,
+        "y": 2.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DiamondBuyComponentType2"
+    },
+    {
+      "type": "Image",
+      "fileID": "4223927435729549773",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "d3edc68eb166e4c69a52a94502c2f4a6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BuyWithRealMonyNode",
+      "rectSize": {
+        "x": 202.0,
+        "y": 97.0
+      },
+      "anchoredPosition": {
+        "x": -0.9999757,
+        "y": -47.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DiamondBuyComponentType2"
+    },
+    {
+      "type": "Image",
+      "fileID": "1895917758158111058",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.34117648,
+        "g": 0.67058825,
+        "b": 0.9019608,
+        "a": 0.5019608
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8cbf0c754bcae4b598aeae1646c5d200",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "BG2",
+      "rectSize": {
+        "x": 302.0,
+        "y": 215.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DiamondBuyComponentType2"
+    },
+    {
+      "type": "Image",
+      "fileID": "6318167335411980679",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "d3edc68eb166e4c69a52a94502c2f4a6",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BuyWithRealMonyNode",
+      "rectSize": {
+        "x": 202.0,
+        "y": 97.0
+      },
+      "anchoredPosition": {
+        "x": -0.9999757,
+        "y": -47.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DiamondBuyComponentType2"
+    }
+  ],
+  "texts": [],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 15
+}

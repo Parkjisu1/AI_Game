@@ -1,0 +1,309 @@
+{
+  "fileName": "EnableItemPopup",
+  "filePath": "E:/AIMED/FantaPuzzle/PuzzleAutomation2/Assets\\Resources\\Prefabs\\Popup\\EnableItemPopup.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 10,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "2761533227457837856",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Close",
+      "rectSize": {
+        "x": 128.0,
+        "y": 128.0
+      },
+      "anchoredPosition": {
+        "x": 1.0,
+        "y": -54.0
+      },
+      "anchorMin": {
+        "x": 1.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 0.0
+      },
+      "sourceFile": "EnableItemPopup"
+    }
+  ],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "7666536080464293867",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8dc7823f7557942958134606cf802639",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Close",
+      "rectSize": {
+        "x": 128.0,
+        "y": 128.0
+      },
+      "anchoredPosition": {
+        "x": 1.0,
+        "y": -54.0
+      },
+      "anchorMin": {
+        "x": 1.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 0.0
+      },
+      "sourceFile": "EnableItemPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "2837653290837019727",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "133ccaf0330484dc2bcd64aab4fea19c",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "TitelBg",
+      "rectSize": {
+        "x": 1024.0,
+        "y": 1024.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 190.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "EnableItemPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "8352387368765389135",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 0.0
+      },
+      "m_Sprite": {
+        "fileID": 10907,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Panel",
+      "rectSize": {
+        "x": 3000.0,
+        "y": 5000.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "EnableItemPopup"
+    },
+    {
+      "type": "Image",
+      "fileID": "8352387369755566774",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8c9a23eee9840451a83990cd1fb287ad",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "ItemImage",
+      "rectSize": {
+        "x": 369.3,
+        "y": 369.3
+      },
+      "anchoredPosition": {
+        "x": -353.0,
+        "y": 10.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "EnableItemPopup"
+    }
+  ],
+  "texts": [
+    {
+      "type": "Text",
+      "fileID": "8352387368424396512",
+      "m_FontSize": 35.0,
+      "m_Alignment": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "gameObjectName": "ItemExplain",
+      "rectSize": {
+        "x": 524.2,
+        "y": 128.8
+      },
+      "anchoredPosition": {
+        "x": 438.3,
+        "y": -60.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "EnableItemPopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "8352387369393046171",
+      "m_FontSize": 65.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.64705884,
+        "g": 0.7058824,
+        "b": 0.6862745,
+        "a": 1.0
+      },
+      "m_Text": "ITEM",
+      "gameObjectName": "Title",
+      "rectSize": {
+        "x": 230.0,
+        "y": 75.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 7.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "EnableItemPopup"
+    },
+    {
+      "type": "Text",
+      "fileID": "8352387370032117822",
+      "m_FontSize": 55.0,
+      "m_Alignment": 6,
+      "m_Color": {
+        "r": 0.990566,
+        "g": 0.8825493,
+        "b": 0.378471,
+        "a": 1.0
+      },
+      "m_Text": "Cross Bomb",
+      "gameObjectName": "ItemName",
+      "rectSize": {
+        "x": 410.7,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 382.5,
+        "y": 73.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "EnableItemPopup"
+    }
+  ],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 10
+}

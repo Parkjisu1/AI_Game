@@ -1,0 +1,71 @@
+# AI_기획서 - MoveValidator
+nodeId: MoveValidator
+type: class
+layer: Domain
+role: Validator
+phase: 3b
+
+description: "차량 수집 가능 여부 검사"
+
+using:
+  - System
+  - System.Collections.Generic
+  - UnityEngine
+
+fields:
+  - name: boardManager
+    type: BoardManager
+    access: private
+    description: "보드 매니저 참조"
+
+  - name: directions
+    type: Vector2Int[]
+    access: private
+    static: true
+    default: "new Vector2Int[] { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right }"
+    description: "4방향 체크용"
+
+provides:
+  - signature: "void Initialize(BoardManager board)"
+    description: "보드 매니저 참조 설정"
+
+  - signature: "bool CanCollect(CarController car)"
+    description: "차량 수집 가능 여부 확인"
+    logic:
+      - "차량 위치 가져오기"
+      - "4방향 중 하나라도 열려있으면 true"
+      - "장애물(Wall)이 막고 있으면 해당 방향 불가"
+    return: "수집 가능 여부"
+
+  - signature: "bool HasOpenSide(Vector2Int position)"
+    description: "열린 면이 있는지 확인"
+    logic:
+      - "4방향 체크"
+      - "보드 경계 = 열림"
+      - "빈 셀 = 열림"
+      - "Wall = 막힘"
+
+  - signature: "List<Vector2Int> GetOpenDirections(Vector2Int position)"
+    description: "열린 방향 리스트 반환"
+
+  - signature: "int GetOpenSideCount(Vector2Int position)"
+    description: "열린 면의 개수 반환"
+
+private_methods:
+  - signature: "bool IsBlocked(Vector2Int position, Vector2Int direction)"
+    description: "특정 방향이 막혀있는지 확인"
+    logic:
+      - "position + direction 위치 확인"
+      - "범위 밖이면 false (열림)"
+      - "Wall이면 true (막힘)"
+      - "다른 차량이면 true (막힘)"
+      - "그 외 false (열림)"
+
+requires:
+  - BoardManager
+  - CarController
+  - ObstacleType
+
+output:
+  path: "Logic/MoveValidator.cs"
+  namespace: "CarMatch"

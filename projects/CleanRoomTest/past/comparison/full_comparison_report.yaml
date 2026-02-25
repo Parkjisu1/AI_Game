@@ -1,0 +1,1319 @@
+###############################################################################
+# Full Comparison Report: Clean Room Spec Generation Test
+# 3 Games x 6 Conditions = 18 Comparisons
+# Scoring: 1.0 (Exact), 0.7 (Close), 0.4 (Partial), 0.1 (Wrong), 0.0 (Missing)
+###############################################################################
+
+metadata:
+  generated: "2026-02-19"
+  games: [TapShift, MagicSort, CarMatch]
+  conditions:
+    A: "Concept Only"
+    B1: "Concept + Design Intent Pattern Cards"
+    B2: "Concept + Structural Hint Pattern Cards"
+    C: "AI User Observations Only"
+    D1: "AI User + Design Intent Pattern Cards"
+    D2: "AI User + Structural Hint Pattern Cards"
+  scoring_scale:
+    exact: 1.0
+    close: 0.7
+    partial: 0.4
+    wrong: 0.1
+    missing: 0.0
+  parameters_per_game: 32
+
+###############################################################################
+# TAPSHIFT (32 parameters)
+###############################################################################
+tapshift:
+  parameters:
+    # --- Core Constants ---
+    - id: TS01
+      name: total_levels
+      category: core_constants
+      ground_truth: 100
+      scores:
+        A:  { value: 200,   score: 0.1, note: "Wrong - doubled" }
+        B1: { value: 100,   score: 1.0, note: "Exact" }
+        B2: { value: 100,   score: 1.0, note: "Exact" }
+        C:  { value: 100,   score: 1.0, note: "Exact - observed correctly" }
+        D1: { value: 100,   score: 1.0, note: "Exact" }
+        D2: { value: 100,   score: 1.0, note: "Exact" }
+
+    - id: TS02
+      name: max_lives
+      category: core_constants
+      ground_truth: 3
+      scores:
+        A:  { value: 5,     score: 0.1, note: "Wrong" }
+        B1: { value: 3,     score: 1.0, note: "Exact" }
+        B2: { value: 3,     score: 1.0, note: "Exact" }
+        C:  { value: 3,     score: 1.0, note: "Exact - observed correctly" }
+        D1: { value: 3,     score: 1.0, note: "Exact" }
+        D2: { value: 3,     score: 1.0, note: "Exact" }
+
+    - id: TS03
+      name: max_undo_count
+      category: core_constants
+      ground_truth: 10
+      scores:
+        A:  { value: 3,     score: 0.1, note: "Wrong" }
+        B1: { value: 5,     score: 0.4, note: "Partial - half of GT" }
+        B2: { value: 10,    score: 1.0, note: "Exact" }
+        C:  { value: "unlimited", score: 0.1, note: "Wrong - no limit" }
+        D1: { value: 30,    score: 0.1, note: "Wrong - 3x GT" }
+        D2: { value: 10,    score: 1.0, note: "Exact" }
+
+    - id: TS04
+      name: max_hint_count
+      category: core_constants
+      ground_truth: 3
+      scores:
+        A:  { value: 3,     score: 1.0, note: "Exact" }
+        B1: { value: 3,     score: 1.0, note: "Exact" }
+        B2: { value: 3,     score: 1.0, note: "Exact" }
+        C:  { value: 3,     score: 1.0, note: "Exact - observed" }
+        D1: { value: 3,     score: 1.0, note: "Exact" }
+        D2: { value: 3,     score: 1.0, note: "Exact" }
+
+    - id: TS05
+      name: interstitial_frequency
+      category: monetization
+      ground_truth: 3
+      scores:
+        A:  { value: 5,     score: 0.4, note: "Partial - close range" }
+        B1: { value: 4,     score: 0.7, note: "Close - off by 1" }
+        B2: { value: 3,     score: 1.0, note: "Exact" }
+        C:  { value: 5,     score: 0.4, note: "Partial" }
+        D1: { value: 3,     score: 1.0, note: "Exact" }
+        D2: { value: 3,     score: 1.0, note: "Exact" }
+
+    - id: TS06
+      name: arrow_move_speed
+      category: core_constants
+      ground_truth: 15.0
+      scores:
+        A:  { value: 10.0,  score: 0.4, note: "Partial" }
+        B1: { value: 12.0,  score: 0.7, note: "Close - within 20%" }
+        B2: { value: 15.0,  score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: 12.0,  score: 0.7, note: "Close" }
+        D2: { value: 15.0,  score: 1.0, note: "Exact" }
+
+    - id: TS07
+      name: max_arrow_clamp
+      category: core_constants
+      ground_truth: 20
+      scores:
+        A:  { value: 16,    score: 0.7, note: "Close - within 20%" }
+        B1: { value: 20,    score: 1.0, note: "Exact" }
+        B2: { value: 20,    score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: null,   score: 0.0, note: "Missing" }
+        D2: { value: 20,    score: 1.0, note: "Exact" }
+
+    # --- Star Rating ---
+    - id: TS08
+      name: star_rating_system
+      category: scoring
+      ground_truth: "0 wrong=3stars, 1-2=2stars, 3-5=1star, 6+=0stars"
+      scores:
+        A:  { value: "tap_count vs optimal ratio", score: 0.1, note: "Wrong - different metric" }
+        B1: { value: "0/1-3/4-7/8+ thresholds", score: 0.7, note: "Close - right concept, slightly off thresholds" }
+        B2: { value: "0/1-2/3-5/6+ thresholds", score: 1.0, note: "Exact" }
+        C:  { value: "0/1/3+ thresholds", score: 0.4, note: "Partial - right concept, wrong thresholds" }
+        D1: { value: "0/2/5+ thresholds", score: 0.4, note: "Partial - right concept, wrong thresholds" }
+        D2: { value: "0/1-2/3-5/6+ thresholds", score: 1.0, note: "Exact" }
+
+    # --- Animation ---
+    - id: TS09
+      name: base_unit
+      category: animation
+      ground_truth: 60.0
+      scores:
+        A:  { value: 1.0,   score: 0.1, note: "Wrong - completely off" }
+        B1: { value: 60.0,  score: 1.0, note: "Exact" }
+        B2: { value: 60.0,  score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: null,   score: 0.0, note: "Missing" }
+        D2: { value: 60.0,  score: 1.0, note: "Exact" }
+
+    - id: TS10
+      name: position_snap
+      category: animation
+      ground_truth: 30.0
+      scores:
+        A:  { value: null,   score: 0.0, note: "Missing" }
+        B1: { value: 30.0,  score: 1.0, note: "Exact" }
+        B2: { value: 30.0,  score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: null,   score: 0.0, note: "Missing" }
+        D2: { value: 30.0,  score: 1.0, note: "Exact" }
+
+    - id: TS11
+      name: duration_clamp
+      category: animation
+      ground_truth: "[0.25, 0.7]"
+      scores:
+        A:  { value: "[0.2, 0.5]", score: 0.4, note: "Partial - similar concept, different values" }
+        B1: { value: "[0.2, 0.8]", score: 0.7, note: "Close - nearly correct range" }
+        B2: { value: "[0.25, 0.70]", score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: null,   score: 0.0, note: "Missing" }
+        D2: { value: "[0.25, 0.7]", score: 1.0, note: "Exact" }
+
+    - id: TS12
+      name: stretch_phase
+      category: animation
+      ground_truth: "first 40%"
+      scores:
+        A:  { value: null,   score: 0.0, note: "Missing" }
+        B1: { value: "first 30%", score: 0.7, note: "Close" }
+        B2: { value: "first 40%", score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: null,   score: 0.0, note: "Missing" }
+        D2: { value: "first 40%", score: 1.0, note: "Exact" }
+
+    - id: TS13
+      name: stretch_max
+      category: animation
+      ground_truth: 1.6
+      scores:
+        A:  { value: null,   score: 0.0, note: "Missing" }
+        B1: { value: 1.5,   score: 0.7, note: "Close" }
+        B2: { value: 1.6,   score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: null,   score: 0.0, note: "Missing" }
+        D2: { value: 1.6,   score: 1.0, note: "Exact" }
+
+    - id: TS14
+      name: snap_phase
+      category: animation
+      ground_truth: "last 60%"
+      scores:
+        A:  { value: null,   score: 0.0, note: "Missing" }
+        B1: { value: "last 70%", score: 0.7, note: "Close" }
+        B2: { value: "last 60%", score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: null,   score: 0.0, note: "Missing" }
+        D2: { value: "last 60%", score: 1.0, note: "Exact" }
+
+    # --- Visual ---
+    - id: TS15
+      name: arrow_colors
+      category: visual
+      ground_truth: "up=#4CAF50, down=#F44336, left=#2196F3, right=#FF9800"
+      scores:
+        A:  { value: "generic 4 colors", score: 0.4, note: "Partial - concept present, values wrong" }
+        B1: { value: "4 directional colors specified", score: 0.7, note: "Close - right concept, slightly different hex" }
+        B2: { value: "4 colors, some different hex", score: 0.7, note: "Close - right structure, minor hex differences" }
+        C:  { value: "8 colors", score: 0.1, note: "Wrong - wrong count and values" }
+        D1: { value: "8 colors", score: 0.1, note: "Wrong" }
+        D2: { value: "8 colors + directional", score: 0.4, note: "Partial - observation artifacts added extras" }
+
+    - id: TS16
+      name: head_ratio
+      category: visual
+      ground_truth: 0.35
+      scores:
+        A:  { value: 0.45,  score: 0.4, note: "Partial" }
+        B1: { value: 0.40,  score: 0.7, note: "Close - off by 0.05" }
+        B2: { value: 0.35,  score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: null,   score: 0.0, note: "Missing" }
+        D2: { value: 0.35,  score: 1.0, note: "Exact" }
+
+    - id: TS17
+      name: shaft_height_ratio
+      category: visual
+      ground_truth: 0.55
+      scores:
+        A:  { value: null,   score: 0.0, note: "Missing" }
+        B1: { value: 0.50,  score: 0.7, note: "Close" }
+        B2: { value: 0.55,  score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: null,   score: 0.0, note: "Missing" }
+        D2: { value: 0.55,  score: 1.0, note: "Exact" }
+
+    # --- Collision & Algorithm ---
+    - id: TS18
+      name: collision_system
+      category: algorithm
+      ground_truth: "AABB sweep-to-boundary"
+      scores:
+        A:  { value: "grid-based", score: 0.1, note: "Wrong - different approach" }
+        B1: { value: "AABB sweep", score: 1.0, note: "Exact" }
+        B2: { value: "AABB sweep", score: 1.0, note: "Exact" }
+        C:  { value: "topological sort", score: 0.1, note: "Wrong" }
+        D1: { value: "path_sweep", score: 0.4, note: "Partial - similar concept" }
+        D2: { value: "AABB sweep", score: 1.0, note: "Exact" }
+
+    - id: TS19
+      name: performance_complexity
+      category: algorithm
+      ground_truth: "O(n) per tap, n <= 20"
+      scores:
+        A:  { value: null,   score: 0.0, note: "Missing" }
+        B1: { value: "O(n)", score: 0.7, note: "Close - missing n<=20 constraint" }
+        B2: { value: "O(n) per tap, n <= 20", score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: null,   score: 0.0, note: "Missing" }
+        D2: { value: "O(n) per tap, n <= 20", score: 1.0, note: "Exact" }
+
+    - id: TS20
+      name: solver_algorithm
+      category: algorithm
+      ground_truth: "DFS with backtracking"
+      scores:
+        A:  { value: "BFS", score: 0.1, note: "Wrong - different algorithm" }
+        B1: { value: "DFS with backtracking", score: 1.0, note: "Exact" }
+        B2: { value: "DFS with backtracking", score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: "BFS", score: 0.1, note: "Wrong" }
+        D2: { value: "DFS with backtracking", score: 1.0, note: "Exact" }
+
+    # --- UI ---
+    - id: TS21
+      name: ui_reference_resolution
+      category: ui
+      ground_truth: "[720, 1280]"
+      scores:
+        A:  { value: "[1080, 1920]", score: 0.4, note: "Partial - common mobile res but wrong" }
+        B1: { value: "[720, 1280]", score: 1.0, note: "Exact" }
+        B2: { value: "[1080, 1920]", score: 0.4, note: "Partial - defaulted to common res" }
+        C:  { value: "[1080, 1920]", score: 0.4, note: "Partial" }
+        D1: { value: "[1080, 1920]", score: 0.4, note: "Partial" }
+        D2: { value: "[720, 1280]", score: 1.0, note: "Exact" }
+
+    # --- Architecture ---
+    - id: TS22
+      name: total_files
+      category: architecture
+      ground_truth: 50
+      scores:
+        A:  { value: 35,    score: 0.4, note: "Partial" }
+        B1: { value: 45,    score: 0.7, note: "Close" }
+        B2: { value: 50,    score: 1.0, note: "Exact" }
+        C:  { value: 30,    score: 0.4, note: "Partial" }
+        D1: { value: 40,    score: 0.7, note: "Close" }
+        D2: { value: 50,    score: 1.0, note: "Exact" }
+
+    - id: TS23
+      name: pattern_count
+      category: architecture
+      ground_truth: 9
+      scores:
+        A:  { value: 5,     score: 0.4, note: "Partial" }
+        B1: { value: 8,     score: 0.7, note: "Close" }
+        B2: { value: 9,     score: 1.0, note: "Exact" }
+        C:  { value: 4,     score: 0.4, note: "Partial" }
+        D1: { value: 7,     score: 0.7, note: "Close" }
+        D2: { value: 9,     score: 1.0, note: "Exact" }
+
+    - id: TS24
+      name: state_count
+      category: architecture
+      ground_truth: 9
+      scores:
+        A:  { value: 5,     score: 0.4, note: "Partial" }
+        B1: { value: 7,     score: 0.7, note: "Close" }
+        B2: { value: 9,     score: 1.0, note: "Exact" }
+        C:  { value: 5,     score: 0.4, note: "Partial" }
+        D1: { value: 7,     score: 0.7, note: "Close" }
+        D2: { value: 9,     score: 1.0, note: "Exact" }
+
+    - id: TS25
+      name: serialization_format
+      category: architecture
+      ground_truth: "JSON"
+      scores:
+        A:  { value: "JSON", score: 1.0, note: "Exact" }
+        B1: { value: "JSON", score: 1.0, note: "Exact" }
+        B2: { value: "JSON", score: 1.0, note: "Exact" }
+        C:  { value: "JSON", score: 1.0, note: "Exact" }
+        D1: { value: "JSON", score: 1.0, note: "Exact" }
+        D2: { value: "JSON", score: 1.0, note: "Exact" }
+
+    # --- Arrow Types ---
+    - id: TS26
+      name: arrow_directions
+      category: gameplay
+      ground_truth: "4 (up, down, left, right)"
+      scores:
+        A:  { value: "4 directions", score: 1.0, note: "Exact" }
+        B1: { value: "4 directions", score: 1.0, note: "Exact" }
+        B2: { value: "4 directions", score: 1.0, note: "Exact" }
+        C:  { value: "4 + L-bends + U-turns", score: 0.4, note: "Partial - added non-existent types" }
+        D1: { value: "4 + L-bends + U-turns", score: 0.4, note: "Partial - observation artifacts" }
+        D2: { value: "4 + L-bends + U-turns", score: 0.4, note: "Partial - observation artifacts" }
+
+    # --- Difficulty ---
+    - id: TS27
+      name: arrow_count_progression
+      category: difficulty
+      ground_truth: "gradual increase across 100 levels"
+      scores:
+        A:  { value: "linear progression", score: 0.7, note: "Close" }
+        B1: { value: "gradual with plateaus", score: 0.7, note: "Close" }
+        B2: { value: "gradual increase", score: 1.0, note: "Exact concept" }
+        C:  { value: "tiered zones", score: 0.4, note: "Partial" }
+        D1: { value: "tiered zones", score: 0.4, note: "Partial" }
+        D2: { value: "gradual increase", score: 1.0, note: "Exact" }
+
+    - id: TS28
+      name: grid_size_range
+      category: gameplay
+      ground_truth: "3x3 to 5x5 progressive"
+      scores:
+        A:  { value: "3x3 to 6x6", score: 0.7, note: "Close" }
+        B1: { value: "3x3 to 5x5", score: 1.0, note: "Exact" }
+        B2: { value: "3x3 to 5x5", score: 1.0, note: "Exact" }
+        C:  { value: "4x4 to 6x6", score: 0.4, note: "Partial" }
+        D1: { value: "3x3 to 6x6", score: 0.7, note: "Close" }
+        D2: { value: "3x3 to 5x5", score: 1.0, note: "Exact" }
+
+    # --- Core Mechanics ---
+    - id: TS29
+      name: tap_mechanic
+      category: gameplay
+      ground_truth: "single tap to move arrow to boundary"
+      scores:
+        A:  { value: "tap to move", score: 0.7, note: "Close - right concept" }
+        B1: { value: "tap to move to boundary", score: 1.0, note: "Exact" }
+        B2: { value: "tap to move to boundary", score: 1.0, note: "Exact" }
+        C:  { value: "tap to move", score: 0.7, note: "Close" }
+        D1: { value: "tap to move", score: 0.7, note: "Close" }
+        D2: { value: "tap to move to boundary", score: 1.0, note: "Exact" }
+
+    - id: TS30
+      name: goal_condition
+      category: gameplay
+      ground_truth: "all arrows off grid"
+      scores:
+        A:  { value: "clear all arrows", score: 1.0, note: "Exact" }
+        B1: { value: "all arrows off grid", score: 1.0, note: "Exact" }
+        B2: { value: "all arrows off grid", score: 1.0, note: "Exact" }
+        C:  { value: "clear all arrows", score: 1.0, note: "Exact" }
+        D1: { value: "clear all arrows", score: 1.0, note: "Exact" }
+        D2: { value: "all arrows off grid", score: 1.0, note: "Exact" }
+
+    - id: TS31
+      name: level_generation
+      category: algorithm
+      ground_truth: "solver-verified procedural + hand-crafted"
+      scores:
+        A:  { value: "procedural only", score: 0.4, note: "Partial" }
+        B1: { value: "solver-verified + hand-crafted", score: 1.0, note: "Exact" }
+        B2: { value: "solver-verified + hand-crafted", score: 1.0, note: "Exact" }
+        C:  { value: "procedural", score: 0.4, note: "Partial" }
+        D1: { value: "solver-verified", score: 0.7, note: "Close" }
+        D2: { value: "solver-verified + hand-crafted", score: 1.0, note: "Exact" }
+
+    - id: TS32
+      name: save_system
+      category: architecture
+      ground_truth: "PlayerPrefs + JSON"
+      scores:
+        A:  { value: "PlayerPrefs", score: 0.7, note: "Close" }
+        B1: { value: "PlayerPrefs + JSON", score: 1.0, note: "Exact" }
+        B2: { value: "PlayerPrefs + JSON", score: 1.0, note: "Exact" }
+        C:  { value: "PlayerPrefs", score: 0.7, note: "Close" }
+        D1: { value: "PlayerPrefs + JSON", score: 1.0, note: "Exact" }
+        D2: { value: "PlayerPrefs + JSON", score: 1.0, note: "Exact" }
+
+  # --- TapShift Summary ---
+  summary:
+    A:  { total: 32, sum: 12.2, average: 0.3813 }
+    B1: { total: 32, sum: 26.9, average: 0.8406 }
+    B2: { total: 32, sum: 31.1, average: 0.9719 }
+    C:  { total: 32, sum: 10.7, average: 0.3344 }
+    D1: { total: 32, sum: 14.2, average: 0.4438 }
+    D2: { total: 32, sum: 30.8, average: 0.9625 }
+
+###############################################################################
+# MAGICSORT (32 parameters)
+###############################################################################
+magicsort:
+  parameters:
+    # --- Core Constants ---
+    - id: MS01
+      name: bottle_max_height
+      category: core_constants
+      ground_truth: 4
+      scores:
+        A:  { value: 4,     score: 1.0, note: "Exact" }
+        B1: { value: 4,     score: 1.0, note: "Exact" }
+        B2: { value: 4,     score: 1.0, note: "Exact" }
+        C:  { value: 4,     score: 1.0, note: "Exact - clearly observable" }
+        D1: { value: 4,     score: 1.0, note: "Exact" }
+        D2: { value: 4,     score: 1.0, note: "Exact" }
+
+    - id: MS02
+      name: colors_total
+      category: core_constants
+      ground_truth: 17
+      scores:
+        A:  { value: 12,    score: 0.4, note: "Partial" }
+        B1: { value: 15,    score: 0.7, note: "Close" }
+        B2: { value: 17,    score: 1.0, note: "Exact" }
+        C:  { value: 9,     score: 0.1, note: "Wrong" }
+        D1: { value: 12,    score: 0.4, note: "Partial" }
+        D2: { value: 17,    score: 1.0, note: "Exact" }
+
+    - id: MS03
+      name: colors_playable
+      category: core_constants
+      ground_truth: 13
+      scores:
+        A:  { value: 8,     score: 0.4, note: "Partial" }
+        B1: { value: 10,    score: 0.7, note: "Close" }
+        B2: { value: 13,    score: 1.0, note: "Exact" }
+        C:  { value: 9,     score: 0.4, note: "Partial" }
+        D1: { value: 10,    score: 0.7, note: "Close" }
+        D2: { value: 13,    score: 1.0, note: "Exact" }
+
+    # --- Level Generation ---
+    - id: MS04
+      name: builtin_levels
+      category: level_gen
+      ground_truth: 10
+      scores:
+        A:  { value: 100,   score: 0.1, note: "Wrong - 10x" }
+        B1: { value: 120,   score: 0.1, note: "Wrong - 12x" }
+        B2: { value: 10,    score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: 50,    score: 0.1, note: "Wrong" }
+        D2: { value: 10,    score: 1.0, note: "Exact" }
+
+    - id: MS05
+      name: procedural_after_level
+      category: level_gen
+      ground_truth: 10
+      scores:
+        A:  { value: 100,   score: 0.1, note: "Wrong" }
+        B1: { value: 120,   score: 0.1, note: "Wrong" }
+        B2: { value: 10,    score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: 50,    score: 0.1, note: "Wrong" }
+        D2: { value: 10,    score: 1.0, note: "Exact" }
+
+    - id: MS06
+      name: max_gen_attempts
+      category: level_gen
+      ground_truth: 100
+      scores:
+        A:  { value: 50,    score: 0.4, note: "Partial" }
+        B1: { value: null,   score: 0.0, note: "Missing" }
+        B2: { value: 100,   score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: null,   score: 0.0, note: "Missing" }
+        D2: { value: 100,   score: 1.0, note: "Exact" }
+
+    # --- Difficulty Tiers ---
+    - id: MS07
+      name: difficulty_tier_count
+      category: difficulty
+      ground_truth: 3
+      scores:
+        A:  { value: 6,     score: 0.1, note: "Wrong" }
+        B1: { value: 5,     score: 0.4, note: "Partial" }
+        B2: { value: 3,     score: 1.0, note: "Exact" }
+        C:  { value: 3,     score: 1.0, note: "Exact - observed" }
+        D1: { value: 3,     score: 1.0, note: "Exact" }
+        D2: { value: 3,     score: 1.0, note: "Exact" }
+
+    - id: MS08
+      name: tier_color_counts
+      category: difficulty
+      ground_truth: "4/7/10"
+      scores:
+        A:  { value: "3/5/7/9/11/13", score: 0.1, note: "Wrong - 6 tiers" }
+        B1: { value: "3/5/7/9/11", score: 0.1, note: "Wrong - 5 tiers" }
+        B2: { value: "4/7/10", score: 1.0, note: "Exact" }
+        C:  { value: "4/6/8", score: 0.4, note: "Partial - first tier correct" }
+        D1: { value: "4/7/10", score: 1.0, note: "Exact" }
+        D2: { value: "4/7/10", score: 1.0, note: "Exact" }
+
+    - id: MS09
+      name: tier_level_ranges
+      category: difficulty
+      ground_truth: "1-20/21-60/61+"
+      scores:
+        A:  { value: "different ranges", score: 0.1, note: "Wrong" }
+        B1: { value: "1-30/31-80/81+", score: 0.4, note: "Partial - similar structure" }
+        B2: { value: "1-20/21-60/61+", score: 1.0, note: "Exact" }
+        C:  { value: "gradual", score: 0.1, note: "Wrong" }
+        D1: { value: "1-20/21-60/61+", score: 1.0, note: "Exact" }
+        D2: { value: "1-20/21-60/61+", score: 1.0, note: "Exact" }
+
+    - id: MS10
+      name: par_bonus_values
+      category: difficulty
+      ground_truth: "5/3/0"
+      scores:
+        A:  { value: null,   score: 0.0, note: "Missing" }
+        B1: { value: "4/2/0", score: 0.7, note: "Close" }
+        B2: { value: "2/3/5", score: 0.4, note: "Partial - values reversed" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: null,   score: 0.0, note: "Missing" }
+        D2: { value: "2/4/6", score: 0.4, note: "Partial - similar concept, wrong values" }
+
+    - id: MS11
+      name: par_formula
+      category: difficulty
+      ground_truth: "colorCount*3 + par_bonus"
+      scores:
+        A:  { value: "different formula", score: 0.1, note: "Wrong" }
+        B1: { value: "colorCount*3 + bonus", score: 0.7, note: "Close - right concept" }
+        B2: { value: "colorCount*3 + par_bonus", score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: "similar formula", score: 0.4, note: "Partial" }
+        D2: { value: "colorCount*3 + par_bonus", score: 1.0, note: "Exact" }
+
+    # --- Grid Layout ---
+    - id: MS12
+      name: max_per_row
+      category: visual
+      ground_truth: 5
+      scores:
+        A:  { value: 6,     score: 0.7, note: "Close" }
+        B1: { value: 5,     score: 1.0, note: "Exact" }
+        B2: { value: 5,     score: 1.0, note: "Exact" }
+        C:  { value: 5,     score: 1.0, note: "Exact - observable" }
+        D1: { value: 5,     score: 1.0, note: "Exact" }
+        D2: { value: 5,     score: 1.0, note: "Exact" }
+
+    - id: MS13
+      name: h_spacing
+      category: visual
+      ground_truth: 1.5
+      scores:
+        A:  { value: 2.0,   score: 0.4, note: "Partial" }
+        B1: { value: 1.5,   score: 1.0, note: "Exact" }
+        B2: { value: 1.5,   score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: 1.5,   score: 1.0, note: "Exact" }
+        D2: { value: 1.5,   score: 1.0, note: "Exact" }
+
+    - id: MS14
+      name: v_spacing
+      category: visual
+      ground_truth: 2.5
+      scores:
+        A:  { value: 3.0,   score: 0.7, note: "Close" }
+        B1: { value: 2.5,   score: 1.0, note: "Exact" }
+        B2: { value: 2.5,   score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: 2.5,   score: 1.0, note: "Exact" }
+        D2: { value: 2.5,   score: 1.0, note: "Exact" }
+
+    # --- Animation ---
+    - id: MS15
+      name: pour_total_duration
+      category: animation
+      ground_truth: 0.4
+      scores:
+        A:  { value: 0.65,  score: 0.4, note: "Partial" }
+        B1: { value: 0.5,   score: 0.7, note: "Close" }
+        B2: { value: 0.45,  score: 0.7, note: "Close" }
+        C:  { value: 0.95,  score: 0.1, note: "Wrong - more than 2x" }
+        D1: { value: 0.5,   score: 0.7, note: "Close" }
+        D2: { value: 0.45,  score: 0.7, note: "Close" }
+
+    - id: MS16
+      name: lift_height
+      category: animation
+      ground_truth: 1.5
+      scores:
+        A:  { value: 2.0,   score: 0.7, note: "Close" }
+        B1: { value: 1.5,   score: 1.0, note: "Exact" }
+        B2: { value: 1.5,   score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: 1.5,   score: 1.0, note: "Exact" }
+        D2: { value: 1.5,   score: 1.0, note: "Exact" }
+
+    - id: MS17
+      name: tilt_angle
+      category: animation
+      ground_truth: 60
+      scores:
+        A:  { value: 110,   score: 0.1, note: "Wrong - nearly 2x" }
+        B1: { value: 60,    score: 1.0, note: "Exact" }
+        B2: { value: 60,    score: 1.0, note: "Exact" }
+        C:  { value: 45,    score: 0.7, note: "Close" }
+        D1: { value: 60,    score: 1.0, note: "Exact" }
+        D2: { value: 60,    score: 1.0, note: "Exact" }
+
+    # --- Economy ---
+    - id: MS18
+      name: starting_coins
+      category: economy
+      ground_truth: 100
+      scores:
+        A:  { value: 200,   score: 0.4, note: "Partial" }
+        B1: { value: 500,   score: 0.1, note: "Wrong - 5x" }
+        B2: { value: 100,   score: 1.0, note: "Exact" }
+        C:  { value: 500,   score: 0.1, note: "Wrong" }
+        D1: { value: 500,   score: 0.1, note: "Wrong - influenced by observed mid-game value" }
+        D2: { value: 1500,  score: 0.1, note: "Wrong - observed mid-game value" }
+
+    - id: MS19
+      name: starting_gems
+      category: economy
+      ground_truth: 5
+      scores:
+        A:  { value: 10,    score: 0.4, note: "Partial" }
+        B1: { value: 30,    score: 0.1, note: "Wrong - 6x" }
+        B2: { value: 5,     score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: 10,    score: 0.4, note: "Partial" }
+        D2: { value: 5,     score: 1.0, note: "Exact" }
+
+    # --- Boosters ---
+    - id: MS20
+      name: booster_type_count
+      category: gameplay
+      ground_truth: 5
+      scores:
+        A:  { value: 3,     score: 0.4, note: "Partial" }
+        B1: { value: 5,     score: 1.0, note: "Exact" }
+        B2: { value: 5,     score: 1.0, note: "Exact" }
+        C:  { value: 3,     score: 0.4, note: "Partial" }
+        D1: { value: 5,     score: 1.0, note: "Exact" }
+        D2: { value: 5,     score: 1.0, note: "Exact" }
+
+    - id: MS21
+      name: booster_initial_counts
+      category: gameplay
+      ground_truth: "extra_bottle=3, shuffle=3, undo=5, hint=5, color_clear=1"
+      scores:
+        A:  { value: "different", score: 0.1, note: "Wrong" }
+        B1: { value: "close", score: 0.4, note: "Partial" }
+        B2: { value: "3/3/5/5/1", score: 1.0, note: "Exact" }
+        C:  { value: "different", score: 0.1, note: "Wrong" }
+        D1: { value: "partial match", score: 0.4, note: "Partial" }
+        D2: { value: "3/3/5/5/1", score: 1.0, note: "Exact" }
+
+    - id: MS22
+      name: undo_max_steps
+      category: gameplay
+      ground_truth: 50
+      scores:
+        A:  { value: 3,     score: 0.1, note: "Wrong" }
+        B1: { value: 30,    score: 0.7, note: "Close" }
+        B2: { value: 50,    score: 1.0, note: "Exact" }
+        C:  { value: 30,    score: 0.7, note: "Close" }
+        D1: { value: 30,    score: 0.7, note: "Close" }
+        D2: { value: 50,    score: 1.0, note: "Exact" }
+
+    # --- Star Rating ---
+    - id: MS23
+      name: star_rating_3star
+      category: scoring
+      ground_truth: "moves <= par"
+      scores:
+        A:  { value: "moves <= par", score: 1.0, note: "Exact concept" }
+        B1: { value: "moves <= par", score: 1.0, note: "Exact" }
+        B2: { value: "moves <= par", score: 1.0, note: "Exact" }
+        C:  { value: "moves <= par", score: 1.0, note: "Exact" }
+        D1: { value: "moves <= par", score: 1.0, note: "Exact" }
+        D2: { value: "moves <= par", score: 1.0, note: "Exact" }
+
+    - id: MS24
+      name: star_rating_2star_threshold
+      category: scoring
+      ground_truth: "moves <= par * 1.5"
+      scores:
+        A:  { value: "par * 1.3", score: 0.7, note: "Close" }
+        B1: { value: "par * 1.5", score: 1.0, note: "Exact" }
+        B2: { value: "par * 1.5", score: 1.0, note: "Exact" }
+        C:  { value: "par * 2", score: 0.4, note: "Partial" }
+        D1: { value: "par * 1.5", score: 1.0, note: "Exact" }
+        D2: { value: "par * 1.5", score: 1.0, note: "Exact" }
+
+    # --- Hint Scoring ---
+    - id: MS25
+      name: hint_scoring_system
+      category: algorithm
+      ground_truth: "completing_bottle=100, monochromatic=50, emptying=30, etc."
+      scores:
+        A:  { value: null,   score: 0.0, note: "Missing" }
+        B1: { value: "similar weights", score: 0.4, note: "Partial" }
+        B2: { value: "close weights", score: 0.7, note: "Close" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: "partial", score: 0.4, note: "Partial" }
+        D2: { value: "close weights", score: 0.7, note: "Close" }
+
+    # --- Blockers ---
+    - id: MS26
+      name: blocker_type_count
+      category: gameplay
+      ground_truth: 18
+      scores:
+        A:  { value: 7,     score: 0.4, note: "Partial" }
+        B1: { value: 9,     score: 0.4, note: "Partial - half" }
+        B2: { value: 18,    score: 1.0, note: "Exact" }
+        C:  { value: 1,     score: 0.1, note: "Wrong" }
+        D1: { value: 9,     score: 0.4, note: "Partial" }
+        D2: { value: 18,    score: 1.0, note: "Exact" }
+
+    # --- Save System ---
+    - id: MS27
+      name: save_prefix
+      category: architecture
+      ground_truth: "MS_"
+      scores:
+        A:  { value: null,   score: 0.0, note: "Missing" }
+        B1: { value: "MagicSort_", score: 0.4, note: "Partial - similar intent, wrong prefix" }
+        B2: { value: "MS_", score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: "MagicSort_", score: 0.4, note: "Partial" }
+        D2: { value: "MS_", score: 1.0, note: "Exact" }
+
+    # --- Architecture ---
+    - id: MS28
+      name: pattern_count
+      category: architecture
+      ground_truth: 9
+      scores:
+        A:  { value: 5,     score: 0.4, note: "Partial" }
+        B1: { value: 8,     score: 0.7, note: "Close" }
+        B2: { value: 9,     score: 1.0, note: "Exact" }
+        C:  { value: 4,     score: 0.4, note: "Partial" }
+        D1: { value: 7,     score: 0.7, note: "Close" }
+        D2: { value: 9,     score: 1.0, note: "Exact" }
+
+    - id: MS29
+      name: state_count
+      category: architecture
+      ground_truth: 6
+      scores:
+        A:  { value: 4,     score: 0.7, note: "Close" }
+        B1: { value: 5,     score: 0.7, note: "Close" }
+        B2: { value: 6,     score: 1.0, note: "Exact" }
+        C:  { value: 4,     score: 0.7, note: "Close" }
+        D1: { value: 5,     score: 0.7, note: "Close" }
+        D2: { value: 6,     score: 1.0, note: "Exact" }
+
+    # --- Core Gameplay ---
+    - id: MS30
+      name: pour_mechanic
+      category: gameplay
+      ground_truth: "tap source then target, pour top matching layers"
+      scores:
+        A:  { value: "tap to pour", score: 0.7, note: "Close" }
+        B1: { value: "tap source/target", score: 1.0, note: "Exact" }
+        B2: { value: "tap source/target, matching layers", score: 1.0, note: "Exact" }
+        C:  { value: "tap to pour", score: 0.7, note: "Close" }
+        D1: { value: "tap source/target", score: 1.0, note: "Exact" }
+        D2: { value: "tap source/target, matching layers", score: 1.0, note: "Exact" }
+
+    - id: MS31
+      name: win_condition
+      category: gameplay
+      ground_truth: "all bottles monochromatic or empty"
+      scores:
+        A:  { value: "all sorted", score: 0.7, note: "Close" }
+        B1: { value: "monochromatic or empty", score: 1.0, note: "Exact" }
+        B2: { value: "monochromatic or empty", score: 1.0, note: "Exact" }
+        C:  { value: "all same color", score: 0.7, note: "Close" }
+        D1: { value: "monochromatic or empty", score: 1.0, note: "Exact" }
+        D2: { value: "monochromatic or empty", score: 1.0, note: "Exact" }
+
+    - id: MS32
+      name: empty_bottles_formula
+      category: difficulty
+      ground_truth: "2 extra empty bottles per level"
+      scores:
+        A:  { value: "2 extra", score: 1.0, note: "Exact" }
+        B1: { value: "2 extra", score: 1.0, note: "Exact" }
+        B2: { value: "2 extra", score: 1.0, note: "Exact" }
+        C:  { value: "2 extra", score: 1.0, note: "Exact - observable" }
+        D1: { value: "2 extra", score: 1.0, note: "Exact" }
+        D2: { value: "2 extra", score: 1.0, note: "Exact" }
+
+  # --- MagicSort Summary ---
+  summary:
+    A:  { total: 32, sum: 12.8, average: 0.4000 }
+    B1: { total: 32, sum: 20.5, average: 0.6406 }
+    B2: { total: 32, sum: 30.8, average: 0.9625 }
+    C:  { total: 32, sum: 11.1, average: 0.3469 }
+    D1: { total: 32, sum: 21.6, average: 0.6750 }
+    D2: { total: 32, sum: 29.9, average: 0.9344 }
+
+###############################################################################
+# CARMATCH (32 parameters)
+###############################################################################
+carmatch:
+  parameters:
+    # --- Core Constants ---
+    - id: CM01
+      name: cell_size
+      category: core_constants
+      ground_truth: 1.0
+      scores:
+        A:  { value: 1.1,   score: 0.7, note: "Close" }
+        B1: { value: 1.2,   score: 0.7, note: "Close" }
+        B2: { value: 1.0,   score: 1.0, note: "Exact" }
+        C:  { value: 1.0,   score: 1.0, note: "Exact" }
+        D1: { value: 1.2,   score: 0.7, note: "Close" }
+        D2: { value: 1.0,   score: 1.0, note: "Exact" }
+
+    - id: CM02
+      name: car_types
+      category: core_constants
+      ground_truth: 6
+      scores:
+        A:  { value: 10,    score: 0.1, note: "Wrong" }
+        B1: { value: 6,     score: 1.0, note: "Exact" }
+        B2: { value: 6,     score: 1.0, note: "Exact" }
+        C:  { value: 6,     score: 1.0, note: "Exact - observed" }
+        D1: { value: 8,     score: 0.7, note: "Close" }
+        D2: { value: 6,     score: 1.0, note: "Exact" }
+
+    - id: CM03
+      name: match_count
+      category: core_constants
+      ground_truth: 3
+      scores:
+        A:  { value: 3,     score: 1.0, note: "Exact" }
+        B1: { value: 3,     score: 1.0, note: "Exact" }
+        B2: { value: 3,     score: 1.0, note: "Exact" }
+        C:  { value: 3,     score: 1.0, note: "Exact" }
+        D1: { value: 3,     score: 1.0, note: "Exact" }
+        D2: { value: 3,     score: 1.0, note: "Exact" }
+
+    - id: CM04
+      name: movement_speed
+      category: core_constants
+      ground_truth: 5.0
+      scores:
+        A:  { value: 8.0,   score: 0.4, note: "Partial" }
+        B1: { value: 5.0,   score: 1.0, note: "Exact" }
+        B2: { value: 5.0,   score: 1.0, note: "Exact" }
+        C:  { value: 8.0,   score: 0.4, note: "Partial" }
+        D1: { value: 8.0,   score: 0.4, note: "Partial" }
+        D2: { value: 5.0,   score: 1.0, note: "Exact" }
+
+    - id: CM05
+      name: model_scale
+      category: visual
+      ground_truth: 0.4
+      scores:
+        A:  { value: null,   score: 0.0, note: "Missing" }
+        B1: { value: 0.4,   score: 1.0, note: "Exact" }
+        B2: { value: 0.4,   score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: null,   score: 0.0, note: "Missing" }
+        D2: { value: 0.4,   score: 1.0, note: "Exact" }
+
+    - id: CM06
+      name: y_offset
+      category: visual
+      ground_truth: 0.25
+      scores:
+        A:  { value: null,   score: 0.0, note: "Missing" }
+        B1: { value: 0.25,  score: 1.0, note: "Exact" }
+        B2: { value: 0.25,  score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: null,   score: 0.0, note: "Missing" }
+        D2: { value: 0.25,  score: 1.0, note: "Exact" }
+
+    # --- Holder ---
+    - id: CM07
+      name: holder_max_slots
+      category: gameplay
+      ground_truth: 7
+      scores:
+        A:  { value: 7,     score: 1.0, note: "Exact" }
+        B1: { value: 7,     score: 1.0, note: "Exact" }
+        B2: { value: 7,     score: 1.0, note: "Exact" }
+        C:  { value: 7,     score: 1.0, note: "Exact - observed" }
+        D1: { value: 7,     score: 1.0, note: "Exact" }
+        D2: { value: 7,     score: 1.0, note: "Exact" }
+
+    - id: CM08
+      name: slot_spacing
+      category: visual
+      ground_truth: 1.0
+      scores:
+        A:  { value: 1.2,   score: 0.7, note: "Close" }
+        B1: { value: 1.0,   score: 1.0, note: "Exact" }
+        B2: { value: 1.0,   score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: 1.0,   score: 1.0, note: "Exact" }
+        D2: { value: 1.0,   score: 1.0, note: "Exact" }
+
+    # --- Grid Sizes ---
+    - id: CM09
+      name: grid_size_progression
+      category: difficulty
+      ground_truth: "4x4(1-10), 5x5(11-30), 6x5(31-60), 6x6(61-100), 7x6(101+)"
+      scores:
+        A:  { value: "4x4 to 7x7 generic", score: 0.4, note: "Partial - wrong specifics" }
+        B1: { value: "4x4/5x5/6x5/6x6 different ranges", score: 0.7, note: "Close - right sizes, wrong ranges" }
+        B2: { value: "4x4(1-10)/5x5(11-30)/6x5(31-60)/6x6(61-100)/7x6(101+)", score: 1.0, note: "Exact" }
+        C:  { value: "4x4 to 6x6 generic", score: 0.4, note: "Partial" }
+        D1: { value: "4x4 to 8x8", score: 0.4, note: "Partial - extended beyond GT" }
+        D2: { value: "4x4(1-10)/5x5(11-30)/6x5(31-60)/6x6(61-100)/7x6(101+)", score: 1.0, note: "Exact" }
+
+    # --- Scoring ---
+    - id: CM10
+      name: scoring_formula
+      category: scoring
+      ground_truth: "stars * 10"
+      scores:
+        A:  { value: "time-based", score: 0.1, note: "Wrong" }
+        B1: { value: "stars * 10", score: 1.0, note: "Exact" }
+        B2: { value: "stars * 10", score: 1.0, note: "Exact" }
+        C:  { value: "completion bonus", score: 0.1, note: "Wrong" }
+        D1: { value: "stars * points", score: 0.4, note: "Partial" }
+        D2: { value: "stars * 10", score: 1.0, note: "Exact" }
+
+    - id: CM11
+      name: star_thresholds
+      category: scoring
+      ground_truth: "totalCars / totalCars+5 / totalCars+10"
+      scores:
+        A:  { value: "time-based thresholds", score: 0.1, note: "Wrong" }
+        B1: { value: "moves vs par", score: 0.4, note: "Partial - different metric" }
+        B2: { value: "totalCars/+5/+10", score: 1.0, note: "Exact" }
+        C:  { value: "booster usage", score: 0.1, note: "Wrong" }
+        D1: { value: "moves based", score: 0.4, note: "Partial" }
+        D2: { value: "totalCars/+5/+10", score: 1.0, note: "Exact" }
+
+    # --- Levels ---
+    - id: CM12
+      name: max_levels
+      category: core_constants
+      ground_truth: 200
+      scores:
+        A:  { value: 999,   score: 0.1, note: "Wrong" }
+        B1: { value: 200,   score: 1.0, note: "Exact" }
+        B2: { value: 200,   score: 1.0, note: "Exact" }
+        C:  { value: 120,   score: 0.4, note: "Partial" }
+        D1: { value: 200,   score: 1.0, note: "Exact" }
+        D2: { value: 200,   score: 1.0, note: "Exact" }
+
+    - id: CM13
+      name: car_sets_formula
+      category: difficulty
+      ground_truth: "3+(levelId/10) max 8"
+      scores:
+        A:  { value: null,   score: 0.0, note: "Missing" }
+        B1: { value: "similar scaling", score: 0.4, note: "Partial" }
+        B2: { value: "3+(levelId/10) max 8", score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: "scaling by level", score: 0.4, note: "Partial" }
+        D2: { value: "3+(levelId/10) max 8", score: 1.0, note: "Exact" }
+
+    # --- Boosters ---
+    - id: CM14
+      name: booster_types
+      category: gameplay
+      ground_truth: "undo, shuffle, super_undo, magnet (4 types)"
+      scores:
+        A:  { value: "3 types", score: 0.4, note: "Partial" }
+        B1: { value: "4 types", score: 1.0, note: "Exact" }
+        B2: { value: "4 types", score: 1.0, note: "Exact" }
+        C:  { value: "3 types", score: 0.4, note: "Partial" }
+        D1: { value: "4 types", score: 1.0, note: "Exact" }
+        D2: { value: "4 types", score: 1.0, note: "Exact" }
+
+    - id: CM15
+      name: booster_initial_counts
+      category: gameplay
+      ground_truth: "undo=5, shuffle=5, super_undo=3, magnet=3"
+      scores:
+        A:  { value: "different counts", score: 0.1, note: "Wrong" }
+        B1: { value: "5/5/3/3", score: 1.0, note: "Exact" }
+        B2: { value: "5/5/3/3", score: 1.0, note: "Exact" }
+        C:  { value: "different", score: 0.1, note: "Wrong" }
+        D1: { value: "5/5/3/3", score: 1.0, note: "Exact" }
+        D2: { value: "3/3/3/3", score: 0.7, note: "Close - 2 values off" }
+
+    # --- Economy ---
+    - id: CM16
+      name: initial_coins
+      category: economy
+      ground_truth: 500
+      scores:
+        A:  { value: 1000,  score: 0.4, note: "Partial" }
+        B1: { value: 500,   score: 1.0, note: "Exact" }
+        B2: { value: 500,   score: 1.0, note: "Exact" }
+        C:  { value: 200,   score: 0.4, note: "Partial" }
+        D1: { value: 500,   score: 1.0, note: "Exact" }
+        D2: { value: 500,   score: 1.0, note: "Exact" }
+
+    - id: CM17
+      name: move_history_max
+      category: gameplay
+      ground_truth: 50
+      scores:
+        A:  { value: null,   score: 0.0, note: "Missing" }
+        B1: { value: 50,    score: 1.0, note: "Exact" }
+        B2: { value: 50,    score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: 30,    score: 0.7, note: "Close" }
+        D2: { value: 50,    score: 1.0, note: "Exact" }
+
+    # --- Tunnel ---
+    - id: CM18
+      name: tunnel_spawn_count
+      category: gameplay
+      ground_truth: "3 if <35, 6 if >=35"
+      scores:
+        A:  { value: null,   score: 0.0, note: "Missing" }
+        B1: { value: "3/6 threshold", score: 0.7, note: "Close" }
+        B2: { value: "3 if <35, 6 if >=35", score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: null,   score: 0.0, note: "Missing" }
+        D2: { value: "3 if <35, 6 if >=35", score: 1.0, note: "Exact" }
+
+    - id: CM19
+      name: tunnel_placement
+      category: gameplay
+      ground_truth: "top, left, right (not bottom)"
+      scores:
+        A:  { value: null,   score: 0.0, note: "Missing" }
+        B1: { value: "edges", score: 0.4, note: "Partial" }
+        B2: { value: "top, left, right (not bottom)", score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: null,   score: 0.0, note: "Missing" }
+        D2: { value: "top, left, right (not bottom)", score: 1.0, note: "Exact" }
+
+    # --- Pathfinding ---
+    - id: CM20
+      name: pathfinding_algorithm
+      category: algorithm
+      ground_truth: "A* Manhattan"
+      scores:
+        A:  { value: "BFS", score: 0.4, note: "Partial" }
+        B1: { value: "BFS", score: 0.4, note: "Partial" }
+        B2: { value: "A* Manhattan", score: 1.0, note: "Exact" }
+        C:  { value: "A*", score: 1.0, note: "Exact" }
+        D1: { value: "BFS", score: 0.4, note: "Partial" }
+        D2: { value: "A* Manhattan", score: 1.0, note: "Exact" }
+
+    # --- Storage ---
+    - id: CM21
+      name: storage_count
+      category: gameplay
+      ground_truth: 2
+      scores:
+        A:  { value: 3,     score: 0.7, note: "Close" }
+        B1: { value: 1,     score: 0.4, note: "Partial" }
+        B2: { value: 2,     score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: 1,     score: 0.4, note: "Partial" }
+        D2: { value: 2,     score: 1.0, note: "Exact" }
+
+    # --- Daily Rewards ---
+    - id: CM22
+      name: daily_reward_progression
+      category: economy
+      ground_truth: "7-day cycle: 50,75,100,150,200,300,500"
+      scores:
+        A:  { value: "generic daily", score: 0.4, note: "Partial" }
+        B1: { value: "7-day cycle close values", score: 0.7, note: "Close" }
+        B2: { value: "50,75,100,150,200,300,500", score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: "7-day cycle", score: 0.7, note: "Close" }
+        D2: { value: "50,75,100,150,200,300,500", score: 1.0, note: "Exact" }
+
+    - id: CM23
+      name: journey_frequency
+      category: gameplay
+      ground_truth: "every 5 levels"
+      scores:
+        A:  { value: null,   score: 0.0, note: "Missing" }
+        B1: { value: "every 5 levels", score: 1.0, note: "Exact" }
+        B2: { value: "every 5 levels", score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: "every 5 levels", score: 1.0, note: "Exact" }
+        D2: { value: "every 5 levels", score: 1.0, note: "Exact" }
+
+    # --- Camera ---
+    - id: CM24
+      name: camera_angle
+      category: visual
+      ground_truth: 70
+      scores:
+        A:  { value: 55,    score: 0.7, note: "Close" }
+        B1: { value: 55,    score: 0.7, note: "Close" }
+        B2: { value: 70,    score: 1.0, note: "Exact" }
+        C:  { value: 55,    score: 0.7, note: "Close" }
+        D1: { value: 55,    score: 0.7, note: "Close" }
+        D2: { value: 70,    score: 1.0, note: "Exact" }
+
+    - id: CM25
+      name: base_height_5x5
+      category: visual
+      ground_truth: 12.0
+      scores:
+        A:  { value: null,   score: 0.0, note: "Missing" }
+        B1: { value: 10.0,  score: 0.7, note: "Close" }
+        B2: { value: 12.0,  score: 1.0, note: "Exact" }
+        C:  { value: null,   score: 0.0, note: "Missing" }
+        D1: { value: null,   score: 0.0, note: "Missing" }
+        D2: { value: 12.0,  score: 1.0, note: "Exact" }
+
+    # --- State Machine ---
+    - id: CM26
+      name: state_count
+      category: architecture
+      ground_truth: "5 (Idle, Playing, Paused, Win, Fail)"
+      scores:
+        A:  { value: 4,     score: 0.7, note: "Close" }
+        B1: { value: 5,     score: 1.0, note: "Exact" }
+        B2: { value: 5,     score: 1.0, note: "Exact" }
+        C:  { value: 4,     score: 0.7, note: "Close" }
+        D1: { value: 5,     score: 1.0, note: "Exact" }
+        D2: { value: 5,     score: 1.0, note: "Exact" }
+
+    - id: CM27
+      name: namespace
+      category: architecture
+      ground_truth: "CarMatch"
+      scores:
+        A:  { value: "CarMatch", score: 1.0, note: "Exact" }
+        B1: { value: "CarMatch", score: 1.0, note: "Exact" }
+        B2: { value: "CarMatch", score: 1.0, note: "Exact" }
+        C:  { value: "CarMatch", score: 1.0, note: "Exact" }
+        D1: { value: "CarMatch", score: 1.0, note: "Exact" }
+        D2: { value: "CarMatch", score: 1.0, note: "Exact" }
+
+    # --- Core Gameplay ---
+    - id: CM28
+      name: tap_mechanic
+      category: gameplay
+      ground_truth: "tap car to move to holder, auto-match on 3"
+      scores:
+        A:  { value: "tap to collect", score: 0.7, note: "Close" }
+        B1: { value: "tap car to holder, auto-match", score: 1.0, note: "Exact" }
+        B2: { value: "tap car to holder, auto-match on 3", score: 1.0, note: "Exact" }
+        C:  { value: "tap to move to holder", score: 0.7, note: "Close" }
+        D1: { value: "tap car to holder, auto-match", score: 1.0, note: "Exact" }
+        D2: { value: "tap car to holder, auto-match on 3", score: 1.0, note: "Exact" }
+
+    - id: CM29
+      name: fail_condition
+      category: gameplay
+      ground_truth: "holder full (7 slots) with no match"
+      scores:
+        A:  { value: "holder full", score: 0.7, note: "Close" }
+        B1: { value: "holder full no match", score: 1.0, note: "Exact" }
+        B2: { value: "holder full (7) no match", score: 1.0, note: "Exact" }
+        C:  { value: "holder full", score: 0.7, note: "Close" }
+        D1: { value: "holder full no match", score: 1.0, note: "Exact" }
+        D2: { value: "holder full (7) no match", score: 1.0, note: "Exact" }
+
+    - id: CM30
+      name: win_condition
+      category: gameplay
+      ground_truth: "all cars cleared from grid"
+      scores:
+        A:  { value: "clear all", score: 1.0, note: "Exact" }
+        B1: { value: "all cars cleared", score: 1.0, note: "Exact" }
+        B2: { value: "all cars cleared", score: 1.0, note: "Exact" }
+        C:  { value: "clear all", score: 1.0, note: "Exact" }
+        D1: { value: "all cars cleared", score: 1.0, note: "Exact" }
+        D2: { value: "all cars cleared", score: 1.0, note: "Exact" }
+
+    # --- Architecture ---
+    - id: CM31
+      name: pattern_count
+      category: architecture
+      ground_truth: "8-9 patterns"
+      scores:
+        A:  { value: 5,     score: 0.4, note: "Partial" }
+        B1: { value: 8,     score: 1.0, note: "Exact" }
+        B2: { value: 9,     score: 1.0, note: "Exact" }
+        C:  { value: 4,     score: 0.4, note: "Partial" }
+        D1: { value: 7,     score: 0.7, note: "Close" }
+        D2: { value: 9,     score: 1.0, note: "Exact" }
+
+    - id: CM32
+      name: serialization
+      category: architecture
+      ground_truth: "JSON + PlayerPrefs"
+      scores:
+        A:  { value: "JSON", score: 0.7, note: "Close" }
+        B1: { value: "JSON + PlayerPrefs", score: 1.0, note: "Exact" }
+        B2: { value: "JSON + PlayerPrefs", score: 1.0, note: "Exact" }
+        C:  { value: "PlayerPrefs", score: 0.7, note: "Close" }
+        D1: { value: "JSON + PlayerPrefs", score: 1.0, note: "Exact" }
+        D2: { value: "JSON + PlayerPrefs", score: 1.0, note: "Exact" }
+
+  # --- CarMatch Summary ---
+  summary:
+    A:  { total: 32, sum: 12.9, average: 0.4031 }
+    B1: { total: 32, sum: 27.2, average: 0.8500 }
+    B2: { total: 32, sum: 32.0, average: 1.0000 }
+    C:  { total: 32, sum: 13.2, average: 0.4125 }
+    D1: { total: 32, sum: 21.0, average: 0.6563 }
+    D2: { total: 32, sum: 31.7, average: 0.9906 }
+
+###############################################################################
+# OVERALL SUMMARY
+###############################################################################
+overall:
+  by_condition:
+    A:
+      tapshift: 0.3813
+      magicsort: 0.4000
+      carmatch: 0.4031
+      average: 0.3948
+    B1:
+      tapshift: 0.8406
+      magicsort: 0.6406
+      carmatch: 0.8500
+      average: 0.7771
+    B2:
+      tapshift: 0.9719
+      magicsort: 0.9625
+      carmatch: 1.0000
+      average: 0.9781
+    C:
+      tapshift: 0.3344
+      magicsort: 0.3469
+      carmatch: 0.4125
+      average: 0.3646
+    D1:
+      tapshift: 0.4438
+      magicsort: 0.6750
+      carmatch: 0.6563
+      average: 0.5917
+    D2:
+      tapshift: 0.9625
+      magicsort: 0.9344
+      carmatch: 0.9906
+      average: 0.9625
+
+  by_group:
+    group_1_baseline:
+      label: "A - Concept Only"
+      average: 0.3948
+    group_2_clean_room_patterns:
+      label: "B1/B2 - Concept + Pattern Cards"
+      B1_average: 0.7771
+      B2_average: 0.9781
+      best: "B2 (Structural Hint)"
+    group_3_ai_user:
+      label: "C - AI User Only"
+      average: 0.3646
+    group_4_ai_user_patterns:
+      label: "D1/D2 - AI User + Pattern Cards"
+      D1_average: 0.5917
+      D2_average: 0.9625
+      best: "D2 (AI User + Structural Hint)"
+
+  improvement_deltas:
+    A_to_B1: +0.3823
+    A_to_B2: +0.5833
+    C_to_D1: +0.2271
+    C_to_D2: +0.5979
+    B1_to_B2: +0.2010
+    D1_to_D2: +0.3708
+    A_to_C: -0.0302
+    B2_to_D2: -0.0156

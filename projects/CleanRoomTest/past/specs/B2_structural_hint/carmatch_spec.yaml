@@ -1,0 +1,539 @@
+################################################################################
+# Car Match - Complete Game Balance Sheet
+# Generated from Structural Hint Patterns (Level 2)
+# All "약(approximately)" values resolved to specific final values
+################################################################################
+
+meta:
+  game_title: "Car Match"
+  platform: Mobile
+  genre: 3D Puzzle
+  description: >
+    격자 보드 위 자동차를 탭하여 홀더에 모으고, 같은 종류 3개가 모이면 소멸.
+    장애물, 터널, 부스터, 보상 시스템 포함.
+
+################################################################################
+# GRID SYSTEM
+################################################################################
+grid:
+  cell_size: 1.0          # Unity units per cell
+  stages:
+    - stage: 1
+      level_range: [1, 10]
+      cols: 4
+      rows: 4
+      total_cells: 16
+    - stage: 2
+      level_range: [11, 30]
+      cols: 5
+      rows: 5
+      total_cells: 25
+    - stage: 3
+      level_range: [31, 60]
+      cols: 6
+      rows: 5
+      total_cells: 30
+    - stage: 4
+      level_range: [61, 100]
+      cols: 6
+      rows: 6
+      total_cells: 36
+    - stage: 5
+      level_range: [101, 200]
+      cols: 7
+      rows: 6
+      total_cells: 42
+  total_stages: 5
+  total_levels: 200
+
+################################################################################
+# CAR SYSTEM
+################################################################################
+car_system:
+  total_car_types: 6
+  match_count: 3          # 홀더에서 같은 종류 3개 연속 시 소멸
+  movement:
+    speed: 5.0            # 단위/초 (Unity units per second)
+    directions:
+      priority_order: [down, left, right, up]   # A* 탐색 우선순위
+      type: orthogonal_4  # 직교 4방향
+  spawn_pool_size: 10     # 자동차 종류당 오브젝트 풀 크기
+  model:
+    scale: 0.4            # 모델 스케일 (uniform)
+    y_offset: 0.25        # 보드 셀 위 Y 오프셋 (Unity units)
+  # 세트 수: 3 + floor(level / 10), 최대 8
+  sets_per_level:
+    base: 3
+    increment_per: 10     # 레벨당 1 증가 간격
+    max: 8
+  # 종류 수: 3 + floor(level / 15), 최대 8
+  types_per_level:
+    base: 3
+    increment_per: 15
+    max: 8
+
+################################################################################
+# HOLDER
+################################################################################
+holder:
+  max_slots: 7            # 홀더 최대 칸 수
+  slot_spacing: 1.0       # 슬롯 간격 (Unity units)
+  z_position: -2.0        # 홀더의 Z 위치 (월드 좌표)
+  initial_rotation_deg: 180.0   # 초기 회전 각도 (degrees)
+  rotation_anim:
+    duration_sec: 0.15
+    easing: OutQuad
+  win_condition:
+    board_empty: true
+    holder_empty: true
+    no_waiting_cars: true
+  fail_condition:
+    holder_full: true
+    no_match_possible: true
+
+################################################################################
+# SCORING
+################################################################################
+scoring:
+  stars:
+    3_star:
+      description: "이동 횟수 <= 총 자동차 수"
+      threshold_offset: 0   # total_car_count + 0
+    2_star:
+      description: "이동 횟수 <= 총 자동차 수 + 5"
+      threshold_offset: 5
+    1_star:
+      description: "이동 횟수 <= 총 자동차 수 + 10"
+      threshold_offset: 10
+  coin_reward:
+    per_star: 10            # 코인 = 별 수 * 10
+    formula: "stars * 10"
+
+################################################################################
+# LEVEL GENERATION
+################################################################################
+level_generation:
+  # 장애물 생성 규칙
+  obstacles:
+    start_level: 10
+    # 개수: 1 + floor(level / 20), 최대 5
+    count_formula: "1 + floor(level / 20)"
+    count_base: 1
+    count_increment_per: 20
+    count_max: 5
+  # 터널 생성 규칙
+  tunnels:
+    start_level: 20
+    # 개수: 1 + floor((level - 20) / 15), 최대 2
+    count_formula: "1 + floor((level - 20) / 15)"
+    count_base: 1
+    count_increment_per: 15
+    count_max: 2
+
+################################################################################
+# BOOSTERS
+################################################################################
+boosters:
+  types:
+    - id: undo
+      name: "되돌리기"
+      description: "마지막 탭 동작을 되돌림"
+      initial_count: 5
+      pattern: Command          # Command 패턴으로 구현
+
+    - id: shuffle
+      name: "셔플"
+      description: "보드 위 자동차를 Fisher-Yates 알고리즘으로 무작위 재배치"
+      initial_count: 5
+      algorithm: Fisher-Yates
+      pattern: Command
+
+    - id: enhanced_undo
+      name: "강화 되돌리기"
+      description: "마지막 여러 동작 되돌림 (일반 되돌리기 강화판)"
+      initial_count: 3
+      pattern: Command
+
+    - id: magnet
+      name: "자석"
+      description: "보드에서 같은 종류 자동차 3개를 자동으로 홀더에 매칭"
+      initial_count: 3
+      auto_match_count: 3     # 자동 매칭 자동차 수
+      pattern: Command
+
+  undo_history:
+    max_entries: 50           # 히스토리 최대 저장 수
+
+  economy:
+    initial_coins: 500
+
+################################################################################
+# TUNNEL
+################################################################################
+tunnel:
+  spawn_animation:
+    duration_sec: 0.3
+    easing_phase1: OutBack
+    easing_phase2: OutQuad
+  car_counts:
+    level_lt_35: 3            # 레벨 < 35: 3대
+    level_gte_35: 6           # 레벨 >= 35: 6대
+  set_size: 3                 # 3대씩 1세트
+  delays:
+    after_collect_sec: 0.1    # 수집 후 다음 스폰 딜레이
+    after_match_sec: 0.7      # 매칭 성공 후 딜레이
+  placement:
+    allowed_sides: [top, left, right]   # 하단 제외
+    forbidden_sides: [bottom]
+
+################################################################################
+# ANIMATION
+################################################################################
+animation:
+  car_rotation:
+    duration_sec: 0.10
+    easing: OutQuad
+
+  match_punch:
+    scale_amount: 0.12        # 펀치 스케일 오버슈트 양
+    duration_sec: 0.15
+    easing: Punch
+
+  disappear:
+    duration_sec: 0.18
+    easing: InBack
+
+  merge_fly:
+    duration_sec: 0.25        # 머지 시 날아오는 애니메이션
+
+  processing_delay_sec: 0.40  # 범용 처리 딜레이
+
+  holder_full_check_delay_sec: 0.50  # 홀더 가득 찼는지 체크 딜레이
+
+  rearrange_delay_sec: 0.60   # 재배치 딜레이
+
+  storage_move_sec: 0.25      # 저장소 이동 애니메이션
+
+################################################################################
+# OBSTACLES
+################################################################################
+obstacles:
+  pool_size: 5                # 장애물 오브젝트 풀 크기
+  default_grid_size: [1, 1]  # 기본 크기 1x1 셀
+  types:
+    - id: wall
+      name: "벽"
+      passable: false
+      description: "통과 불가 고정 장애물"
+
+    - id: box
+      name: "상자"
+      passable: false
+      breakable: true
+      description: "자동차 충돌 시 제거 가능"
+
+    - id: lock
+      name: "잠금"
+      passable: false
+      requires_key: true
+      description: "열쇠 아이템으로 해제"
+
+    - id: ice
+      name: "얼음"
+      passable: false
+      hit_points: 2
+      description: "2회 충격으로 제거"
+
+    - id: tunnel
+      name: "터널"
+      passable: true
+      teleport: true
+      description: "입구-출구 쌍으로 자동차 이동"
+
+  total_types: 5
+
+################################################################################
+# PATHFINDING
+################################################################################
+pathfinding:
+  algorithm: A_Star
+  heuristic: Manhattan
+  direction_priority: [down, left, right, up]
+  features:
+    path_reservation: true    # 경로 예약으로 충돌 방지
+    waypoint_merge:
+      enabled: true
+      dot_threshold: 0.99     # 직선 판단 내적 임계값
+    straight_line_fallback:
+      enabled: true
+      max_cells: 3            # 직선 폴백 최대 셀 수
+  collision_resolution: reservation
+
+################################################################################
+# STORAGE
+################################################################################
+storage:
+  slot_count: 2               # 저장소 슬롯 수
+  capacity_per_slot: 1        # 슬롯당 자동차 1대
+  total_capacity: 2
+
+################################################################################
+# DAILY REWARDS
+################################################################################
+daily_rewards:
+  cycle_days: 7
+  cooldown_hours: 24
+  rewards:
+    - day: 1
+      coins: 50
+    - day: 2
+      coins: 75
+    - day: 3
+      coins: 100
+    - day: 4
+      coins: 150
+    - day: 5
+      coins: 200
+    - day: 6
+      coins: 300
+    - day: 7
+      coins: 500
+
+################################################################################
+# JOURNEY REWARDS
+################################################################################
+journey_rewards:
+  milestone_interval_levels: 5    # 5레벨마다 마일스톤
+  max_milestones: 50
+  dynamic_reward:
+    formula: "200 + (level * 10)"
+    base: 200
+    per_level: 10
+  # 예시 마일스톤 값
+  example_milestones:
+    - milestone: 1
+      level: 5
+      coins: 250        # 200 + 5*10
+    - milestone: 2
+      level: 10
+      coins: 300        # 200 + 10*10
+    - milestone: 5
+      level: 25
+      coins: 450        # 200 + 25*10
+    - milestone: 10
+      level: 50
+      coins: 700        # 200 + 50*10
+    - milestone: 20
+      level: 100
+      coins: 1200       # 200 + 100*10
+    - milestone: 50
+      level: 250
+      coins: 2700       # 200 + 250*10 (cap at max milestone level)
+
+################################################################################
+# CAMERA
+################################################################################
+camera:
+  base_fov_deg: 70
+  reference_grid:
+    cols: 5
+    rows: 5
+    height: 12.0              # 5x5 기준 카메라 높이
+  scaling:
+    formula: "maxDim / (5.0 * cellSize)"
+    description: "격자 최대 차원 / (기준 5.0 * 셀 크기) 로 높이 스케일링"
+  # 격자별 계산 높이 예시
+  height_by_stage:
+    - stage: 1
+      grid: "4x4"
+      max_dim: 4
+      height: 9.6             # 12.0 * (4/5)
+    - stage: 2
+      grid: "5x5"
+      max_dim: 5
+      height: 12.0            # 기준
+    - stage: 3
+      grid: "6x5"
+      max_dim: 6
+      height: 14.4            # 12.0 * (6/5)
+    - stage: 4
+      grid: "6x6"
+      max_dim: 6
+      height: 14.4
+    - stage: 5
+      grid: "7x6"
+      max_dim: 7
+      height: 16.8            # 12.0 * (7/5)
+
+################################################################################
+# STATES
+################################################################################
+states:
+  total: 5
+  list:
+    - id: Idle
+      description: "게임 시작 전 대기 상태"
+      transitions_to: [Playing]
+
+    - id: Playing
+      description: "게임 플레이 중"
+      transitions_to: [Paused, Win, Fail]
+
+    - id: Paused
+      description: "일시정지"
+      transitions_to: [Playing]
+
+    - id: Win
+      description: "승리 (보드+홀더 비어있고 대기 없음)"
+      transitions_to: [Idle]
+
+    - id: Fail
+      description: "실패 (홀더 가득 + 매칭 불가)"
+      transitions_to: [Idle]
+
+################################################################################
+# ARCHITECTURE
+################################################################################
+architecture:
+  namespace: "CarMatch"
+  serialization: JSON
+  persistence: PlayerPrefs
+
+  singletons:
+    permanent:
+      - EventBus
+      - DataManager
+      - LevelManager
+      - ObjectPool
+    scene_scoped:
+      - BoardManager
+      - HolderController
+      - StageStateHandler
+
+  patterns:
+    - pattern: Singleton
+      usage: "영구/씬 한정 매니저"
+      classes: [EventBus, DataManager, LevelManager, ObjectPool, BoardManager, HolderController, StageStateHandler]
+
+    - pattern: PubSub
+      usage: "EventBus 기반 이벤트 통신"
+      classes: [EventBus]
+
+    - pattern: Factory
+      usage: "레벨 데이터 및 오브젝트 생성"
+      classes: [LevelManager]
+
+    - pattern: Command
+      usage: "부스터 실행 및 되돌리기"
+      classes: [BoosterProcessor]
+
+    - pattern: Strategy
+      usage: "경로 탐색 알고리즘 교체 가능"
+      classes: [AStarPathfinder, BFSPathfinder]
+
+  object_pool:
+    car_pool_per_type: 10
+    obstacle_pool_size: 5
+
+################################################################################
+# ECONOMY SUMMARY
+################################################################################
+economy_summary:
+  initial_coins: 500
+  coin_sources:
+    - source: level_complete
+      amount_formula: "stars * 10"
+      max_per_level: 30
+    - source: daily_reward
+      range: [50, 500]
+      cycle: 7_days
+    - source: journey_milestone
+      formula: "200 + (level * 10)"
+  booster_initial_inventory:
+    undo: 5
+    shuffle: 5
+    enhanced_undo: 3
+    magnet: 3
+
+################################################################################
+# LEVEL BALANCE TABLE (Sample)
+################################################################################
+level_balance_samples:
+  - level: 1
+    grid: "4x4"
+    car_types: 3
+    sets: 3
+    total_cars: 9
+    obstacles: 0
+    tunnels: 0
+    3star_moves: 9
+    2star_moves: 14
+    1star_moves: 19
+
+  - level: 10
+    grid: "4x4"
+    car_types: 3
+    sets: 4
+    total_cars: 12
+    obstacles: 1
+    tunnels: 0
+    3star_moves: 12
+    2star_moves: 17
+    1star_moves: 22
+
+  - level: 20
+    grid: "5x5"
+    car_types: 4
+    sets: 5
+    total_cars: 20
+    obstacles: 1
+    tunnels: 1
+    3star_moves: 20
+    2star_moves: 25
+    1star_moves: 30
+
+  - level: 50
+    grid: "6x5"
+    car_types: 6
+    sets: 8
+    total_cars: 48
+    obstacles: 3
+    tunnels: 3
+    3star_moves: 48
+    2star_moves: 53
+    1star_moves: 58
+
+  - level: 100
+    grid: "6x6"
+    car_types: 8
+    sets: 8      # max 8
+    total_cars: 64
+    obstacles: 5  # max 5
+    tunnels: 5    # cap at max 5, but rule says max 2 -> capped at 2
+    # correction: tunnel max=2
+    tunnels_corrected: 2
+    3star_moves: 64
+    2star_moves: 69
+    1star_moves: 74
+
+  - level: 150
+    grid: "7x6"
+    car_types: 8  # max 8
+    sets: 8       # max 8
+    total_cars: 64
+    obstacles: 5  # max 5
+    tunnels: 2    # max 2
+    3star_moves: 64
+    2star_moves: 69
+    1star_moves: 74
+
+  - level: 200
+    grid: "7x6"
+    car_types: 8
+    sets: 8
+    total_cars: 64
+    obstacles: 5
+    tunnels: 2
+    3star_moves: 64
+    2star_moves: 69
+    1star_moves: 74

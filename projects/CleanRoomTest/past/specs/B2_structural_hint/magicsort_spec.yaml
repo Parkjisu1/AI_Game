@@ -1,0 +1,692 @@
+---
+# ============================================================
+# Magic Sort - Complete Game Balance Sheet
+# Generated from Structural Hint Patterns (Level 2)
+# All "약" (approximate) values resolved to final specifics
+# ============================================================
+
+game:
+  name: "Magic Sort"
+  genre: Puzzle / Casual
+  platform: Mobile (iOS / Android)
+  target_age: 12+
+
+# ============================================================
+# BOTTLE SYSTEM
+# ============================================================
+bottle_system:
+  max_stack_depth: 4              # 최대 4층 (액체 슬롯 수)
+  layer_unit: 1                   # 한 번에 따를 수 있는 단위 (같은 색 연속층)
+
+  colors:
+    playable_count: 13
+    playable_list:
+      - Red
+      - Orange
+      - Yellow
+      - Lime
+      - Green
+      - Cyan
+      - Blue
+      - Indigo
+      - Purple
+      - Pink
+      - Brown
+      - White
+      - Black
+    special:
+      - name: Rainbow
+        description: "어떤 색과도 합쳐질 수 있는 와일드카드 색상"
+        can_merge_with: all
+    total_color_types: 14         # 13 playable + 1 special
+
+  pour_rules:
+    condition_source_not_equals_target: true
+    condition_source_must_have_liquid: true
+    condition_target_top_match_or_empty: true
+    condition_no_pour_if_target_full: true
+    # 단색꽉참 병에서 빈 병으로 따르기 금지
+    condition_no_pour_single_full_to_empty: true
+    rainbow_pour_allowed_on_any_color: true
+
+  win_condition:
+    type: "ALL_BOTTLES_SINGLE_COLOR_FULL_OR_EMPTY"
+    description: "모든 병이 단일 색으로 꽉 차거나 완전히 비어야 승리"
+
+  stuck_condition:
+    type: "NO_VALID_MOVES_AND_NOT_WIN"
+    description: "유효한 이동이 하나도 없고 승리 조건도 충족하지 않은 상태"
+
+# ============================================================
+# LEVEL STRUCTURE
+# ============================================================
+level_structure:
+  builtin_levels:
+    count: 10
+    range: "Level 1 ~ 10"
+    description: "수작업 제작된 튜토리얼/입문 레벨"
+
+  procedural_levels:
+    start_from: 11
+    max_generation_attempts: 100
+    fallback_on_exceed: "사전 저장된 예비 레벨 사용"
+    seed_strategy: "level_index * 1000 + difficulty_tier"
+
+  save_key_prefix: "MS_"
+  save_keys:
+    current_level: "MS_CurrentLevel"
+    level_stars: "MS_LevelStars_{id}"
+    level_best_moves: "MS_LevelBestMoves_{id}"
+    coins: "MS_Coins"
+    gems: "MS_Gems"
+    booster_counts: "MS_Booster_{type}"
+    undo_stack: "MS_UndoStack"
+
+# ============================================================
+# DIFFICULTY
+# ============================================================
+difficulty:
+  tiers:
+    - name: Easy
+      level_range: [1, 20]
+      color_count: 4
+      empty_bottle_count: 2
+      total_bottle_count: 6       # 4 colors + 2 empty
+      par_base_formula: "color_count * 3 + bonus"
+      par_bonus: 2
+      par_value: 14               # 4 * 3 + 2
+      max_blockers: 0
+      blocker_types_allowed: []
+
+    - name: Hard
+      level_range: [21, 60]
+      color_count: 7
+      empty_bottle_count: 2
+      total_bottle_count: 9       # 7 colors + 2 empty
+      par_base_formula: "color_count * 3 + bonus"
+      par_bonus: 3
+      par_value: 24               # 7 * 3 + 3
+      max_blockers: 3
+      blocker_types_allowed:
+        - Ice
+        - Carpet
+        - Tag
+        - Frog
+
+    - name: SuperHard
+      level_range: [61, 9999]
+      color_count: 10
+      empty_bottle_count: 2
+      total_bottle_count: 12      # 10 colors + 2 empty
+      par_base_formula: "color_count * 3 + bonus"
+      par_bonus: 5
+      par_value: 35               # 10 * 3 + 5
+      max_blockers: 6
+      blocker_types_allowed: all
+
+# ============================================================
+# GRID LAYOUT
+# ============================================================
+grid_layout:
+  display_mode: "Scrollable grid"
+  columns_default: 4
+  columns_wide: 5                 # SuperHard 12병 이상 시
+  bottle_spacing_px: 16
+  bottle_width_px: 80
+  bottle_height_px: 200
+  canvas_reference_resolution: [1080, 1920]
+  canvas_match_mode: "Scale With Screen Size"
+
+# ============================================================
+# ANIMATION
+# ============================================================
+animation:
+  config_struct: "BottleAnimationConfig"
+
+  pour_sequence:
+    total_duration_sec: 0.45      # 따르기 전체 시퀀스 (0.4 ~ 0.5 중앙값)
+    phases:
+      lift:
+        height_units: 1.5
+        duration_sec: 0.15
+        easing: "EaseOutQuad"
+      move:
+        duration_sec: 0.20
+        easing: "EaseInOutSine"
+      tilt:
+        angle_deg: 60
+        duration_sec: 0.10
+        easing: "EaseOutBack"
+      pour_per_layer:
+        duration_sec: 0.12        # 층당 0.12초 (4층 최대 = 0.48초 별도)
+        easing: "Linear"
+      return:
+        duration_sec: 0.20
+        easing: "EaseInQuad"
+
+  selection:
+    lift_units: 0.3
+    duration_sec: 0.10
+    tint_color: "0xFFFFFFCC"      # 밝은 노란빛 틴트
+    easing: "EaseOutCubic"
+
+  completion_bounce:
+    bounce_height_units: 0.3
+    scale_pulse: 1.1              # 기본 1.0 → 1.1 (0.1 증가)
+    duration_sec: 0.25
+    easing: "EaseOutElastic"
+
+  blocker_break:
+    duration_sec: 0.20
+    easing: "EaseOutBounce"
+
+  booster_effect:
+    duration_sec: 0.35
+    easing: "EaseOutBack"
+
+# ============================================================
+# CURRENCY
+# ============================================================
+currency:
+  types:
+    - id: Coin
+      display_name: "코인"
+      icon: "icon_coin"
+      soft_hard: soft
+      initial_amount: 100
+      max_amount: 9999999
+
+    - id: Gem
+      display_name: "젬"
+      icon: "icon_gem"
+      soft_hard: hard
+      initial_amount: 5
+      max_amount: 99999
+
+  earn_rates:
+    level_clear_coin: 50
+    level_clear_xp: 10            # 경험치 (향후 확장 가능)
+    three_star_bonus_coin: 20
+    ad_watch_coin: 30
+    daily_login_coin: [10, 10, 20, 20, 30, 30, 50]   # 7일 연속 보상
+
+  spend_rates:
+    extra_bottle_booster_coin: 100
+    shuffle_booster_coin: 80
+    color_remove_booster_coin: 150
+    undo_booster_coin: 0          # 부스터 되돌리기는 무료 (아이템 소모)
+    hint_booster_coin: 0          # 힌트는 무료 (아이템 소모)
+    continue_after_stuck_gem: 3
+    buy_5_gems_pack_usd: 0.99     # IAP 참고값
+
+# ============================================================
+# BOOSTERS
+# ============================================================
+boosters:
+  initial_inventory:
+    description: "게임 최초 설치 시 지급량"
+    ExtraBottle: 3
+    Shuffle: 2
+    Undo: 5
+    Hint: 5
+    ColorRemove: 1
+
+  definitions:
+    - id: ExtraBottle
+      name: "추가 병"
+      description: "빈 병 1개를 추가로 제공"
+      cost_coin: 100
+      effect: "SpawnEmptyBottle"
+      max_per_level: 3
+      initial_count: 3
+
+    - id: Shuffle
+      name: "셔플"
+      description: "현재 레벨의 모든 액체를 무작위로 재배치"
+      cost_coin: 80
+      effect: "ShuffleAllLiquids"
+      max_per_level: 1
+      initial_count: 2
+
+    - id: Undo
+      name: "되돌리기"
+      description: "마지막 행동을 취소 (LIFO 스택)"
+      cost_coin: 0
+      effect: "UndoLastCommand"
+      max_per_level: unlimited
+      initial_count: 5
+      undo_stack_max: 50
+
+    - id: Hint
+      name: "힌트"
+      description: "HintCalculator로 최선의 이동 강조 표시"
+      cost_coin: 0
+      effect: "ShowBestMove"
+      max_per_level: unlimited
+      initial_count: 5
+
+    - id: ColorRemove
+      name: "색상 제거"
+      description: "선택한 색상의 액체를 전부 제거"
+      cost_coin: 150
+      effect: "RemoveSelectedColor"
+      max_per_level: 1
+      initial_count: 1
+
+# ============================================================
+# UNDO SYSTEM
+# ============================================================
+undo:
+  stack_type: LIFO
+  max_stack_size: 50
+  persists_across_pause: true
+  clear_on_level_restart: true
+  clear_on_booster_shuffle: true
+  command_types_tracked:
+    - PourCommand
+    - BlockerInteractCommand
+    - BoosterUseCommand
+
+# ============================================================
+# STAR RATING
+# ============================================================
+star_rating:
+  thresholds:
+    three_star:
+      condition: "moves <= par"
+      stars: 3
+    two_star:
+      condition: "moves <= floor(par * 1.5)"
+      stars: 2
+    one_star:
+      condition: "moves > floor(par * 1.5)"
+      stars: 1
+
+  examples:
+    - tier: Easy
+      par: 14
+      three_star_max_moves: 14
+      two_star_max_moves: 21      # floor(14 * 1.5)
+    - tier: Hard
+      par: 24
+      three_star_max_moves: 24
+      two_star_max_moves: 36
+    - tier: SuperHard
+      par: 35
+      three_star_max_moves: 35
+      two_star_max_moves: 52      # floor(35 * 1.5)
+
+  rewards:
+    one_star_coin: 50
+    two_star_coin: 70
+    three_star_coin: 100
+    experience_per_clear: 10
+
+# ============================================================
+# HINT SCORING
+# ============================================================
+hint_scoring:
+  calculator_class: "HintCalculator"
+  algorithm: "Score each valid move candidate, return highest"
+
+  score_table:
+    bottle_completion:
+      description: "이 이동으로 병 하나가 단색꽉참 완성"
+      score: 100
+    single_color_formation:
+      description: "이동 후 대상 병이 단색 상태가 됨"
+      score: 50
+    emptying_source:
+      description: "이동 후 원본 병이 완전히 빔"
+      score: 30
+    pour_to_non_empty:
+      description: "비지 않은 병에 따르는 기본 점수"
+      score: 20
+    source_becomes_single_color:
+      description: "이동 후 원본 병이 단색 상태가 됨"
+      score: 15
+    per_layer_poured:
+      description: "따르는 층 수마다 추가"
+      score: 10
+    empty_bottle_target_penalty:
+      description: "빈 병으로 따를 때 페널티 (낭비 우려)"
+      score: -5
+
+  tie_breaking: "랜덤 (동점 시 임의 선택)"
+  display: "원본+대상 병 강조 표시 (outline pulse 0.5초)"
+
+# ============================================================
+# BLOCKER TYPES
+# ============================================================
+blocker_types:
+  base_class: "BlockerBase"
+  total_derived_types: 18
+
+  categories:
+    physical:
+      description: "물리적으로 병을 가리거나 막음"
+      types:
+        - id: Ice
+          name: "얼음"
+          description: "병 외부를 덮음. 따르기 1회 시 파괴"
+          hp: 1
+          break_on_pour: true
+          visual: "ice_overlay"
+
+        - id: Carpet
+          name: "카펫"
+          description: "병 슬롯 아래 깔림. 해당 슬롯 액체 제거 시 파괴"
+          hp: 1
+          break_on_layer_clear: true
+          visual: "carpet_underlay"
+
+        - id: Curtain
+          name: "커튼"
+          description: "병 전면을 가림. 내부 색상 비공개. 따르기 1회로 제거"
+          hp: 1
+          hides_content: true
+          break_on_pour: true
+          visual: "curtain_front"
+
+        - id: Plaster
+          name: "석고"
+          description: "병 외부를 두껍게 덮음. HP 2 (2회 타격)"
+          hp: 2
+          break_on_pour: true
+          damage_per_pour: 1
+          visual: "plaster_overlay"
+
+    conditional:
+      description: "특정 조건 충족 시 해제"
+      types:
+        - id: Tag
+          name: "태그"
+          description: "같은 태그 번호를 가진 병 모두 완성 시 해제"
+          hp: 1
+          unlock_condition: "all_tagged_bottles_complete"
+          tag_groups: 3           # 최대 태그 그룹 수
+          visual: "tag_label"
+
+        - id: Vault
+          name: "금고"
+          description: "열쇠 3개 수집 시 해제"
+          hp: 1
+          unlock_condition: "collect_3_keys"
+          keys_required: 3
+          visual: "vault_door"
+
+        - id: KeyBox
+          name: "열쇠-상자"
+          description: "열쇠 병과 상자 병 쌍. 열쇠를 완성하면 상자 해제"
+          hp: 1
+          unlock_condition: "partner_key_bottle_complete"
+          is_paired: true
+          visual: "key_padlock"
+
+    biological:
+      description: "생물 기믹. 이동 또는 특정 조건에 반응"
+      types:
+        - id: Frog
+          name: "개구리"
+          description: "병 위에 앉아 있음. 해당 병 선택 시 점프로 인접 병 이동"
+          hp: 1
+          on_select_action: "jump_to_adjacent_bottle"
+          can_block_pour: true
+          visual: "frog_sprite"
+
+        - id: Duck
+          name: "오리"
+          description: "병 내부에 떠 있음. 특정 색 액체 제거 시 보상 드롭"
+          hp: 1
+          trigger: "specific_color_removed"
+          reward_on_trigger: "random_booster"
+          visual: "duck_sprite"
+
+    special:
+      description: "고유 메커니즘"
+      types:
+        - id: Toggle
+          name: "토글"
+          description: "따를 때마다 ON/OFF 전환. OFF 상태면 해당 병 사용 불가"
+          states: [ON, OFF]
+          initial_state: OFF
+          toggle_on_pour: true
+          visual: "toggle_switch"
+
+        - id: Switch
+          name: "스위치"
+          description: "활성화 시 지정 병 쌍의 내용물을 즉시 교환"
+          hp: 1
+          effect: "swap_two_bottle_contents"
+          targets: 2
+          visual: "switch_lever"
+
+        - id: QuestionMark
+          name: "물음표"
+          description: "병 내용물이 숨겨진 상태. 따르기 시도 시 내용 공개"
+          hp: 1
+          hides_content: true
+          reveal_on_pour_attempt: true
+          visual: "question_mark_overlay"
+
+        # 나머지 파생 블로커 (총 18종 달성을 위한 추가 6종)
+        - id: Lock
+          name: "잠금"
+          description: "열쇠 블로커 해제 전까지 병 사용 불가"
+          hp: 1
+          unlock_condition: "key_item_used"
+          visual: "lock_chain"
+
+        - id: Mud
+          name: "진흙"
+          description: "병 최하단 슬롯을 막음. 해당 슬롯은 비울 수 없음"
+          hp: 1
+          blocks_slot_index: 0
+          break_on_adjacent_clear: true
+          visual: "mud_blob"
+
+        - id: Rust
+          name: "녹"
+          description: "따르기 2회 후 자동 소멸. 녹슨 병엔 새 액체 불가"
+          hp: 2
+          decay_per_pour: 1
+          blocks_new_liquid: true
+          visual: "rust_texture"
+
+        - id: Mirror
+          name: "거울"
+          description: "이 병에 따르기 시 같은 양이 쌍둥이 병에도 복사"
+          hp: 1
+          mirror_partner: true
+          copies_pour_to_partner: true
+          visual: "mirror_glass"
+
+        - id: Gravity
+          name: "반중력"
+          description: "내부 액체 순서가 역전(위가 아래로). 따르기 방향 역전"
+          hp: 1
+          inverted_stack: true
+          visual: "gravity_flip_icon"
+
+        - id: TimeBomb
+          name: "시한폭탄"
+          description: "N턴 이내 해당 병을 비우지 않으면 게임오버"
+          hp: 1
+          turns_until_explode: 5
+          fail_condition: "not_emptied_in_time"
+          visual: "bomb_timer"
+
+# ============================================================
+# WIN / STUCK CONDITIONS
+# ============================================================
+conditions:
+  win:
+    id: WIN
+    check_class: "CompletionChecker"
+    logic: "ForAll bottles: (is_full AND is_single_color) OR is_empty"
+    triggers_state: Win
+
+  stuck:
+    id: STUCK
+    check_class: "CompletionChecker"
+    logic: "PourValidator.GetAllValidMoves().Count == 0 AND NOT win"
+    triggers_state: Stuck
+    recovery_options:
+      - use_undo_booster
+      - use_shuffle_booster
+      - restart_level
+      - spend_gem_to_continue
+
+  pour_validation:
+    validator_class: "PourValidator"
+    checks:
+      - "source != target"
+      - "source.topLayer != null"
+      - "target.layerCount < max_stack_depth"
+      - "target.isEmpty OR target.topColor == source.topColor OR source.topColor == Rainbow"
+      - "NOT (source.isSingleColorFull AND target.isEmpty)"
+
+# ============================================================
+# ARCHITECTURE
+# ============================================================
+architecture:
+  pattern_overview:
+    - Singleton<T>
+    - SignalBus (pub/sub 이벤트 버스)
+    - StateMachine<T>
+    - Command Pattern (실행취소 지원)
+    - DI Container (의존성 주입)
+    - Object Pool
+    - Strategy Pattern
+    - MVC
+
+  state_machine:
+    class: "StateMachine<GameState>"
+    states:
+      - Playing
+      - Paused
+      - Win
+      - Stuck
+      - Transitioning
+      - Tutorial
+    total_states: 6
+
+  layers:
+    core:
+      description: "장르 무관 기반 시스템"
+      classes:
+        - Singleton<T>
+        - SignalBus
+        - StateMachine<T>
+        - DIContainer
+        - SaveManager
+        - ColorService
+
+    domain:
+      description: "재사용 가능한 도메인 시스템"
+      classes:
+        - LevelManager
+        - BottleItem
+        - PourValidator
+        - PourProcessor
+        - CompletionChecker
+        - UndoManager
+        - HintCalculator
+        - BlockerBase
+        - BoosterManager
+        - CurrencyManager
+
+    game:
+      description: "프로젝트 특화 레이어"
+      classes:
+        - GamePlayController
+        - SelectionManager
+        - PopUpService
+        - HomeStateManager
+
+  selection_manager:
+    description: "병 선택 처리. 선택 시 0.3 위로 이동 + 틴트 적용"
+    lift_offset_units: 0.3
+    tint_on_select: true
+    calls_pour_validator_before_pour: true
+
+  signals:
+    examples:
+      - "OnPourCompleted(source, target, layers)"
+      - "OnBottleCompleted(bottle)"
+      - "OnLevelWin(stars, moves)"
+      - "OnLevelStuck()"
+      - "OnBlockerBroken(blocker)"
+      - "OnBoosterUsed(type)"
+      - "OnCurrencyChanged(type, delta, newTotal)"
+
+  save_manager:
+    prefix: "MS_"
+    backend: "PlayerPrefs (기본) / JSON 파일 (확장)"
+    auto_save_on: [level_complete, app_pause, currency_change]
+
+# ============================================================
+# PROCEDURAL GENERATION
+# ============================================================
+procedural_generation:
+  algorithm: "Reverse-solve: start from solved state, apply N random valid reverse-pours"
+  max_attempts: 100
+  solvability_check: "BFS / DFS with move limit = par * 3"
+  shuffle_seed: "level_index * 31337 XOR difficulty_seed"
+  guaranteed_solvable: true
+  blocker_placement:
+    strategy: "Random selection from tier-allowed list"
+    max_blockers_easy: 0
+    max_blockers_hard: 3
+    max_blockers_superhard: 6
+
+# ============================================================
+# EXPERIENCE & PROGRESSION
+# ============================================================
+progression:
+  xp_per_clear: 10
+  xp_per_star:
+    one_star: 0
+    two_star: 5
+    three_star: 10
+  level_up_xp_formula: "base_xp * (player_level ^ 1.3)"
+  base_xp: 100
+  level_up_reward_coin: 50
+  level_up_reward_gem: 1
+  max_player_level: 100
+
+# ============================================================
+# UI / UX NOTES (for code generation reference)
+# ============================================================
+ui_ux:
+  canvas:
+    resolution: [1080, 1920]
+    mode: "Screen Space - Overlay"
+    scaler: "Scale With Screen Size"
+  serialized_field_bindings: true
+  no_dynamic_ui_creation_in_code: true
+  forbidden_patterns:
+    - "new GameObject() + AddComponent<Image>()"
+    - "Find()"
+    - "FindObjectOfType()"
+  inspector_linkage: "[SerializeField]"
+
+  scenes:
+    - name: Title
+      required_elements: [Logo, LoadingBar, AutoTransitionToMain]
+    - name: Main
+      required_elements: [PlayButton, SettingsButton, CoinDisplay, GemDisplay]
+    - name: GameScene
+      required_elements: [BottleGrid, UIOverlay, ManagersObject]
+
+# ============================================================
+# VERSION INFO
+# ============================================================
+meta:
+  spec_version: "1.0.0"
+  source_tier: "B2 - Structural Hint"
+  generated_date: "2026-02-19"
+  notes: >
+    모든 수치는 "약(approximate)" 힌트에서 최종 확정값으로 변환되었습니다.
+    절차적 생성 파라미터, 블로커 18종 세부 명세, 힌트 점수 테이블,
+    애니메이션 타이밍, 재화 지급/소모 경제를 포함합니다.

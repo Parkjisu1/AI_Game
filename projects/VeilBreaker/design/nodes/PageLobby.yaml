@@ -1,0 +1,73 @@
+metadata:
+  nodeId: "PageLobby"
+  version: "1.0.0"
+  phase: 3
+  role: "UX"
+
+dependencies:
+  internal:
+    - "UISystem"
+    - "StageManager"
+    - "CurrencyManager"
+    - "EventManager"
+    - "GameConstants"
+  external:
+    - "UnityEngine"
+    - "UnityEngine.UI"
+    - "TMPro"
+
+contract:
+  provides:
+    - "void Show()"
+    - "void Hide()"
+    - "void RefreshUI()"
+  requires:
+    - "UISystem"
+    - "StageManager"
+    - "CurrencyManager"
+
+tags:
+  layer: "Game"
+  genre: "Idle"
+  role: "UX"
+  system: "UI"
+  majorFunctions:
+    - "DataSync"
+    - "ResponseTrigger"
+  minorFunctions:
+    - "Assign"
+    - "Notify"
+
+logicFlow:
+  - step: 1
+    tag: "Assign"
+    action: "Show: 현재 스테이지 정보 표시, 재화 표시"
+    next: null
+  - step: 2
+    tag: "ResponseTrigger"
+    action: "전투 버튼 클릭: StageManager.StartStage(currentId), UISystem.OpenPage<PageBattle>()"
+    next: null
+  - step: 3
+    tag: "ResponseTrigger"
+    action: "영웅 버튼: UISystem.OpenPopup<PopupCharacter>()"
+    next: null
+
+referencePatterns:
+  - source: "CLAUDE.md"
+    pattern: "PageLobby - 메인 로비 페이지"
+
+codeHints:
+  patterns:
+    - "public class PageLobby : PageBase"
+    - "[SerializeField] private Button _battleButton"
+    - "[SerializeField] private Button _heroButton"
+    - "[SerializeField] private Button _equipButton"
+    - "[SerializeField] private Button _gachaButton"
+    - "[SerializeField] private Button _questButton"
+    - "[SerializeField] private Button _shopButton"
+    - "[SerializeField] private TextMeshProUGUI _stageLabel"
+    - "[SerializeField] private TextMeshProUGUI _goldText"
+    - "[SerializeField] private TextMeshProUGUI _gemText"
+    - "버튼 onClick은 Inspector에서 연결 또는 AddListener"
+  avoidPatterns:
+    - "GameObject.Find로 버튼 참조 금지 → [SerializeField]"

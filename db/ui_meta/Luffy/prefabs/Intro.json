@@ -1,0 +1,823 @@
+{
+  "fileName": "Intro",
+  "filePath": "E:/AIMED/Luffy/IdleMoney1/Project/Assets\\IdleMoney\\Scenes\\Intro.unity",
+  "fileType": "scene",
+  "gameObjectCount": 35,
+  "canvases": [
+    {
+      "type": "Canvas",
+      "fileID": "973754481",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 0,
+      "gameObjectName": "Canvas",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    }
+  ],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "62049878",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "BtnSkipBG",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 581.39996,
+        "y": 329.19998
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Intro"
+    },
+    {
+      "type": "Button",
+      "fileID": "1992047446",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "BG",
+      "rectSize": {
+        "x": 1882.0,
+        "y": 1058.0
+      },
+      "anchoredPosition": {
+        "x": -1.0,
+        "y": 4.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Intro"
+    }
+  ],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "62049876",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 0.18039216,
+        "b": 0.6431373,
+        "a": 0.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8cbf0c754bcae4b598aeae1646c5d200",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BtnSkipBG",
+      "rectSize": {
+        "x": 100.0,
+        "y": 30.0
+      },
+      "anchoredPosition": {
+        "x": 581.39996,
+        "y": 329.19998
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Intro"
+    },
+    {
+      "type": "Image",
+      "fileID": "113902594",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "4042fe8526c521f4ca08076af8141422",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IntroSc4_3",
+      "rectSize": {
+        "x": 489.0,
+        "y": 591.0
+      },
+      "anchoredPosition": {
+        "x": 1109.3,
+        "y": 424.2
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Intro"
+    },
+    {
+      "type": "Image",
+      "fileID": "126279474",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "b40158bccce4cb841965064e1db4922a",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IntroSc5_1",
+      "rectSize": {
+        "x": 493.0,
+        "y": 695.0
+      },
+      "anchoredPosition": {
+        "x": 358.8,
+        "y": 360.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Intro"
+    },
+    {
+      "type": "Image",
+      "fileID": "372567920",
+      "m_Type": 2,
+      "m_Color": {
+        "r": 0.8784314,
+        "g": 0.23717646,
+        "b": 0.29000506,
+        "a": 0.29803923
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "10d716444145246df85846c6cc8aea20",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "PatternImg",
+      "rectSize": {
+        "x": 3000.0,
+        "y": 3000.0
+      },
+      "anchoredPosition": {
+        "x": -1.0,
+        "y": -27.333374
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Intro"
+    },
+    {
+      "type": "Image",
+      "fileID": "390156675",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "e148cb88f19325e49a56d2ec4ff87098",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IntroSc5_3",
+      "rectSize": {
+        "x": 470.0,
+        "y": 780.0
+      },
+      "anchoredPosition": {
+        "x": 1149.2,
+        "y": 402.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Intro"
+    },
+    {
+      "type": "Image",
+      "fileID": "463110147",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "f46ab2810e852904981ce2ee123454ca",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IntroSc4_2",
+      "rectSize": {
+        "x": 362.0,
+        "y": 427.0
+      },
+      "anchoredPosition": {
+        "x": 643.0,
+        "y": 304.2
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Intro"
+    },
+    {
+      "type": "Image",
+      "fileID": "718578463",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "3d702b0f96ef0a24bb04df5c44743df7",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IntroSc4_1",
+      "rectSize": {
+        "x": 256.0,
+        "y": 304.0
+      },
+      "anchoredPosition": {
+        "x": 293.8,
+        "y": 189.3
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Intro"
+    },
+    {
+      "type": "Image",
+      "fileID": "758476614",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "c52130ef460acf8449855b848d8acefe",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IntroSc2_1",
+      "rectSize": {
+        "x": 1256.0,
+        "y": 708.0
+      },
+      "anchoredPosition": {
+        "x": 759.6,
+        "y": 354.9
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Intro"
+    },
+    {
+      "type": "Image",
+      "fileID": "851151505",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "417799603acaf5d42a46b95698bd4561",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IntroSc3_2",
+      "rectSize": {
+        "x": 741.0,
+        "y": 631.0
+      },
+      "anchoredPosition": {
+        "x": 978.5,
+        "y": 370.7
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Intro"
+    },
+    {
+      "type": "Image",
+      "fileID": "914531670",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "703efd5f580424341858879f9b924d14",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IntroSc1_1",
+      "rectSize": {
+        "x": 803.0,
+        "y": 324.0
+      },
+      "anchoredPosition": {
+        "x": 734.3,
+        "y": 541.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Intro"
+    },
+    {
+      "type": "Image",
+      "fileID": "1173286689",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 0.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "7266bf116c4f9064cb26e028bd0f0251",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "BtnSkipIcon",
+      "rectSize": {
+        "x": 32.0,
+        "y": 24.0
+      },
+      "anchoredPosition": {
+        "x": -31.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Intro"
+    },
+    {
+      "type": "Image",
+      "fileID": "1243735488",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "cee175d7707fea44b9bd28c60f79e304",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IntroSc1_4",
+      "rectSize": {
+        "x": 187.0,
+        "y": 208.0
+      },
+      "anchoredPosition": {
+        "x": 1314.0,
+        "y": 421.6
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Intro"
+    },
+    {
+      "type": "Image",
+      "fileID": "1250646932",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "b771612af0e4e9a4b9a38bcc02e5aa50",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IntroSc6_1",
+      "rectSize": {
+        "x": 1256.0,
+        "y": 695.0
+      },
+      "anchoredPosition": {
+        "x": 760.6,
+        "y": 360.6
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Intro"
+    },
+    {
+      "type": "Image",
+      "fileID": "1344516760",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "d31efa9959cdc874d9e968b69a2e8a4c",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IntroSc1_3",
+      "rectSize": {
+        "x": 376.0,
+        "y": 341.0
+      },
+      "anchoredPosition": {
+        "x": 1130.0,
+        "y": 187.1
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Intro"
+    },
+    {
+      "type": "Image",
+      "fileID": "1449834651",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "3387692ba3228bc4a90e267988140281",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IntroSc1_2",
+      "rectSize": {
+        "x": 716.0,
+        "y": 422.0
+      },
+      "anchoredPosition": {
+        "x": 561.5,
+        "y": 205.3
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Intro"
+    },
+    {
+      "type": "Image",
+      "fileID": "1471188137",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8d38a5d12fe1bfd44942520f3a81b7d7",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Bread",
+      "rectSize": {
+        "x": 213.0,
+        "y": 207.0
+      },
+      "anchoredPosition": {
+        "x": 6.0,
+        "y": -112.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Intro"
+    },
+    {
+      "type": "Image",
+      "fileID": "1904646416",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "9b3241e4e544b3241a50788041d4da2a",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IntroSc5_2",
+      "rectSize": {
+        "x": 641.0,
+        "y": 695.0
+      },
+      "anchoredPosition": {
+        "x": 753.4,
+        "y": 360.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Intro"
+    },
+    {
+      "type": "Image",
+      "fileID": "1992047443",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "2b698730905ab488d9ad06b91e5ebb05",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BG",
+      "rectSize": {
+        "x": 1882.0,
+        "y": 1058.0
+      },
+      "anchoredPosition": {
+        "x": -1.0,
+        "y": 4.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Intro"
+    },
+    {
+      "type": "Image",
+      "fileID": "2112786003",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "11ed25f15db71b141a61d744fd91d3a2",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IntroSc3_1",
+      "rectSize": {
+        "x": 526.0,
+        "y": 631.0
+      },
+      "anchoredPosition": {
+        "x": 435.0,
+        "y": 349.7
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "Intro"
+    }
+  ],
+  "texts": [],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 33
+}

@@ -1,0 +1,157 @@
+metadata:
+  nodeId: "FruitMergePlayable"
+  version: "1.0.0"
+  phase: 0
+  role: "Controller"
+  platform: "playable"
+
+playable_config:
+  canvas_size: { width: 540, height: 960 }
+  tech_stack: "canvas"
+  asset_mode: "code_only"
+  max_file_size: "2MB"
+
+levels:
+  - id: 1
+    name: "Tutorial"
+    difficulty: "easy"
+    grid_size: { cols: 4, rows: 4 }
+    objects:
+      - type: "cherry"
+        level: 1
+        positions: [[1,2], [2,2]]
+      - type: "strawberry"
+        level: 2
+        positions: [[0,3]]
+    win_condition: "merge_count >= 1"
+    fail_condition: "none"
+    tutorial_hint: "DRAG TO MERGE!"
+    guaranteed_win: true
+
+  - id: 2
+    name: "Challenge"
+    difficulty: "medium"
+    grid_size: { cols: 4, rows: 4 }
+    objects:
+      - type: "cherry"
+        level: 1
+        positions: [[0,0], [1,0], [3,3]]
+      - type: "strawberry"
+        level: 2
+        positions: [[2,1], [3,1]]
+      - type: "grape"
+        level: 3
+        positions: [[0,3]]
+    win_condition: "merge_count >= 3"
+    fail_condition: "moves <= 0"
+    moves_limit: 5
+    fail_bait: false
+
+  - id: 3
+    name: "Trap"
+    difficulty: "hard"
+    grid_size: { cols: 4, rows: 4 }
+    objects:
+      - type: "cherry"
+        level: 1
+        positions: [[0,0], [2,2], [3,0]]
+      - type: "strawberry"
+        level: 2
+        positions: [[1,3], [0,1]]
+      - type: "grape"
+        level: 3
+        positions: [[3,3], [1,1]]
+      - type: "orange"
+        level: 4
+        positions: [[2,0]]
+    win_condition: "merge_count >= 4"
+    fail_condition: "moves <= 0"
+    moves_limit: 3
+    fail_bait: true
+
+fruit_tiers:
+  - level: 1
+    name: "Cherry"
+    color: "#FF4444"
+    emoji: "cherry"
+    size: 0.5
+  - level: 2
+    name: "Strawberry"
+    color: "#FF6B9D"
+    emoji: "strawberry"
+    size: 0.6
+  - level: 3
+    name: "Grape"
+    color: "#9B59B6"
+    emoji: "grape"
+    size: 0.7
+  - level: 4
+    name: "Orange"
+    color: "#FF9F43"
+    emoji: "orange"
+    size: 0.8
+  - level: 5
+    name: "Watermelon"
+    color: "#2ECC71"
+    emoji: "watermelon"
+    size: 1.0
+
+cta_config:
+  trigger_conditions:
+    - "fail_count >= 2"
+    - "all_levels_clear"
+  title: "CAN YOU MAKE A WATERMELON?"
+  subtitle: "Download now and prove your skills!"
+  button_text: "PLAY NOW!"
+  button_url: "https://example.com/store"
+
+assets:
+  mode: "code_only"
+  items: []
+
+game_flow:
+  - step: 1
+    state: "title"
+    duration: "1s"
+    description: "타이틀 화면, 과일 로고 + TAP TO START"
+  - step: 2
+    state: "tutorial"
+    description: "핸드 아이콘으로 드래그 머지 안내"
+  - step: 3
+    state: "playing"
+    description: "레벨 순차 진행, 같은 과일 합치기"
+  - step: 4
+    state: "result"
+    description: "성공/실패 결과 표시"
+  - step: 5
+    state: "cta"
+    description: "CTA 오버레이 표시"
+
+tags:
+  layer: "Game"
+  genre: "Playable"
+  role: "Controller"
+  system: "FruitMerge"
+  majorFunctions: ["StateControl", "FlowControl", "ResponseTrigger"]
+  minorFunctions: ["Compare", "Assign", "Iterate", "Notify"]
+
+referencePatterns:
+  - source: "merge-game (html5_references)"
+    pattern: "Grid-based merge with level tiers, tween animations"
+  - source: "casino-slots (html5_references)"
+    pattern: "Application structure, event system, render factory"
+
+codeHints:
+  patterns:
+    - "State machine (title/tutorial/playing/result/cta)"
+    - "Grid-based board with cell objects"
+    - "Drag & drop with grid snap"
+    - "Merge detection: adjacent same-level fruits"
+    - "Level progression with increasing difficulty"
+    - "Particle effects on merge (circle burst)"
+    - "CTA overlay with pulse animation"
+  avoidPatterns:
+    - "setInterval for game loop"
+    - "External HTTP requests"
+    - "document.write"
+    - "eval()"

@@ -1,0 +1,215 @@
+# Tap Shift - Ground Truth
+# 원본 소스코드에서 추출한 모든 밸런스 상수 및 게임 파라미터
+# Source: E:\AI_WORK_FLOW_TEST\ShiftTap\My project\Assets\Scripts\
+
+version: "1.0"
+game: "Tap Shift"
+package: "com.paxiegames.tapshift"
+extraction_date: "2026-02-19"
+
+# ============================================================
+# A. DIFFICULTY PROGRESSION & GRID
+# ============================================================
+difficulty_progression:  # LevelGenerator.cs:64-89
+  - { level_range: "1-5", arrow_count: "1 to 5", board_size: "200x200", min_arrow: 60, max_arrow: 100 }
+  - { level_range: "6-15", arrow_count: "3 + (lvl-5)/2", board_size: "280x280", min_arrow: 50, max_arrow: 100 }
+  - { level_range: "16-30", arrow_count: "5 + (lvl-15)/3", board_size: "340x340", min_arrow: 50, max_arrow: 110 }
+  - { level_range: "31-50", arrow_count: "7 + (lvl-30)/4", board_size: "380x380", min_arrow: 45, max_arrow: 110 }
+  - { level_range: "51-75", arrow_count: "10 + (lvl-50)/5", board_size: "420x420", min_arrow: 40, max_arrow: 120 }
+  - { level_range: "76-100", arrow_count: "13 + (lvl-75)/5", board_size: "450x450", min_arrow: 40, max_arrow: 120 }
+  max_arrow_clamp: 20              # line 81
+
+# ============================================================
+# B. CORE GAME CONSTANTS
+# ============================================================
+core_constants:  # Define.cs
+  max_lives: 3
+  max_undo_count: 10
+  max_hint_count: 3
+  total_levels: 100
+  interstitial_frequency: 3        # every 3 levels
+  arrow_move_speed: 15.0           # pixels/units per time unit
+  arrow_shake_duration: 0.3        # seconds
+  arrow_shake_intensity: 0.1       # scale factor (* 50 = 5.0 actual)
+  board_padding: 10.0
+  popup_fade_duration: 0.25        # seconds
+  target_frame_rate: 60
+
+# ============================================================
+# C. STAR RATING
+# ============================================================
+star_rating:  # GameUtility.cs:7-13
+  three_stars: "0 wrong taps (Perfect)"
+  two_stars: "1-2 wrong taps (Great)"
+  one_star: "3-5 wrong taps"
+  zero_stars: "6+ wrong taps"
+
+# ============================================================
+# D. LEVEL GENERATION
+# ============================================================
+level_generation:  # LevelGenerator.cs
+  base_unit: 60.0
+  position_snap: 30.0              # half-unit grid
+  size_snap: 60.0                  # UNIT multiples
+  overlap_gap: 2.0                 # required gap between arrows
+  max_placement_attempts: 100
+  max_retries: 20                  # before fallback
+  fallback_count: "min(1 + levelId/10, 8)"
+  fallback_layout: "vertically stacked"
+  solvability_required: true       # PuzzleSolver.IsSolvable()
+  direction_rules:
+    up_down: "Height > Width (taller)"
+    left_right: "Width > Height (wider)"
+
+# ============================================================
+# E. ANIMATION TIMINGS
+# ============================================================
+animation:
+  arrow_movement:  # ArrowAnimator.cs:29-100
+    duration_formula: "distance / (ArrowMoveSpeed * 100)"
+    duration_clamp: [0.25, 0.7]    # seconds
+    stretch_phase: "first 40%"
+    stretch_max: 1.6
+    stretch_easing: "ease-out sine"
+    snap_phase: "last 60%"
+    snap_easing: "ease-in quadratic"
+
+  arrow_blocked:  # ArrowAnimator.cs:112-132
+    duration: 0.3
+    intensity: 5.0                  # 0.1 * 50
+    decay: "exponential"
+
+  hint_animation:  # ArrowAnimator.cs:134-161
+    pulse_count: 3
+    pulse_duration: 0.3
+    scale_range: [1.0, 1.15]
+    color_flash: "Yellow"
+
+  popup:  # PopupBase.cs
+    duration: 0.25
+    open_scale: [0.8, 1.0]
+    open_easing: "ease-out-back"
+    close_scale: [1.0, 0.8]
+
+  page_fade:  # PageBase.cs
+    fade_in: 0.2
+    fade_out: 0.2
+
+  star_reveal:  # LevelCompletePopup.cs
+    initial_delay: 0.3
+    per_star_delay: 0.3
+    total_3stars: 1.2
+
+# ============================================================
+# F. ARROW COLORS
+# ============================================================
+arrow_colors:  # Arrow.cs:93-103
+  up: "#4CAF50"      # Green
+  down: "#F44336"    # Red
+  left: "#2196F3"    # Blue
+  right: "#FF9800"   # Orange
+  hint: "Yellow"
+
+# ============================================================
+# G. ARROW RENDERING
+# ============================================================
+arrow_rendering:  # ArrowGraphic.cs
+  head_ratio: 0.35               # 35% of width is pointed head
+  shaft_height_ratio: 0.55       # 55% of height is shaft thickness
+  local_direction: "RIGHT"       # always drawn pointing right
+  rotation_mapping:
+    right: 0
+    up: 90
+    left: 180
+    down: -90
+
+# ============================================================
+# H. HAPTIC VIBRATIONS
+# ============================================================
+haptic:  # HapticManager.cs
+  light: 10    # ms (Android)
+  medium: 20   # ms
+  heavy: 40    # ms
+
+# ============================================================
+# I. COLLISION DETECTION
+# ============================================================
+collision:
+  method: "AABB sweep-to-boundary"
+  sweep: "arrow edge to board boundary in movement direction"
+  overlap_test: "AABB rectangle overlap"
+  performance: "O(n) per tap, n <= 20"
+
+# ============================================================
+# J. UI/CANVAS
+# ============================================================
+ui:  # GameSceneBuilder.cs
+  reference_resolution: [720, 1280]
+  scale_mode: "ScaleWithScreenSize"
+  match_width_or_height: 0.5
+  sorting_orders:
+    game_canvas: 0
+    popup_canvas: 100
+
+# ============================================================
+# K. PERSISTENCE
+# ============================================================
+persistence:
+  level_stars: "LevelStar_{levelId}"
+  level_unlock: "LevelUnlock_{levelId}"
+  sound_enabled: "SoundEnabled"
+  music_enabled: "MusicEnabled"
+  haptic_enabled: "HapticEnabled"
+  remaining_hints: "RemainingHints"
+  ads_removed: "AdsRemoved"
+
+# ============================================================
+# L. MONETIZATION
+# ============================================================
+monetization:
+  ad_test_unit: "ca-app-pub-3940256099942544/1033173712"
+  iap_products:
+    hint_pack: { id: "com.shifttap.hintpack", type: "Consumable", gives: 5 }
+    remove_ads: { id: "com.shifttap.removeads", type: "NonConsumable" }
+
+# ============================================================
+# M. ARCHITECTURE
+# ============================================================
+architecture:
+  total_files: 50
+  patterns:
+    - "Singleton<T> (thread-safe, DontDestroyOnLoad)"
+    - "Object Pooling (ArrowFactory)"
+    - "Command Pattern (MoveCommand + MoveHistory)"
+    - "Observer/Event System (EventManager)"
+    - "Factory Pattern (ArrowFactory, PopupManager)"
+    - "State Pattern (eGameState)"
+    - "Template Method (PopupBase, PageBase)"
+    - "Adapter Pattern (IAdService, IIAPService)"
+    - "Strategy Pattern (ArrowValidator, PuzzleSolver)"
+  singletons:
+    - "GameManager"
+    - "LevelManager"
+    - "SoundManager"
+    - "HapticManager"
+    - "ArrowAnimator"
+    - "MonetizationManager"
+    - "PopupManager"
+  layers:
+    core: ["Define", "EventManager", "GameManager", "GameUtility", "ObjectPool", "PooledObject", "SafeAreaFitter", "Singleton"]
+    domain:
+      arrow: ["Arrow", "ArrowAnimator", "ArrowFactory", "ArrowGraphic", "ArrowValidator"]
+      audio: ["SoundManager", "HapticManager"]
+      board: ["BoardManager"]
+      input: ["InputHandler"]
+      level: ["LevelConfig", "LevelData", "LevelLoader", "LevelManager", "LevelProgress"]
+      puzzle: ["MoveCommand", "MoveHistory", "PuzzleController", "PuzzleSolver", "PuzzleState"]
+    game:
+      elements: ["HintButtonElement", "LevelButtonElement", "LivesDisplayElement", "StarRatingElement"]
+      hud: ["GameHUD"]
+      pages: ["GamePage", "LevelSelectPage", "MainPage", "PageBase"]
+      popups: ["LevelCompletePopup", "LevelFailPopup", "PausePopup", "PopupBase", "PopupManager", "SettingsPopup", "TutorialPopup"]
+      monetization: ["AdMobService", "IAdService", "IAPService", "IIAPService", "MonetizationManager"]
+  states: ["None", "Loading", "MainMenu", "LevelSelect", "Playing", "Paused", "LevelComplete", "LevelFail", "Tutorial"]
+  solver: "DFS with backtracking"
+  serialization: "JSON (JsonUtility), Resources/Levels/level_NNN.json"

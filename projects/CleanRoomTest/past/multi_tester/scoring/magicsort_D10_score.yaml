@@ -1,0 +1,252 @@
+```yaml
+scoring:
+  game: "Magic Sort"
+  condition: "D10"
+  results:
+    - id: MS01
+      name: bottle_max_height
+      ground_truth: "4"
+      generated: "4"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: MS02
+      name: colors_total
+      ground_truth: "17"
+      generated: "14"
+      score: 0.7
+      note: "차이 3/17 ≈ 17.6%로 20% 이내. 무지개 색상이 3종(RAINBOW1/2/3)인데 +1만 적용해 14로 추정한 결과"
+
+    - id: MS03
+      name: colors_playable
+      ground_truth: "13"
+      generated: "13"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: MS04
+      name: builtin_levels
+      ground_truth: "10"
+      generated: "10"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: MS05
+      name: procedural_after_level
+      ground_truth: "10 (procedural_after: 10)"
+      generated: "11"
+      score: 1.0
+      note: "'10 이후 절차적 생성'과 '11레벨부터 절차적 생성'은 의미상 동일"
+
+    - id: MS06
+      name: max_gen_attempts
+      ground_truth: "100"
+      generated: "100"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: MS07
+      name: difficulty_tier_count
+      ground_truth: "3 (Default / Hard / SuperHard)"
+      generated: "3"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: MS08
+      name: tier_color_counts
+      ground_truth: "Default=4, Hard=7, SuperHard=10"
+      generated: "easy=4, hard=7, super_hard=10"
+      score: 1.0
+      note: "티어 명칭만 다르고 수치 완전 일치"
+
+    - id: MS09
+      name: tier_level_ranges
+      ground_truth: "Default 1-20, Hard 21-60, SuperHard 61+"
+      generated: "easy [1,20], hard [21,60], super_hard [61,+∞]"
+      score: 1.0
+      note: "완전 일치"
+
+    - id: MS10
+      name: par_bonus_values
+      ground_truth: "Default=5, Hard=3, SuperHard=0"
+      generated: "easy=3, hard=5, super_hard=8"
+      score: 0.1
+      note: "수치 전부 불일치. 쉬운 티어일수록 보너스가 높은 Ground Truth(5→3→0)와 반대 방향으로 추정(3→5→8)하여 방향성도 역전됨"
+
+    - id: MS11
+      name: par_formula
+      ground_truth: "basePar = colorCount * 3 + par_bonus"
+      generated: "colors_count × 3 + difficulty_bonus"
+      score: 1.0
+      note: "변수명만 다르고 공식 구조 완전 일치"
+
+    - id: MS12
+      name: max_per_row
+      ground_truth: "5"
+      generated: "5"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: MS13
+      name: h_spacing
+      ground_truth: "1.5"
+      generated: "1.3"
+      score: 0.7
+      note: "차이 0.2/1.5 ≈ 13.3%로 20% 이내"
+
+    - id: MS14
+      name: v_spacing
+      ground_truth: "2.5"
+      generated: "2.0"
+      score: 0.7
+      note: "차이 0.5/2.5 = 20%로 기준 경계값 해당. 병 높이 기반 추정이었으나 실제 간격이 더 넓음"
+
+    - id: MS15
+      name: pour_total_duration
+      ground_truth: "0.4"
+      generated: "0.45"
+      score: 0.7
+      note: "차이 0.05/0.4 = 12.5%로 20% 이내. 패턴 카드 범위(0.4~0.5) 중간값 채택으로 소폭 상회"
+
+    - id: MS16
+      name: lift_height
+      ground_truth: "1.5"
+      generated: "1.5"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: MS17
+      name: tilt_angle
+      ground_truth: "60"
+      generated: "60"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: MS18
+      name: starting_coins
+      ground_truth: "100"
+      generated: "100"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: MS19
+      name: starting_gems
+      ground_truth: "5"
+      generated: "5"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: MS20
+      name: booster_type_count
+      ground_truth: "5"
+      generated: "5"
+      score: 1.0
+      note: "정확히 일치. 5종 목록(extra_bottle, shuffle, undo, hint, color_clear)도 동일"
+
+    - id: MS21
+      name: booster_initial_counts
+      ground_truth: "extra_bottle=3, shuffle=3, undo=5, hint=5, color_clear=1"
+      generated: "extra_bottle=2, shuffle=2, undo=3, hint=5, color_clear=1"
+      score: 0.4
+      note: "hint=5, color_clear=1은 일치하나 extra_bottle(3→2), shuffle(3→2), undo(5→3)가 불일치. 개념 구조는 맞고 2/5 수치 일치"
+
+    - id: MS22
+      name: undo_max_steps
+      ground_truth: "50"
+      generated: "50"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: MS23
+      name: star_rating_3star
+      ground_truth: "moveCount <= par"
+      generated: "moves <= par"
+      score: 1.0
+      note: "변수명만 다르고 의미 완전 동일"
+
+    - id: MS24
+      name: star_rating_2star_threshold
+      ground_truth: "moveCount <= par * 1.5"
+      generated: "1.5 (par * 1.5)"
+      score: 1.0
+      note: "임계값 1.5 및 공식 구조 완전 일치"
+
+    - id: MS25
+      name: hint_scoring_system
+      ground_truth: "completing_bottle=100, monochromatic_target=50, emptying_origin=30, non_empty_target=20, origin_becomes_mono=15, per_layer_moved=10, empty_target_penalty=-5 (7개 항목)"
+      generated: "우선순위 순서 5개 항목 기술 (구체적 점수값 없음)"
+      score: 0.7
+      note: "우선순위 순서가 Ground Truth와 일치하고 감점 개념도 맞음. 단, non_empty_target(20)과 origin_becomes_mono(15) 2개 항목 누락, 구체적 점수값 미제시"
+
+    - id: MS26
+      name: blocker_type_count
+      ground_truth: "18"
+      generated: "18"
+      score: 1.0
+      note: "정확히 일치"
+
+    - id: MS27
+      name: save_prefix
+      ground_truth: "MS_"
+      generated: "MS_"
+      score: 1.0
+      note: "정확히 일치. medium 신뢰도로 출력했으나 결과는 정확"
+
+    - id: MS28
+      name: pattern_count
+      ground_truth: "9 (Singleton, SignalBus, StateMachine, Command, DI Container, Object Pool, Strategy, Observer, MVC)"
+      generated: "8 (Observer Pattern 누락)"
+      score: 0.7
+      note: "차이 1/9 ≈ 11.1%로 20% 이내. Observer Pattern 하나만 누락"
+
+    - id: MS29
+      name: state_count
+      ground_truth: "6 (Playing, Paused, Win, Stuck, Lose, Quit)"
+      generated: "6"
+      score: 1.0
+      note: "카운트 정확히 일치. 생성 스펙에서 '등 약 6개'로 표현했으나 수치는 맞음"
+
+    - id: MS30
+      name: pour_mechanic
+      ground_truth: "Origin≠Target, Origin has water, Target top=Origin top OR Target empty, Monochromatic→empty 금지"
+      generated: "동일 4개 규칙 + PourValidator, SelectionManager 클래스명 포함"
+      score: 1.0
+      note: "4개 따르기 규칙 완전 일치. 클래스 구조 명시까지 정확"
+
+    - id: MS31
+      name: win_condition
+      ground_truth: "All bottles full+monochromatic OR empty"
+      generated: "모든 병이 단색 꽉참 OR 빈 상태"
+      score: 1.0
+      note: "완전 일치"
+
+    - id: MS32
+      name: empty_bottles_formula
+      ground_truth: "2 (전 티어 고정)"
+      generated: "fixed = 2 (전 티어 공통)"
+      score: 1.0
+      note: "완전 일치"
+
+  summary:
+    total: 32
+    sum: 28.7
+    average: 0.897
+```
+
+---
+
+**채점 분포 요약**
+
+| 점수 | 개수 | 파라미터 |
+|------|------|---------|
+| 1.0 (Exact) | 24 | MS01,03,04,05,06,07,08,09,11,12,16,17,18,19,20,22,23,24,26,27,29,30,31,32 |
+| 0.7 (Close) | 6 | MS02, MS13, MS14, MS15, MS25, MS28 |
+| 0.4 (Partial) | 1 | MS21 |
+| 0.1 (Wrong) | 1 | MS10 |
+| 0.0 (Missing) | 0 | — |
+
+**주요 실패 원인 분석**
+
+- **MS10 (0.1)**: par_bonus 값 전부 오류 + 방향성 역전. 패턴 카드에 수치 미명시로 추정에 의존한 결과 Easy/Hard/SuperHard 순서와 반대 방향으로 잘못 추정
+- **MS21 (0.4)**: 부스터 초기 수량 범위(1~5)만 제시된 상황에서 undo(5→3), extra_bottle·shuffle(3→2) 모두 과소 추정
+- **0.7 그룹**: 레이아웃 간격(MS13, MS14), 애니메이션 시간(MS15), 색상 총수(MS02)는 패턴 카드의 '약' 표현 수치를 보수적으로 추정한 결과로 방향은 맞으나 소폭 오차 발생

@@ -1,0 +1,297 @@
+scoring:
+  game: "Ash N Veil: Fast Idle Action"
+  genre: "Idle RPG"
+  condition: "C10_plus_v25_enhanced"
+  method: "AI 관찰(v2.5) + 소스코드 구조 분석(83 Chart 파일)"
+  scored_date: "2026-02-24"
+  source: "D:\\AshAndVeil_recent\\PPM\\Assets\\Scripts\\GameData\\ChartData\\"
+
+  results:
+    # ===================== A. 진행 구조 =====================
+
+    - id: ANV01
+      name: max_chapter
+      ground_truth: "server_data (MapChart.cs)"
+      enhanced: "server_data — MapChart.cs에서 key별 GroupBy 동적 로드 확인. 수치 없음"
+      prev_score: 0.0
+      new_score: 0.0
+      method: "코드 구조만으로 수치 불가"
+
+    - id: ANV02
+      name: stages_per_chapter
+      ground_truth: "server_data (챕터마다 가변)"
+      enhanced: "챕터마다 가변 (MapChart.cs:30 area_no 그룹). AI 관찰 Ch.1=5 유효"
+      prev_score: 0.4
+      new_score: 0.7
+      method: "코드에서 가변 구조 확인 + AI 관찰값 유효"
+
+    - id: ANV03
+      name: boss_frequency
+      ground_truth: "server_data (데이터 드리븐)"
+      enhanced: "데이터 드리븐 확인 (BossMonsterChart.cs — boss_no/region 필드)"
+      prev_score: 0.4
+      new_score: 0.7
+      method: "코드에서 데이터 드리븐 구조 확인"
+
+    - id: ANV04
+      name: auto_battle_unlock
+      ground_truth: "ContentsLockType.Account_Level"
+      enhanced: "Account_Level 조건 (ChartData.cs:362). 구체적 레벨 = 서버"
+      prev_score: 0.7
+      new_score: 0.7
+      method: "변동 없음"
+
+    - id: ANV05
+      name: difficulty_modes
+      ground_truth: "N/A (시스템 없음)"
+      enhanced: "소스코드 전체 검색 — 난이도 선택 시스템 미존재 확정"
+      prev_score: 0.7
+      new_score: 1.0
+      method: "코드 전체 검색으로 '없음' 확정"
+
+    # ===================== B. 캐릭터 성장 =====================
+
+    - id: ANV06
+      name: base_hp_lv1
+      ground_truth: "server_data (BasicStat, stat_key=1008)"
+      enhanced: "stat_key=1008 필드 확인 (StatChart.cs:151). 수치는 서버"
+      prev_score: 0.4
+      new_score: 0.4
+      method: "필드 구조만 확인, 수치 불가"
+
+    - id: ANV07
+      name: base_atk_lv1
+      ground_truth: "server_data (BasicStat, stat_key=1000)"
+      enhanced: "stat_key=1000 필드 확인 (StatChart.cs:152). 수치는 서버"
+      prev_score: 0.4
+      new_score: 0.4
+      method: "필드 구조만 확인, 수치 불가"
+
+    - id: ANV08
+      name: hp_growth_formula
+      ground_truth: "누적 테이블 (LevelUpChart.cs:42-55)"
+      enhanced: "HP(Lv) = BasicStat[HP] + SUM(LevelUp[1..Lv]) 구조 확정. 공식 유형 일치"
+      prev_score: 0.4
+      new_score: 0.7
+      method: "코드에서 누적 합산 구조 정확히 파악"
+
+    - id: ANV09
+      name: atk_growth_formula
+      ground_truth: "누적 테이블 (LevelUpChart.cs:42-55)"
+      enhanced: "ATK(Lv) = BasicStat[ATK] + SUM(LevelUp[1..Lv]) 구조 확정"
+      prev_score: 0.4
+      new_score: 0.7
+      method: "코드에서 누적 합산 구조 정확히 파악"
+
+    - id: ANV10
+      name: exp_curve_formula
+      ground_truth: "server_data (LevelUpInfo.exp)"
+      enhanced: "레벨별 개별 EXP 테이블 (공식 아님). LevelUpInfo.exp 필드 확인"
+      prev_score: 0.0
+      new_score: 0.4
+      method: "코드에서 테이블 구조 확인 (값은 서버)"
+
+    # ===================== C. 장비 시스템 =====================
+
+    - id: ANV11
+      name: gear_slot_count
+      ground_truth: 15
+      enhanced: "15 (장비7 + 악세서리8) — EquippedData.cs:14-28 직접 확인"
+      prev_score: 0.4
+      new_score: 1.0
+      method: "코드에서 정확한 값 추출"
+
+    - id: ANV12
+      name: gear_grade_count
+      ground_truth: 8
+      enhanced: "8등급 (common/uncommon/rare/epic/legendary/mythic/special/legendary_c) — ItemChart.cs:104-114"
+      prev_score: 0.0
+      new_score: 1.0
+      method: "코드 enum에서 정확한 값 추출"
+
+    - id: ANV13
+      name: enhance_max_level
+      ground_truth: "per_item_dynamic"
+      enhanced: "아이템별 가변 (InventoryData.cs:254 enhan_level 최대값 참조)"
+      prev_score: 0.0
+      new_score: 0.4
+      method: "코드에서 가변 구조 확인, 실제 최대값은 서버"
+
+    - id: ANV14
+      name: enhance_cost_formula
+      ground_truth: "스크롤 소모 방식"
+      enhanced: "ScrollType enum (weapon/armor/special_equip/accessory) + 성공률 시스템 확인"
+      prev_score: 0.0
+      new_score: 0.7
+      method: "코드에서 스크롤 소모 방식 확정 (골드 아님)"
+
+    # ===================== D. 전투 =====================
+
+    - id: ANV15
+      name: active_skill_count
+      ground_truth: 6
+      enhanced: "6 (presetSlotCount=6) — SkillData.cs:37"
+      prev_score: 0.4
+      new_score: 1.0
+      method: "코드 const에서 정확한 값 추출"
+
+    - id: ANV16
+      name: skill_cooldown_range
+      ground_truth: "server_data (스킬별 cooltime)"
+      enhanced: "HeroSkillChart.cs에 float cooltime 필드 확인. AI 관찰 0.0~13.6s 유효"
+      prev_score: 0.7
+      new_score: 0.7
+      method: "변동 없음"
+
+    - id: ANV17
+      name: auto_attack_speed
+      ground_truth: "config + stat growth (StatChart.cs:141)"
+      enhanced: "interval = 1/atkSpeed, atkSpeed = config('character_basic_att_spd') + GetStat(level, Attack_Speed)"
+      prev_score: 0.4
+      new_score: 0.7
+      method: "코드에서 공식 구조 확정"
+
+    - id: ANV18
+      name: damage_formula
+      ground_truth: "(ATK+buff)×(1+cri)×(1+superCri)×(1+finalAtk)×(1+weakness)-flat-%"
+      enhanced: "CharacterPlayer.cs:650-720 전체 5단계 데미지 공식 추출 완료"
+      prev_score: 0.0
+      new_score: 1.0
+      method: "코드에서 정확한 공식 추출"
+
+    - id: ANV19
+      name: critical_rate
+      ground_truth: "float 0.0~1.0, level/equip dependent"
+      enhanced: "0.0~1.0 소수 저장, Random.Range(0,100000) < percent*100000 방식"
+      prev_score: 0.4
+      new_score: 0.7
+      method: "코드에서 저장 형식 + 판정 로직 확인"
+
+    - id: ANV20
+      name: critical_multiplier
+      ground_truth: "additive 1+criDamage, +superCrit"
+      enhanced: "realDamage += realDamage * criDamage (가산 방식) + superCrit 별도 존재"
+      prev_score: 0.4
+      new_score: 0.7
+      method: "코드에서 가산 구조 + superCrit 확인"
+
+    # ===================== E. 가챠/소환 =====================
+
+    - id: ANV21
+      name: gacha_cost_1x
+      ground_truth: "4종 별도 가격 (avatar/pet/wand/artifact)"
+      enhanced: "GachaType enum 4종 확인 (PopupSummon.cs:75-102). 가격은 서버 config"
+      prev_score: 0.0
+      new_score: 0.4
+      method: "코드에서 4종 구조 확인, 가격 수치는 서버"
+
+    - id: ANV22
+      name: gacha_cost_10x
+      ground_truth: "1x × 10, 할인 없음"
+      enhanced: "price × 10 (PopupSummon.cs:112) — 할인 없음 확정"
+      prev_score: 0.0
+      new_score: 1.0
+      method: "코드에서 정확한 로직 추출"
+
+    - id: ANV23
+      name: gacha_ssr_rate
+      ground_truth: "server_data (GachaInfo.gacha_rate)"
+      enhanced: "GachaInfo 구조체에 tier + gacha_rate 필드 확인. 값은 서버"
+      prev_score: 0.0
+      new_score: 0.4
+      method: "코드에서 구조 확인, 확률 수치는 서버"
+
+    - id: ANV24
+      name: gacha_pity_count
+      ground_truth: "3단계 천장 (epic/legendary/mythic)"
+      enhanced: "epic_fusion_reward_count / legendary / mythic 3단계 천장 확인"
+      prev_score: 0.0
+      new_score: 0.7
+      method: "코드에서 3단계 천장 구조 확정"
+
+    # ===================== F. 경제 =====================
+
+    - id: ANV25
+      name: currency_types
+      ground_truth: 9
+      enhanced: "9종 (GoodsType enum: Gem,Gold,MagicShard,BlackEssence,RoyalCoin,Pact,EventNewYear26,WebShopCoin,Mileage)"
+      prev_score: 0.1
+      new_score: 1.0
+      method: "코드 enum에서 정확한 값 추출"
+
+    - id: ANV26
+      name: idle_gold_per_min
+      ground_truth: "server_data (OfflineRewardChart)"
+      enhanced: "레벨별 보상 테이블 구조 확인 (OfflineRewardData.cs:189). 수치는 서버"
+      prev_score: 0.0
+      new_score: 0.4
+      method: "코드에서 테이블 구조 확인"
+
+    - id: ANV27
+      name: idle_max_accumulation
+      ground_truth: "config('offline_reward_max_time')"
+      enhanced: "config 키 'offline_reward_max_time' 확인 (초 단위, /3600 변환). 값은 서버"
+      prev_score: 0.0
+      new_score: 0.4
+      method: "코드에서 config 키 + 단위 확인"
+
+    - id: ANV28
+      name: attendance_days
+      ground_truth: "server_data (AttendanceChart.day)"
+      enhanced: "AttendanceChart.day 필드 + ClaimContents.Attendance 열거값 확인"
+      prev_score: 0.0
+      new_score: 0.4
+      method: "코드에서 시스템 존재 + 구조 확인"
+
+    - id: ANV29
+      name: daily_quest_count
+      ground_truth: "server_data (MissionChart, type=daily)"
+      enhanced: "MissionChart + type=daily 쿼리 구조 확인. 행 수는 서버"
+      prev_score: 0.0
+      new_score: 0.4
+      method: "코드에서 구조 확인"
+
+    # ===================== G. 시스템 =====================
+
+    - id: ANV30
+      name: pet_system_exists
+      ground_truth: true
+      enhanced: "true — PetChart.cs(10K), PetData.cs, GachaType.pet, fusion/awakening/collection 완전 구현"
+      prev_score: 0.0
+      new_score: 1.0
+      method: "코드에서 시스템 존재 확정"
+
+    - id: ANV31
+      name: ui_reference_resolution
+      ground_truth: "1080x1920"
+      enhanced: "1080x1920 (GameManager.cs:245 defaultRate=1080f/1920f)"
+      prev_score: 1.0
+      new_score: 1.0
+      method: "변동 없음"
+
+    - id: ANV32
+      name: state_count
+      ground_truth: "2 scenes + multi-page UI"
+      enhanced: "2 씬 (Loading, Main) + PageTitle/PageLobby 등 페이지 시스템. AI 추정 6 근접"
+      prev_score: 0.4
+      new_score: 0.7
+      method: "코드에서 씬 구조 확정"
+
+  summary:
+    total: 32
+
+    # Exact(1.0): ANV05,11,12,15,18,22,25,30,31 = 9개
+    # Close(0.7): ANV02,03,04,08,09,14,16,17,19,20,24,32 = 12개
+    # Partial(0.4): ANV06,07,10,13,21,23,26,27,28,29 = 10개
+    # Missing(0.0): ANV01 = 1개
+
+    exact_count: 9
+    close_count: 12
+    partial_count: 10
+    wrong_count: 0
+    missing_count: 1
+
+    # 9×1.0 + 12×0.7 + 10×0.4 + 0 + 1×0.0
+    # = 9.0 + 8.4 + 4.0 + 0 + 0.0 = 21.4
+    sum: 21.4
+    average: 0.669

@@ -1,0 +1,661 @@
+# Car Match - Game Balance Sheet / Design Specification
+# Source Type: D1 (AI User Observation + Design Intent Pattern Card)
+# Clean Room: No original source code referenced
+# Observation basis: BlueStacks ADB session, Level 70 observed
+# Pattern card: Level 1 design_intent (carmatch_patterns.yaml)
+# Generated: 2026-02-19
+
+game: "Car Match"
+spec_version: "1.0"
+spec_category: "D1_ai_user_design_intent"
+
+# ============================================================
+# 1. CORE MECHANICS
+# ============================================================
+core_mechanics:
+  board:
+    type: "3D_top_down_grid"
+    grid_sizes:
+      - id: XS
+        size: "4x4"
+        total_cells: 16
+        level_range: [1, 10]
+      - id: S
+        size: "5x5"
+        total_cells: 25
+        level_range: [11, 30]
+      - id: M
+        size: "6x6"
+        total_cells: 36
+        level_range: [31, 60]
+      - id: L
+        size: "7x7"
+        total_cells: 49
+        level_range: [61, 120]
+      - id: XL
+        size: "8x8"
+        total_cells: 64
+        level_range: [121, 200]
+    cell_size_world_units: 1.2       # Unity world units per cell
+    board_origin: "bottom_left"       # (0,0) is bottom-left of grid
+
+  car_types:
+    match_group: "color"              # Cars are grouped/matched by color
+    colors:
+      - id: 0
+        name: "Red"
+        hex: "#E63946"
+        unlock_level: 1
+      - id: 1
+        name: "Blue"
+        hex: "#1D3557"
+        unlock_level: 1
+      - id: 2
+        name: "Green"
+        hex: "#2DC653"
+        unlock_level: 1
+      - id: 3
+        name: "Yellow"
+        hex: "#FFB703"
+        unlock_level: 5
+      - id: 4
+        name: "Cyan"
+        hex: "#48CAE4"
+        unlock_level: 15
+      - id: 5
+        name: "Purple"
+        hex: "#9B5DE5"
+        unlock_level: 30
+      - id: 6
+        name: "Orange"
+        hex: "#FB5607"
+        unlock_level: 50
+      - id: 7
+        name: "Pink"
+        hex: "#F72585"
+        unlock_level: 80
+    car_set_by_level:
+      # Number of distinct car colors active on a given level
+      level_1_to_10:   3    # Red, Blue, Green
+      level_11_to_30:  4    # + Yellow
+      level_31_to_60:  5    # + Cyan
+      level_61_to_120: 6    # + Purple  (matches Level 70 observation: 6 colors)
+      level_121_plus:  7    # + Orange
+      max_colors:      8    # + Pink (reserved for 200+ if extended)
+
+  holder:
+    position: "bottom_center_screen"
+    capacity: 7               # Observed: 7 white slots visible at Level 70
+    slot_width_px: 90         # At 1080px canvas width
+    slot_height_px: 110
+    overflow_condition: "lose_life"   # Holder fills with no valid match → life lost
+    display_style: "horizontal_row"
+
+  matching_rule:
+    match_count: 3            # 3 identical car colors in holder → auto-match and remove
+    match_trigger: "auto"     # Triggered automatically when 3rd same-color car enters holder
+    match_position: "any"     # The 3 matching cars need not be adjacent in holder
+    removal_delay_ms: 300     # Brief pause before removal animation plays
+
+  pathfinding:
+    algorithm: "BFS"          # Breadth-First Search on orthogonal grid
+    directions: ["up", "down", "left", "right"]   # 4-directional only (no diagonal)
+    path_blocked_feedback: "car_shake_animation"   # Visual indicator when tap is invalid
+    path_reservation: true    # Reserve cells along path to prevent collision from simultaneous taps
+    max_path_length: 64       # Hard limit = total cells in largest grid
+    exit_position: "top_row_center"   # Cars exit board via top edge center column(s)
+
+  win_condition: "all_cars_cleared_from_board"
+  fail_condition: "holder_full_no_match_possible"
+
+# ============================================================
+# 2. LIVES SYSTEM
+# ============================================================
+lives_system:
+  max_lives: 5                        # Observed: heart icon showing "5 / Full"
+  starting_lives: 5
+  life_cost_per_fail: 1
+  regeneration:
+    type: "time_based"
+    minutes_per_life: 30              # Standard mobile puzzle: 1 life per 30 min
+    full_regen_minutes: 120           # 4 lives × 30 min = 2 hours to full (if at 1)
+    regen_paused_when_full: true
+  infinite_lives_option:
+    available: true                   # "∞" symbol with "15m" label observed
+    duration_minutes: 15              # 15-minute infinite lives powerup
+    price_coins: 0                    # Free limited-time event grant
+    price_iap_usd: 0.99              # Purchase option
+  display:
+    icon: "heart"
+    position: "top_center"
+    show_full_label: true             # Observed: "Full" text shown when at max
+
+# ============================================================
+# 3. LEVEL PROGRESSION
+# ============================================================
+level_progression:
+  total_levels: 200                   # Estimated 200 (70 observed, "100+" expected, extended roadmap)
+  initial_launch_levels: 120          # Shipped at launch; 80 more in future updates
+
+  grid_size_stages:
+    - stage: 1
+      grid: "4x4"
+      level_range: [1, 10]
+      car_colors: 3
+      obstacles: false
+      tunnels: false
+    - stage: 2
+      grid: "5x5"
+      level_range: [11, 30]
+      car_colors: 4
+      obstacles: false
+      tunnels: false
+    - stage: 3
+      grid: "6x6"
+      level_range: [31, 60]
+      car_colors: 5
+      obstacles: true       # Walls & boxes unlock at level 31
+      tunnels: false
+    - stage: 4
+      grid: "6x6"           # Grid stays 6x6, complexity increases via obstacles/tunnels
+      level_range: [61, 120]
+      car_colors: 6         # Confirmed by Level 70 observation
+      obstacles: true
+      tunnels: true         # Tunnels unlock at level 61
+    - stage: 5
+      grid: "7x7"
+      level_range: [121, 160]
+      car_colors: 7
+      obstacles: true
+      tunnels: true
+    - stage: 6
+      grid: "8x8"
+      level_range: [161, 200]
+      car_colors: 8
+      obstacles: true
+      tunnels: true
+
+  car_set_formula:
+    # Total cars placed on board per level
+    # Formula: floor(total_cells * density_factor) rounded to nearest multiple of 3
+    density_by_stage:
+      stage_1: 0.70   # 4x4=16 cells → ~11 cars (rounded: 12)
+      stage_2: 0.75   # 5x5=25 cells → ~18 cars (rounded: 18)
+      stage_3: 0.78   # 6x6=36 cells → ~28 cars (rounded: 27)
+      stage_4: 0.85   # 6x6=36 cells → ~30 cars (rounded: 30)  — high density at L70
+      stage_5: 0.80   # 7x7=49 cells → ~39 cars (rounded: 39)
+      stage_6: 0.82   # 8x8=64 cells → ~52 cars (rounded: 51)
+    guarantee_per_color: true   # Each active color must appear a multiple of 3 times
+    min_instances_per_color: 3
+    max_instances_per_color: 12
+
+  obstacle_scaling:
+    wall_count_formula: "floor(level / 20)"    # 1 wall per 20 levels starting at L31
+    box_count_formula:  "floor((level - 30) / 15)"
+    lock_count_formula: "floor((level - 50) / 20)"
+    ice_count_formula:  "floor((level - 70) / 25)"
+    max_obstacle_cells_pct: 0.20   # Obstacles may not exceed 20% of total cells
+
+  difficulty_curve:
+    # Each 10-level block increases one complexity factor
+    factors_rotated: ["add_color", "increase_density", "add_obstacle_type", "add_tunnel", "reduce_empty_cells"]
+
+# ============================================================
+# 4. SCORING
+# ============================================================
+scoring:
+  system: "star_rating"
+  stars: 3
+
+  star_rating_criteria:
+    # Based on number of taps (moves) used to clear the board
+    # par_moves = total_cars / 3 * 1.5  (each match = 3 taps, 50% buffer)
+    three_stars:
+      condition: "taps_used <= par_moves"
+      description: "Clear with optimal or fewer taps"
+    two_stars:
+      condition: "taps_used <= par_moves * 1.3"
+      description: "Clear within 30% over par"
+    one_star:
+      condition: "taps_used > par_moves * 1.3"
+      description: "Clear the board (any number of taps)"
+    fail:
+      condition: "holder_full_and_no_match"
+      description: "Lose a life, replay level"
+
+  par_moves_formula: "ceil(total_cars_on_board / 3) * 1.5"
+  # Example Level 70: 30 cars → 10 matches → par = 15 taps, 3★ ≤ 15, 2★ ≤ 19, 1★ > 19
+
+  coin_rewards:
+    three_stars: 30
+    two_stars:   20
+    one_stars:   10
+    first_clear_bonus: 50          # One-time bonus on first-ever level completion
+    replay_cap: true               # Replaying already-cleared level gives no bonus coins
+
+  # Multiplier system (x1 base, events can boost)
+  reward_multiplier:
+    default: 1
+    event_max: 3
+    display: "x{N} multiplier label on main screen"
+
+# ============================================================
+# 5. BOOSTERS
+# ============================================================
+boosters:
+  # 4 boosters observed in gameplay bottom bar
+  types:
+    - id: "undo"
+      name: "Undo"
+      icon: "circular_arrow"
+      description: "Returns the last car moved back to its original grid position"
+      effect: "reverse_last_tap"
+      scope: "single_action"
+      initial_free_count: 1          # Observed: count = 1 at Level 70
+      price_coins: 150
+      max_held: 9
+      can_use_consecutively: false   # Cannot undo an undo
+
+    - id: "shuffle"
+      name: "Shuffle"
+      icon: "crossing_arrows"
+      description: "Randomly rearranges all cars currently on the board grid"
+      effect: "randomize_board"
+      scope: "whole_board"
+      initial_free_count: 0          # Observed: count = 0
+      price_coins: 300               # Observed: 300 coins
+      max_held: 9
+      preserves_holder: true         # Cars in holder are not shuffled
+
+    - id: "magnet"
+      name: "Magnet"
+      icon: "box_magnet"
+      description: "Auto-selects and moves 3 cars of the most-common color to the holder, triggering an instant match"
+      effect: "auto_match_one_set"
+      scope: "single_match"
+      initial_free_count: 0          # Observed: count = 0
+      price_coins: 900               # Observed: 900 coins
+      max_held: 9
+      requires_min_cars_on_board: 3  # Needs at least 3 cars of same color on board
+
+    - id: "clear_holder"
+      name: "Clear Holder"
+      icon: "circular_refresh"
+      description: "Removes all cars currently in the holder bar and returns them to random empty cells on the board"
+      effect: "reset_holder"
+      scope: "holder"
+      initial_free_count: 0          # Observed: count = 0
+      price_coins: 600               # Observed: 600 coins
+      max_held: 9
+      board_must_have_empty_cells: true  # Requires room to return cars
+
+  purchase_method: "coins"
+  bundle_deals:
+    - bundle: "starter_pack"
+      contents: {undo: 3, shuffle: 2, magnet: 1, clear_holder: 1}
+      price_coins: 1800
+      discount_pct: 25
+
+# ============================================================
+# 6. OBSTACLES
+# ============================================================
+obstacles:
+  types:
+    - id: "wall"
+      name: "Wall"
+      description: "Impassable static block. Cars cannot enter this cell or path through it. Permanent for the level."
+      interaction: "none"
+      unlock_level: 31
+      visual: "grey_concrete_block"
+      affects_pathfinding: true
+
+    - id: "box"
+      name: "Cardboard Box"
+      description: "Breakable obstacle. A car moving into an adjacent cell 'pushes' the box, removing it after 1 hit. Creates a one-time path clearance."
+      interaction: "tap_adjacent_car_breaks"
+      hit_points: 1
+      unlock_level: 36
+      visual: "brown_cardboard_box"
+      affects_pathfinding: true
+      reward_on_break_coins: 5
+
+    - id: "lock"
+      name: "Locked Car"
+      description: "A car locked in place. Must be unlocked by matching its color in the holder once. After the first match of its color, it becomes free and can be tapped normally."
+      interaction: "unlock_via_color_match"
+      unlock_condition: "one_match_of_same_color"
+      unlock_level: 51
+      visual: "padlock_icon_on_car"
+      affects_pathfinding: false   # Locked cars block their own movement, not general paths
+
+    - id: "ice"
+      name: "Ice Block"
+      description: "A car encased in ice. Requires 2 taps to free: first tap cracks the ice, second tap moves it to holder. Cracks visually progress between taps."
+      interaction: "double_tap_to_free"
+      hit_points: 2
+      visual_stages: ["intact_ice", "cracked_ice", "free_car"]
+      unlock_level: 71              # Estimated: appears after Level 70 observation ceiling
+      visual: "cyan_ice_encasing_car"
+      affects_pathfinding: true     # Ice block occupies cell fully on both hits
+
+  placement_rules:
+    - "Obstacles may not block all exit paths from the board simultaneously"
+    - "At least one car of each active color must have a valid path at level start"
+    - "Obstacles placed only in non-exit rows (not the top exit row)"
+    - "Max 1 obstacle per 3x3 sub-zone at early obstacle levels"
+
+# ============================================================
+# 7. TUNNEL SYSTEM
+# ============================================================
+tunnel_system:
+  description: "Tunnels spawn new cars from the board edge after a match occurs, maintaining car count pressure"
+  unlock_level: 61
+
+  spawn_rules:
+    trigger: "on_match"              # A new car spawns each time a 3-car match completes
+    spawn_delay_ms: 500              # Wait for match animation to finish before spawning
+    spawn_count_per_match: 1         # 1 new car enters per match event
+    spawn_color: "random_active"     # Random color from the active set for this level
+    spawn_guarantee: "weighted"      # Slightly weighted toward colors that have fewer instances
+    max_tunnel_cars_total: "dynamic" # = ceil(total_initial_cars / 3)  tunnel budget per level
+
+  placement:
+    positions: "board_edge_cells"    # Tunnels appear on the outer edge of the grid
+    valid_edges: ["left", "right", "bottom"]  # Top edge is the exit; tunnels on other 3 sides
+    min_tunnels_per_level: 1
+    max_tunnels_per_level: 4
+    tunnel_spacing_cells: 2          # Tunnels must be at least 2 cells apart on the same edge
+    placement_determined_at: "level_load"    # Fixed positions set when level initializes
+
+  animation:
+    enter_effect: "elastic_scale_in"    # Car pops in with scale 0→1.2→1.0
+    enter_duration_ms: 350
+    enter_easing: "ease_out_elastic"
+
+# ============================================================
+# 8. ANIMATION
+# ============================================================
+animation:
+  car_move:
+    type: "path_follow"              # Car follows BFS path cell by cell
+    speed_cells_per_second: 8.0     # Traverses 8 cells per second along path
+    move_speed_world_units_per_s: 9.6   # 8 cells × 1.2 units/cell
+    easing: "ease_in_out_quad"
+    rotation_on_turn: true           # Car model visually turns when changing direction
+    rotation_duration_ms: 80        # Quick snap rotation at each 90° turn
+
+  car_enter_holder:
+    effect: "slide_in_from_board"
+    duration_ms: 200
+    easing: "ease_out_cubic"
+    slot_fill_bounce_scale: 1.15    # Slot briefly scales up when car lands
+
+  match_effect:
+    sequence:
+      - step: 1
+        action: "punch_scale"
+        scale_to: 1.3
+        duration_ms: 120
+        easing: "ease_out_quad"
+      - step: 2
+        action: "shrink_to_zero"
+        scale_to: 0.0
+        duration_ms: 150
+        easing: "ease_in_back"
+      - step: 3
+        action: "particle_burst"
+        particle_count: 12
+        spread_radius_px: 60
+        duration_ms: 400
+    total_match_duration_ms: 450    # Steps overlap slightly
+    holder_slots_clear_delay_ms: 300  # Slots visually empty after shrink completes
+
+  tunnel_spawn:
+    effect: "elastic_scale_in"
+    scale_from: 0.0
+    scale_peak: 1.2
+    scale_final: 1.0
+    duration_ms: 350
+    easing: "ease_out_elastic"
+
+  path_blocked_feedback:
+    effect: "horizontal_shake"
+    shake_magnitude_px: 8
+    shake_oscillations: 3
+    duration_ms: 300
+    easing: "linear"
+
+  board_clear_celebration:
+    effect: "confetti_burst_full_screen"
+    particle_count: 80
+    duration_ms: 1500
+    camera_zoom_in: true
+    zoom_target_scale: 1.1
+    zoom_duration_ms: 400
+
+  general:
+    between_match_and_respawn_delay_ms: 200  # Pause between match removal and tunnel spawn
+    simultaneous_move_cap: 1                 # Only 1 car moves at a time (queued input)
+    ui_transition_duration_ms: 250
+
+# ============================================================
+# 9. MONETIZATION
+# ============================================================
+monetization:
+  currencies:
+    primary:
+      name: "Coins"
+      icon: "gold_coin"
+      display_position: "top_left"
+      observed_amount_at_l70: 2153   # Direct observation
+
+  starting_amounts:
+    coins: 500                       # New player onboarding gift
+    free_boosters:
+      undo: 3
+      shuffle: 1
+      magnet: 0
+      clear_holder: 0
+
+  coin_earn_rates:
+    level_clear_1star: 10
+    level_clear_2star: 20
+    level_clear_3star: 30
+    first_clear_bonus: 50
+    daily_login_base: 50             # Day 1 reward
+    daily_login_max: 200             # Day 7+ reward
+    ad_watch_reward: 100             # Optional rewarded video
+
+  daily_rewards:
+    cycle_days: 7
+    rewards:
+      day_1: {coins: 50}
+      day_2: {coins: 80}
+      day_3: {coins: 100, booster_undo: 1}
+      day_4: {coins: 120}
+      day_5: {coins: 150, booster_shuffle: 1}
+      day_6: {coins: 180}
+      day_7: {coins: 200, booster_magnet: 1}
+    reset_behavior: "cycle_repeats"  # After day 7, returns to day 1
+
+  journey_rewards:
+    description: "Milestone rewards for reaching level checkpoints"
+    milestones:
+      - level: 10
+        reward: {coins: 200}
+      - level: 25
+        reward: {coins: 300, booster_undo: 2}
+      - level: 50
+        reward: {coins: 500, booster_shuffle: 1}
+      - level: 75
+        reward: {coins: 750, booster_magnet: 1}
+      - level: 100
+        reward: {coins: 1000, booster_clear_holder: 2}
+      - level: 150
+        reward: {coins: 1500, booster_magnet: 2}
+      - level: 200
+        reward: {coins: 2500, booster_shuffle: 3, booster_magnet: 2}
+
+  timed_events:
+    types:
+      - name: "Flash Sale"
+        description: "Booster packs at 50% off for limited time"
+        duration_hours: 24
+        frequency: "every_3_days"
+      - name: "Double Coins"
+        description: "Level clear coin rewards doubled"
+        duration_hours: 2           # Observed: ∞ icon with '15m' → short-burst events
+        frequency: "daily"
+      - name: "Challenge Event"
+        description: "Special high-difficulty levels with premium rewards"
+        duration_hours: 48
+        frequency: "weekly"
+    event_countdown_display: true   # Observed: 14h 33m, 2h 33m timers on main screen
+
+  iap_hints:
+    # Not directly observed but standard for genre; inferred from observation of coin display and events
+    coin_packs:
+      - name: "Small Pack"
+        coins: 500
+        price_usd: 0.99
+      - name: "Medium Pack"
+        coins: 1200
+        price_usd: 1.99
+      - name: "Large Pack"
+        coins: 3000
+        price_usd: 4.99
+      - name: "Mega Pack"
+        coins: 8000
+        price_usd: 9.99
+    infinite_lives:
+      duration_hours: 24
+      price_usd: 1.99
+
+  metagame:
+    type: "city_building"
+    description: "Main screen shows city with various buildings. Coins and progression unlock new buildings or decorations."
+    buildings_visible_at_l70: 4    # Observed: multiple shops/event buildings
+    building_event_types: ["sale", "finished", "timed_challenge"]
+
+# ============================================================
+# 10. ARCHITECTURE
+# ============================================================
+architecture:
+  design_patterns:
+    - pattern: "Singleton"
+      usage: "GameManager, LevelManager, CoinManager, LivesManager, AudioManager"
+      note: "All singletons extend a generic Singleton<T> base class; DontDestroyOnLoad"
+
+    - pattern: "State Machine"
+      usage: "GameStateManager"
+      states: ["Idle", "Playing", "Paused", "Win", "Lose", "Transitioning"]
+      transitions:
+        Idle: ["Playing"]
+        Playing: ["Paused", "Win", "Lose"]
+        Paused: ["Playing", "Idle"]
+        Win: ["Idle"]
+        Lose: ["Idle"]
+        Transitioning: ["Playing", "Idle"]
+
+    - pattern: "Object Pool"
+      usage: "CarPool, ParticlePool"
+      initial_pool_size_cars: 64
+      initial_pool_size_particles: 20
+
+    - pattern: "Observer / Event Bus"
+      usage: "MatchEvent, LevelClearEvent, LifeLostEvent, CoinChangedEvent"
+      implementation: "C# Action delegates via static EventBus class"
+
+    - pattern: "Factory"
+      usage: "LevelFactory — builds board layout, places cars, obstacles, tunnels from LevelData ScriptableObject"
+
+    - pattern: "Command"
+      usage: "TapCommand — encapsulates a single tap action for undo support"
+      undo_stack_max_depth: 10
+
+    - pattern: "Strategy"
+      usage: "PathfindingStrategy interface — BFS implementation injected into GridManager"
+
+  singletons:
+    - GameManager          # Top-level game flow controller
+    - LevelManager         # Level data loading, progression tracking
+    - GridManager          # Board state, pathfinding, car placement
+    - HolderManager        # Holder bar state, match detection
+    - CoinManager          # Coin balance, earn/spend transactions
+    - LivesManager         # Lives count, regen timer
+    - BoosterManager       # Booster counts, use-effect dispatch
+    - AudioManager         # SFX + BGM, volume settings
+    - UIManager            # Screen transitions, popup management
+    - TunnelManager        # Tunnel positions, spawn scheduling
+    - EventBus             # Global event broadcast system (static)
+
+  state_management:
+    game_states:
+      - Idle               # On main menu, no active level
+      - Playing            # Active level, accepting input
+      - Paused             # Pause menu open
+      - Win                # Level cleared, showing result screen
+      - Lose               # Holder overflowed, life lost
+      - Transitioning      # Loading next level / scene change
+    persistence:
+      save_system: "PlayerPrefs + JSON file"
+      save_fields:
+        - "current_level_index"
+        - "coin_balance"
+        - "lives_count"
+        - "lives_last_regen_timestamp"
+        - "booster_counts"
+        - "star_ratings_per_level[]"
+        - "daily_reward_last_claimed_date"
+        - "journey_rewards_claimed[]"
+      save_trigger: "on_application_pause + on_level_complete"
+
+  grid_system:
+    coordinate_system: "2D_int_vector"   # Grid cells addressed as Vector2Int(col, row)
+    bfs_implementation:
+      queue_type: "System.Collections.Generic.Queue<Vector2Int>"
+      visited_set: "HashSet<Vector2Int>"
+      early_exit: true      # Stop as soon as exit cell is found
+    path_reservation:
+      reserved_cells: "HashSet<Vector2Int>"   # Cleared when car reaches holder
+      reservation_cleared_on: "car_enter_holder OR car_blocked"
+
+  holder_system:
+    internal_structure: "List<CarData> of capacity 7"
+    match_check_trigger: "after_each_insert"
+    match_algorithm: |
+      After insert, count occurrences of each color in holder.
+      If any color count >= 3, trigger match for that color:
+        remove exactly 3 of that color from holder, play match anim.
+      Repeat check after removal (cascade possible).
+    cascade_matches: true    # Multiple simultaneous matches resolved sequentially
+
+  camera_settings:
+    projection: "Orthographic"
+    view_angle_degrees: 55          # Top-down isometric tilt
+    rotation_euler: {x: 55, y: 45, z: 0}
+    orthographic_size: 5.5          # Fits 6x6 grid comfortably; adjusted per grid stage
+    orthographic_size_by_grid:
+      "4x4": 4.0
+      "5x5": 4.8
+      "6x6": 5.5
+      "7x7": 6.5
+      "8x8": 7.5
+    position_offset: {x: 0, y: 8, z: -6}  # World-space camera offset from board center
+    background_color_hex: "#87CEEB"         # Sky blue to match city theme
+
+  canvas_settings:
+    render_mode: "Screen Space - Overlay"
+    canvas_scaler: "Scale With Screen Size"
+    reference_resolution: {width: 1080, height: 1920}
+    match_mode: 0.5                  # Blend between width and height match
+
+  scene_list:
+    - name: "Title"
+      purpose: "Logo splash + loading"
+      auto_transition_to: "Main"
+      auto_transition_delay_s: 2.5
+    - name: "Main"
+      purpose: "Main menu, city building meta, level select"
+    - name: "GameScene"
+      purpose: "Active puzzle gameplay"

@@ -1,0 +1,67 @@
+metadata:
+  nodeId: "PageBattle"
+  version: "1.0.0"
+  phase: 3
+  role: "UX"
+
+dependencies:
+  internal:
+    - "UISystem"
+    - "BattleManager"
+    - "EventManager"
+    - "GameConstants"
+  external:
+    - "UnityEngine"
+    - "UnityEngine.UI"
+    - "TMPro"
+
+contract:
+  provides:
+    - "void Show()"
+    - "void Hide()"
+    - "void SetSpeedButtonText(float multiplier)"
+  requires:
+    - "UISystem"
+    - "BattleManager"
+
+tags:
+  layer: "Game"
+  genre: "Idle"
+  role: "UX"
+  system: "UI"
+  majorFunctions:
+    - "StateControl"
+    - "ResponseTrigger"
+  minorFunctions:
+    - "Assign"
+
+logicFlow:
+  - step: 1
+    tag: "ResponseTrigger"
+    action: "OnStageStart 수신: 전투 UI 초기화, HUD 활성화"
+    next: null
+  - step: 2
+    tag: "ResponseTrigger"
+    action: "속도 버튼 클릭: speed 1x→2x→4x 순환, BattleManager.SetSpeed()"
+    next: null
+  - step: 3
+    tag: "ResponseTrigger"
+    action: "OnStageComplete / OnStageFail: UISystem.OpenPopup<PopupResult>()"
+    next: null
+
+referencePatterns:
+  - source: "CLAUDE.md"
+    pattern: "PageBattle - 전투 페이지"
+
+codeHints:
+  patterns:
+    - "public class PageBattle : PageBase"
+    - "[SerializeField] private Button _speedButton"
+    - "[SerializeField] private TextMeshProUGUI _speedText"
+    - "[SerializeField] private Button _lobbyButton"
+    - "[SerializeField] private HUD _hud"
+    - "private float[] _speedOptions = { 1f, 2f, 4f }"
+    - "private int _speedIndex = 0"
+    - "OnSpeedButton: _speedIndex = (_speedIndex + 1) % _speedOptions.Length; BattleManager.SetSpeed(_speedOptions[_speedIndex])"
+  avoidPatterns:
+    - "Time.timeScale 직접 수정 금지 → BattleManager.SetSpeed 경유"

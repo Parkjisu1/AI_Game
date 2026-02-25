@@ -1,0 +1,170 @@
+{
+  "fileName": "BannerBottom",
+  "filePath": "E:/AIMED/Luffy/IdleMoney1/Project/Assets\\MaxSdk\\Prefabs\\BannerBottom.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 5,
+  "canvases": [
+    {
+      "type": "Canvas",
+      "fileID": "2511819091764556577",
+      "m_RenderMode": 0,
+      "m_SortingOrder": 500,
+      "gameObjectName": "BannerBottom",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    }
+  ],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "6048907697713132302",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Panel",
+      "rectSize": {
+        "x": 0.0,
+        "y": 168.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 84.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 0.0
+      },
+      "sourceFile": "BannerBottom"
+    },
+    {
+      "type": "Image",
+      "fileID": "1436650035481827287",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Panel",
+      "rectSize": {
+        "x": 640.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -50.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 1.0
+      },
+      "sourceFile": "BannerBottom"
+    }
+  ],
+  "texts": [
+    {
+      "type": "Text",
+      "fileID": "3801875349924125266",
+      "m_FontSize": 18.0,
+      "m_Alignment": 7,
+      "m_Color": {
+        "r": 0.29411766,
+        "g": 0.29411766,
+        "b": 0.29411766,
+        "a": 1.0
+      },
+      "m_Text": "Actual banner size may vary on mobile devices",
+      "gameObjectName": "InfoText",
+      "rectSize": {
+        "x": 0.0,
+        "y": -6.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 3.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "BannerBottom"
+    },
+    {
+      "type": "Text",
+      "fileID": "5500603550844857255",
+      "m_FontSize": 26.0,
+      "m_Alignment": 1,
+      "m_Color": {
+        "r": 0.19607843,
+        "g": 0.19607843,
+        "b": 0.19607843,
+        "a": 1.0
+      },
+      "m_Text": "MAX Banner Ad",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": -8.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -4.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "BannerBottom"
+    }
+  ],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 5
+}

@@ -1,0 +1,249 @@
+## 채점 결과
+
+```yaml
+scoring:
+  game: "Tap Shift"
+  condition: "D1_10"
+  results:
+
+    - id: TS01
+      name: total_levels
+      ground_truth: "100"
+      generated: "100"
+      score: 1.0
+      note: "정확 일치 — 레벨맵 끝까지 탐색하여 100 확인"
+
+    - id: TS02
+      name: max_lives
+      ground_truth: "3"
+      generated: "3"
+      score: 1.0
+      note: "정확 일치 — 관찰로 Lives 3회 확인"
+
+    - id: TS03
+      name: max_undo_count
+      ground_truth: "10"
+      generated: "10"
+      score: 1.0
+      note: "정확 일치 — Undo 10회 확인"
+
+    - id: TS04
+      name: max_hint_count
+      ground_truth: "3"
+      generated: "3"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: TS05
+      name: interstitial_frequency
+      ground_truth: "3 (every 3 levels)"
+      generated: "3 (every 3 levels)"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: TS06
+      name: arrow_move_speed
+      ground_truth: "15.0"
+      generated: "12.0"
+      score: 0.7
+      note: "12 vs 15 — 20% 오차, 프레임 추정 범위 내"
+
+    - id: TS07
+      name: max_arrow_clamp
+      ground_truth: "20"
+      generated: "18~20"
+      score: 0.7
+      note: "18 vs 20 — 범위 상한 일치"
+
+    - id: TS08
+      name: star_rating_system
+      ground_truth: "0-star~3-star 4단계, wrong tap 기준 (0/1-2/3-5/6+)"
+      generated: "0~3성, wrong tap 기준 4단계"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: TS09
+      name: base_unit
+      ground_truth: "60.0"
+      generated: "50.0"
+      score: 0.7
+      note: "50 vs 60 — 17% 차이, Close"
+
+    - id: TS10
+      name: position_snap
+      ground_truth: "30.0 (half-unit, pixels)"
+      generated: "30.0 (half-unit)"
+      score: 1.0
+      note: "정확 일치 — 패턴카드 도움으로 half-unit snap 파악"
+
+    - id: TS11
+      name: duration_clamp
+      ground_truth: "[0.25, 0.7] seconds"
+      generated: "[0.20, 0.55] seconds"
+      score: 0.4
+      note: "범위 방향 맞으나 하한 0.20 vs 0.25(20%), 상한 0.55 vs 0.70(21%)"
+
+    - id: TS12
+      name: stretch_phase
+      ground_truth: "first 40%"
+      generated: "first 35%"
+      score: 0.7
+      note: "35% vs 40% — 12.5% 차이, 범위 내 근접"
+
+    - id: TS13
+      name: stretch_max
+      ground_truth: "1.6"
+      generated: "1.4"
+      score: 0.7
+      note: "1.4 vs 1.6 — 12.5% 차이, Close"
+
+    - id: TS14
+      name: snap_phase
+      ground_truth: "last 60%"
+      generated: "last 60%"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: TS15
+      name: arrow_colors
+      ground_truth: "up=#4CAF50, down=#F44336, left=#2196F3, right=#FF9800, hint=Yellow"
+      generated: "up=green, down=red, left=blue, right=orange, hint=yellow"
+      score: 0.7
+      note: "색상 방향 매핑 정확, hint 포함하나 hex 코드 미확인"
+
+    - id: TS16
+      name: head_ratio
+      ground_truth: "0.35"
+      generated: "0.25"
+      score: 0.4
+      note: "0.25 vs 0.35 — 29% 차이, 개념 맞으나 수치 부정확"
+
+    - id: TS17
+      name: shaft_height_ratio
+      ground_truth: "0.55"
+      generated: "0.50"
+      score: 0.7
+      note: "0.50 vs 0.55 — 9% 차이, Close"
+
+    - id: TS18
+      name: collision_system
+      ground_truth: "AABB sweep-to-boundary"
+      generated: "AABB sweep-to-boundary"
+      score: 1.0
+      note: "정확 일치 — 관찰+패턴카드로 충돌 시스템 정확 파악"
+
+    - id: TS19
+      name: performance_complexity
+      ground_truth: "O(n) per tap, n <= 20"
+      generated: "O(n) per tap, n <= 20"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: TS20
+      name: solver_algorithm
+      ground_truth: "DFS with backtracking"
+      generated: "DFS with backtracking"
+      score: 1.0
+      note: "정확 일치 — 패턴카드에서 솔버 알고리즘 유형 확인"
+
+    - id: TS21
+      name: ui_reference_resolution
+      ground_truth: "[720, 1280]"
+      generated: "[720, 1280]"
+      score: 1.0
+      note: "정확 일치 — 패턴카드에서 해상도 기준 확인"
+
+    - id: TS22
+      name: total_files
+      ground_truth: "50"
+      generated: "45~50"
+      score: 0.7
+      note: "45~50 vs 50 — 범위 내 포함"
+
+    - id: TS23
+      name: pattern_count
+      ground_truth: "9 (Singleton/Pool/Command/Observer/Factory/State/Template/Adapter/Strategy)"
+      generated: "7~8 (Singleton/Pool/Command/Observer/Factory/State/Strategy + α)"
+      score: 0.7
+      note: "7~8 vs 9 — 주요 패턴 대부분 식별, 2개 누락"
+
+    - id: TS24
+      name: state_count
+      ground_truth: "9 (None/Loading/MainMenu/LevelSelect/Playing/Paused/LevelComplete/LevelFail/Tutorial)"
+      generated: "8"
+      score: 0.7
+      note: "8 vs 9 — Tutorial 상태 미식별"
+
+    - id: TS25
+      name: serialization_format
+      ground_truth: "JSON (JsonUtility), Resources/Levels/level_NNN.json"
+      generated: "JSON (JsonUtility), Resources/Levels/"
+      score: 0.7
+      note: "형식 맞으나 파일명 패턴 level_NNN 명시 누락"
+
+    - id: TS26
+      name: arrow_directions
+      ground_truth: "4 (up/down/left/right)"
+      generated: "4 (up/down/left/right)"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: TS27
+      name: arrow_count_progression
+      ground_truth: "Level 1-5: 1~5 / 6-15: 3~8 / 16-30: 5~10 / 31-50: 7~12 / 51-75: 10~15 / 76-100: 13~18"
+      generated: "Level 1-5: 1~5 / 6-15: 3~8 / 16-30: 5~10 / 31-50: 7~12 / 51-75: 10~15 / 76-100: 13~18"
+      score: 1.0
+      note: "정확 일치 — 패턴카드 가이드로 정확한 구간별 범위 도출"
+
+    - id: TS28
+      name: grid_size_range
+      ground_truth: "board_size 200×200 ~ 450×450 pixels"
+      generated: "board_size 200×200 ~ 420×420 pixels"
+      score: 0.7
+      note: "하한 정확, 상한 420 vs 450 (7% 차이)"
+
+    - id: TS29
+      name: tap_mechanic
+      ground_truth: "tap arrow → slides in arrow direction → stops at board boundary or blocked by other arrow (AABB sweep)"
+      generated: "tap arrow → slides in arrow direction → stops at board boundary or blocked by other arrow"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: TS30
+      name: goal_condition
+      ground_truth: "(명시적 필드 없음, 아키텍처에서 암묵적으로 전체 화살표 보드 탈출)"
+      generated: "모든 화살표를 보드 밖으로 탈출"
+      score: 1.0
+      note: "정확 일치"
+
+    - id: TS31
+      name: level_generation
+      ground_truth: "LevelGenerator.cs (절차적 생성 + solvability 검증) + level_NNN.json 저장"
+      generated: "절차적 생성 + JSON 저장"
+      score: 0.7
+      note: "절차적 생성 맞으나 LevelGenerator.cs 명시 없음 — Close"
+
+    - id: TS32
+      name: save_system
+      ground_truth: "PlayerPrefs keys: LevelStar_{id}, LevelUnlock_{id}, SoundEnabled, MusicEnabled, HapticEnabled, RemainingHints, AdsRemoved"
+      generated: "PlayerPrefs: LevelStar_{id}, LevelUnlock_{id}, SoundEnabled, MusicEnabled, HapticEnabled, RemainingHints, AdsRemoved"
+      score: 1.0
+      note: "정확 일치"
+
+  summary:
+    total: 32
+    sum: 26.9
+    average: 0.841
+```
+
+---
+
+### 점수 분포 요약
+
+| 점수 | 파라미터 수 | 해당 항목 |
+|------|-----------|----------|
+| **1.0** Exact | 17 | TS01, TS02, TS03, TS04, TS05, TS08, TS10, TS14, TS18, TS19, TS20, TS21, TS26, TS27, TS29, TS30, TS32 |
+| **0.7** Close | 13 | TS06, TS07, TS09, TS12, TS13, TS15, TS17, TS22, TS23, TS24, TS25, TS28, TS31 |
+| **0.4** Partial | 2 | TS11, TS16 |
+| **0.1** Wrong | 0 | - |
+| **0.0** Missing/Null | 0 | - |

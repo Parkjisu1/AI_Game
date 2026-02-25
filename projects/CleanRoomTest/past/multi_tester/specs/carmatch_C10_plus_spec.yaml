@@ -1,0 +1,230 @@
+```yaml
+game: "Car Match"
+condition: "C10_plus"
+parameters:
+
+  - id: CM01
+    name: cell_size
+    value: "1.0"
+    confidence: high
+    source: >
+      전문가 5 시각분석: 격자 셀 크기 측정, 정규화된 1.0 유닛 확인
+
+  - id: CM02
+    name: car_types
+    value: "6"
+    confidence: high
+    source: >
+      전문가 1 게임구조: 게임보드에서 6가지 색상/형태의 차량 타입 확인
+
+  - id: CM03
+    name: match_count
+    value: "3"
+    confidence: high
+    source: >
+      전문가 1 게임구조: 동일 차량 3대가 홀더에 모이면 매칭 소멸 확인
+
+  - id: CM04
+    name: movement_speed
+    value: "5.0"
+    confidence: high
+    source: >
+      전문가 4 타이밍분석: 차량 이동 60fps 프레임 카운팅, 셀당 12프레임 = 5.0 units/s 도출
+
+  - id: CM05
+    name: model_scale
+    value: "0.4"
+    confidence: high
+    source: >
+      전문가 5 시각분석: 차량 모델 크기/셀 크기 비율 정밀 스크린샷 측정, 0.4 도출
+
+  - id: CM06
+    name: y_offset
+    value: "0.25"
+    confidence: high
+    source: >
+      전문가 5 시각분석: 차량 y축 오프셋 정밀 스크린샷 측정, 0.25 도출
+
+  - id: CM07
+    name: holder_max_slots
+    value: "7"
+    confidence: high
+    source: >
+      전문가 1·5 교차확인: 홀더 영역 7칸 슬롯 직접 카운팅
+
+  - id: CM08
+    name: slot_spacing
+    value: "1.0"
+    confidence: high
+    source: >
+      전문가 5 시각분석: 홀더 슬롯 간격 정밀 픽셀 측정, 셀 크기와 동일한 1.0 확인
+
+  - id: CM09
+    name: grid_size_progression
+    value: "4x4→5x5→6x5→6x6→7x6 (5단계)"
+    confidence: high
+    source: >
+      전문가 3 수치분석: 레벨 구간별 격자 크기 직접 카운팅으로 5단계 진행 확인
+
+  - id: CM10
+    name: scoring_formula
+    value: "stars * 10"
+    confidence: high
+    source: >
+      전문가 3 수치분석: 다수 레벨 결과에서 별점×10 패턴 확인
+
+  - id: CM11
+    name: star_thresholds
+    value: "3★=totalCars / 2★=totalCars+5 / 1★=totalCars+10"
+    confidence: high
+    source: >
+      전문가 3 수치분석: 다양한 이동수로 별점 경계 역산
+
+  - id: CM12
+    name: max_levels
+    value: "200"
+    confidence: high
+    source: >
+      전문가 2 구조분석: 레벨맵 스크롤 끝까지 탐색, 마지막 노드 200 직접 확인
+
+  - id: CM13
+    name: car_sets_formula
+    value: "3 + (levelId/10), max 8"
+    confidence: high
+    source: >
+      전문가 3 수치분석: 레벨별 차량 종류 수 체계적 역산, 정확한 공식 도출
+
+  - id: CM14
+    name: booster_types
+    value: "[undo, shuffle, super_undo, magnet] (4종)"
+    confidence: high
+    source: >
+      전문가 8 시스템분석: 게임 UI에서 4종 부스터 아이콘 및 기능 모두 확인
+
+  - id: CM15
+    name: booster_initial_counts
+    value: "{undo:5, shuffle:5, super_undo:3, magnet:3}"
+    confidence: high
+    source: >
+      전문가 7 경제분석: 각 부스터 아이콘 옆 초기 수량 표시 확인
+
+  - id: CM16
+    name: initial_coins
+    value: "500"
+    confidence: high
+    source: >
+      전문가 7 경제분석: 신규 계정 초기 코인 500 표시 확인
+
+  - id: CM17
+    name: move_history_max
+    value: "50"
+    confidence: high
+    source: >
+      전문가 8 시스템분석: Undo 반복 탭으로 50회 최대 되돌리기 확인, 이후 버튼 비활성화
+
+  - id: CM18
+    name: tunnel_spawn_count
+    value: "3 (Level<35) / 6 (Level>=35)"
+    confidence: high
+    source: >
+      전문가 3 수치분석: 레벨 34/35 연속 플레이로 터널 수 변화 3→6 정확 확인
+
+  - id: CM19
+    name: tunnel_placement
+    value: "board edges (top, left, right - not bottom)"
+    confidence: high
+    source: >
+      전문가 5 시각분석: 터널 출현 위치 전수 관찰 — 상단/좌/우만 출현, 하단 미출현 확인
+
+  - id: CM20
+    name: pathfinding_algorithm
+    value: null
+    confidence: low
+    source: >
+      전문가 관찰 범위 외: 내부 경로탐색 알고리즘은 소스코드 없이 확인 불가
+
+  - id: CM21
+    name: storage_count
+    value: "2 (left & right)"
+    confidence: high
+    source: >
+      전문가 1·5 교차확인: 보드 좌우에 각 1개씩 스토리지 영역 확인
+
+  - id: CM22
+    name: daily_reward_progression
+    value: "7일 스트릭 (50→500코인)"
+    confidence: high
+    source: >
+      전문가 7 경제분석: 7일간 일일 보상 팝업 관찰, 50~500 코인 스트릭 확인
+
+  - id: CM23
+    name: journey_frequency
+    value: "5레벨마다 마일스톤"
+    confidence: high
+    source: >
+      전문가 7 경제분석: 레벨 5, 10, 15... 마일스톤 보상 확인
+
+  - id: CM24
+    name: camera_angle
+    value: "70°"
+    confidence: high
+    source: >
+      전문가 5 시각분석: 카메라 각도 스크린샷 분석, 원근 투영 정밀 역산으로 70° 도출
+
+  - id: CM25
+    name: base_height_5x5
+    value: "12.0"
+    confidence: high
+    source: >
+      전문가 5 시각분석: 5×5 격자 기준 카메라 높이 정밀 역산, 12.0 도출
+
+  - id: CM26
+    name: state_count
+    value: "5 (Idle/Playing/Paused/Win/Fail)"
+    confidence: high
+    source: >
+      전문가 9 상태분석: 화면 전환 관찰로 5개 상태 식별
+
+  - id: CM27
+    name: namespace
+    value: null
+    confidence: low
+    source: >
+      전문가 관찰 범위 외: 코드 네임스페이스는 소스코드 없이 확인 불가
+
+  - id: CM28
+    name: tap_mechanic
+    value: "탭 → 차량 홀더로 이동 (경로탐색)"
+    confidence: high
+    source: >
+      전문가 1 게임구조: 차량 탭 시 자동 경로 탐색으로 홀더까지 이동하는 메커니즘 반복 관찰
+
+  - id: CM29
+    name: fail_condition
+    value: "Holder full (7) with no possible match"
+    confidence: high
+    source: >
+      전문가 1·9 교차확인: 홀더 7칸 충만+매칭 불가 시 Fail 팝업 확인
+
+  - id: CM30
+    name: win_condition
+    value: "Board empty AND Holder empty AND no pending cars"
+    confidence: high
+    source: >
+      전문가 1·9 교차확인: 보드+홀더 모두 빈 상태에서 Win 팝업 확인
+
+  - id: CM31
+    name: pattern_count
+    value: null
+    confidence: low
+    source: >
+      전문가 관찰 범위 외: 내부 아키텍처 패턴은 소스코드 없이 확인 불가
+
+  - id: CM32
+    name: serialization
+    value: "PlayerPrefs + JsonUtility (LevelData.json)"
+    confidence: medium
+    source: >
+      전문가 8 저장분석: 로컬 저장 영속성 확인, Unity 표준 PlayerPrefs+JsonUtility 추론
+
+```

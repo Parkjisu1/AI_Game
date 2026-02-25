@@ -1,0 +1,248 @@
+```yaml
+scoring:
+  game: "Car Match"
+  condition: "C10"
+  results:
+    - id: CM01
+      name: cell_size
+      ground_truth: "1.0"
+      generated: "null"
+      score: 0.0
+      note: "누락. 인게임 미진입으로 측정 불가라고 정직하게 기재."
+
+    - id: CM02
+      name: car_types
+      ground_truth: "6"
+      generated: "8"
+      score: 0.4
+      note: "개념은 맞으나 값 오류. 6종 vs 추정 8종, 33% 오차(>20%). 범위(6~10) 내에 정답이 포함되어 있으나 채택값이 틀림."
+
+    - id: CM03
+      name: match_count
+      ground_truth: "3"
+      generated: "3"
+      score: 1.0
+      note: "정확히 일치. Triple Match 장르 표준 메커니즘 정확히 추론."
+
+    - id: CM04
+      name: movement_speed
+      ground_truth: "5.0"
+      generated: "null"
+      score: 0.0
+      note: "누락. 인게임 미진입으로 측정 불가."
+
+    - id: CM05
+      name: model_scale
+      ground_truth: "0.4"
+      generated: "null"
+      score: 0.0
+      note: "누락. 인게임 미진입으로 측정 불가."
+
+    - id: CM06
+      name: y_offset
+      ground_truth: "0.25"
+      generated: "null"
+      score: 0.0
+      note: "누락. 인게임 미진입으로 측정 불가."
+
+    - id: CM07
+      name: holder_max_slots
+      ground_truth: "7"
+      generated: "7"
+      score: 1.0
+      note: "정확히 일치. Triple Match 장르 표준 7슬롯 정확히 추론."
+
+    - id: CM08
+      name: slot_spacing
+      ground_truth: "1.0"
+      generated: "null"
+      score: 0.0
+      note: "누락. 인게임 미진입으로 측정 불가."
+
+    - id: CM09
+      name: grid_size_progression
+      ground_truth: "4x4 → 5x5 → 6x5 → 6x6 → 7x6"
+      generated: "3x3 → 6x6"
+      score: 0.4
+      note: "개념(진행형 격자 확장)은 맞으나 시작값 오류(3x3 vs 4x4), 최대값 누락(7x6 미포함). 중간 단계(6x5 등) 전무."
+
+    - id: CM10
+      name: scoring_formula
+      ground_truth: "stars * 10 (1★=10, 2★=20, 3★=30 코인)"
+      generated: "null"
+      score: 0.0
+      note: "누락. 레벨 클리어 화면 미관찰."
+
+    - id: CM11
+      name: star_thresholds
+      ground_truth: "3★: totalCars / 2★: totalCars+5 / 1★: totalCars+10"
+      generated: "null"
+      score: 0.0
+      note: "누락. 레벨 클리어 화면 미관찰, 3-star 시스템 존재 여부도 불확실 처리."
+
+    - id: CM12
+      name: max_levels
+      ground_truth: "200"
+      generated: "100"
+      score: 0.4
+      note: "개념은 맞으나 값이 절반(100 vs 200, 50% 오차). 최솟값으로 표기했다고 명시했으나 실제값과 큰 차이."
+
+    - id: CM13
+      name: car_sets_formula
+      ground_truth: "3 + (levelId / 10), max 8"
+      generated: "null"
+      score: 0.0
+      note: "누락. 인게임 미진입으로 공식 확인 불가."
+
+    - id: CM14
+      name: booster_types
+      ground_truth: "4 (undo, shuffle, super_undo, magnet)"
+      generated: "2"
+      score: 0.4
+      note: "개념은 맞으나 값 오류. 인게임 부스터 미확인으로 2 기재. 소스 주석에서 '4~6종 예상'이라 서술해 정답 범위를 인지했으나 채택값이 틀림."
+
+    - id: CM15
+      name: booster_initial_counts
+      ground_truth: "undo:5, shuffle:5, super_undo:3, magnet:3"
+      generated: "null"
+      score: 0.0
+      note: "누락. 부스터 인벤토리 UI 미관찰."
+
+    - id: CM16
+      name: initial_coins
+      ground_truth: "500"
+      generated: "null"
+      score: 0.0
+      note: "누락. 현재 잔액 2,153이 초기값인지 불확실하다고 정직하게 처리."
+
+    - id: CM17
+      name: move_history_max
+      ground_truth: "50"
+      generated: "null"
+      score: 0.0
+      note: "누락. 인게임 미진입."
+
+    - id: CM18
+      name: tunnel_spawn_count
+      ground_truth: "3 (Level<35) / 6 (Level>=35)"
+      generated: "null"
+      score: 0.0
+      note: "누락. 터널 기능 자체 존재 여부도 미확인 처리."
+
+    - id: CM19
+      name: tunnel_placement
+      ground_truth: "board edges (top, left, right - not bottom)"
+      generated: "null"
+      score: 0.0
+      note: "누락. 인게임 미진입."
+
+    - id: CM20
+      name: pathfinding_algorithm
+      ground_truth: "A* with Manhattan distance"
+      generated: "null"
+      score: 0.0
+      note: "누락. 'BFS 또는 A*가 일반적'이라 언급했으나 값 미기재."
+
+    - id: CM21
+      name: storage_count
+      ground_truth: "2 (left & right, capacity 1 each)"
+      generated: "null"
+      score: 0.0
+      note: "누락. 인게임 미진입."
+
+    - id: CM22
+      name: daily_reward_progression
+      ground_truth: "7일 로그인 연속: [50, 75, 100, 150, 200, 300, 500]"
+      generated: "[50, 150, 200]"
+      score: 0.1
+      note: "시스템 혼동. 생성값은 '일일 태스크 완료 보상'(1/5/8 레벨 클리어)이며, 정답은 '7일 로그인 연속 보상' 시스템. 완전히 다른 구조. 첫 값(50)만 우연히 일치."
+
+    - id: CM23
+      name: journey_frequency
+      ground_truth: "5레벨마다 1회 (최대 50회, 레벨 250까지)"
+      generated: "null"
+      score: 0.0
+      note: "누락. Journey 보상 UI 미관찰."
+
+    - id: CM24
+      name: camera_angle
+      ground_truth: "70°"
+      generated: "45°"
+      score: 0.4
+      note: "개념은 맞으나 값 오류. 45° vs 70°, 36% 오차(>20%). 허브 화면 기준 추정으로 인게임 보드 각도와 혼동."
+
+    - id: CM25
+      name: base_height_5x5
+      ground_truth: "12.0"
+      generated: "null"
+      score: 0.0
+      note: "누락. 인게임 미진입."
+
+    - id: CM26
+      name: state_count
+      ground_truth: "5 (Idle, Playing, Paused, Win, Fail)"
+      generated: "6"
+      score: 0.7
+      note: "근접. 5 vs 6, 정확히 20% 오차. 추론 상태 목록이 거의 정확(Loading→Idle, Hub→Idle, Playing, Win, Fail 도출). 1개 과잉 계산."
+
+    - id: CM27
+      name: namespace
+      ground_truth: "CarMatch"
+      generated: "null"
+      score: 0.0
+      note: "누락. 소스코드 접근 불가."
+
+    - id: CM28
+      name: tap_mechanic
+      ground_truth: "tap_to_select (자동차 탭 → 홀더 이동)"
+      generated: "tap_to_select"
+      score: 1.0
+      note: "정확히 일치. 장르 관찰 및 탭 인터랙션 직접 확인으로 핵심 메커니즘 정확히 파악."
+
+    - id: CM29
+      name: fail_condition
+      ground_truth: "Holder full (7) with no possible match"
+      generated: "holder_overflow"
+      score: 0.7
+      note: "근접. 핵심 개념(홀더 가득 참) 정확히 포착. 소스 설명에서 '3매치 완성 불가' 조건도 언급. 다만 value 필드 값이 단순화되어 세부 조건 누락."
+
+    - id: CM30
+      name: win_condition
+      ground_truth: "Board empty AND Holder empty AND no pending cars"
+      generated: "all_cars_cleared"
+      score: 0.7
+      note: "근접. 핵심 개념(모든 자동차 제거) 정확히 포착. 단 홀더 비워야 함 및 대기 차량 없음 조건이 value에 명시되지 않음."
+
+    - id: CM31
+      name: pattern_count
+      ground_truth: "8 (Singleton, ObjectPool, StateMachine, Observer, Factory, Command, Strategy, Component)"
+      generated: "null"
+      score: 0.0
+      note: "누락. 소스코드 접근 불가."
+
+    - id: CM32
+      name: serialization
+      ground_truth: "JSON (JsonUtility) / Config: LevelData.json / Save: PlayerPrefs (CarMatchUserData)"
+      generated: "null"
+      score: 0.0
+      note: "누락. 코인 값 세션 간 일치로 서버 저장 추측만 기재."
+
+  summary:
+    total: 32
+    sum: 7.2
+    average: 0.225
+```
+
+---
+
+**채점 분포**
+
+| 점수 | 파라미터 수 | 해당 ID |
+|------|------------|---------|
+| 1.0 (Exact) | 3 | CM03, CM07, CM28 |
+| 0.7 (Close) | 3 | CM26, CM29, CM30 |
+| 0.4 (Partial) | 5 | CM02, CM09, CM12, CM14, CM24 |
+| 0.1 (Wrong) | 1 | CM22 |
+| 0.0 (Missing) | 20 | 나머지 전체 |
+
+**핵심 진단**: 인게임 보드 미진입이 치명적 제약이었습니다. 장르 표준 추론으로 도출 가능한 파라미터(match_count=3, holder=7, tap_mechanic, fail/win 조건)는 정확했으나, 수치 파라미터(speed, scale, offset, spacing, height 등) 20개가 전량 누락되어 평균 0.225라는 낮은 점수로 이어졌습니다. 특히 CM22는 daily task 보상을 daily login 보상으로 혼동한 시스템 오인이 있었습니다.

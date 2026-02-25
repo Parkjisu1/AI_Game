@@ -1,0 +1,23 @@
+node:
+  name: GameOverDetector
+  layer: Domain
+  genre: Puzzle
+  role: Validator
+  file: GameOverDetector.cs
+  namespace: BlockBlast.Domain
+
+spec:
+  description: "게임오버 조건 판정 - 모든 후보 블록이 배치 불가할 때"
+  provides:
+    - "CheckGameOver"
+  requires:
+    - "GameBoard"
+    - "BlockSpawner"
+
+  methods:
+    - name: CheckGameOver
+      returns: bool
+      logic: |
+        BlockSpawner의 모든 남은 후보에 대해
+        GameBoard.HasValidPlacement 체크
+        모두 배치 불가 → true (게임오버)

@@ -1,0 +1,368 @@
+{
+  "fileName": "DailyRewardWin",
+  "filePath": "E:/AIMED/Luffy/IdleMoney1/Project/Assets\\IdleMoney\\Prefabs\\UI\\Windows\\DailyRewardWin.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 13,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [
+    {
+      "type": "CanvasGroup",
+      "fileID": "2254598912678852197",
+      "m_Alpha": 1,
+      "m_Interactable": 1,
+      "m_BlocksRaycasts": 1,
+      "m_IgnoreParentGroups": 0,
+      "gameObjectName": "DailyRewardWin",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      }
+    }
+  ],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "8229593385248572246",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "OkWithADBtn",
+      "rectSize": {
+        "x": 238.0,
+        "y": 119.0
+      },
+      "anchoredPosition": {
+        "x": -38.9,
+        "y": -205.2
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DailyRewardWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "8359956073187756640",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "OkBtn",
+      "rectSize": {
+        "x": 200.0,
+        "y": 70.0
+      },
+      "anchoredPosition": {
+        "x": -37.6,
+        "y": -301.7
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DailyRewardWin"
+    }
+  ],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "1608325654064084117",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "9b690423b33944a19b77a840363d1af0",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "OkWithADBtn",
+      "rectSize": {
+        "x": 238.0,
+        "y": 119.0
+      },
+      "anchoredPosition": {
+        "x": -38.9,
+        "y": -205.2
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DailyRewardWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "1860064487114608473",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 0.9411765,
+        "b": 0.8039216,
+        "a": 0.8
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "7e4510361cbb64212aa4d75e33ec2e6b",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "FlareEffect",
+      "rectSize": {
+        "x": 335.0,
+        "y": 335.0
+      },
+      "anchoredPosition": {
+        "x": -527.1,
+        "y": 12.299999
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DailyRewardWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "3009587944887722804",
+      "m_Type": 2,
+      "m_Color": {
+        "r": 0.8784314,
+        "g": 0.33333334,
+        "b": 0.43529412,
+        "a": 0.5019608
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "10d716444145246df85846c6cc8aea20",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "PatternImg",
+      "rectSize": {
+        "x": 3000.0,
+        "y": 3000.0
+      },
+      "anchoredPosition": {
+        "x": -3.0,
+        "y": -35.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DailyRewardWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "3009587944996193380",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "ee7821eb1e3cb6944b5487e7f2411236",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "BG",
+      "rectSize": {
+        "x": 2560.0,
+        "y": 1440.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DailyRewardWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "8905711312622967343",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 0.0
+      },
+      "m_Sprite": {
+        "fileID": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "OkBtn",
+      "rectSize": {
+        "x": 200.0,
+        "y": 70.0
+      },
+      "anchoredPosition": {
+        "x": -37.6,
+        "y": -301.7
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DailyRewardWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "9050861314804107005",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "d9898a3315e9c4faebe8d39223cf6b65",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Icon",
+      "rectSize": {
+        "x": 54.0,
+        "y": 40.0
+      },
+      "anchoredPosition": {
+        "x": -77.38989,
+        "y": 4.34
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "DailyRewardWin"
+    }
+  ],
+  "texts": [],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 21
+}

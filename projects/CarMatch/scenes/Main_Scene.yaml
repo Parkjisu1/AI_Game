@@ -1,0 +1,719 @@
+# ============================================================
+# CarMatch - Main Scene YAML 명세서
+# 생성일: 2026-02-11
+# 목적: SceneBuilder가 참조하는 오브젝트 계층/컴포넌트/필드 연결 정의
+# 사용자가 편집 후 SceneBuilder에 반영
+# ============================================================
+
+scene:
+  name: Main
+  path: Assets/0.Scenes/Main.unity
+  resolution: { width: 1080, height: 1920 }
+
+# ============================================================
+# 레이아웃 상수
+# ============================================================
+layout:
+  top_bar_height: 0.065       # 6.5% (125px)
+  bottom_bar_height: 0.08     # 8% (154px)
+  safe_area_top: 0.025        # 2.5%
+  safe_area_bottom: 0.015     # 1.5%
+
+fonts:
+  H1: 56
+  H2: 46
+  H3: 38
+  H4: 32
+  BODY_LARGE: 28
+  BODY: 24
+  BODY_SMALL: 20
+  CAPTION: 18
+
+colors:
+  PRIMARY: "#2952CC"           # 메인 파랑
+  SUCCESS: "#4CAF50"           # 초록 (버튼 등)
+  ACCENT: "#FF9800"            # 주황
+  PANEL_LIGHT: "#FFF8E7"       # 크림
+  SIDEBAR: "#213870"           # 어두운 파랑
+  GOLD: "Gold"
+  BG_PRIMARY: "#33A3F4"        # 하늘색 배경
+
+# ============================================================
+# 카메라
+# ============================================================
+camera:
+  position: [0, 5, -10]
+  background_color: BG_PRIMARY
+  clear_flags: SolidColor
+
+# ============================================================
+# 매니저 (Managers 빈 오브젝트 하위)
+# ============================================================
+managers:
+  parent: Managers
+  children:
+    - name: EventBus
+      component: EventBus
+      fields: {}                # 필드 없음
+
+    - name: ObjectPool
+      component: ObjectPool
+      fields: {}                # 필드 없음
+
+    - name: DataManager
+      component: DataManager
+      fields: {}                # PlayerPrefs로 관리
+
+    - name: SoundManager
+      component: SoundManager
+      fields:
+        bgmSource: AudioSource  # 자동 생성 후 연결
+        sfxSource: AudioSource  # 자동 생성 후 연결
+
+    - name: SceneLoader
+      component: SceneLoader
+      fields:
+        # 주의: loadingPanel, progressBar, progressText는 Main 씬에서 생성 필요
+        loadingPanel: null       # TODO: 로딩 패널 오브젝트
+        progressBar: null        # TODO: 프로그레스바 Image
+        progressText: null       # TODO: 프로그레스 텍스트
+        minLoadingTime: 0.5
+
+    - name: LevelManager
+      component: LevelManager
+      fields:
+        levelDataJson: null      # Resources/LevelData.json TextAsset (없으면 자동 생성)
+
+    - name: TutorialManager
+      component: TutorialManager
+      fields: {}                # 필드 없음
+
+    - name: FirebaseManager
+      component: FirebaseManager
+      fields:
+        enableAnalytics: true
+        enableMessaging: true
+
+    - name: AdMobManager
+      component: AdMobManager
+      fields:
+        testMode: true
+        showBannerOnStart: false
+
+    - name: IAPManager
+      component: IAPManager
+      fields: {}                # 기본값 사용
+
+# ============================================================
+# Canvas 계층 구조
+# ============================================================
+canvas:
+  render_mode: ScreenSpaceOverlay
+  canvas_scaler:
+    ui_scale_mode: ScaleWithScreenSize
+    reference_resolution: [1080, 1920]
+    match_width_or_height: 0.5
+
+  # ========================================
+  # MainPage (Canvas 직접 자식)
+  # ========================================
+  root_component:
+    name: MainPage
+    component: MainPage
+    anchors: stretch             # Canvas 전체
+
+  children:
+
+    # ----------------------------------------
+    # 1. TopBar
+    # ----------------------------------------
+    - name: TopBar
+      anchors: { left: 0, bottom: "1 - TOP_BAR - SAFE_TOP", right: 1, top: "1 - SAFE_TOP" }
+      background: PRIMARY
+      layout:
+        type: HorizontalLayoutGroup
+        padding: [20, 20, 10, 10]
+        spacing: 15
+        child_alignment: MiddleCenter
+        child_force_expand_width: false
+        child_force_expand_height: true
+      children:
+
+        - name: SettingsButton
+          type: icon_button
+          icon: "Assets/Resources/Ref/kenney_game-icons/gear.png"
+          fallback_emoji: "⚙"
+          preferred_width: 70
+          color: [0.2, 0.45, 0.9, 1]
+          connect_to: MainPage.settingsButton  # Button 컴포넌트
+
+        - name: Spacer
+          type: layout_element
+          flexible_width: 1
+
+        - name: StarContainer
+          preferred_width: 100
+          background: PANEL_LIGHT
+          corner_radius: 15
+          layout:
+            type: HorizontalLayoutGroup
+            padding: [8, 8, 5, 5]
+            spacing: 5
+          children:
+            - name: StarIcon
+              type: text
+              text: "★"
+              font_size: BODY_LARGE
+              color: GOLD
+              preferred_width: 30
+            - name: StarText
+              type: text
+              text: "87"
+              font_size: BODY
+              color: black
+              alignment: Left
+              flexible_width: 1
+              connect_to: MainPage.starText
+
+        - name: CoinContainer
+          preferred_width: 140
+          background: PANEL_LIGHT
+          corner_radius: 15
+          add_component: Button      # 클릭 → ShopPopup
+          layout:
+            type: HorizontalLayoutGroup
+            padding: [8, 8, 5, 5]
+            spacing: 5
+          connect_to: MainPage.coinButton  # Button 컴포넌트
+          children:
+            - name: CoinIcon
+              type: image
+              color: GOLD
+              preferred_width: 35
+            - name: CoinText
+              type: text
+              text: "160"
+              font_size: BODY
+              color: black
+              alignment: Left
+              flexible_width: 1
+              connect_to: MainPage.coinText
+            - name: CoinPlus
+              type: text
+              text: "+"
+              font_size: BODY
+              color: SUCCESS
+              preferred_width: 25
+
+    # ----------------------------------------
+    # 2. ContentArea (TopBar ~ BottomBar 사이)
+    # ----------------------------------------
+    - name: ContentArea
+      anchors:
+        left: 0
+        bottom: "BOTTOM_BAR + SAFE_BOTTOM"
+        right: 1
+        top: "1 - TOP_BAR - SAFE_TOP"
+      children:
+
+        - name: CharacterArea
+          description: "3D 캐릭터/차량 표시 영역 (미구현, 플레이스홀더)"
+          anchors: { left: 0.1, bottom: 0.45, right: 0.9, top: 0.95 }
+
+        - name: LevelButton
+          type: button
+          anchors: { left: 0.25, bottom: 0.35, right: 0.75, top: 0.43 }
+          text: "Level 31"
+          background: SUCCESS
+          font_size: H3
+          font_style: Bold
+          connect_to:
+            - MainPage.levelButton       # Button 컴포넌트
+            - MainPage.levelButtonText   # 내부 TextMeshProUGUI
+
+        - name: LevelScroll
+          description: "레벨 카드 가로 스크롤"
+          anchors: { left: 0.02, bottom: 0.02, right: 0.98, top: 0.32 }
+          component: ScrollRect
+          scroll_direction: horizontal
+          movement_type: Elastic
+          children:
+            - name: Viewport
+              anchors: stretch
+              mask: true
+              children:
+                - name: Content
+                  layout:
+                    type: HorizontalLayoutGroup
+                    padding: [20, 20, 20, 20]
+                    spacing: 30
+                  content_size_fitter: { horizontal: PreferredSize }
+                  children:
+                    # 동적 생성: LevelCard_N (샘플 8개)
+                    - name: "LevelCard_{N}"
+                      preferred_width: 100
+                      background: PANEL_LIGHT    # 현재 레벨은 SUCCESS
+                      children:
+                        - name: Label
+                          text: "Level"
+                        - name: Number
+                          text: "{N}"
+
+    # ----------------------------------------
+    # 3. BottomBar
+    # ----------------------------------------
+    - name: BottomBar
+      anchors: { left: 0, bottom: SAFE_BOTTOM, right: 1, top: "BOTTOM_BAR + SAFE_BOTTOM" }
+      background: SIDEBAR
+      component: BottomBarController
+      layout:
+        type: HorizontalLayoutGroup
+        padding: [30, 30, 10, 10]
+        spacing: 20
+        child_alignment: MiddleCenter
+      children:
+
+        - name: HomeButton
+          type: bottom_nav_button
+          icon: "home.png"
+          fallback_emoji: "🏠"
+          label: "Home"
+          is_selected: true
+          connect_to: BottomBarController.homeButton
+
+        - name: ShopButton
+          type: bottom_nav_button
+          icon: "shoppingCart.png"
+          fallback_emoji: "🛒"
+          label: "Shop"
+          is_selected: false
+          connect_to: BottomBarController.shopButton
+
+        - name: DailyButton
+          type: bottom_nav_button
+          icon: "present.png"
+          fallback_emoji: "🎁"
+          label: "Daily"
+          is_selected: false
+          connect_to: BottomBarController.dailyButton
+
+        - name: LeaderboardButton
+          type: bottom_nav_button
+          icon: "trophy.png"
+          fallback_emoji: "🏆"
+          label: "Rank"
+          is_selected: false
+          connect_to: BottomBarController.leaderboardButton
+
+        - name: ProfileButton
+          type: bottom_nav_button
+          icon: "player.png"
+          fallback_emoji: "👤"
+          label: "Profile"
+          is_selected: false
+          connect_to: BottomBarController.profileButton
+
+    # ----------------------------------------
+    # 4. Popups (Canvas 자식, 초기 비활성)
+    # ----------------------------------------
+
+    # ---- Settings Popup ----
+    - name: SettingsPopup
+      active: false
+      component: SettingsPopup
+      add_component: CanvasGroup
+      anchors: { left: 0, bottom: "BOTTOM_BAR + SAFE_BOTTOM", right: 1, top: 1 }
+      background: PANEL_LIGHT
+      connect_to:
+        - MainPage.settingsPopup
+        - BottomBarController.settingsPopup
+      children:
+        - name: Title
+          type: text
+          text: "Settings"
+          anchors: { left: 0, bottom: 0.85, right: 1, top: 0.98 }
+          font_size: H2
+          font_style: Bold
+          color: PRIMARY
+          connect_to: SettingsPopup.titleText
+
+        - name: Container
+          anchors: { left: 0.1, bottom: 0.2, right: 0.9, top: 0.82 }
+          layout:
+            type: VerticalLayoutGroup
+            spacing: 25
+          children:
+
+            - name: SoundToggle
+              type: settings_toggle_row
+              label: "Sound"
+              default_on: true
+              connect_to:
+                button: SettingsPopup.sfxButton
+                icon: SettingsPopup.sfxIcon
+
+            - name: MusicToggle
+              type: settings_toggle_row
+              label: "Music"
+              default_on: true
+              connect_to:
+                button: SettingsPopup.bgmButton
+                icon: SettingsPopup.bgmIcon
+
+            - name: NotificationToggle
+              type: settings_toggle_row
+              label: "Notifications"
+              default_on: false
+              connect_to:
+                button: SettingsPopup.notificationButton
+                icon: SettingsPopup.notificationIcon
+
+            - name: VibrationToggle
+              type: settings_toggle_row
+              label: "Vibration"
+              default_on: true
+              connect_to:
+                button: SettingsPopup.vibrationButton
+                icon: SettingsPopup.vibrationIcon
+
+            - name: LinkContainer
+              layout:
+                type: HorizontalLayoutGroup
+                spacing: 15
+              children:
+                - name: SupportButton
+                  type: button
+                  text: "Support"
+                  color: gray
+                  connect_to: SettingsPopup.supportButton
+                - name: TermsButton
+                  type: button
+                  text: "Terms"
+                  color: gray
+                  connect_to: SettingsPopup.termsButton
+                - name: PrivacyButton
+                  type: button
+                  text: "Privacy"
+                  color: gray
+                  connect_to: SettingsPopup.privacyButton
+
+    # ---- Shop Popup ----
+    - name: ShopPopup
+      active: false
+      component: ShopPopup
+      add_component: CanvasGroup
+      anchors: { left: 0, bottom: "BOTTOM_BAR + SAFE_BOTTOM", right: 1, top: 1 }
+      background: PANEL_LIGHT
+      connect_to:
+        - MainPage.shopPopup
+        - BottomBarController.shopPopup
+      children:
+        - name: Title
+          type: text
+          text: "Shop"
+          anchors: { left: 0, bottom: 0.92, right: 1, top: 0.99 }
+          font_size: H2
+          font_style: Bold
+          color: PRIMARY
+
+        - name: TabContainer
+          anchors: { left: 0.05, bottom: 0.83, right: 0.95, top: 0.91 }
+          layout:
+            type: HorizontalLayoutGroup
+            spacing: 15
+          children:
+            - { name: CoinsTab, type: tab_button, text: "Coins", selected: true }
+            - { name: BoostersTab, type: tab_button, text: "Boosters", selected: false }
+            - { name: BundlesTab, type: tab_button, text: "Bundles", selected: false }
+
+        - name: ContentScroll
+          anchors: { left: 0.05, bottom: 0.08, right: 0.95, top: 0.81 }
+          component: ScrollRect
+          scroll_direction: vertical
+          connect_to: ShopPopup.scrollRect
+          children:
+            - name: Content
+              layout:
+                type: VerticalLayoutGroup
+                spacing: 15
+                padding: [15, 15, 15, 15]
+              connect_to: ShopPopup.contentContainer
+              children:
+                - name: CoinPack1
+                  type: shop_item
+                  icon_color: GOLD
+                  label: "100 Coins"
+                  price: "$0.99"
+                - name: CoinPack2
+                  type: shop_item
+                  label: "500 Coins"
+                  price: "$3.99"
+                - name: CoinPack3
+                  type: shop_item
+                  label: "1000 Coins"
+                  price: "$6.99"
+
+    # ---- Daily Popup ----
+    - name: DailyPopup
+      active: false
+      component: DailyPopup
+      add_component: CanvasGroup
+      anchors: { left: 0, bottom: "BOTTOM_BAR + SAFE_BOTTOM", right: 1, top: 1 }
+      background: PANEL_LIGHT
+      connect_to:
+        - MainPage.dailyPopup
+        - BottomBarController.dailyPopup
+      children:
+        - name: Title
+          type: text
+          text: "Daily Reward"
+          anchors: { left: 0, bottom: 0.92, right: 1, top: 0.99 }
+          font_size: H2
+          font_style: Bold
+          color: PRIMARY
+          connect_to: DailyPopup.titleText
+
+        - name: RewardContainer
+          anchors: { left: 0.2, bottom: 0.4, right: 0.8, top: 0.75 }
+          background: "#F5E6D0"
+          children:
+            - name: RewardIcon
+              anchors: { left: 0.35, bottom: 0.4, right: 0.65, top: 0.9 }
+              type: image
+              color: GOLD
+            - name: RewardText
+              type: text
+              text: "+100"
+              anchors: { left: 0, bottom: 0.05, right: 1, top: 0.35 }
+              font_size: H3
+              font_style: Bold
+              color: GOLD
+              connect_to: DailyPopup.rewardText
+
+        - name: ClaimButton
+          type: button
+          text: "CLAIM"
+          anchors: { left: 0.25, bottom: 0.1, right: 0.75, top: 0.3 }
+          background: SUCCESS
+          font_size: H4
+          font_style: Bold
+          connect_to:
+            button: DailyPopup.claimButton
+            text: DailyPopup.claimButtonText
+
+    # ---- Leaderboard Popup ----
+    - name: LeaderboardPopup
+      active: false
+      component: LeaderboardPopup
+      add_component: CanvasGroup
+      anchors: { left: 0, bottom: "BOTTOM_BAR + SAFE_BOTTOM", right: 1, top: 1 }
+      background: PANEL_LIGHT
+      connect_to:
+        - BottomBarController.leaderboardPopup
+      children:
+        - name: Title
+          type: text
+          text: "Leaderboard"
+          anchors: { left: 0, bottom: 0.92, right: 1, top: 0.99 }
+          font_size: H2
+          font_style: Bold
+          color: PRIMARY
+          connect_to: LeaderboardPopup.titleText
+
+        - name: LockContainer
+          description: "레벨 40 미만이면 잠금 표시"
+          anchors: { left: 0.1, bottom: 0.3, right: 0.9, top: 0.85 }
+          children:
+            - name: LockIcon
+              type: text
+              text: "🔒"
+              font_size: 112
+            - name: LockText
+              type: text
+              text: "Reach Level 40\nto unlock Leaderboard!"
+              font_size: H4
+              color: gray
+
+    # ---- Profile Popup ----
+    - name: ProfilePopup
+      active: false
+      component: ProfilePopup
+      add_component: CanvasGroup
+      anchors: { left: 0, bottom: "BOTTOM_BAR + SAFE_BOTTOM", right: 1, top: 1 }
+      background: PANEL_LIGHT
+      connect_to:
+        - BottomBarController.profilePopup
+      children:
+        - name: Title
+          type: text
+          text: "Profile"
+          anchors: { left: 0, bottom: 0.92, right: 1, top: 0.99 }
+          font_size: H2
+          font_style: Bold
+
+        - name: AvatarArea
+          anchors: { left: 0.3, bottom: 0.65, right: 0.7, top: 0.88 }
+          background: PRIMARY
+          children:
+            - name: AvatarText
+              type: text
+              text: "👤"
+              font_size: 112
+
+        - name: Username
+          type: text
+          text: "Player123"
+          anchors: { left: 0.1, bottom: 0.55, right: 0.9, top: 0.63 }
+          font_size: H3
+          font_style: Bold
+          color: black
+          connect_to: ProfilePopup.playerNameText
+
+        - name: StatsGrid
+          anchors: { left: 0.1, bottom: 0.2, right: 0.9, top: 0.52 }
+          layout:
+            type: GridLayoutGroup
+            cell_size: [380, 140]
+            spacing: [20, 20]
+            constraint: FixedColumnCount
+            constraint_count: 2
+          children:
+            - { name: LevelStat, type: stat_item, value: "31", label: "Level" }
+            - { name: StarsStat, type: stat_item, value: "87", label: "Stars" }
+            - { name: CoinsStat, type: stat_item, value: "160", label: "Coins" }
+            - { name: PlayedStat, type: stat_item, value: "156", label: "Played" }
+
+    # ---- Tutorial Popup ----
+    - name: TutorialPopup
+      active: false
+      component: TutorialPopup
+      add_component: CanvasGroup
+      anchors: stretch
+      connect_to:
+        - MainPage.tutorialPopup
+      description: >
+        풀스크린 오버레이. dimBackground + highlightMask + 텍스트 패널.
+        현재 SceneBuilder에서 상세 구조 미구현 (TODO).
+      fields_needed:
+        - panel: GameObject
+        - titleText: TextMeshProUGUI
+        - messageText: TextMeshProUGUI
+        - continueButton: Button
+        - continueButtonText: TextMeshProUGUI
+        - skipButton: Button
+        - highlightMask: RectTransform
+        - dimBackground: Image
+
+    # ---- SDK Test Panel ----
+    - name: SDKTestPanel
+      active: false
+      component: SDKTestPanel
+      connect_to:
+        - MainPage.sdkTestPanel
+      description: "디버그 전용. UNITY_EDITOR || DEVELOPMENT_BUILD에서만 활성"
+      fields_needed:
+        - panelRoot: GameObject
+        - closeButton: Button
+        - statusText: TextMeshProUGUI
+        - logText: TextMeshProUGUI
+        # 나머지 버튼들은 SDKTestPanel 내부에서 자체 생성
+
+    # ---- SDK Test Button (TopBar 옆) ----
+    - name: SDKTestButton
+      active: false
+      description: "UNITY_EDITOR에서만 보이는 디버그 버튼"
+      connect_to: MainPage.sdkTestButton
+
+# ============================================================
+# 필드 연결 종합 (connect_to 요약)
+# ============================================================
+field_connections:
+
+  MainPage:
+    coinButton: "CoinContainer (Button)"
+    coinText: "CoinContainer > CoinText (TextMeshProUGUI)"
+    starText: "StarContainer > StarText (TextMeshProUGUI)"
+    settingsButton: "TopBar > SettingsButton (Button)"
+    levelButton: "ContentArea > LevelButton (Button)"
+    levelButtonText: "ContentArea > LevelButton > Text (TextMeshProUGUI)"
+    settingsPopup: "SettingsPopup (SettingsPopup)"
+    shopPopup: "ShopPopup (ShopPopup)"
+    dailyPopup: "DailyPopup (DailyPopup)"
+    tutorialPopup: "TutorialPopup (TutorialPopup)"
+    sdkTestButton: "SDKTestButton (Button)"
+    sdkTestPanel: "SDKTestPanel (SDKTestPanel)"
+    bottomBarController: "BottomBar (BottomBarController)"
+
+  BottomBarController:
+    homeButton: "BottomBar > HomeButton (Button)"
+    shopButton: "BottomBar > ShopButton (Button)"
+    dailyButton: "BottomBar > DailyButton (Button)"
+    leaderboardButton: "BottomBar > LeaderboardButton (Button)"
+    profileButton: "BottomBar > ProfileButton (Button)"
+    settingsPopup: "SettingsPopup (SettingsPopup)"
+    shopPopup: "ShopPopup (ShopPopup)"
+    dailyPopup: "DailyPopup (DailyPopup)"
+    leaderboardPopup: "LeaderboardPopup (LeaderboardPopup)"
+    profilePopup: "ProfilePopup (ProfilePopup)"
+
+  SettingsPopup:
+    # UIBase 상속
+    canvasGroup: "self (CanvasGroup)"
+    # 자체 필드
+    titleText: "Title (TextMeshProUGUI)"
+    bgmButton: "MusicToggle > Toggle (Button)"
+    bgmIcon: "MusicToggle > Toggle (Image)"
+    sfxButton: "SoundToggle > Toggle (Button)"
+    sfxIcon: "SoundToggle > Toggle (Image)"
+    vibrationButton: "VibrationToggle > Toggle (Button)"
+    vibrationIcon: "VibrationToggle > Toggle (Image)"
+    notificationButton: "NotificationToggle > Toggle (Button)"
+    notificationIcon: "NotificationToggle > Toggle (Image)"
+    supportButton: "LinkContainer > SupportButton (Button)"
+    termsButton: "LinkContainer > TermsButton (Button)"
+    privacyButton: "LinkContainer > PrivacyButton (Button)"
+
+  ShopPopup:
+    canvasGroup: "self (CanvasGroup)"
+    scrollRect: "ContentScroll (ScrollRect)"
+    contentContainer: "ContentScroll > Content (Transform)"
+
+  DailyPopup:
+    canvasGroup: "self (CanvasGroup)"
+    titleText: "Title (TextMeshProUGUI)"
+    rewardText: "RewardContainer > RewardText (TextMeshProUGUI)"
+    claimButton: "ClaimButton (Button)"
+    claimButtonText: "ClaimButton > Text (TextMeshProUGUI)"
+
+  LeaderboardPopup:
+    canvasGroup: "self (CanvasGroup)"
+    titleText: "Title (TextMeshProUGUI)"
+
+  SoundManager:
+    bgmSource: "자동 생성 AudioSource (BGM용)"
+    sfxSource: "자동 생성 AudioSource (SFX용)"
+
+# ============================================================
+# 알려진 이슈 / TODO
+# ============================================================
+known_issues:
+  - id: 1
+    description: "TutorialPopup 내부 구조가 SceneBuilder에서 미구현"
+    severity: medium
+
+  - id: 2
+    description: "SDKTestPanel 내부 버튼 16개 SceneBuilder 연결 미구현"
+    severity: low
+    note: "디버그 전용이라 우선순위 낮음"
+
+  - id: 3
+    description: "SceneLoader의 loadingPanel/progressBar 오브젝트 미생성"
+    severity: medium
+
+  - id: 4
+    description: "ShopPopup.shopItemPrefab, sectionHeaderPrefab 미연결"
+    severity: medium
+
+  - id: 5
+    description: "ProfilePopup 필드 연결 불완전 (titleText만 연결됨)"
+    severity: low

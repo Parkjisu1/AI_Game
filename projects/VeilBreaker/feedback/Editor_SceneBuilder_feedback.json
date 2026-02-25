@@ -1,0 +1,18 @@
+{
+  "nodeId": "SceneBuilder",
+  "genre": "Idle",
+  "role": "Builder",
+  "validationResult": "pass",
+  "score": 0.6,
+  "feedbacks": [
+    {
+      "category": "PATTERN.STRUCTURE",
+      "line": 1,
+      "severity": "fixed",
+      "description": "[FIXED] 파일 전체를 #if UNITY_EDITOR ... #endif로 감쌈. using UnityEditor가 이제 조건부 컴파일 블록 안에 포함됨.",
+      "suggestion": null
+    }
+  ],
+  "contractChanged": false,
+  "timestamp": "2026-02-24T00:00:00Z"
+}

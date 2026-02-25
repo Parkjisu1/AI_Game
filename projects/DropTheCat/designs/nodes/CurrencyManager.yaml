@@ -1,0 +1,71 @@
+# CurrencyManager - Domain Currency System
+metadata:
+  nodeId: "CurrencyManager"
+  version: "1.0.0"
+  phase: 1
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "SaveManager"
+    - "EventManager"
+  external:
+    - "UnityEngine"
+
+contract:
+  provides:
+    - "void AddCoins(int amount)"
+    - "bool SpendCoins(int amount)"
+    - "int GetBalance()"
+    - "bool CanAfford(int amount)"
+  requires:
+    - "Singleton<CurrencyManager>"
+    - "SaveManager.Save/Load"
+    - "EventManager.Publish"
+
+tags:
+  layer: "Domain"
+  genre: "Generic"
+  role: "Manager"
+  system: "Economy"
+  majorFunctions:
+    - "ValueModification"
+    - "ResourceTransfer"
+  minorFunctions:
+    - "Calculate"
+    - "Validate"
+    - "Assign"
+    - "Notify"
+
+logicFlow:
+  - step: 1
+    tag: "DataSync"
+    action: "초기화 시 SaveManager에서 코인 잔액 로드"
+    next: 2
+  - step: 2
+    tag: "ValueModification"
+    action: "AddCoins - 잔액 증가 → 저장 → OnCoinChanged 이벤트 발행"
+    next: 3
+  - step: 3
+    tag: "ConditionCheck"
+    action: "SpendCoins - 잔액 >= amount 확인"
+    next: 4
+  - step: 4
+    tag: "ValueModification"
+    action: "조건 충족 시 잔액 차감 → 저장 → OnCoinChanged 이벤트 발행"
+    next: null
+
+referencePatterns:
+  - source: "Generic Core"
+    pattern: "단일 재화 관리, Save/Load 연동"
+
+codeHints:
+  patterns:
+    - "public class CurrencyManager : Singleton<CurrencyManager>"
+    - "private int _coins"
+    - "const string SAVE_KEY = \"player_coins\""
+    - "SpendCoins는 bool 반환 (잔액 부족 시 false)"
+  avoidPatterns:
+    - "음수 잔액 허용 금지"
+    - "저장 없이 값만 변경 금지"

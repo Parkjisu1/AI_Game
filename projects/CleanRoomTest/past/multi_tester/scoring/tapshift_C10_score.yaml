@@ -1,0 +1,253 @@
+```yaml
+scoring:
+  game: "Tap Shift"
+  condition: "C10"
+  results:
+    - id: TS01
+      name: total_levels
+      ground_truth: "100"
+      generated: "null"
+      score: 0.0
+      note: "미확인으로 null 처리. Ground Truth는 명확히 100."
+
+    - id: TS02
+      name: max_lives
+      ground_truth: "3"
+      generated: "5"
+      score: 0.1
+      note: "값 존재하나 완전히 다름. 3 vs 5. 업계 평균 추측이 빗나감."
+
+    - id: TS03
+      name: max_undo_count
+      ground_truth: "10"
+      generated: "null"
+      score: 0.0
+      note: "인게임 미포착으로 null. Ground Truth는 10."
+
+    - id: TS04
+      name: max_hint_count
+      ground_truth: "3"
+      generated: "null"
+      score: 0.0
+      note: "인게임 미포착으로 null. Ground Truth는 3."
+
+    - id: TS05
+      name: interstitial_frequency
+      ground_truth: "3 (every 3 levels)"
+      generated: "null"
+      score: 0.0
+      note: "광고 시스템 존재만 확인, 빈도 null 처리."
+
+    - id: TS06
+      name: arrow_move_speed
+      ground_truth: "15.0"
+      generated: "null"
+      score: 0.0
+      note: "인게임 미포착. Ground Truth는 15.0."
+
+    - id: TS07
+      name: max_arrow_clamp
+      ground_truth: "20"
+      generated: "null"
+      score: 0.0
+      note: "구현 상수. 인게임 미포착으로 null."
+
+    - id: TS08
+      name: star_rating_system
+      ground_truth: "0 wrong=3stars / 1-2 wrong=2stars / 3-5 wrong=1star / 6+=0stars"
+      generated: "null"
+      score: 0.0
+      note: "레벨 클리어 화면 미포착. 별점 시스템 전체 null."
+
+    - id: TS09
+      name: base_unit
+      ground_truth: "60.0"
+      generated: "null"
+      score: 0.0
+      note: "엔진 내부 단위 상수. 화면 관찰 불가."
+
+    - id: TS10
+      name: position_snap
+      ground_truth: "30.0"
+      generated: "null"
+      score: 0.0
+      note: "격자 스냅 상수. 인게임 미포착."
+
+    - id: TS11
+      name: duration_clamp
+      ground_truth: "[0.25, 0.7] seconds"
+      generated: "null"
+      score: 0.0
+      note: "애니메이션 지속시간 범위. 인게임 미관찰."
+
+    - id: TS12
+      name: stretch_phase
+      ground_truth: "first 40%"
+      generated: "null"
+      score: 0.0
+      note: "스트레칭 단계 비율. 인게임 미관찰."
+
+    - id: TS13
+      name: stretch_max
+      ground_truth: "1.6"
+      generated: "null"
+      score: 0.0
+      note: "최대 스트레칭 배율. 인게임 미관찰."
+
+    - id: TS14
+      name: snap_phase
+      ground_truth: "last 60%"
+      generated: "null"
+      score: 0.0
+      note: "스냅 단계 비율. 인게임 미관찰."
+
+    - id: TS15
+      name: arrow_colors
+      ground_truth: "up=#4CAF50(Green) / down=#F44336(Red) / left=#2196F3(Blue) / right=#FF9800(Orange)"
+      generated: "null"
+      score: 0.0
+      note: "인게임 보드 미포착. 방향별 색상 전혀 확인 불가."
+
+    - id: TS16
+      name: head_ratio
+      ground_truth: "0.35 (35%)"
+      generated: "null"
+      score: 0.0
+      note: "화살표 렌더링 상수. 인게임 미포착."
+
+    - id: TS17
+      name: shaft_height_ratio
+      ground_truth: "0.55 (55%)"
+      generated: "null"
+      score: 0.0
+      note: "화살표 축 비율 상수. 인게임 미포착."
+
+    - id: TS18
+      name: collision_system
+      ground_truth: "AABB sweep-to-boundary"
+      generated: "null"
+      score: 0.0
+      note: "충돌 알고리즘 미확인. Ground Truth는 AABB 스윕 방식."
+
+    - id: TS19
+      name: performance_complexity
+      ground_truth: "O(n) per tap, n <= 20"
+      generated: "O(n²) 이하 (추정)"
+      score: 0.4
+      note: "성능 복잡도라는 개념 자체는 올바르게 접근. 그러나 O(n²)는 실제 O(n)보다 과대 추정. 'O(n²) 이하'는 기술적으로 틀리지 않으나 정확한 값과 다름 → Partial."
+
+    - id: TS20
+      name: solver_algorithm
+      ground_truth: "DFS with backtracking"
+      generated: "null"
+      score: 0.0
+      note: "힌트/솔버 기능 미확인. Ground Truth는 DFS+백트래킹."
+
+    - id: TS21
+      name: ui_reference_resolution
+      ground_truth: "720x1280"
+      generated: "1080x1920"
+      score: 0.4
+      note: "세로형 Portrait 9:16 비율은 맞지만 실제 해상도가 다름(720x1280 vs 1080x1920). 개념(기준 해상도 유형)은 맞으나 구체적 수치가 틀림 → Partial. 유일하게 high confidence였으나 오답."
+
+    - id: TS22
+      name: total_files
+      ground_truth: "50"
+      generated: "null"
+      score: 0.0
+      note: "소스코드 접근 불가. Ground Truth는 50개."
+
+    - id: TS23
+      name: pattern_count
+      ground_truth: "9 (Singleton, Pool, Command, Observer, Factory, State, Template, Adapter, Strategy)"
+      generated: "null"
+      score: 0.0
+      note: "아키텍처 구조 미확인."
+
+    - id: TS24
+      name: state_count
+      ground_truth: "9 (None, Loading, MainMenu, LevelSelect, Playing, Paused, LevelComplete, LevelFail, Tutorial)"
+      generated: "7 이상"
+      score: 0.4
+      note: "하한 7 추정으로 실제값 9를 포함하는 범위. 개념(복수 게임 상태 존재)은 올바르나 정확한 수(9) 미특정 → Partial."
+
+    - id: TS25
+      name: serialization_format
+      ground_truth: "JSON (JsonUtility), Resources/Levels/level_NNN.json"
+      generated: "null"
+      score: 0.0
+      note: "저장 형식 null 처리. 소스 텍스트에서 JSON 가능성 언급했으나 값으로 커밋 안 함."
+
+    - id: TS26
+      name: arrow_directions
+      ground_truth: "4방향 (up/down/left/right)"
+      generated: "4방향 (상/하/좌/우) 추정"
+      score: 1.0
+      note: "수와 방향 모두 정확히 일치. 게임 이름 의미론적 추론이 우연히 맞은 케이스."
+
+    - id: TS27
+      name: arrow_count_progression
+      ground_truth: "6구간 공식 (lvl 1-5: 1~5개, 6-15: 3+(lvl-5)/2, 16-30: 5+(lvl-15)/3, 31-50: 7+(lvl-30)/4, 51-75: 10+(lvl-50)/5, 76-100: 13+(lvl-75)/5)"
+      generated: "null"
+      score: 0.0
+      note: "인게임 미포착. 난이도 공식 전체 null."
+
+    - id: TS28
+      name: grid_size_range
+      ground_truth: "200x200 ~ 450x450 (5단계: 200/280/340/380/420/450)"
+      generated: "null"
+      score: 0.0
+      note: "인게임 보드 단 한 장도 미포착. 격자 크기 null."
+
+    - id: TS29
+      name: tap_mechanic
+      ground_truth: "탭 → 화살표 이동 (AABB 스윕으로 충돌 전까지 이동 후 정지)"
+      generated: "탭으로 화살표/타일 상호작용 (구체적 동작 미확인)"
+      score: 0.4
+      note: "탭이 화살표와 상호작용한다는 핵심 개념은 맞음. 이동+충돌정지라는 구체 동작은 미확인. → Partial."
+
+    - id: TS30
+      name: goal_condition
+      ground_truth: "IsSolvable() 통과 조건 — 모든 화살표를 이동시켜 퍼즐 해결 (wrong tap 최소화)"
+      generated: "null"
+      score: 0.0
+      note: "클리어 조건 전혀 관찰 불가. null."
+
+    - id: TS31
+      name: level_generation
+      ground_truth: "알고리즘 생성 (LevelGenerator.cs: 배치 알고리즘, 최대 시도 100회, 재시도 20회, 폴백, 솔버 검증 후 JSON 직렬화)"
+      generated: "수동 설계 (hand-crafted)"
+      score: 0.1
+      note: "LevelGenerator.cs가 명시하는 절차적 생성을 수동 설계로 오판. 레벨 15 보스 마커를 hand-crafted 근거로 삼은 추론 오류. 개념 자체가 반대 방향."
+
+    - id: TS32
+      name: save_system
+      ground_truth: "PlayerPrefs (key-value: LevelStar_{id}, LevelUnlock_{id}, SoundEnabled 등)"
+      generated: "로컬 저장 (형식 미확인)"
+      score: 0.4
+      note: "로컬 저장이라는 상위 개념은 정확. 구체적 구현(PlayerPrefs)은 미특정. → Partial."
+
+  summary:
+    total: 32
+    sum: 3.2
+    average: 0.10
+```
+
+---
+
+### 채점 분포 요약
+
+| 점수 | 파라미터 수 | 해당 ID |
+|------|------------|---------|
+| **1.0** (Exact) | 1 | TS26 |
+| **0.7** (Close) | 0 | — |
+| **0.4** (Partial) | 6 | TS19, TS21, TS24, TS29, TS32, (TS24) |
+| **0.1** (Wrong) | 2 | TS02, TS31 |
+| **0.0** (Missing) | 23 | 나머지 전부 |
+
+### 주요 관찰
+
+1. **유일한 만점(TS26)**: 화살표 방향 4개 — 게임명 의미론 추론이 우연히 적중.
+2. **고신뢰 오답(TS21)**: `ui_reference_resolution`을 `high confidence`로 1080×1920이라 단정했으나 실제는 720×1280. 과잉 확신이 오히려 감점.
+3. **방향 역전 오답(TS31)**: `level_generation`을 hand-crafted로 판정했으나 실제는 LevelGenerator.cs의 절차적 생성. 레벨 맵 UI만 보고 생성 로직을 오판.
+4. **구조적 한계**: CONTINUE 버튼 무반응으로 인게임 진입 0회 → 핵심 파라미터(속도, 색상, 애니메이션, 그리드, 솔버 등) 23개 전부 null.

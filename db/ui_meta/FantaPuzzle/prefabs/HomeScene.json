@@ -1,0 +1,902 @@
+{
+  "fileName": "HomeScene",
+  "filePath": "E:/AIMED/FantaPuzzle/PuzzleAutomation2/Assets\\1.Scenes\\HomeScene.unity",
+  "fileType": "scene",
+  "gameObjectCount": 31,
+  "canvases": [
+    {
+      "type": "Canvas",
+      "fileID": "40315594",
+      "m_RenderMode": 1,
+      "m_SortingOrder": 0,
+      "gameObjectName": "UI_Background",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    {
+      "type": "Canvas",
+      "fileID": "1339729686",
+      "m_RenderMode": 1,
+      "m_SortingOrder": 10,
+      "gameObjectName": "UI_ClickEffect",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    {
+      "type": "Canvas",
+      "fileID": "1808115471",
+      "m_RenderMode": 1,
+      "m_SortingOrder": 10,
+      "gameObjectName": "UI_Popup",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    }
+  ],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "1651176817",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "TitleBackground",
+      "rectSize": {
+        "x": 2261.9,
+        "y": 2419.6
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HomeScene"
+    },
+    {
+      "type": "Button",
+      "fileID": "1827055696",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "KR",
+      "rectSize": {
+        "x": 386.7,
+        "y": 232.6
+      },
+      "anchoredPosition": {
+        "x": 321.0,
+        "y": -78.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HomeScene"
+    },
+    {
+      "type": "Button",
+      "fileID": "1831918077",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "En",
+      "rectSize": {
+        "x": 386.7,
+        "y": 232.6
+      },
+      "anchoredPosition": {
+        "x": 321.0,
+        "y": 178.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HomeScene"
+    },
+    {
+      "type": "Button",
+      "fileID": "1876001431",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "C",
+      "rectSize": {
+        "x": 400.0,
+        "y": 150.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -495.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HomeScene"
+    },
+    {
+      "type": "Button",
+      "fileID": "1993923349",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "B",
+      "rectSize": {
+        "x": 400.0,
+        "y": 150.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -306.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HomeScene"
+    },
+    {
+      "type": "Button",
+      "fileID": "2147064874",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "A",
+      "rectSize": {
+        "x": 400.0,
+        "y": 150.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -115.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HomeScene"
+    }
+  ],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "368321865",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 3254187900836308370,
+        "guid": "c973786ba1f0a4626bb687c06624f3c0"
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "TextBg",
+      "rectSize": {
+        "x": 593.0,
+        "y": 131.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -363.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HomeScene"
+    },
+    {
+      "type": "Image",
+      "fileID": "796397089",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8d9864cfa9af84b258f014249b347b83",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Logo",
+      "rectSize": {
+        "x": 1024.0,
+        "y": 1024.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 618.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HomeScene"
+    },
+    {
+      "type": "Image",
+      "fileID": "1651176818",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "09b1582f324cb47758319497e01e9cfa",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "TitleBackground",
+      "rectSize": {
+        "x": 2261.9,
+        "y": 2419.6
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HomeScene"
+    },
+    {
+      "type": "Image",
+      "fileID": "1827055697",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "KR",
+      "rectSize": {
+        "x": 386.7,
+        "y": 232.6
+      },
+      "anchoredPosition": {
+        "x": 321.0,
+        "y": -78.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HomeScene"
+    },
+    {
+      "type": "Image",
+      "fileID": "1831918078",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "En",
+      "rectSize": {
+        "x": 386.7,
+        "y": 232.6
+      },
+      "anchoredPosition": {
+        "x": 321.0,
+        "y": 178.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HomeScene"
+    },
+    {
+      "type": "Image",
+      "fileID": "1876001432",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "C",
+      "rectSize": {
+        "x": 400.0,
+        "y": 150.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -495.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HomeScene"
+    },
+    {
+      "type": "Image",
+      "fileID": "1993923350",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "B",
+      "rectSize": {
+        "x": 400.0,
+        "y": 150.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -306.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HomeScene"
+    },
+    {
+      "type": "Image",
+      "fileID": "2147064875",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "A",
+      "rectSize": {
+        "x": 400.0,
+        "y": 150.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -115.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HomeScene"
+    }
+  ],
+  "texts": [
+    {
+      "type": "Text",
+      "fileID": "334571631",
+      "m_FontSize": 100.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.19607843,
+        "g": 0.19607843,
+        "b": 0.19607843,
+        "a": 1.0
+      },
+      "m_Text": "C",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "HomeScene"
+    },
+    {
+      "type": "Text",
+      "fileID": "501187256",
+      "m_FontSize": 100.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.19607843,
+        "g": 0.19607843,
+        "b": 0.19607843,
+        "a": 1.0
+      },
+      "m_Text": "KR",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "HomeScene"
+    },
+    {
+      "type": "Text",
+      "fileID": "727917522",
+      "m_FontSize": 100.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.19607843,
+        "g": 0.19607843,
+        "b": 0.19607843,
+        "a": 1.0
+      },
+      "m_Text": "A",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "HomeScene"
+    },
+    {
+      "type": "Text",
+      "fileID": "873089399",
+      "m_FontSize": 50.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Text": "\"\\uD654\\uBA74\\uC744 \\uD130\\uCE58\\uD574 \\uC8FC\\uC138\\uC694.\"",
+      "gameObjectName": "TouchText",
+      "rectSize": {
+        "x": 700.0,
+        "y": 114.9
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -3.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "HomeScene"
+    },
+    {
+      "type": "Text",
+      "fileID": "1159993844",
+      "m_FontSize": 100.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.19607843,
+        "g": 0.19607843,
+        "b": 0.19607843,
+        "a": 1.0
+      },
+      "m_Text": "B",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "HomeScene"
+    },
+    {
+      "type": "Text",
+      "fileID": "2032764537",
+      "m_FontSize": 100.0,
+      "m_Alignment": 4,
+      "m_Color": {
+        "r": 0.19607843,
+        "g": 0.19607843,
+        "b": 0.19607843,
+        "a": 1.0
+      },
+      "m_Text": "EN",
+      "gameObjectName": "Text",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "HomeScene"
+    }
+  ],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 20
+}

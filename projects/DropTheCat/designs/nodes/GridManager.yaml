@@ -1,0 +1,86 @@
+# GridManager - Domain Grid System
+metadata:
+  nodeId: "GridManager"
+  version: "1.0.0"
+  phase: 1
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "EventManager"
+    - "ObjectPool"
+  external:
+    - "UnityEngine"
+    - "System.Collections.Generic"
+
+contract:
+  provides:
+    - "void InitGrid(LevelData levelData)"
+    - "CellData GetCell(int x, int y)"
+    - "void SetCellState(int x, int y, CellState state)"
+    - "void SetCellOccupant(int x, int y, CellOccupant occupant)"
+    - "CellOccupant GetCellOccupant(int x, int y)"
+    - "bool IsInBounds(int x, int y)"
+    - "bool IsEmpty(int x, int y)"
+    - "bool IsWalkable(int x, int y)"
+    - "Vector3 GridToWorld(int x, int y)"
+    - "Vector2Int WorldToGrid(Vector3 worldPos)"
+    - "int GridWidth { get; }"
+    - "int GridHeight { get; }"
+    - "void ClearGrid()"
+  requires:
+    - "Singleton<GridManager>"
+    - "EventManager.Publish"
+    - "ObjectPool.Get/Release"
+
+tags:
+  layer: "Domain"
+  genre: "Puzzle"
+  role: "Manager"
+  system: "Grid"
+  majorFunctions:
+    - "StateControl"
+    - "DataSync"
+  minorFunctions:
+    - "Assign"
+    - "Find"
+    - "Validate"
+    - "Calculate"
+    - "Iterate"
+
+logicFlow:
+  - step: 1
+    tag: "StateControl"
+    action: "InitGrid - LevelData에서 gridWidth, gridHeight 읽어 CellData[,] 배열 생성"
+    next: 2
+  - step: 2
+    tag: "DataSync"
+    action: "LevelData의 셀 타입 정보를 CellData에 매핑 (Empty, Cat, Hole, Blocker 등)"
+    next: 3
+  - step: 3
+    tag: "FlowControl"
+    action: "각 셀 위치에 해당 오브젝트 생성 (ObjectPool에서 가져옴)"
+    next: 4
+  - step: 4
+    tag: "ResponseTrigger"
+    action: "OnGridInitialized 이벤트 발행"
+    next: 5
+  - step: 5
+    tag: "ValueModification"
+    action: "GridToWorld/WorldToGrid - 셀 크기 기반 좌표 변환 계산"
+    next: null
+
+referencePatterns:
+  - source: "db/base/puzzle/domain/GameBoard"
+    pattern: "2D 배열 기반 그리드, 타일 위치 관리, Initialize/SetTile/GetTile 패턴"
+
+codeHints:
+  patterns:
+    - "CellData[,] grid - 2D 배열로 그리드 관리"
+    - "CellData { cellType, occupantType, occupantColor, x, y, isLocked }"
+    - "float cellSize로 월드 좌표 계산"
+    - "그리드 원점은 좌하단, 중앙 정렬용 offset 계산"
+  avoidPatterns:
+    - "List<List<>> 사용 금지 (2D 배열 사용)"
+    - "그리드 외부 좌표 접근 시 예외 대신 bool 반환"

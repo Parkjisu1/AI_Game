@@ -1,0 +1,117 @@
+metadata:
+  nodeId: "SceneBuilder"
+  version: "1.0.0"
+  phase: 3
+  role: "Builder"
+
+dependencies:
+  internal: []
+  external:
+    - "UnityEngine"
+    - "UnityEditor"
+    - "UnityEditor.SceneManagement"
+
+contract:
+  provides:
+    - "static SceneBuilder() [InitializeOnLoad]"
+    - "static void BuildScenes()"
+    - "static void BuildTitleScene(Scene scene)"
+    - "static void BuildMainScene(Scene scene)"
+    - "static void BuildGameScene(Scene scene)"
+  requires: []
+
+tags:
+  layer: "Game"
+  genre: "Generic"
+  role: "Builder"
+  system: "Editor"
+  majorFunctions:
+    - "FlowControl"
+    - "StateControl"
+  minorFunctions:
+    - "Spawn"
+    - "Assign"
+    - "Validate"
+
+logicFlow:
+  - step: 1
+    tag: "StateControl"
+    action: "InitializeOnLoad: static 생성자 실행"
+    next: 2
+  - step: 2
+    tag: "Assign"
+    action: "EditorApplication.delayCall += BuildScenesDelayed"
+    next: null
+  - step: 3
+    tag: "Validate"
+    action: "BuildScenesDelayed: EditorPrefs.GetBool('VeilBreaker_SceneBuilt') 체크"
+    next: 4
+  - step: 4
+    tag: "ConditionCheck"
+    action: "이미 빌드됨이면 return (중복 방지)"
+    next: 5
+  - step: 5
+    tag: "Spawn"
+    action: "BuildScenes(): 각 씬 파일 존재 여부 확인 후 없으면 생성"
+    next: 6
+  - step: 6
+    tag: "Assign"
+    action: "Manager 싱글톤 빈 오브젝트 생성, DontDestroyOnLoad 설정"
+    next: 7
+  - step: 7
+    tag: "Assign"
+    action: "EditorPrefs.SetBool('VeilBreaker_SceneBuilt', true)"
+    next: null
+
+referencePatterns:
+  - source: "CLAUDE.md"
+    pattern: "SceneBuilder - InitializeOnLoad + EditorApplication.delayCall + EditorPrefs 중복 방지"
+  - source: "CLAUDE.md"
+    pattern: "Manager 싱글톤: GameScene에 'Managers' 빈 게임오브젝트 생성 후 컴포넌트 부착"
+
+codeHints:
+  patterns:
+    - |
+      using UnityEditor;
+      using UnityEditor.SceneManagement;
+      using UnityEngine;
+
+      [InitializeOnLoad]
+      public static class SceneBuilder
+      {
+          static SceneBuilder()
+          {
+              EditorApplication.delayCall += BuildScenesDelayed;
+          }
+
+          private static void BuildScenesDelayed()
+          {
+              if (EditorPrefs.GetBool("VeilBreaker_SceneBuilt", false)) return;
+              BuildScenes();
+              EditorPrefs.SetBool("VeilBreaker_SceneBuilt", true);
+          }
+
+          private static void BuildScenes()
+          {
+              BuildGameScene();
+              // Title, Main 씬도 동일 패턴
+          }
+
+          private static void BuildGameScene()
+          {
+              var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Additive);
+              // Camera, Canvas, EventSystem 기본 구성
+              // Managers 오브젝트 생성
+              var managersGo = new GameObject("Managers");
+              managersGo.AddComponent<GameManager>();
+              managersGo.AddComponent<BattleManager>();
+              // ... 다른 Manager 컴포넌트
+              EditorSceneManager.SaveScene(scene, "Assets/Scenes/GameScene.unity");
+          }
+      }
+    - "EditorPrefs 키: 'VeilBreaker_SceneBuilt' (프로젝트별 고유 키)"
+    - "delayCall 없이 직접 실행하면 Unity 에디터 초기화 전 오류 발생"
+  avoidPatterns:
+    - "EditorApplication.delayCall 없이 static 생성자에서 직접 실행 금지"
+    - "EditorPrefs 체크 없이 매번 씬 재생성 금지"
+    - "Editor 스크립트를 Assets/Scripts/에 배치 금지 → Assets/Editor/"

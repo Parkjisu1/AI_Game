@@ -1,0 +1,61 @@
+metadata:
+  nodeId: "PopupSettings"
+  version: "1.0.0"
+  phase: 3
+  role: "UX"
+
+dependencies:
+  internal:
+    - "UISystem"
+    - "SaveManager"
+  external:
+    - "UnityEngine"
+    - "UnityEngine.UI"
+    - "TMPro"
+
+contract:
+  provides:
+    - "void Open(object data)"
+    - "void Close()"
+  requires:
+    - "UISystem"
+    - "SaveManager"
+
+tags:
+  layer: "Game"
+  genre: "Generic"
+  role: "UX"
+  system: "UI"
+  majorFunctions:
+    - "StateControl"
+    - "ValueModification"
+  minorFunctions:
+    - "Assign"
+
+logicFlow:
+  - step: 1
+    tag: "Assign"
+    action: "Open: PlayerPrefs에서 설정값 로드, 토글 상태 설정"
+    next: null
+  - step: 2
+    tag: "ResponseTrigger"
+    action: "BGM 토글: AudioListener.volume 조정, PlayerPrefs 저장"
+    next: null
+  - step: 3
+    tag: "ResponseTrigger"
+    action: "SFX 토글: AudioSource volume 조정, PlayerPrefs 저장"
+    next: null
+
+referencePatterns:
+  - source: "CLAUDE.md"
+    pattern: "PopupSettings - 설정 팝업"
+
+codeHints:
+  patterns:
+    - "public class PopupSettings : PopupBase"
+    - "[SerializeField] private Toggle _bgmToggle"
+    - "[SerializeField] private Toggle _sfxToggle"
+    - "[SerializeField] private TextMeshProUGUI _versionText"
+    - "OnBgmToggle: AudioListener.pause = !value; PlayerPrefs.SetInt('BGM', value ? 1 : 0)"
+  avoidPatterns:
+    - "볼륨 설정을 SaveManager JSON에 저장하지 말고 PlayerPrefs 사용 (경량)"

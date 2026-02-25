@@ -1,0 +1,61 @@
+metadata:
+  nodeId: "Singleton"
+  version: "1.0.0"
+  phase: 0
+  role: "Helper"
+
+dependencies:
+  internal: []
+  external:
+    - "UnityEngine.MonoBehaviour"
+
+contract:
+  provides:
+    - "static T Instance { get; }"
+    - "void Awake()"
+    - "void OnDestroy()"
+  requires: []
+
+tags:
+  layer: "Core"
+  genre: "Generic"
+  role: "Helper"
+  system: "Util"
+  majorFunctions:
+    - "StateControl"
+  minorFunctions:
+    - "Find"
+    - "Assign"
+
+logicFlow:
+  - step: 1
+    tag: "ConditionCheck"
+    action: "Instance가 null인지 확인"
+    next: 2
+  - step: 2
+    tag: "Assign"
+    action: "null이면 this를 Instance에 할당"
+    next: 3
+  - step: 3
+    tag: "StateControl"
+    action: "DontDestroyOnLoad(gameObject)"
+    next: 4
+  - step: 4
+    tag: "ConditionCheck"
+    action: "Instance != this이면 (중복) Destroy(gameObject)"
+    next: null
+
+referencePatterns:
+  - source: "db/base/generic/Core"
+    pattern: "SingletonBehaviour - MonoBehaviour where T : MonoBehaviour 패턴"
+  - source: "db/base/generic/Core"
+    pattern: "Singleton - Component 기반 단일 인스턴스 보장"
+
+codeHints:
+  patterns:
+    - "public class Singleton<T> : MonoBehaviour where T : MonoBehaviour"
+    - "private static T _instance; public static T Instance { get { if (_instance == null) _instance = FindObjectOfType<T>(); return _instance; } }"
+    - "protected virtual void Awake() { if (_instance != null && _instance != this) { Destroy(gameObject); return; } _instance = this as T; DontDestroyOnLoad(gameObject); }"
+  avoidPatterns:
+    - "FindObjectOfType 매 프레임 호출 금지"
+    - "double-checked locking (Unity 단일 스레드이므로 불필요)"

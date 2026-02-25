@@ -1,0 +1,560 @@
+##############################################################################
+# Car Match - Complete Balance Sheet
+# Game Type: Mobile Casual 3D Puzzle
+# Version: 1.0.0
+##############################################################################
+
+meta:
+  game_name: "Car Match"
+  genre: "Casual 3D Puzzle"
+  platform: "Mobile (iOS / Android)"
+  target_session_length_sec: 180
+  designed_by: "AI Game Designer"
+
+##############################################################################
+# 1. GRID
+##############################################################################
+grid:
+  cell_size: 1.1              # Unity units per cell
+  padding: 0.15               # gap between cells (Unity units)
+  board_colors:
+    base: "#2C3E50"
+    alternate: "#34495E"
+    highlight: "#3498DB"
+    obstacle_tint: "#7F8C8D"
+    tunnel_entrance: "#8E44AD"
+    tunnel_exit: "#27AE60"
+  sizes_by_level:
+    - level_range: [1, 5]
+      cols: 5
+      rows: 5
+      max_car_types: 4
+    - level_range: [6, 15]
+      cols: 6
+      rows: 6
+      max_car_types: 5
+    - level_range: [16, 30]
+      cols: 7
+      rows: 7
+      max_car_types: 6
+    - level_range: [31, 50]
+      cols: 7
+      rows: 8
+      max_car_types: 7
+    - level_range: [51, 80]
+      cols: 8
+      rows: 8
+      max_car_types: 8
+    - level_range: [81, 120]
+      cols: 8
+      rows: 9
+      max_car_types: 9
+    - level_range: [121, 999]
+      cols: 9
+      rows: 9
+      max_car_types: 10
+  center_offset:              # board centered in world space
+    x: 0.0
+    y: 0.0
+    z: 0.0
+
+##############################################################################
+# 2. CAR SYSTEM
+##############################################################################
+car_system:
+  match_requirement: 3        # exactly 3 identical cars trigger a match
+  spawn_pool_size: 120        # total object pool per scene
+  model_y_offset: 0.05        # float above cell surface (Unity units)
+  movement_speed: 8.0         # units/sec during board-to-holder tween
+  car_types_total: 10
+  car_types:
+    - id: 0
+      name: "Sedan"
+      color_hex: "#E74C3C"
+      model_scale: 0.72
+      unlock_level: 1
+    - id: 1
+      name: "SUV"
+      color_hex: "#3498DB"
+      model_scale: 0.80
+      unlock_level: 1
+    - id: 2
+      name: "Truck"
+      color_hex: "#2ECC71"
+      model_scale: 0.85
+      unlock_level: 1
+    - id: 3
+      name: "Sports"
+      color_hex: "#F39C12"
+      model_scale: 0.70
+      unlock_level: 1
+    - id: 4
+      name: "Van"
+      color_hex: "#9B59B6"
+      model_scale: 0.82
+      unlock_level: 6
+    - id: 5
+      name: "Pickup"
+      color_hex: "#1ABC9C"
+      model_scale: 0.83
+      unlock_level: 6
+    - id: 6
+      name: "Coupe"
+      color_hex: "#E67E22"
+      model_scale: 0.71
+      unlock_level: 16
+    - id: 7
+      name: "Bus"
+      color_hex: "#34495E"
+      model_scale: 0.90
+      unlock_level: 31
+    - id: 8
+      name: "Roadster"
+      color_hex: "#EC407A"
+      model_scale: 0.69
+      unlock_level: 51
+    - id: 9
+      name: "Camper"
+      color_hex: "#26C6DA"
+      model_scale: 0.88
+      unlock_level: 81
+
+##############################################################################
+# 3. HOLDER
+##############################################################################
+holder:
+  max_size: 7                 # maximum slots in holder bar
+  slot_spacing: 1.15          # center-to-center distance (Unity units)
+  position:                   # world position of holder bar center
+    x: 0.0
+    y: -0.50
+    z: -5.20
+  slot_rotation:              # cars in holder face the camera
+    x: -15
+    y: 0
+    z: 0
+  rotation_time: 0.18         # sec - tween from board orientation to holder orientation
+  slide_duration: 0.22        # sec - tween cars along holder bar after insertion
+  overflow_shake_duration: 0.35  # sec - camera shake when holder is full (fail condition)
+  overflow_shake_strength: 0.18  # Unity units
+
+##############################################################################
+# 4. SCORING
+##############################################################################
+scoring:
+  # Base coin formula per match:
+  #   coins = base_match_coins + (level * level_multiplier) + (combo * combo_bonus)
+  base_match_coins: 5
+  level_multiplier: 0.5       # coins += floor(level * 0.5)
+  combo_bonus: 3              # coins += combo_count * 3  (combo resets after 2 sec idle)
+  time_bonus_enabled: true
+  # time bonus = floor((par_time_sec - elapsed_sec) / 10) * 2, min 0
+  par_time_formula: "60 + (level * 10)"   # seconds - par time per level
+
+  coins_by_stars:
+    3: 50
+    2: 25
+    1: 10
+    0: 0
+
+  star_thresholds:
+    # 3 stars: clear with >= 50% of holder slots still free at clear moment
+    # 2 stars: clear with 1-2 holder slots remaining free
+    # 1 star:  clear with 0 holder slots free (survive but solved)
+    # 0 stars: fail (holder overflows)
+    three_star_min_free_slots_ratio: 0.50   # >= ceil(max_size * 0.50) slots free
+    two_star_min_free_slots: 1
+    one_star_min_free_slots: 0
+
+##############################################################################
+# 5. LEVEL GENERATION
+##############################################################################
+level_generation:
+  max_levels: 999
+  seed_formula: "level * 31337 + 7"      # deterministic RNG seed per level
+
+  # Number of distinct car types on board:
+  #   car_set_count = min(max_car_types_for_grid, 3 + floor(level / 10))
+  car_sets_formula: "min(max_car_types_for_grid, 3 + floor(level / 10))"
+
+  # Copies of each type on the board (must be multiple of 3):
+  copies_formula: "3 * (1 + floor(level / 20))"   # 3 copies at L1, 6 at L20, 9 at L40...
+  copies_max: 12
+
+  # Total car count sanity clamp:
+  #   total_cars = car_set_count * copies, must fit in grid (cols*rows - obstacle_count)
+  overflow_reduction: "reduce copies by 3 if total_cars > cols*rows - obstacles"
+
+  obstacle_generation:
+    # formula: floor(level / 8), min 0, max = floor(cols*rows * 0.18)
+    count_formula: "clamp(floor(level / 8), 0, floor(cols * rows * 0.18))"
+    placement: "random non-edge cells, no 2x2 clusters allowed"
+
+  tunnel_generation:
+    # Tunnels appear from level 10 onward
+    unlock_level: 10
+    # formula: floor((level - 10) / 15) + 1, max 3 pairs
+    pair_count_formula: "clamp(floor((level - 10) / 15) + 1, 0, 3)"
+    placement: "entrance on left/top edge row, exit on right/bottom edge row, min distance 3 cells"
+
+##############################################################################
+# 6. BOOSTERS
+##############################################################################
+boosters:
+  initial_coins: 500          # coins given at first launch
+  move_history_max: 10        # max undo steps stored per session
+
+  types:
+    - id: "undo"
+      name: "Undo"
+      description: "Remove the last car placed in the holder and return it to the board."
+      coin_cost: 100
+      initial_inventory: 3
+      cooldown_sec: 0
+
+    - id: "shuffle"
+      name: "Shuffle"
+      description: "Randomly reposition all cars currently on the board grid."
+      coin_cost: 150
+      initial_inventory: 2
+      cooldown_sec: 0
+
+    - id: "extra_slot"
+      name: "Extra Slot"
+      description: "Temporarily add 1 extra holder slot for the remainder of the level."
+      coin_cost: 200
+      initial_inventory: 1
+      cooldown_sec: 0
+      max_uses_per_level: 2
+
+    - id: "hint"
+      name: "Hint"
+      description: "Highlight the next best car to tap (optimal next match group)."
+      coin_cost: 50
+      initial_inventory: 5
+      cooldown_sec: 0
+
+    - id: "bomb"
+      name: "Bomb"
+      description: "Remove one selected car from the holder (discards it without match)."
+      coin_cost: 250
+      initial_inventory: 1
+      cooldown_sec: 0
+
+##############################################################################
+# 7. TUNNEL SYSTEM
+##############################################################################
+tunnel:
+  spawn_animation_duration: 0.40       # sec - car emerges from tunnel entrance
+  exit_animation_duration: 0.35        # sec - car arrives at exit cell
+  spawn_delay_between_cars: 0.15       # sec - stagger when multiple cars queue
+  spawn_queue_unit: 1                  # one car per tick through tunnel (no batching)
+
+  spawn_counts_by_level:
+    # Each tunnel pair can carry N cars per level layout
+    - level_range: [10, 25]
+      cars_per_tunnel_pair: 3
+    - level_range: [26, 50]
+      cars_per_tunnel_pair: 6
+    - level_range: [51, 999]
+      cars_per_tunnel_pair: 9
+
+  placement_rules:
+    min_cell_distance_entrance_to_exit: 3
+    entrance_edge: "left or top"
+    exit_edge: "right or bottom"
+    no_overlap_with_obstacles: true
+    no_adjacent_tunnel_cells: true    # tunnels may not be directly adjacent
+
+  visual:
+    entrance_color: "#8E44AD"
+    exit_color: "#27AE60"
+    portal_scale: 1.05
+    particle_rate_per_sec: 12
+
+##############################################################################
+# 8. ANIMATION
+##############################################################################
+animation:
+  car_idle_rotation:
+    enabled: true
+    speed_deg_per_sec: 22.0
+    axis: "Y"
+
+  board_to_holder:
+    arc_height: 1.8             # Unity units, bezier mid-point lift
+    duration_sec: 0.30
+
+  holder_to_board_undo:
+    duration_sec: 0.25
+
+  match_effect:
+    punch_scale: 1.35           # scale overshoot at match moment
+    punch_duration_sec: 0.12
+    disappear_scale: 0.0
+    disappear_duration_sec: 0.18
+    particle_burst_count: 14
+    particle_lifetime_sec: 0.55
+
+  merge_cascade_delay_sec: 0.08  # stagger between consecutive match animations
+
+  processing_delays:
+    after_tap_before_move_sec: 0.05
+    after_match_before_slide_sec: 0.10
+    after_level_complete_fanfare_sec: 1.20
+
+  storage_move:
+    duration_sec: 0.22
+    ease: "OutBack"
+
+  level_complete_camera_zoom:
+    target_fov_delta: -8          # FOV decrease (degrees) on win
+    duration_sec: 0.60
+
+##############################################################################
+# 9. OBSTACLES
+##############################################################################
+obstacles:
+  spawn_pool_size: 30
+  default_size: 1               # occupies 1 cell
+  types:
+    - id: "barrier"
+      name: "Barrier"
+      description: "Solid wall. Blocks movement; cars cannot pass through or stop on it."
+      passable: false
+      removable: false
+
+    - id: "cone"
+      name: "Traffic Cone"
+      description: "Soft obstacle. Blocks a cell but is removed after 3 matched sets complete."
+      passable: false
+      removable: true
+      remove_after_matches: 3
+
+    - id: "mud"
+      name: "Mud Patch"
+      description: "Passable cell that halves car movement speed when traversed."
+      passable: true
+      speed_multiplier: 0.5
+
+    - id: "ice"
+      name: "Ice Patch"
+      description: "Passable cell. Car slides one extra cell in the same direction on exit."
+      passable: true
+      slide_bonus_cells: 1
+
+##############################################################################
+# 10. PATHFINDING
+##############################################################################
+pathfinding:
+  algorithm: "BFS"             # Breadth-First Search on grid graph
+  directions_priority:         # order checked per node expansion
+    - "right"
+    - "down"
+    - "left"
+    - "up"
+  movement_type: "grid_step"   # discrete cell-by-cell, no diagonal
+  path_reservation: true       # reserve intermediate cells during movement to prevent collision
+  reservation_lifetime_frames: 4
+  waypoint_merge_threshold: 2  # merge collinear waypoints if angle < 2 degrees
+  direct_path_fallback_max: 3  # if BFS path > 3x manhattan distance, pick greedy direct path
+  obstacle_avoidance: true
+  tunnel_cost: 1               # traversing a tunnel counts as 1 step in BFS
+
+##############################################################################
+# 11. STORAGE (Off-board reserve)
+##############################################################################
+storage:
+  count: 3                     # number of storage slots (separate from holder)
+  capacity_each: 1             # each storage slot holds exactly 1 car
+  position:                    # world position of first storage slot
+    x: -3.80
+    y: -0.50
+    z: -5.20
+  slot_spacing: 1.30           # center-to-center (Unity units)
+  unlock_level: 15             # storage slots become available at level 15
+  coin_cost_to_use: 0          # free to use (no cost); limited to 3 uses per level
+
+##############################################################################
+# 12. DAILY REWARDS
+##############################################################################
+daily_rewards:
+  max_streak: 7                # 7-day cycle then resets
+  cooldown_hours: 24           # next reward available 24 hours after claim
+  missed_day_resets_streak: false  # streak continues even if a day is missed
+  rewards:
+    - day: 1
+      coins: 100
+      boosters: {}
+    - day: 2
+      coins: 150
+      boosters: { hint: 1 }
+    - day: 3
+      coins: 200
+      boosters: {}
+    - day: 4
+      coins: 250
+      boosters: { undo: 1 }
+    - day: 5
+      coins: 300
+      boosters: { shuffle: 1 }
+    - day: 6
+      coins: 400
+      boosters: { extra_slot: 1 }
+    - day: 7
+      coins: 600
+      boosters: { bomb: 1, hint: 2 }
+
+##############################################################################
+# 13. JOURNEY REWARDS
+##############################################################################
+journey_rewards:
+  milestone_interval: 10       # reward every 10 levels completed
+  max_milestones: 99           # up to level 990 has a preset milestone
+  example_rewards:
+    - milestone: 1             # level 10
+      coins: 300
+      boosters: { hint: 2 }
+    - milestone: 5             # level 50
+      coins: 500
+      boosters: { undo: 2, shuffle: 1 }
+    - milestone: 10            # level 100
+      coins: 800
+      boosters: { bomb: 1, extra_slot: 1 }
+    - milestone: 20            # level 200
+      coins: 1200
+      boosters: { bomb: 2, shuffle: 2 }
+  dynamic_scaling_formula:
+    # For milestone M (M = level / milestone_interval):
+    #   coins = 300 + (M * 50)
+    #   booster_count = 1 + floor(M / 5)
+    coins_formula: "300 + (milestone_index * 50)"
+    booster_count_formula: "1 + floor(milestone_index / 5)"
+
+##############################################################################
+# 14. CAMERA
+##############################################################################
+camera:
+  default_angle_deg: 55        # X rotation (pitch) - isometric-ish top-down
+  base_height: 9.5             # Y position for 5x5 grid
+  fov: 60                      # vertical field of view (degrees)
+  near_clip: 0.3
+  far_clip: 100.0
+  # Height scaling formula based on grid cols:
+  #   camera_y = base_height + (cols - 5) * 0.90
+  scaling_formula: "base_height + (cols - 5) * 0.90"
+  # Z position formula:
+  #   camera_z = -( (rows / 2.0) * cell_size ) - 3.0
+  z_position_formula: "-((rows / 2.0) * cell_size) - 3.0"
+  smooth_follow_speed: 0.0     # static camera per level (no follow)
+  shake_on_fail:
+    enabled: true
+    duration_sec: 0.40
+    magnitude: 0.22
+
+##############################################################################
+# 15. GAME STATES
+##############################################################################
+states:
+  - id: 0
+    name: "Boot"
+    description: "App launch, asset loading, SDK init."
+  - id: 1
+    name: "MainMenu"
+    description: "Level select, settings, shop access."
+  - id: 2
+    name: "LevelLoading"
+    description: "Procedurally generate level layout, instantiate objects."
+  - id: 3
+    name: "LevelIntro"
+    description: "Camera pan over board, car placement animation."
+  - id: 4
+    name: "Playing"
+    description: "Active gameplay - tap, move, match loop."
+  - id: 5
+    name: "Paused"
+    description: "Pause menu open; game logic frozen."
+  - id: 6
+    name: "BoosterActive"
+    description: "Player selecting target for a booster (e.g., Bomb, Hint)."
+  - id: 7
+    name: "MatchResolving"
+    description: "Match animation playing; input locked."
+  - id: 8
+    name: "LevelComplete"
+    description: "Win condition met; star calculation, reward display."
+  - id: 9
+    name: "LevelFail"
+    description: "Holder overflowed; continue prompt or restart."
+  - id: 10
+    name: "Shop"
+    description: "Coin/booster purchase UI."
+  - id: 11
+    name: "DailyReward"
+    description: "Daily login reward claim UI."
+  - id: 12
+    name: "JourneyReward"
+    description: "Milestone reward claim UI."
+
+##############################################################################
+# 16. ARCHITECTURE
+##############################################################################
+architecture:
+  namespace: "CarMatch"
+  patterns:
+    - "Singleton<T> (persistent managers)"
+    - "Object Pool (CarPool, ObstaclePool, ParticlePool)"
+    - "State Machine (GameStateMachine with IGameState interface)"
+    - "Command Pattern (booster actions, undo stack)"
+    - "Observer / UnityEvent (match events, state transitions)"
+    - "Factory (LevelFactory generates board from seed)"
+    - "Data-Driven Design (LevelData ScriptableObject per level or procedural)"
+
+  singletons_persistent:
+    - "GameManager"          # owns GameStateMachine, scene transitions
+    - "AudioManager"         # SFX/BGM, pooled AudioSources
+    - "DataManager"          # SaveData, PlayerPrefs wrapper
+    - "CoinManager"          # coin balance, transactions
+    - "BoosterManager"       # inventory tracking
+    - "DailyRewardManager"   # streak, claim logic
+    - "JourneyRewardManager" # milestone tracking
+
+  singletons_scene_specific:
+    - "LevelController"      # owns board, holder, scoring for one level
+    - "BoardManager"         # grid data, car placement, pathfinding
+    - "HolderManager"        # holder slot state, match detection
+    - "StorageManager"       # 3 off-board slots
+    - "TunnelManager"        # tunnel pair routing, car queuing
+    - "AnimationController"  # sequences match/move/merge animations
+    - "UIController"         # HUD, pause, booster buttons, star display
+
+  core_logic_modules:
+    - name: "GridGraph"
+      responsibility: "2D grid representation, BFS pathfinding, obstacle masking"
+    - name: "MatchDetector"
+      responsibility: "Detect 3-identical consecutive cars in holder, trigger match event"
+    - name: "LevelFactory"
+      responsibility: "Procedural level generation: car placement, obstacle/tunnel seeding"
+    - name: "ScoreCalculator"
+      responsibility: "Coin formula evaluation, star threshold checking"
+    - name: "BoosterExecutor"
+      responsibility: "Apply booster effects: undo, shuffle, extra slot, hint, bomb"
+    - name: "WinConditionChecker"
+      responsibility: "Board empty = win; holder full = fail"
+    - name: "SaveSerializer"
+      responsibility: "JSON serialization of PlayerProgress to Application.persistentDataPath"
+
+  serialization:
+    format: "JSON"
+    path: "Application.persistentDataPath/save.json"
+    fields:
+      - "current_level"
+      - "coins"
+      - "booster_inventory"
+      - "daily_reward_last_claim_utc"
+      - "daily_reward_streak"
+      - "journey_milestone_index"
+      - "stars_per_level[]"
+
+  win_condition: "BoardManager.RemainingCarCount == 0"
+  fail_condition: "HolderManager.FreeSlots == 0 AND a new car attempts insertion"

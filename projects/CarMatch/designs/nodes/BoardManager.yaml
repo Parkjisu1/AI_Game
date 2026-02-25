@@ -1,0 +1,109 @@
+# AI_기획서 - BoardManager
+nodeId: BoardManager
+type: class
+layer: Domain
+role: Manager
+phase: 3c
+
+description: "보드 상태 관리, 차량 배치 및 조회"
+
+using:
+  - System
+  - System.Collections.Generic
+  - UnityEngine
+
+baseClass: MonoBehaviour
+
+fields:
+  - name: gridSize
+    type: Vector2Int
+    access: private
+    description: "보드 크기"
+
+  - name: cells
+    type: CarController[,]
+    access: private
+    description: "2D 셀 배열 (차량 참조)"
+
+  - name: obstacles
+    type: Dictionary<Vector2Int, ObstacleController>
+    access: private
+    description: "장애물 딕셔너리"
+
+  - name: activeCars
+    type: List<CarController>
+    access: private
+    description: "활성 차량 리스트"
+
+  - name: carPrefab
+    type: CarController
+    access: private
+    serializeField: true
+
+  - name: obstaclePrefabs
+    type: List<ObstacleController>
+    access: private
+    serializeField: true
+
+provides:
+  - signature: "void InitBoard(LevelData levelData)"
+    description: "레벨 데이터로 보드 초기화"
+    logic:
+      - "그리드 크기 설정"
+      - "cells 배열 초기화"
+      - "차량 스폰"
+      - "장애물 스폰"
+      - "각 차량의 수집 가능 여부 업데이트"
+
+  - signature: "CarController GetCarAt(Vector2Int position)"
+    description: "특정 위치의 차량 반환"
+    logic:
+      - "범위 체크"
+      - "cells[position.x, position.y] 반환"
+
+  - signature: "bool IsValidPosition(Vector2Int position)"
+    description: "유효한 위치인지 확인"
+
+  - signature: "bool IsEmpty(Vector2Int position)"
+    description: "빈 셀인지 확인"
+
+  - signature: "void RemoveCar(CarController car)"
+    description: "보드에서 차량 제거"
+    logic:
+      - "cells에서 null 처리"
+      - "activeCars에서 제거"
+      - "주변 차량 수집 가능 여부 업데이트"
+
+  - signature: "void UpdateCollectableStates()"
+    description: "모든 차량의 수집 가능 상태 업데이트"
+    logic:
+      - "각 차량에 대해 MoveValidator.CanCollect 호출"
+      - "결과를 CarController에 설정"
+
+  - signature: "List<CarController> GetAllCars()"
+    description: "모든 활성 차량 반환"
+
+  - signature: "bool IsBoardCleared()"
+    description: "보드가 비었는지 확인"
+    logic:
+      - "activeCars.Count == 0 반환"
+
+  - signature: "void Clear()"
+    description: "보드 초기화"
+
+requires:
+  - LevelData
+  - CarController
+  - ObstacleController
+  - MoveValidator
+  - ObjectPool
+
+events:
+  publish:
+    - OnBoardCleared
+  subscribe:
+    - OnCarCollected
+
+output:
+  path: "Manager/BoardManager.cs"
+  namespace: "CarMatch"

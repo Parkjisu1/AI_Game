@@ -1,0 +1,291 @@
+```yaml
+game: "Car Match"
+condition: "D10"
+parameters:
+  - id: CM01
+    name: cell_size
+    value: 1.0
+    unit: "Unity world units"
+    confidence: medium
+    source: "패턴 카드 미명시. model_scale 0.4 + y_offset 0.25 비율, movement_speed 5.0 단위/초 기반 Unity 표준 격자 단위 역산 추정"
+
+  - id: CM02
+    name: car_types
+    value: 8
+    confidence: high
+    source: "패턴 카드 core_loop '약 6종' (초기 관찰), difficulty_progression '최대 약 8' → 전체 풀 기준 최댓값 8 채택. 레벨 진행에 따라 활성 종류 수 증가"
+
+  - id: CM03
+    name: match_count
+    value: 3
+    confidence: high
+    source: "패턴 카드 core_loop '홀더에서 같은 종류 약 3개가 연속으로 모이면 매칭 소멸'"
+
+  - id: CM04
+    name: movement_speed
+    value: 5.0
+    unit: "units/second"
+    confidence: high
+    source: "패턴 카드 animation_feel '이동 속도: 약 5.0 단위/초, 경로 웨이포인트를 따라 이동'"
+
+  - id: CM05
+    name: model_scale
+    value: 0.4
+    confidence: high
+    source: "패턴 카드 animation_feel '자동차 3D 모델: 약 0.4 스케일'"
+
+  - id: CM06
+    name: y_offset
+    value: 0.25
+    unit: "Unity world units"
+    confidence: high
+    source: "패턴 카드 animation_feel '약 0.25 Y 오프셋 (격자 위에 살짝 떠있는 느낌)'"
+
+  - id: CM07
+    name: holder_max_slots
+    value: 7
+    confidence: high
+    source: "패턴 카드 core_loop '홀더: 최대 약 7칸, 선입 방식, 가득 차면 실패'"
+
+  - id: CM08
+    name: slot_spacing
+    value: 1.0
+    unit: "Unity world units"
+    confidence: low
+    source: "패턴 카드 미명시. cell_size 1.0 기준 홀더 7칸 배치 역산 추정 (6x6 그리드 폭 ≈ 6 units / 7슬롯 ≈ 0.86 → 여백 포함 1.0 근사). 실측 필요"
+
+  - id: CM09
+    name: grid_size_progression
+    value:
+      - levels: "1~10"
+        size: "4x4"
+      - levels: "11~30"
+        size: "5x5"
+      - levels: "31~60"
+        size: "6x5"
+      - levels: "61~100"
+        size: "6x6"
+      - levels: "101+"
+        size: "7x6"
+    confidence: high
+    source: "패턴 카드 difficulty_progression 5단계 격자 크기 명시. 관찰 데이터 현재 Level 70 → 6x6 구간 진행 중으로 일치"
+
+  - id: CM10
+    name: scoring_formula
+    value: "coins = stars × 10"
+    confidence: high
+    source: "패턴 카드 scoring '코인 보상: 별 수 * 약 10코인'. ScoreCalculator 별도 클래스 분리 구조 명시"
+
+  - id: CM11
+    name: star_thresholds
+    value:
+      - stars: 3
+        condition: "taps ≤ total_cars"
+      - stars: 2
+        condition: "taps ≤ total_cars + 5"
+      - stars: 1
+        condition: "taps ≤ total_cars + 10"
+    confidence: high
+    source: "패턴 카드 scoring 3단계 별 기준 명시. total_cars = 레벨의 전체 자동차 수 기준"
+
+  - id: CM12
+    name: max_levels
+    value: 200
+    confidence: medium
+    source: "패턴 카드 difficulty_progression '약 200개 레벨'. 관찰 데이터 Level 70 허브 대기 중 — 진행 범위 내 모순 없음. '약' 표현으로 정확 수치 불확실"
+
+  - id: CM13
+    name: car_sets_formula
+    value: "sets = floor(3 + level / 10), max: 8"
+    confidence: high
+    source: "패턴 카드 difficulty_progression '자동차 세트 수: 약 3 + (레벨/10), 최대 약 8'"
+
+  - id: CM14
+    name: booster_types
+    value:
+      - id: 0
+        name: "undo"
+        description: "되돌리기 (이동 히스토리 1단계 복원)"
+      - id: 1
+        name: "shuffle"
+        description: "셔플 — Fisher-Yates 알고리즘 보드 재배치"
+      - id: 2
+        name: "power_undo"
+        description: "강화 되돌리기 — 홀더에서 자동차 직접 제거"
+      - id: 3
+        name: "magnet"
+        description: "자석 — 동일 종류 약 3개 자동 매칭"
+    confidence: high
+    source: "패턴 카드 special_mechanics '약 4종' 명세. 관찰 데이터 Key Blaze 멀티플라이어(x1/x5/x10/x25/x100)와 별도 시스템"
+
+  - id: CM15
+    name: booster_initial_counts
+    value:
+      min: 3
+      max: 5
+      note: "타입별 동일 지급"
+    confidence: medium
+    source: "패턴 카드 special_mechanics '초기 제공: 각 약 3~5개'. 정확한 타입별 분배 미명시"
+
+  - id: CM16
+    name: initial_coins
+    value: 500
+    confidence: medium
+    source: "패턴 카드 monetization '초기 코인: 약 500'. 관찰 데이터 현재 2,153 → Level 69 누적 클리어 보상(별 × 10) + 일일/여정 보상 반영 시 수치 일관성 확인 가능"
+
+  - id: CM17
+    name: move_history_max
+    value: 50
+    unit: "steps"
+    confidence: high
+    source: "패턴 카드 special_mechanics '이동 히스토리: 최대 약 50단계 기록' — undo 부스터 복원 한도에 직접 연관"
+
+  - id: CM18
+    name: tunnel_spawn_count
+    value: 3
+    unit: "cars per spawn batch"
+    confidence: high
+    source: "패턴 카드 special_mechanics '약 3대씩 세트 단위로 스폰, 레벨별로 총 스폰량 다름'"
+
+  - id: CM19
+    name: tunnel_placement
+    value:
+      allowed_edges: ["top", "left", "right"]
+      excluded_edge: "bottom"
+      note: "홀더가 하단 점유로 하단 배치 불가"
+    confidence: high
+    source: "패턴 카드 special_mechanics '보드 가장자리(상, 좌, 우 — 하단 제외)에 배치'"
+
+  - id: CM20
+    name: pathfinding_algorithm
+    value:
+      primary:
+        algorithm: "A*"
+        heuristic: "Manhattan distance"
+        directions: "4-directional orthogonal"
+        optimization: "waypoint merging (무방향 변화 연속 셀 병합)"
+      validator:
+        algorithm: "BFS"
+        purpose: "reachability check (도달 가능성 별도 검증)"
+      fallback:
+        algorithm: "straight-line path"
+        condition: "A* 탐색 실패 시 ≤3 셀 직선 경로 시도"
+      reservation: "이동 중 자동차 점유 셀 경로 예약으로 충돌 방지"
+    confidence: high
+    source: "패턴 카드 core_loop 'A* + Manhattan', input_system 'BFS 기반 도달 가능성 검증 별도 분리, 직선 경로 폴백, 경로 예약 시스템'"
+
+  - id: CM21
+    name: storage_count
+    value: 2
+    unit: "slots (각 1칸 용량)"
+    confidence: high
+    source: "패턴 카드 special_mechanics '약 2개, 각 1칸 용량 — 홀더 자동차를 잠시 빼놓는 전략적 임시 저장'"
+
+  - id: CM22
+    name: daily_reward_progression
+    value:
+      cycle_days: 7
+      coin_range:
+        min: 50
+        max: 500
+      scaling: "일수에 비례 선형 증가"
+    confidence: high
+    source: "패턴 카드 monetization '약 7일 주기, 약 50~500코인'. 관찰 데이터 Daily Task 갱신 타이머 '22h 14m' 확인으로 24h 주기 일치"
+
+  - id: CM23
+    name: journey_frequency
+    value: "every 5 levels"
+    confidence: high
+    source: "패턴 카드 special_mechanics '약 5레벨 간격 마일스톤, 코인 약 200 + (레벨 × 10) 동적 스케일링 + 상위 마일스톤 부스터 포함'"
+
+  - id: CM24
+    name: camera_angle
+    value: 70
+    unit: "degrees (수평면으로부터 앙각 기준)"
+    confidence: high
+    source: "패턴 카드 architecture '기본 약 70도 앵글, 격자 크기에 따라 높이/FOV 동적 조정'"
+
+  - id: CM25
+    name: base_height_5x5
+    value: 7.0
+    unit: "Unity world units"
+    confidence: low
+    source: "패턴 카드 미명시 (동적 조정만 언급). camera_angle 70° + grid 5×5 (5.0 units) + FOV 약 60° 기준 역산: 시야 반폭 2.5 / tan(30°) × sin(70°) ≈ 4.1~4.4 — 홀더/UI 여백 포함 6~8 범위, 중간값 7.0 채택. 인게임 진입 후 실측 필요"
+
+  - id: CM26
+    name: state_count
+    value: 5
+    states: ["Idle", "Playing", "Paused", "Win", "Fail"]
+    confidence: high
+    source: "패턴 카드 architecture 'enum 기반 약 5개 상태 (Idle, Playing, Paused, Win, Fail)'"
+
+  - id: CM27
+    name: namespace
+    value: "CarMatch"
+    confidence: medium
+    source: "패턴 카드 architecture '전체를 하나의 네임스페이스로 묶어 관리'. 구체 명칭 미명시 → 게임 타이틀 파스칼케이스 변환 추정. 실제 네임스페이스명 소스 분석 필요"
+
+  - id: CM28
+    name: tap_mechanic
+    value: "3D Raycast hit test"
+    note: "Camera.main.ScreenPointToRay → Physics.Raycast → Car 컴포넌트 감지"
+    confidence: high
+    source: "패턴 카드 input_system 'Raycast 기반 3D 히트 테스트로 탭한 자동차 식별'"
+
+  - id: CM29
+    name: fail_condition
+    value: "holder_slots_full AND match_impossible"
+    logic: "홀더 7칸 모두 점유 AND 현재 배치로 3-연속 매칭 형성 불가"
+    confidence: high
+    source: "패턴 카드 core_loop '실패 조건: 홀더가 가득 차고 매칭 불가능한 상태'"
+
+  - id: CM30
+    name: win_condition
+    value: "board_empty AND holder_empty AND tunnel_queue_empty"
+    logic: "보드 자동차 0 AND 홀더 자동차 0 AND 터널 대기 자동차 0"
+    confidence: high
+    source: "패턴 카드 core_loop '승리 조건: 보드 비어있고, 홀더 비어있고, 대기 자동차 없음'"
+
+  - id: CM31
+    name: pattern_count
+    value: 8
+    patterns:
+      - "Singleton (영구: EventBus, DataManager, LevelManager, ObjectPool 등)"
+      - "Singleton (씬 한정: BoardManager, HolderController, StageStateHandler 등)"
+      - "Object Pool (자동차·장애물 인스턴스 풀링)"
+      - "Observer/Pub-Sub (EventBus 시스템 간 이벤트 전달)"
+      - "Factory (LevelManager 레벨 생성 담당)"
+      - "Command (부스터 프로세서 기반 되돌리기)"
+      - "Strategy (A*/BFS 경로 탐색 알고리즘 교체 가능)"
+      - "Component (MonoBehaviour 기반 게임오브젝트 구성)"
+    confidence: medium
+    source: "패턴 카드 architecture 명시 패턴 열거. Singleton을 영구/씬한정 2종으로 분리 계산 시 8종. 1종으로 통합 시 7종"
+
+  - id: CM32
+    name: serialization
+    value:
+      level_data:
+        format: "JSON"
+        storage: "Resources folder (Resources.Load)"
+        note: "레벨 설계 데이터 — 격자 배치, 터널 위치, 장애물 등"
+      user_data:
+        format: "JSON (직렬화 후 단일 키 저장)"
+        storage: "PlayerPrefs"
+        note: "재화·부스터·레벨 진행도 통합 관리 — DataManager 싱글톤 경유"
+    confidence: high
+    source: "패턴 카드 architecture '레벨 설정: JSON (Resources 폴더에서 로드), 유저 저장: PlayerPrefs (단일 키에 JSON 직렬화)'"
+```
+
+---
+
+**추정 신뢰도 요약**
+
+| 등급 | 개수 | 파라미터 |
+|------|------|---------|
+| **high** | 22 | CM03~07, CM09~14, CM17~24, CM26, CM28~30, CM32 |
+| **medium** | 7 | CM02, CM08, CM12, CM15, CM16, CM27, CM31 |
+| **low** | 3 | CM01, CM08 → CM25 |
+
+**핵심 한계 메모**
+
+> 10개 세션 전체에서 인게임 보드 화면 미진입으로 **CM01(cell_size), CM08(slot_spacing), CM25(base_height_5x5)** 3개 파라미터는 패턴 카드 기반 역산 추정치이며, Level 70 진입 후 실측 검증이 필수입니다. CM27(namespace) 역시 소스 접근 없이는 확정 불가합니다.

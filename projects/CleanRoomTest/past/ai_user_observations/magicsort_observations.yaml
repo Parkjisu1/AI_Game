@@ -1,0 +1,124 @@
+# Magic Sort - AI User Observation Data
+# Source: BlueStacks gameplay via ADB screenshot capture + interaction
+# Method: AI player observed game screens, menus, gameplay mechanics through visual analysis
+game: "Magic Sort"
+observation_method: "AI_User_BlueStacks_ADB"
+sessions_played: 1
+levels_observed: [18]
+
+observations:
+  game_identity:
+    title: "Magic Sort"
+    genre: "Water sort / color sort puzzle"
+    art_style: "2D cartoon with glass bottles, dark blue starry background, cat character theme"
+    orientation: "Portrait"
+    platform: "Mobile (Android)"
+    characters: "3 cat characters visible on main screen (blue cat, brown/orange cat, small kitten)"
+    theme: "Magical/potion theme with cauldron on main screen"
+
+  level_progression:
+    current_level: 18
+    level_display: "레벨 18 (Level 18) shown at top of gameplay screen"
+    main_screen: "Character scene with cauldron, green PLAY button showing level number"
+    journey_system:
+      observed: true
+      milestones: "Reward milestones visible at levels 10, 15, 25, 30 (from earlier screenshot)"
+      rewards: "Coins and boosters at milestones"
+    estimated_total_levels: "Procedurally generated, likely unlimited or 100+ hand-crafted + generated"
+
+  gameplay_mechanics:
+    bottle_structure:
+      max_layers: 4
+      description: "Glass bottles with colored liquid layers stacked vertically"
+    bottle_layout:
+      top_row: 7
+      bottom_row: 4
+      empty_bottles: 2
+      total_bottles: 11
+    interaction: "Tap-tap: Select source bottle, then tap target bottle to pour"
+    pour_rule: "Pour top color from source to matching top color of target (or empty bottle)"
+    selection_feedback: "Selected bottle lifts slightly upward"
+
+    blocker_system:
+      observed_type: "Question mark (?) blocker"
+      description: "Dark layers with '?' symbol that hide the actual color underneath"
+      placement: "Multiple bottles have 2 hidden layers each (bottom positions)"
+      effect: "Prevents seeing what colors are below, adding strategic uncertainty"
+      count_per_bottle: "1-2 '?' layers per bottle observed"
+
+    colors_observed:
+      - "Green (lime)"
+      - "Red"
+      - "Pink"
+      - "Orange"
+      - "Yellow"
+      - "Purple"
+      - "Blue (dark)"
+      - "Brown"
+      - "Light blue / periwinkle"
+    color_count: "~9 distinct colors at level 18"
+
+    win_condition: "All bottles either single-color full or empty"
+    fail_condition: "No valid moves remaining (deadlock)"
+
+  currency:
+    type: "Coins (gold star coin icon)"
+    observed_amount: 1420
+    display: "Top-left corner with coin icon"
+
+  boosters:
+    count: 3
+    display: "Bottom bar with purple icons"
+    types:
+      - name: "Undo (circular arrow icon)"
+        count: 3
+        price: "Free (count-based)"
+      - name: "Shuffle (crossing arrows icon)"
+        count: 3
+        price: "Free (count-based)"
+      - name: "Add Bottle (bottle+ icon)"
+        count: 0
+        price: "900 coins"
+        description: "Adds extra empty bottle to the board"
+
+  ui_layout:
+    gameplay:
+      - "Coin display (top-left)"
+      - "Settings gear (top-right, purple circular button)"
+      - "Level number label (top-center)"
+      - "Bottle grid (center, 2 rows)"
+      - "Booster bar (bottom)"
+    main_screen:
+      - "Character scene with cats and cauldron"
+      - "Green level button (center-bottom)"
+      - "Bottom navigation: Trophy, Castle/Store, Home"
+      - "Coin display (top-left)"
+      - "Hearts/Lives display (top-center, 5 hearts)"
+
+  lives_system:
+    max_lives: 5
+    display: "5 hearts with '전체' (Full) label on main screen"
+
+  special_features:
+    - "Question mark (?) blocker layers hiding colors"
+    - "Journey reward milestones"
+    - "Cat character theme with animated main screen"
+    - "Multiple booster types with limited free uses"
+    - "Add Bottle booster purchasable with coins"
+
+  difficulty_observations:
+    level_18:
+      bottle_count: 11
+      color_count: 9
+      empty_bottles: 2
+      blockers: "Question mark layers on most bottles in top row"
+      complexity: "High - 9 colors + hidden layers = significant strategic depth"
+
+  scoring:
+    type: "Stars (inferred from genre)"
+    criteria: "Likely based on number of moves vs par"
+
+  inferred_mechanics:
+    core_loop: "Play level -> sort colors into bottles -> earn coins/stars -> progress journey -> unlock rewards"
+    difficulty_scaling: "More colors, more bottles, more blockers at higher levels"
+    monetization: "Coins for boosters, likely ads for extra rewards, potential IAP for coins"

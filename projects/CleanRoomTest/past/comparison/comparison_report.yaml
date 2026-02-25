@@ -1,0 +1,1621 @@
+# ============================================================
+# Clean Room Test - 3-Way Comparison Report
+# Generated: 2026-02-19
+# Methodology: Ground Truth vs AI-Generated Specs
+# Combinations: A (Concept Only), B1 (Design Intent), B2 (Structural Hint)
+# ============================================================
+
+# Scoring Legend:
+#   1.0  = Exact Match
+#   0.7  = Close Match (within ~25% or right concept, slight difference)
+#   0.4  = Partial Match (right direction, significantly different value)
+#   0.1  = Present but Wrong (category exists, fundamentally different)
+#   0.0  = Missing (parameter entirely absent)
+
+# ============================================================
+# TAPSHIFT COMPARISONS
+# ============================================================
+
+tapshift:
+  # ----------------------------------------------------------
+  # A: Concept Only
+  # ----------------------------------------------------------
+  A_concept_only:
+    parameters:
+      total_levels:
+        gt: 100
+        spec: 200
+        score: 0.4
+        note: "Present but doubled. Wrong direction for casual puzzle scope."
+      max_lives:
+        gt: 3
+        spec: 5
+        score: 0.4
+        note: "Right concept (limited lives), but 5 instead of 3."
+      max_undo_count:
+        gt: 10
+        spec: 3
+        score: 0.1
+        note: "Present but far too low (3 vs 10)."
+      max_hint_count:
+        gt: 3
+        spec: 3
+        score: 1.0
+        note: "Exact match."
+      arrow_move_speed:
+        gt: 15.0
+        spec: 18.0
+        score: 0.7
+        note: "Within 25% (20% off)."
+      interstitial_frequency:
+        gt: 3
+        spec: 3
+        score: 1.0
+        note: "Exact match."
+      target_frame_rate:
+        gt: 60
+        spec: 60
+        score: 1.0
+        note: "Exact match."
+      max_arrow_clamp:
+        gt: 20
+        spec: 16
+        score: 0.7
+        note: "Close (16 vs 20, within 25%)."
+      star_rating_thresholds:
+        gt: "0/1-2/3-5/6+ wrong taps"
+        spec: "optimal ratio 1.0/1.5/2.5 (different metric entirely)"
+        score: 0.1
+        note: "Different metric system - ratio-based vs wrong-tap-count."
+      arrow_colors:
+        gt: "Up=#4CAF50, Down=#F44336, Left=#2196F3, Right=#FF9800"
+        spec: "Up=#4A90D9, Down=#E74C3C, Left=#2ECC71, Right=#F39C12"
+        score: 0.4
+        note: "Same concept (4 distinct colors per direction), but all colors differ. Swapped green/blue mapping."
+      head_ratio:
+        gt: 0.35
+        spec: 0.45
+        score: 0.4
+        note: "Right concept but 29% off."
+      shaft_height_ratio:
+        gt: 0.55
+        spec: 0.55
+        score: 1.0
+        note: "Exact match."
+      haptic_light:
+        gt: 10
+        spec: 10
+        score: 1.0
+        note: "Exact match."
+      haptic_medium:
+        gt: 20
+        spec: 30
+        score: 0.4
+        note: "50% off."
+      haptic_heavy:
+        gt: 40
+        spec: 60
+        score: 0.4
+        note: "50% off."
+      animation_duration_clamp:
+        gt: [0.25, 0.7]
+        spec: "[0.05, 0.6]"
+        score: 0.4
+        note: "Different lower bound (0.05 vs 0.25), close upper bound."
+      stretch_max:
+        gt: 1.6
+        spec: 1.2
+        score: 0.4
+        note: "Right concept but 25% less."
+      blocked_duration:
+        gt: 0.3
+        spec: 0.35
+        score: 0.7
+        note: "Close (17% off)."
+      hint_pulse_count:
+        gt: 3
+        spec: 3
+        score: 1.0
+        note: "Exact match."
+      hint_scale_range:
+        gt: [1.0, 1.15]
+        spec: "[0.9, 1.15]"
+        score: 0.7
+        note: "Upper bound exact, lower bound different."
+      popup_fade_duration:
+        gt: 0.25
+        spec: 0.25
+        score: 1.0
+        note: "Exact match."
+      page_fade:
+        gt: 0.2
+        spec: 0.3
+        score: 0.7
+        note: "Close (50% off but both <0.5s)."
+      star_reveal_delay:
+        gt: 0.3
+        spec: 0.3
+        score: 1.0
+        note: "Exact match."
+      reference_resolution:
+        gt: [720, 1280]
+        spec: "[1080, 1920]"
+        score: 0.4
+        note: "Different resolution. 1080x1920 is a common alternative but not matching GT."
+      collision_method:
+        gt: "AABB sweep"
+        spec: "grid_cell_raycast"
+        score: 0.4
+        note: "Different approach. Grid raycast vs AABB sweep. Both valid but different."
+      solver_algorithm:
+        gt: "DFS with backtracking"
+        spec: "BFS"
+        score: 0.4
+        note: "Different algorithm entirely."
+      board_sizes_progression:
+        gt: "200->280->340->380->420->450 (pixel-based, 6 ranges)"
+        spec: "4x4->5x5->5x6->6x6->6x7 (cell-based, 5 ranges)"
+        score: 0.1
+        note: "Completely different paradigm. Cell grid vs pixel board sizes."
+      arrow_count_progression:
+        gt: "1-5 / formula-based per range"
+        spec: "2-4 / 4-6 / 6-9 / 9-12 / 12-16"
+        score: 0.4
+        note: "Right concept of progressive increase, but different ranges and no formula."
+      difficulty_ranges:
+        gt: "6 ranges with specific formulas"
+        spec: "5 ranges with labels"
+        score: 0.4
+        note: "Similar structure, different details."
+      overlap_gap:
+        gt: 2.0
+        spec: 0
+        score: 0.1
+        note: "Spec says no overlap gap needed (cell-exclusive), GT requires 2.0 gap."
+      max_placement_attempts:
+        gt: 100
+        spec: 100
+        score: 1.0
+        note: "Exact match."
+      iap_products:
+        gt: "hintpack consumable 5, removeads non-consumable"
+        spec: "noads, hints_small(5), hints_large(20), undos_small(5), undos_large(20), starter_pack"
+        score: 0.7
+        note: "Contains the GT products (hint 5 consumable, no-ads non-consumable) plus extras."
+
+    summary:
+      total_parameters: 30
+      scores: [0.4, 0.4, 0.1, 1.0, 0.7, 1.0, 1.0, 0.7, 0.1, 0.4, 0.4, 1.0, 1.0, 0.4, 0.4, 0.4, 0.4, 0.7, 1.0, 0.7, 1.0, 0.7, 1.0, 0.4, 0.4, 0.4, 0.1, 0.4, 0.1, 1.0, 0.7]
+      average_score: 0.567
+      match_percentage: "56.7%"
+
+  # ----------------------------------------------------------
+  # B1: Design Intent
+  # ----------------------------------------------------------
+  B1_design_intent:
+    parameters:
+      total_levels:
+        gt: 100
+        spec: 100
+        score: 1.0
+        note: "Exact match."
+      max_lives:
+        gt: 3
+        spec: 3
+        score: 1.0
+        note: "Exact match."
+      max_undo_count:
+        gt: 10
+        spec: 5
+        score: 0.4
+        note: "Half of GT value."
+      max_hint_count:
+        gt: 3
+        spec: 3
+        score: 1.0
+        note: "Exact match."
+      arrow_move_speed:
+        gt: 15.0
+        spec: 12.0
+        score: 0.7
+        note: "Within 25% (20% off)."
+      interstitial_frequency:
+        gt: 3
+        spec: 4
+        score: 0.7
+        note: "Close (1 off)."
+      target_frame_rate:
+        gt: 60
+        spec: 60
+        score: 1.0
+        note: "Exact match."
+      max_arrow_clamp:
+        gt: 20
+        spec: 18
+        score: 0.7
+        note: "Close (10% off)."
+      star_rating_thresholds:
+        gt: "0/1-2/3-5/6+ wrong taps"
+        spec: "0/1-3/4-7/8+ wrong taps"
+        score: 0.7
+        note: "Same metric (wrong taps), slightly different thresholds."
+      arrow_colors:
+        gt: "Up=#4CAF50, Down=#F44336, Left=#2196F3, Right=#FF9800"
+        spec: "Up=#2196F3, Down=#FF9800, Left=#9C27B0, Right=#4CAF50"
+        score: 0.1
+        note: "All 4 directions have different colors. GT colors are present but assigned to wrong directions."
+      head_ratio:
+        gt: 0.35
+        spec: 0.4
+        score: 0.7
+        note: "Close (14% off)."
+      shaft_height_ratio:
+        gt: 0.55
+        spec: 0.5
+        score: 0.7
+        note: "Close (9% off)."
+      haptic_light:
+        gt: 10
+        spec: 8
+        score: 0.7
+        note: "Close (20% off)."
+      haptic_medium:
+        gt: 20
+        spec: 20
+        score: 1.0
+        note: "Exact match."
+      haptic_heavy:
+        gt: 40
+        spec: 35
+        score: 0.7
+        note: "Close (12.5% off)."
+      animation_duration_clamp:
+        gt: [0.25, 0.7]
+        spec: "[0.2, 0.65]"
+        score: 0.7
+        note: "Very close on both bounds."
+      stretch_max:
+        gt: 1.6
+        spec: 1.5
+        score: 0.7
+        note: "Close (6% off)."
+      blocked_duration:
+        gt: 0.3
+        spec: 0.25
+        score: 0.7
+        note: "Close (17% off)."
+      hint_pulse_count:
+        gt: 3
+        spec: 3
+        score: 1.0
+        note: "Exact match."
+      hint_scale_range:
+        gt: [1.0, 1.15]
+        spec: "[1.0, 1.12]"
+        score: 0.7
+        note: "Very close."
+      popup_fade_duration:
+        gt: 0.25
+        spec: 0.2
+        score: 0.7
+        note: "Close (20% off)."
+      page_fade:
+        gt: 0.2
+        spec: 0.15
+        score: 0.7
+        note: "Close (25% off)."
+      star_reveal_delay:
+        gt: 0.3
+        spec: 0.25
+        score: 0.7
+        note: "Close (17% off)."
+      reference_resolution:
+        gt: [720, 1280]
+        spec: "[720, 1280]"
+        score: 1.0
+        note: "Exact match."
+      collision_method:
+        gt: "AABB sweep"
+        spec: "AABB sweep-to-boundary"
+        score: 1.0
+        note: "Exact match."
+      solver_algorithm:
+        gt: "DFS with backtracking"
+        spec: "DFS with backtracking"
+        score: 1.0
+        note: "Exact match."
+      board_sizes_progression:
+        gt: "200->280->340->380->420->450"
+        spec: "180->270->330->390->450"
+        score: 0.7
+        note: "Very close progression, 5 ranges vs 6, values within ~10%."
+      arrow_count_progression:
+        gt: "1-5 / formula-based per range"
+        spec: "1-5 / formula-based per range (similar formulas)"
+        score: 0.7
+        note: "Same approach (formula-based), slightly different coefficients."
+      difficulty_ranges:
+        gt: "6 ranges"
+        spec: "5 ranges"
+        score: 0.7
+        note: "Similar structure, one fewer range."
+      overlap_gap:
+        gt: 2.0
+        spec: 3.0
+        score: 0.7
+        note: "Close concept (small gap), 50% off."
+      max_placement_attempts:
+        gt: 100
+        spec: 80
+        score: 0.7
+        note: "Close (20% off)."
+      iap_products:
+        gt: "hintpack consumable 5, removeads non-consumable"
+        spec: "hintpack consumable 5, removeads non-consumable"
+        score: 1.0
+        note: "Exact match on types, quantities, and consumability."
+
+    summary:
+      total_parameters: 31
+      scores: [1.0, 1.0, 0.4, 1.0, 0.7, 0.7, 1.0, 0.7, 0.7, 0.1, 0.7, 0.7, 0.7, 1.0, 0.7, 0.7, 0.7, 0.7, 1.0, 0.7, 0.7, 0.7, 0.7, 1.0, 1.0, 1.0, 0.7, 0.7, 0.7, 0.7, 0.7, 1.0]
+      average_score: 0.750
+      match_percentage: "75.0%"
+
+  # ----------------------------------------------------------
+  # B2: Structural Hint
+  # ----------------------------------------------------------
+  B2_structural_hint:
+    parameters:
+      total_levels:
+        gt: 100
+        spec: 100
+        score: 1.0
+        note: "Exact match."
+      max_lives:
+        gt: 3
+        spec: 3
+        score: 1.0
+        note: "Exact match."
+      max_undo_count:
+        gt: 10
+        spec: 10
+        score: 1.0
+        note: "Exact match."
+      max_hint_count:
+        gt: 3
+        spec: 3
+        score: 1.0
+        note: "Exact match."
+      arrow_move_speed:
+        gt: 15.0
+        spec: "N/A (duration-based instead)"
+        score: 0.4
+        note: "Uses duration range instead of speed value. Different approach."
+      interstitial_frequency:
+        gt: 3
+        spec: 3
+        score: 1.0
+        note: "Exact match."
+      target_frame_rate:
+        gt: 60
+        spec: 60
+        score: 1.0
+        note: "Exact match."
+      max_arrow_clamp:
+        gt: 20
+        spec: 20
+        score: 1.0
+        note: "Exact match."
+      star_rating_thresholds:
+        gt: "0/1-2/3-5/6+ wrong taps"
+        spec: "0/1-2/3-5/6+ extra taps"
+        score: 1.0
+        note: "Exact match (same thresholds, same metric)."
+      arrow_colors:
+        gt: "Up=#4CAF50, Down=#F44336, Left=#2196F3, Right=#FF9800"
+        spec: "Up=#4A90D9, Down=#D0021B, Left=#7ED321, Right=#F5A623"
+        score: 0.4
+        note: "4 distinct colors per direction but wrong assignments. Different hex values."
+      head_ratio:
+        gt: 0.35
+        spec: 0.35
+        score: 1.0
+        note: "Exact match."
+      shaft_height_ratio:
+        gt: 0.55
+        spec: 0.55
+        score: 1.0
+        note: "Exact match."
+      haptic_light:
+        gt: 10
+        spec: "light (no ms value)"
+        score: 0.4
+        note: "Tier name present but no millisecond value specified."
+      haptic_medium:
+        gt: 20
+        spec: "medium (no ms value)"
+        score: 0.4
+        note: "Tier name present but no millisecond value specified."
+      haptic_heavy:
+        gt: 40
+        spec: "heavy (no ms value)"
+        score: 0.4
+        note: "Tier name present but no millisecond value specified."
+      animation_duration_clamp:
+        gt: [0.25, 0.7]
+        spec: "[0.25, 0.7]"
+        score: 1.0
+        note: "Exact match."
+      stretch_max:
+        gt: 1.6
+        spec: 1.6
+        score: 1.0
+        note: "Exact match."
+      blocked_duration:
+        gt: 0.3
+        spec: 0.3
+        score: 1.0
+        note: "Exact match."
+      hint_pulse_count:
+        gt: 3
+        spec: 3
+        score: 1.0
+        note: "Exact match."
+      hint_scale_range:
+        gt: [1.0, 1.15]
+        spec: "[1.0, 1.15]"
+        score: 1.0
+        note: "Exact match."
+      popup_fade_duration:
+        gt: 0.25
+        spec: 0.25
+        score: 1.0
+        note: "Exact match."
+      page_fade:
+        gt: 0.2
+        spec: 0.2
+        score: 1.0
+        note: "Exact match."
+      star_reveal_delay:
+        gt: 0.3
+        spec: 0.3
+        score: 1.0
+        note: "Exact match."
+      reference_resolution:
+        gt: [720, 1280]
+        spec: "[1080, 1920]"
+        score: 0.4
+        note: "Different resolution (1080x1920 vs 720x1280)."
+      collision_method:
+        gt: "AABB sweep"
+        spec: "AABB_grid_sweep"
+        score: 1.0
+        note: "Essentially same method."
+      solver_algorithm:
+        gt: "DFS with backtracking"
+        spec: "DFS_backtracking"
+        score: 1.0
+        note: "Exact match."
+      board_sizes_progression:
+        gt: "200->280->340->380->420->450 (pixel-based)"
+        spec: "360->360->450->450->450 (cell*90px, 5 ranges)"
+        score: 0.4
+        note: "Different paradigm. Uses cell-based grid sizing."
+      arrow_count_progression:
+        gt: "1-5 / formula-based per range"
+        spec: "1-5 / 5-8 / 5-10 / 10-15 / 10-20"
+        score: 0.7
+        note: "Right concept, overlapping but similar ranges."
+      difficulty_ranges:
+        gt: "6 ranges"
+        spec: "5 ranges"
+        score: 0.7
+        note: "Similar structure."
+      overlap_gap:
+        gt: 2.0
+        spec: "N/A (cell-based, 1 arrow per cell)"
+        score: 0.1
+        note: "Different paradigm - cell grid has no overlap gap concept."
+      max_placement_attempts:
+        gt: 100
+        spec: 50
+        score: 0.4
+        note: "Half of GT value."
+      iap_products:
+        gt: "hintpack consumable 5, removeads non-consumable"
+        spec: "hints_pack_s consumable 5, remove_ads non-consumable (plus more packs)"
+        score: 1.0
+        note: "Core products match exactly."
+
+    summary:
+      total_parameters: 31
+      scores: [1.0, 1.0, 1.0, 1.0, 0.4, 1.0, 1.0, 1.0, 1.0, 0.4, 1.0, 1.0, 0.4, 0.4, 0.4, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.4, 1.0, 1.0, 0.4, 0.7, 0.7, 0.1, 0.4, 1.0]
+      average_score: 0.806
+      match_percentage: "80.6%"
+
+# ============================================================
+# MAGICSORT COMPARISONS
+# ============================================================
+
+magicsort:
+  # ----------------------------------------------------------
+  # A: Concept Only
+  # ----------------------------------------------------------
+  A_concept_only:
+    parameters:
+      max_height:
+        gt: 4
+        spec: 4
+        score: 1.0
+        note: "Exact match."
+      colors_playable:
+        gt: 13
+        spec: 8
+        score: 0.4
+        note: "Right concept but much lower (62% off)."
+      water_per_color:
+        gt: 4
+        spec: 4
+        score: 1.0
+        note: "Exact match."
+      builtin_levels:
+        gt: 10
+        spec: 100
+        score: 0.1
+        note: "10x the GT value."
+      max_gen_attempts:
+        gt: 100
+        spec: 50
+        score: 0.4
+        note: "Half of GT."
+      difficulty_tiers:
+        gt: "Default/Hard/SuperHard (3 tiers)"
+        spec: "Novice/Apprentice/Adept/Expert/Master/Grandmaster (6 tiers)"
+        score: 0.4
+        note: "More tiers but different structure."
+      tier_color_counts:
+        gt: "4/7/10"
+        spec: "2/3/4/5/6/7"
+        score: 0.4
+        note: "Different range and granularity."
+      empty_bottles:
+        gt: "2 for all tiers"
+        spec: "1/2/2/3/3 per tier"
+        score: 0.7
+        note: "Mostly 2, with some variation."
+      par_formula:
+        gt: "colorCount*3 + par_bonus"
+        spec: "colors*4+2 / colors*5+3 / colors*5+4 / colors*6+5 / colors*6+6 / colors*7+8"
+        score: 0.4
+        note: "Similar concept (linear in colors) but different coefficients."
+      max_per_row:
+        gt: 5
+        spec: "Layout by count (4-6 cols)"
+        score: 0.4
+        note: "Has layout tables but max isn't directly 5."
+      h_spacing:
+        gt: 1.5
+        spec: "90px"
+        score: 0.1
+        note: "Different units (pixels vs world units)."
+      v_spacing:
+        gt: 2.5
+        spec: "200px"
+        score: 0.1
+        note: "Different units."
+      pour_total_duration:
+        gt: 0.4
+        spec: 0.65
+        score: 0.4
+        note: "63% higher."
+      lift_height:
+        gt: 1.5
+        spec: "40px"
+        score: 0.1
+        note: "Different units."
+      tilt_angle:
+        gt: 60
+        spec: 110
+        score: 0.1
+        note: "Almost double."
+      animation_phase_durations:
+        gt: "lift 0.15, move 0.2, tilt 0.1, pour 0.12, return 0.2"
+        spec: "lift 0.10, move 0.15, tilt 0.08, pour 0.24, return 0.08"
+        score: 0.4
+        note: "Right phases but different durations."
+      completion_bounce:
+        gt: "height 0.3, duration 0.25, scale_punch 0.1"
+        spec: "height 12px, duration 0.30, scale N/A"
+        score: 0.4
+        note: "Different units and missing scale."
+      selection_lift:
+        gt: 0.3
+        spec: "scale 1.08"
+        score: 0.1
+        note: "Uses scale instead of lift."
+      starting_coins:
+        gt: 100
+        spec: 200
+        score: 0.4
+        note: "Double GT."
+      starting_gems:
+        gt: 5
+        spec: 5
+        score: 1.0
+        note: "Exact match."
+      reward_coins:
+        gt: 50
+        spec: "10/25/50 by stars"
+        score: 0.7
+        note: "3-star reward matches GT."
+      reward_exp:
+        gt: 10
+        spec: 10
+        score: 1.0
+        note: "Exact match (as exp_base)."
+      booster_initial_extra_bottle:
+        gt: 3
+        spec: 1
+        score: 0.1
+        note: "Far less."
+      booster_initial_shuffle:
+        gt: 3
+        spec: 0
+        score: 0.0
+        note: "Missing (0 initial)."
+      booster_initial_undo:
+        gt: 5
+        spec: 0
+        score: 0.0
+        note: "Tracked separately, no grant."
+      booster_initial_hint:
+        gt: 5
+        spec: 3
+        score: 0.4
+        note: "Lower but present."
+      booster_initial_color_clear:
+        gt: 1
+        spec: 0
+        score: 0.0
+        note: "Missing."
+      undo_max_steps:
+        gt: 50
+        spec: 3
+        score: 0.1
+        note: "Massively lower (94% off)."
+      star_rating_thresholds:
+        gt: "<=par / <=par*1.5 / else"
+        spec: "<=par / <=par*1.5 / else"
+        score: 1.0
+        note: "Exact match."
+      hint_scores:
+        gt: "completing 100, mono 50, emptying 30, non-empty 20, mono_origin 15, per_layer 10, empty_target -5"
+        spec: "completing 100, emptying 80, matching 50, consolidation 30, frees_blocked 40, empty 10, no_benefit -10, splits -30"
+        score: 0.4
+        note: "Different scoring system. Top score matches (100) but different categories."
+      blocker_count:
+        gt: 18
+        spec: 7
+        score: 0.1
+        note: "Less than half."
+      blocker_types_list:
+        gt: "Ice, Carpet, Curtain, Plaster, Clay, Tag, Generator, Woodbox, Frog, Duck, Ivy, Safe, MagicSeal, Toggle, Switch, Snitch, QuestionMark, Blob"
+        spec: "Lock, Ice, Stopper, Mud, Chain, Rainbow, Bubble"
+        score: 0.1
+        note: "Only Ice overlaps. Completely different set."
+      win_condition:
+        gt: "all full+mono OR empty"
+        spec: "all_bottles_single_color_or_empty"
+        score: 1.0
+        note: "Exact match (same meaning)."
+      save_prefix:
+        gt: "MS_"
+        spec: "MagicSort_"
+        score: 0.4
+        note: "Similar concept but different prefix."
+
+    summary:
+      total_parameters: 33
+      scores: [1.0, 0.4, 1.0, 0.1, 0.4, 0.4, 0.4, 0.7, 0.4, 0.4, 0.1, 0.1, 0.4, 0.1, 0.1, 0.4, 0.4, 0.1, 0.4, 1.0, 0.7, 1.0, 0.1, 0.0, 0.0, 0.4, 0.0, 0.1, 1.0, 0.4, 0.1, 0.1, 1.0, 0.4]
+      average_score: 0.376
+      match_percentage: "37.6%"
+
+  # ----------------------------------------------------------
+  # B1: Design Intent
+  # ----------------------------------------------------------
+  B1_design_intent:
+    parameters:
+      max_height:
+        gt: 4
+        spec: 4
+        score: 1.0
+        note: "Exact match."
+      colors_playable:
+        gt: 13
+        spec: "2-12 range (varies by tier)"
+        score: 0.4
+        note: "Master tier max=12, close to 13 but not exact."
+      water_per_color:
+        gt: 4
+        spec: 4
+        score: 1.0
+        note: "Exact match."
+      builtin_levels:
+        gt: 10
+        spec: 120
+        score: 0.1
+        note: "12x GT."
+      max_gen_attempts:
+        gt: 100
+        spec: "5 (max_reroll_attempts)"
+        score: 0.1
+        note: "Very different (shuffle guarantee rerolls, not gen attempts)."
+      difficulty_tiers:
+        gt: "Default/Hard/SuperHard (3 tiers)"
+        spec: "Easy/Normal/Hard/Expert/Master (5 tiers)"
+        score: 0.4
+        note: "More tiers, different names."
+      tier_color_counts:
+        gt: "4/7/10"
+        spec: "2-4/4-6/5-8/7-10/9-12 (ranges)"
+        score: 0.4
+        note: "Ranges overlap with GT values but not exact match."
+      empty_bottles:
+        gt: "2 for all tiers"
+        spec: "1/2/2/3/3 per tier"
+        score: 0.7
+        note: "Mostly 2, some variation."
+      par_formula:
+        gt: "colorCount*3 + par_bonus"
+        spec: "solver pass (not formula-based)"
+        score: 0.1
+        note: "Different approach - solver-computed vs formula."
+      max_per_row:
+        gt: 5
+        spec: "4-6 columns by count"
+        score: 0.7
+        note: "5 is within the range."
+      h_spacing:
+        gt: 1.5
+        spec: "110px cell + 12px gap"
+        score: 0.1
+        note: "Different units entirely."
+      v_spacing:
+        gt: 2.5
+        spec: "implicit in layout"
+        score: 0.0
+        note: "Not explicitly specified."
+      pour_total_duration:
+        gt: 0.4
+        spec: "0.80 max (stages sum)"
+        score: 0.4
+        note: "Double GT."
+      lift_height:
+        gt: 1.5
+        spec: "20px"
+        score: 0.1
+        note: "Different units."
+      tilt_angle:
+        gt: 60
+        spec: 65
+        score: 0.7
+        note: "Close (8% off)."
+      animation_phase_durations:
+        gt: "lift 0.15, move 0.2, tilt 0.1, pour 0.12, return 0.2"
+        spec: "move 0.18, tilt 0.14, pour 0.09/unit, untilt 0.12, return 0.18"
+        score: 0.4
+        note: "Similar phases but different values."
+      completion_bounce:
+        gt: "height 0.3, duration 0.25, scale_punch 0.1"
+        spec: "scale 1.15, duration 0.20"
+        score: 0.4
+        note: "Has bounce but different metrics."
+      selection_lift:
+        gt: 0.3
+        spec: "20px"
+        score: 0.1
+        note: "Different units."
+      starting_coins:
+        gt: 100
+        spec: 500
+        score: 0.1
+        note: "5x GT."
+      starting_gems:
+        gt: 5
+        spec: 30
+        score: 0.1
+        note: "6x GT."
+      reward_coins:
+        gt: 50
+        spec: "10/25/50 by stars"
+        score: 0.7
+        note: "3-star reward matches."
+      reward_exp:
+        gt: 10
+        spec: "20/40/80 by stars"
+        score: 0.4
+        note: "Minimum is double GT."
+      booster_initial_extra_bottle:
+        gt: 3
+        spec: 3
+        score: 1.0
+        note: "Exact match."
+      booster_initial_shuffle:
+        gt: 3
+        spec: 3
+        score: 1.0
+        note: "Exact match."
+      booster_initial_undo:
+        gt: 5
+        spec: 5
+        score: 1.0
+        note: "Exact match."
+      booster_initial_hint:
+        gt: 5
+        spec: 3
+        score: 0.4
+        note: "Lower."
+      booster_initial_color_clear:
+        gt: 1
+        spec: 1
+        score: 1.0
+        note: "Exact match."
+      undo_max_steps:
+        gt: 50
+        spec: 30
+        score: 0.4
+        note: "40% less."
+      star_rating_thresholds:
+        gt: "<=par / <=par*1.5 / else"
+        spec: "<=par*1.0 / <=par*1.5 / >par*1.5"
+        score: 1.0
+        note: "Exact match."
+      hint_scores:
+        gt: "completing 100, mono 50, emptying 30, non-empty 20, mono_origin 15, per_layer 10, empty_target -5"
+        spec: "completing 100, consolidation 30, freeing 20, blocking -15, splitting -25"
+        score: 0.4
+        note: "Top score matches but different scoring categories."
+      blocker_count:
+        gt: 18
+        spec: 9
+        score: 0.4
+        note: "Half of GT."
+      blocker_types_list:
+        gt: "Ice, Carpet, Curtain, Plaster, Clay, Tag, Generator, Woodbox, Frog, Duck, Ivy, Safe, MagicSeal, Toggle, Switch, Snitch, QuestionMark, Blob"
+        spec: "Cork, Ice, Chain, Dirty, GravityFlip, Vine, Fungus, Phantom, Magnet"
+        score: 0.1
+        note: "Only Ice overlaps."
+      win_condition:
+        gt: "all full+mono OR empty"
+        spec: "all_bottles_single_color_or_empty"
+        score: 1.0
+        note: "Exact match."
+      save_prefix:
+        gt: "MS_"
+        spec: "MagicSort_"
+        score: 0.4
+        note: "Different prefix."
+
+    summary:
+      total_parameters: 33
+      scores: [1.0, 0.4, 1.0, 0.1, 0.1, 0.4, 0.4, 0.7, 0.1, 0.7, 0.1, 0.0, 0.4, 0.1, 0.7, 0.4, 0.4, 0.1, 0.1, 0.1, 0.7, 0.4, 1.0, 1.0, 1.0, 0.4, 1.0, 0.4, 1.0, 0.4, 0.4, 0.1, 1.0, 0.4]
+      average_score: 0.467
+      match_percentage: "46.7%"
+
+  # ----------------------------------------------------------
+  # B2: Structural Hint
+  # ----------------------------------------------------------
+  B2_structural_hint:
+    parameters:
+      max_height:
+        gt: 4
+        spec: 4
+        score: 1.0
+        note: "Exact match."
+      colors_playable:
+        gt: 13
+        spec: 13
+        score: 1.0
+        note: "Exact match."
+      water_per_color:
+        gt: 4
+        spec: 4
+        score: 1.0
+        note: "Exact match (implicit from max_stack_depth)."
+      builtin_levels:
+        gt: 10
+        spec: 10
+        score: 1.0
+        note: "Exact match."
+      max_gen_attempts:
+        gt: 100
+        spec: 100
+        score: 1.0
+        note: "Exact match."
+      difficulty_tiers:
+        gt: "Default/Hard/SuperHard (3 tiers)"
+        spec: "Easy/Hard/SuperHard (3 tiers)"
+        score: 0.7
+        note: "Same structure (3 tiers), first name differs."
+      tier_color_counts:
+        gt: "4/7/10"
+        spec: "4/7/10"
+        score: 1.0
+        note: "Exact match."
+      empty_bottles:
+        gt: "2 for all tiers"
+        spec: "2 for all tiers"
+        score: 1.0
+        note: "Exact match."
+      par_formula:
+        gt: "colorCount*3 + par_bonus"
+        spec: "color_count * 3 + bonus"
+        score: 1.0
+        note: "Exact match."
+      max_per_row:
+        gt: 5
+        spec: "4-5 columns"
+        score: 0.7
+        note: "5 is the max, matches."
+      h_spacing:
+        gt: 1.5
+        spec: "16px gap"
+        score: 0.1
+        note: "Different units."
+      v_spacing:
+        gt: 2.5
+        spec: "implicit"
+        score: 0.0
+        note: "Not explicitly specified."
+      pour_total_duration:
+        gt: 0.4
+        spec: 0.45
+        score: 0.7
+        note: "Close (12.5% off)."
+      lift_height:
+        gt: 1.5
+        spec: 1.5
+        score: 1.0
+        note: "Exact match."
+      tilt_angle:
+        gt: 60
+        spec: 60
+        score: 1.0
+        note: "Exact match."
+      animation_phase_durations:
+        gt: "lift 0.15, move 0.2, tilt 0.1, pour 0.12, return 0.2"
+        spec: "lift 0.15, move 0.20, tilt 0.10, pour 0.12, return 0.20"
+        score: 1.0
+        note: "Exact match on all phases."
+      completion_bounce:
+        gt: "height 0.3, duration 0.25, scale_punch 0.1"
+        spec: "height 0.3, duration 0.25, scale_pulse 0.1"
+        score: 1.0
+        note: "Exact match."
+      selection_lift:
+        gt: 0.3
+        spec: 0.3
+        score: 1.0
+        note: "Exact match."
+      starting_coins:
+        gt: 100
+        spec: 100
+        score: 1.0
+        note: "Exact match."
+      starting_gems:
+        gt: 5
+        spec: 5
+        score: 1.0
+        note: "Exact match."
+      reward_coins:
+        gt: 50
+        spec: 50
+        score: 1.0
+        note: "Exact match."
+      reward_exp:
+        gt: 10
+        spec: 10
+        score: 1.0
+        note: "Exact match."
+      booster_initial_extra_bottle:
+        gt: 3
+        spec: 3
+        score: 1.0
+        note: "Exact match."
+      booster_initial_shuffle:
+        gt: 3
+        spec: 2
+        score: 0.7
+        note: "Close (1 off)."
+      booster_initial_undo:
+        gt: 5
+        spec: 5
+        score: 1.0
+        note: "Exact match."
+      booster_initial_hint:
+        gt: 5
+        spec: 5
+        score: 1.0
+        note: "Exact match."
+      booster_initial_color_clear:
+        gt: 1
+        spec: 1
+        score: 1.0
+        note: "Exact match."
+      undo_max_steps:
+        gt: 50
+        spec: 50
+        score: 1.0
+        note: "Exact match."
+      star_rating_thresholds:
+        gt: "<=par / <=par*1.5 / else"
+        spec: "<=par / <=floor(par*1.5) / else"
+        score: 1.0
+        note: "Exact match."
+      hint_scores:
+        gt: "completing 100, mono 50, emptying 30, non-empty 20, mono_origin 15, per_layer 10, empty_target -5"
+        spec: "completing 100, mono 50, emptying 30, non-empty 20, mono_origin 15, per_layer 10, empty_target -5"
+        score: 1.0
+        note: "Exact match on all scores."
+      blocker_count:
+        gt: 18
+        spec: 18
+        score: 1.0
+        note: "Exact match."
+      blocker_types_list:
+        gt: "Ice, Carpet, Curtain, Plaster, Clay, Tag, Generator, Woodbox, Frog, Duck, Ivy, Safe, MagicSeal, Toggle, Switch, Snitch, QuestionMark, Blob"
+        spec: "Ice, Carpet, Curtain, Plaster, Tag, Vault, KeyBox, Frog, Duck, Toggle, Switch, QuestionMark, Lock, Mud, Rust, Mirror, Gravity, TimeBomb"
+        score: 0.4
+        note: "18 types, 9 exact matches (Ice, Carpet, Curtain, Plaster, Tag, Frog, Duck, Toggle, Switch, QuestionMark). ~56% overlap."
+      win_condition:
+        gt: "all full+mono OR empty"
+        spec: "ALL_BOTTLES_SINGLE_COLOR_FULL_OR_EMPTY"
+        score: 1.0
+        note: "Exact match."
+      save_prefix:
+        gt: "MS_"
+        spec: "MS_"
+        score: 1.0
+        note: "Exact match."
+
+    summary:
+      total_parameters: 33
+      scores: [1.0, 1.0, 1.0, 1.0, 1.0, 0.7, 1.0, 1.0, 1.0, 0.7, 0.1, 0.0, 0.7, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.7, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.4, 1.0, 1.0]
+      average_score: 0.910
+      match_percentage: "91.0%"
+
+# ============================================================
+# CARMATCH COMPARISONS
+# ============================================================
+
+carmatch:
+  # ----------------------------------------------------------
+  # A: Concept Only
+  # ----------------------------------------------------------
+  A_concept_only:
+    parameters:
+      grid_sizes:
+        gt: "4x4/5x5/6x5/6x6/7x6 (5 stages)"
+        spec: "5x5/6x6/7x7/7x8/8x8/8x9/9x9 (7 stages)"
+        score: 0.1
+        note: "Different sizes, more stages, no match."
+      level_ranges:
+        gt: "1-10/11-30/31-60/61-100/101+"
+        spec: "1-5/6-15/16-30/31-50/51-80/81-120/121+"
+        score: 0.4
+        note: "More granular but different breakpoints."
+      car_types:
+        gt: 6
+        spec: 10
+        score: 0.4
+        note: "67% higher."
+      match_requirement:
+        gt: 3
+        spec: 3
+        score: 1.0
+        note: "Exact match."
+      holder_max_size:
+        gt: 7
+        spec: 7
+        score: 1.0
+        note: "Exact match."
+      movement_speed:
+        gt: 5.0
+        spec: 8.0
+        score: 0.4
+        note: "60% higher."
+      model_scale:
+        gt: 0.4
+        spec: "0.69-0.90 (varies by car)"
+        score: 0.1
+        note: "Much larger, varies per car type."
+      model_y_offset:
+        gt: 0.25
+        spec: 0.05
+        score: 0.1
+        note: "80% lower."
+      spawn_pool_size:
+        gt: 10
+        spec: 120
+        score: 0.1
+        note: "12x GT (total pool vs per-type)."
+      max_levels:
+        gt: 200
+        spec: 999
+        score: 0.1
+        note: "5x GT."
+      coin_formula:
+        gt: "stars * 10"
+        spec: "base_match_coins + level_multiplier + combo_bonus (complex)"
+        score: 0.1
+        note: "Completely different formula."
+      star_thresholds:
+        gt: "totalCars / totalCars+5 / totalCars+10"
+        spec: "free_slots_ratio 0.5 / 1-2 free / 0 free"
+        score: 0.1
+        note: "Fundamentally different metric (slots vs moves)."
+      boosters_types:
+        gt: "4 (undo/shuffle/super_undo/magnet)"
+        spec: "5 (undo/shuffle/extra_slot/hint/bomb)"
+        score: 0.4
+        note: "Undo and shuffle match, others differ."
+      booster_counts:
+        gt: "undo 5, shuffle 5, super_undo 3, magnet 3"
+        spec: "undo 3, shuffle 2, extra_slot 1, hint 5, bomb 1"
+        score: 0.1
+        note: "Different types and counts."
+      initial_coins:
+        gt: 500
+        spec: 500
+        score: 1.0
+        note: "Exact match."
+      move_history_max:
+        gt: 50
+        spec: 10
+        score: 0.1
+        note: "80% lower."
+      tunnel_spawn_counts:
+        gt: "<35: 3, >=35: 6"
+        spec: "10-25: 3, 26-50: 6, 51+: 9"
+        score: 0.4
+        note: "Similar concept, different thresholds."
+      tunnel_spawn_animation_duration:
+        gt: 0.3
+        spec: 0.40
+        score: 0.7
+        note: "Close (33% off)."
+      tunnel_spawn_queue_unit:
+        gt: 3
+        spec: 1
+        score: 0.1
+        note: "Different (1 vs 3)."
+      tunnel_placement:
+        gt: "top/left/right, not bottom"
+        spec: "left or top entrance, right or bottom exit"
+        score: 0.4
+        note: "Partially matches (top/left) but adds bottom for exit."
+      obstacles_types:
+        gt: "Wall, Box, Lock, Ice, Tunnel"
+        spec: "Barrier, TrafficCone, MudPatch, IcePatch"
+        score: 0.1
+        note: "Only conceptual overlap (Ice). Different specific types."
+      pathfinding:
+        gt: "A* with Manhattan"
+        spec: "BFS"
+        score: 0.4
+        note: "Different algorithm."
+      directions_priority:
+        gt: "down/left/right/up"
+        spec: "right/down/left/up"
+        score: 0.4
+        note: "Same 4 directions, different priority order."
+      storage_count:
+        gt: 2
+        spec: 3
+        score: 0.7
+        note: "Close."
+      storage_capacity:
+        gt: "1 each"
+        spec: "1 each"
+        score: 1.0
+        note: "Exact match."
+      daily_rewards_7day:
+        gt: "50/75/100/150/200/300/500"
+        spec: "100/150/200/250/300/400/600"
+        score: 0.4
+        note: "Same 7-day structure but ~2x the values."
+      journey_milestone_interval:
+        gt: 5
+        spec: 10
+        score: 0.4
+        note: "Double GT."
+      camera_default_angle:
+        gt: 70
+        spec: 55
+        score: 0.4
+        note: "21% lower."
+      camera_base_height:
+        gt: 12.0
+        spec: 9.5
+        score: 0.7
+        note: "Close (21% off)."
+      states_list:
+        gt: "Idle/Playing/Paused/Win/Fail"
+        spec: "Boot/MainMenu/LevelLoading/LevelIntro/Playing/Paused/BoosterActive/MatchResolving/LevelComplete/LevelFail/Shop/DailyReward/JourneyReward"
+        score: 0.4
+        note: "Contains GT states but many more. Over-specified."
+      animation_timings:
+        gt: "car_rotation 0.1, match_punch 0.15/0.12, disappear 0.18"
+        spec: "car_idle_rotation 22deg/s, match punch 1.35/0.12, disappear 0.18"
+        score: 0.4
+        note: "Some values close (disappear, punch_duration) but rotation is completely different."
+
+    summary:
+      total_parameters: 30
+      scores: [0.1, 0.4, 0.4, 1.0, 1.0, 0.4, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.4, 0.1, 1.0, 0.1, 0.4, 0.7, 0.1, 0.4, 0.1, 0.4, 0.4, 0.7, 1.0, 0.4, 0.4, 0.4, 0.7, 0.4, 0.4]
+      average_score: 0.390
+      match_percentage: "39.0%"
+
+  # ----------------------------------------------------------
+  # B1: Design Intent
+  # ----------------------------------------------------------
+  B1_design_intent:
+    parameters:
+      grid_sizes:
+        gt: "4x4/5x5/6x5/6x6/7x6"
+        spec: "4x4/5x5/6x5/6x6/7x6"
+        score: 0.7
+        note: "Same grid sizes but different level range breakpoints."
+      level_ranges:
+        gt: "1-10/11-30/31-60/61-100/101+"
+        spec: "1-15/16-50/51-100/101-200/201+"
+        score: 0.4
+        note: "5 ranges but different breakpoints."
+      car_types:
+        gt: 6
+        spec: "3-8 (by level range)"
+        score: 0.7
+        note: "6 is within the mid-range."
+      match_requirement:
+        gt: 3
+        spec: 3
+        score: 1.0
+        note: "Exact match."
+      holder_max_size:
+        gt: 7
+        spec: 7
+        score: 1.0
+        note: "Exact match."
+      movement_speed:
+        gt: 5.0
+        spec: 8.0
+        score: 0.4
+        note: "60% higher."
+      model_scale:
+        gt: 0.4
+        spec: 0.85
+        score: 0.1
+        note: "More than double."
+      model_y_offset:
+        gt: 0.25
+        spec: 0.1
+        score: 0.4
+        note: "60% lower."
+      spawn_pool_size:
+        gt: 10
+        spec: "N/A (not explicitly stated)"
+        score: 0.0
+        note: "Missing."
+      max_levels:
+        gt: 200
+        spec: 250
+        score: 0.7
+        note: "Close (25% off)."
+      coin_formula:
+        gt: "stars * 10"
+        spec: "par_moves formula + star-based coins (10/20/35)"
+        score: 0.4
+        note: "Has star-based coins but different values."
+      star_thresholds:
+        gt: "totalCars / totalCars+5 / totalCars+10"
+        spec: "moves<=par / moves<=par*1.4 / level_complete"
+        score: 0.1
+        note: "Fundamentally different metric."
+      boosters_types:
+        gt: "4 (undo/shuffle/super_undo/magnet)"
+        spec: "4 (undo/shuffle/super_undo/magnet)"
+        score: 1.0
+        note: "Exact match on types."
+      booster_counts:
+        gt: "undo 5, shuffle 5, super_undo 3, magnet 3"
+        spec: "undo 5, shuffle 3, super_undo 2, magnet 2"
+        score: 0.7
+        note: "Close on undo (5=5), shuffle close, others slightly less."
+      initial_coins:
+        gt: 500
+        spec: 500
+        score: 1.0
+        note: "Exact match."
+      move_history_max:
+        gt: 50
+        spec: "5 (max_uses_per_level for undo)"
+        score: 0.1
+        note: "Different concept (uses vs history)."
+      tunnel_spawn_counts:
+        gt: "<35: 3, >=35: 6"
+        spec: "N/A (tunnel described but no spawn count)"
+        score: 0.0
+        note: "Missing spawn count details."
+      tunnel_spawn_animation_duration:
+        gt: 0.3
+        spec: 0.35
+        score: 0.7
+        note: "Close (17% off)."
+      tunnel_spawn_queue_unit:
+        gt: 3
+        spec: "N/A"
+        score: 0.0
+        note: "Missing."
+      tunnel_placement:
+        gt: "top/left/right, not bottom"
+        spec: "N/A (described conceptually)"
+        score: 0.0
+        note: "No specific placement rules."
+      obstacles_types:
+        gt: "Wall, Box, Lock, Ice, Tunnel"
+        spec: "Box, Wall, LockedCar, Ice"
+        score: 0.7
+        note: "4 of 5 match conceptually. Missing Tunnel as obstacle."
+      pathfinding:
+        gt: "A* with Manhattan"
+        spec: "BFS"
+        score: 0.4
+        note: "Different algorithm."
+      directions_priority:
+        gt: "down/left/right/up"
+        spec: "up/down/left/right"
+        score: 0.4
+        note: "Same 4, different priority."
+      storage_count:
+        gt: 2
+        spec: 1
+        score: 0.4
+        note: "Half."
+      storage_capacity:
+        gt: "1 each"
+        spec: "1"
+        score: 1.0
+        note: "Exact match."
+      daily_rewards_7day:
+        gt: "50/75/100/150/200/300/500"
+        spec: "50/80/100/120/150/200/300"
+        score: 0.7
+        note: "Day 1 exact, overall pattern close but lower in later days."
+      journey_milestone_interval:
+        gt: 5
+        spec: "milestones at 5/10/20/30/50/75/100/150/200/250"
+        score: 0.7
+        note: "Starts at 5, then varies."
+      camera_default_angle:
+        gt: 70
+        spec: 55
+        score: 0.4
+        note: "21% lower."
+      camera_base_height:
+        gt: 12.0
+        spec: 10.0
+        score: 0.7
+        note: "Close (17% off)."
+      states_list:
+        gt: "Idle/Playing/Paused/Win/Fail"
+        spec: "LOADING/MAIN_MENU/LEVEL_SELECT/LEVEL_INTRO/GAMEPLAY/CAR_MOVING/MATCHING/LEVEL_COMPLETE/LEVEL_FAIL/BOOSTER_ACTIVE/PAUSED/DAILY_REWARD_POPUP/JOURNEY_REWARD_POPUP/SETTINGS"
+        score: 0.4
+        note: "Contains equivalent states (Playing/Paused/Win/Fail) but many more."
+      animation_timings:
+        gt: "car_rotation 0.1, match_punch 0.15/0.12, disappear 0.18"
+        spec: "car_move 0.22, match_clear 0.3, car_slide 8.0 u/s"
+        score: 0.4
+        note: "Different parameterization."
+
+    summary:
+      total_parameters: 30
+      scores: [0.7, 0.4, 0.7, 1.0, 1.0, 0.4, 0.1, 0.4, 0.0, 0.7, 0.4, 0.1, 1.0, 0.7, 1.0, 0.1, 0.0, 0.7, 0.0, 0.0, 0.7, 0.4, 0.4, 0.4, 1.0, 0.7, 0.7, 0.4, 0.7, 0.4, 0.4]
+      average_score: 0.477
+      match_percentage: "47.7%"
+
+  # ----------------------------------------------------------
+  # B2: Structural Hint
+  # ----------------------------------------------------------
+  B2_structural_hint:
+    parameters:
+      grid_sizes:
+        gt: "4x4/5x5/6x5/6x6/7x6"
+        spec: "4x4/5x5/6x5/6x6/7x6"
+        score: 1.0
+        note: "Exact match."
+      level_ranges:
+        gt: "1-10/11-30/31-60/61-100/101+"
+        spec: "1-10/11-30/31-60/61-100/101-200"
+        score: 1.0
+        note: "Exact match."
+      car_types:
+        gt: 6
+        spec: 6
+        score: 1.0
+        note: "Exact match."
+      match_requirement:
+        gt: 3
+        spec: 3
+        score: 1.0
+        note: "Exact match."
+      holder_max_size:
+        gt: 7
+        spec: 7
+        score: 1.0
+        note: "Exact match."
+      movement_speed:
+        gt: 5.0
+        spec: 5.0
+        score: 1.0
+        note: "Exact match."
+      model_scale:
+        gt: 0.4
+        spec: 0.4
+        score: 1.0
+        note: "Exact match."
+      model_y_offset:
+        gt: 0.25
+        spec: 0.25
+        score: 1.0
+        note: "Exact match."
+      spawn_pool_size:
+        gt: 10
+        spec: 10
+        score: 1.0
+        note: "Exact match."
+      max_levels:
+        gt: 200
+        spec: 200
+        score: 1.0
+        note: "Exact match."
+      coin_formula:
+        gt: "stars * 10"
+        spec: "stars * 10"
+        score: 1.0
+        note: "Exact match."
+      star_thresholds:
+        gt: "totalCars / totalCars+5 / totalCars+10"
+        spec: "totalCars+0 / totalCars+5 / totalCars+10"
+        score: 1.0
+        note: "Exact match."
+      boosters_types:
+        gt: "4 (undo/shuffle/super_undo/magnet)"
+        spec: "4 (undo/shuffle/enhanced_undo/magnet)"
+        score: 1.0
+        note: "Exact match (enhanced_undo = super_undo)."
+      booster_counts:
+        gt: "undo 5, shuffle 5, super_undo 3, magnet 3"
+        spec: "undo 5, shuffle 5, enhanced_undo 3, magnet 3"
+        score: 1.0
+        note: "Exact match."
+      initial_coins:
+        gt: 500
+        spec: 500
+        score: 1.0
+        note: "Exact match."
+      move_history_max:
+        gt: 50
+        spec: 50
+        score: 1.0
+        note: "Exact match."
+      tunnel_spawn_counts:
+        gt: "<35: 3, >=35: 6"
+        spec: "<35: 3, >=35: 6"
+        score: 1.0
+        note: "Exact match."
+      tunnel_spawn_animation_duration:
+        gt: 0.3
+        spec: 0.3
+        score: 1.0
+        note: "Exact match."
+      tunnel_spawn_queue_unit:
+        gt: 3
+        spec: 3
+        score: 1.0
+        note: "Exact match."
+      tunnel_placement:
+        gt: "top/left/right, not bottom"
+        spec: "top/left/right, not bottom"
+        score: 1.0
+        note: "Exact match."
+      obstacles_types:
+        gt: "Wall, Box, Lock, Ice, Tunnel"
+        spec: "Wall, Box, Lock, Ice, Tunnel"
+        score: 1.0
+        note: "Exact match."
+      pathfinding:
+        gt: "A* with Manhattan"
+        spec: "A_Star with Manhattan"
+        score: 1.0
+        note: "Exact match."
+      directions_priority:
+        gt: "down/left/right/up"
+        spec: "down/left/right/up"
+        score: 1.0
+        note: "Exact match."
+      storage_count:
+        gt: 2
+        spec: 2
+        score: 1.0
+        note: "Exact match."
+      storage_capacity:
+        gt: "1 each"
+        spec: "1 each"
+        score: 1.0
+        note: "Exact match."
+      daily_rewards_7day:
+        gt: "50/75/100/150/200/300/500"
+        spec: "50/75/100/150/200/300/500"
+        score: 1.0
+        note: "Exact match."
+      journey_milestone_interval:
+        gt: 5
+        spec: 5
+        score: 1.0
+        note: "Exact match."
+      camera_default_angle:
+        gt: 70
+        spec: 70
+        score: 1.0
+        note: "Exact match."
+      camera_base_height:
+        gt: 12.0
+        spec: 12.0
+        score: 1.0
+        note: "Exact match."
+      states_list:
+        gt: "Idle/Playing/Paused/Win/Fail"
+        spec: "Idle/Playing/Paused/Win/Fail"
+        score: 1.0
+        note: "Exact match."
+      animation_timings:
+        gt: "car_rotation 0.1, match_punch 0.15/0.12, disappear 0.18"
+        spec: "car_rotation 0.10, match_punch 0.12/0.15, disappear 0.18"
+        score: 0.7
+        note: "Very close. Punch scale/duration slightly swapped."
+
+    summary:
+      total_parameters: 30
+      scores: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.7]
+      average_score: 0.990
+      match_percentage: "99.0%"
+
+# ============================================================
+# SUMMARY MATRIX
+# ============================================================
+
+summary_matrix:
+  #                     A (Concept)    B1 (Intent)    B2 (Structural)
+  tapshift:
+    A_concept_only:    "56.7%"
+    B1_design_intent:  "75.0%"
+    B2_structural_hint: "80.6%"
+
+  magicsort:
+    A_concept_only:    "37.6%"
+    B1_design_intent:  "46.7%"
+    B2_structural_hint: "91.0%"
+
+  carmatch:
+    A_concept_only:    "39.0%"
+    B1_design_intent:  "47.7%"
+    B2_structural_hint: "99.0%"
+
+  averages:
+    A_concept_only:    "44.4%"
+    B1_design_intent:  "56.5%"
+    B2_structural_hint: "90.2%"
+
+  improvement_A_to_B1: "+12.1pp"
+  improvement_B1_to_B2: "+33.7pp"
+  improvement_A_to_B2:  "+45.8pp"

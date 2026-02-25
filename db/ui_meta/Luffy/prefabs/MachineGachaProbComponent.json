@@ -1,0 +1,437 @@
+{
+  "fileName": "MachineGachaProbComponent",
+  "filePath": "E:/AIMED/Luffy/IdleMoney1/Project/Assets\\IdleMoney\\Prefabs\\UI\\SubPages\\MachineGachaProbComponent.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 25,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "5959871705440196293",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "293abf9c7eb11452bba6cb0dc68a7117",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "GradeIcon",
+      "rectSize": {
+        "x": 60.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineGachaProbComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "574828590859394477",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "5864379de56804e6faa00a5613260b8d",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Grade2",
+      "rectSize": {
+        "x": 60.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": -144.2,
+        "y": -46.1
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineGachaProbComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "5398642290377684719",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "f07cc8a003d8c49b7825f9e1aadef9df",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Grade5",
+      "rectSize": {
+        "x": 60.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": 284.90002,
+        "y": -46.099976
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineGachaProbComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "900390662824703385",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "4011250ca837c4e9faef33673df7433b",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "GradeIcon",
+      "rectSize": {
+        "x": 60.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineGachaProbComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "8650627557954403949",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "bdee2d8641d9d4beaafa752c527a99f6",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Grade3",
+      "rectSize": {
+        "x": 60.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": -1.0,
+        "y": -46.099976
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineGachaProbComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "1609913001636358555",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "a91b9200202054a62bb5610646bfd352",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "BGImg",
+      "rectSize": {
+        "x": 715.0,
+        "y": 202.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -62.5
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineGachaProbComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "3468006970631989183",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "f4085ade9b78b3441ba63e926521d072",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "CurrentBGImg",
+      "rectSize": {
+        "x": 715.0,
+        "y": 202.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": -62.5
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineGachaProbComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "4809437975867832722",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "17fe6e007cbb541b8baf39a9eb082107",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Grade1",
+      "rectSize": {
+        "x": 60.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": -287.1,
+        "y": -46.099976
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineGachaProbComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "1722102131065510102",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "7f9be3cf6f3e74e1e9ec85256b6ea80b",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "GradeIcon",
+      "rectSize": {
+        "x": 60.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineGachaProbComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "6748068739827185257",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "fff8730d9197444c497645b623e28a3e",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "GradeIcon",
+      "rectSize": {
+        "x": 60.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineGachaProbComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "7920027867503018423",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "735fbeb3f94c44b54b18d06cdcc2ed81",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Grade4",
+      "rectSize": {
+        "x": 60.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": 142.0,
+        "y": -46.099976
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineGachaProbComponent"
+    },
+    {
+      "type": "Image",
+      "fileID": "1294457817253387739",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "0ae3450d6527240a5a4fc3c7dae70b66",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "GradeIcon",
+      "rectSize": {
+        "x": 60.0,
+        "y": 60.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "MachineGachaProbComponent"
+    }
+  ],
+  "texts": [],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 25
+}

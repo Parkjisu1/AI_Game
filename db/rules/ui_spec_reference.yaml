@@ -1,0 +1,685 @@
+# UI 규격 레퍼런스 문서
+# 3개 레퍼런스 프로젝트(FantaPuzzle, TamplePuzzle, Luffy) 실측 기반
+# 총 834개 파일(804 prefabs, 30 scenes) 분석
+# 갱신일: 2026-02-11 (실측 데이터 반영)
+
+---
+
+# =============================================================================
+# 1. 해상도 및 Canvas 설정
+# =============================================================================
+
+resolution:
+  # 세로형 게임 (Portrait) - 퍼즐, RPG 등
+  portrait:
+    reference: { width: 1080, height: 1920 }
+    aspect_ratio: "9:16"
+    canvas_scaler:
+      ui_scale_mode: 1  # Scale with Screen Size
+      screen_match_mode: 0  # Match Width or Height
+      match_width_or_height: 0  # 0 = Width 기준, 1 = Height 기준
+      reference_pixels_per_unit: 100
+      fallback_screen_dpi: 96
+      default_sprite_dpi: 96
+
+  # 가로형 게임 (Landscape) - 캐주얼, 시뮬레이션 등
+  landscape:
+    reference: { width: 1920, height: 1080 }
+    aspect_ratio: "16:9"
+    canvas_scaler:
+      ui_scale_mode: 1
+      screen_match_mode: 0
+      match_width_or_height: 0.5  # 중간값 권장
+      reference_pixels_per_unit: 100
+
+  # 반응형 (React Native 스타일)
+  responsive:
+    base_width: 360  # 기준 너비
+    scale_formula: "(ScreenWidth * targetSize) / 360"
+    image_scales: ["@1x", "@2x", "@3x"]
+
+# =============================================================================
+# 2. 레이어 및 정렬 순서
+# =============================================================================
+
+sorting_layers:
+  - name: Background
+    order: 0
+    description: 배경 이미지, 환경
+
+  - name: Game
+    order: 100
+    description: 게임 오브젝트 (보드, 타일, 캐릭터)
+
+  - name: Effect
+    order: 200
+    description: 이펙트, 파티클
+
+  - name: UI
+    order: 300
+    description: 게임 UI (HUD, 버튼)
+
+  - name: Popup
+    order: 400
+    description: 팝업 UI
+
+  - name: Toast
+    order: 500
+    description: 토스트 메시지, 알림
+
+  - name: Loading
+    order: 600
+    description: 로딩 화면
+
+# Canvas 정렬 순서 (Sorting Order)
+canvas_sorting:
+  background: 0
+  game_ui: 1
+  hud: 5
+  popup_dim: 9
+  popup: 10
+  toast: 15
+  loading: 20
+
+# =============================================================================
+# 3. UI 레이아웃 규격 (세로형 1080x1920 기준)
+# =============================================================================
+
+layout:
+  # 상단 UI (Top Bar)
+  top_bar:
+    height: 120
+    padding: { left: 20, right: 20, top: 40 }  # Safe Area 고려
+    elements:
+      back_button: { size: 80, position: left }
+      title: { font_size: 36, position: center }
+      settings_button: { size: 80, position: right }
+      currency_display: { height: 60, position: right }
+
+  # 게임 영역 (Game Area)
+  game_area:
+    # 세로형 퍼즐 게임 기준
+    top_margin: 200  # 상단 UI 아래
+    bottom_margin: 300  # 하단 UI 위
+    side_margin: 40
+
+    # 보드 크기 계산
+    board:
+      max_width: 1000  # 1080 - 40*2
+      max_height: 1420  # 1920 - 200 - 300
+      cell_size_range: { min: 80, max: 140 }
+      grid_sizes:
+        - { cols: 4, rows: 4, cell: 140 }
+        - { cols: 5, rows: 5, cell: 120 }
+        - { cols: 6, rows: 6, cell: 100 }
+        - { cols: 7, rows: 7, cell: 90 }
+        - { cols: 8, rows: 8, cell: 80 }
+
+  # 하단 UI (Bottom Bar)
+  bottom_bar:
+    height: 280
+    padding: { left: 20, right: 20, bottom: 40 }  # Safe Area 고려
+    elements:
+      holder:  # 퍼즐 게임용 홀더
+        height: 120
+        slot_size: 100
+        slot_gap: 10
+        max_slots: 7
+      booster_bar:
+        height: 100
+        button_size: 80
+        button_gap: 20
+
+  # 팝업 규격
+  popup:
+    # 전체 화면 팝업
+    full:
+      width: 1000
+      height: 1600
+      corner_radius: 40
+      padding: 40
+
+    # 중간 팝업
+    medium:
+      width: 900
+      height: 1200
+      corner_radius: 32
+      padding: 32
+
+    # 작은 팝업 (확인/취소)
+    small:
+      width: 700
+      height: 500
+      corner_radius: 24
+      padding: 24
+
+    # 공통 요소
+    common:
+      title_font_size: 48
+      body_font_size: 32
+      button_height: 100
+      button_gap: 20
+      dim_color: "rgba(0, 0, 0, 0.7)"
+
+# =============================================================================
+# 4. 버튼 규격
+# =============================================================================
+
+buttons:
+  # 실측: 581개 버튼 분석 (FantaPuzzle 147, TamplePuzzle 126, Luffy 308)
+  # 전체 평균 width=300.5, median=200, mode=150
+  # 전체 평균 height=197.7, median=119, mode=120
+
+  # 대형 버튼 (메인 액션) - 실측 152개 (26.2%)
+  large:
+    width: 400          # 실측 범위 300~500
+    height: 120         # 실측 mode=120
+    corner_radius: 24
+    font_size: 40
+    icon_size: 60
+
+  # 중형 버튼 - 실측 142개 (24.4%)
+  medium:
+    width: 250          # 실측 범위 200~300, median=200
+    height: 80
+    corner_radius: 16
+    font_size: 32
+    icon_size: 48
+
+  # 소형 버튼 - 실측 287개 (49.4%, 가장 많음)
+  small:
+    width: 150          # 실측 범위 100~200, mode=150
+    height: 60
+    corner_radius: 12
+    font_size: 24
+    icon_size: 36
+
+  # 프로젝트별 분포
+  project_breakdown:
+    FantaPuzzle: { total: 147, large: 68, medium: 24, small: 55 }
+    TamplePuzzle: { total: 126, large: 60, medium: 15, small: 51 }
+    Luffy: { total: 308, large: 24, medium: 103, small: 181 }
+
+  # 아이콘 버튼
+  icon_only:
+    sizes:
+      large: 100
+      medium: 80
+      small: 60
+      tiny: 40
+
+  # 상태별 스타일
+  states:
+    normal: { opacity: 1.0, scale: 1.0 }
+    pressed: { opacity: 0.8, scale: 0.95 }
+    disabled: { opacity: 0.5, scale: 1.0 }
+    highlighted: { opacity: 1.0, scale: 1.05 }
+
+# =============================================================================
+# 5. 색상 팔레트
+# =============================================================================
+
+colors:
+  # 기본 색상
+  primary: "#FF6B35"      # 주황 (액션, CTA)
+  secondary: "#4ECDC4"    # 민트 (보조)
+  accent: "#FFE66D"       # 노랑 (강조, 골드)
+
+  # 상태 색상
+  success: "#2ECC71"      # 초록 (성공)
+  warning: "#F39C12"      # 주황 (경고)
+  error: "#E74C3C"        # 빨강 (오류)
+  info: "#3498DB"         # 파랑 (정보)
+
+  # 중립 색상 (그레이 스케일)
+  gray:
+    50: "#FAFAFA"
+    100: "#F5F5F5"
+    200: "#EEEEEE"
+    300: "#E0E0E0"
+    400: "#BDBDBD"
+    500: "#9E9E9E"
+    600: "#757575"
+    700: "#616161"
+    800: "#424242"
+    900: "#212121"
+
+  # 배경
+  background:
+    primary: "#FFFFFF"
+    secondary: "#F8F9FA"
+    dark: "#1A1A2E"
+    game: "#2D3436"
+
+  # 텍스트
+  text:
+    primary: "#212121"
+    secondary: "#757575"
+    disabled: "#BDBDBD"
+    inverse: "#FFFFFF"
+    gold: "#FFD700"
+
+  # 게임 요소 색상 (퍼즐)
+  game_elements:
+    red: "#E74C3C"
+    blue: "#3498DB"
+    green: "#2ECC71"
+    yellow: "#F1C40F"
+    purple: "#9B59B6"
+    orange: "#E67E22"
+    pink: "#FF69B4"
+    cyan: "#00BCD4"
+
+# =============================================================================
+# 6. 타이포그래피
+# =============================================================================
+
+typography:
+  # 실측: 557개 텍스트 분석
+  # 평균 fontSize=42.7, median=40, mode=40
+  # 범위: min=10, max=160
+  # 정렬: MiddleCenter(4)=415건(74.5%), UpperLeft(0)=64건(11.5%)
+
+  # 폰트 패밀리
+  font_family:
+    primary: "NotoSansKR"  # 한글
+    secondary: "Roboto"     # 영문/숫자
+    decorative: "CookieRun" # 게임 타이틀용
+
+  # 크기 체계 (실측 기반 보정)
+  sizes:
+    h1: 56       # 메인 타이틀
+    h2: 48       # 서브 타이틀
+    h3: 40       # 섹션 헤더 (실측 mode=40, 가장 빈번)
+    h4: 36       # 카드 타이틀
+    body_large: 32
+    body: 28
+    body_small: 24
+    caption: 20
+    tiny: 16     # 실측 최소 10
+
+  # 실측 정렬 분포 (Unity TextAnchor 값)
+  # 0=UpperLeft, 1=UpperCenter, 3=MiddleLeft, 4=MiddleCenter,
+  # 5=MiddleRight, 6=LowerLeft, 7=LowerCenter
+  alignment_distribution:
+    MiddleCenter: 74.5   # % - 대부분의 UI 텍스트
+    UpperLeft: 11.5      # % - 설명 텍스트
+    MiddleLeft: 4.3      # %
+    UpperCenter: 2.9     # %
+    MiddleRight: 4.3     # %
+
+  # 굵기
+  weights:
+    light: 300
+    regular: 400
+    medium: 500
+    bold: 700
+    black: 900
+
+  # 행간
+  line_heights:
+    tight: 1.2
+    normal: 1.5
+    loose: 1.8
+
+# =============================================================================
+# 7. 스프라이트 아틀라스 구성
+# =============================================================================
+
+sprite_atlases:
+  # 권장 구성 (12개)
+  - name: "UI_Common"
+    max_size: 2048
+    padding: 4
+    contents:
+      - 공통 버튼
+      - 아이콘
+      - 프레임
+      - 게이지
+
+  - name: "UI_Popup"
+    max_size: 2048
+    padding: 4
+    contents:
+      - 팝업 배경
+      - 팝업 버튼
+      - 팝업 장식
+
+  - name: "UI_FullPopup"
+    max_size: 2048
+    padding: 4
+    contents:
+      - 전체화면 팝업 배경
+      - 대형 이미지
+
+  - name: "Game_Tiles"
+    max_size: 2048
+    padding: 4
+    contents:
+      - 게임 타일/젬
+      - 특수 블록
+      - 장애물
+
+  - name: "Game_Effects"
+    max_size: 2048
+    padding: 4
+    contents:
+      - 매칭 이펙트
+      - 파티클
+      - 애니메이션 프레임
+
+  - name: "Scene_Background"
+    max_size: 4096
+    padding: 0
+    contents:
+      - 씬 배경
+      - 환경 요소
+
+  - name: "Scene_Lobby"
+    max_size: 2048
+    padding: 4
+    contents:
+      - 로비 UI
+      - 스테이지 버튼
+
+  - name: "Characters"
+    max_size: 2048
+    padding: 4
+    contents:
+      - 캐릭터 스프라이트
+      - 아바타
+
+  - name: "Items"
+    max_size: 2048
+    padding: 4
+    contents:
+      - 아이템 아이콘
+      - 부스터 아이콘
+      - 재화 아이콘
+
+  - name: "Numbers"
+    max_size: 1024
+    padding: 2
+    contents:
+      - 숫자 스프라이트
+      - 점수 표시
+
+# =============================================================================
+# 8. 필수 UI 이미지 리소스 목록
+# =============================================================================
+
+required_assets:
+  # 공통 UI
+  common:
+    buttons:
+      - btn_play.png          # 플레이 버튼
+      - btn_back.png          # 뒤로가기
+      - btn_close.png         # 닫기 (X)
+      - btn_settings.png      # 설정
+      - btn_home.png          # 홈
+      - btn_restart.png       # 재시작
+      - btn_next.png          # 다음
+      - btn_confirm.png       # 확인
+      - btn_cancel.png        # 취소
+      - btn_watch_ad.png      # 광고 보기
+      - btn_shop.png          # 상점
+
+    icons:
+      - icon_coin.png         # 코인
+      - icon_gem.png          # 젬/다이아
+      - icon_heart.png        # 하트/라이프
+      - icon_star_on.png      # 별 (활성)
+      - icon_star_off.png     # 별 (비활성)
+      - icon_sound_on.png     # 사운드 켜짐
+      - icon_sound_off.png    # 사운드 꺼짐
+      - icon_music_on.png     # 음악 켜짐
+      - icon_music_off.png    # 음악 꺼짐
+      - icon_vibration.png    # 진동
+
+    frames:
+      - frame_popup_bg.png    # 팝업 배경
+      - frame_panel.png       # 패널 프레임
+      - frame_button.png      # 버튼 프레임
+      - frame_slot.png        # 슬롯 프레임
+
+    gauges:
+      - gauge_bg.png          # 게이지 배경
+      - gauge_fill.png        # 게이지 채움
+      - gauge_score.png       # 점수 게이지
+
+  # 게임 화면 UI
+  game_screen:
+    top_ui:
+      - game_top_bg.png       # 상단 배경
+      - game_score_frame.png  # 점수 프레임
+      - game_moves_frame.png  # 이동 횟수 프레임
+      - game_goal_frame.png   # 목표 프레임
+
+    bottom_ui:
+      - game_holder_bg.png    # 홀더 배경
+      - game_holder_slot.png  # 홀더 슬롯
+      - game_booster_frame.png # 부스터 프레임
+
+    boosters:
+      - booster_undo.png      # 되돌리기
+      - booster_shuffle.png   # 셔플
+      - booster_hint.png      # 힌트
+      - booster_bomb.png      # 폭탄
+
+  # 팝업
+  popups:
+    result:
+      - popup_win_bg.png      # 승리 배경
+      - popup_lose_bg.png     # 패배 배경
+      - popup_star_1.png      # 별 1개
+      - popup_star_2.png      # 별 2개
+      - popup_star_3.png      # 별 3개
+      - effect_confetti.png   # 축하 이펙트
+
+    pause:
+      - popup_pause_bg.png    # 일시정지 배경
+
+    shop:
+      - popup_shop_bg.png     # 상점 배경
+      - shop_item_frame.png   # 아이템 프레임
+
+    settings:
+      - popup_settings_bg.png # 설정 배경
+      - toggle_on.png         # 토글 켜짐
+      - toggle_off.png        # 토글 꺼짐
+
+  # 로비/메인
+  lobby:
+    - lobby_bg.png            # 로비 배경
+    - level_button_locked.png # 잠긴 레벨
+    - level_button_unlocked.png # 열린 레벨
+    - level_button_current.png  # 현재 레벨
+    - level_star_frame.png    # 레벨 별 표시
+
+  # 게임 요소 (퍼즐)
+  game_elements:
+    cars:  # CarMatch 전용
+      - car_red.png
+      - car_blue.png
+      - car_green.png
+      - car_yellow.png
+      - car_purple.png
+      - car_orange.png
+      - car_pink.png
+      - car_cyan.png
+
+    obstacles:
+      - obstacle_wall.png
+      - obstacle_box.png
+      - obstacle_lock.png
+      - obstacle_ice.png
+
+    effects:
+      - effect_match.png      # 매칭 이펙트
+      - effect_collect.png    # 수집 이펙트
+      - effect_clear.png      # 클리어 이펙트
+
+  # 배경
+  backgrounds:
+    - bg_main.png             # 메인 배경
+    - bg_game.png             # 게임 배경
+    - bg_lobby.png            # 로비 배경
+
+# =============================================================================
+# 9. ScrollRect 실측 규격
+# =============================================================================
+
+scroll_rect:
+  # 실측: 16개 ScrollRect 분석
+  total_count: 16
+  horizontal_count: 2
+  vertical_count: 16       # 대부분 세로 스크롤
+  inertia_enabled: 16      # 100% 관성 활성
+  deceleration_rate: 0.14  # 모든 프로젝트 동일
+  scroll_sensitivity: 1.0  # 모든 프로젝트 동일
+
+# =============================================================================
+# 10. LayoutGroup 실측 규격
+# =============================================================================
+
+layout_groups:
+  # 실측: 34개 LayoutGroup 분석
+  total_count: 34
+  type_distribution:
+    vertical_horizontal: 26  # 76.5%
+    grid: 8                  # 23.5%
+  spacing:
+    min: -45
+    max: 23
+    avg: 1.0
+    median: 0
+    mode: 0                  # 대부분 spacing=0
+  child_alignment:
+    MiddleCenter: 10         # 29.4%
+    UpperLeft: 18            # 52.9%
+    UpperCenter: 6           # 17.6%
+
+# =============================================================================
+# 11. Safe Area 설정
+# =============================================================================
+
+safe_area:
+  # iOS 노치 대응
+  ios:
+    top_inset: 44      # 상단 노치
+    bottom_inset: 34   # 하단 홈 인디케이터
+    side_inset: 0
+
+  # Android (펀치홀, 엣지 디스플레이)
+  android:
+    top_inset: 40
+    bottom_inset: 20
+    side_inset: 0
+
+  # 적용 방식
+  application:
+    top_ui: true       # 상단 UI에 Safe Area 적용
+    bottom_ui: true    # 하단 UI에 Safe Area 적용
+    game_area: false   # 게임 영역은 전체 화면 사용
+    popup: false       # 팝업은 전체 화면 사용
+
+# =============================================================================
+# 10. 애니메이션 설정
+# =============================================================================
+
+animations:
+  # 기본 이징
+  easing:
+    default: "EaseOutQuad"
+    bounce: "EaseOutBounce"
+    elastic: "EaseOutElastic"
+    smooth: "EaseInOutSine"
+
+  # 지속 시간 (초)
+  durations:
+    instant: 0.1
+    fast: 0.2
+    normal: 0.3
+    slow: 0.5
+    very_slow: 1.0
+
+  # UI 애니메이션
+  ui:
+    button_press:
+      duration: 0.1
+      scale: 0.95
+      easing: "EaseOutQuad"
+
+    popup_open:
+      duration: 0.3
+      scale_from: 0.8
+      scale_to: 1.0
+      fade_from: 0
+      fade_to: 1
+      easing: "EaseOutBack"
+
+    popup_close:
+      duration: 0.2
+      scale_to: 0.8
+      fade_to: 0
+      easing: "EaseInQuad"
+
+    slide_in:
+      duration: 0.3
+      easing: "EaseOutQuad"
+
+  # 게임 애니메이션
+  game:
+    car_move:
+      speed: 800  # pixels per second
+      easing: "EaseOutQuad"
+
+    car_collect:
+      duration: 0.3
+      easing: "EaseInQuad"
+
+    match_clear:
+      duration: 0.4
+      easing: "EaseOutBounce"
+
+    score_update:
+      duration: 0.5
+      easing: "EaseOutQuad"
+
+# =============================================================================
+# 11. 씬 구성
+# =============================================================================
+
+scenes:
+  - name: "Main"
+    description: 메인 메뉴/로비
+    canvas_count: 2
+    canvases:
+      - name: "BackgroundCanvas"
+        render_mode: "ScreenSpaceOverlay"
+        sorting_order: 0
+      - name: "UICanvas"
+        render_mode: "ScreenSpaceOverlay"
+        sorting_order: 1
+
+  - name: "Game"
+    description: 게임 플레이
+    canvas_count: 3
+    canvases:
+      - name: "BackgroundCanvas"
+        render_mode: "ScreenSpaceCamera"
+        sorting_order: 0
+      - name: "GameUICanvas"
+        render_mode: "ScreenSpaceOverlay"
+        sorting_order: 1
+      - name: "PopupCanvas"
+        render_mode: "ScreenSpaceOverlay"
+        sorting_order: 10
+
+  - name: "SceneMaker"
+    description: 레벨 에디터
+    canvas_count: 1
+    canvases:
+      - name: "EditorCanvas"
+        render_mode: "ScreenSpaceOverlay"
+        sorting_order: 0

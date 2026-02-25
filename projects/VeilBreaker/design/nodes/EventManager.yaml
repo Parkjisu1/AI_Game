@@ -1,0 +1,72 @@
+metadata:
+  nodeId: "EventManager"
+  version: "1.0.0"
+  phase: 0
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+  external:
+    - "System.Collections.Generic"
+    - "System"
+
+contract:
+  provides:
+    - "static void Subscribe(string eventKey, Action<object> callback)"
+    - "static void Unsubscribe(string eventKey, Action<object> callback)"
+    - "static void Publish(string eventKey, object data = null)"
+    - "static void Clear()"
+  requires:
+    - "Singleton"
+
+tags:
+  layer: "Core"
+  genre: "Generic"
+  role: "Manager"
+  system: "Event"
+  majorFunctions:
+    - "ResponseTrigger"
+    - "DataSync"
+  minorFunctions:
+    - "Notify"
+    - "Find"
+
+logicFlow:
+  - step: 1
+    tag: "Assign"
+    action: "Dictionary<string, List<Action<object>>> _listeners 초기화"
+    next: 2
+  - step: 2
+    tag: "Validate"
+    action: "Subscribe: eventKey null 체크"
+    next: 3
+  - step: 3
+    tag: "Assign"
+    action: "Subscribe: _listeners[eventKey]에 callback 추가"
+    next: null
+  - step: 4
+    tag: "Find"
+    action: "Publish: _listeners[eventKey] 조회"
+    next: 5
+  - step: 5
+    tag: "Notify"
+    action: "Publish: 모든 callback(data) 순차 호출"
+    next: null
+
+referencePatterns:
+  - source: "db/base/generic/Core"
+    pattern: "ChainGameEventController - EventInterval, IEventDuringController 기반 이벤트 체인"
+  - source: "CLAUDE.md"
+    pattern: "string 키 기반 글로벌 이벤트 버스"
+
+codeHints:
+  patterns:
+    - "public class EventManager : Singleton<EventManager>"
+    - "private Dictionary<string, List<Action<object>>> _listeners = new()"
+    - "public static void Subscribe(string key, Action<object> cb) => Instance._listeners.GetOrCreate(key).Add(cb)"
+    - "public static void Publish(string key, object data = null) { if (!Instance._listeners.ContainsKey(key)) return; foreach (var cb in Instance._listeners[key].ToList()) cb?.Invoke(data); }"
+    - "씬 전환 시 Clear() 호출로 메모리 누수 방지"
+  avoidPatterns:
+    - "이벤트 키를 하드코딩 문자열로 사용 금지 → GameConstants.Events 상수 참조"
+    - "Publish 중 _listeners 컬렉션 수정 금지 (ToList() 복사 후 순회)"

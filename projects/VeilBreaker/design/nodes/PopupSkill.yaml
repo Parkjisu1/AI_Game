@@ -1,0 +1,57 @@
+metadata:
+  nodeId: "PopupSkill"
+  version: "1.0.0"
+  phase: 3
+  role: "UX"
+
+dependencies:
+  internal:
+    - "UISystem"
+    - "SkillManager"
+    - "CurrencyManager"
+  external:
+    - "UnityEngine"
+    - "UnityEngine.UI"
+    - "TMPro"
+
+contract:
+  provides:
+    - "void Open(object data)"
+    - "void Close()"
+  requires:
+    - "UISystem"
+    - "SkillManager"
+
+tags:
+  layer: "Game"
+  genre: "Idle"
+  role: "UX"
+  system: "UI"
+  majorFunctions:
+    - "DataSync"
+    - "ResponseTrigger"
+  minorFunctions:
+    - "Assign"
+
+logicFlow:
+  - step: 1
+    tag: "Assign"
+    action: "Open: heroId로 SkillManager.GetHeroSkills() 조회, 3슬롯 UI 구성"
+    next: null
+  - step: 2
+    tag: "ResponseTrigger"
+    action: "레벨업 버튼: SkillManager.LevelUpSkill(heroId, skillId)"
+    next: null
+
+referencePatterns:
+  - source: "CLAUDE.md"
+    pattern: "PopupSkill - 스킬 관리 팝업"
+
+codeHints:
+  patterns:
+    - "public class PopupSkill : PopupBase"
+    - "[SerializeField] private SkillSlotUI[] _skillSlots (3개)"
+    - "[SerializeField] private Button _levelUpButton"
+    - "[SerializeField] private TextMeshProUGUI _skillStoneText"
+  avoidPatterns:
+    - "쿨타임 UI를 PopupSkill에서 직접 업데이트 금지 → HUD에서 처리"

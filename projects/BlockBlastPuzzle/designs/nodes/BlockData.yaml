@@ -1,0 +1,42 @@
+node:
+  name: BlockData
+  layer: Domain
+  genre: Puzzle
+  role: Config
+  file: BlockData.cs
+  namespace: BlockBlast.Domain
+
+spec:
+  description: "블록 모양 정의. 셀 좌표 배열과 색상으로 구성"
+
+  enums:
+    - name: BlockShapeType
+      values: [Single, H2, V2, H3, V3, L2x2, L2x2_R, Square2, T3, H4, V4, L3x2, L3x2_R, Square3, H5, V5, Z3, S3]
+
+  classes:
+    - name: BlockShape
+      members:
+        - { name: shapeType, type: BlockShapeType }
+        - { name: cells, type: "Vector2Int[]" }
+        - { name: weight, type: int }
+
+    - name: BlockData
+      type: static
+      methods:
+        - name: GetAllShapes
+          returns: "List<BlockShape>"
+          static: true
+          logic: "모든 블록 모양 정의 반환"
+        - name: GetRandomShape
+          returns: BlockShape
+          static: true
+          logic: "가중치 기반 랜덤 블록 선택"
+
+  color_palette:
+    - { name: Red, hex: "#FF4444" }
+    - { name: Blue, hex: "#4488FF" }
+    - { name: Green, hex: "#44DD44" }
+    - { name: Yellow, hex: "#FFCC00" }
+    - { name: Purple, hex: "#BB44FF" }
+    - { name: Orange, hex: "#FF8800" }
+    - { name: Cyan, hex: "#00CCCC" }

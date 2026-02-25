@@ -1,0 +1,67 @@
+metadata:
+  nodeId: "GameManager"
+  version: "1.0.0"
+  phase: 3
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "SaveManager"
+    - "OfflineProgressManager"
+    - "UISystem"
+    - "EventManager"
+    - "GameConstants"
+  external:
+    - "UnityEngine"
+    - "UnityEngine.SceneManagement"
+
+contract:
+  provides:
+    - "void ChangeScene(string sceneName)"
+    - "GameState GetCurrentState()"
+    - "void SetState(GameState state)"
+  requires:
+    - "Singleton"
+    - "SaveManager"
+    - "OfflineProgressManager"
+
+tags:
+  layer: "Game"
+  genre: "Generic"
+  role: "Manager"
+  system: "Game"
+  majorFunctions:
+    - "FlowControl"
+    - "StateControl"
+  minorFunctions:
+    - "DataSync"
+    - "Notify"
+
+logicFlow:
+  - step: 1
+    tag: "ResponseTrigger"
+    action: "OnApplicationPause(true): SaveManager.Save(), lastLoginTime 기록"
+    next: null
+  - step: 2
+    tag: "ResponseTrigger"
+    action: "OnApplicationFocus(true): OfflineProgressManager.CalculateOfflineReward()"
+    next: null
+  - step: 3
+    tag: "StateControl"
+    action: "ChangeScene: SceneManager.LoadScene(sceneName)"
+    next: null
+
+referencePatterns:
+  - source: "CLAUDE.md"
+    pattern: "GameManager - 루트 게임 매니저, 앱 생명주기"
+
+codeHints:
+  patterns:
+    - "public class GameManager : Singleton<GameManager>"
+    - "public enum GameState { Title, Lobby, Battle }"
+    - "void OnApplicationPause(bool pause) { if (pause) SaveManager.Instance.Save(); }"
+    - "void OnApplicationFocus(bool focus) { if (focus && !_isFirstFocus) OfflineProgressManager.Instance.CalculateOfflineReward(); _isFirstFocus = false; }"
+    - "ChangeScene: StartCoroutine(LoadSceneAsync(sceneName))"
+  avoidPatterns:
+    - "첫 실행 시 OnApplicationFocus(true) 호출로 잘못된 오프라인 계산 방지 (플래그 필요)"

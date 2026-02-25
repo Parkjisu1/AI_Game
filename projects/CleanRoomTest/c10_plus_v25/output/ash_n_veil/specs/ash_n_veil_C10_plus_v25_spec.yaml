@@ -1,0 +1,236 @@
+```yaml
+game: "Ash N Veil: Fast Idle Action"
+genre: "Idle RPG"
+condition: "C10_plus_v25"
+parameters:
+
+  - id: ANV01
+    name: max_chapter
+    value: null
+    confidence: low
+    source: "관찰: 1챕터(1-1~1-5)만 확인, 스테이지 맵 6개 이상 잠금 노드 존재.
+      전체 챕터 수 미확인 — 복수 챕터 존재는 시사되나 상한 불명"
+
+  - id: ANV02
+    name: stages_per_chapter
+    value: 5
+    confidence: confirmed
+    source: "관찰+OCR: 1-1, 1-2, 1-3, 1-4, 1-5 스테이지 구조 직접 확인"
+
+  - id: ANV03
+    name: boss_frequency
+    value: 5
+    confidence: high
+    source: "관찰: 1-5 해골 아이콘 보스 스테이지 직접 확인 → 5스테이지당 1회 패턴.
+      챕터 1 단일 관찰 기반이므로 전 챕터 동일 여부는 추정"
+
+  - id: ANV04
+    name: auto_battle_unlock
+    value: "Lv.3"
+    confidence: confirmed
+    source: "관찰: Lv.3(스테이지 1-1) 시점에서 AUTO 기능 활성화 직접 확인"
+
+  - id: ANV05
+    name: difficulty_modes
+    value: null
+    confidence: low
+    source: "관찰 범위 내 난이도 선택 UI 미확인. 단일 난이도 운영 추정이나
+      잠금 노드 해제 후 Hard 모드 존재 가능성 배제 불가"
+
+  - id: ANV06
+    name: base_hp_lv1
+    value: 195
+    confidence: medium
+    source: "회귀분석(관찰 4점): (Lv3=250, Lv7=350, Lv9=399, Lv10=435) 선형회귀
+      HP ≈ 197 + 26×(Lv-1) → Lv.1 역산 ≈ 197. 195로 반올림(문서 추정식 일치)"
+
+  - id: ANV07
+    name: base_atk_lv1
+    value: 18
+    confidence: medium
+    source: "회귀분석(관찰 4점): (Lv3=19, Lv7=21, Lv9=22, Lv10=23)
+      ATK ≈ 18 + 0.55×(Lv-1) → Lv.1 역산 ≈ 18"
+
+  - id: ANV08
+    name: hp_growth_formula
+    value: "linear_with_step: HP ≈ 197 + 26 × (Lv - 1), 특정 레벨 계단 보너스 가능"
+    confidence: medium
+    source: "관찰 4점 선형회귀(R²≈0.97). Lv.9→10 DEF +6 급증 패턴 확인으로
+      특정 레벨 구간 계단 보너스 또는 장비 교체 효과 병존 추정"
+
+  - id: ANV09
+    name: atk_growth_formula
+    value: "linear_equipment_dependent: ATK ≈ 18 + 0.55 × (Lv - 1)"
+    confidence: medium
+    source: "관찰 4점 선형회귀: Lv.3→10 총 +4(레벨당 +0.57) 극저성장 확인.
+      실질 전투력 스케일링은 장비 ATK 의존 구조 강하게 시사"
+
+  - id: ANV10
+    name: exp_curve_formula
+    value: null
+    confidence: low
+    source: "관찰 범위 내 EXP 요구량 수치 미추출. EXP 바 존재만 확인(하단 전체 폭).
+      Idle RPG 장르 표준인 지수 곡선 추정이나 내부 공식 확인 불가"
+
+  - id: ANV11
+    name: gear_slot_count
+    value: 7
+    confidence: confirmed
+    source: "관찰: 투구/무기/갑옷/신발(좌·하)/망토/화살통/장갑(우) 7슬롯 레이아웃 직접 확인"
+
+  - id: ANV12
+    name: gear_grade_count
+    value: null
+    confidence: low
+    source: "관찰: 로마숫자 등급 체계 확인, III 등급 직접 관찰. 최저~최고 전체 범위 미확인.
+      I~V(5등급) 또는 I~VI(6등급) 추정이나 근거 불충분"
+
+  - id: ANV13
+    name: enhance_max_level
+    value: null
+    confidence: low
+    source: "관찰: +0 기본 상태만 확인. 강화 UI 상세 미캡처. 최대 +10~+20 추정이나 미확인"
+
+  - id: ANV14
+    name: enhance_cost_formula
+    value: null
+    confidence: low
+    source: "관찰 범위 내 강화 비용 테이블 미캡처. 스킬 언락 비용(400,000G) 관찰은
+      골드 소모 구조 시사하나 강화 전용 공식 도출 불가"
+
+  - id: ANV15
+    name: active_skill_count
+    value: 3
+    confidence: medium
+    source: "관찰: Lv.3→1슬롯, Lv.7→3슬롯 순차 개방 직접 확인.
+      3은 관찰된 최솟값이며 고레벨 추가 슬롯 개방 가능성 있음"
+
+  - id: ANV16
+    name: skill_cooldown_range
+    value: "0.0 ~ 13.6"
+    confidence: high
+    source: "관찰 직접 측정: Lv.3 슬롯1=1.8s / Lv.7 슬롯1=5.0s, 슬롯2=6.1s, 슬롯3=0.0s
+      / Lv.9 슬롯1=7.5s, 슬롯2=13.6s, 슬롯3=5.9s. 단위: 초(s)"
+
+  - id: ANV17
+    name: auto_attack_speed
+    value: "1.0 ~ 1.5"
+    confidence: medium
+    source: "관찰+추정: 전투 화면 시각적 공격 주기 측정. 명시적 수치 미기재,
+      전투 영상 프레임 분석 기반 범위 추정"
+
+  - id: ANV18
+    name: damage_formula
+    value: null
+    confidence: low
+    source: "관찰 범위 내 실제 피해량 수치 미확인. ATK·DEF·명중 스탯 존재 확인으로
+      ATK 기반 감산/비율 공식 추정이나 내부 공식 추출 불가"
+
+  - id: ANV19
+    name: critical_rate
+    value: "5 ~ 15"
+    confidence: low
+    source: "추론: SPD/CRIT 복합 스탯 관찰(Lv.3=12, Lv.7=16, Lv.9=18).
+      Idle RPG 장르 표준 범위 적용. 크리티컬 독립 수치 미추출 (U-02 미확인)"
+
+  - id: ANV20
+    name: critical_multiplier
+    value: "1.5 ~ 2.0"
+    confidence: low
+    source: "추론: SPD/CRIT 복합 스탯 구조 관찰, Idle RPG 장르 표준 배율 범위 적용.
+      배율 수치 직접 확인 불가 (U-02 미확인)"
+
+  - id: ANV21
+    name: gacha_cost_1x
+    value: null
+    confidence: low
+    source: "관찰: 소환 메뉴 UI 존재 확인. 비용 화면 미캡처 (U-04 최우선 미확인 항목).
+      다이아 100~200 범위 추정이나 근거 불충분"
+
+  - id: ANV22
+    name: gacha_cost_10x
+    value: null
+    confidence: low
+    source: "관찰: 소환 UI 존재 확인. 10연차 할인율 포함 비용 미캡처 (U-04 미확인)"
+
+  - id: ANV23
+    name: gacha_ssr_rate
+    value: null
+    confidence: low
+    source: "관찰: 확률 테이블 화면 미캡처. 한국 모바일 게임 규제상 공시 의무이나
+      미확인 (U-04 미확인)"
+
+  - id: ANV24
+    name: gacha_pity_count
+    value: null
+    confidence: low
+    source: "관찰: 천장(Pity) 시스템 존재 여부 자체 미확인 (U-04 미확인).
+      Idle RPG 장르 50~100회 범위 추정이나 근거 불충분"
+
+  - id: ANV25
+    name: currency_types
+    value: 2
+    confidence: high
+    source: "관찰: 상단 HUD에서 다이아(프리미엄)·골드(A접미사) 2종 직접 확인.
+      던전 코인·길드 포인트 등 서브 재화 존재 가능성 있으나 현재 미확인"
+
+  - id: ANV26
+    name: idle_gold_per_min
+    value: null
+    confidence: low
+    source: "관찰: 방치 보상 UI 미캡처 (U-03 최우선 미확인). FLAG-01(A단위 정의 불명)
+      미해소로 현재 골드량(2.1~2.2A)에서 속도 역산 불가"
+
+  - id: ANV27
+    name: idle_max_accumulation
+    value: null
+    confidence: low
+    source: "관찰: 방치 보상 체계 전반 미확인 (U-03 미확인). 4~12시간 범위 추정이나
+      근거 없음"
+
+  - id: ANV28
+    name: attendance_days
+    value: null
+    confidence: low
+    source: "관찰: 출석 보상 UI 미캡처. 7일 또는 30일 주기 추정이나 확인 불가"
+
+  - id: ANV29
+    name: daily_quest_count
+    value: null
+    confidence: low
+    source: "관찰: 플로팅 가이드 퀘스트 패널(미션 제목+진행도+보상) 존재 확인.
+      메인 가이드 퀘스트와 일일 퀘스트 구분 불명, 총 개수 미확인"
+
+  - id: ANV30
+    name: pet_system_exists
+    value: null
+    confidence: low
+    source: "관찰: 펫 시스템 존재 여부 불명 (U-06 미확인). 하단 4번 탭 '영웅' 항목이
+      동료/파티 시스템 가능성 시사하나 펫과의 구분 불명"
+
+  - id: ANV31
+    name: ui_reference_resolution
+    value: "1080x1920"
+    confidence: confirmed
+    source: "관찰+역산: 캡처 해상도 540×960px(9:16비율), HUD 픽셀 측정값 기준
+      Unity CanvasScaler Scale Factor≈0.5 역산. 상단HUD=164dp, 하단HUD=248dp 일치"
+
+  - id: ANV32
+    name: state_count
+    value: 6
+    confidence: medium
+    source: "관찰 기반 UI 상태 추산: ①Title/Loading ②MainLobby ③Battle/Combat
+      ④Character/Equipment ⑤Inventory ⑥Skill/Hero — 6개 화면 상태 식별.
+      내부 FSM 아키텍처 상태 수는 미확인이므로 최솟값 기준 추정"
+```
+
+---
+
+## 추정 근거 요약
+
+| 구분 | confirmed | high | medium | low | null |
+|------|-----------|------|--------|-----|------|
+| 파라미터 수 | 4 | 4 | 7 | 13 | 4 |
+| ID 목록 | ANV02·04·11·31 | ANV03·16·17·25 | ANV06~09·15·32 | ANV01·05·12~14·18~24·28~30 | ANV01·10·13·26·27 |
+
+> **핵심 제약**: U-01(골드 A단위)·U-03(방치 보상)·U-04(가챠) 3개 항목이 경제·가챠 관련 9개 파라미터(ANV21~29)를 null/low로 묶는 병목. 다음 관찰 세션에서 해당 화면 우선 캡처 권장.

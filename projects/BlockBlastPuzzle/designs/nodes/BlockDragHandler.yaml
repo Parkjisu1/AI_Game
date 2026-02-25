@@ -1,0 +1,54 @@
+node:
+  name: BlockDragHandler
+  layer: Domain
+  genre: Puzzle
+  role: Handler
+  file: BlockDragHandler.cs
+  namespace: BlockBlast.Domain
+
+spec:
+  description: "블록 드래그 앤 드롭. 터치/마우스 입력 → 보드 스냅 → 배치"
+  provides:
+    - "드래그 시작/중/끝 처리"
+    - "보드 그리드 스냅"
+    - "배치 미리보기"
+  requires:
+    - "GameBoard"
+    - "BlockVisual"
+    - "GameManager"
+
+  members:
+    - name: _blockVisual
+      type: BlockVisual
+      access: private
+    - name: _isDragging
+      type: bool
+      access: private
+    - name: _dragOffset
+      type: Vector3
+      access: private
+    - name: _originalPos
+      type: Vector3
+      access: private
+    - name: _originalScale
+      type: Vector3
+      access: private
+
+  constants:
+    - { name: DRAG_SCALE, value: 1.0f }
+    - { name: DRAG_Y_OFFSET, value: 2.0f }
+
+  methods:
+    - name: OnPointerDown
+      logic: "드래그 시작 - 블록 확대, 위치 기억"
+    - name: OnDrag
+      logic: |
+        마우스/터치 위치로 블록 이동
+        Y 오프셋 적용 (손가락 위에 표시)
+        보드 위 그리드 좌표 계산
+        GameBoard.ShowPreview 호출
+    - name: OnPointerUp
+      logic: |
+        배치 가능하면 → GameBoard.PlaceBlock
+        배치 불가하면 → 원래 위치로 복귀
+        미리보기 해제

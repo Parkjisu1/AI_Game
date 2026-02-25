@@ -1,0 +1,544 @@
+## =============================================================
+## Layer 3: AI 기획서 노드 (ArmyClashPlayable.yaml)
+## Project  : SLG-ArmyClash
+## Platform : playable (HTML5 단일 파일)
+## Generated: 2026-02-23
+## =============================================================
+
+metadata:
+  nodeId: "ArmyClashPlayable"
+  version: "1.0.0"
+  phase: 0
+  role: "Controller"
+  platform: "playable"
+  output_file: "playable.html"
+
+dependencies:
+  internal: []
+  external: []
+  note: "단일 HTML 파일, 외부 라이브러리 없음. 순수 Canvas API + Base64 인라인 에셋."
+
+contract:
+  provides:
+    - "playable_game_loop: requestAnimationFrame 기반 게임 루프"
+    - "drag_deploy: 부대 카드 드래그 → 전장 배치"
+    - "auto_battle: 배치된 유닛 자동 행군 + 교전"
+    - "wave_state: {currentWave, totalWaves, enemiesRemaining, baseHp}"
+    - "economy: {gold, unitCosts, goldPerKill}"
+    - "cta_trigger: Install Now 버튼 클릭 이벤트"
+  requires: []
+
+tags:
+  layer: "Game"
+  genre: "Playable"
+  role: "Controller"
+  system: "ArmyClashPlayable"
+  majorFunctions:
+    - "FlowControl"
+    - "StateControl"
+    - "ResponseTrigger"
+  minorFunctions:
+    - "Iterate"
+    - "Calculate"
+    - "Assign"
+    - "Notify"
+    - "Spawn"
+    - "Despawn"
+
+## =============================================================
+## Playable 광고 규격
+## =============================================================
+
+playable_config:
+  canvas_size:
+    width: 540
+    height: 960
+  tech_stack: "canvas"
+  asset_mode: "provided"
+  max_file_size: "5MB"
+  target_networks: ["google_ads", "facebook", "ironsource"]
+
+## =============================================================
+## 에셋 정의 (provided - Base64 인라인)
+## =============================================================
+
+assets:
+  mode: "provided"
+  source_dir: "assets/"
+  items:
+    - key: "bg"
+      file: "Map_2048.png"
+      usage: "배경 이미지 (리사이즈하여 사용)"
+    - key: "player_unit"
+      file: "NPC_Summon_001_D.png"
+      usage: "아군 보병 스프라이트"
+    - key: "archer_unit"
+      file: "TowerA.png"
+      usage: "아군 궁수 스프라이트"
+    - key: "enemy_unit"
+      file: "MOB_Cactus01_red_D.png"
+      usage: "적 보병/정예병 스프라이트"
+    - key: "boss_unit"
+      file: "MOB_Boss_Cactus_Crown_D.png"
+      usage: "적 보스 스프라이트"
+    - key: "wall"
+      file: "WallA.png"
+      usage: "아군/적군 성벽(기지)"
+    - key: "arrow"
+      file: "Arrow.png"
+      usage: "궁수 투사체"
+    - key: "coin"
+      file: "Coin.png"
+      usage: "골드 아이콘"
+    - key: "btn"
+      file: "Button.png"
+      usage: "UI 버튼 배경"
+    - key: "hit"
+      file: "Effect_Star_1.png"
+      usage: "피격 이펙트"
+    - key: "hpbar"
+      file: "HPSlider.png"
+      usage: "HP바 프레임"
+    - key: "shadow"
+      file: "Shadow.png"
+      usage: "유닛 그림자"
+
+## =============================================================
+## 레벨 정의
+## =============================================================
+
+levels:
+  - id: 1
+    name: "Tutorial: Deploy Troops!"
+    difficulty: "easy"
+    duration_target: "10s"
+    player_start_gold: 30
+    gold_per_kill: 10
+    unlocked_units: ["swordsman"]
+    enemy_spawns:
+      - type: "soldier"
+        count: 3
+        hp: 40
+        atk: 8
+        speed: 45
+        spawn_interval: 2.0
+    enemy_base_hp: 100
+    player_base_hp: 200
+    win_condition: "enemy_base_hp <= 0"
+    fail_condition: "player_base_hp <= 0"
+    tutorial_hint: "DRAG TROOP → BATTLEFIELD!"
+    guaranteed_win: true
+    note: "보병 3마리만 배치하면 쉽게 적 성 함락"
+
+  - id: 2
+    name: "Archer Unlocked!"
+    difficulty: "medium"
+    duration_target: "12s"
+    bonus_gold: 20
+    unlocked_units: ["swordsman", "archer"]
+    enemy_spawns:
+      - type: "soldier"
+        count: 4
+        hp: 50
+        atk: 10
+        speed: 45
+        spawn_interval: 1.5
+      - type: "elite"
+        count: 1
+        hp: 80
+        atk: 15
+        speed: 35
+        spawn_delay: 4.0
+    enemy_base_hp: 150
+    player_base_hp: 200
+    win_condition: "enemy_base_hp <= 0"
+    fail_condition: "player_base_hp <= 0"
+    new_unit_hint: "NEW! ARCHER - Ranged Attack!"
+    fail_bait: true
+    note: "정예병 등장으로 긴장감. 궁수 없으면 아슬아슬"
+
+  - id: 3
+    name: "Boss Battle!"
+    difficulty: "hard"
+    duration_target: "15s"
+    bonus_gold: 30
+    unlocked_units: ["swordsman", "archer"]
+    enemy_spawns:
+      - type: "soldier"
+        count: 3
+        hp: 50
+        atk: 10
+        speed: 50
+        spawn_interval: 1.0
+      - type: "elite"
+        count: 2
+        hp: 80
+        atk: 15
+        speed: 40
+        spawn_delay: 3.0
+        spawn_interval: 2.0
+      - type: "boss"
+        count: 1
+        hp: 300
+        atk: 25
+        speed: 20
+        spawn_delay: 6.0
+    enemy_base_hp: 200
+    player_base_hp: 200
+    win_condition: "enemy_base_hp <= 0"
+    fail_condition: "player_base_hp <= 0"
+    fail_bait: true
+    note: "보스 HP 300 + 파상공세. 전략적 배치 필수"
+
+## =============================================================
+## CTA 설정
+## =============================================================
+
+cta_config:
+  trigger_conditions:
+    - "all_waves_clear"
+    - "player_base_destroyed"
+    - "timer >= 45"
+  title: "BUILD YOUR ARMY!"
+  subtitle: "Recruit heroes & conquer kingdoms!"
+  button_text: "INSTALL NOW"
+  button_url: "https://play.google.com/store"
+  button_color: "#ffd700"
+  button_bg: "#cc0000"
+  overlay_bg: "rgba(0, 0, 0, 0.85)"
+  mraid_support: true
+
+## =============================================================
+## 사운드 디자인 (WebAudio 프로시저럴)
+## =============================================================
+
+sound_design:
+  engine: "WebAudio"
+  sounds:
+    deploy:
+      type: "synth"
+      waveform: "square"
+      frequency: 220
+      duration: 0.15
+      note: "부대 배치 시"
+    sword_hit:
+      type: "noise"
+      duration: 0.08
+      note: "근접 공격"
+    arrow_shoot:
+      type: "synth"
+      waveform: "sine"
+      frequency: 880
+      duration: 0.1
+      note: "궁수 발사"
+    enemy_death:
+      type: "noise_burst"
+      duration: 0.12
+      note: "적 사망"
+    coin_collect:
+      type: "synth"
+      waveform: "sine"
+      frequency: [660, 880]
+      duration: 0.15
+      note: "코인 획득"
+    base_hit:
+      type: "rumble"
+      frequency: 60
+      duration: 0.2
+      note: "기지 피격"
+    wave_clear:
+      type: "fanfare"
+      frequencies: [523, 659, 784]
+      duration: 0.5
+      note: "웨이브 클리어"
+    victory:
+      type: "fanfare"
+      frequencies: [523, 659, 784, 1047]
+      duration: 0.8
+      note: "최종 승리"
+
+## =============================================================
+## VFX 디자인
+## =============================================================
+
+vfx_design:
+  particle_pool_size: 150
+  effects:
+    hit_spark:
+      count: 5
+      color: "#ffff00"
+      size: [2, 5]
+      lifetime: 0.3
+      velocity: 80
+      trigger: "melee_hit"
+    death_burst:
+      count: 10
+      color: "#ff6600"
+      size: [3, 8]
+      lifetime: 0.5
+      velocity: 120
+      trigger: "unit_death"
+    coin_pop:
+      count: 1
+      color: "#ffd700"
+      size: [8, 8]
+      lifetime: 0.6
+      velocity: -50
+      trigger: "enemy_killed"
+    base_explosion:
+      count: 20
+      color: ["#ff4400", "#ff8800", "#ffcc00"]
+      size: [4, 12]
+      lifetime: 0.8
+      velocity: 150
+      trigger: "base_destroyed"
+
+## =============================================================
+## 게임 플로우 (FSM 상태 시퀀스)
+## =============================================================
+
+game_flow:
+  - step: 1
+    state: "loading"
+    description: "에셋 로드 (Base64 디코딩). 프로그레스바 표시."
+    auto_advance: "all_assets_loaded"
+
+  - step: 2
+    state: "title"
+    duration: "2s"
+    description: "ARMY CLASH 타이틀 + Drag troops to battle! 힌트 + 드래그 모션 손 아이콘"
+    auto_advance: "2s OR first_touch"
+
+  - step: 3
+    state: "wave_intro"
+    wave: 1
+    duration: "1s"
+    description: "WAVE 1 텍스트 표시 + 전장 초기화"
+    auto_advance: "1s"
+
+  - step: 4
+    state: "playing"
+    wave: 1
+    description: "보병 카드만 활성화. 튜토리얼 힌트 표시. 적 보병 3마리 순차 스폰."
+    auto_advance: "enemy_base_destroyed OR player_base_destroyed"
+
+  - step: 5
+    state: "wave_clear"
+    duration: "1.5s"
+    description: "WAVE 1 CLEAR! 연출. 골드 보너스."
+    auto_advance: "1.5s"
+
+  - step: 6
+    state: "wave_intro"
+    wave: 2
+    duration: "1.5s"
+    description: "WAVE 2 + NEW UNIT: ARCHER! 해금 연출"
+    auto_advance: "1.5s"
+
+  - step: 7
+    state: "playing"
+    wave: 2
+    description: "보병+궁수 카드 활성화. 적 보병4+정예1. 궁수 활용 유도."
+    auto_advance: "enemy_base_destroyed OR player_base_destroyed"
+
+  - step: 8
+    state: "wave_clear"
+    duration: "1.5s"
+    description: "WAVE 2 CLEAR! 연출. 골드 보너스."
+    auto_advance: "1.5s"
+
+  - step: 9
+    state: "wave_intro"
+    wave: 3
+    duration: "1s"
+    description: "WAVE 3 - BOSS BATTLE! 보스 등장 연출"
+    auto_advance: "1s"
+
+  - step: 10
+    state: "playing"
+    wave: 3
+    description: "최종 웨이브. 보병3+정예2+보스1. 파상공세."
+    auto_advance: "enemy_base_destroyed OR player_base_destroyed"
+
+  - step: 11
+    state: "result"
+    duration: "2s"
+    description: "승리: VICTORY! + 별3개 / 패배: DEFEATED! 연출"
+    auto_advance: "2s → cta"
+
+  - step: 12
+    state: "cta"
+    description: "블러 오버레이 + BUILD YOUR ARMY! + INSTALL NOW 버튼 pulse"
+    auto_advance: "none (user interaction)"
+
+## =============================================================
+## 배틀필드 레이아웃
+## =============================================================
+
+battlefield:
+  area:
+    x: 0
+    y: 60
+    width: 540
+    height: 740
+  ground_y: 750
+  lanes: 3
+  lane_y_positions: [250, 450, 650]
+  lane_height: 160
+  player_base_x: 30
+  enemy_base_x: 510
+  spawn_area:
+    player: {x_min: 40, x_max: 100}
+    enemy: {x_min: 480, x_max: 520}
+
+## =============================================================
+## 부대 카드 UI
+## =============================================================
+
+troop_card_ui:
+  panel:
+    y: 800
+    height: 160
+    bg: "rgba(30, 20, 10, 0.85)"
+    border_top: "2px solid #8b7355"
+  card_size:
+    width: 90
+    height: 110
+  card_positions:
+    swordsman: {x: 160, y: 830}
+    archer: {x: 380, y: 830}
+  card_style:
+    bg: "rgba(60, 40, 20, 0.9)"
+    border: "2px solid #8b7355"
+    border_radius: 8
+    icon_size: 48
+    cost_icon: "coin"
+    cost_font: "bold 14px Arial"
+    name_font: "bold 11px Arial"
+  drag_feedback:
+    ghost_alpha: 0.5
+    valid_zone_color: "rgba(0, 255, 0, 0.15)"
+    invalid_zone_color: "rgba(255, 0, 0, 0.15)"
+
+## =============================================================
+## 로직 플로우 (구현 참고용 의사코드)
+## =============================================================
+
+logicFlow:
+  - step: 1
+    tag: "FlowControl"
+    action: "requestAnimationFrame 루프. dt = (ts - lastTime) / 1000."
+    next: 2
+
+  - step: 2
+    tag: "StateControl"
+    action: "state 분기: loading/title/wave_intro/playing/wave_clear/result/cta"
+    next: 3
+
+  - step: 3
+    tag: "ResponseTrigger"
+    action: |
+      InputHandler:
+      - touchstart/mousedown: 카드 영역 히트 테스트 → 드래그 시작
+      - touchmove/mousemove: 드래그 중이면 고스트 유닛 표시
+      - touchend/mouseup: 전장 영역이면 유닛 스폰, 아니면 취소
+    next: 4
+
+  - step: 4
+    tag: "Validate"
+    action: "배치 검증: gold >= unitCost AND 배치 위치가 전장 영역 내"
+    next: 5
+
+  - step: 5
+    tag: "Spawn"
+    action: |
+      유닛 생성:
+      - playerUnits.push({type, x, y, hp, maxHp, atk, speed, range, attackType})
+      - gold -= unitCost
+      - 배치 사운드 재생
+    next: 6
+
+  - step: 6
+    tag: "Iterate"
+    action: |
+      아군 유닛 업데이트 (매 프레임):
+      - 적 유닛 범위 내 탐색
+      - 적 없으면 → 우측으로 행군 (x += speed * dt)
+      - 적 있으면 → 공격 (attackCooldown 체크)
+      - 적 기지 도달 시 → 기지 공격
+    next: 7
+
+  - step: 7
+    tag: "Iterate"
+    action: |
+      적 유닛 업데이트 (매 프레임):
+      - 아군 유닛 범위 내 탐색
+      - 아군 없으면 → 좌측으로 행군 (x -= speed * dt)
+      - 아군 있으면 → 공격
+      - 아군 기지 도달 시 → 기지 공격
+    next: 8
+
+  - step: 8
+    tag: "Calculate"
+    action: |
+      전투 계산:
+      - 근접: distance < melee_range → target.hp -= atk * dt
+      - 원거리: distance < shoot_range → 투사체 생성
+      - 투사체: 이동 → 충돌 시 target.hp -= atk
+    next: 9
+
+  - step: 9
+    tag: "Despawn"
+    action: |
+      사망 처리:
+      - hp <= 0인 유닛 제거
+      - 적 사망 시: gold += goldPerKill, 파티클 이펙트
+    next: 10
+
+  - step: 10
+    tag: "ConditionCheck"
+    action: |
+      승리/패배 조건 확인:
+      - enemy_base_hp <= 0 → wave_clear
+      - player_base_hp <= 0 → defeat → cta
+      - timer >= maxTime → timeout → cta
+    next: 11
+
+  - step: 11
+    tag: "StateControl"
+    action: |
+      웨이브 전환:
+      - wave < 3: 다음 웨이브 진입 (wave_intro)
+      - wave == 3: result → cta
+    next: 12
+
+  - step: 12
+    tag: "Notify"
+    action: "CTA 표시: MRAID 대응 + window.open 폴백"
+
+## =============================================================
+## 코드 힌트
+## =============================================================
+
+codeHints:
+  patterns:
+    - "requestAnimationFrame 루프: let lastTime=0; function loop(ts){ dt=(ts-lastTime)/1000; lastTime=ts; update(dt); render(); requestAnimationFrame(loop); }"
+    - "드래그 앤 드롭: touchstart에서 카드 히트 체크, touchmove에서 고스트 위치 업데이트, touchend에서 배치 확정"
+    - "유닛 자동 전투: 매 프레임 가장 가까운 적 탐색 → range 내면 공격, 아니면 이동"
+    - "사이드뷰 레인: y좌표로 3개 레인 구분, 같은 레인의 유닛끼리만 교전"
+    - "MRAID 대응: typeof mraid !== 'undefined' ? mraid.open(url) : window.open(url)"
+    - "Canvas 스케일: canvas.width=540; scale=Math.min(window.innerWidth/540, window.innerHeight/960)"
+    - "Base64 에셋 로드: new Image(); img.onload=resolve; img.src='data:image/png;base64,...'"
+    - "적 스폰 타이머: waveTimer += dt; if(waveTimer >= nextSpawnTime) spawnEnemy()"
+  avoidPatterns:
+    - "외부 이미지 URL 사용"
+    - "CDN 라이브러리 로드"
+    - "setInterval 사용"
+    - "localStorage / sessionStorage"
+    - "동적 DOM 생성 (Canvas 단독 렌더링)"
+    - "레인 무시하고 모든 유닛 교차 전투 (성능 이슈)"
+  sizeOptimization:
+    - "에셋 PNG를 64x64 이하로 리사이즈 후 Base64"
+    - "변수명 축약은 하지 않음 (가독성 우선)"
+    - "파티클 풀 150개 사전 할당"
+    - "불필요한 주석 최소화"

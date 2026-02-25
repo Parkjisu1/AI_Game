@@ -1,0 +1,450 @@
+# Tap Shift - Game Balance Sheet / Design Specification
+# Source: AI User Observation Data (BlueStacks ADB gameplay session)
+# Method: Inferred from visual gameplay observation + game concept definition
+# Generated for: Clean Room Test - C_ai_user_only condition
+spec_version: "1.0"
+game: "Tap Shift"
+subtitle: "Pull Arrows to Escape"
+genre: "Arrow Puzzle / Path-Clearing Puzzle"
+platform: "Mobile (Android)"
+orientation: "Portrait"
+
+# ─────────────────────────────────────────────
+# CORE MECHANICS
+# ─────────────────────────────────────────────
+core_mechanics:
+  board:
+    type: "2D grid"
+    cell_unit_px: 64             # pixels per grid cell at 1080p
+    default_grid_size: "6x8"    # columns x rows (mid-game baseline from level 14 observation)
+    min_grid_size: "4x5"        # early levels
+    max_grid_size: "8x10"       # late/hard levels
+    background_color: "#1A1A2E" # dark navy (neon-on-dark art style)
+    dot_pattern_visible: true   # dots remain after arrow removed
+    dot_color: "#3A3A5C"
+
+  arrow_types:
+    count: 6
+    definitions:
+      - id: "straight_horizontal"
+        shape: "─"
+        path_direction: "left_right"
+      - id: "straight_vertical"
+        shape: "│"
+        path_direction: "up_down"
+      - id: "l_bend_ne"
+        shape: "└"
+        path_direction: "up_right"
+      - id: "l_bend_nw"
+        shape: "┘"
+        path_direction: "up_left"
+      - id: "l_bend_se"
+        shape: "┌"
+        path_direction: "down_right"
+      - id: "l_bend_sw"
+        shape: "┐"
+        path_direction: "down_left"
+      - id: "u_turn_up"
+        shape: "∩"
+        path_direction: "returns_upward"
+      - id: "u_turn_down"
+        shape: "∪"
+        path_direction: "returns_downward"
+
+  colors:
+    count: 8
+    palette:
+      - id: 0
+        name: "Red"
+        hex: "#FF3333"
+      - id: 1
+        name: "Lime"
+        hex: "#66FF33"
+      - id: 2
+        name: "Blue"
+        hex: "#1A3CFF"
+      - id: 3
+        name: "Cyan"
+        hex: "#33CCFF"
+      - id: 4
+        name: "Magenta"
+        hex: "#FF33CC"
+      - id: 5
+        name: "Orange"
+        hex: "#FF8C00"
+      - id: 6
+        name: "Yellow"
+        hex: "#FFE033"
+      - id: 7
+        name: "Light Blue"
+        hex: "#99CCFF"
+
+  interaction:
+    method: "single_tap"
+    tap_radius_px: 40            # hit area radius around arrow center
+    wrong_tap_result: "lose_1_life"
+    correct_tap_result: "arrow_removed"
+    tap_debounce_ms: 120         # prevent double-taps
+    arrow_removal_chain: false   # each tap removes exactly 1 arrow
+
+  goal_marker:
+    symbol: "G"
+    position: "variable_per_level"
+    description: "Target exit cell; all arrows must be cleared to reach it"
+
+  receiver_area:
+    position: "bottom_of_board"
+    max_receivers_per_level: 4
+    receivers_at_level_14: 3     # directly observed
+
+# ─────────────────────────────────────────────
+# LIVES SYSTEM
+# ─────────────────────────────────────────────
+lives_system:
+  max_lives: 3                  # directly observed (3 hearts)
+  display: "heart_icons"
+  display_position: "top_center"
+  lives_lost_on: "wrong_tap"
+  lives_restored_on: "level_restart"
+  lives_refill_on_new_level: true
+  regeneration:
+    enabled: false              # no timer-based regen observed; puzzle game resets on attempt
+  visual:
+    full_heart_color: "#FF4444"
+    empty_heart_color: "#333355"
+    loss_animation: "shake_and_fade"
+    loss_animation_duration_ms: 350
+
+# ─────────────────────────────────────────────
+# LEVEL PROGRESSION
+# ─────────────────────────────────────────────
+level_progression:
+  total_levels: 100             # best estimate for genre (observer noted "50-100+")
+  level_select_style: "vertical_scrolling_path"
+  level_node_shape: "circle"
+  connection_style: "line_between_circles"
+
+  difficulty_ranges:
+    tutorial:
+      levels: "1-5"
+      grid_size: "4x5"
+      arrow_count: 8
+      color_count: 3
+      arrow_types_used: 2       # only straight arrows
+    easy:
+      levels: "6-20"
+      grid_size: "5x6"
+      arrow_count: 16
+      color_count: 5
+      arrow_types_used: 4
+    medium:
+      levels: "21-50"
+      grid_size: "6x8"
+      arrow_count: 24
+      color_count: 6
+      arrow_types_used: 6
+    hard:
+      levels: "51-80"
+      grid_size: "7x9"
+      arrow_count: 32
+      color_count: 7
+      arrow_types_used: 8
+    expert:
+      levels: "81-100"
+      grid_size: "8x10"
+      arrow_count: 42
+      color_count: 8
+      arrow_types_used: 8
+
+  level_status:
+    completed: "green_circle"
+    failed: "pink_red_circle_with_skull"
+    locked: "gray_blue_circle"
+    available: "green_circle"
+
+  unlock_condition: "complete_previous_level"
+
+  level_14_reference:            # ground-truth calibration from observation
+    grid_size: "6x8"
+    arrow_count: 22              # midpoint of observed "~20-25"
+    color_count: 8
+    receiver_count: 3
+
+# ─────────────────────────────────────────────
+# SCORING
+# ─────────────────────────────────────────────
+scoring:
+  system: "star_rating"
+  max_stars: 3
+
+  star_rating_criteria:
+    basis: "wrong_taps_count"    # fewer wrong taps = more stars
+    thresholds:
+      three_stars:
+        wrong_taps_max: 0        # perfect run, no wrong taps
+      two_stars:
+        wrong_taps_max: 1        # at most 1 mistake
+      one_star:
+        wrong_taps_max: 3        # at most 3 mistakes; more = 0 stars but level still clears
+
+  completion_reward_coins:
+    three_stars: 30
+    two_stars: 20
+    one_star: 10
+
+  first_clear_bonus_coins: 50   # one-time bonus for first completion of a level
+
+  display_timing: "end_of_level_popup"
+
+# ─────────────────────────────────────────────
+# BOOSTERS
+# ─────────────────────────────────────────────
+boosters:
+  total_types: 3
+  display_position: "bottom_bar_above_ad"
+
+  definitions:
+    - id: "hint"
+      name: "Hint"
+      icon: "magnifying_glass"
+      initial_count: 1
+      max_stock: 5
+      effect: "highlights_next_correct_arrow"
+      highlight_duration_ms: 2000
+      highlight_color: "#FFFFFF"
+      cost_coins: 40
+
+    - id: "auto_step"
+      name: "Auto Step"
+      icon: "hand_pointer"
+      initial_count: 1
+      max_stock: 5
+      effect: "auto_taps_one_correct_arrow"
+      animation_duration_ms: 600
+      cost_coins: 60
+
+    - id: "undo"
+      name: "Undo"
+      icon: "hashtag"
+      initial_count: -1          # -1 = unlimited (infinity symbol observed)
+      max_stock: -1
+      effect: "restores_last_removed_arrow_and_returns_life_if_lost"
+      undo_depth: 1              # single-step undo only
+      cost_coins: 0              # free / unlimited as observed
+
+  booster_display:
+    badge_color: "#FF3333"
+    badge_font_size_sp: 12
+    infinity_symbol_threshold: -1
+
+# ─────────────────────────────────────────────
+# ANIMATION
+# ─────────────────────────────────────────────
+animation:
+  arrow_removal:
+    type: "scale_fade"
+    duration_ms: 250
+    easing: "ease_out_cubic"
+    scale_start: 1.0
+    scale_end: 0.0
+    alpha_start: 1.0
+    alpha_end: 0.0
+
+  wrong_tap_feedback:
+    type: "shake"
+    duration_ms: 350
+    shake_amplitude_px: 8
+    shake_cycles: 3
+    color_flash: "#FF0000"
+    color_flash_duration_ms: 150
+
+  correct_tap_feedback:
+    type: "pulse_glow"
+    duration_ms: 200
+    scale_peak: 1.15
+    glow_color: "arrow_own_color"
+    easing: "ease_out_back"
+
+  heart_loss:
+    type: "shake_and_shrink"
+    duration_ms: 350
+    scale_end: 0.0
+    easing: "ease_in_quad"
+
+  level_complete:
+    type: "star_reveal_sequence"
+    delay_between_stars_ms: 400
+    star_pop_duration_ms: 300
+    star_scale_peak: 1.3
+    confetti_particle_count: 60
+    confetti_duration_ms: 1500
+
+  level_fail:
+    type: "shake_screen"
+    duration_ms: 500
+    shake_amplitude_px: 12
+
+  board_entry:
+    type: "slide_up_fade_in"
+    duration_ms: 400
+    easing: "ease_out_expo"
+
+  booster_use:
+    type: "ripple_highlight"
+    duration_ms: 300
+    ripple_radius_px: 48
+    easing: "ease_out_sine"
+
+  hint_highlight:
+    type: "pulsing_border"
+    border_width_px: 4
+    pulse_period_ms: 600
+    cycles: 3
+
+# ─────────────────────────────────────────────
+# MONETIZATION
+# ─────────────────────────────────────────────
+monetization:
+  currencies:
+    soft_currency:
+      name: "Coins"
+      icon: "gold_coin"
+      observed_starting_amount: 85   # directly observed in session
+      earn_sources:
+        - "level_completion"
+        - "daily_gift"
+        - "watching_rewarded_ad"
+      spend_sinks:
+        - "hint_booster_purchase"
+        - "auto_step_booster_purchase"
+        - "continue_after_fail"
+
+  ads:
+    banner:
+      position: "bottom_strip"
+      always_visible: true
+    rewarded:
+      trigger: "watch_for_coins"
+      reward_coins: 50
+    interstitial:
+      trigger: "every_3_level_failures"
+
+  iap:
+    no_ads:
+      price_usd: 2.99
+      effect: "removes_banner_and_interstitial_ads_permanently"
+
+    coin_packs:
+      - id: "small"
+        coins: 200
+        price_usd: 0.99
+      - id: "medium"
+        coins: 600
+        price_usd: 2.49
+      - id: "large"
+        coins: 1500
+        price_usd: 4.99
+
+    booster_bundles:
+      - id: "hint_pack_5"
+        type: "hint"
+        count: 5
+        price_usd: 0.99
+      - id: "auto_step_pack_5"
+        type: "auto_step"
+        count: 5
+        price_usd: 1.49
+
+  continue_after_fail:
+    method: "coins_or_rewarded_ad"
+    coin_cost: 80
+    restores_lives: 3
+    available_attempts: 1        # one continue per failed attempt
+
+  daily_gift:
+    type: "gift_box_claim"
+    reward_coins_base: 30
+    display: "gift_button_in_level_select"
+
+# ─────────────────────────────────────────────
+# ARCHITECTURE
+# ─────────────────────────────────────────────
+architecture:
+  design_patterns:
+    primary:
+      - pattern: "Singleton"
+        usage: "GameManager, AudioManager, CurrencyManager, BoosterManager"
+      - pattern: "State Machine"
+        usage: "Game states: Idle, Playing, WrongTap, LevelComplete, LevelFail"
+      - pattern: "Command"
+        usage: "TapCommand encapsulates each tap action (supports Undo booster)"
+      - pattern: "Observer / Event Bus"
+        usage: "Decouples UI hearts, score display from game logic events"
+      - pattern: "Object Pool"
+        usage: "Arrow tile GameObjects recycled across level loads"
+      - pattern: "Factory"
+        usage: "LevelFactory parses level data and spawns arrow grid"
+
+  state_management:
+    states:
+      - "Idle"          # before first tap
+      - "Playing"       # mid-puzzle
+      - "Animating"     # locked during removal animation
+      - "WrongTap"      # brief penalty state
+      - "LevelComplete" # all arrows cleared
+      - "LevelFail"     # all lives lost
+    transitions:
+      Idle_to_Playing: "first_tap"
+      Playing_to_Animating: "valid_tap"
+      Animating_to_Playing: "animation_complete"
+      Playing_to_WrongTap: "invalid_tap"
+      WrongTap_to_Playing: "penalty_animation_complete_AND_lives_remaining"
+      WrongTap_to_LevelFail: "penalty_animation_complete_AND_lives_zero"
+      Playing_to_LevelComplete: "arrow_count_zero"
+
+  algorithms:
+    puzzle_validation:
+      name: "Topological Sort / Dependency Graph"
+      description: >
+        Each arrow node stores which arrows must be cleared before it is tappable.
+        Valid tap sequence is verified as a directed acyclic graph;
+        the puzzle is solvable iff at least one valid topological ordering exists.
+
+    level_generation:
+      name: "Procedural Constraint Satisfaction"
+      description: >
+        Start from goal G, lay arrows backwards so each arrow's path feeds
+        into the next; shuffle colors and shapes within difficulty parameters.
+        Verify solvability via topological sort before saving.
+
+    difficulty_calibration:
+      primary_metric: "minimum_taps_to_solve"
+      secondary_metric: "branching_factor"   # number of valid-looking wrong choices at each step
+      target_by_range:
+        tutorial:  { min_taps: 8,  branching: 1 }
+        easy:      { min_taps: 16, branching: 2 }
+        medium:    { min_taps: 24, branching: 3 }
+        hard:      { min_taps: 32, branching: 4 }
+        expert:    { min_taps: 42, branching: 5 }
+
+  data_format:
+    level_file: "JSON"
+    fields:
+      - "level_id: int"
+      - "grid_cols: int"
+      - "grid_rows: int"
+      - "arrows: Array<{id, row, col, color_id, type_id, depends_on: [ids]}>"
+      - "goal: {row, col}"
+      - "receivers: Array<{row, col, color_id}>"
+
+  ui_architecture:
+    pattern: "MVP (Model-View-Presenter)"
+    board_rendering: "Unity Canvas / UGUI grid layout"
+    arrow_prefab: "single prefab with SpriteRenderer swap per type/color"
+    serialized_fields: true      # Inspector wiring, no runtime Find()
+
+  performance:
+    target_fps: 60
+    max_arrows_on_screen: 50
+    pool_prewarm_count: 60       # pre-instantiate arrow pool on scene load
+    level_load_time_target_ms: 300

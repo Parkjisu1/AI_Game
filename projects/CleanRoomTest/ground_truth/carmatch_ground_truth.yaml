@@ -1,0 +1,230 @@
+# Car Match - Ground Truth
+# 원본 소스코드에서 추출한 모든 밸런스 상수 및 게임 파라미터
+# Source: E:\AI_WORK_FLOW_TEST\CarMatching\Assets\1.Scripts\
+
+version: "1.0"
+game: "Car Match"
+package: "com.grandgames.carmatch"
+extraction_date: "2026-02-19"
+
+# ============================================================
+# A. GRID & BOARD
+# ============================================================
+grid:
+  sizes_by_level:  # LevelManager
+    - { level_range: "1-10", grid: "4x4" }
+    - { level_range: "11-30", grid: "5x5" }
+    - { level_range: "31-60", grid: "6x5" }
+    - { level_range: "61-100", grid: "6x6" }
+    - { level_range: "101+", grid: "7x6" }
+  cell_size: 1.0
+  board_origin: [0, 0, 0]
+  board_base_color: [0.22, 0.25, 0.3]
+  grid_line_color: [0.5, 0.5, 0.55]
+  cell_colors:
+    - [0.35, 0.38, 0.42]
+    - [0.3, 0.33, 0.37]
+
+# ============================================================
+# B. CAR SYSTEM
+# ============================================================
+car_system:
+  car_types: 6
+  car_list:
+    - { id: 0, name: "Taxi" }
+    - { id: 1, name: "TractorPolice" }
+    - { id: 2, name: "Truck" }
+    - { id: 3, name: "Firetruck" }
+    - { id: 4, name: "GarbageTruck" }
+    - { id: 5, name: "HatchbackSports" }
+  model_scale: 0.4
+  model_y_offset: 0.25
+  movement_speed: 5.0              # world units per second
+  match_requirement: 3             # consecutive same type
+  spawn_pool_size: 10
+
+# ============================================================
+# C. HOLDER SYSTEM
+# ============================================================
+holder:
+  max_size: 7                      # default, customizable per level
+  slot_spacing: 1.0
+  position_z: -2.0
+  rotation: 180                    # degrees, faces camera
+  rotation_time: 0.15              # seconds, Ease.OutQuad
+
+# ============================================================
+# D. SCORING & STARS
+# ============================================================
+scoring:
+  coin_formula: "stars * 10"
+  coins_by_stars:
+    - { stars: 1, coins: 10 }
+    - { stars: 2, coins: 20 }
+    - { stars: 3, coins: 30 }
+  star_thresholds:
+    three_stars: "totalCars"
+    two_stars: "totalCars + 5"
+    one_star: "totalCars + 10"
+
+# ============================================================
+# E. LEVEL GENERATION
+# ============================================================
+level_generation:
+  max_levels: 200
+  car_sets_formula: "3 + (levelId / 10), max 8"
+  color_count_formula: "min(3 + (levelId / 15), 8)"
+  board_car_sets: "carTypeCount - (tunnelSpawnTotal / 3), min 2"
+  obstacle_generation: "Level 10+: 1 + (levelId / 20), max 5"
+  tunnel_generation: "Level 20+: 1 + ((levelId - 20) / 15), max 2"
+
+# ============================================================
+# F. BOOSTERS
+# ============================================================
+boosters:
+  initial_inventory:
+    undo: 5
+    shuffle: 5
+    super_undo: 3
+    magnet: 3
+  initial_coins: 500
+  types:
+    undo: { id: 0, description: "Revert last car collected" }
+    shuffle: { id: 1, description: "Randomize car positions (Fisher-Yates)" }
+    super_undo: { id: 2, description: "Remove last car from holder" }
+    magnet: { id: 3, description: "Auto-collect 3 matching cars" }
+  move_history_max: 50
+
+# ============================================================
+# G. TUNNEL SYSTEM
+# ============================================================
+tunnel:
+  spawn_animation_duration: 0.3     # seconds
+  spawn_ease_scale: "Ease.OutBack"
+  spawn_ease_move: "Ease.OutQuad"
+  spawn_count_low: 3               # Level < 35
+  spawn_count_high: 6              # Level >= 35
+  spawn_delay_after_collection: 0.1
+  spawn_delay_after_match: 0.7
+  spawn_queue_unit: 3              # 3-car sets
+  placement: "board edges (top, left, right - not bottom)"
+
+# ============================================================
+# H. ANIMATION TIMINGS
+# ============================================================
+animation:
+  car_rotation: 0.1                # seconds, Ease.OutQuad
+  match_punch_scale: 0.15          # multiplier
+  match_punch_duration: 0.12
+  match_disappear: 0.18            # seconds, Ease.InBack
+  merge_fly_up: 0.25               # seconds, Ease.OutQuad
+  merge_disappear: 0.15            # seconds, Ease.InBack
+  merge_height: 0.5                # units above target
+  match_processing_delay: 0.4
+  holder_full_check_delay: 0.5
+  match_rearrange_delay: 0.6
+  storage_move: 0.25               # seconds
+
+# ============================================================
+# I. OBSTACLE SYSTEM
+# ============================================================
+obstacles:
+  types: ["Wall", "Box", "Lock", "Ice", "Tunnel"]
+  spawn_pool_size: 5
+  default_size: [1, 1]
+
+# ============================================================
+# J. PATHFINDING
+# ============================================================
+pathfinding:
+  algorithm: "A* with Manhattan distance"
+  directions: ["down", "left", "right", "up"]  # priority order
+  movement: "4-directional orthogonal only"
+  path_reservation: true           # prevents collision during transit
+  waypoint_merge_threshold: 0.99   # dot product, ~8 degree angle
+  direct_path_fallback_max: 3      # cells
+
+# ============================================================
+# K. STORAGE SYSTEM
+# ============================================================
+storage:
+  count: 2                         # left & right
+  capacity_each: 1
+  indices: [0, 1]
+
+# ============================================================
+# L. DAILY REWARDS
+# ============================================================
+daily_rewards:
+  max_streak: 7
+  rewards:
+    - { day: 1, coins: 50 }
+    - { day: 2, coins: 75 }
+    - { day: 3, coins: 100 }
+    - { day: 4, coins: 150 }
+    - { day: 5, coins: 200 }
+    - { day: 6, coins: 300 }
+    - { day: 7, coins: 500 }
+  cooldown: "24 hours (midnight to midnight)"
+
+# ============================================================
+# M. JOURNEY REWARDS
+# ============================================================
+journey_rewards:
+  milestone_interval: 5            # every 5 levels
+  max_milestones: 50               # up to level 250
+  examples:
+    - { level: 5, coins: 100 }
+    - { level: 10, coins: 200, boosters: { undo: 1 } }
+    - { level: 20, coins: 400, boosters: { shuffle: 1 } }
+    - { level: 30, reward: "30 min Infinite Hearts" }
+    - { level: 50, coins: 1000, boosters: { shuffle: 2, undo: 2 } }
+  dynamic_scaling: "coins = 200 + (levelId * 10)"
+
+# ============================================================
+# N. CAMERA
+# ============================================================
+camera:
+  default_angle: 70                # degrees
+  base_height_5x5: 12.0
+  scaling_formula: "maxDimension / (5.0 * cellSize)"
+  fov_adjustment: "dynamic based on grid size"
+
+# ============================================================
+# O. GAME STATES
+# ============================================================
+states:
+  - { id: 0, name: "Idle" }
+  - { id: 1, name: "Playing" }
+  - { id: 2, name: "Paused" }
+  - { id: 3, name: "Win" }
+  - { id: 4, name: "Fail" }
+
+# ============================================================
+# P. ARCHITECTURE
+# ============================================================
+architecture:
+  patterns:
+    - "Singleton (EventBus, DataManager, LevelManager)"
+    - "Object Pool (CarController, ObstacleController)"
+    - "State Machine (GameState enum)"
+    - "Observer/Pub-Sub (EventBus)"
+    - "Factory (LevelManager.GenerateLevel)"
+    - "Command (BoosterProcessor)"
+    - "Strategy (A*, BFS pathfinding)"
+    - "Component (MonoBehaviour)"
+  namespace: "CarMatch"
+  singletons:
+    persistent: ["EventBus", "DataManager", "LevelManager", "FirebaseManager", "ObjectPool"]
+    scene_specific: ["BoardManager", "HolderController", "StageStateHandler", "TutorialManager"]
+  core_logic:
+    - "MatchChecker (3-car detection)"
+    - "PathFinder (A* with Manhattan)"
+    - "MoveValidator (BFS reachability)"
+    - "ScoreCalculator"
+  serialization:
+    config: "LevelData.json (Resources/)"
+    save: "PlayerPrefs (CarMatchUserData key)"
+    format: "JSON (JsonUtility)"
+  win_condition: "Board empty AND Holder empty AND no pending cars"
+  fail_condition: "Holder full (7) with no possible match"

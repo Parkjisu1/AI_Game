@@ -1,0 +1,274 @@
+{
+  "fileName": "Stage_OpenType",
+  "filePath": "E:/AIMED/FantaPuzzle/PuzzleAutomation2/Assets\\Resources\\Prefabs\\StageType\\Stage_OpenType.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 6,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "5109069406190359286",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Scrollbar Vertical",
+      "rectSize": {
+        "x": 20.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 1.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "Stage_OpenType"
+    }
+  ],
+  "scrollRects": [
+    {
+      "type": "ScrollRect",
+      "fileID": "5109069406841120769",
+      "m_Horizontal": 0,
+      "m_Vertical": 1,
+      "m_Inertia": 1,
+      "m_DecelerationRate": 0.135,
+      "m_ScrollSensitivity": 1.0,
+      "gameObjectName": "Stage_OpenType",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "Stage_OpenType"
+    }
+  ],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "5109069406190359285",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10907,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Scrollbar Vertical",
+      "rectSize": {
+        "x": 20.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 1.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "Stage_OpenType"
+    },
+    {
+      "type": "Image",
+      "fileID": "5109069406357178372",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 0.039215688
+      },
+      "m_Sprite": {
+        "fileID": 10917,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Viewport",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "sourceFile": "Stage_OpenType"
+    },
+    {
+      "type": "Image",
+      "fileID": "5109069406541102275",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 10905,
+        "guid": "0000000000000000f000000000000000",
+        "type": 0
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Handle",
+      "rectSize": {
+        "x": 20.0,
+        "y": 20.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMax": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "sourceFile": "Stage_OpenType"
+    }
+  ],
+  "texts": [],
+  "layoutGroups": [
+    {
+      "type": "GridLayoutGroup",
+      "fileID": "5109069405443911451",
+      "m_CellSize": {
+        "x": 200.0,
+        "y": 200.0
+      },
+      "m_Spacing": {
+        "x": 10.0,
+        "y": 10.0
+      },
+      "m_Constraint": 1,
+      "m_ConstraintCount": 4,
+      "m_Padding": {
+        "m_Left": 30,
+        "m_Right": 0,
+        "m_Top": 0,
+        "m_Bottom": 0
+      },
+      "m_ChildAlignment": 4,
+      "gameObjectName": "Content",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "Stage_OpenType"
+    }
+  ],
+  "contentSizeFitters": [
+    {
+      "type": "ContentSizeFitter",
+      "fileID": "5109069405443911460",
+      "m_HorizontalFit": 0,
+      "m_VerticalFit": 2,
+      "gameObjectName": "Content",
+      "rectSize": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.0,
+        "y": 1.0
+      },
+      "anchorMax": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "sourceFile": "Stage_OpenType"
+    }
+  ],
+  "rectTransformCount": 6
+}

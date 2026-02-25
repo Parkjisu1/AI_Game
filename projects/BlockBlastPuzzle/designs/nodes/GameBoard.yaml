@@ -1,0 +1,69 @@
+node:
+  name: GameBoard
+  layer: Domain
+  genre: Puzzle
+  role: Manager
+  file: GameBoard.cs
+  namespace: BlockBlast.Domain
+
+spec:
+  description: "8x8 퍼즐 보드. 셀 상태 추적, 블록 배치/줄 클리어"
+  base_class: "Singleton<GameBoard>"
+  provides:
+    - "PlaceBlock"
+    - "CanPlaceBlock"
+    - "CheckAndClearLines"
+    - "GetCell"
+    - "ClearBoard"
+  requires:
+    - "CellVisual"
+    - "SpriteFactory"
+    - "EventManager"
+
+  constants:
+    - { name: BOARD_SIZE, value: 8 }
+    - { name: CELL_SIZE, value: 0.9f }
+    - { name: CELL_GAP, value: 0.1f }
+
+  members:
+    - name: _cells
+      type: "CellVisual[,]"
+      access: private
+    - name: _occupied
+      type: "bool[,]"
+      access: private
+
+  methods:
+    - name: InitBoard
+      logic: |
+        8x8 그리드 생성
+        각 셀에 CellVisual 인스턴스 배치
+        코드로 GameObject + SpriteRenderer 생성
+    - name: CanPlaceBlock
+      params: [{ name: shape, type: BlockShape }, { name: gridPos, type: Vector2Int }]
+      returns: bool
+      logic: "모양의 모든 셀이 보드 범위 내이고 빈 칸인지 확인"
+    - name: PlaceBlock
+      params: [{ name: shape, type: BlockShape }, { name: gridPos, type: Vector2Int }, { name: color, type: Color }]
+      returns: bool
+      logic: "블록 배치 → 셀 점유 → 줄 체크"
+    - name: CheckAndClearLines
+      returns: int
+      logic: "완성된 가로/세로줄 찾아서 클리어, 클리어 수 반환"
+    - name: ShowPreview
+      params: [{ name: shape, type: BlockShape }, { name: gridPos, type: Vector2Int }, { name: valid, type: bool }]
+      logic: "드래그 중 배치 미리보기 표시"
+    - name: ClearPreview
+      logic: "미리보기 해제"
+    - name: WorldToGrid
+      params: [{ name: worldPos, type: Vector3 }]
+      returns: Vector2Int
+    - name: GridToWorld
+      params: [{ name: gridPos, type: Vector2Int }]
+      returns: Vector3
+    - name: HasValidPlacement
+      params: [{ name: shape, type: BlockShape }]
+      returns: bool
+      logic: "보드 전체 순회하여 배치 가능 위치 존재 여부"
+    - name: ClearBoard
+      logic: "보드 초기화"

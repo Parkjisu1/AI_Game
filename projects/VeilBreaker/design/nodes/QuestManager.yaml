@@ -1,0 +1,93 @@
+metadata:
+  nodeId: "QuestManager"
+  version: "1.0.0"
+  phase: 2
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "DataManager"
+    - "CurrencyManager"
+    - "EventManager"
+    - "SaveManager"
+  external:
+    - "System"
+    - "System.Collections.Generic"
+
+contract:
+  provides:
+    - "List<UserQuestData> GetDailyQuests()"
+    - "List<UserQuestData> GetWeeklyQuests()"
+    - "List<UserQuestData> GetAchievements()"
+    - "bool ClaimReward(string questId)"
+    - "void UpdateProgress(string condition, int amount)"
+  requires:
+    - "Singleton"
+    - "DataManager"
+    - "CurrencyManager"
+    - "EventManager"
+
+tags:
+  layer: "Domain"
+  genre: "Idle"
+  role: "Manager"
+  system: "Quest"
+  majorFunctions:
+    - "StateControl"
+    - "ConditionCheck"
+    - "ValueModification"
+  minorFunctions:
+    - "Aggregate"
+    - "Compare"
+    - "Notify"
+
+logicFlow:
+  - step: 1
+    tag: "ConditionCheck"
+    action: "Init: 일일 퀘스트 리셋 날짜 확인 (lastRefreshedAt vs 오늘)"
+    next: 2
+  - step: 2
+    tag: "Assign"
+    action: "리셋 필요 시 일일 퀘스트 진행도 초기화, 날짜 업데이트"
+    next: null
+  - step: 3
+    tag: "Find"
+    action: "UpdateProgress: condition 매칭하는 퀘스트 목록 탐색"
+    next: 4
+  - step: 4
+    tag: "Assign"
+    action: "progress += amount, targetCount 달성 시 isComplete = true"
+    next: 5
+  - step: 5
+    tag: "Notify"
+    action: "EventManager.Publish(OnQuestProgress, questId)"
+    next: null
+  - step: 6
+    tag: "Validate"
+    action: "ClaimReward: isComplete && !isClaimed 체크"
+    next: 7
+  - step: 7
+    tag: "Assign"
+    action: "보상 지급 (CurrencyManager), isClaimed = true"
+    next: 8
+  - step: 8
+    tag: "Notify"
+    action: "EventManager.Publish(OnQuestComplete, questId)"
+    next: null
+
+referencePatterns:
+  - source: "CLAUDE.md"
+    pattern: "QuestManager - 일일/주간/업적 퀘스트"
+
+codeHints:
+  patterns:
+    - "public class QuestManager : Singleton<QuestManager>"
+    - "구독: OnEnemyDie → UpdateProgress('kill_enemy', 1)"
+    - "구독: OnStageComplete → UpdateProgress('clear_stage', 1)"
+    - "구독: OnGachaResult → UpdateProgress('gacha_pull', count)"
+    - "일일 리셋 체크: DateTime.Now.Date > lastRefreshDate"
+    - "퀘스트 조건 문자열: 'kill_enemy', 'clear_stage', 'level_up_hero', 'pull_gacha'"
+  avoidPatterns:
+    - "퀘스트 조건을 하드코딩 금지 → QuestTable condition 필드 참조"
+    - "이미 수령한 퀘스트 중복 보상 방지 (isClaimed 체크)"

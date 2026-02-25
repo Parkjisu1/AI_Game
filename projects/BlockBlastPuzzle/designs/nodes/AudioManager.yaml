@@ -1,0 +1,37 @@
+node:
+  name: AudioManager
+  layer: Core
+  genre: Generic
+  role: Manager
+  file: AudioManager.cs
+  namespace: BlockBlast.Core
+
+spec:
+  description: "AudioSource 기반 사운드/BGM 관리. 프리팹 없이 코드로 AudioSource 생성"
+  base_class: "Singleton<AudioManager>"
+  provides:
+    - "PlaySFX"
+    - "PlayBGM"
+    - "SetVolume"
+    - "ToggleMute"
+
+  members:
+    - name: _bgmSource
+      type: AudioSource
+      access: private
+    - name: _sfxSource
+      type: AudioSource
+      access: private
+    - name: _isMuted
+      type: bool
+      access: private
+
+  methods:
+    - name: Init
+      logic: "코드로 AudioSource 2개 생성 (BGM/SFX)"
+    - name: PlaySFX
+      params: [{ name: clip, type: AudioClip }]
+    - name: PlayBGM
+      params: [{ name: clip, type: AudioClip }]
+    - name: ToggleMute
+      logic: "SaveManager로 상태 저장"

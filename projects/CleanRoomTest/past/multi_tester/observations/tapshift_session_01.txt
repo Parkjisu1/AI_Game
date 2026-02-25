@@ -1,0 +1,44 @@
+파일 정보가 확인되었습니다.
+
+---
+
+## 분석 결과
+
+### 파일 메타데이터
+| 파일 | 해상도 | 색상 모드 | 파일 크기 |
+|------|--------|-----------|-----------|
+| 01_launch.png | 1080 x 1920 | 8-bit RGBA | 13KB |
+| 02_main_menu.png | 1080 x 1920 | 8-bit RGBA | 13KB |
+| 03_settings.png | 1080 x 1920 | 8-bit RGBA | 13KB |
+
+### 문제 원인
+
+이미지 파일은 **구조적으로 유효한 PNG** (1080×1920 RGBA) 이지만, 세 파일 모두 **완전히 검은 픽셀**만 포함되어 있습니다.
+
+가장 유력한 원인: **Android `FLAG_SECURE` 차단**
+
+게임 앱이 `WindowManager.LayoutParams.FLAG_SECURE` 플래그를 설정한 경우, Android OS가 스크린샷/화면 녹화를 시스템 레벨에서 차단하여 검은 화면만 캡처됩니다. 이는 보안 민감 앱(금융, 게임 해킹 방지 등)에서 흔히 사용됩니다.
+
+---
+
+### 해결 방법
+
+**옵션 1: 에뮬레이터 사용**
+- Android Studio Emulator 또는 BlueStacks 에서 실행
+- 에뮬레이터는 FLAG_SECURE 무시하는 경우가 많음
+
+**옵션 2: ADB 스크린샷 (루팅된 기기)**
+```bash
+adb shell screencap -p /sdcard/screen.png
+adb pull /sdcard/screen.png
+```
+
+**옵션 3: 외부 카메라**
+- 실물 기기 화면을 별도 카메라로 촬영
+
+**옵션 4: ADB 설정 변경 (에뮬레이터)**
+```bash
+adb shell settings put global policy_control immersive.full=*
+```
+
+스크린샷을 재촬영 후 다시 제공해 주시면 분석을 진행하겠습니다.

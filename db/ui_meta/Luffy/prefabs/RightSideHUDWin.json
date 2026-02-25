@@ -1,0 +1,1276 @@
+{
+  "fileName": "RightSideHUDWin",
+  "filePath": "E:/AIMED/Luffy/IdleMoney1/Project/Assets\\IdleMoney\\Prefabs\\UI\\Windows\\RightSideHUDWin.prefab",
+  "fileType": "prefab",
+  "gameObjectCount": 59,
+  "canvases": [],
+  "canvasScalers": [],
+  "canvasGroups": [],
+  "buttons": [
+    {
+      "type": "Button",
+      "fileID": "4721760687547146234",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 0,
+      "gameObjectName": "Boost2Slider",
+      "rectSize": {
+        "x": 143.0,
+        "y": 33.0
+      },
+      "anchoredPosition": {
+        "x": 70.6,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "2406445056991624982",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 0,
+      "gameObjectName": "Boost3Slider",
+      "rectSize": {
+        "x": 143.0,
+        "y": 33.0
+      },
+      "anchoredPosition": {
+        "x": -309.0,
+        "y": 187.00003
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "2590144287894356674",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 0,
+      "gameObjectName": "Boost1Slider",
+      "rectSize": {
+        "x": 143.0,
+        "y": 33.0
+      },
+      "anchoredPosition": {
+        "x": 70.6,
+        "y": -0.2
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "4334028294558764314",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Button",
+      "rectSize": {
+        "x": 192.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "5960188496215095711",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Boost1RecommendNode_Off",
+      "rectSize": {
+        "x": 202.0,
+        "y": 118.0
+      },
+      "anchoredPosition": {
+        "x": -4.9,
+        "y": 9.700897
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Button",
+      "fileID": "373335247579083500",
+      "m_Colors": {
+        "m_NormalColor": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0,
+          "a": 1.0
+        },
+        "m_HighlightedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_PressedColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 1.0
+        },
+        "m_SelectedColor": {
+          "r": 0.9607843,
+          "g": 0.9607843,
+          "b": 0.9607843,
+          "a": 1.0
+        },
+        "m_DisabledColor": {
+          "r": 0.78431374,
+          "g": 0.78431374,
+          "b": 0.78431374,
+          "a": 0.5019608
+        }
+      },
+      "m_Navigation": {
+        "m_Mode": 3
+      },
+      "m_Interactable": 1,
+      "gameObjectName": "Button",
+      "rectSize": {
+        "x": 192.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    }
+  ],
+  "scrollRects": [],
+  "images": [
+    {
+      "type": "Image",
+      "fileID": "8088359540937572198",
+      "m_Type": 3,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "e28b856152a1725468c5ebf40107801e",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "GaugeFull",
+      "rectSize": {
+        "x": 143.0,
+        "y": 33.0
+      },
+      "anchoredPosition": {
+        "x": -309.0,
+        "y": 187.00003
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "8091675587415566375",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "9016376195c24a84eabed3d870451697",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Boost1RemainTimeNode",
+      "rectSize": {
+        "x": 165.0,
+        "y": 57.0
+      },
+      "anchoredPosition": {
+        "x": 535.0,
+        "y": 388.9
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "6575678257706750595",
+      "m_Type": 3,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "92319a0d19cd1a84ebea3a521bdda060",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Boost1Gauge",
+      "rectSize": {
+        "x": 143.0,
+        "y": 33.0
+      },
+      "anchoredPosition": {
+        "x": 1.8,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7320156002564993055",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "f7be16b0922df423eb2ccc528b9c4c5e",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Icon2Img",
+      "rectSize": {
+        "x": 48.0,
+        "y": 35.0
+      },
+      "anchoredPosition": {
+        "x": 32.69995,
+        "y": 70.2
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "5994540428164436150",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "e28b856152a1725468c5ebf40107801e",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Boost2Slider",
+      "rectSize": {
+        "x": 143.0,
+        "y": 33.0
+      },
+      "anchoredPosition": {
+        "x": 70.6,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "6693335648800680115",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "e28b856152a1725468c5ebf40107801e",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Boost3Slider",
+      "rectSize": {
+        "x": 143.0,
+        "y": 33.0
+      },
+      "anchoredPosition": {
+        "x": -309.0,
+        "y": 187.00003
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "3713392313761884053",
+      "m_Type": 3,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "50b348ba283315c4382b950b725bf5ac",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Boost2Gauge",
+      "rectSize": {
+        "x": 143.0,
+        "y": 33.0
+      },
+      "anchoredPosition": {
+        "x": 1.8,
+        "y": -0.4
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7544719847449028042",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8e67f4533bd274c2490c44992c7aa826",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Icon1Img_1",
+      "rectSize": {
+        "x": 88.0,
+        "y": 52.0
+      },
+      "anchoredPosition": {
+        "x": -84.9,
+        "y": -0.7
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "8451534592516412347",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "04b2a876088027d4cb5015572efb3df7",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "GaugeIconBG_2",
+      "rectSize": {
+        "x": 77.0,
+        "y": 77.0
+      },
+      "anchoredPosition": {
+        "x": -101.2,
+        "y": -0.8
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7178596442395987256",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "4158c1f585f061248bc95f3bfc8baca3",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "IconImg_1",
+      "rectSize": {
+        "x": 74.25,
+        "y": 72.0
+      },
+      "anchoredPosition": {
+        "x": -412.60004,
+        "y": 196.90002
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7788867185534311383",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "e28b856152a1725468c5ebf40107801e",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Boost1Slider",
+      "rectSize": {
+        "x": 143.0,
+        "y": 33.0
+      },
+      "anchoredPosition": {
+        "x": 70.6,
+        "y": -0.2
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "2160742905823464518",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.06666667,
+        "g": 0.5137255,
+        "b": 0.43529412,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "228b9829034604390a6a7db4dd2fe3dc",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Tag2Img",
+      "rectSize": {
+        "x": 160.0,
+        "y": 35.0
+      },
+      "anchoredPosition": {
+        "x": -0.20019531,
+        "y": -14.2
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "8602065517052638157",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "f7be16b0922df423eb2ccc528b9c4c5e",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Icon2Img_1",
+      "rectSize": {
+        "x": 48.0,
+        "y": 35.0
+      },
+      "anchoredPosition": {
+        "x": -64.5,
+        "y": 32.6
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "3639357786044770047",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "04b2a876088027d4cb5015572efb3df7",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "GaugeIconBG",
+      "rectSize": {
+        "x": 77.0,
+        "y": 77.0
+      },
+      "anchoredPosition": {
+        "x": -414.60004,
+        "y": 186.5
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "2330999845448247437",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "fcc10b7634dafb740a91b5c7d1bf862e",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "ADImg",
+      "rectSize": {
+        "x": 46.0,
+        "y": 44.0
+      },
+      "anchoredPosition": {
+        "x": -81.7,
+        "y": 33.2
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "4727148809493158694",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "cb38115e00f174bb1b6c577b33d34a12",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Button",
+      "rectSize": {
+        "x": 192.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "9079778757647734557",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 0.95686275,
+        "b": 0.7254902,
+        "a": 0.7294118
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "4c8f1e50ed97795438ab578a63535f4a",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "FX_LIne",
+      "rectSize": {
+        "x": 80.0,
+        "y": 200.0
+      },
+      "anchoredPosition": {
+        "x": -129.0,
+        "y": 5.4
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "7815163882912459697",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 0.7294118
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "4c8f1e50ed97795438ab578a63535f4a",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "FX_LIne",
+      "rectSize": {
+        "x": 80.0,
+        "y": 200.0
+      },
+      "anchoredPosition": {
+        "x": -129.0,
+        "y": 11.2
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "834123504148557475",
+      "m_Type": 3,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "27ecf54a058f1644bb617f4c5d21edf0",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Boost1RecommendNode_Off",
+      "rectSize": {
+        "x": 202.0,
+        "y": 118.0
+      },
+      "anchoredPosition": {
+        "x": -4.9,
+        "y": 9.700897
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "5855631473121900475",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "9016376195c24a84eabed3d870451697",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "GaugeFullBG",
+      "rectSize": {
+        "x": 165.0,
+        "y": 57.0
+      },
+      "anchoredPosition": {
+        "x": -311.60013,
+        "y": 187.70007
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "8724065757233668267",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "03dae92edf9234f1189762db821cb57a",
+        "type": 3
+      },
+      "m_RaycastTarget": 1,
+      "gameObjectName": "Button",
+      "rectSize": {
+        "x": 192.0,
+        "y": 100.0
+      },
+      "anchoredPosition": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "4049638719982442879",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "fcc10b7634dafb740a91b5c7d1bf862e",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "ADImg",
+      "rectSize": {
+        "x": 46.0,
+        "y": 44.0
+      },
+      "anchoredPosition": {
+        "x": -81.7,
+        "y": 34.6
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "542067845521526743",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "04b2a876088027d4cb5015572efb3df7",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "GaugeIconBG_1",
+      "rectSize": {
+        "x": 77.0,
+        "y": 77.0
+      },
+      "anchoredPosition": {
+        "x": -101.2,
+        "y": -0.2
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "5000504648231333125",
+      "m_Type": 0,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "8e67f4533bd274c2490c44992c7aa826",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Icon1Img",
+      "rectSize": {
+        "x": 88.0,
+        "y": 52.0
+      },
+      "anchoredPosition": {
+        "x": 10.100049,
+        "y": 25.9
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "8297600783760492752",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 0.45490196,
+        "g": 0.12941177,
+        "b": 0.56078434,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "228b9829034604390a6a7db4dd2fe3dc",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Tag1Img",
+      "rectSize": {
+        "x": 150.0,
+        "y": 32.0
+      },
+      "anchoredPosition": {
+        "x": 0.2,
+        "y": -18.0
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    },
+    {
+      "type": "Image",
+      "fileID": "5443955053964393328",
+      "m_Type": 1,
+      "m_Color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "m_Sprite": {
+        "fileID": 21300000,
+        "guid": "9016376195c24a84eabed3d870451697",
+        "type": 3
+      },
+      "m_RaycastTarget": 0,
+      "gameObjectName": "Boost2RemainTimeNode",
+      "rectSize": {
+        "x": 165.0,
+        "y": 57.0
+      },
+      "anchoredPosition": {
+        "x": 535.0,
+        "y": 479.90002
+      },
+      "anchorMin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchorMax": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "sourceFile": "RightSideHUDWin"
+    }
+  ],
+  "texts": [],
+  "layoutGroups": [],
+  "contentSizeFitters": [],
+  "rectTransformCount": 54
+}
