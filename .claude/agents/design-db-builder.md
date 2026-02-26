@@ -60,6 +60,13 @@ allowed_tools:
 - 처리: source_type: observed, reference_only: true
 - 주의: 저작권 주의, 수치만 추출 (게임명 익명화 옵션)
 
+### 상태 6: Project Snapshot (프로젝트 레이어 1 저장)
+- 특징: 프로젝트 전체 기획 구조를 하나의 파일로 통짜 저장
+- 처리: `_projects/{project}.json`에 저장
+- 목적: 프로젝트 간 비교 분석, 전체 구조 참조
+- source_type: 입력 자료에 따라 결정 (internal_original, internal_produced 등)
+- 저장 경로: `E:\AI\db\design\base\{genre}\_projects\{project}.json`
+
 ---
 
 ## 분류 체계
@@ -78,7 +85,7 @@ allowed_tools:
 | Meta | 메타 진행, 장기 루프 | Progression, Unlock, Achievement |
 
 ### Genre (9종)
-Generic, RPG, Idle, Merge, SLG, Tycoon, Simulation, Puzzle, Playable
+Generic, RPG, Idle, Merge, SLG, Tycoon, Simulation, Puzzle, Casual
 
 ### data_type (6종)
 | data_type | 정의 | 예시 |
@@ -90,10 +97,12 @@ Generic, RPG, Idle, Merge, SLG, Tycoon, Simulation, Puzzle, Playable
 | config | 설정값, 상수 | 최대 인벤토리: 100, 새로고침 시간: 30분 |
 | content_data | 콘텐츠 배치 데이터 | 스테이지 1-1 몬스터 배치 |
 
-### source_type (4종)
-- **internal_original**: 자사 게임의 원본 기획 문서
-- **internal_produced**: 자사 기획서 기반으로 생성/가공된 데이터
+### source_type (6종)
+- **internal_original**: 자사 게임의 원본 기획 문서 (실증 데이터)
+- **internal_produced**: Workflow를 통해 생산되어 디렉터 검증을 거친 자료
+- **internal_live**: 라이브 운영 중 수정/업데이트된 자료 (KPI 데이터 포함)
 - **observed**: 외부 게임 관찰 또는 회의록 등 비공식 자료
+- **community**: 위키, 가이드 등 공개 커뮤니티 데이터
 - **generated**: AI가 추론하여 생성한 보완 데이터
 
 ---

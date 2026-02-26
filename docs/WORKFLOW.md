@@ -21,7 +21,9 @@ E:\AI\
 │   │   └── db-search\
 │   └── agents\                  # Custom Agent Definitions
 │       ├── designer.md          # 기획 AI (Sonnet)
-│       ├── coder.md             # 코드 생성 AI (Opus)
+│       ├── main-coder.md        # 메인 코드 생성 AI (Opus)
+│       ├── sub-coder.md         # 서브 코드 생성 AI (Sonnet)
+│       ├── playable-coder.md    # 플레이어블 코드 생성 AI (Sonnet)
 │       ├── validator.md         # 검증 AI (Sonnet)
 │       └── db-builder.md        # DB 구축 AI (Sonnet)
 ├── db\                          # 코드 데이터베이스
@@ -44,15 +46,21 @@ E:\AI\
                      │   - 품질 게이트 관리    │
                      └──────────┬───────────┘
               ┌─────────────────┼─────────────────┐
-        ┌─────┴──────┐   ┌─────┴──────┐   ┌──────┴───────┐
-        │  Designer  │   │  Coder x N │   │  Validator   │
-        │  (Sonnet)  │   │  (Opus)    │   │  (Sonnet)    │
-        │  기획 전문  │   │  코드 생성  │   │  검증 전문    │
-        └────────────┘   └────────────┘   └──────────────┘
-                         ┌─────┴──────┐
-                         │ DB Builder │  (필요 시)
-                         │  (Sonnet)  │
-                         └────────────┘
+        ┌─────┴──────┐   ┌──────────────────┐   ┌──────┴───────┐
+        │  Designer  │   │  Main Coder      │   │  Validator   │
+        │  (Sonnet)  │   │  (Opus)          │   │  (Sonnet)    │
+        │  기획 전문  │   │  Core + 핵심     │   │  검증 전문    │
+        └────────────┘   ├──────────────────┤   └──────────────┘
+                         │  Sub Coder x2    │
+                         │  (Sonnet) 병렬   │
+                         ├──────────────────┤
+                         │ Playable Coder   │
+                         │  (Sonnet) HTML5  │
+                         └──────────────────┘
+                         ┌──────────────────┐
+                         │   DB Builder     │  (필요 시)
+                         │    (Sonnet)      │
+                         └──────────────────┘
 ```
 
 ### Agent별 역할
@@ -106,7 +114,7 @@ E:\AI\
 Layer > Genre > Role > Tag
 
 Layer: Core / Domain / Game
-Genre: Generic / RPG / Idle / Merge / SLG / Tycoon / Simulation / Puzzle / Playable
+Genre: Generic / RPG / Idle / Merge / SLG / Tycoon / Simulation / Puzzle / Casual
 Role: Manager / Controller / Calculator / ... / UX (21종)
 Tag: Major (7종) + Minor (11종)
 ```
@@ -449,12 +457,21 @@ DB Builder를 사용해서 병렬로 진행해줘.
 
 ## 명령어 요약
 
+### Code Workflow
 | 명령어 | 용도 | 담당 Agent |
 |--------|------|-----------|
-| `/parse-source` | 소스 파싱 → DB | DB Builder |
+| `/parse-source` | 소스 파싱 → Code DB | DB Builder |
 | `/generate-design` | 기획서 생성 | Designer |
-| `/generate-code` | 코드 생성 | Coder |
+| `/generate-code` | 코드 생성 | Main/Sub Coder |
 | `/validate-code` | 코드 검증 | Validator |
+
+### Design Workflow
+| 명령어 | 용도 | 담당 Agent |
+|--------|------|-----------|
+| `/parse-design` | 기획 문서 → Design DB 파싱 저장 | Design DB Builder |
+| `/generate-design-v2` | 8단계 기획 워크플로우 전체 실행 | Designer (design mode) |
+| `/validate-design` | 기획 교차 검증 + 밸런스 시뮬 | Design Validator |
+| `/sync-live` | 라이브 지표 → Design DB 동기화 | Design DB Builder |
 
 ---
 
@@ -662,6 +679,24 @@ node E:/AI/scripts/play-verification.js --project MyGame --mode longterm --days 
 
 # 7-3 Mass Simulation (100 페르소나)
 node E:/AI/scripts/play-verification.js --project MyGame --mode mass --personas 100
+```
+
+### Design ↔ Code 역방향 피드백 경로
+
+코드 Workflow 또는 플레이 검증에서 기획 이슈 발견 시 역방향 피드백:
+
+```
+기획 7단계 플레이 검증 실패 시:
+
+  밸런스 이슈 → 기획 2-3단계(밸런스)만 수정 → 코드 Calculator만 재생성
+  시스템 이슈 → 기획 2-2단계(시스템) 수정 → 코드 해당 Phase부터 재시작
+  양쪽 이슈  → 기획 2단계 전체 수정 → 코드 전체 재생성
+
+코드 Workflow 검증 실패 시:
+
+  구현 불가 판정 → 기획 L3 logicFlow 수정 요청 → Designer 재생성
+  계약 불일치   → 기획 L2 relations 수정 → L3 의존성 재검증
+  밸런스 이상치 → 기획 Balance 도메인 수정 → Calculator만 재생성
 ```
 
 ### Design → Code Workflow 통합

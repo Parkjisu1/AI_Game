@@ -77,7 +77,7 @@ E:\AI\db\
 | Game | 프로젝트 특화 | Page, Popup, Element, partial class |
 
 ### Genre (9종)
-Generic, RPG, Idle, Merge, SLG, Tycoon, Simulation, Puzzle, Playable
+Generic, RPG, Idle, Merge, SLG, Tycoon, Simulation, Puzzle, Casual
 
 ### Role (21종) - 클래스명 패턴으로 분류
 | Role | 정의 | 패턴 |
@@ -138,10 +138,18 @@ Compare, Calculate, Find, Validate, Assign, Notify, Delay, Spawn, Despawn, Itera
 ---
 
 ## 명령어
+
+### Code Workflow
 - `/parse-source [path]` - 소스코드 파싱 후 DB 저장
 - `/generate-design [input]` - 기획서/명세서 생성
 - `/generate-code [yaml]` - 코드 생성
 - `/validate-code [path]` - 코드 검증
+
+### Design Workflow
+- `/parse-design [path]` - 기획 문서 파싱 후 Design DB 저장
+- `/generate-design-v2 [input]` - 8단계 기획 워크플로우 실행
+- `/validate-design [path]` - 기획서 통합 검증 (교차 검증, 밸런스 시뮬)
+- `/sync-live [project]` - 라이브 데이터 동기화
 
 ---
 
@@ -476,8 +484,8 @@ E:\AI\db\design\
 ### Design 데이터 유형
 formula, table, rule, flow, config, content_data
 
-### Design 소스 유형
-internal_original, internal_produced, observed, generated
+### Design 소스 유형 (6종)
+internal_original, internal_produced, internal_live, observed, community, generated
 
 ### Design DB 검색 우선순위
 | 순위 | 검색 대상 | 조건 |

@@ -95,6 +95,32 @@ Designer 기획서의 자가 모순 탐지:
 - phase별 노드 수가 병렬 실행에 적합한지 (Phase당 1~6개)
 ```
 
+### 5. Quality Gates (기획 품질 게이트)
+```
+Gate 1: Cross-Layer Naming Validation
+  - L1/L2/L3에서 동일 시스템을 지칭하는 명칭이 정확히 일치하는지 자동 검증
+  - 예: L2 "DataTableManager" ↔ L3 contract.requires "DataTableManager"
+
+Gate 2: L3 Completeness Gate
+  - Phase 0 + Phase 1 시스템의 L3 노드가 100% 존재해야 코드 생성 진행 가능
+  - 전체 Domain 중 최소 80% L3 노드 존재해야 검증 요청 가능
+
+Gate 3: Dependency Auto-Validation
+  - L3 dependencies.internal이 L2 relations.uses와 일치하는지 자동 검증
+  - 불일치 시 자동 목록 생성 → Designer에게 수정 요청
+
+Gate 4: logicFlow Quality Gate
+  - 각 L3 노드의 logicFlow에 최소 1개의 failNext/error 분기 존재 필수
+  - 외부 의존 step에는 반드시 fallback step 정의
+
+Gate 5: Copy-Paste Detection
+  - L3 codeHints/avoidPatterns가 3개 이상 노드에서 동일하면 경고
+  - 시스템별 고유 패턴 최소 1개 필수
+
+Gate 6: Cross-Doc Consistency
+  - 동일 개념(등급명, 재화명, 시스템명)이 L1/docs/L2/L3에서 일관되는지 자동 검증
+```
+
 ---
 
 ## 피드백 형식
@@ -191,14 +217,34 @@ node E:/AI/scripts/balance-simulator.js \
 
 ## 신뢰도 점수 관리
 
+### 자동 점수 3종 (AI 판단)
+
+검증 시 아래 3개 항목을 0~1.0 범위로 자동 산출합니다:
+
+| 항목 | 설명 | 산출 기준 |
+|------|------|-----------|
+| 논리 완결성 | 시스템 간 모순, 누락, 참조 오류 없을수록 높음 | Cross-Consistency + Gap Detection 결과 |
+| 밸런스 안정성 | 경제/전투 시뮬레이션에서 이상치 없을수록 높음 | balance-simulator.js 결과 |
+| 구현 복잡도 | 기존 Base Code DB와 매칭률 (구현 가능성) | DB 검색 매칭 비율 |
+
+자동 점수 평균이 신뢰도 초기값을 결정합니다:
+- 평균 >= 0.5 → 신뢰도 초기값 **0.4**
+- 평균 < 0.5 → 신뢰도 초기값 **0.3** (검증 미달)
+
+### 신뢰도 점수 변동
+
 | 이벤트 | 점수 변동 |
 |--------|-----------|
-| 초기 저장 | 0.4 |
-| 검증 통과 (피드백 반영 완료) | +0.2 |
-| 재사용 성공 (1회당) | +0.1 |
-| 재사용 실패 (1회당) | -0.15 |
-| 다른 장르에서 재사용 성공 | +0.1 (Generic 승격 검토) |
+| 초기 저장 (자동 점수 평균 >= 0.5) | 0.4 |
+| 초기 저장 (자동 점수 평균 < 0.5) | 0.3 |
+| 디렉터 검증 통과 (피드백 없이 승인) | +0.2 |
+| 피드백 반영 완료 후 승인 | +0.1 |
+| 다른 프로젝트에서 구조 참조 성공 | +0.1 |
+| 참조 부적합 판정 | -0.1 |
+| 다른 장르에서 참조 성공 | +0.1 (Generic 승격 검토) |
 | Expert Design DB 승격 임계값 | >= 0.6 |
+
+> 기획 재사용 실패 감점(-0.1)은 코드(-0.15)보다 완화됨. 근거: 기획 재사용 실패는 코드보다 원인이 복잡하므로 감점폭 완화.
 
 ---
 

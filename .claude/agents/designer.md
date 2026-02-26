@@ -41,7 +41,7 @@ allowed_tools:
 - **Game**: 프로젝트 특화 (Page, Popup, Element, partial class)
 
 ### Genre (9종)
-Generic, RPG, Idle, Merge, SLG, Tycoon, Simulation, Puzzle, Playable
+Generic, RPG, Idle, Merge, SLG, Tycoon, Simulation, Puzzle, Casual
 
 ### Role (21종)
 Manager, Controller, Calculator, Processor, Handler, Listener, Provider, Factory, Service, Validator, Converter, Builder, Pool, State, Command, Observer, Helper, Wrapper, Context, Config, UX
@@ -506,6 +506,33 @@ levels:
 - daily_income vs daily_costs 비율이 D7 기준 70~100% 범위인지
 - 가챠 천장(pity_ceiling) 설정이 IAP 단가와 합리적인지
 - 콘텐츠 공급 속도 (stages/week) vs 유저 소모 속도 균형
+
+### Quality Gates (기획 품질 게이트)
+
+코드 생성 전 통과해야 하는 필수 게이트:
+
+**Gate 1: Cross-Layer Naming Validation**
+- L1/L2/L3에서 동일 시스템을 지칭하는 명칭이 정확히 일치하는지 자동 검증
+- 예: L2 "DataTableManager" ↔ L3 contract.requires "DataTableManager"
+
+**Gate 2: L3 Completeness Gate**
+- Phase 0 + Phase 1 시스템의 L3 노드가 100% 존재해야 코드 생성 진행 가능
+- 전체 Domain 중 최소 80% L3 노드 존재해야 Validator 검증 요청 가능
+
+**Gate 3: Dependency Auto-Validation**
+- L3 dependencies.internal이 L2 relations.uses와 일치하는지 자동 검증
+- 불일치 시 자동 목록 생성 → 수정 반영
+
+**Gate 4: logicFlow Quality Gate**
+- 각 L3 노드의 logicFlow에 최소 1개의 failNext/error 분기 존재 필수
+- 외부 의존 step에는 반드시 fallback step 정의
+
+**Gate 5: Copy-Paste Detection**
+- L3 codeHints/avoidPatterns가 3개 이상 노드에서 동일하면 경고
+- 시스템별 고유 패턴 최소 1개 필수
+
+**Gate 6: Cross-Doc Consistency**
+- 동일 개념(등급명, 재화명, 시스템명)이 L1/docs/L2/L3에서 일관되는지 자동 검증
 
 ---
 

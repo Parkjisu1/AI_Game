@@ -79,7 +79,7 @@ namespace {project}.{system}
 
 ### 6. 저장
 ```
-E:\AI\projects\$project\generated\
+E:\AI\projects\$project\output\
 ├── {phase}\
 │   └── {nodeId}.cs
 └── build_log.json
