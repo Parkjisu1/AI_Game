@@ -1,5 +1,5 @@
 ---
-description: 기획 문서를 파싱하여 Design DB에 저장
+description: 기획 문서를 파싱하여 Design DB에 저장 (설계 분석 + 디렉터 큐레이션 포함)
 arguments:
   - name: path
     description: 파싱할 폴더/파일 경로
@@ -8,6 +8,10 @@ arguments:
     description: "장르 (generic/rpg/idle/merge/slg/tycoon/simulation/puzzle/casual)"
     required: false
     default: "auto"
+  - name: auto
+    description: "store 권장 항목 자동 저장 (대량 투입 시 사용, 큐레이션 생략)"
+    required: false
+    default: "false"
 ---
 
 # Design Document Parsing
@@ -46,12 +50,39 @@ tags:         formula, rate, cost, count, unlock, verified, estimated
 - $genre 가 'auto'이면 파일 내용 키워드 기반 자동 감지
 - 감지 우선순위: 파일 내 genre 필드 → 파일명 키워드 → 기본값(generic)
 
-### 5. DB 저장
+### 5. 설계 의도 분석 + 품질 평가
+각 파싱된 기획 요소에 대해 AI가 자동 분석:
+```yaml
+design_analysis:
+  design_intent: "이 설계의 의도 (왜 이렇게 설계했는가)"
+  context: "맥락, 제약조건, 전제 조건"
+  strengths: ["강점 목록"]
+  concerns: ["약점/리스크 목록"]
+  db_recommendation: "store | store_with_caveat | skip | needs_context"
+  reasoning: "판단 근거"
+```
+
+### 6. 큐레이션 리포트 생성
+디렉터에게 제출할 요약 리포트:
+```
+총 파싱: N건
+├── store 권장: X건 (바로 저장 가능)
+├── store_with_caveat: Y건 (약점 확인 필요)
+├── skip 권장: Z건 (투입 부적합)
+└── needs_context: W건 (맥락 보충 필요)
+
+[상세] 항목별 design_intent + concerns + recommendation
+```
+
+- 기본 동작: 리포트 생성 후 디렉터 확인 대기
+- `$auto` = true 시: store 권장 항목 자동 저장 (store_with_caveat, skip, needs_context는 리포트만 생성)
+
+### 7. DB 저장 (큐레이션 승인분만)
 ```
 E:\AI\db\design\base\{genre}\{domain}\
 ├── index.json          (경량 인덱스 업데이트)
 └── files\
-    └── {designId}.json (상세 정보)
+    └── {designId}.json (상세 정보 + design_analysis 포함)
 ```
 
 ### Design DB Index Entry 형식

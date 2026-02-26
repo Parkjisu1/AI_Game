@@ -84,8 +84,9 @@ E:\AI\
 ```
 ═══ DB 구축 (1회) ═══════════════════════════════════════════════════════
 [Code DB 구축]    소스 파싱 → /parse-source → db/base/      (DB Builder)
-[Design DB 구축]  기획 문서 / AI Tester 관찰 → /parse-design → db/design/base/
-                                                              (Design DB Builder)
+[Design DB 구축]  기획 문서 / AI Tester 관찰 → /parse-design
+                  → 설계 의도 분석 + 품질 평가 → 디렉터 큐레이션 → db/design/base/
+                                                              (Design DB Builder + 디렉터)
 ═══ Design Workflow (프로젝트마다) ═══════════════════════════════════════
 [Stage 2: 기획 생성]     디렉션 + DB 참조 → 기획서/밸런스/콘텐츠/BM/LiveOps
                                                               (Designer)
@@ -292,8 +293,9 @@ Lead가 생성하는 태스크 구조 예시 (Design + Code 통합):
 
 ```
 ═══ Design Workflow ═══════════════════════════════════════════════════════
-Task D1:  [Design DB Builder]  기획 문서 파싱 → Design DB (Stage 1)
-Task D2:  [Designer]           기획 생성 (2-1~2-5)                     (blockedBy: D1)
+Task D1:  [Design DB Builder]  기획 문서 파싱 → 설계 분석 → 큐레이션 리포트 (Stage 1)
+Task D1b: [디렉터 (사람)]      큐레이션 확인 → 승인/맥락보충/거부       (blockedBy: D1)
+Task D2:  [Designer]           기획 생성 (2-1~2-5)                     (blockedBy: D1b)
 Task D3:  [Design Validator]   통합 검증 (Stage 3)                     (blockedBy: D2)
 Task D4:  [디렉터 (사람)]      디렉터 검수 (Stage 4)                    (blockedBy: D3)
 Task D5:  [Design Validator]   재생성 평가 (Stage 5, 피드백 시)         (blockedBy: D4)
@@ -617,7 +619,8 @@ Code Workflow와 병렬 또는 선행 실행 가능합니다.
 ### 파이프라인 다이어그램
 
 ```
-Stage 1: DB 가공 (Design DB Builder)
+Stage 1: DB 가공 (Design DB Builder + 디렉터)
+  기획 문서 파싱 → 설계 의도 분석 → 품질 평가 → 디렉터 큐레이션 → DB 저장
   기존 기획 문서 / AI Tester 관찰 자료 → /parse-design → db/design/base/
               ↓
 Stage 2: 기획 생성 (Designer - design mode)
@@ -649,10 +652,10 @@ Stage 8: 라이브 동기화 (Design DB Builder)
 
 | Agent | Model | 역할 | 단계 |
 |-------|-------|------|------|
-| **Design DB Builder** | Sonnet | 기획 문서 파싱 → Design DB 저장, 라이브 데이터 동기화 | 1, 6, 8 |
+| **Design DB Builder** | Sonnet | 기획 문서 파싱 → 설계 의도 분석 → 큐레이션 리포트 → Design DB 저장, 라이브 데이터 동기화 | 1, 6, 8 |
 | **Designer (design mode)** | Sonnet | 기획 생성 (2-1~2-5 sub-steps), 도메인별 YAML 생성 | 2 |
 | **Design Validator** | Sonnet | 기획 교차 검증, 밸런스 시뮬, 일관성 점검, 점수 관리 | 3, 5 보조 |
-| **디렉터 (사람)** | - | 기획 검수, 피드백 제공, 최종 승인 | 4 |
+| **디렉터 (사람)** | - | 기획 검수, 피드백 제공, 최종 승인, DB 큐레이션 | 1 (큐레이션), 4 |
 
 ### Design 신뢰도 점수
 
@@ -691,8 +694,9 @@ Stage 8: 라이브 동기화 (Design DB Builder)
 ### Design Task Graph 템플릿
 
 ```
-Task D1:  [Design DB Builder]  기획 문서 파싱 → Design DB (Stage 1)
-Task D2:  [Designer]           컨셉 정의 (2-1)                             (blockedBy: D1)
+Task D1:  [Design DB Builder]  기획 문서 파싱 → 설계 분석 → 큐레이션 리포트 (Stage 1)
+Task D1b: [디렉터 (사람)]      큐레이션 확인 → 승인/맥락보충/거부       (blockedBy: D1)
+Task D2:  [Designer]           컨셉 정의 (2-1)                             (blockedBy: D1b)
 Task D3:  [Designer]           시스템 기획 (2-2)                            (blockedBy: D2)
 Task D4:  [Designer]           밸런스 기획 (2-3)                            (blockedBy: D3)
 Task D5:  [Designer]           콘텐츠 기획 (2-4)                            (blockedBy: D3, D4와 병렬 가능)
