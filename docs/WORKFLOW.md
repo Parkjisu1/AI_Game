@@ -654,6 +654,40 @@ Stage 8: 라이브 동기화 (Design DB Builder)
 | **Design Validator** | Sonnet | 기획 교차 검증, 밸런스 시뮬, 일관성 점검, 점수 관리 | 3, 5 보조 |
 | **디렉터 (사람)** | - | 기획 검수, 피드백 제공, 최종 승인 | 4 |
 
+### Design 신뢰도 점수
+
+| 이벤트 | 점수 변동 |
+|--------|-----------|
+| 초기 저장 (자동 점수 평균 >= 0.5) | 0.4 |
+| 초기 저장 (자동 점수 평균 < 0.5) | 0.3 |
+| 디렉터 검증 통과 (피드백 없이 승인) | +0.2 |
+| 피드백 반영 완료 후 승인 | +0.1 |
+| 다른 프로젝트에서 구조 참조 성공 | +0.1 |
+| 참조 부적합 판정 | -0.1 |
+| 다른 장르에서 참조 성공 | +0.1 (Generic 승격 검토) |
+| Expert Design DB 승격 임계값 | >= 0.6 |
+
+자동 점수 3종: 논리 완결성, 밸런스 안정성, 구현 복잡도
+
+### Design 피드백 카테고리 (14종)
+
+| 그룹 | 타입 | 설명 |
+|------|------|------|
+| SYSTEM | RULE_CONFLICT | 시스템 간 규칙 충돌 |
+| SYSTEM | MISSING_FEATURE | 필수 기능 누락 |
+| SYSTEM | OVER_COMPLEXITY | 과도한 복잡성 |
+| BALANCE | CURVE_TOO_STEEP | 성장 곡선 과도 |
+| BALANCE | CURVE_TOO_FLAT | 성장 곡선 미약 |
+| BALANCE | ECONOMY_IMBALANCE | 경제 불균형 |
+| BALANCE | FORMULA_ERROR | 공식 오류 |
+| CONTENT | PACING_ISSUE | 진행 속도 문제 |
+| CONTENT | LOGIC_ERROR | 논리 오류 |
+| BM | PAY_WALL_TOO_HARD | 결제 장벽 과도 |
+| BM | VALUE_MISMATCH | 가치 불일치 |
+| UX | FLOW_BROKEN | 플로우 단절 |
+| UX | TUTORIAL_GAP | 튜토리얼 공백 |
+| DIRECTION | OFF_TARGET | 방향성 이탈 |
+
 ### Design Task Graph 템플릿
 
 ```
@@ -758,7 +792,7 @@ Design Validator의 `domain → code system` 매핑:
 | Balance | 수치 공식 클래스 | Calculator, Processor |
 | Content | Quest, Stage | Manager, Factory |
 | BM | Shop, IAP | Service, Manager |
-| LiveOps | Config, Scheduler, EventCalendar | Service, Config |
+| LiveOps | Config + Service + Scheduler | Service, Config |
 | UX | UI Flow | Controller, UX |
 | Social | Guild, PvP | Manager, Service |
 | Meta | Achievement | Manager, Observer |
