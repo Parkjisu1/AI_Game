@@ -291,6 +291,14 @@ design_analysis:
   "provides": ["damage_formula", "crit_formula"],
   "requires": ["unit_stats", "enemy_stats"],
   "tags": ["Combat", "DPS", "Calculation"],
+  "design_analysis": {
+    "design_intent": "방어력 데미지 감소 비중을 낮춰 공격적 플레이 유도",
+    "context": "감산식 데미지, 방어율 상한 75%로 탱커 메타 방지",
+    "strengths": ["공식 간결", "밸런스 조정 포인트 명확"],
+    "concerns": ["방어 투자 가치 낮을 수 있음", "PvP에서 원샷 위험"],
+    "db_recommendation": "store",
+    "reasoning": "검증된 프로젝트의 실증 데이터, 구조 참조 가치 있음"
+  },
   "timestamp": "ISO8601"
 }
 ```
