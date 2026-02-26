@@ -79,18 +79,29 @@ E:\AI\
 
 ## 파이프라인 개요
 
+### 전체 게임 제작 흐름 (Design + Code 통합)
+
 ```
-[Phase 1: DB 구축] ─ (DB Builder) ──────────────────────┐
-  소스 폴더 → /parse-source → db/base/                   │
-                                                         │
-[Phase 2: 기획서 생성] ─ (Designer) ─────────────────────┤
-  게임 컨셉 → /generate-design → projects/{name}/designs │
-                                                         │
-[Phase 3: 코드 생성] ─ (Coder x N 병렬) ────────────────┤
-  AI_기획서 → /generate-code → projects/{name}/output    │
-                                                         │
-[Phase 4: 검증 & 축적] ─ (Validator) ───────────────────┘
-  생성 코드 → /validate-code → db/expert/
+═══ DB 구축 (1회) ═══════════════════════════════════════════════════════
+[Code DB 구축]    소스 파싱 → /parse-source → db/base/      (DB Builder)
+[Design DB 구축]  기획 문서 / AI Tester 관찰 → /parse-design → db/design/base/
+                                                              (Design DB Builder)
+═══ Design Workflow (프로젝트마다) ═══════════════════════════════════════
+[Stage 2: 기획 생성]     디렉션 + DB 참조 → 기획서/밸런스/콘텐츠/BM/LiveOps
+                                                              (Designer)
+[Stage 3: 통합 검증]     교차 일관성 + 유저 여정 + 누락 검출  (Design Validator)
+[Stage 4: 디렉터 검수]   사람이 검수 → 피드백 또는 승인       (디렉터)
+[Stage 5: 재생성 평가]   피드백 반영 확인 (4↔5 반복 가능)     (Design Validator)
+[Stage 6: DB 축적]       Expert Design DB 승격 + Rules 추출   (Design DB Builder)
+
+═══ Code Workflow (프로젝트마다) ═════════════════════════════════════════
+[Phase 2: 기획서 변환]   design YAML → system_spec → AI_기획서 (Designer)
+[Phase 3: 코드 생성]     AI_기획서 → DB 참조 → C# 코드 생성   (Coder x N 병렬)
+[Phase 4: 검증 & 축적]   5단계 검증 → Expert Code DB 승격      (Validator)
+
+═══ 플레이 검증 + 라이브 (출시 전후) ═══════════════════════════════════
+[Stage 7: 플레이 검증]   빌드 → AI Tester 가속/장기/대규모 검증
+[Stage 8: 라이브 동기화]  밸런스 패치 → 버전 추가 → KPI 기록
 ```
 
 ---
@@ -277,27 +288,37 @@ Expert 승격: score >= 0.6
 
 ## 태스크 의존성 (Task Graph)
 
-Lead가 생성하는 태스크 구조 예시:
+Lead가 생성하는 태스크 구조 예시 (Design + Code 통합):
 
 ```
-Task 1:  [Designer]     게임 기획서 생성
-Task 2:  [Designer]     시스템 명세서 생성          (blockedBy: 1)
-Task 3:  [Designer]     AI_기획서 노드 + 빌드오더   (blockedBy: 2)
+═══ Design Workflow ═══════════════════════════════════════════════════════
+Task D1:  [Design DB Builder]  기획 문서 파싱 → Design DB (Stage 1)
+Task D2:  [Designer]           기획 생성 (2-1~2-5)                     (blockedBy: D1)
+Task D3:  [Design Validator]   통합 검증 (Stage 3)                     (blockedBy: D2)
+Task D4:  [디렉터 (사람)]      디렉터 검수 (Stage 4)                    (blockedBy: D3)
+Task D5:  [Design Validator]   재생성 평가 (Stage 5, 피드백 시)         (blockedBy: D4)
+Task D6:  [Design DB Builder]  DB 축적 (Stage 6)                       (blockedBy: D5)
+
+═══ Code Workflow ═════════════════════════════════════════════════════════
+Task C1:  [Designer]     기획서 → system_spec → AI_기획서 노드 + 빌드오더  (blockedBy: D6)
+Task C2:  [Main Coder]   Phase 0 Core 전체 + _ARCHITECTURE.md             (blockedBy: C1)
+Task C3:  [Validator]    Phase 0 검증                                      (blockedBy: C2)
 ─────────────────────────────────────────────────────
-Task 4:  [Main Coder]   Phase 0 Core 전체 + _ARCHITECTURE.md  (blockedBy: 3)
-Task 5:  [Validator]    Phase 0 검증               (blockedBy: 4)
+Task C4:  [Main Coder]   BattleManager.cs (복잡)    (blockedBy: C3, Phase 1)
+Task C5:  [Sub Coder-1]  DataManager.cs             (blockedBy: C3, Phase 1)
+Task C6:  [Sub Coder-2]  ResourceManager.cs         (blockedBy: C3, Phase 1)
+Task C7:  [Validator]    Phase 1 검증               (blockedBy: C4, C5, C6)
 ─────────────────────────────────────────────────────
-Task 6:  [Main Coder]   BattleManager.cs (복잡)    (blockedBy: 5, Phase 1)
-Task 7:  [Sub Coder-1]  DataManager.cs             (blockedBy: 5, Phase 1)
-Task 8:  [Sub Coder-2]  ResourceManager.cs         (blockedBy: 5, Phase 1)
-Task 9:  [Validator]    Phase 1 검증               (blockedBy: 6, 7, 8)
-─────────────────────────────────────────────────────
-Task 10: [Main Coder]   SkillSystem.cs (복잡)      (blockedBy: 9, Phase 2)
-Task 11: [Sub Coder-1]  QuestManager.cs            (blockedBy: 9, Phase 2)
-Task 12: [Sub Coder-2]  ShopManager.cs             (blockedBy: 9, Phase 2)
-Task 13: [Validator]    Phase 2 검증               (blockedBy: 10, 11, 12)
+Task C8:  [Main Coder]   SkillSystem.cs (복잡)      (blockedBy: C7, Phase 2)
+Task C9:  [Sub Coder-1]  QuestManager.cs            (blockedBy: C7, Phase 2)
+Task C10: [Sub Coder-2]  ShopManager.cs             (blockedBy: C7, Phase 2)
+Task C11: [Validator]    Phase 2 검증               (blockedBy: C8, C9, C10)
 ─────────────────────────────────────────────────────
 ... (Phase 3 반복)
+
+═══ 플레이 검증 + 라이브 ═════════════════════════════════════════════════
+Task P1:  [AI Tester]          플레이 검증 (Stage 7)    (blockedBy: 코드 빌드 완료)
+Task P2:  [Design DB Builder]  라이브 동기화 (Stage 8)  (blockedBy: P1, 출시 후)
 ```
 
 ---
@@ -707,18 +728,26 @@ node E:/AI/scripts/play-verification.js --project MyGame --mode mass --personas 
 
 ### Design → Code Workflow 통합
 
-Design Workflow 완료 후 Code Workflow와 연결되는 방식:
+Design Workflow **Stage 6 (DB 축적)** 완료 후 Code Workflow로 연결됩니다:
 
 ```
-[Design Workflow 완료]
+[Design Stage 6 완료] — 기획 검증 + 디렉터 승인 + Expert DB 축적 완료
   db/design/base/{genre}/{domain}/
+  projects/{name}/designs/ (game_design, system_spec, nodes/)
     ↓
-[Code Workflow Phase 2: Designer]
-  design YAML → system_spec.yaml → AI_기획서 (코드 노드 YAML)
+[Code Phase 2: Designer] — 기획서를 코드 생성용 YAML로 변환
+  design YAML → system_spec.yaml 보강 → AI_기획서 노드 (코드용 YAML)
+  build_order.yaml → Phase 0~N 할당
     ↓
-[Code Workflow Phase 3: Coder]
-  YAML 노드 → C# 코드 생성 (DB 참조)
+[Code Phase 3: Coder x N] — DB 참조하여 C# 코드 생성
+  YAML 노드 → DB 검색 → C# 코드 생성 (Phase별 병렬)
+    ↓
+[Code Phase 4: Validator] — 코드 검증 + Expert Code DB 축적
+    ↓
+[Design Stage 7: 플레이 검증] — 빌드 후 AI Tester 실증 검증
 ```
+
+**핵심**: Code Workflow는 Design Stage 6 이후에 시작합니다. Stage 3~5(검증/검수/재생성)를 거치지 않은 기획서로 코드를 생성하면 안 됩니다.
 
 Design Validator의 `domain → code system` 매핑:
 
