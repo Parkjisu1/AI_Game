@@ -126,6 +126,8 @@ Compare, Calculate, Find, Validate, Assign, Notify, Delay, Spawn, Despawn, Itera
 ---
 
 ## 신뢰도 점수 체계
+
+### Code 점수
 | 이벤트 | 점수 변동 |
 |--------|-----------|
 | 초기 저장 | 0.4 |
@@ -134,6 +136,20 @@ Compare, Calculate, Find, Validate, Assign, Notify, Delay, Spawn, Despawn, Itera
 | 재사용 실패 (1회당) | -0.15 |
 | 다른 장르에서 재사용 성공 | +0.1 (Generic 승격 검토) |
 | Expert DB 승격 임계값 | >= 0.6 |
+
+### Design 점수
+자동 점수 3종(논리 완결성, 밸런스 안정성, 구현 복잡도) 평균 → 신뢰도 초기값 결정
+
+| 이벤트 | 점수 변동 |
+|--------|-----------|
+| 초기 저장 (자동 점수 평균 >= 0.5) | 0.4 |
+| 초기 저장 (자동 점수 평균 < 0.5) | 0.3 |
+| 디렉터 검증 통과 (피드백 없이 승인) | +0.2 |
+| 피드백 반영 완료 후 승인 | +0.1 |
+| 다른 프로젝트에서 구조 참조 성공 | +0.1 |
+| 참조 부적합 판정 | -0.1 |
+| 다른 장르에서 참조 성공 | +0.1 (Generic 승격 검토) |
+| Expert Design DB 승격 임계값 | >= 0.6 |
 
 ---
 
@@ -175,6 +191,18 @@ AI_기획서 → DB 검색 → 코드 생성 → 자가 검증 → 피드백 반
 
 ### Phase 4: 지식 축적 (자동)
 검증 완료 → 점수 계산 → Expert DB 승격 → Rules 추출
+
+### Design Workflow 8단계 (기획 파이프라인)
+```
+Stage 1: DB 가공          — 기획 문서 / AI Tester 관찰 → Design DB
+Stage 2: 기획 생성        — 2-1 컨셉 → 2-2 시스템 → 2-3 밸런스 / 2-4 콘텐츠 (병렬) → 2-5 BM/LiveOps
+Stage 3: 통합 검증        — 교차 일관성 + 유저 여정 시뮬 + 누락 검출
+Stage 4: 디렉터 검수      — 사람이 검수, 피드백 없으면 Stage 6으로
+Stage 5: 재생성 평가      — 피드백 반영 확인 + 히스토리 분석
+Stage 6: DB 축적          — score 산출 → Expert DB 승격 (>= 0.6) → Rules 추출
+Stage 7: 플레이 검증      — AI Tester (7-1 가속 / 7-2 장기 / 7-3 대규모 시뮬)
+Stage 8: 라이브 동기화    — 밸런스 패치 → 버전 추가 → KPI 기록
+```
 
 ---
 
@@ -462,7 +490,7 @@ E:\AI\db\design\
 │   ├── generic\    # 장르 무관 공통
 │   │   ├── ingame\, outgame\, balance\, content\, bm\
 │   │   ├── liveops\, ux\, social\, meta\
-│   │   └── projects\
+│   │   └── _projects\
 │   ├── rpg\, idle\, slg\, simulation\, tycoon\, merge\, puzzle\, casual\
 ├── expert\         # 검증된 기획 (score >= 0.6)
 └── rules\          # 축적된 기획 피드백 규칙
@@ -514,6 +542,7 @@ internal_original, internal_produced, internal_live, observed, community, genera
 | Balance | Calculator/Processor Roles |
 | Content | Quest, Stage, Reward |
 | BM | Shop, IAP |
+| LiveOps | Config + Service + Scheduler Role |
 | UX | UI, Audio |
 | Social | Network, Guild |
 | Meta | Achievement, Collection |
@@ -546,3 +575,20 @@ node E:/AI/scripts/play-verification.js --project MyGame --mode accelerated --bu
 node E:/AI/scripts/virtual-player-bridge.js --input vp_export.yaml --project MyGame
 node E:/AI/scripts/design-version.js --designId BattleSystem --genre rpg --domain ingame --version 1.1.0 --phase post_launch
 ```
+
+---
+
+## AI Tester 시스템
+
+AI Tester는 Design Workflow와 두 가지 역할로 연계됩니다.
+
+### PRIMARY: 외부 게임 → Design DB 데이터 수집 (Stage 1 입력)
+- 외부 레퍼런스 게임을 10명 AI 전문 관찰로 분석 (소스코드 접근 없음)
+- 32개 파라미터 추정 결과를 Base Design DB로 가공 (source: observed)
+- 정확도 약 85~89.5%, 나머지 10~15%는 자체 설계로 채움 (차별화 요소)
+- 변환: AI Tester JSON → design-parser.js --source-type observed → Design DB
+
+### SECONDARY: 자사 게임 빌드 검증 (Stage 7)
+- BlueStacks + ADB 인프라로 자사 빌드 가속 테스트
+- 밸런스 예측값 vs 실측값 비교 → 기획 피드백 생성
+- 7-1 가속 테스트 / 7-2 장기 테스트 / 7-3 대규모 가상 유저 시뮬레이션

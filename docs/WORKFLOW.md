@@ -596,54 +596,60 @@ Code Workflow와 병렬 또는 선행 실행 가능합니다.
 ### 파이프라인 다이어그램
 
 ```
-Stage 1: 기획 DB 구축 (Design DB Builder)
-  기존 기획 문서 → /parse-design → db/design/base/
+Stage 1: DB 가공 (Design DB Builder)
+  기존 기획 문서 / AI Tester 관찰 자료 → /parse-design → db/design/base/
               ↓
-Stage 2: 장르 기준 설정 (Designer - design mode)
-  장르 분석 → 핵심 지표 정의 → 기준 DB 로드
+Stage 2: 기획 생성 (Designer - design mode)
+  2-1 컨셉 정의 → 2-2 시스템 기획 → 2-3 밸런스 기획 ─┐
+                                    → 2-4 콘텐츠 기획 ─┤ (2-3, 2-4 병렬 가능)
+                                                      ↓
+                                    → 2-5 BM/LiveOps 기획 (2-3 완료 후)
               ↓
-Stage 3: 게임 설계 생성 (Designer - design mode)
-  컨셉 → Core Loop → 시스템 설계 → 도메인별 YAML
+Stage 3: 통합 검증 (Design Validator)
+  교차 일관성 체크 → 유저 여정 시뮬레이션 → 누락 검출 → 자가 검증
               ↓
-Stage 4: 밸런스 설계 (Designer - design mode)
-  수치 공식 → 경제 밸런스 → 확률표 → formula/table YAML
+Stage 4: 디렉터 검수 (사람)
+  기획 리뷰 → 피드백 없으면 Stage 6, 피드백 있으면 재생성 요청
               ↓
-Stage 5: 콘텐츠 설계 (Designer - design mode)
-  스테이지 → 퀘스트 → 보상 → 몬스터 → content_data YAML
+Stage 5: 재생성 평가 (Design Validator 보조)
+  피드백 반영 확인 → 히스토리 분석 → 이전 버전 차이 기록
               ↓
-Stage 6: BM/LiveOps 설계 (Designer - design mode)
-  결제 모델 → 이벤트 → 시즌 → bm/liveops YAML
+Stage 6: DB 축적 (Design DB Builder)
+  신뢰도 점수 산출 → score >= 0.6 시 Expert DB 승격 → Rules 추출
+              ↓ (코드 Workflow 연결)
+Stage 7: 플레이 검증 (AI Tester + play-verification.js)
+  7-1 자사 가속 테스트 → 7-2 장기 테스트 → 7-3 대규모 가상 유저 시뮬
               ↓
-Stage 7: Play Verification (Validator + play-verification.js)
-  7-1 Accelerated → 7-2 Long-term → 7-3 Mass Simulation
-              ↓
-Stage 8: 기획 DB 업데이트 (Design DB Builder)
-  검증 결과 반영 → score 업데이트 → Expert 승격 → Rules 추출
+Stage 8: 라이브 동기화 (Design DB Builder)
+  밸런스 패치 → 버전 추가 → KPI 기록 → 다음 프로젝트 입력으로 순환
 ```
 
 ### Design Agent 역할
 
 | Agent | Model | 역할 | 단계 |
 |-------|-------|------|------|
-| **Design DB Builder** | Sonnet | 기획 문서 파싱 → Design DB 저장, 라이브 데이터 동기화 | 1, 8 |
-| **Designer (design mode)** | Sonnet | 8단계 기획 워크플로우 실행, 도메인별 YAML 생성 | 2, 3, 4, 5, 6 |
-| **Design Validator** | Sonnet | 기획 교차 검증, 밸런스 시뮬, 일관성 점검, 점수 관리 | 7 |
+| **Design DB Builder** | Sonnet | 기획 문서 파싱 → Design DB 저장, 라이브 데이터 동기화 | 1, 6, 8 |
+| **Designer (design mode)** | Sonnet | 기획 생성 (2-1~2-5 sub-steps), 도메인별 YAML 생성 | 2 |
+| **Design Validator** | Sonnet | 기획 교차 검증, 밸런스 시뮬, 일관성 점검, 점수 관리 | 3, 5 보조 |
+| **디렉터 (사람)** | - | 기획 검수, 피드백 제공, 최종 승인 | 4 |
 
 ### Design Task Graph 템플릿
 
 ```
-Task D1:  [Design DB Builder]  기존 기획 문서 파싱 → Design DB
-Task D2:  [Designer]           장르 기준 분석 + 핵심 KPI 설정          (blockedBy: D1)
-Task D3:  [Designer]           Core Loop + 시스템 설계 (InGame/OutGame) (blockedBy: D2)
-Task D4:  [Designer]           밸런스 설계 (Balance 도메인 YAML)         (blockedBy: D3)
-Task D5:  [Designer]           콘텐츠 설계 (Content 도메인 YAML)         (blockedBy: D3)
-Task D6:  [Designer]           BM + LiveOps 설계 (BM/LiveOps YAML)      (blockedBy: D4, D5)
+Task D1:  [Design DB Builder]  기획 문서 파싱 → Design DB (Stage 1)
+Task D2:  [Designer]           컨셉 정의 (2-1)                             (blockedBy: D1)
+Task D3:  [Designer]           시스템 기획 (2-2)                            (blockedBy: D2)
+Task D4:  [Designer]           밸런스 기획 (2-3)                            (blockedBy: D3)
+Task D5:  [Designer]           콘텐츠 기획 (2-4)                            (blockedBy: D3, D4와 병렬 가능)
+Task D6:  [Designer]           BM/LiveOps 기획 (2-5)                       (blockedBy: D4, D5)
 ─────────────────────────────────────────────────────────────────────────────
-Task D7:  [Design Validator]   전체 기획 교차 검증 (설계 일관성)          (blockedBy: D6)
-Task D8:  [Design Validator]   밸런스 시뮬레이션 (수치 검증)              (blockedBy: D7)
+Task D7:  [Design Validator]   통합 검증 — 교차 일관성 + 여정 시뮬 (Stage 3) (blockedBy: D6)
+Task D8:  [디렉터 (사람)]      디렉터 검수 및 피드백 (Stage 4)               (blockedBy: D7)
+Task D9:  [Design Validator]   재생성 평가 (Stage 5, 피드백 있을 시)         (blockedBy: D8)
+Task D10: [Design DB Builder]  DB 축적 — score 산출 + Expert 승격 (Stage 6) (blockedBy: D9)
 ─────────────────────────────────────────────────────────────────────────────
-Task D9:  [Play Verification]  Stage 7 플레이 검증 (accelerated → mass)  (blockedBy: D8)
-Task D10: [Design DB Builder]  결과 반영, score 업데이트, Expert 승격     (blockedBy: D9)
+Task D11: [AI Tester]          플레이 검증 (Stage 7, 빌드 필요)             (blockedBy: D10 + 코드 빌드)
+Task D12: [Design DB Builder]  라이브 동기화 (Stage 8, 출시 후)             (blockedBy: D11)
 ```
 
 ### Design Verification (Stage 7)
@@ -723,9 +729,35 @@ Design Validator의 `domain → code system` 매핑:
 | Balance | 수치 공식 클래스 | Calculator, Processor |
 | Content | Quest, Stage | Manager, Factory |
 | BM | Shop, IAP | Service, Manager |
+| LiveOps | Config, Scheduler, EventCalendar | Service, Config |
 | UX | UI Flow | Controller, UX |
 | Social | Guild, PvP | Manager, Service |
 | Meta | Achievement | Manager, Observer |
+
+### AI Tester 시스템 연계
+
+AI Tester는 Design Workflow와 두 가지 역할로 연계됩니다:
+
+**PRIMARY: 외부 게임 분석 → Design DB 데이터 수집 (Stage 1 입력)**
+- 외부 레퍼런스 게임을 10명 AI 전문 관찰로 분석
+- 32개 파라미터 추정 결과를 Base Design DB로 가공 (source: observed)
+- 패턴 카드 방식 미사용 (법적 리스크 회피)
+- 소스코드 접근 없이 순수 관찰만 활용, 약 85~89.5% 정확도
+
+**SECONDARY: 자사 게임 플레이 검증 (Stage 7)**
+- 자사 빌드를 BlueStacks + ADB로 가속 테스트
+- 밸런스 예측값 vs 실측값 비교 → 기획 피드백 생성
+- 7-1 가속 / 7-2 장기 / 7-3 대규모 시뮬레이션
+
+| AI Tester 출력 | Design DB 필드 | Domain |
+|----------------|---------------|--------|
+| 화면 구성 관찰 | UX flow 데이터 | UX |
+| 전투 수치 추출 | 데미지/스탯 formula | Balance |
+| 재화 흐름 관찰 | economy source/sink | Balance |
+| 가챠 확률 관찰 | gacha probability table | OutGame |
+| 스테이지 구성 | stage content_data | Content |
+| 상점 가격 관찰 | IAP/package config | BM |
+| 소셜 기능 관찰 | social system rule | Social |
 
 ### 명령어 (Design Workflow)
 
