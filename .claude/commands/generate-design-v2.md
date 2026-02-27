@@ -1,5 +1,5 @@
 ---
-description: 게임 기획 워크플로우 실행 (8단계 파이프라인)
+description: 게임 기획 워크플로우 실행 (Stage 0~8 파이프라인)
 arguments:
   - name: concept
     description: 게임 컨셉 설명
@@ -12,12 +12,12 @@ arguments:
     required: true
 ---
 
-# Stage 2: 기획 생성 — Design Workflow 8단계 중 2단계
+# Stage 2: 기획 생성 — Design Workflow Stage 0~8 중 Stage 2
 
 $concept 을 기반으로 $genre 장르의 $project 게임 기획을 생성합니다.
 
-> **파이프라인 위치**: 이 커맨드는 Design Workflow 8단계 중 **Stage 2 (기획 생성)** 를 실행합니다.
-> 전체 흐름: Stage 1(DB 가공) → **Stage 2(기획 생성)** → Stage 3(통합 검증) → Stage 4(디렉터 검수)
+> **파이프라인 위치**: 이 커맨드는 Design Workflow Stage 0~8 중 **Stage 2 (기획 생성)** 를 실행합니다.
+> 전체 흐름: Stage 0(설계 표준) → Stage 1(DB 가공) → **Stage 2(기획 생성)** → Stage 3(통합 검증) → Stage 4(디렉터 검수)
 > → Stage 5(재생성 평가) → Stage 6(DB 축적) → Stage 7(플레이 검증) → Stage 8(라이브 동기화)
 
 ## 출력 위치
