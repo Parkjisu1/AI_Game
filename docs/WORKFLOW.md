@@ -82,11 +82,16 @@ E:\AI\
 ### 전체 게임 제작 흐름 (Design + Code 통합)
 
 ```
+═══ 설계 표준 (장르 최초 1회) ═══════════════════════════════════════════
+[Stage 0: 설계 표준]    장르별 파라미터 + 디렉션 히스토리    (디렉터 + AI Tester)
+                        구성요소 맵 → 파라미터 정의 → DB 스키마
+                        저장: db/design/standards/{genre}.yaml
+
 ═══ DB 구축 (1회) ═══════════════════════════════════════════════════════
 [Code DB 구축]    소스 파싱 → /parse-source → db/base/      (DB Builder)
 [Design DB 구축]  기획 문서 / AI Tester 관찰 → /parse-design
                   → 설계 의도 분석 + 품질 평가 → 디렉터 큐레이션 → db/design/base/
-                                                              (Design DB Builder + 디렉터)
+                  (0단계 스키마에 맞춰 정규화)              (Design DB Builder + 디렉터)
 ═══ Design Workflow (프로젝트마다) ═══════════════════════════════════════
 [Stage 2: 기획 생성]     디렉션 + DB 참조 → 기획서/밸런스/콘텐츠/BM/LiveOps
                                                               (Designer)
@@ -611,7 +616,7 @@ E:\AI\History\{ProjectName}\Project_History.md
 
 ---
 
-## Design Workflow Pipeline (8단계)
+## Design Workflow Pipeline (Stage 0~8)
 
 게임 기획을 데이터화하고 검증하는 독립 파이프라인입니다.
 Code Workflow와 병렬 또는 선행 실행 가능합니다.
@@ -619,6 +624,11 @@ Code Workflow와 병렬 또는 선행 실행 가능합니다.
 ### 파이프라인 다이어그램
 
 ```
+Stage 0: 설계 표준 (디렉터 + AI Tester)
+  장르별 설계 표준 정의 — 구성요소 맵 + 파라미터 + DB 스키마
+  디렉션 히스토리 자동 축적 시작
+  저장: db/design/standards/{genre}.yaml
+              ↓
 Stage 1: DB 가공 (Design DB Builder + 디렉터)
   기획 문서 파싱 → 설계 의도 분석 → 품질 평가 → 디렉터 큐레이션 → DB 저장
   기존 기획 문서 / AI Tester 관찰 자료 → /parse-design → db/design/base/

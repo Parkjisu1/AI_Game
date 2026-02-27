@@ -182,8 +182,11 @@ Compare, Calculate, Find, Validate, Assign, Notify, Delay, Spawn, Despawn, Itera
 
 ### 전체 게임 제작 흐름 (Design → Code 통합)
 ```
+설계 표준 정의 (장르 최초 1회)
+               장르별 파라미터 + 디렉션 히스토리 자동 축적 시작
+    ↓
 DB 구축 (1회)  Code DB: 소스 파싱 → db/base/
-               Design DB: 기획 문서 / AI Tester → db/design/base/
+               Design DB: 기획 문서 / AI Tester → db/design/base/ (0단계 스키마 참조)
     ↓
 Design Stage 2~6: 기획 생성 → 통합 검증 → 디렉터 검수 → 재생성 → DB 축적
     ↓ (Stage 6 완료 = 기획 확정)
@@ -207,9 +210,10 @@ AI_기획서 → DB 검색 → 코드 생성 → 자가 검증 → 피드백 반
 #### Phase 4: 지식 축적 (자동)
 검증 완료 → 점수 계산 → Expert DB 승격 → Rules 추출
 
-### Design Workflow (Stage 1~8)
+### Design Workflow (Stage 0~8)
 ```
-Stage 1: DB 가공          — 기획 문서 / AI Tester 관찰 → Design DB
+Stage 0: 설계 표준       — 장르별 파라미터 정의 + 디렉션 히스토리 자동 축적 (장르 최초 1회)
+Stage 1: DB 가공          — 기획 문서 / AI Tester 관찰 → Design DB (0단계 스키마 참조)
 Stage 2: 기획 생성        — 2-1 컨셉 → 2-2 시스템 → 2-3 밸런스 / 2-4 콘텐츠 (병렬) → 2-5 BM/LiveOps
 Stage 3: 통합 검증        — 교차 일관성 + 유저 여정 시뮬 + 누락 검출
 Stage 4: 디렉터 검수      — 사람이 검수, 피드백 없으면 Stage 6으로
