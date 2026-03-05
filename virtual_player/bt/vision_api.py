@@ -207,33 +207,34 @@ class VisionPlanner:
                 f"\nDo NOT tap these areas again. Find DIFFERENT cars to tap."
             )
 
-        prompt = f"""You are an AI playing a car-matching puzzle game. Analyze this screenshot carefully.
+        prompt = f"""Analyze this 1080x1920 pixel game screenshot and plan moves.
 
-GAME CONTEXT: {self.game_context}
-CURRENT SCREEN: {screen_type}
-OCR TEXT: {ocr_str}
-SCREEN SIZE: 1080 x 1920 pixels{failed_context}
+COORDINATE REFERENCE POINTS (use these to calibrate your coordinates):
+- "Level N" text: center ~(540, 120)
+- Coin display (top-left): ~(60, 50)
+- Board top edge: ~y=250
+- Board bottom edge: ~y=1300
+- Board left edge: ~x=30, right edge: ~x=1050
+- Holder slots (7 boxes): y=1400, spread from x=130 to x=950
+- Booster buttons: y=1830, x=108/324/540/756/972
+- Cars are 3D models, each roughly 100-130px wide, 80-120px tall
+- The board has parking lanes. Cars face downward or sideways.
 
-CRITICAL RULES FOR GAMEPLAY:
-1. Look at the HOLDER (bottom area ~y1350-1450). Count how many cars are there and their colors.
-2. Look at the BOARD (main area y200-1300). Identify ALL visible car colors and positions.
-3. PRIORITY: If the holder has 2 cars of the same color, find the 3rd matching car on the board and tap it FIRST.
-4. BLOCKED CARS: Some cars have other cars in front of them. You can ONLY tap cars that are NOT blocked.
-   - A car is blocked if another car is directly in front of it (closer to the bottom of the screen).
-   - Tap the front car first to unblock the ones behind.
-5. If no obvious match exists, tap cars from the FRONT ROW first (lowest y-values among tappable cars).
-6. NEVER let the holder fill up with 6+ different colors. Use Undo (bottom-left booster) if needed.
-7. Each tap should target the CENTER of a visible car. Cars are roughly 80-100px wide.
+{self.game_context}
+SCREEN: {screen_type} | OCR: {ocr_str}{failed_context}
 
-Return a JSON array of {self.batch_size} moves (or fewer).
-Each move: {{"action": "tap", "x": <int>, "y": <int>, "description": "<color> car at <location>"}}
-For wait: {{"action": "wait", "seconds": 2, "description": "wait for animation"}}
+RULES:
+1. Check HOLDER (y~1400): count cars and their colors.
+2. If 2 same-color in holder, find 3rd on board and tap it immediately.
+3. BLOCKED = another car is between it and the board exit. Tap front cars first.
+4. Each car tap coordinate must be the CENTER of the car body (not the edge).
+5. Keep holder under 5 cars. Use Undo booster (108, 1830) if 5+ with no match.
+6. NEVER tap boosters at y>1800 unless using Undo.
 
-IMPORTANT: After each tap, include a short wait for the car animation.
-IMPORTANT: Be very precise with x,y coordinates. Tap the CENTER of each car.
-IMPORTANT: x range 0-1080, y range 0-1920.
+Return JSON array of {self.batch_size} tap moves. Include 1.5s wait between taps.
+Format: [{{"action":"tap","x":<0-1080>,"y":<0-1920>,"description":"<color> car <position>"}},{{"action":"wait","seconds":1.5,"description":"animation"}}]
 
-Return ONLY the JSON array, no other text."""
+ONLY output the JSON array."""
         return prompt
 
     def _parse_response(self, raw: str) -> Optional[List[Dict[str, Any]]]:

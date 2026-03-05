@@ -378,7 +378,7 @@ def cmd_play_v2(args: argparse.Namespace) -> None:
             game_id=args.game,
             claude_cmd=r"C:\Users\user\AppData\Roaming\npm\claude.cmd",
             model="claude-haiku-4-5-20251001",
-            batch_size=4,
+            batch_size=8,
             data_dir=str(Path(__file__).parent / "data"),
         )
         print(f"[play-v2] Vision AI loaded (batch=4, model=claude-haiku-4-5-20251001)")
