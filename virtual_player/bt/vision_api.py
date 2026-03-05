@@ -2,7 +2,8 @@
 Vision API via Claude CLI
 ==========================
 Calls Claude CLI with game screenshots for gameplay decisions.
-Uses batch analysis: one call → multiple planned moves.
+Uses batch analysis: one call -> multiple planned moves.
+Tracks failed taps and feeds them back to avoid repeating mistakes.
 
 Returns dict: {action, x, y, description}
 Compatible with VisionQuery node's vision_fn interface.
@@ -10,7 +11,9 @@ Compatible with VisionQuery node's vision_fn interface.
 
 import json
 import logging
+import os
 import subprocess
+import tempfile
 import time
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
@@ -23,13 +26,13 @@ class VisionPlanner:
 
     One Claude call analyzes the screen and returns N planned moves.
     Subsequent calls return cached moves until the plan is exhausted
-    or the screen changes.
+    or the screen changes. Tracks failed taps to avoid repeating them.
     """
 
     def __init__(
         self,
         claude_cmd: str = "C:/Users/user/AppData/Roaming/npm/claude.cmd",
-        model: str = "haiku",
+        model: str = "claude-haiku-4-5-20251001",
         game_context: str = "",
         batch_size: int = 4,
         timeout: int = 60,
@@ -43,9 +46,12 @@ class VisionPlanner:
         # Cached plan
         self._plan: List[Dict[str, Any]] = []
         self._plan_screen: str = ""
-        self._plan_tick: int = 0
         self._call_count: int = 0
         self._cache_hits: int = 0
+
+        # Failed tap tracking (reset on screen change)
+        self._failed_taps: List[Dict[str, Any]] = []
+        self._consecutive_fails: int = 0
 
     def __call__(
         self,
@@ -55,9 +61,11 @@ class VisionPlanner:
     ) -> Optional[Dict[str, Any]]:
         """vision_fn interface: (path, screen_type, texts) -> action dict."""
 
-        # If screen changed, invalidate plan
+        # If screen changed, reset everything
         if screen_type != self._plan_screen:
             self._plan.clear()
+            self._failed_taps.clear()
+            self._consecutive_fails = 0
 
         # Return cached move if available
         if self._plan:
@@ -67,12 +75,17 @@ class VisionPlanner:
                         move.get("description", "?"), len(self._plan))
             return move
 
-        # No cached moves — call Claude CLI
+        # No cached moves - call Claude CLI
         result = self._query_claude(screenshot_path, screen_type, ocr_texts)
         if not result:
+            self._consecutive_fails += 1
+            # After 3 consecutive failures, return a random safe tap
+            if self._consecutive_fails >= 3:
+                return self._fallback_tap(screen_type)
             return None
 
         self._plan_screen = screen_type
+        self._consecutive_fails = 0
 
         # Parse batch response
         moves = result if isinstance(result, list) else [result]
@@ -83,6 +96,34 @@ class VisionPlanner:
         first = moves[0]
         self._plan = moves[1:]
         return first
+
+    def report_tap_failed(self, x: int, y: int, description: str = "") -> None:
+        """Called by engine when a tap didn't change the screen."""
+        self._failed_taps.append({"x": x, "y": y, "description": description})
+        # Invalidate remaining cached plan since it was based on wrong assumptions
+        self._plan.clear()
+
+    def _fallback_tap(self, screen_type: str) -> Dict[str, Any]:
+        """Generate a fallback tap when Vision AI keeps failing."""
+        import random
+        # For gameplay: tap in the car board area (y: 200-1300), avoid holder area
+        if screen_type == "gameplay":
+            # Avoid previously failed coordinates
+            for _ in range(10):
+                x = random.randint(50, 1030)
+                y = random.randint(200, 1200)
+                if not self._is_near_failed(x, y):
+                    return {"action": "tap", "x": x, "y": y,
+                            "description": "fallback: random board tap"}
+        return {"action": "tap", "x": 540, "y": 700,
+                "description": "fallback: center tap"}
+
+    def _is_near_failed(self, x: int, y: int, threshold: int = 80) -> bool:
+        """Check if coordinates are near a previously failed tap."""
+        for f in self._failed_taps[-10:]:  # Only check last 10
+            if abs(f["x"] - x) < threshold and abs(f["y"] - y) < threshold:
+                return True
+        return False
 
     def _query_claude(
         self,
@@ -100,97 +141,109 @@ class VisionPlanner:
 
         try:
             start = time.time()
-            # Use Read tool to view the screenshot via Claude CLI
-            # Forward slashes for cross-platform compatibility
             img_path = str(path).replace("\\", "/")
             full_prompt = (
                 f"Use the Read tool to view the screenshot at {img_path}. "
                 f"Then respond with ONLY the JSON array.\n\n{prompt}"
             )
-            cmd = [
-                self.claude_cmd,
-                "-p", full_prompt,
-                "--model", self.model,
-                "--output-format", "json",
-                "--max-turns", "2",
-                "--tools", "Read",
-                "--allowedTools", "Read",
-            ]
 
-            # Clean env to avoid inherited Claude Code vars and bad API keys
-            import os
+            # Clean env
             env = os.environ.copy()
             for key in ("CLAUDECODE", "CLAUDE_CODE_ENTRYPOINT"):
                 env.pop(key, None)
-            # Remove placeholder API keys so CLI uses its own subscription auth
             api_key = env.get("ANTHROPIC_API_KEY", "")
             if not api_key or not api_key.startswith("sk-ant-"):
                 env.pop("ANTHROPIC_API_KEY", None)
+            env["PYTHONIOENCODING"] = "utf-8"
 
+            # Pipe prompt via stdin to avoid cmd.exe special char issues
             r = subprocess.run(
-                cmd,
+                [
+                    self.claude_cmd,
+                    "-p",
+                    "--model", self.model,
+                    "--output-format", "json",
+                    "--max-turns", "2",
+                    "--tools", "Read",
+                    "--allowedTools", "Read",
+                ],
+                input=full_prompt,
                 capture_output=True,
                 timeout=self.timeout,
-                text=True,
+                encoding="utf-8",
                 env=env,
+                cwd=tempfile.gettempdir(),
             )
 
             elapsed = time.time() - start
-            logger.info("VisionPlanner: Claude CLI took %.1fs (call #%d)",
-                        elapsed, self._call_count)
+            print(f"VisionPlanner: CLI {elapsed:.1f}s (call #{self._call_count})")
 
             if r.returncode != 0:
-                logger.warning("VisionPlanner: CLI error: %s", r.stderr[:200])
+                err = r.stderr[:300] if r.stderr else "(no stderr)"
+                out = r.stdout[:300] if r.stdout else "(no stdout)"
+                print(f"VisionPlanner: CLI error (rc={r.returncode}): {out}")
                 return None
 
             return self._parse_response(r.stdout)
 
         except subprocess.TimeoutExpired:
-            logger.warning("VisionPlanner: CLI timeout (%ds)", self.timeout)
+            print(f"VisionPlanner: CLI timeout ({self.timeout}s)")
             return None
         except Exception as e:
-            logger.warning("VisionPlanner: error: %s", e)
+            print(f"VisionPlanner: error: {e}")
             return None
 
     def _build_prompt(self, screen_type: str, ocr_texts: List[str]) -> str:
-        """Build the prompt for Claude."""
+        """Build the prompt for Claude with failed-tap feedback."""
         ocr_str = ", ".join(ocr_texts[:15]) if ocr_texts else "none"
 
-        prompt = f"""You are an AI game player. Analyze this game screenshot and plan your next {self.batch_size} moves.
+        # Build failed taps context
+        failed_context = ""
+        if self._failed_taps:
+            failed_list = [f"({f['x']},{f['y']})" for f in self._failed_taps[-8:]]
+            failed_context = (
+                f"\n\nFAILED TAPS (these coordinates did NOT work, "
+                f"the car was blocked or nothing happened): {', '.join(failed_list)}"
+                f"\nDo NOT tap these areas again. Find DIFFERENT cars to tap."
+            )
+
+        prompt = f"""You are an AI playing a car-matching puzzle game. Analyze this screenshot carefully.
 
 GAME CONTEXT: {self.game_context}
 CURRENT SCREEN: {screen_type}
-OCR TEXT ON SCREEN: {ocr_str}
-SCREEN SIZE: 1080 x 1920 pixels
+OCR TEXT: {ocr_str}
+SCREEN SIZE: 1080 x 1920 pixels{failed_context}
 
-RULES:
-- Return a JSON array of {self.batch_size} moves (or fewer if game state will change)
-- Each move: {{"action": "tap", "x": <int>, "y": <int>, "description": "<what and why>"}}
-- Supported actions: "tap", "back", "wait"
-- For "wait": {{"action": "wait", "seconds": 2, "description": "waiting for animation"}}
-- x range: 0-1080, y range: 0-1920
-- Be precise with coordinates — tap on the exact UI element
-- NEVER tap on ads or purchase buttons
-- If this is a puzzle/match game, analyze the board and plan strategic moves
+CRITICAL RULES FOR GAMEPLAY:
+1. Look at the HOLDER (bottom area ~y1350-1450). Count how many cars are there and their colors.
+2. Look at the BOARD (main area y200-1300). Identify ALL visible car colors and positions.
+3. PRIORITY: If the holder has 2 cars of the same color, find the 3rd matching car on the board and tap it FIRST.
+4. BLOCKED CARS: Some cars have other cars in front of them. You can ONLY tap cars that are NOT blocked.
+   - A car is blocked if another car is directly in front of it (closer to the bottom of the screen).
+   - Tap the front car first to unblock the ones behind.
+5. If no obvious match exists, tap cars from the FRONT ROW first (lowest y-values among tappable cars).
+6. NEVER let the holder fill up with 6+ different colors. Use Undo (bottom-left booster) if needed.
+7. Each tap should target the CENTER of a visible car. Cars are roughly 80-100px wide.
 
-Return ONLY the JSON array, no other text. Example:
-[
-  {{"action": "tap", "x": 540, "y": 700, "description": "tap blue car in center"}},
-  {{"action": "wait", "seconds": 3, "description": "wait for car animation"}},
-  {{"action": "tap", "x": 250, "y": 500, "description": "tap matching blue car"}}
-]"""
+Return a JSON array of {self.batch_size} moves (or fewer).
+Each move: {{"action": "tap", "x": <int>, "y": <int>, "description": "<color> car at <location>"}}
+For wait: {{"action": "wait", "seconds": 2, "description": "wait for animation"}}
+
+IMPORTANT: After each tap, include a short wait for the car animation.
+IMPORTANT: Be very precise with x,y coordinates. Tap the CENTER of each car.
+IMPORTANT: x range 0-1080, y range 0-1920.
+
+Return ONLY the JSON array, no other text."""
         return prompt
 
     def _parse_response(self, raw: str) -> Optional[List[Dict[str, Any]]]:
         """Parse Claude CLI JSON response into move list."""
         try:
-            # Claude CLI --output-format json wraps in {"result": "..."}
             outer = json.loads(raw)
             text = outer.get("result", raw) if isinstance(outer, dict) else raw
         except json.JSONDecodeError:
             text = raw
 
-        # Find JSON array in the text
         text = text.strip()
 
         # Try to extract JSON array
@@ -201,7 +254,6 @@ Return ONLY the JSON array, no other text. Example:
             try:
                 moves = json.loads(json_str)
                 if isinstance(moves, list):
-                    # Validate each move
                     valid = []
                     for m in moves:
                         if not isinstance(m, dict):
@@ -216,16 +268,31 @@ Return ONLY the JSON array, no other text. Example:
                         elif action in ("tap", "back"):
                             x = int(m.get("x", 540))
                             y = int(m.get("y", 960))
-                            # Clamp to screen bounds
                             x = max(0, min(1080, x))
                             y = max(0, min(1920, y))
-                            valid.append({
-                                "action": action,
-                                "x": x,
-                                "y": y,
-                                "description": m.get("description", "vision_move"),
-                            })
-                    return valid if valid else None
+                            # Skip if too close to previously failed taps
+                            if not self._is_near_failed(x, y):
+                                valid.append({
+                                    "action": action,
+                                    "x": x,
+                                    "y": y,
+                                    "description": m.get("description", "vision_move"),
+                                })
+                            else:
+                                logger.info("VisionPlanner: skipping (%d,%d) near failed tap", x, y)
+                    if valid:
+                        # Auto-insert waits between taps for animation
+                        spaced = []
+                        for i, v in enumerate(valid):
+                            spaced.append(v)
+                            if v["action"] == "tap" and i < len(valid) - 1:
+                                spaced.append({
+                                    "action": "wait",
+                                    "seconds": 1.5,
+                                    "description": "wait for car animation",
+                                })
+                        return spaced
+                    return None
             except json.JSONDecodeError:
                 pass
 
@@ -240,7 +307,7 @@ Return ONLY the JSON array, no other text. Example:
             except json.JSONDecodeError:
                 pass
 
-        logger.warning("VisionPlanner: could not parse response: %s", text[:200])
+        print(f"VisionPlanner: could not parse response: {text[:200]}")
         return None
 
     def get_stats(self) -> Dict[str, Any]:
@@ -248,6 +315,7 @@ Return ONLY the JSON array, no other text. Example:
             "api_calls": self._call_count,
             "cache_hits": self._cache_hits,
             "pending_plan": len(self._plan),
+            "failed_taps": len(self._failed_taps),
         }
 
 
@@ -259,33 +327,32 @@ GAME_CONTEXTS = {
     "carmatch": (
         "CarMatch is a 3D car parking puzzle on a 1080x1920 screen. "
         "BOARD: A parking lot viewed from above with colored cars in rows/lanes. "
+        "Cars are 3D models sitting in parking spots. "
         "Colors: red, orange, yellow, green, cyan, blue, purple, pink. "
-        "HOLDER: 7 slots at the bottom (~y1430). Cars you tap go here. "
-        "MATCHING: When 3 same-color cars are in the holder, they match and vanish. "
-        "LOSE: If all 7 slots fill with no match possible, 'Out of Space!' = fail. "
-        "GIMMICKS: "
-        "1) BLOCKED CARS: Cars behind others cannot be tapped. Clear the front car first. "
-        "2) STACKED SPOTS: A number (4, 5) on a spot means cars stacked there. "
-        "   Tap to take the top car; number decreases. Colors underneath are hidden. "
-        "3) MYSTERY CARS (?): Unknown color until tapped. Risky - only tap with 3+ empty holder slots. "
-        "4) LOCKED CARS: Have a lock icon. Unlock after clearing certain matches. "
+        "HOLDER: 7 slots at the bottom of the screen (~y1350-1450). "
+        "Cars you tap move from the board to the holder. "
+        "MATCHING: When 3 same-color cars are in the holder, they vanish (matched). "
+        "LOSE: If all 7 holder slots fill with no match possible = game over. "
+        "BLOCKED CARS: Some cars are behind other cars. "
+        "You CANNOT tap a blocked car - you must remove the car in front first. "
+        "Cars in the FRONT ROW (larger, closer to bottom) can always be tapped. "
+        "STACKED SPOTS: A number (2,3,4,5) on a spot means multiple cars stacked. "
+        "Tap to take the top car; the number decreases. Colors underneath are hidden. "
+        "MYSTERY CARS (?): Unknown color until tapped. Only tap when 3+ holder slots empty. "
+        "LOCKED CARS: Have a lock icon. Unlock after clearing certain matches. "
         "BOOSTERS (bottom bar ~y1830): "
-        "- Undo (1st, free x2): Sends last car back to board. Use on bad moves. "
-        "- Magnet (2nd, free x1): Auto-matches 3 same-color cars from board. Save for emergencies. "
-        "- Shuffle (3rd, 900 coins): Randomizes board. DO NOT USE - costs coins. "
-        "- Rotate (4th, 600 coins): Rearranges cars. DO NOT USE - costs coins. "
+        "- Undo (leftmost): Sends last car back. Use when holder is filling up. "
+        "- Magnet (2nd): Auto-matches 3 same-color from board. Save for emergencies. "
+        "- Shuffle (3rd, 900 coins): DO NOT USE. "
+        "- Rotate (4th, 600 coins): DO NOT USE. "
         "STRATEGY: "
-        "- Count visible colors before tapping. Tap cars that complete a 3-match first. "
-        "- If 2 red in holder, find the 3rd red on board immediately. "
-        "- Never have more than 2 incomplete colors in holder at once. "
-        "- Clear front-row and stacked spots first to reveal hidden cars. "
-        "- If holder has 5+ cars with no match coming, use free Undo immediately. "
-        "LIVES & ADS: "
-        "- Limited lives. Each fail costs 1 life. "
-        "- If lives = 0, 'More Lives' popup appears. Watch ad for +1 life (tap green button). "
-        "- After win/lose, ads may appear. Close with X (top-right or top-left). Never tap Install. "
-        "FLOW: Lobby (tap green Level N) -> Gameplay (tap cars) -> Win (tap Continue) -> Lobby. "
-        "On fail: tap X to skip 'Add Space', X to skip 'Play On', then 'Try Again' or X to lobby."
+        "- ALWAYS check holder first. If 2 same-color cars in holder, find the 3rd on board. "
+        "- If no match possible, tap front-row cars to unblock cars behind them. "
+        "- Keep holder under 5 cars. If 5+, use Undo booster immediately. "
+        "- Tap cars that are clearly visible and unblocked. "
+        "- After each tap, wait 1-2 seconds for the car animation to complete. "
+        "FLOW: Lobby -> Gameplay -> Win/Fail -> Lobby. "
+        "On fail: close popups with X buttons, then Try Again or back to lobby."
     ),
     "default": (
         "A mobile game. Look at the screen and decide what to tap. "
@@ -298,7 +365,7 @@ GAME_CONTEXTS = {
 def create_vision_fn(
     game_id: str = "default",
     claude_cmd: str = "C:/Users/user/AppData/Roaming/npm/claude.cmd",
-    model: str = "haiku",
+    model: str = "claude-haiku-4-5-20251001",
     batch_size: int = 4,
     data_dir: str = "",
 ) -> VisionPlanner:

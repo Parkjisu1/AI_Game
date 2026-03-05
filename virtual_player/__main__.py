@@ -377,11 +377,11 @@ def cmd_play_v2(args: argparse.Namespace) -> None:
         vision_fn = create_vision_fn(
             game_id=args.game,
             claude_cmd=r"C:\Users\user\AppData\Roaming\npm\claude.cmd",
-            model="haiku",
+            model="claude-haiku-4-5-20251001",
             batch_size=4,
             data_dir=str(Path(__file__).parent / "data"),
         )
-        print(f"[play-v2] Vision AI loaded (batch={4}, model=haiku)")
+        print(f"[play-v2] Vision AI loaded (batch=4, model=claude-haiku-4-5-20251001)")
     except Exception as e:
         print(f"[play-v2] No Vision AI: {e}")
 

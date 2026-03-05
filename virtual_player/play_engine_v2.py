@@ -225,6 +225,14 @@ class PlayEngineV2:
         # 3. Record outcome of previous action (if any)
         self._outcome.record_result(screen_changed, screen_type)
 
+        # 3a. Report failed vision tap to VisionPlanner
+        if not screen_changed and self._vision_fn and hasattr(self._vision_fn, 'report_tap_failed'):
+            from .bt.nodes import VisionQuery
+            if VisionQuery.last_tap is not None:
+                tap = VisionQuery.last_tap
+                self._vision_fn.report_tap_failed(tap["x"], tap["y"], tap.get("description", ""))
+                VisionQuery.last_tap = None
+
         # 3b. Record to episode
         if self._episode_recorder and self._episode_recorder.is_recording:
             last_action = self._actions_executed[-1] if self._actions_executed else ""

@@ -316,15 +316,17 @@ class VisionQuery(BTNode):
     """Ask Claude Haiku what to do on the current screen.
 
     If vision_fn is available, sends screenshot and gets (action, x, y) back.
-    Successful results are recorded for potential BT node promotion.
+    Tracks last tap for failed-tap feedback.
     """
+
+    # Class-level tracking of last vision tap (shared across instances)
+    last_tap: Optional[Dict[str, Any]] = None
 
     def __init__(self, name: str = "vision_query"):
         super().__init__(name)
 
     def tick(self, ctx: BTContext) -> Status:
         if ctx.vision_fn is None:
-            logger.debug("VisionQuery: no vision_fn available")
             return Status.FAILURE
 
         try:
@@ -339,19 +341,22 @@ class VisionQuery(BTNode):
 
             if action_type == "tap":
                 ctx.tap_fn(x, y, 1.5)
+                VisionQuery.last_tap = {"x": x, "y": y, "description": description}
+                print(f"[Vision] tap ({x},{y}): {description}")
             elif action_type == "back" and ctx.back_fn:
                 ctx.back_fn()
+                VisionQuery.last_tap = None
             elif action_type == "wait":
                 time.sleep(result.get("seconds", 2.0))
+                VisionQuery.last_tap = None
             else:
                 ctx.tap_fn(x, y, 1.5)
+                VisionQuery.last_tap = {"x": x, "y": y, "description": description}
 
-            # Record for potential promotion
             if ctx.outcome_tracker:
                 ctx.outcome_tracker.record_vision_action(
                     ctx.screen_type, description, (x, y), action_type)
 
-            logger.info("VisionQuery: %s -> %s at (%d,%d)", ctx.screen_type, description, x, y)
             return Status.SUCCESS
 
         except Exception as e:
