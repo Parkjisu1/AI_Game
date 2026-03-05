@@ -274,9 +274,10 @@ class ReferenceDB:
         log(f"  [RefDB] Saved to {db_dir}: {len(self._all_entries)} entries")
 
     @classmethod
-    def load(cls, db_dir: Path) -> "ReferenceDB":
+    def load(cls, db_dir: "str | Path") -> "ReferenceDB":
         """Load reference DB from directory."""
         db = cls()
+        db_dir = Path(db_dir) if not isinstance(db_dir, Path) else db_dir
         index_file = db_dir / "index.json"
         if not index_file.exists():
             log(f"  [RefDB] No index at {index_file}, returning empty DB")
@@ -321,9 +322,14 @@ class ReferenceDB:
                                 )
                                 break
 
+                # Convert phash from binary string to int if needed
+                raw_phash = edata["phash"]
+                if isinstance(raw_phash, str):
+                    raw_phash = int(raw_phash, 2)
+
                 entry = RefEntry(
                     frame_path=edata["frame_path"],
-                    phash=edata["phash"],
+                    phash=raw_phash,
                     thumbnail=thumbnail.astype(np.float64),
                     regions=regions,
                     screen_type=screen_type,
