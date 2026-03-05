@@ -24,6 +24,10 @@ class Skill:
     accuracy: float       # 0.0~1.0 (tap/swipe precision)
     strategy: float       # 0.0~1.0 (optimal play probability)
     patience: float       # 0.0~1.0 (willingness to wait/grind)
+    # BT decision parameters (used by PersonaGate nodes)
+    risk_tolerance: float = 0.5    # 0=cautious, 1=aggressive
+    explore_rate: float = 0.3      # 0=never explore, 1=always explore
+    spend_threshold: float = 0.3   # 0=hoard, 1=spend freely
 
 
 @dataclass
@@ -74,6 +78,9 @@ ARCHETYPES: Dict[str, Persona] = {
             accuracy=0.6,
             strategy=0.4,
             patience=0.3,
+            risk_tolerance=0.3,
+            explore_rate=0.2,
+            spend_threshold=0.2,
         ),
         preferred_session_minutes=(5, 20),
         pay_probability=0.05,
@@ -88,6 +95,9 @@ ARCHETYPES: Dict[str, Persona] = {
             accuracy=0.9,
             strategy=0.85,
             patience=0.8,
+            risk_tolerance=0.8,
+            explore_rate=0.5,
+            spend_threshold=0.5,
         ),
         preferred_session_minutes=(30, 120),
         pay_probability=0.3,
@@ -102,6 +112,9 @@ ARCHETYPES: Dict[str, Persona] = {
             accuracy=0.7,
             strategy=0.6,
             patience=0.5,
+            risk_tolerance=0.5,
+            explore_rate=0.4,
+            spend_threshold=0.95,
         ),
         preferred_session_minutes=(15, 60),
         pay_probability=0.9,
@@ -116,6 +129,9 @@ ARCHETYPES: Dict[str, Persona] = {
             accuracy=0.3,
             strategy=0.15,
             patience=0.4,
+            risk_tolerance=0.2,
+            explore_rate=0.6,
+            spend_threshold=0.1,
         ),
         preferred_session_minutes=(3, 15),
         pay_probability=0.02,
@@ -130,6 +146,9 @@ ARCHETYPES: Dict[str, Persona] = {
             accuracy=0.5,
             strategy=0.5,
             patience=0.35,
+            risk_tolerance=0.4,
+            explore_rate=0.3,
+            spend_threshold=0.3,
         ),
         preferred_session_minutes=(10, 30),
         pay_probability=0.1,
