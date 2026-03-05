@@ -85,6 +85,9 @@ class TreeBuilder:
         logger.info("TreeBuilder: built %d screen trees", len(self._trees))
         return self._trees
 
+    # Screens where Vision AI should drive gameplay (not nav_graph edges)
+    VISION_FIRST_SCREENS = {"gameplay", "battle", "puzzle", "board"}
+
     def build_one(self, screen_type: str) -> ScreenBehaviorTree:
         """Build a 3-layer behavior tree for one screen."""
         layer1_nodes = self._build_known_actions(screen_type)
@@ -101,12 +104,19 @@ class TreeBuilder:
         else:
             layer1 = None
 
-        # 3-layer selector
-        children: List[BTNode] = []
-        if layer1:
-            children.append(layer1)
-        children.append(layer2)
-        children.append(layer3)
+        # For gameplay screens: Vision first, then known actions as fallback
+        if screen_type in self.VISION_FIRST_SCREENS:
+            children: List[BTNode] = [layer3]  # Vision first
+            if layer1:
+                children.append(layer1)
+            children.append(layer2)
+        else:
+            # Normal: known actions -> discovery -> vision
+            children = []
+            if layer1:
+                children.append(layer1)
+            children.append(layer2)
+            children.append(layer3)
 
         root = Selector(name=f"root_{screen_type}", children=children)
         return ScreenBehaviorTree(screen_type, root)

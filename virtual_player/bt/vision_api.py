@@ -28,11 +28,11 @@ class VisionPlanner:
 
     def __init__(
         self,
-        claude_cmd: str = r"C:\Users\user\AppData\Roaming\npm\claude.cmd",
+        claude_cmd: str = "C:/Users/user/AppData/Roaming/npm/claude.cmd",
         model: str = "haiku",
         game_context: str = "",
         batch_size: int = 4,
-        timeout: int = 30,
+        timeout: int = 60,
     ):
         self.claude_cmd = claude_cmd
         self.model = model
@@ -100,20 +100,32 @@ class VisionPlanner:
 
         try:
             start = time.time()
+            # Use Read tool to view the screenshot via Claude CLI
+            # Forward slashes for cross-platform compatibility
+            img_path = str(path).replace("\\", "/")
+            full_prompt = (
+                f"Use the Read tool to view the screenshot at {img_path}. "
+                f"Then respond with ONLY the JSON array.\n\n{prompt}"
+            )
             cmd = [
                 self.claude_cmd,
-                "-p", prompt,
+                "-p", full_prompt,
                 "--model", self.model,
                 "--output-format", "json",
-                "--max-turns", "1",
-                "--image", str(path),
+                "--max-turns", "2",
+                "--tools", "Read",
+                "--allowedTools", "Read",
             ]
 
-            # Clean env to avoid inherited Claude Code vars interfering
+            # Clean env to avoid inherited Claude Code vars and bad API keys
             import os
             env = os.environ.copy()
             for key in ("CLAUDECODE", "CLAUDE_CODE_ENTRYPOINT"):
                 env.pop(key, None)
+            # Remove placeholder API keys so CLI uses its own subscription auth
+            api_key = env.get("ANTHROPIC_API_KEY", "")
+            if not api_key or not api_key.startswith("sk-ant-"):
+                env.pop("ANTHROPIC_API_KEY", None)
 
             r = subprocess.run(
                 cmd,
@@ -285,7 +297,7 @@ GAME_CONTEXTS = {
 
 def create_vision_fn(
     game_id: str = "default",
-    claude_cmd: str = r"C:\Users\user\AppData\Roaming\npm\claude.cmd",
+    claude_cmd: str = "C:/Users/user/AppData/Roaming/npm/claude.cmd",
     model: str = "haiku",
     batch_size: int = 4,
     data_dir: str = "",
