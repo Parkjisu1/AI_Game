@@ -12,6 +12,9 @@
 const fs = require('fs');
 const path = require('path');
 
+// Shared libraries
+const { applyHybridScoring, getSearchModeInfo } = require('./lib/search-strategy');
+
 // ============================================================
 // Configuration
 // ============================================================
@@ -235,16 +238,13 @@ function filterAndRank(results, args) {
         }
     }
 
-    // 스코어링
-    const scored = filtered.map(entry => ({
-        ...entry,
-        matchScore: calculateScore(entry, args)
-    }));
+    // 하이브리드 스코어링 (DB 규모에 따라 자동 전환)
+    const scored = applyHybridScoring(filtered, args, calculateScore);
 
     // 정렬: matchScore 내림차순 → priority 오름차순
     scored.sort((a, b) => {
         if (b.matchScore !== a.matchScore) return b.matchScore - a.matchScore;
-        return a.priority - b.priority;
+        return (a.priority || 4) - (b.priority || 4);
     });
 
     // 중복 fileId 제거 (높은 점수 유지)
@@ -295,15 +295,20 @@ function formatPretty(results, args) {
         return;
     }
 
+    const modeInfo = getSearchModeInfo(results.length > 0 ? (results[0]._candidateCount || 0) : 0);
     console.log(`\n${'='.repeat(60)}`);
     console.log(`DB 검색 결과 (상위 ${results.length}건)`);
     console.log(`조건: genre=${args.genre || 'any'}, role=${args.role || 'any'}, system=${args.system || 'any'}`);
+    console.log(`검색 모드: ${modeInfo.reason}`);
     console.log(`${'='.repeat(60)}\n`);
 
     for (let i = 0; i < results.length; i++) {
         const r = results[i];
         console.log(`[${i + 1}] ${r.fileId}`);
-        console.log(`    Source: ${r.source} | Score: ${r.matchScore.toFixed(2)} | DB Score: ${r.score || 0.4}`);
+        const scoreDetail = r._searchMode === 'hybrid'
+            ? ` (structured: ${r._structuredScore}, cosine: ${r._cosineScore})`
+            : '';
+        console.log(`    Source: ${r.source} | Score: ${r.matchScore.toFixed(2)}${scoreDetail} | DB Score: ${r.score || 0.4}`);
         console.log(`    Layer: ${r.layer} | Genre: ${r.genre} | Role: ${r.role} | System: ${r.system || '-'}`);
 
         if (r.provides && r.provides.length > 0) {
@@ -334,8 +339,10 @@ function formatPretty(results, args) {
 }
 
 function formatJson(results) {
+    const modeInfo = getSearchModeInfo(results.length > 0 ? (results[0]._candidateCount || 0) : 0);
     const output = {
         count: results.length,
+        searchMode: modeInfo,
         results: results.map(r => {
             const detail = loadDetail(r);
             return {
