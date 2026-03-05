@@ -370,6 +370,21 @@ def cmd_play_v2(args: argparse.Namespace) -> None:
         print(f"Outcome: {result['outcome_stats']}")
         return
 
+    # Vision AI (Claude CLI)
+    vision_fn = None
+    try:
+        from .bt.vision_api import create_vision_fn
+        vision_fn = create_vision_fn(
+            game_id=args.game,
+            claude_cmd=r"C:\Users\user\AppData\Roaming\npm\claude.cmd",
+            model="haiku",
+            batch_size=4,
+            data_dir=str(Path(__file__).parent / "data"),
+        )
+        print(f"[play-v2] Vision AI loaded (batch={4}, model=haiku)")
+    except Exception as e:
+        print(f"[play-v2] No Vision AI: {e}")
+
     # Build and run PlayEngineV2
     from .play_engine_v2 import PlayEngineV2
 
@@ -386,6 +401,7 @@ def cmd_play_v2(args: argparse.Namespace) -> None:
         back_fn=back_fn,
         swipe_fn=swipe_fn,
         relaunch_fn=relaunch_fn,
+        vision_fn=vision_fn,
         temp_dir=temp_dir,
         cache_dir=cache_dir,
         input_method=input_method,

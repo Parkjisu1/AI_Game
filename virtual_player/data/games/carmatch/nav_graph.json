@@ -1,0 +1,270 @@
+{
+  "nodes": {
+    "lobby": {
+      "screen_type": "lobby",
+      "description": "Main menu with green Play button and bottom nav bar",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_play", "tab_shop", "tab_leaderboard", "tab_journey", "tab_settings"]
+    },
+    "gameplay": {
+      "screen_type": "gameplay",
+      "description": "3D parking lot with colored cars and bottom holder (7 slots)",
+      "visit_count": 0,
+      "in_screen_actions": [
+        {"element": "tap_car_center", "category": "interaction", "action_type": "tap", "x": 540, "y": 700, "description": "Tap car center"},
+        {"element": "tap_car_left", "category": "interaction", "action_type": "tap", "x": 250, "y": 600, "description": "Tap car left"},
+        {"element": "tap_car_right", "category": "interaction", "action_type": "tap", "x": 830, "y": 600, "description": "Tap car right"},
+        {"element": "tap_car_top", "category": "interaction", "action_type": "tap", "x": 540, "y": 400, "description": "Tap car top"},
+        {"element": "tap_car_bottom", "category": "interaction", "action_type": "tap", "x": 540, "y": 1000, "description": "Tap car bottom"}
+      ],
+      "elements": ["tap_car_center", "tap_car_left", "tap_car_right", "tap_car_top", "tap_car_bottom", "tap_settings_gear"]
+    },
+    "win": {
+      "screen_type": "win",
+      "description": "Level complete - PERFECT! Continue button",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_continue", "tap_close"]
+    },
+    "fail_outofspace": {
+      "screen_type": "fail_outofspace",
+      "description": "Out of Space! - holder full",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_close"]
+    },
+    "fail_continue": {
+      "screen_type": "fail_continue",
+      "description": "Continue? - lose life/streak warning",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_close"]
+    },
+    "fail_result": {
+      "screen_type": "fail_result",
+      "description": "Level Failed - rewards and Try Again",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_try_again", "tap_close"]
+    },
+    "ingame_setting": {
+      "screen_type": "ingame_setting",
+      "description": "In-game Settings popup",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_resume", "tap_quit", "tap_close"]
+    },
+    "ingame_quit_confirm": {
+      "screen_type": "ingame_quit_confirm",
+      "description": "Quit confirmation - lose 1 life",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_quit", "tap_close"]
+    },
+    "ad": {
+      "screen_type": "ad",
+      "description": "Fullscreen ad",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["close_ad_top_right", "close_ad_top_left", "close_ad_landscape_right", "tap_back_button"]
+    },
+    "ad_install": {
+      "screen_type": "ad_install",
+      "description": "App install page from ad",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_back_button"]
+    },
+    "shop": {
+      "screen_type": "shop",
+      "description": "Shop with real money purchases",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tab_home"]
+    },
+    "leaderboard": {
+      "screen_type": "leaderboard",
+      "description": "Leaderboard (Weekly/World/Country)",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tab_home"]
+    },
+    "journey": {
+      "screen_type": "journey",
+      "description": "Journey map",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tab_home"]
+    },
+    "setting": {
+      "screen_type": "setting",
+      "description": "App settings page",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tab_home"]
+    },
+    "profile": {
+      "screen_type": "profile",
+      "description": "Player profile popup",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_close"]
+    },
+    "profile_edit": {
+      "screen_type": "profile_edit",
+      "description": "Edit Profile popup",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_close"]
+    },
+    "lobby_keyblaze": {
+      "screen_type": "lobby_keyblaze",
+      "description": "Key Blaze event popup",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_close"]
+    },
+    "lobby_keyblaze_info": {
+      "screen_type": "lobby_keyblaze_info",
+      "description": "Key Blaze info overlay",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_continue"]
+    },
+    "lobby_streakrace": {
+      "screen_type": "lobby_streakrace",
+      "description": "Streak Race event popup",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_close"]
+    },
+    "lobby_streakrace_info": {
+      "screen_type": "lobby_streakrace_info",
+      "description": "Streak Race info overlay",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_close"]
+    },
+    "lobby_dailytask": {
+      "screen_type": "lobby_dailytask",
+      "description": "Daily Task popup",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_close"]
+    },
+    "lobby_skylift": {
+      "screen_type": "lobby_skylift",
+      "description": "Sky Lift event",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_close"]
+    },
+    "lobby_skylift_info": {
+      "screen_type": "lobby_skylift_info",
+      "description": "Sky Lift info overlay",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_continue"]
+    },
+    "lobby_missiongarage": {
+      "screen_type": "lobby_missiongarage",
+      "description": "Mission Garage event",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_close"]
+    },
+    "lobby_missiongarage_info": {
+      "screen_type": "lobby_missiongarage_info",
+      "description": "Mission Garage info overlay",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_continue"]
+    },
+    "lobby_skyrally": {
+      "screen_type": "lobby_skyrally",
+      "description": "Sky Rally start popup",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_close", "tap_start"]
+    },
+    "lobby_skyrally_race": {
+      "screen_type": "lobby_skyrally_race",
+      "description": "Sky Rally race view",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_close"]
+    },
+    "lobby_endlesscoast": {
+      "screen_type": "lobby_endlesscoast",
+      "description": "Endless Coast offers",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_close"]
+    },
+    "lobby_punchout": {
+      "screen_type": "lobby_punchout",
+      "description": "Punch Out event",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_close"]
+    },
+    "lobby_citydeal": {
+      "screen_type": "lobby_citydeal",
+      "description": "City Deal offer (real money!)",
+      "visit_count": 0,
+      "in_screen_actions": [],
+      "elements": ["tap_close"]
+    }
+  },
+  "edges": [
+    {"source": "lobby", "target": "gameplay", "action": {"action_type": "tap", "x": 540, "y": 1500, "description": "Start level", "element": "tap_play", "category": "navigation"}, "success_count": 5},
+    {"source": "lobby", "target": "shop", "action": {"action_type": "tap", "x": 108, "y": 1870, "description": "Shop tab", "element": "tab_shop", "category": "navigation"}, "success_count": 3},
+    {"source": "lobby", "target": "leaderboard", "action": {"action_type": "tap", "x": 324, "y": 1870, "description": "Leaderboard tab", "element": "tab_leaderboard", "category": "navigation"}, "success_count": 3},
+    {"source": "lobby", "target": "journey", "action": {"action_type": "tap", "x": 756, "y": 1870, "description": "Journey tab", "element": "tab_journey", "category": "navigation"}, "success_count": 3},
+    {"source": "lobby", "target": "setting", "action": {"action_type": "tap", "x": 972, "y": 1870, "description": "Settings tab", "element": "tab_settings", "category": "navigation"}, "success_count": 3},
+
+    {"source": "win", "target": "lobby", "action": {"action_type": "tap", "x": 540, "y": 1170, "description": "Continue after win", "element": "tap_continue", "category": "navigation"}, "success_count": 5},
+    {"source": "win", "target": "lobby", "action": {"action_type": "tap", "x": 880, "y": 400, "description": "X close win popup", "element": "tap_close", "category": "navigation"}, "success_count": 3},
+
+    {"source": "fail_outofspace", "target": "fail_continue", "action": {"action_type": "tap", "x": 970, "y": 180, "description": "X close - decline Add Space", "element": "tap_close", "category": "navigation"}, "success_count": 5},
+    {"source": "fail_continue", "target": "fail_result", "action": {"action_type": "tap", "x": 900, "y": 500, "description": "X close - decline Play On", "element": "tap_close", "category": "navigation"}, "success_count": 5},
+    {"source": "fail_result", "target": "gameplay", "action": {"action_type": "tap", "x": 540, "y": 1100, "description": "Try Again", "element": "tap_try_again", "category": "navigation"}, "success_count": 5},
+    {"source": "fail_result", "target": "lobby", "action": {"action_type": "tap", "x": 880, "y": 370, "description": "X close - back to lobby", "element": "tap_close", "category": "navigation"}, "success_count": 3},
+
+    {"source": "ingame_setting", "target": "gameplay", "action": {"action_type": "tap", "x": 310, "y": 1070, "description": "Resume gameplay", "element": "tap_resume", "category": "navigation"}, "success_count": 5},
+    {"source": "ingame_setting", "target": "ingame_quit_confirm", "action": {"action_type": "tap", "x": 640, "y": 1070, "description": "Quit button", "element": "tap_quit", "category": "navigation"}, "success_count": 3},
+    {"source": "ingame_setting", "target": "gameplay", "action": {"action_type": "tap", "x": 885, "y": 570, "description": "X close settings", "element": "tap_close", "category": "navigation"}, "success_count": 5},
+    {"source": "ingame_quit_confirm", "target": "lobby", "action": {"action_type": "tap", "x": 540, "y": 1160, "description": "Confirm quit", "element": "tap_quit", "category": "navigation"}, "success_count": 3},
+    {"source": "ingame_quit_confirm", "target": "gameplay", "action": {"action_type": "tap", "x": 880, "y": 550, "description": "Cancel quit", "element": "tap_close", "category": "navigation"}, "success_count": 5},
+
+    {"source": "ad", "target": "lobby", "action": {"action_type": "tap", "x": 1050, "y": 30, "description": "Close ad top-right", "element": "close_ad_top_right", "category": "navigation"}, "success_count": 5},
+    {"source": "ad", "target": "lobby", "action": {"action_type": "tap", "x": 30, "y": 30, "description": "Close ad top-left", "element": "close_ad_top_left", "category": "navigation"}, "success_count": 3},
+    {"source": "ad", "target": "lobby", "action": {"action_type": "tap", "x": 1895, "y": 35, "description": "Close landscape ad", "element": "close_ad_landscape_right", "category": "navigation"}, "success_count": 3},
+    {"source": "ad_install", "target": "ad", "action": {"action_type": "back", "description": "Back from install page", "element": "tap_back_button", "category": "navigation"}, "success_count": 5},
+
+    {"source": "shop", "target": "lobby", "action": {"action_type": "tap", "x": 540, "y": 1870, "description": "Home tab", "element": "tab_home", "category": "navigation"}, "success_count": 5},
+    {"source": "leaderboard", "target": "lobby", "action": {"action_type": "tap", "x": 540, "y": 1870, "description": "Home tab", "element": "tab_home", "category": "navigation"}, "success_count": 5},
+    {"source": "journey", "target": "lobby", "action": {"action_type": "tap", "x": 540, "y": 1870, "description": "Home tab", "element": "tab_home", "category": "navigation"}, "success_count": 5},
+    {"source": "setting", "target": "lobby", "action": {"action_type": "tap", "x": 540, "y": 1870, "description": "Home tab", "element": "tab_home", "category": "navigation"}, "success_count": 5},
+
+    {"source": "profile", "target": "lobby", "action": {"action_type": "tap", "x": 920, "y": 110, "description": "X close profile", "element": "tap_close", "category": "navigation"}, "success_count": 5},
+    {"source": "profile_edit", "target": "profile", "action": {"action_type": "tap", "x": 920, "y": 340, "description": "X close edit profile", "element": "tap_close", "category": "navigation"}, "success_count": 3},
+
+    {"source": "lobby_keyblaze", "target": "lobby", "action": {"action_type": "tap", "x": 885, "y": 340, "description": "X close Key Blaze", "element": "tap_close", "category": "navigation"}, "success_count": 5},
+    {"source": "lobby_keyblaze_info", "target": "lobby_keyblaze", "action": {"action_type": "tap", "x": 540, "y": 1730, "description": "Tap to Continue", "element": "tap_continue", "category": "navigation"}, "success_count": 5},
+    {"source": "lobby_streakrace", "target": "lobby", "action": {"action_type": "tap", "x": 910, "y": 65, "description": "X close Streak Race", "element": "tap_close", "category": "navigation"}, "success_count": 5},
+    {"source": "lobby_streakrace_info", "target": "lobby_streakrace", "action": {"action_type": "tap", "x": 540, "y": 1680, "description": "Tap to Continue", "element": "tap_continue", "category": "navigation"}, "success_count": 5},
+    {"source": "lobby_dailytask", "target": "lobby", "action": {"action_type": "tap", "x": 910, "y": 580, "description": "X close Daily Task", "element": "tap_close", "category": "navigation"}, "success_count": 5},
+    {"source": "lobby_skylift", "target": "lobby", "action": {"action_type": "tap", "x": 895, "y": 65, "description": "X close Sky Lift", "element": "tap_close", "category": "navigation"}, "success_count": 5},
+    {"source": "lobby_skylift_info", "target": "lobby_skylift", "action": {"action_type": "tap", "x": 540, "y": 1730, "description": "Tap to Continue", "element": "tap_continue", "category": "navigation"}, "success_count": 5},
+    {"source": "lobby_missiongarage", "target": "lobby", "action": {"action_type": "tap", "x": 905, "y": 60, "description": "X close Mission Garage", "element": "tap_close", "category": "navigation"}, "success_count": 5},
+    {"source": "lobby_missiongarage_info", "target": "lobby_missiongarage", "action": {"action_type": "tap", "x": 540, "y": 1740, "description": "Tap to Continue", "element": "tap_continue", "category": "navigation"}, "success_count": 5},
+    {"source": "lobby_skyrally", "target": "lobby", "action": {"action_type": "tap", "x": 880, "y": 390, "description": "X close Sky Rally", "element": "tap_close", "category": "navigation"}, "success_count": 5},
+    {"source": "lobby_skyrally", "target": "lobby_skyrally_race", "action": {"action_type": "tap", "x": 540, "y": 1400, "description": "Start Sky Rally", "element": "tap_start", "category": "navigation"}, "success_count": 3},
+    {"source": "lobby_skyrally_race", "target": "lobby", "action": {"action_type": "tap", "x": 890, "y": 70, "description": "X close race view", "element": "tap_close", "category": "navigation"}, "success_count": 5},
+    {"source": "lobby_endlesscoast", "target": "lobby", "action": {"action_type": "tap", "x": 895, "y": 60, "description": "X close Endless Coast", "element": "tap_close", "category": "navigation"}, "success_count": 5},
+    {"source": "lobby_punchout", "target": "lobby", "action": {"action_type": "tap", "x": 890, "y": 390, "description": "X close Punch Out", "element": "tap_close", "category": "navigation"}, "success_count": 5},
+    {"source": "lobby_citydeal", "target": "lobby", "action": {"action_type": "tap", "x": 895, "y": 230, "description": "X close City Deal", "element": "tap_close", "category": "navigation"}, "success_count": 5}
+  ]
+}

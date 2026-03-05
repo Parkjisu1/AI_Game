@@ -22,6 +22,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from .bt.nodes import BTContext, Status
 from .bt.tree_builder import TreeBuilder
+from .episode_recorder import EpisodeRecorder, ExperienceLearner
 from .outcome_tracker import OutcomeTracker
 from .state_machine import ScreenStateMachine
 
@@ -91,6 +92,27 @@ class PlayEngineV2:
         self._ad_detector: Any = None
         self._ad_handler: Any = None
 
+        # Episode recording
+        self._episode_recorder: Optional[EpisodeRecorder] = None
+        self._experience_learner: Optional[ExperienceLearner] = None
+        data_dir = (temp_dir or Path("temp")).parent
+        # Try to find the actual data dir (virtual_player/data)
+        for candidate in [Path("virtual_player/data"), Path("data"), data_dir / "data"]:
+            if candidate.exists() and (candidate / "games").exists():
+                data_dir = candidate
+                break
+        try:
+            self._episode_recorder = EpisodeRecorder(
+                game_id=game_package.split(".")[-1] if game_package else genre,
+                data_dir=data_dir,
+            )
+            self._experience_learner = ExperienceLearner(
+                game_id=game_package.split(".")[-1] if game_package else genre,
+                data_dir=data_dir,
+            )
+        except Exception as e:
+            logger.warning("Episode recorder init failed: %s", e)
+
         # Core components
         cache = cache_dir or (temp_dir or Path("temp")) / "bt_cache"
         self._sm = ScreenStateMachine()
@@ -124,6 +146,11 @@ class PlayEngineV2:
         print(f"[PlayEngineV2] Starting {self.play_duration}s session "
               f"(genre={self.genre}, persona={persona_name})")
 
+        # Start episode recording
+        if self._episode_recorder:
+            ep_id = self._episode_recorder.start_episode()
+            print(f"[PlayEngineV2] Recording episode #{ep_id}")
+
         observer_errors: List[str] = []
 
         while time.time() - start_time < self.play_duration:
@@ -147,6 +174,22 @@ class PlayEngineV2:
 
         duration = time.time() - start_time
         stats = self._outcome.get_stats()
+
+        # End episode recording
+        episode_outcome = self._detect_episode_outcome()
+        if self._episode_recorder and self._episode_recorder.is_recording:
+            ep_path = self._episode_recorder.end_episode(
+                outcome=episode_outcome,
+                fail_reason=self._sm.last_screen if episode_outcome == "fail" else None,
+            )
+            print(f"[PlayEngineV2] Episode saved: {ep_path}")
+
+        # Update experience summary
+        if self._experience_learner:
+            summary = self._experience_learner.generate_summary()
+            if summary:
+                print(f"[PlayEngineV2] Experience: {summary[:120]}...")
+
         print(f"\n[PlayEngineV2] DONE - {self._tick_count} ticks, "
               f"{len(self._actions_executed)} actions in {duration:.0f}s")
         print(f"[PlayEngineV2] Outcome stats: {stats}")
@@ -156,6 +199,7 @@ class PlayEngineV2:
             "actions_executed": self._actions_executed,
             "duration": duration,
             "outcome_stats": stats,
+            "episode_outcome": episode_outcome,
             "observer_errors": observer_errors,
         }
 
@@ -180,6 +224,16 @@ class PlayEngineV2:
 
         # 3. Record outcome of previous action (if any)
         self._outcome.record_result(screen_changed, screen_type)
+
+        # 3b. Record to episode
+        if self._episode_recorder and self._episode_recorder.is_recording:
+            last_action = self._actions_executed[-1] if self._actions_executed else ""
+            self._episode_recorder.record_action(
+                tick=self._tick_count,
+                screen_type=screen_type,
+                action_name=last_action,
+                context={"screen_changed": screen_changed},
+            )
 
         # 4. Ad detection
         if self._handle_ad(path, screen_type):
@@ -479,6 +533,25 @@ class PlayEngineV2:
                         pass
         except Exception:
             pass
+
+    def _detect_episode_outcome(self) -> str:
+        """Detect win/fail/timeout from the action history."""
+        # Check last few screens visited
+        recent_screens = []
+        for action_str in reversed(self._actions_executed[-20:]):
+            parts = action_str.split(":")
+            if len(parts) >= 2:
+                recent_screens.append(parts[1])
+
+        # Win detection: visited 'win' screen
+        if any("win" in s for s in recent_screens[:5]):
+            return "win"
+
+        # Fail detection: visited fail screens
+        if any("fail" in s for s in recent_screens[:5]):
+            return "fail"
+
+        return "timeout"
 
     def _on_node_promoted(self, screen_type: str, action: Dict) -> None:
         """Callback when OutcomeTracker promotes a vision action to BT node."""
