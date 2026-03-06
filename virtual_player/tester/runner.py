@@ -1,0 +1,273 @@
+"""
+AI Game Tester v2 — Main Runner
+=================================
+5-Layer 통합 실행기.
+
+Perception → Memory → Decision → Execution → Verification
+(눈)         (기억)    (판단)      (손)          (확인)
+
+자유도 최소, 규칙 최대.
+"""
+
+import json
+import subprocess
+import time
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Optional
+
+from .playbook import Playbook, create_carmatch_playbook
+from .perception import Perception, BoardState
+from .memory import GameMemory
+from .decision import Decision
+from .decision_v2 import DecisionV2
+from .executor import Executor
+
+
+# ---------------------------------------------------------------------------
+# ADB 함수 (기존 시스템 재사용)
+# ---------------------------------------------------------------------------
+ADB = r"C:\Program Files\BlueStacks_nxt\HD-Adb.exe"
+SERIAL = "emulator-5554"
+
+
+def adb_screenshot(temp_dir: Path, name: str = "frame") -> Optional[Path]:
+    """ADB 스크린샷 캡처."""
+    temp_dir.mkdir(parents=True, exist_ok=True)
+    try:
+        r = subprocess.run(
+            [ADB, "-s", SERIAL, "exec-out", "screencap", "-p"],
+            capture_output=True, timeout=10,
+        )
+        if len(r.stdout) < 1000:
+            return None
+        path = temp_dir / f"{name}.png"
+        path.write_bytes(r.stdout)
+        return path
+    except Exception:
+        return None
+
+
+def adb_tap(x: int, y: int):
+    """ADB 탭."""
+    try:
+        subprocess.run(
+            [ADB, "-s", SERIAL, "shell", "input", "tap", str(x), str(y)],
+            capture_output=True, timeout=5,
+        )
+    except Exception:
+        pass
+
+
+def adb_back():
+    """ADB back 버튼."""
+    try:
+        subprocess.run(
+            [ADB, "-s", SERIAL, "shell", "input", "keyevent", "4"],
+            capture_output=True, timeout=5,
+        )
+    except Exception:
+        pass
+
+
+def adb_relaunch(package: str = "com.grandgames.carmatch"):
+    """게임 강제 종료 + 재시작."""
+    try:
+        subprocess.run(
+            [ADB, "-s", SERIAL, "shell", "am", "force-stop", package],
+            capture_output=True, timeout=5,
+        )
+        time.sleep(2)
+        subprocess.run(
+            [ADB, "-s", SERIAL, "shell", "monkey", "-p", package,
+             "-c", "android.intent.category.LAUNCHER", "1"],
+            capture_output=True, timeout=5,
+        )
+        time.sleep(5)
+    except Exception:
+        pass
+
+
+# ---------------------------------------------------------------------------
+# Main Runner
+# ---------------------------------------------------------------------------
+class TesterRunner:
+    """AI Game Tester v2 메인 루프."""
+
+    def __init__(
+        self,
+        playbook: Optional[Playbook] = None,
+        model: str = "claude-haiku-4-5-20251001",
+        temp_dir: Optional[Path] = None,
+        log_file: Optional[Path] = None,
+        use_lookahead: bool = False,
+        use_deep_lookahead: bool = False,
+        lookahead_weights: Optional[dict] = None,
+    ):
+        self.playbook = playbook or create_carmatch_playbook()
+        self.temp_dir = temp_dir or Path("E:/AI/virtual_player/data/games/carmatch/temp/tester_v2")
+        self.log_file = log_file or Path("E:/AI/virtual_player/data/games/carmatch/tester_v2_log.txt")
+
+        # Layer 초기화
+        self.perception = Perception(model=model)
+        self.memory = GameMemory()
+        if use_lookahead or use_deep_lookahead:
+            self.decision = DecisionV2(
+                self.playbook,
+                use_deep=use_deep_lookahead,
+                weights=lookahead_weights,
+            )
+        else:
+            self.decision = Decision(self.playbook)
+        self.executor = Executor(
+            tap_fn=adb_tap,
+            back_fn=adb_back,
+            screenshot_fn=lambda: adb_screenshot(self.temp_dir),
+            relaunch_fn=adb_relaunch,
+            perception=self.perception,
+            memory=self.memory,
+        )
+
+        # 상태
+        self._current_board: Optional[BoardState] = None
+        self._running = False
+
+    def run(self, duration_minutes: int = 60):
+        """메인 루프 실행."""
+        target = datetime.now() + timedelta(minutes=duration_minutes)
+
+        self._log(f"=== AI Game Tester v2 START ===")
+        self._log(f"Game: {self.playbook.game_id}")
+        self._log(f"Target: {target.strftime('%Y-%m-%d %H:%M')}")
+        self._log(f"Model: {self.perception.model}")
+        self._running = True
+
+        try:
+            self._game_loop(target)
+        except KeyboardInterrupt:
+            self._log("Interrupted by user")
+        except Exception as e:
+            self._log(f"FATAL ERROR: {e}")
+        finally:
+            self._running = False
+            self._print_report()
+
+    def _game_loop(self, target: datetime):
+        """핵심 루프: perceive → decide → execute → verify."""
+
+        while datetime.now() < target:
+            try:
+                # Step 1: 스크린샷
+                img = adb_screenshot(self.temp_dir, "current")
+                if not img:
+                    self._log("Screenshot failed, retrying...")
+                    time.sleep(2)
+                    continue
+
+                # Step 2: Layer 1 — Perception
+                board = self.perception.perceive(img)
+                self._log(f"Screen: {board.screen_type} | "
+                          f"Holder: {self._format_holder(board.holder)} | "
+                          f"Cars: {len(board.active_cars)}")
+
+                prev_board = self._current_board or board
+
+                # Step 3: Layer 2 — Memory 업데이트 (첫 턴이 아니면)
+                if self._current_board is not None:
+                    # 이미 executor에서 업데이트되므로 여기선 스킵
+                    pass
+
+                # Step 4: Layer 3 — Decision
+                actions = self.decision.decide(board, self.memory)
+                for a in actions:
+                    self._log(f"  Plan: {a}")
+
+                # Step 5: Layer 4+5 — Execute + Verify
+                self._current_board = self.executor.execute(actions, board)
+
+                # 주기적 통계
+                if self.memory.total_turns % 10 == 0:
+                    self._log(f"--- Stats: {self.memory.games_won}W/"
+                              f"{self.memory.games_failed}F | "
+                              f"Taps: {self.memory.total_taps} | "
+                              f"Matches: {self.memory.total_matches} | "
+                              f"Vision: {self.perception.call_count} ---")
+
+            except Exception as e:
+                self._log(f"ERROR: {e}")
+                time.sleep(3)
+
+    def _print_report(self):
+        """최종 보고서."""
+        self._log("")
+        self._log("=" * 50)
+        self._log("SESSION COMPLETE")
+        self._log("=" * 50)
+        self._log(f"Games started:  {self.memory.games_started}")
+        self._log(f"Games won:      {self.memory.games_won}")
+        self._log(f"Games failed:   {self.memory.games_failed}")
+        self._log(f"Total taps:     {self.memory.total_taps}")
+        self._log(f"Total matches:  {self.memory.total_matches}")
+        self._log(f"Total turns:    {self.memory.total_turns}")
+        self._log(f"Vision calls:   {self.perception.call_count}")
+
+        # JSON 통계 저장
+        stats = {
+            "games_started": self.memory.games_started,
+            "games_won": self.memory.games_won,
+            "games_failed": self.memory.games_failed,
+            "total_taps": self.memory.total_taps,
+            "total_matches": self.memory.total_matches,
+            "total_turns": self.memory.total_turns,
+            "vision_calls": self.perception.call_count,
+            "ended_at": datetime.now().isoformat(),
+        }
+        stats_path = self.temp_dir / "stats.json"
+        stats_path.write_text(json.dumps(stats, indent=2), encoding="utf-8")
+        self._log(f"Stats saved: {stats_path}")
+
+    def _log(self, msg: str):
+        ts = datetime.now().strftime("%H:%M:%S")
+        line = f"[{ts}] {msg}"
+        print(line, flush=True)
+        try:
+            self.log_file.parent.mkdir(parents=True, exist_ok=True)
+            with open(self.log_file, "a", encoding="utf-8") as f:
+                f.write(line + "\n")
+        except Exception:
+            pass
+
+    def _format_holder(self, holder: list) -> str:
+        parts = []
+        for h in holder:
+            if h is None:
+                parts.append("_")
+            else:
+                parts.append(h[0].upper())
+        return "[" + " ".join(parts) + "]"
+
+
+# ---------------------------------------------------------------------------
+# CLI Entry Point
+# ---------------------------------------------------------------------------
+def main():
+    """커맨드라인 실행."""
+    import argparse
+    parser = argparse.ArgumentParser(description="AI Game Tester v2")
+    parser.add_argument("duration", nargs="?", type=int, default=60,
+                        help="Duration in minutes (default: 60)")
+    parser.add_argument("--lookahead", action="store_true",
+                        help="Use 1-move lookahead simulation")
+    parser.add_argument("--deep", action="store_true",
+                        help="Use 2-move deep lookahead simulation")
+    args = parser.parse_args()
+
+    runner = TesterRunner(
+        use_lookahead=args.lookahead,
+        use_deep_lookahead=args.deep,
+    )
+    runner.run(duration_minutes=args.duration)
+
+
+if __name__ == "__main__":
+    main()

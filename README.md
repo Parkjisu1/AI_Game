@@ -806,11 +806,6 @@ E:\AI\
 │   ├── pattern_db/                    #   패턴 DB (reflex_cache, tactical_rules)
 │   └── data/games/                    #   게임별 프로파일 + 런타임 데이터 (로컬)
 │
-├── ai_tester/                         # Cross-genre 게임 테스트 프레임워크 (개발 중)
-│   ├── core/                          #   ADB, 상태 추적, UI 탐색
-│   ├── strategies/                    #   장르별 전략
-│   └── runner.py                      #   실행 엔진
-│
 ├── docs/                              # 문서
 │   ├── WORKFLOW.md                    #   통합 워크플로우 문서
 │   └── Claude_Code_TMux_Guide.txt    #   TMux 가이드
