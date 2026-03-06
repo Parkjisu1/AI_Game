@@ -14,16 +14,18 @@ Unity C# 게임 코드 및 HTML5 플레이어블 광고를 지원합니다.
 
 ## Agent Team: AI-Game-Creator
 
-### 팀 구성 (6명 + 호출형 1명)
+### 팀 구성 (7명 + 호출형 3명)
 | Agent | Model | 역할 | Custom Agent 파일 | Platform |
 |-------|-------|------|-------------------|----------|
-| **Lead** | Opus | PM - 태스크 분배/조율, delegate 모드 | (메인 세션) | 공통 |
-| **Designer** | Sonnet | 기획 - 기획서 생성 | `.claude/agents/designer.md` | 공통 |
-| **Main Coder** | Opus | 메인 개발 - Core 아키텍처, 핵심 시스템 | `.claude/agents/main-coder.md` | Unity |
-| **Sub Coder x2** | Sonnet | 서브 개발 - Main 패턴 따라 노드 구현 | `.claude/agents/sub-coder.md` | Unity |
-| **Playable Coder** | Sonnet | HTML5 플레이어블 광고 코드 생성 | `.claude/agents/playable-coder.md` | Playable |
-| **Validator** | Sonnet | QA - Unity 5단계 / Playable 4단계 검증 | `.claude/agents/validator.md` | 공통 |
-| **DB Builder** | Sonnet | DB 구축 - 사용자 호출 시에만 | `.claude/agents/db-builder.md` | 공통 |
+| **Lead** | claude-opus-4-6 | PM - 태스크 분배/조율/평가, delegate 모드 | `.claude/agents/lead.md` | 공통 |
+| **Designer** | claude-sonnet-4-6 | 기획 - 기획서 생성 | `.claude/agents/designer.md` | 공통 |
+| **Main Coder** | claude-opus-4-6 | 메인 개발 - Core 아키텍처, 핵심 시스템 | `.claude/agents/main-coder.md` | Unity |
+| **Sub Coder x2** | claude-sonnet-4-6 | 서브 개발 - Main 패턴 따라 노드 구현 | `.claude/agents/sub-coder.md` | Unity |
+| **Playable Coder** | claude-sonnet-4-6 | HTML5 플레이어블 광고 코드 생성 | `.claude/agents/playable-coder.md` | Playable |
+| **Validator** | claude-sonnet-4-6 | QA - Unity 5+1단계 / Playable 4단계 검증 | `.claude/agents/validator.md` | 공통 |
+| **Design Validator** | claude-sonnet-4-6 | 기획 QA - Quality Gates 소유, 6단계 검증 | `.claude/agents/design-validator.md` | 공통 |
+| **DB Builder** | claude-sonnet-4-6 | Code DB 구축 - 사용자 호출 시에만 | `.claude/agents/db-builder.md` | 공통 |
+| **Design DB Builder** | claude-sonnet-4-6 | Design DB 구축 - 사용자 호출 시에만 | `.claude/agents/design-db-builder.md` | 공통 |
 
 ### 병렬 실행 규칙
 - **Phase 0**: Main Coder가 Core 전담 → _ARCHITECTURE.md 생성
