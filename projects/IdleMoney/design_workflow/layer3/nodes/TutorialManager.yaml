@@ -1,0 +1,96 @@
+metadata:
+  nodeId: "TutorialManager"
+  version: "1.0.0"
+  phase: 2
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "FactoryManager"
+    - "ShopManager"
+    - "EventManager"
+    - "SaveManager"
+  external:
+    - "UnityEngine.MonoBehaviour"
+    - "System.Collections.Generic"
+    - "UnityEngine.UI"
+
+contract:
+  provides:
+    - "tutorial_progression"
+    - "ui_highlight"
+    - "tutorial_reward"
+  requires:
+    - "factory_manager"
+    - "shop_manager"
+    - "event_system"
+    - "save_system"
+
+tags:
+  layer: "Domain"
+  genre: "Idle"
+  role: "Manager"
+  system: "TutorialSystem"
+  majorFunctions:
+    - "StateControl"
+    - "FlowControl"
+    - "ConditionCheck"
+    - "ResourceTransfer"
+  minorFunctions:
+    - "Compare"
+    - "Assign"
+    - "Notify"
+    - "Find"
+    - "Delay"
+
+logicFlow:
+  - step: 1
+    tag: "ConditionCheck.Compare"
+    action: "CheckTutorialIndex: SaveManager에서 currentTutorialIndex 로드, 완료 여부 및 최대 단계(30+) 초과 체크"
+    next: 2
+  - step: 2
+    tag: "FlowControl.Assign"
+    action: "SendMission(ID): TutorialDataTable[currentTutorialIndex] 에서 미션 타입/타겟UI/완료조건 로드"
+    next: 3
+  - step: 3
+    tag: "StateControl.Assign"
+    action: "HighlightUI.UnMask: 미션 타겟 UI 요소에 UnMask 컴포넌트 활성화, 나머지 화면 블러/딤 처리"
+    next: 4
+  - step: 4
+    tag: "ConditionCheck.Find"
+    action: "WaitPlayerAction: EventManager 이벤트 구독으로 튜토리얼 완료 트리거 이벤트 대기"
+    next: 5
+  - step: 5
+    tag: "ResourceTransfer.Assign"
+    action: "CompleteMission.GiveReward: TUTORIAL_N_MONEY_REWARD 테이블에서 단계별 보상 조회 후 CurrencyManager 전달"
+    next: 6
+  - step: 6
+    tag: "StateControl.Assign"
+    action: "NextStep: currentTutorialIndex + 1 증가, UnMask 비활성화, SaveManager 저장"
+    next: 7
+  - step: 7
+    tag: "FlowControl.Delay"
+    action: "단계 전환 딜레이(튜토리얼 연출 시간) 후 다음 CheckTutorialIndex 재진입"
+    next: 1
+
+referencePatterns:
+  - source: "idlemoney__ux__tutorial_flow"
+    pattern: "30+ 단계 UnMask 기반 튜토리얼 플로우, 단계별 완료 조건 및 TUTORIAL_N_MONEY_REWARD 테이블"
+  - source: "idlemoney__balance__factory_progression"
+    pattern: "튜토리얼 완료 조건과 팩토리 레벨업 연동 구간 참조"
+
+codeHints:
+  patterns:
+    - "SerializeField for Inspector"
+    - "MessagePack serialization"
+    - "DontDestroyOnLoad singleton"
+    - "UnMask component for UI highlight (not custom shader)"
+    - "EventManager subscription for tutorial trigger detection"
+    - "List<TutorialStep> for step data container"
+  avoidPatterns:
+    - "Find/FindObjectOfType for UI"
+    - "dynamic UI creation"
+    - "hardcoded magic numbers"
+    - "Hardcoded step index checks in FactoryManager or ShopManager"
+    - "GameObject.Find for tutorial target lookup (use [SerializeField] references)"

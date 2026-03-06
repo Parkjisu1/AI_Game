@@ -1,5 +1,5 @@
 """
-IdleSchema — Idle Genre Configuration
+IdleSchema -- Idle Genre Configuration
 =======================================
 Concepts, ROIs, goals, actions, and interrupt rules for Idle/Incremental games.
 Focus: resource accumulation, offline rewards, upgrades, prestige.

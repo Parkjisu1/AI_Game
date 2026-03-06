@@ -1,0 +1,76 @@
+{
+  "fileId": "ItemUpgradeStatComponent",
+  "filePath": "UI\\ItemUpgradeStatComponent.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Rpg",
+  "role": "Component",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI",
+    "TMPro"
+  ],
+  "classes": [
+    {
+      "className": "ItemUpgradeStatComponent",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "itemIconImg",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "beforeStat",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "afterStat",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": []
+    }
+  ],
+  "provides": [],
+  "requires": [
+    "TextMeshProUGUI"
+  ],
+  "tags": {
+    "major": [],
+    "minor": []
+  },
+  "uses": [],
+  "usedBy": []
+}

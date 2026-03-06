@@ -1,0 +1,466 @@
+{
+  "fileId": "InGame_BottomUi",
+  "filePath": "InGame\\UI\\InGame_BottomUi.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Rpg",
+  "role": "Component",
+  "system": "InGame",
+  "score": 0.4,
+  "usings": [
+    "System",
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI",
+    "Global_Define"
+  ],
+  "classes": [
+    {
+      "className": "InGame_BottomUi",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [
+        "IApplySprite"
+      ],
+      "fields": [
+        {
+          "fieldName": "bottomBackgrund",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "reward",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "item1Background",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "item2Background",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "item3Background",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "item4Background",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "item1",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "item1CountBackground",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "item1ZeroCountBackground",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "item1_Count",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "item2",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "item2CountBackground",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "item2ZeroCountBackground",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "item2_Count",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "item3",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "item3CountBackground",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "item3ZeroCountBackground",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "item3_Count",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "item4",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "item4_Count",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "item4CountBackground",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "item4ZeroCountBackground",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "goldPig",
+          "fieldType": "GoldPig",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "goldPigUpdate",
+          "fieldType": "Action",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "eventItem",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "specialItem",
+          "fieldType": "SpecialItem",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "itemBackground",
+          "fieldType": "Sprite",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "itemCountBackground",
+          "fieldType": "Sprite",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "itemZeroCountBackground",
+          "fieldType": "Sprite",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Initialize",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "ResourceNameTable",
+              "paramName": "_resourceNameData"
+            }
+          ],
+          "signature": "void Initialize(ResourceNameTable _resourceNameData)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "FillPiggyBank",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "n"
+            }
+          ],
+          "signature": "void FillPiggyBank(int n)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateItemCount",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "eItem",
+              "paramName": "_eItem"
+            },
+            {
+              "paramType": "int",
+              "paramName": "_updateCount"
+            }
+          ],
+          "signature": "void UpdateItemCount(eItem _eItem, int _updateCount)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "SetApplySprite",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "ResourceNameTable",
+              "paramName": "_resourNameData"
+            }
+          ],
+          "signature": "void SetApplySprite(ResourceNameTable _resourNameData)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Initialize(ResourceNameTable _resourceNameData)",
+    "void FillPiggyBank(int n)",
+    "void UpdateItemCount(eItem _eItem, int _updateCount)",
+    "void SetApplySprite(ResourceNameTable _resourNameData)"
+  ],
+  "requires": [
+    "GoldPig",
+    "IApplySprite",
+    "ResourceNameTable",
+    "SpecialItem"
+  ],
+  "tags": {
+    "major": [
+      "DataSync",
+      "ValueModification"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "CSpriteManager",
+    "Define",
+    "Instance",
+    "PlayerPrefs",
+    "Random",
+    "_updateCount"
+  ],
+  "usedBy": []
+}

@@ -1,0 +1,1113 @@
+{
+  "fileId": "SlotLevelUpTable",
+  "filePath": "Tables\\SlotLevelUpTable.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Tycoon",
+  "role": "Table",
+  "system": "Tables",
+  "score": 0.4,
+  "usings": [
+    "System.IO",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "MessagePack",
+    "Newtonsoft.Json"
+  ],
+  "classes": [
+    {
+      "className": "SlotlevelUpCheckPoint",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "Level",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "BonusRate",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "DebugPrint",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DebugPrint()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PostProcess",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void PostProcess()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetMachinePower",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "machineType"
+            }
+          ],
+          "signature": "double GetMachinePower(int machineType)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetBeforeCheckPoint",
+          "accessModifier": "public",
+          "returnType": "SlotlevelUpCheckPoint",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "level"
+            }
+          ],
+          "signature": "SlotlevelUpCheckPoint GetBeforeCheckPoint(int level)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetCheckPoint",
+          "accessModifier": "public",
+          "returnType": "SlotlevelUpCheckPoint",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "level"
+            }
+          ],
+          "signature": "SlotlevelUpCheckPoint GetCheckPoint(int level)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetData",
+          "accessModifier": "public",
+          "returnType": "ITableData",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "level"
+            }
+          ],
+          "signature": "ITableData GetData(int level)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetDataCost",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "level"
+            },
+            {
+              "paramType": "int",
+              "paramName": "lineNum"
+            }
+          ],
+          "signature": "double GetDataCost(int level, int lineNum)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetDataCostFactor",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "level"
+            },
+            {
+              "paramType": "int",
+              "paramName": "lineNum"
+            }
+          ],
+          "signature": "double GetDataCostFactor(int level, int lineNum)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMax",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int GetMax()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "JsonToByte",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "path"
+            },
+            {
+              "paramType": "string",
+              "paramName": "json"
+            }
+          ],
+          "signature": "bool JsonToByte(string path, string json)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "LoadingPostProcess",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void LoadingPostProcess()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "DebugPrint",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DebugPrint()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    },
+    {
+      "className": "SlotLevelUpTableData",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [
+        "ITableData"
+      ],
+      "fields": [
+        {
+          "fieldName": "SlotLevel",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "Line0LevelUpMoneyCost",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "Line1LevelUpMoneyCost",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "Line2LevelUpMoneyCost",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "Line3LevelUpMoneyCost",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "Line0LevelUpMoneyCostFactor",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "Line1LevelUpMoneyCostFactor",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "Line2LevelUpMoneyCostFactor",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "Line3LevelUpMoneyCostFactor",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "MachinePowerGeneral",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "MachinePowerAdvanced",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "MachinePowerSuper",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "MachinePowerLegend",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "MachinePowerSuperLegend",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "MachinePowerUpriseValue",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "DebugPrint",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DebugPrint()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PostProcess",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void PostProcess()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetMachinePower",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "machineType"
+            }
+          ],
+          "signature": "double GetMachinePower(int machineType)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetBeforeCheckPoint",
+          "accessModifier": "public",
+          "returnType": "SlotlevelUpCheckPoint",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "level"
+            }
+          ],
+          "signature": "SlotlevelUpCheckPoint GetBeforeCheckPoint(int level)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetCheckPoint",
+          "accessModifier": "public",
+          "returnType": "SlotlevelUpCheckPoint",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "level"
+            }
+          ],
+          "signature": "SlotlevelUpCheckPoint GetCheckPoint(int level)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetData",
+          "accessModifier": "public",
+          "returnType": "ITableData",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "level"
+            }
+          ],
+          "signature": "ITableData GetData(int level)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetDataCost",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "level"
+            },
+            {
+              "paramType": "int",
+              "paramName": "lineNum"
+            }
+          ],
+          "signature": "double GetDataCost(int level, int lineNum)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetDataCostFactor",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "level"
+            },
+            {
+              "paramType": "int",
+              "paramName": "lineNum"
+            }
+          ],
+          "signature": "double GetDataCostFactor(int level, int lineNum)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMax",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int GetMax()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "JsonToByte",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "path"
+            },
+            {
+              "paramType": "string",
+              "paramName": "json"
+            }
+          ],
+          "signature": "bool JsonToByte(string path, string json)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "LoadingPostProcess",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void LoadingPostProcess()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "DebugPrint",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DebugPrint()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    },
+    {
+      "className": "SlotLevelUpTable",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [
+        "ITable<int>",
+        "ITableLoader"
+      ],
+      "fields": [
+        {
+          "fieldName": "SlotLevel",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "Line0LevelUpMoneyCost",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "Line1LevelUpMoneyCost",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "Line2LevelUpMoneyCost",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "Line3LevelUpMoneyCost",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "Line0LevelUpMoneyCostFactor",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "Line1LevelUpMoneyCostFactor",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "Line2LevelUpMoneyCostFactor",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "Line3LevelUpMoneyCostFactor",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "MachinePowerGeneral",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "MachinePowerAdvanced",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "MachinePowerSuper",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "MachinePowerLegend",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "MachinePowerSuperLegend",
+          "fieldType": "double",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "MachinePowerUpriseValue",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "DebugPrint",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DebugPrint()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PostProcess",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void PostProcess()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetMachinePower",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "machineType"
+            }
+          ],
+          "signature": "double GetMachinePower(int machineType)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetBeforeCheckPoint",
+          "accessModifier": "public",
+          "returnType": "SlotlevelUpCheckPoint",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "level"
+            }
+          ],
+          "signature": "SlotlevelUpCheckPoint GetBeforeCheckPoint(int level)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetCheckPoint",
+          "accessModifier": "public",
+          "returnType": "SlotlevelUpCheckPoint",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "level"
+            }
+          ],
+          "signature": "SlotlevelUpCheckPoint GetCheckPoint(int level)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetData",
+          "accessModifier": "public",
+          "returnType": "ITableData",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "level"
+            }
+          ],
+          "signature": "ITableData GetData(int level)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetDataCost",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "level"
+            },
+            {
+              "paramType": "int",
+              "paramName": "lineNum"
+            }
+          ],
+          "signature": "double GetDataCost(int level, int lineNum)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetDataCostFactor",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "level"
+            },
+            {
+              "paramType": "int",
+              "paramName": "lineNum"
+            }
+          ],
+          "signature": "double GetDataCostFactor(int level, int lineNum)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMax",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int GetMax()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "JsonToByte",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "path"
+            },
+            {
+              "paramType": "string",
+              "paramName": "json"
+            }
+          ],
+          "signature": "bool JsonToByte(string path, string json)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "LoadingPostProcess",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void LoadingPostProcess()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "DebugPrint",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DebugPrint()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void DebugPrint()",
+    "void PostProcess()",
+    "double GetMachinePower(int machineType)",
+    "SlotlevelUpCheckPoint GetBeforeCheckPoint(int level)",
+    "SlotlevelUpCheckPoint GetCheckPoint(int level)",
+    "ITableData GetData(int level)",
+    "double GetDataCost(int level, int lineNum)",
+    "double GetDataCostFactor(int level, int lineNum)",
+    "int GetMax()",
+    "bool JsonToByte(string path, string json)",
+    "void LoadingPostProcess()",
+    "void DebugPrint()",
+    "void DebugPrint()",
+    "void PostProcess()",
+    "double GetMachinePower(int machineType)"
+  ],
+  "requires": [
+    "ITable",
+    "ITableData",
+    "ITableLoader"
+  ],
+  "tags": {
+    "major": [
+      "DataSync"
+    ],
+    "minor": [
+      "Find"
+    ]
+  },
+  "uses": [
+    "Debug",
+    "File",
+    "ITable",
+    "ITableData",
+    "Line1LevelUpMoneyCost",
+    "Line1LevelUpMoneyCostFactor",
+    "Line3LevelUpMoneyCost",
+    "Line3LevelUpMoneyCostFactor",
+    "MachinePowerAdvanced",
+    "MachinePowerLegend",
+    "MessagePackSerializer",
+    "SlotLevel",
+    "SlotLevelUpTableData",
+    "SlotlevelUpCheckPoint"
+  ],
+  "usedBy": []
+}

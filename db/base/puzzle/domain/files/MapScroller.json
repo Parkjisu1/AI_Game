@@ -1,0 +1,54 @@
+{
+  "fileId": "MapScroller",
+  "filePath": "MapScroller.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Puzzle",
+  "role": "Component",
+  "system": "MapScroller",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine",
+    "UnityEngine.UI",
+    "System.Collections"
+  ],
+  "classes": [
+    {
+      "className": "MapScroller",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "myScrollRect",
+          "fieldType": "ScrollRect",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": []
+    }
+  ],
+  "provides": [],
+  "requires": [
+    "ScrollRect"
+  ],
+  "tags": {
+    "major": [],
+    "minor": []
+  },
+  "uses": [
+    "WaitForEndOfFrame"
+  ],
+  "usedBy": []
+}

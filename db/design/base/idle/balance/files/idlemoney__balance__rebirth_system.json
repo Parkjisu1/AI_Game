@@ -1,0 +1,52 @@
+{
+  "designId": "idlemoney__balance__rebirth_system",
+  "project": "IdleMoney",
+  "domain": "Balance",
+  "genre": "Idle",
+  "system": "Rebirth Prestige",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "flow",
+  "balance_area": "prestige",
+  "source_file": "balance_systems.yaml",
+  "content": {
+    "summary": "프레스티지 시스템. 팩토리 챌린지 성공 시 리버스 실행.\n리버스 횟수에 따라 새 월드 해금, 매니저/랩 해금, 보상 증가.",
+    "flow": [],
+    "parameters": {
+      "total_rebirths": 12,
+      "per_rebirth_data": [
+        "RebirthConditionFactoryLevel: 필요 팩토리 레벨",
+        "TargetMoneyAmount: 챌린지 목표 금액",
+        "TimeLimit: 챌린지 시간 제한",
+        "EarningMoneyPerPower: 수익 배율",
+        "GoodsRewardType/Amount: 보상 재화",
+        "IdleRewardTime: 오프라인 보상 시간",
+        "IdleFactoryFactor: 오프라인 보상 배율"
+      ],
+      "unlock_gates": [
+        "매니저 해금: MinRebirthCount per manager",
+        "연구소 해금: LAB_UNLOCK_REBIRTH_COUNT",
+        "던전 해금: LevelUnlockRebirthCount per level",
+        "룰렛 해금: ConditionRebirthCount"
+      ]
+    },
+    "edge_cases": [],
+    "references": []
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from C# analysis: Rebirth Prestige",
+      "note": "Live game code analysis import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T11:08:16.903Z"
+}

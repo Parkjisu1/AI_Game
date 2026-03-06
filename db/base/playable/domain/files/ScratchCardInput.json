@@ -1,0 +1,383 @@
+{
+  "fileId": "ScratchCardInput",
+  "filePath": "Scratch\\Core\\InputData\\ScratchCardInput.cs",
+  "namespace": "ScratchCardAsset.Core.InputData",
+  "layer": "Domain",
+  "genre": "Playable",
+  "role": "Model",
+  "system": "Scratch",
+  "score": 0.4,
+  "usings": [
+    "System",
+    "UnityEngine",
+    "UnityEngine.InputSystem",
+    "UnityEngine.InputSystem.EnhancedTouch"
+  ],
+  "classes": [
+    {
+      "className": "ScratchCardInput",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "OnScratch",
+          "fieldType": "event ScratchHandler",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "OnScratchHole",
+          "fieldType": "event Action<Vector2, float>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "OnScratchHoleExtended",
+          "fieldType": "event Action<ScratchCardInputData>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "OnScratchLine",
+          "fieldType": "event Action<Vector2, float, Vector2, float>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "OnScratchLineExtended",
+          "fieldType": "event Action<ScratchCardInputData, ScratchCardInputData>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "CheckCanvasRaycasts",
+          "fieldType": "bool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "UsePressure",
+          "fieldType": "bool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "isScratched",
+          "fieldType": "Func<bool>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "raycastController",
+          "fieldType": "RaycastController",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "startInputData",
+          "fieldType": "ScratchCardInputData[]",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "endInputData",
+          "fieldType": "ScratchCardInputData[]",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "scratchPosition",
+          "fieldType": "Vector2",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "isScratching",
+          "fieldType": "bool[]",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "isStartPosition",
+          "fieldType": "bool[]",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "MaxTouchCount",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "10"
+        },
+        {
+          "fieldName": "ReserveTouchCount",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "1"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "ScratchHandler",
+          "accessModifier": "public",
+          "returnType": "delegate Vector2",
+          "parameters": [
+            {
+              "paramType": "Vector2",
+              "paramName": "position"
+            }
+          ],
+          "signature": "delegate Vector2 ScratchHandler(Vector2 position)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Scratch",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector2",
+              "paramName": "screenPosition"
+            }
+          ],
+          "signature": "void Scratch(Vector2 screenPosition)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "InitRaycastsController",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "GameObject",
+              "paramName": "surfaceObject"
+            },
+            {
+              "paramType": "Canvas[]",
+              "paramName": "canvases"
+            }
+          ],
+          "signature": "void InitRaycastsController(GameObject surfaceObject, Canvas[] canvases)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "TryUpdate",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool TryUpdate()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetInputData",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "fingerId"
+            },
+            {
+              "paramType": "Vector2",
+              "paramName": "position"
+            },
+            {
+              "paramType": "float pressure =",
+              "paramName": "1f"
+            }
+          ],
+          "signature": "void SetInputData(int fingerId, Vector2 position, float pressure = 1f)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "Scratch",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Scratch()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Scratch",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector2",
+              "paramName": "screenPosition"
+            }
+          ],
+          "signature": "void Scratch(Vector2 screenPosition)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ResetData",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void ResetData()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "delegate Vector2 ScratchHandler(Vector2 position)",
+    "void Scratch(Vector2 screenPosition)",
+    "void InitRaycastsController(GameObject surfaceObject, Canvas[] canvases)",
+    "bool TryUpdate()",
+    "void Scratch(Vector2 screenPosition)",
+    "void ResetData()"
+  ],
+  "requires": [],
+  "tags": {
+    "major": [
+      "StateControl",
+      "ValueModification"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "EnhancedTouchSupport",
+    "Input",
+    "RaycastController",
+    "ScratchCardInputData"
+  ],
+  "usedBy": []
+}

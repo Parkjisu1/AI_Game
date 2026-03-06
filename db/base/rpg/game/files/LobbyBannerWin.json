@@ -1,0 +1,243 @@
+{
+  "fileId": "LobbyBannerWin",
+  "filePath": "UI\\LobbyBannerWin.cs",
+  "namespace": "",
+  "layer": "Game",
+  "genre": "Rpg",
+  "role": "View",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "Cysharp.Threading.Tasks"
+  ],
+  "classes": [
+    {
+      "className": "LobbyBannerWin",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "WindowBase",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "scroll",
+          "fieldType": "LobbyBannerScrollView",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "default"
+        },
+        {
+          "fieldName": "items",
+          "fieldType": "List<LobbyBannerScrollItemData>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<LobbyBannerScrollItemData>()"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "InitWindow",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "WindowManager",
+              "paramName": "owner"
+            },
+            {
+              "paramType": "WindowManager>",
+              "paramName": "messageController"
+            }
+          ],
+          "signature": "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "Open",
+          "accessModifier": "public",
+          "returnType": "UniTask",
+          "parameters": [],
+          "signature": "UniTask Open()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "Refresh",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Refresh()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ShowPackage",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "packageID"
+            }
+          ],
+          "signature": "void ShowPackage(int packageID)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnClickClose",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickClose()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "Update",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Update()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "RemoveBanner",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "tableID"
+            }
+          ],
+          "signature": "void RemoveBanner(int tableID)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Despawn"
+        },
+        {
+          "methodName": "IsInBanner",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "tableID"
+            }
+          ],
+          "signature": "bool IsInBanner(int tableID)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "AddBanner",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "tableID"
+            }
+          ],
+          "signature": "void AddBanner(int tableID)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+    "UniTask Open()",
+    "void Refresh()",
+    "void ShowPackage(int packageID)",
+    "void OnClickClose()",
+    "void Update()",
+    "void RemoveBanner(int tableID)",
+    "bool IsInBanner(int tableID)",
+    "void AddBanner(int tableID)"
+  ],
+  "requires": [
+    "LobbyBannerScrollView",
+    "WindowBase"
+  ],
+  "tags": {
+    "major": [
+      "StateControl",
+      "ResponseTrigger",
+      "ConditionCheck"
+    ],
+    "minor": [
+      "Despawn"
+    ]
+  },
+  "uses": [
+    "Debug",
+    "Input",
+    "LobbyBannerScrollItemData",
+    "WindowBase",
+    "WindowID"
+  ],
+  "usedBy": []
+}

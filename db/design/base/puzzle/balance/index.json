@@ -1,0 +1,48 @@
+[
+  {
+    "designId": "carmatch__balance__difficulty_lives",
+    "domain": "Balance",
+    "genre": "Puzzle",
+    "system": "Difficulty & Lives",
+    "score": 0.4,
+    "source": "observed",
+    "data_type": "spec",
+    "balance_area": "difficulty",
+    "version": "1.0.0",
+    "project": "CarMatch",
+    "provides": [
+      "difficulty_curve",
+      "lives_system",
+      "win_fail_conditions",
+      "scoring_system"
+    ],
+    "requires": [],
+    "tags": [
+      "balance",
+      "difficulty",
+      "lives",
+      "puzzle"
+    ]
+  },
+  {
+    "designId": "carmatch__balance__auto",
+    "domain": "Balance",
+    "genre": "Puzzle",
+    "system": "Auto-detected BALANCE parameters",
+    "score": 0.4,
+    "source": "observed",
+    "data_type": "spec",
+    "balance_area": "balance",
+    "version": "1.0.0",
+    "project": "Carmatch",
+    "provides": [
+      "balance_params"
+    ],
+    "requires": [],
+    "tags": [
+      "puzzle",
+      "balance",
+      "auto_detected"
+    ]
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "designId": "test_rpg__economy__일일퀘스트보상",
+  "project": "test_rpg",
+  "domain": "Balance",
+  "genre": "Rpg",
+  "system": "일일퀘스트보상",
+  "source": "internal_produced",
+  "version": "1.0.0",
+  "score": 0.4,
+  "auto_scores": {
+    "logic_completeness": null,
+    "balance_stability": null,
+    "implementation_complexity": null
+  },
+  "post_launch_label": null,
+  "accuracy_estimate": null,
+  "content": {
+    "summary": "",
+    "formula": "500*quest_count",
+    "parameters": {
+      "type": "source",
+      "sink_amount": "일일 퀘스트 클리어 시"
+    },
+    "edge_cases": [],
+    "references": []
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "pre_launch",
+      "data": "{\"name\":\"일일퀘스트보상\",\"type\":\"source\",\"domain\":\"economy\",\"formula\":\"500*quest_count\",\"source_amount\":\"\",\"sink_amount\":\"일일 퀘스트 클리어 시\",\"notes\":\"\"}",
+      "note": "Initial parse from design materials"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T07:56:47.278Z"
+}

@@ -1,0 +1,183 @@
+{
+  "fileId": "ProductDetailInfoWin",
+  "filePath": "UI\\ProductDetailInfoWin.cs",
+  "namespace": "",
+  "layer": "Game",
+  "genre": "Idle",
+  "role": "View",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI",
+    "TMPro",
+    "System"
+  ],
+  "classes": [
+    {
+      "className": "ProductDetailInfoWin",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "WindowBase",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "titleTxt",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "hpNameTxt",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "hpTxt",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "languageNameTxt",
+          "fieldType": "LanguageText",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "priceNameTxt",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "priceTxt",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "productImg",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "SetData",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Sprite",
+              "paramName": "product"
+            },
+            {
+              "paramType": "string",
+              "paramName": "nameTextID"
+            },
+            {
+              "paramType": "double",
+              "paramName": "hp"
+            },
+            {
+              "paramType": "double",
+              "paramName": "price"
+            }
+          ],
+          "signature": "void SetData(Sprite product, string nameTextID, double hp, double price)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "OnClickClose",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickClose()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void SetData(Sprite product, string nameTextID, double hp, double price)",
+    "void OnClickClose()"
+  ],
+  "requires": [
+    "LanguageText",
+    "TextMeshProUGUI",
+    "WindowBase"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification",
+      "ResponseTrigger"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "CloseWindowMsg",
+    "CurrencyConverter",
+    "Math",
+    "StringUtils",
+    "WindowBase"
+  ],
+  "usedBy": []
+}

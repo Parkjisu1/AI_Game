@@ -1,0 +1,194 @@
+{
+  "fileId": "ShopFreeGold",
+  "filePath": "Popup\\ShopFreeGold.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Slg",
+  "role": "Component",
+  "system": "Popup",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI",
+    "Global_Define"
+  ],
+  "classes": [
+    {
+      "className": "ShopFreeGold",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [
+        "IApplyLanguage"
+      ],
+      "fields": [
+        {
+          "fieldName": "buttonBackground",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "rewardImage",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "countDownText",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "freeGoldText",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "freeGoldTitleText",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "freeRewardType",
+          "fieldType": "eFreeRewardType",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "nonActivateColor",
+          "fieldType": "Color",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Color(100f / 255f, 100f / 255f, 100f / 255f, 1)"
+        },
+        {
+          "fieldName": "isPossibleReward",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "true"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "SetFreeReward",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void SetFreeReward()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetApplyLanguage",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void SetApplyLanguage()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "OnClickRewardGold",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickRewardGold()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void SetFreeReward()",
+    "void SetApplyLanguage()",
+    "void OnClickRewardGold()"
+  ],
+  "requires": [
+    "IApplyLanguage"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification",
+      "ResponseTrigger"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "Analytics",
+    "CAdManager",
+    "CApplicationManager",
+    "CPopupManager",
+    "CSceneManager",
+    "CSoundManager",
+    "Instance",
+    "PlayerPrefs"
+  ],
+  "usedBy": []
+}

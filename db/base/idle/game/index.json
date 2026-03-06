@@ -1,0 +1,2718 @@
+[
+  {
+    "fileId": "ChallengeTopHUDSetRemainTimeMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ChangeLoadingWinGaugeMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "CloseADLoadingWinToGameModeMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "CloseBoostWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "GameEvent",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "CloseTutorialFocusWinMgr",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "CloseWindowMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "CloseWindowToGameModeMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "WindowID"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OnOffLoadingWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenAlertWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenBonusHammerWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenBubbleTooltipWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenChallengeCountDownWinToGameModeMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenChallengeResultWinToGameModeMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "FactoryRebirthTableData",
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenCloudLoadResultWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "UserInfo"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenDefaultLoadingWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenFactoryInfoWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenGameDescripterWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenLabWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenLineSlotOpenWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenMachineMountWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenMachineReplaceWinToGameModeMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenManagerDetailInfoWinToGameModeMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "ManagerStat"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenManagerFireWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "ManagerStat"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenManagerReplaceWinToGameModeMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenManagerWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenMnAResultWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenMnAWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenNewMachineWindowMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenNoticeWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenOfflineRewardWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenPiggyBankWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "PiggyBankType"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenProductWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenSlotControlWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenSlotControlWinToGameModeMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenSuggestBoostWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "GameEvent",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenSupplyMachineBoostWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenSupplyMachineWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenTrainWindowMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenTutorialNoticeWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenWindowMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenWindowWithTutorialFocusMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshHeadQuarterWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshHUDsMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshLineSlotOpenWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshMachineMountWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshManagerWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshPiggyBankWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshRecruiteWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshSlotControlWinUpgradeFactorMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshSlotCountWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshStatLaborataryWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshSupplyMachineWinUpgradeFactorMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshTrainingWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SetResultDefaultLoadingWinMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ShowMnAWinVFXMsg",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ADBankWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "void SetData()",
+      "void OnClickMoney()",
+      "void OnClickBuy()",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "DOTweenAnimation",
+      "LanguageText",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "StateControl",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "AgreementWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "void Awake()",
+      "void OnClickToggle(int index)",
+      "void CloseSubWin()",
+      "void OnClickOK()"
+    ],
+    "requires": [
+      "Toggle",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "StateControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "AlertPopupWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(string titleTextID,string descTextID, params object[] args)",
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "LanguageText",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "StateControl",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "BubbleTooltipWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "void SetData(string textId, string arg, Vector3 showedPosition)",
+      "void OnClickClose()",
+      "void CalcaulateTextSize()"
+    ],
+    "requires": [
+      "LanguageText",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "CloudLoadResultWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(UserInfo userInfo)",
+      "UniTask Open()",
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "void OnClickClose()",
+      "void OnClickRestartWithCloudData()"
+    ],
+    "requires": [
+      "LanguageText",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "DefaultLoadingWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(float waitTime, string textID)",
+      "void Update()",
+      "void OnShowSuccessResult(string textID)",
+      "void OnShowFailedResult(string textID)",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "LanguageText",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "GameDescripterWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(Queue<string> datas, bool flip, System.Action finishCallback)",
+      "void SetData(Queue<TutorialBase> datas, bool flipNone, System.Action finishCallback)",
+      "void ShowManager(bool b)",
+      "void SetBGEnable(bool b)",
+      "void SetFlip(bool b)"
+    ],
+    "requires": [
+      "LanguageText",
+      "SkeletonGraphic",
+      "TutorialBase",
+      "UIFlippable",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger",
+        "StateControl"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "GameQuitWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void OnClickClose()",
+      "void OnClickQuit()"
+    ],
+    "requires": [
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "HelpWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void OnClickSellOff()",
+      "void OnClickOK()",
+      "void OnClickNO()",
+      "void SetTitle(string TextID)",
+      "void CloseAll()"
+    ],
+    "requires": [
+      "HelpWinType1",
+      "HelpWinType10",
+      "HelpWinType2",
+      "HelpWinType3",
+      "HelpWinType4"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification",
+        "StateControl"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "HelpWinType1",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(string TextID, params object[] args)",
+      "void SetDebugText(string text)"
+    ],
+    "requires": [
+      "LanguageText"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "HelpWinType2",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData1(string TextID1, string TextID2, params object[] args1)",
+      "void SetData2(string TextID1, string TextID2, params object[] args2)"
+    ],
+    "requires": [
+      "LanguageText"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "HelpWinType3",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(Sprite icon, Action okCallback, string TextID, params object[] args)",
+      "void OnClickOK()"
+    ],
+    "requires": [
+      "LanguageText"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "HelpWinType4",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(Action okCallback, string okButtonTextID, Action noCallback, string noButtonTextID,\r\n                            string TextID,params object[] args)",
+      "void OnOkClick()",
+      "void OnNOClick()"
+    ],
+    "requires": [
+      "LanguageText"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "HelpWinType7",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(int diaAmonut, string titleTextID, string noticeTextID, string arg0, string arg1)"
+    ],
+    "requires": [
+      "LanguageText",
+      "TextMeshProUGUI"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "HelpWinType8",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(Sprite icon, int multiply)"
+    ],
+    "requires": [
+      "LanguageText"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "HelpWinType9",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(string TextID, string adButtonTextID, Action showADCallback, Action closeCallback)",
+      "void OnClickOKShowAD()",
+      "void OnClickNo()"
+    ],
+    "requires": [
+      "LanguageText"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "HUDTimeWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "void SetBoostMode(bool b)",
+      "void Update()"
+    ],
+    "requires": [
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "InAppReviewWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void OnClickOK()",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "LoadingWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(string textID)",
+      "void SetProgress(float value)",
+      "UniTask Open()",
+      "UniTask Close()"
+    ],
+    "requires": [
+      "LanguageText",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "StateControl"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "LobbyADBankBannerWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "UniTask Open()",
+      "void OnClickBanner()",
+      "void Update()"
+    ],
+    "requires": [
+      "LanguageText",
+      "UserInfo",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ResponseTrigger"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "LTHUDWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void RefreshData()"
+    ],
+    "requires": [
+      "LanguageText",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "MachineReplaceWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "MachineMountComponent GetMachineMountComponent()",
+      "void SetData(string machineNameTextID, int oldWorldFactoryIndex, int newWorldFactoryIndex)",
+      "void OnClickOK()",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "LanguageText",
+      "MachineMountComponent",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ManagerDetailInfoWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(ManagerStat stat, ManagerTableData managerData, ManagerGradeTableData gradeData, \r\n                            int workingFactoryIndex, int selectedlineIndex)",
+      "UniTask Open()",
+      "void OnClickClose()",
+      "void OnClickFire()",
+      "void OnClickPlacement()"
+    ],
+    "requires": [
+      "LanguageText",
+      "ManagerMountComponent",
+      "ManagerStat",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification",
+        "StateControl"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "ManagerEmployWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(ManagerStat stat)",
+      "UniTask Open()",
+      "void Refresh()",
+      "void OnClickOK()",
+      "void OnClickRetry()"
+    ],
+    "requires": [
+      "LanguageText",
+      "ManagerMountComponent",
+      "ManagerStat",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "StateControl",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "ManagerFireWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(ManagerStat stat)",
+      "UniTask Open()",
+      "void Refresh()",
+      "void OnClickFire()",
+      "void OnClickNo()"
+    ],
+    "requires": [
+      "LanguageText",
+      "ManagerMountComponent",
+      "ManagerStat",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "StateControl",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ManagerReplaceWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "ManagerMountComponent GetManagerMountComponent()",
+      "void SetData(long targetManagerGUID, ManagerTableData tableData, int oldWorldFactoryIndex, int oldLineIndex,\r\n                        int newWorldFactoryIndex, int newLineIndex)",
+      "void OnClickOK()",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "LanguageText",
+      "ManagerMountComponent",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "NewMachineWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(int machineID, int level, int exp)",
+      "void OnClickClose()",
+      "UniTask Close()",
+      "void OnClickMessage()",
+      "void OnClickCloseBubble()"
+    ],
+    "requires": [
+      "MachineStatComponent",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification",
+        "StateControl"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "NotEnoughGoodsWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(string titleTextID,string descTextID, params object[] args)",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "LanguageText",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "NoticeBonusHammerWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(double hammerPower, float multiply, int time)",
+      "void OnClick()",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "LanguageText",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "NoticeWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(string titleTextID,string descTextID, params object[] args)",
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "LanguageText",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "StateControl",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "OfflineRewardWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(float maxTimeSec, float currentTimeSec, double rewardsMoney, bool package)",
+      "void ShowPackageVFX(bool b)",
+      "void OnClickOK()",
+      "void OnClickOKWithAD()",
+      "UniTask Close()"
+    ],
+    "requires": [
+      "LanguageText",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification",
+        "StateControl"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ProductDetailInfoWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(Sprite product, string nameTextID, double hp, double price)",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "LanguageText",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "RecruiteWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "void OnClickClose()",
+      "UniTask Open()",
+      "void OnClickBuy(MachineBuyComponent clicked)",
+      "void OnClickHelp(MachineBuyComponent clicked)"
+    ],
+    "requires": [
+      "MachineBuyComponent",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "StateControl",
+        "DataSync"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RegularRewardWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "void SetData(int sellOffCount)",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "LanguageText",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "RTHUDWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void OnClickOption()",
+      "void Update()"
+    ],
+    "requires": [
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SlotControlWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "UniTask Open()",
+      "void SetData(int worldFactoryIndex, int lineIndex, int slotIndex, int slotLevel, int machineID, int machineLevel, int selectedToggleIndex, ResourceAllocator resourceAllocator,\r\n        GameStatCalculator statCalculator)",
+      "void RefreshUpgradeStats(GameStatCalculator statCalculator, int multiply)",
+      "double GetLevelupCost(int factoryIndex, int slotLevel, int multiplyValue)",
+      "void SetToggleIndex(int index)"
+    ],
+    "requires": [
+      "LanguageText",
+      "TextMeshProUGUI",
+      "Toggle",
+      "UISpineMachine",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification",
+        "StateControl"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "SupplyMachineBoostWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "UniTask Open()",
+      "void SetData(int factoryIndex)",
+      "RectTransform GetTutoButtonPos()",
+      "void SetTutoMode(bool b)",
+      "void Update()"
+    ],
+    "requires": [
+      "LanguageText",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "StateControl",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "SupplyMachineWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "UniTask Open()",
+      "void SetData(int factoryIndex, int level, int productGroupID, int selectedToggleIndex, ResourceAllocator resourceAllocator)",
+      "void RefreshUpgradeStats()",
+      "double GetLevelupCost(SupplyMachineLevelUpTable supplyMachineTable, int multiplyValue)",
+      "void SetToggleIndex(int index)"
+    ],
+    "requires": [
+      "LanguageText",
+      "TextMeshProUGUI",
+      "Toggle",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger",
+        "StateControl"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "TrainingWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(int machineID, int level, int exp)",
+      "void OnClickClose()",
+      "UniTask Close()",
+      "void OnClickTrain()",
+      "void OnClickMessage()"
+    ],
+    "requires": [
+      "MachineStatComponent",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification",
+        "StateControl"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "TutorialChatWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(TutorialBase currentTutorial, TutorialManager.TutorialType tutorialType)",
+      "UniTask Open()",
+      "void OnClickNext()",
+      "void OnClickClose()",
+      "UniTask Close()"
+    ],
+    "requires": [
+      "LanguageText",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "TutorialNoticeWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(string descTextID, params object[] args)",
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "LanguageText",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "StateControl",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "UIEffectWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "void SetShowData( UIEffectIndex showedIndex)",
+      "void SetGachaShowData(GachaResult result)",
+      "void SetHideData(UIEffectIndex showedIndex)",
+      "UniTask Open()"
+    ],
+    "requires": [
+      "EffectHandlerBase",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "UnlockProductOrderWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "void SetData(int productGroupID, int order)",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "ProductSlotComponent",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "UnlockProductWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(int productGroupID)",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "LanguageText",
+      "ProductSlotComponent",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "UpdateNoticeWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(bool forceUpdate)",
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "void OnClickClose()",
+      "void OnClickOK()"
+    ],
+    "requires": [
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification",
+        "StateControl"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "UseGoldWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "UniTask Open()",
+      "void RefreshData()",
+      "void MinusGold()",
+      "void PlusGold()"
+    ],
+    "requires": [
+      "Index",
+      "LanguageText",
+      "TextMeshProUGUI",
+      "UserInfo",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "StateControl",
+        "DataSync"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "WorldMapWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "InGameTextWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(string contents, Vector3 position, Color color)",
+      "void SetText(string contents)",
+      "void TurnOn()",
+      "void TurnOff()"
+    ],
+    "requires": [
+      "TextMeshProUGUI"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ProductHPContainerWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void Add(ProductBase product, int fontSize)",
+      "void Remove(ProductBase product)",
+      "void Init(WorldSpaceWindowManager owner, IMessageController<WorldSpaceWindowManager> messageController)"
+    ],
+    "requires": [
+      "IMessageController",
+      "ProductHPTextWin",
+      "WorldSpaceWindowBase",
+      "WorldSpaceWindowManager"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Despawn"
+      ]
+    }
+  },
+  {
+    "fileId": "ProductHPTextWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool SetData(ProductBase target, int fontSize)",
+      "void Update()",
+      "void TurnOff()",
+      "bool IsSameProduct(ProductBase product)"
+    ],
+    "requires": [
+      "InGameTextWin",
+      "ProductBase"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ConditionCheck"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "WorldLineStatusWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "int GetWorldFactoryID()",
+      "void SetData(UserInfo userInfo, GameStatCalculator gameStatCalculator, WorldSlot worldFactorySlot, float idleCashCoolTime, float idleCashFactor)",
+      "void SetRegularRewardInfo(long startTime, float coolTime, RewardType rewardType, double amount)",
+      "void SetData(long remainTime, long totalTime, double profit, int machineCount)",
+      "void Update()"
+    ],
+    "requires": [
+      "GOEffectParticleHandler",
+      "TextMeshProUGUI",
+      "UserInfo",
+      "WorldSlot",
+      "WorldSpaceWindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "WorldLineWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "WorldTopHUDWin",
+    "layer": "Game",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void OnClickClose()",
+      "void OpenWorldGuideWin()",
+      "void Update()"
+    ],
+    "requires": [
+      "LanguageText",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "StateControl"
+      ],
+      "minor": []
+    }
+  }
+]

@@ -1,0 +1,33 @@
+{
+  "fileId": "BoosterManager",
+  "project": "DropTheCat",
+  "layer": "Domain",
+  "genre": "Puzzle",
+  "role": "Manager",
+  "phase": 2,
+  "namespace": "DropTheCat.Domain",
+  "className": "BoosterManager",
+  "baseClass": "Singleton<BoosterManager>",
+  "score": 0.6,
+  "provides": [
+    "bool UseBooster(BoosterType boosterType)",
+    "bool CanUseBooster(BoosterType boosterType)",
+    "int GetBoosterCount(BoosterType boosterType)",
+    "void AddBooster(BoosterType boosterType, int count)",
+    "bool PurchaseBooster(BoosterType boosterType)",
+    "void ResetLevelUsage()"
+  ],
+  "requires": [
+    "Singleton<BoosterManager>",
+    "SaveManager.Save/Load",
+    "CurrencyManager.SpendCoins",
+    "EventManager.Publish"
+  ],
+  "definesTypes": ["BoosterSaveData (class, private)"],
+  "tags": {
+    "major": ["StateControl", "ResourceTransfer", "FlowControl"],
+    "minor": ["Validate", "Calculate", "Assign", "Notify"]
+  },
+  "sourcePath": "E:\\AI\\projects\\DropTheCat\\output\\BoosterManager.cs",
+  "timestamp": "2026-02-10T05:30:00Z"
+}

@@ -1,0 +1,335 @@
+{
+  "fileId": "ETFXEffectControllerPooled",
+  "filePath": "ETFXEffectControllerPooled.cs",
+  "namespace": "EpicToonFX",
+  "layer": "Core",
+  "genre": "Generic",
+  "role": "Model",
+  "system": "ETFXEffectControllerPooled",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI"
+  ],
+  "classes": [
+    {
+      "className": "ETFXEffectControllerPooled",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "effects",
+          "fieldType": "GameObject[]",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "effectsPool",
+          "fieldType": "List<GameObject>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "effectIndex",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0"
+        },
+        {
+          "fieldName": "disableLights",
+          "fieldType": "bool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "true"
+        },
+        {
+          "fieldName": "disableSound",
+          "fieldType": "bool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "true"
+        },
+        {
+          "fieldName": "startDelay",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0.2f"
+        },
+        {
+          "fieldName": "respawnDelay",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0.5f"
+        },
+        {
+          "fieldName": "slideshowMode",
+          "fieldType": "bool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        },
+        {
+          "fieldName": "autoRotation",
+          "fieldType": "bool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        },
+        {
+          "fieldName": "autoRotationSpeed",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0.1f"
+        },
+        {
+          "fieldName": "currentEffect",
+          "fieldType": "GameObject",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "effectNameText",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "effectIndexText",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "etfxMouseOrbit",
+          "fieldType": "ETFXMouseOrbit",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Awake",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Awake()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Start",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Start()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Update",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Update()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "FixedUpdate",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void FixedUpdate()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "InitializeLoop",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void InitializeLoop()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "NextEffect",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void NextEffect()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PreviousEffect",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void PreviousEffect()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "CleanCurrentEffect",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void CleanCurrentEffect()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "EffectLoop",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [],
+          "signature": "IEnumerator EffectLoop()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void InitializeLoop()",
+    "void NextEffect()",
+    "void PreviousEffect()"
+  ],
+  "requires": [
+    "ETFXMouseOrbit",
+    "ParticleSystem"
+  ],
+  "tags": {
+    "major": [
+      "StateControl"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "ETFXMouseOrbit",
+    "Input",
+    "ParticleSystem",
+    "WaitForSeconds"
+  ],
+  "usedBy": []
+}

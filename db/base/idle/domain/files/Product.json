@@ -1,0 +1,87 @@
+{
+  "fileId": "Product",
+  "filePath": "Product.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Idle",
+  "role": "Component",
+  "system": "Product",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "Product",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "ProductBase",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "MaxStepNum",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "6"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "IsValidStep",
+          "accessModifier": "protected",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool IsValidStep()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "IsMaxStep",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool IsMaxStep()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "bool IsMaxStep()"
+  ],
+  "requires": [
+    "ProductBase"
+  ],
+  "tags": {
+    "major": [
+      "ConditionCheck"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "ProductBase"
+  ],
+  "usedBy": []
+}

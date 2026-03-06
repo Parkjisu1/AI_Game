@@ -1,0 +1,627 @@
+{
+  "fileId": "MachineMountComponent",
+  "filePath": "UI\\MachineMountComponent.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Idle",
+  "role": "Component",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI",
+    "TMPro"
+  ],
+  "classes": [
+    {
+      "className": "MachineMountComponent",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "machineNode",
+          "fieldType": "Transform",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "machineImg",
+          "fieldType": "UISpineMachine",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "gradeImg",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "levelText",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "usedText",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "selectBtn",
+          "fieldType": "Button",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "usedNode",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "currentFactoryTag",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "diffFactoryPosText",
+          "fieldType": "LanguageText",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "diffFactoryTag",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "usedOutLineImg",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "emptyNode",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "machineID",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "worldFactoryIndex",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "lineIndex",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "slotIndex",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "used",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "sameCurrentFactory",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "targetWorldFactoryIndex",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "targetLineIndex",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "targetSlotIndex",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "debugIDText",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Init",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "System.Action<MachineMountComponent>",
+              "paramName": "onClickCallback"
+            }
+          ],
+          "signature": "void Init(System.Action<MachineMountComponent> onClickCallback)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetData",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "worldFactoryIndex"
+            },
+            {
+              "paramType": "int",
+              "paramName": "lineIndex"
+            },
+            {
+              "paramType": "int",
+              "paramName": "slotIndex"
+            },
+            {
+              "paramType": "int",
+              "paramName": "machineID"
+            },
+            {
+              "paramType": "int",
+              "paramName": "targetWorldFactoryIndex"
+            },
+            {
+              "paramType": "int",
+              "paramName": "targetLineIndex"
+            },
+            {
+              "paramType": "int",
+              "paramName": "targetSlotIndex"
+            },
+            {
+              "paramType": "ResourceAllocator",
+              "paramName": "resourceAllocator"
+            },
+            {
+              "paramType": "string",
+              "paramName": "machineUIName"
+            },
+            {
+              "paramType": "Sprite",
+              "paramName": "gradeImg"
+            },
+            {
+              "paramType": "int",
+              "paramName": "level"
+            },
+            {
+              "paramType": "bool",
+              "paramName": "used"
+            },
+            {
+              "paramType": "bool",
+              "paramName": "sameCurrentFactory"
+            }
+          ],
+          "signature": "void SetData(int worldFactoryIndex, int lineIndex, int slotIndex, int machineID,\r\n                        int targetWorldFactoryIndex, int targetLineIndex, int targetSlotIndex,\r\n                            ResourceAllocator resourceAllocator,  string machineUIName,\r\n                            Sprite gradeImg, int level, bool used, bool sameCurrentFactory)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "ShowUIMachine",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "ResourceAllocator",
+              "paramName": "resourceAllocator"
+            },
+            {
+              "paramType": "string",
+              "paramName": "prefabName"
+            }
+          ],
+          "signature": "void ShowUIMachine(ResourceAllocator resourceAllocator, string prefabName)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "TurnOn",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void TurnOn()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "TurnOff",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void TurnOff()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetUsed",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "b"
+            }
+          ],
+          "signature": "void SetUsed(bool b)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "OnClick",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClick()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "MakeEmpty",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void MakeEmpty()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetTutorialSelectPos",
+          "accessModifier": "public",
+          "returnType": "RectTransform",
+          "parameters": [],
+          "signature": "RectTransform GetTutorialSelectPos()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "IsSameFactory",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool IsSameFactory()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "GetSlotIndex",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int GetSlotIndex()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetLineIndex",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int GetLineIndex()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetWorldFactoryIndex",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int GetWorldFactoryIndex()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetTargetSlotIndex",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int GetTargetSlotIndex()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetTargetLineIndex",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int GetTargetLineIndex()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetTargetWorldFactoryIndex",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int GetTargetWorldFactoryIndex()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMachineID",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int GetMachineID()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Init(System.Action<MachineMountComponent> onClickCallback)",
+    "void SetData(int worldFactoryIndex, int lineIndex, int slotIndex, int machineID,\r\n                        int targetWorldFactoryIndex, int targetLineIndex, int targetSlotIndex,\r\n                            ResourceAllocator resourceAllocator,  string machineUIName,\r\n                            Sprite gradeImg, int level, bool used, bool sameCurrentFactory)",
+    "void TurnOn()",
+    "void TurnOff()",
+    "void SetUsed(bool b)",
+    "void OnClick()",
+    "void MakeEmpty()",
+    "RectTransform GetTutorialSelectPos()",
+    "bool IsSameFactory()",
+    "int GetSlotIndex()",
+    "int GetLineIndex()",
+    "int GetWorldFactoryIndex()",
+    "int GetTargetSlotIndex()",
+    "int GetTargetLineIndex()",
+    "int GetTargetWorldFactoryIndex()"
+  ],
+  "requires": [
+    "LanguageText",
+    "MachineMountComponent",
+    "System.Action",
+    "TextMeshProUGUI",
+    "UISpineMachine"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification",
+      "ResponseTrigger",
+      "ConditionCheck"
+    ],
+    "minor": [
+      "Find",
+      "Assign"
+    ]
+  },
+  "uses": [
+    "Debug",
+    "StringUtils",
+    "UISpineMachine"
+  ],
+  "usedBy": []
+}

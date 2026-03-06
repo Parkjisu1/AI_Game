@@ -1,0 +1,312 @@
+{
+  "fileId": "DailyRewardPopup",
+  "filePath": "Popup\\DailyRewardPopup.cs",
+  "namespace": "",
+  "layer": "Game",
+  "genre": "Rpg",
+  "role": "View",
+  "system": "Popup",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI",
+    "Global_Define",
+    "GameUtils",
+    "DG.Tweening"
+  ],
+  "classes": [
+    {
+      "className": "DailyRewardPopup",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "CPopupBase",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "rewardBoxItem",
+          "fieldType": "RewardBoxItem",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "backgroundRotateEffect",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "title",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "getText",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "rewardText",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "rewardRoot",
+          "fieldType": "GameObject",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "bottomNativeAdsRoot",
+          "fieldType": "GameObject",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "icon_bottom",
+          "fieldType": "RawImage",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "adChoicesIcon_bottom",
+          "fieldType": "RawImage",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "adsHeadLine_bottom",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "adsBody_bottom",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "callToAction_bottom",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "dailyRewardData",
+          "fieldType": "DailyRewardTable",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "liItemGroups",
+          "fieldType": "List<DailyRewardTable>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<DailyRewardTable>()"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "SetDailyReward",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void SetDailyReward()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "OnClickGameStore_Bottom",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickGameStore_Bottom()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnClickRewardAds",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickRewardAds()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnClickGet",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickGet()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "SetApplyLanguage",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void SetApplyLanguage()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "BackgroundRotateEffect",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [],
+          "signature": "IEnumerator BackgroundRotateEffect()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void SetDailyReward()",
+    "void OnClickGameStore_Bottom()",
+    "void OnClickRewardAds()",
+    "void OnClickGet()",
+    "void SetApplyLanguage()"
+  ],
+  "requires": [
+    "CPopupBase",
+    "RawImage",
+    "RewardBoxItem"
+  ],
+  "tags": {
+    "major": [
+      "ResponseTrigger",
+      "ValueModification"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "Analytics",
+    "Application",
+    "CAdManager",
+    "CApplicationManager",
+    "CGameManager",
+    "CPopupBase",
+    "CPopupManager",
+    "CSoundManager",
+    "DailyRewardTable",
+    "Instance",
+    "PlayerPrefs",
+    "Rand",
+    "Random",
+    "TimeServer"
+  ],
+  "usedBy": []
+}

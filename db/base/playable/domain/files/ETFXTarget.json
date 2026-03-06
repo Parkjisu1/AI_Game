@@ -1,0 +1,282 @@
+{
+  "fileId": "ETFXTarget",
+  "filePath": "ETFXTarget.cs",
+  "namespace": "EpicToonFX",
+  "layer": "Domain",
+  "genre": "Playable",
+  "role": "Model",
+  "system": "ETFXTarget",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine",
+    "System.Collections",
+    "System.Collections.Generic"
+  ],
+  "classes": [
+    {
+      "className": "TargetEffects",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "hitParticle",
+          "fieldType": "GameObject",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "respawnParticle",
+          "fieldType": "GameObject",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "deathParticles",
+          "fieldType": "List<GameObject>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<GameObject>()"
+        },
+        {
+          "fieldName": "destroySound",
+          "fieldType": "AudioClip",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "respawnSound",
+          "fieldType": "AudioClip",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "OnHit",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnHit()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        }
+      ]
+    },
+    {
+      "className": "ETFXTarget",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "effects",
+          "fieldType": "TargetEffects",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "hitsToDestroy",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "5"
+        },
+        {
+          "fieldName": "respawnTime",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "3.0f"
+        },
+        {
+          "fieldName": "enableSquashAndStretch",
+          "fieldType": "bool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "true"
+        },
+        {
+          "fieldName": "duration",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0.07f"
+        },
+        {
+          "fieldName": "squashScale",
+          "fieldType": "Vector3",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Vector3(0.8f, 1.2f, 1f)"
+        },
+        {
+          "fieldName": "stretchScale",
+          "fieldType": "Vector3",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Vector3(1.2f, 0.8f, 1f)"
+        },
+        {
+          "fieldName": "targetRenderer",
+          "fieldType": "Renderer",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "targetCollider",
+          "fieldType": "Collider",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "audioSource",
+          "fieldType": "AudioSource",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "currentHits",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0"
+        },
+        {
+          "fieldName": "originalScale",
+          "fieldType": "Vector3",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "OnHit",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnHit()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void OnHit()",
+    "void OnHit()"
+  ],
+  "requires": [
+    "Renderer",
+    "TargetEffects"
+  ],
+  "tags": {
+    "major": [
+      "ResponseTrigger"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "Random",
+    "Renderer",
+    "WaitForSeconds"
+  ],
+  "usedBy": []
+}

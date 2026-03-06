@@ -1,0 +1,170 @@
+{
+  "fileId": "TutorialMissionPlayer",
+  "filePath": "Tutorial\\TutorialMissionPlayer.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Slg",
+  "role": "Component",
+  "system": "Tutorial",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "System",
+    "Cysharp.Threading.Tasks"
+  ],
+  "classes": [
+    {
+      "className": "TutorialMissionPlayer",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "TutorialBase",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "gameModeMain",
+          "fieldType": "GameModeMain",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "currentMissionNum",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0"
+        },
+        {
+          "fieldName": "titleTextID",
+          "fieldType": "string",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "statusTextID",
+          "fieldType": "string",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "currentConditionNum",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "conditionID",
+          "fieldType": "ConfigTypeID",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "rewardID",
+          "fieldType": "ConfigTypeID",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Enter",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Enter()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Update",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Update()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Finish",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Finish()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Enter()",
+    "void Update()",
+    "void Finish()"
+  ],
+  "requires": [
+    "TutorialBase"
+  ],
+  "tags": {
+    "major": [],
+    "minor": []
+  },
+  "uses": [
+    "OpenTutorialMissionWinMsg",
+    "TutorialBase"
+  ],
+  "usedBy": []
+}

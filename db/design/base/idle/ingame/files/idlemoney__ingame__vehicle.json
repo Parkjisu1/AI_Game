@@ -1,0 +1,104 @@
+{
+  "designId": "idlemoney__ingame__vehicle",
+  "project": "IdleMoney",
+  "domain": "InGame",
+  "genre": "Idle",
+  "system": "Vehicle",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "table",
+  "balance_area": "core_mechanic",
+  "source_file": "Vehicle.json",
+  "table_stats": {
+    "row_count": 4,
+    "columns": [
+      "VehicleID",
+      "ProductionLineID",
+      "MoneyBonus",
+      "PrefabName",
+      "IconName",
+      "SpriteName",
+      "TextID"
+    ],
+    "numeric_columns": [
+      "VehicleID",
+      "ProductionLineID",
+      "MoneyBonus"
+    ],
+    "text_columns": [
+      "PrefabName",
+      "IconName",
+      "SpriteName",
+      "TextID"
+    ]
+  },
+  "content": {
+    "summary": "Vehicle 데이터 테이블 (4행, 7열)",
+    "parameters": {
+      "VehicleID": "0",
+      "ProductionLineID": "0",
+      "MoneyBonus": "0",
+      "PrefabName": "Vehicle_Prefab_0_0",
+      "IconName": "Vehicle_Icon_0_0",
+      "SpriteName": "Vehicle_Sprite_0_0",
+      "TextID": "Vehicle_Name_0_0"
+    },
+    "balance_points": [],
+    "edge_cases": [],
+    "references": []
+  },
+  "data": [
+    {
+      "VehicleID": "0",
+      "ProductionLineID": "0",
+      "MoneyBonus": "0",
+      "PrefabName": "Vehicle_Prefab_0_0",
+      "IconName": "Vehicle_Icon_0_0",
+      "SpriteName": "Vehicle_Sprite_0_0",
+      "TextID": "Vehicle_Name_0_0"
+    },
+    {
+      "VehicleID": "1",
+      "ProductionLineID": "1",
+      "MoneyBonus": "1",
+      "PrefabName": "Vehicle_Prefab_0_1",
+      "IconName": "Vehicle_Icon_0_1",
+      "SpriteName": "Vehicle_Sprite_0_1",
+      "TextID": "Vehicle_Name_0_1"
+    },
+    {
+      "VehicleID": "2",
+      "ProductionLineID": "2",
+      "MoneyBonus": "2",
+      "PrefabName": "Vehicle_Prefab_0_2",
+      "IconName": "Vehicle_Icon_0_2",
+      "SpriteName": "Vehicle_Sprite_0_2",
+      "TextID": "Vehicle_Name_0_2"
+    },
+    {
+      "VehicleID": "3",
+      "ProductionLineID": "3",
+      "MoneyBonus": "4",
+      "PrefabName": "Vehicle_Prefab_0_3",
+      "IconName": "Vehicle_Icon_0_3",
+      "SpriteName": "Vehicle_Sprite_0_3",
+      "TextID": "Vehicle_Name_0_3"
+    }
+  ],
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from Vehicle.json (4 rows)",
+      "note": "Live game data import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T10:32:54.062Z"
+}

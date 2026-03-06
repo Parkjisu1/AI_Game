@@ -1,0 +1,147 @@
+{
+  "fileId": "HUDTimeWin",
+  "filePath": "UI\\HUDTimeWin.cs",
+  "namespace": "",
+  "layer": "Game",
+  "genre": "Idle",
+  "role": "View",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "TMPro",
+    "System"
+  ],
+  "classes": [
+    {
+      "className": "HUDTimeWin",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "WindowBase",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "remainTimeNode",
+          "fieldType": "Transform",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "remainTimeTxt",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "boostMode",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "false"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "InitWindow",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "WindowManager",
+              "paramName": "owner"
+            },
+            {
+              "paramType": "WindowManager>",
+              "paramName": "messageController"
+            }
+          ],
+          "signature": "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "SetBoostMode",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "b"
+            }
+          ],
+          "signature": "void SetBoostMode(bool b)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "Update",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Update()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+    "void SetBoostMode(bool b)",
+    "void Update()"
+  ],
+  "requires": [
+    "TextMeshProUGUI",
+    "WindowBase"
+  ],
+  "tags": {
+    "major": [
+      "StateControl",
+      "ValueModification"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "StringUtils",
+    "WindowBase",
+    "WindowID"
+  ],
+  "usedBy": []
+}

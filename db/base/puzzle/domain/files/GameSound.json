@@ -1,0 +1,136 @@
+{
+  "fileId": "GameSound",
+  "filePath": "Sound\\GameSound.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Puzzle",
+  "role": "Component",
+  "system": "Sound",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.Assertions"
+  ],
+  "classes": [
+    {
+      "className": "GameSound",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "audioSource",
+          "fieldType": "AudioSource",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "pooledObject",
+          "fieldType": "PooledObject",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Play",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "AudioClip",
+              "paramName": "clip"
+            },
+            {
+              "paramType": "bool loop =",
+              "paramName": "false"
+            }
+          ],
+          "signature": "void Play(AudioClip clip, bool loop = false)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Mute",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Mute()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "RePlay",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void RePlay()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "DisalbeSound",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DisalbeSound()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Play(AudioClip clip, bool loop = false)",
+    "void Mute()",
+    "void RePlay()"
+  ],
+  "requires": [
+    "PooledObject"
+  ],
+  "tags": {
+    "major": [],
+    "minor": []
+  },
+  "uses": [
+    "PooledObject"
+  ],
+  "usedBy": []
+}

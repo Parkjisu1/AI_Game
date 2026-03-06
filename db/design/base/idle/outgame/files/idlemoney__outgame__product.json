@@ -1,0 +1,330 @@
+{
+  "designId": "idlemoney__outgame__product",
+  "project": "IdleMoney",
+  "domain": "OutGame",
+  "genre": "Idle",
+  "system": "Product",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "table",
+  "balance_area": "item",
+  "source_file": "Product.json",
+  "table_stats": {
+    "row_count": 90,
+    "columns": [
+      "ProductID",
+      "ProductGroupID",
+      "GroupOrder",
+      "HP",
+      "MoneyReward",
+      "QuestClearAmount",
+      "PrefabName",
+      "LockedIconName",
+      "SpriteName",
+      "TextID"
+    ],
+    "numeric_columns": [
+      "ProductID",
+      "ProductGroupID",
+      "GroupOrder",
+      "HP",
+      "MoneyReward",
+      "QuestClearAmount"
+    ],
+    "text_columns": [
+      "PrefabName",
+      "LockedIconName",
+      "SpriteName",
+      "TextID"
+    ]
+  },
+  "content": {
+    "summary": "Product 데이터 테이블 (90행, 10열)",
+    "parameters": {
+      "ProductID": "0",
+      "ProductGroupID": "0",
+      "GroupOrder": "0",
+      "HP": "9",
+      "MoneyReward": "1",
+      "QuestClearAmount": "10",
+      "PrefabName": "Product_Prefab_0",
+      "LockedIconName": "Locked_Product_Icon_0_0",
+      "SpriteName": "Product_Sprite_0_0",
+      "TextID": "Product_Name_0_0"
+    },
+    "balance_points": [
+      {
+        "variable": "ProductID",
+        "min_value": 0,
+        "max_value": 89,
+        "avg_value": 44.5,
+        "growth_ratio": 89,
+        "data_points": 90,
+        "impact": "high"
+      },
+      {
+        "variable": "ProductGroupID",
+        "min_value": 0,
+        "max_value": 14,
+        "avg_value": 7,
+        "growth_ratio": 14,
+        "data_points": 90,
+        "impact": "high"
+      },
+      {
+        "variable": "GroupOrder",
+        "min_value": 0,
+        "max_value": 5,
+        "avg_value": 2.5,
+        "growth_ratio": 5,
+        "data_points": 90,
+        "impact": "medium"
+      },
+      {
+        "variable": "HP",
+        "min_value": 9,
+        "max_value": 1.16302641758276e+34,
+        "avg_value": 2.1246921837205563e+32,
+        "growth_ratio": 1.2922515750919555e+33,
+        "data_points": 90,
+        "impact": "critical"
+      },
+      {
+        "variable": "MoneyReward",
+        "min_value": 1,
+        "max_value": 862175393,
+        "avg_value": 51115612.54,
+        "growth_ratio": 862175393,
+        "data_points": 90,
+        "impact": "critical"
+      },
+      {
+        "variable": "QuestClearAmount",
+        "min_value": 10,
+        "max_value": 430,
+        "avg_value": 208.33,
+        "growth_ratio": 43,
+        "data_points": 90,
+        "impact": "high"
+      }
+    ],
+    "edge_cases": [],
+    "references": []
+  },
+  "data": {
+    "_note": "Table truncated: 90 rows total. First 10 + last 5 shown.",
+    "_total_rows": 90,
+    "_columns": [
+      "ProductID",
+      "ProductGroupID",
+      "GroupOrder",
+      "HP",
+      "MoneyReward",
+      "QuestClearAmount",
+      "PrefabName",
+      "LockedIconName",
+      "SpriteName",
+      "TextID"
+    ],
+    "sample_first": [
+      {
+        "ProductID": "0",
+        "ProductGroupID": "0",
+        "GroupOrder": "0",
+        "HP": "9",
+        "MoneyReward": "1",
+        "QuestClearAmount": "10",
+        "PrefabName": "Product_Prefab_0",
+        "LockedIconName": "Locked_Product_Icon_0_0",
+        "SpriteName": "Product_Sprite_0_0",
+        "TextID": "Product_Name_0_0"
+      },
+      {
+        "ProductID": "1",
+        "ProductGroupID": "0",
+        "GroupOrder": "1",
+        "HP": "45",
+        "MoneyReward": "2",
+        "QuestClearAmount": "10",
+        "PrefabName": "Product_Prefab_0",
+        "LockedIconName": "Locked_Product_Icon_0_1",
+        "SpriteName": "Product_Sprite_0_1",
+        "TextID": "Product_Name_0_1"
+      },
+      {
+        "ProductID": "2",
+        "ProductGroupID": "0",
+        "GroupOrder": "2",
+        "HP": "100",
+        "MoneyReward": "12",
+        "QuestClearAmount": "10",
+        "PrefabName": "Product_Prefab_0",
+        "LockedIconName": "Locked_Product_Icon_0_2",
+        "SpriteName": "Product_Sprite_0_2",
+        "TextID": "Product_Name_0_2"
+      },
+      {
+        "ProductID": "3",
+        "ProductGroupID": "0",
+        "GroupOrder": "3",
+        "HP": "235",
+        "MoneyReward": "23",
+        "QuestClearAmount": "10",
+        "PrefabName": "Product_Prefab_0",
+        "LockedIconName": "Locked_Product_Icon_0_3",
+        "SpriteName": "Product_Sprite_0_3",
+        "TextID": "Product_Name_0_3"
+      },
+      {
+        "ProductID": "4",
+        "ProductGroupID": "0",
+        "GroupOrder": "4",
+        "HP": "642",
+        "MoneyReward": "35",
+        "QuestClearAmount": "10",
+        "PrefabName": "Product_Prefab_0",
+        "LockedIconName": "Locked_Product_Icon_0_4",
+        "SpriteName": "Product_Sprite_0_4",
+        "TextID": "Product_Name_0_4"
+      },
+      {
+        "ProductID": "5",
+        "ProductGroupID": "0",
+        "GroupOrder": "5",
+        "HP": "1070",
+        "MoneyReward": "49",
+        "QuestClearAmount": "10",
+        "PrefabName": "Product_Prefab_0",
+        "LockedIconName": "Locked_Product_Icon_0_5",
+        "SpriteName": "Product_Sprite_0_5",
+        "TextID": "Product_Name_0_5"
+      },
+      {
+        "ProductID": "6",
+        "ProductGroupID": "1",
+        "GroupOrder": "0",
+        "HP": "485",
+        "MoneyReward": "54",
+        "QuestClearAmount": "15",
+        "PrefabName": "Product_Prefab_1",
+        "LockedIconName": "Locked_Product_Icon_1_0",
+        "SpriteName": "Product_Sprite_1_0",
+        "TextID": "Product_Name_1_0"
+      },
+      {
+        "ProductID": "7",
+        "ProductGroupID": "1",
+        "GroupOrder": "1",
+        "HP": "1230",
+        "MoneyReward": "67",
+        "QuestClearAmount": "20",
+        "PrefabName": "Product_Prefab_1",
+        "LockedIconName": "Locked_Product_Icon_1_1",
+        "SpriteName": "Product_Sprite_1_1",
+        "TextID": "Product_Name_1_1"
+      },
+      {
+        "ProductID": "8",
+        "ProductGroupID": "1",
+        "GroupOrder": "2",
+        "HP": "3150",
+        "MoneyReward": "87",
+        "QuestClearAmount": "25",
+        "PrefabName": "Product_Prefab_1",
+        "LockedIconName": "Locked_Product_Icon_1_2",
+        "SpriteName": "Product_Sprite_1_2",
+        "TextID": "Product_Name_1_2"
+      },
+      {
+        "ProductID": "9",
+        "ProductGroupID": "1",
+        "GroupOrder": "3",
+        "HP": "8040",
+        "MoneyReward": "111",
+        "QuestClearAmount": "30",
+        "PrefabName": "Product_Prefab_1",
+        "LockedIconName": "Locked_Product_Icon_1_3",
+        "SpriteName": "Product_Sprite_1_3",
+        "TextID": "Product_Name_1_3"
+      }
+    ],
+    "sample_last": [
+      {
+        "ProductID": "85",
+        "ProductGroupID": "14",
+        "GroupOrder": "1",
+        "HP": "2.75060898875349E+32",
+        "MoneyReward": "358854353",
+        "QuestClearAmount": "410",
+        "PrefabName": "Product_Prefab_14",
+        "LockedIconName": "Locked_Product_Icon_14_1",
+        "SpriteName": "Product_Sprite_14_1",
+        "TextID": "Product_Name_14_1"
+      },
+      {
+        "ProductID": "86",
+        "ProductGroupID": "14",
+        "GroupOrder": "2",
+        "HP": "7.0140529213214E+32",
+        "MoneyReward": "446773669",
+        "QuestClearAmount": "415",
+        "PrefabName": "Product_Prefab_14",
+        "LockedIconName": "Locked_Product_Icon_14_2",
+        "SpriteName": "Product_Sprite_14_2",
+        "TextID": "Product_Name_14_2"
+      },
+      {
+        "ProductID": "87",
+        "ProductGroupID": "14",
+        "GroupOrder": "3",
+        "HP": "1.78858349493696E+33",
+        "MoneyReward": "556233217",
+        "QuestClearAmount": "420",
+        "PrefabName": "Product_Prefab_14",
+        "LockedIconName": "Locked_Product_Icon_14_3",
+        "SpriteName": "Product_Sprite_14_3",
+        "TextID": "Product_Name_14_3"
+      },
+      {
+        "ProductID": "88",
+        "ProductGroupID": "14",
+        "GroupOrder": "4",
+        "HP": "4.56088791208924E+33",
+        "MoneyReward": "692510356",
+        "QuestClearAmount": "425",
+        "PrefabName": "Product_Prefab_14",
+        "LockedIconName": "Locked_Product_Icon_14_4",
+        "SpriteName": "Product_Sprite_14_4",
+        "TextID": "Product_Name_14_4"
+      },
+      {
+        "ProductID": "89",
+        "ProductGroupID": "14",
+        "GroupOrder": "5",
+        "HP": "1.16302641758276E+34",
+        "MoneyReward": "862175393",
+        "QuestClearAmount": "430",
+        "PrefabName": "Product_Prefab_14",
+        "LockedIconName": "Locked_Product_Icon_14_5",
+        "SpriteName": "Product_Sprite_14_5",
+        "TextID": "Product_Name_14_5"
+      }
+    ]
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from Product.json (90 rows)",
+      "note": "Live game data import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T10:32:53.998Z"
+}

@@ -1,0 +1,273 @@
+---
+project: IdleMoney
+genre: idle
+domain: balance
+source: internal_original
+version: "1.0.0"
+---
+
+# ============================================================
+# Balance Systems - Progression, Economy, Prestige
+# ============================================================
+
+systems:
+  # ----------------------------------------------------------
+  # 1. Factory Progression Curve
+  # ----------------------------------------------------------
+  - designId: idlemoney__balance__factory_progression
+    system: "Factory Progression"
+    data_type: formula
+    balance_area: progression
+    tags: [factory, level, cost_curve, progression]
+    provides:
+      - factory_level_cost
+      - factory_unlock_conditions
+      - factory_power_scaling
+    requires:
+      - money_currency
+      - slot_system
+    content:
+      summary: |
+        팩토리 레벨업 비용 곡선. 1600행 테이블로 레벨별 비용/보상 정의.
+        지수적 비용 증가, 기능 해금 기반 마일스톤.
+      parameters:
+        max_level: 1600
+        cost_curve: "exponential growth"
+        milestone_unlocks:
+          - { level: "SUPPLY_MACHINE_UNLOCK_FACTORY_LEVEL", unlock: "Supply Machine" }
+          - { level: "MACHINE_BUTTON_UNLOCK_FACTORY_LEVEL", unlock: "Machine Button" }
+          - { level: "ACHIEVEMENT_BUTTON_UNLOCK_FACTORY_LEVEL", unlock: "Achievement" }
+          - { level: "WORLD_BUTTON_UNLOCK_FACTORY_LEVEL", unlock: "World Map" }
+          - { level: "MACHINE_BOOST_FIRST_DISPLAY_FACTORY_LEVEL", unlock: "Power Boost" }
+          - { level: "MONEY_BOOST_FIRST_DISPLAY_FACTORY_LEVEL", unlock: "Money Boost" }
+
+  # ----------------------------------------------------------
+  # 2. Slot Progression Curve
+  # ----------------------------------------------------------
+  - designId: idlemoney__balance__slot_progression
+    system: "Slot Level Progression"
+    data_type: formula
+    balance_area: progression
+    tags: [slot, level, power_scaling, progression]
+    provides:
+      - slot_level_cost
+      - machine_power_by_slot
+    requires:
+      - money_currency
+      - machine_system
+    content:
+      summary: |
+        슬롯 레벨업 곡선. 1200행 테이블. 슬롯 레벨이 올라가면
+        장착된 머신의 등급별 파워 보너스 증가.
+      parameters:
+        max_level: 1200
+        grade_power_bonus: "등급별(Grade0~4) 슬롯 레벨당 파워 증가량 차등"
+        cost_scaling: "exponential"
+
+  # ----------------------------------------------------------
+  # 3. Rebirth/Prestige System
+  # ----------------------------------------------------------
+  - designId: idlemoney__balance__rebirth_system
+    system: "Rebirth Prestige"
+    data_type: flow
+    balance_area: prestige
+    tags: [rebirth, prestige, reset, progression]
+    provides:
+      - rebirth_progression
+      - world_unlock
+      - idle_reward_scaling
+      - manager_unlock_gate
+    requires:
+      - factory_challenge
+      - factory_progression
+    content:
+      summary: |
+        프레스티지 시스템. 팩토리 챌린지 성공 시 리버스 실행.
+        리버스 횟수에 따라 새 월드 해금, 매니저/랩 해금, 보상 증가.
+      parameters:
+        total_rebirths: 12
+        per_rebirth_data:
+          - "RebirthConditionFactoryLevel: 필요 팩토리 레벨"
+          - "TargetMoneyAmount: 챌린지 목표 금액"
+          - "TimeLimit: 챌린지 시간 제한"
+          - "EarningMoneyPerPower: 수익 배율"
+          - "GoodsRewardType/Amount: 보상 재화"
+          - "IdleRewardTime: 오프라인 보상 시간"
+          - "IdleFactoryFactor: 오프라인 보상 배율"
+        unlock_gates:
+          - "매니저 해금: MinRebirthCount per manager"
+          - "연구소 해금: LAB_UNLOCK_REBIRTH_COUNT"
+          - "던전 해금: LevelUnlockRebirthCount per level"
+          - "룰렛 해금: ConditionRebirthCount"
+
+  # ----------------------------------------------------------
+  # 4. Economy Flow (Currency Cycle)
+  # ----------------------------------------------------------
+  - designId: idlemoney__balance__economy_flow
+    system: "Economy Currency Flow"
+    data_type: flow
+    balance_area: economy
+    tags: [economy, currency, income, sink, flow]
+    provides:
+      - currency_income_sources
+      - currency_sink_points
+      - economy_balance
+    requires:
+      - production_line
+      - factory_progression
+      - shop_system
+    content:
+      summary: |
+        게임 내 5대 재화의 수입/지출 흐름.
+      parameters:
+        currencies:
+          - name: "Money (Double)"
+            earn: ["생산 라인 수익", "오프라인 보상", "퀘스트 보상", "이벤트"]
+            spend: ["팩토리 레벨업", "슬롯 레벨업", "공급 머신 레벨업", "일반 가챠"]
+            tracking: "DoubleUserInfoIndex.Money"
+          - name: "Diamond (Int)"
+            earn: ["IAP 구매", "패키지", "업적 보상", "일일 보상"]
+            spend: ["고급/슈퍼 가챠", "매니저 고용", "챌린지 재도전", "던전 재도전", "상점 구매"]
+            tracking: "IntUserInfoIndex.Diamond"
+          - name: "Gold/Credit (Int)"
+            earn: ["패키지 구매", "일일 보상"]
+            spend: ["특수 상점 아이템"]
+            tracking: "IntUserInfoIndex.Gold"
+          - name: "Machine Material / Doughnut (Int)"
+            earn: ["가챠 부산물", "일일 보상", "특수 제품"]
+            spend: ["머신 튜닝 레벨업"]
+            tracking: "IntUserInfoIndex.MachineMaterial"
+          - name: "AD Skip Money / Chocolate (Int)"
+            earn: ["일일 보상", "희귀 소스"]
+            spend: ["광고 시청 면제"]
+            tracking: "IntUserInfoIndex.ADSkipMoney"
+
+  # ----------------------------------------------------------
+  # 5. Offline Earnings Formula
+  # ----------------------------------------------------------
+  - designId: idlemoney__balance__offline_earnings
+    system: "Offline Earnings"
+    data_type: formula
+    balance_area: economy
+    tags: [offline, idle, earnings, time_based]
+    provides:
+      - offline_income_calculation
+      - offline_time_cap
+    requires:
+      - production_line
+      - lab_system
+      - package_system
+    content:
+      summary: |
+        오프라인 수익 계산 시스템. 접속하지 않은 시간 동안의 수익을 계산.
+        연구소 버프, 패키지 보너스, 리버스 레벨에 따라 배율 적용.
+      parameters:
+        formula_params:
+          - "OFFLINE_REWARD_MONEY_VALUE_A: 기본 계수"
+          - "OFFLINE_REWARD_MONEY_VALUE_B: 시간 계수"
+        max_time: "IdleRewardTime (리버스 레벨별 상이)"
+        factory_factor: "IdleFactoryFactor (리버스 레벨별)"
+        lab_buff: "LabStats.IdleCash (연구소 오프라인 버프)"
+        package_bonus: "InAppPackageEffect.OfflineRewardUp"
+        ad_multiplier: "2x (광고 시청 시)"
+
+  # ----------------------------------------------------------
+  # 6. Boost Event System
+  # ----------------------------------------------------------
+  - designId: idlemoney__balance__boost_events
+    system: "Boost Event Timers"
+    data_type: rule
+    balance_area: economy
+    tags: [boost, event, multiplier, temporary]
+    provides:
+      - power_boost
+      - money_boost
+      - supply_boost
+    requires:
+      - factory_progression
+      - ad_system
+    content:
+      summary: |
+        일시적 부스트 이벤트 시스템. 일정 간격으로 팝업, AD 시청 시 활성화.
+        파워부스트/머니부스트/공급부스트 3종.
+      parameters:
+        events:
+          - name: "PowerBoost"
+            interval: "PRODUCTIVITY_BOOST_DISPLAY_INTERVAL"
+            duration: "PRODUCTIVITY_BOOST_DURATION"
+            unlock: "MACHINE_BOOST_FIRST_DISPLAY_FACTORY_LEVEL"
+            effect: "해머 데미지 배율 증가"
+          - name: "MoneyBoost"
+            interval: "FINAL_SELLING_MONEY_BOOST_DISPLAY_INTERVAL"
+            duration: "FINAL_SELLING_MONEY_BOOST_DURATION"
+            unlock: "MONEY_BOOST_FIRST_DISPLAY_FACTORY_LEVEL"
+            effect: "판매 수익 배율 증가"
+          - name: "SupplyBoost"
+            interval: "per factory"
+            duration: "SUPPLY_MACHINE_BOOST_DURATION"
+            effect: "공급 속도 배율 증가"
+          - name: "SuperHammer"
+            interval: "SUPER_HAMMER_DISPLAY_INTERVAL"
+            duration: "SUPER_HAMMER_DURATION"
+            effect: "강화 해머 모드"
+
+  # ----------------------------------------------------------
+  # 7. Lab Research System
+  # ----------------------------------------------------------
+  - designId: idlemoney__balance__lab_system
+    system: "Lab Research"
+    data_type: spec
+    balance_area: research
+    tags: [lab, research, buff, permanent, upgrade]
+    provides:
+      - permanent_buffs
+      - lab_item_progression
+    requires:
+      - rebirth_system
+      - money_currency
+    content:
+      summary: |
+        연구소 시스템. 리버스 일정 횟수 이후 해금.
+        연구 아이템 레벨업으로 영구 버프 획득. 아이템당 3개 버프 슬롯.
+      parameters:
+        unlock_condition: "LAB_UNLOCK_REBIRTH_COUNT"
+        items_count: 12
+        buff_slots_per_item: 3
+        max_view: 4
+        buff_types:
+          - { id: "ProductSellingPrice", effect: "제품 판매 가격 증가 %" }
+          - { id: "IdleCash", effect: "오프라인 수익 증가 %" }
+          - { id: "SlotLevelUpCost", effect: "슬롯 레벨업 비용 감소 %" }
+          - { id: "SupplyMachineLevelUpCost", effect: "공급 머신 레벨업 비용 감소 %" }
+          - { id: "FactoryLevelUpCost", effect: "팩토리 레벨업 비용 감소 %" }
+        buff_formula: "baseValue + (addValue * (level - 1))"
+        storage: "UserInfo.labItems (Dictionary itemID -> level)"
+
+  # ----------------------------------------------------------
+  # 8. AD Reward Scaling
+  # ----------------------------------------------------------
+  - designId: idlemoney__balance__ad_reward_curve
+    system: "AD Reward Scaling"
+    data_type: formula
+    balance_area: economy
+    tags: [ad, reward, scaling, monetization]
+    provides:
+      - ad_reward_calculation
+      - ad_frequency_cap
+    requires:
+      - factory_progression
+      - boost_events
+    content:
+      summary: |
+        광고 보상 스케일링 시스템. 팩토리 레벨과 리버스에 따라 보상 증가.
+        ADMoneyBonusFactor 테이블(450행)로 세밀한 보상 곡선 정의.
+      parameters:
+        max_ad_per_session: 10
+        cooldown_types:
+          - "LastShowADBannerTime: 배너 광고 쿨다운"
+          - "LastShowADMachineGachaTime: 머신 가챠 광고 쿨다운"
+        boost_configs:
+          - "EVENT_ROULETTE_REWARD_BOOST_VALUE"
+          - "ATTENDANCE_REWARD_BOOST_VALUE"
+          - "OFFLINE_REWARD_BOOST_VALUE"
+        offline_double: "AD 시청 시 오프라인 보상 2배"

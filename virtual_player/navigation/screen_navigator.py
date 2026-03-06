@@ -4,7 +4,7 @@ Screen Navigator
 Core navigation engine: recognize current screen -> plan path -> execute actions.
 Handles unexpected screens (popups, wrong destinations) with adaptive retry.
 
-Ported from C10+ smart_player/navigator.py — adapted for virtual_player Brain interface.
+Ported from C10+ smart_player/navigator.py -- adapted for virtual_player Brain interface.
 """
 
 import time
@@ -174,7 +174,7 @@ class ScreenNavigator:
             if cls.screen_type == edge.target or self.is_equivalent(cls.screen_type, edge.target):
                 continue
 
-            # Screen didn't change — try fallback close buttons
+            # Screen didn't change -- try fallback close buttons
             if cls.screen_type == prev_screen:
                 log(f"  [Nav] Screen unchanged, trying fallback close buttons")
                 if self._try_fallback_close(edge.target, final_target):

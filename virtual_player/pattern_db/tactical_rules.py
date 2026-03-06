@@ -54,7 +54,7 @@ class TacticalRules:
     """L1 tactical decision layer using nav_graph pathfinding.
 
     Given a current screen and a goal, plans and returns the next action.
-    Does NOT call Vision API — pure graph computation.
+    Does NOT call Vision API -- pure graph computation.
     """
 
     def __init__(self, graph: NavigationGraph, cache_dir: Path):
@@ -78,7 +78,7 @@ class TacticalRules:
         """Plan a navigation path from current screen to target.
 
         Returns ActionSequence if path found, None if unreachable.
-        This is pure BFS — no API calls, <200ms.
+        This is pure BFS -- no API calls, <200ms.
         Excludes failed edges from pathfinding.
         """
         equivalences = equivalences or {}
@@ -121,7 +121,7 @@ class TacticalRules:
                 key = (next_edge.source, next_edge.target, next_edge.action.element)
                 if key not in self._failed_edges:
                     return next_edge
-                # Edge is marked as failed — re-plan excluding it
+                # Edge is marked as failed -- re-plan excluding it
                 self._current_plan = None
 
         # Re-plan

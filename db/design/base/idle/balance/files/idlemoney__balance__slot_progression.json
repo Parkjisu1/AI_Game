@@ -1,0 +1,39 @@
+{
+  "designId": "idlemoney__balance__slot_progression",
+  "project": "IdleMoney",
+  "domain": "Balance",
+  "genre": "Idle",
+  "system": "Slot Level Progression",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "formula",
+  "balance_area": "progression",
+  "source_file": "balance_systems.yaml",
+  "content": {
+    "summary": "슬롯 레벨업 곡선. 1200행 테이블. 슬롯 레벨이 올라가면\n장착된 머신의 등급별 파워 보너스 증가.",
+    "flow": [],
+    "parameters": {
+      "max_level": 1200,
+      "grade_power_bonus": "등급별(Grade0~4) 슬롯 레벨당 파워 증가량 차등",
+      "cost_scaling": "exponential"
+    },
+    "edge_cases": [],
+    "references": []
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from C# analysis: Slot Level Progression",
+      "note": "Live game code analysis import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T11:08:16.900Z"
+}

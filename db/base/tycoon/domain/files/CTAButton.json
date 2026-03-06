@@ -1,0 +1,60 @@
+{
+  "fileId": "CTAButton",
+  "filePath": "UI\\CTAButton.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Tycoon",
+  "role": "Component",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine",
+    "Luna.Unity"
+  ],
+  "classes": [
+    {
+      "className": "CTAButton",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "OnCTAButtonClick",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnCTAButtonClick()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void OnCTAButtonClick()"
+  ],
+  "requires": [],
+  "tags": {
+    "major": [
+      "ResponseTrigger"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "Analytics",
+    "Debug",
+    "Playable"
+  ],
+  "usedBy": []
+}

@@ -3,7 +3,7 @@ Vision Brain (3-Tier)
 ======================
 AI brain for Android games using 3-tier decision architecture.
 
-L0: Reflex Cache (pHash → action, <50ms)
+L0: Reflex Cache (pHash -> action, <50ms)
 L1: Tactical Rules (nav_graph BFS, <200ms) + local template element finder
 L2: Local Behavior Tree (SSIM classification + template matching + zone explore)
     Falls back to Claude Vision API only if local vision is unavailable.
@@ -37,7 +37,7 @@ class VisionBrain(GameBrain):
     - Layer 2+3 (Goal Reasoning + Adaptive Planning): GOAP + utility AI + failure memory
     """
 
-    _STUCK_THRESHOLD = 3       # Same screen N times → stuck
+    _STUCK_THRESHOLD = 3       # Same screen N times -> stuck
     _POPUP_RETRY_LIMIT = 5     # Popup dismiss failures before re-vision
     _POPUP_GIVEUP_LIMIT = 10   # Total popup failures before back key
     _L2_BACK_THRESHOLD = 4     # L2 attempts before trying systematic explore
@@ -126,10 +126,10 @@ class VisionBrain(GameBrain):
 
         # Element coordinate cache: (screen_type, element) -> (x, y)
         self._element_coord_cache: Dict[Tuple[str, str], Tuple[int, int]] = {}
-        # Edges that failed with recorded coords — get one retry with Vision
+        # Edges that failed with recorded coords -- get one retry with Vision
         self._vision_retry_edges: set = set()  # (source, target, element)
 
-        # Oscillation detection: track recent screens to detect A→B→A→B loops
+        # Oscillation detection: track recent screens to detect A->B->A->B loops
         self._screen_history: List[str] = []  # last N screen types
         self._OSCILLATION_WINDOW = 6  # how many screens to track
         self._last_l0_target: Optional[str] = None  # track L0 action's intended target
@@ -159,7 +159,7 @@ class VisionBrain(GameBrain):
         self._last_classification = cls
 
         # Deferred caching: commit pending L2 result only if screen changed
-        # to a REAL screen (not a popup — popups are overlays, not real transitions)
+        # to a REAL screen (not a popup -- popups are overlays, not real transitions)
         if self._pending_cache:
             prev = self._pending_cache["screen_type"]
             intended_target = self._pending_cache["target"]
@@ -184,9 +184,9 @@ class VisionBrain(GameBrain):
                     )
                 self._pending_cache = None
             elif cls.screen_type == prev:
-                # Same screen — action didn't work, discard
+                # Same screen -- action didn't work, discard
                 self._pending_cache = None
-            # else: popup appeared — keep pending, will commit when popup dismissed
+            # else: popup appeared -- keep pending, will commit when popup dismissed
 
         # L1 edge validation: check if we reached the expected target
         if self._last_l1_edge:
@@ -196,11 +196,11 @@ class VisionBrain(GameBrain):
             )
             if not is_popup_screen:
                 if cls.screen_type == self._last_l1_edge.target:
-                    # Reached the intended target — edge succeeded
+                    # Reached the intended target -- edge succeeded
                     log(f"  [Brain] L1 edge succeeded: ->{cls.screen_type}")
                     self._last_l1_edge = None
                 elif cls.screen_type != self._last_l1_edge.source:
-                    # Reached a WRONG screen — edge coords/action is incorrect
+                    # Reached a WRONG screen -- edge coords/action is incorrect
                     edge = self._last_l1_edge
                     edge_key = (edge.source, edge.target, edge.action.element)
                     elem_key = (edge.source, edge.action.element)
@@ -225,7 +225,7 @@ class VisionBrain(GameBrain):
                 for p in PopupHandler.POPUP_PREFIXES
             )
             if not is_popup_screen and cls.screen_type != self._last_l0_target:
-                # L0 cache action led to wrong screen — invalidate it
+                # L0 cache action led to wrong screen -- invalidate it
                 log(f"  [Brain] L0 cache wrong: wanted {self._last_l0_target}, "
                     f"got {cls.screen_type}, invalidating L0 entry")
                 self.reflex_cache.invalidate_by_type(
@@ -237,7 +237,7 @@ class VisionBrain(GameBrain):
         if len(self._screen_history) > self._OSCILLATION_WINDOW:
             self._screen_history = self._screen_history[-self._OSCILLATION_WINDOW:]
 
-        # Popup stuck: screen changed away from popup → reset counter
+        # Popup stuck: screen changed away from popup -> reset counter
         if self._popup_fail_type and cls.screen_type != self._popup_fail_type:
             self._popup_fail_count = 0
             self._popup_fail_type = None
@@ -284,11 +284,11 @@ class VisionBrain(GameBrain):
 
         is_stuck = self._same_screen_count >= self._STUCK_THRESHOLD
 
-        # --- Oscillation detection (A→B→A→B pattern) ---
+        # --- Oscillation detection (A->B->A->B pattern) ---
         is_oscillating = False
         if len(self._screen_history) >= 4:
             h = self._screen_history
-            # Check for A→B→A→B pattern (last 4 entries)
+            # Check for A->B->A->B pattern (last 4 entries)
             if (h[-1] == h[-3] and h[-2] == h[-4]
                     and h[-1] != h[-2]):
                 is_oscillating = True
@@ -324,7 +324,7 @@ class VisionBrain(GameBrain):
         # --- L0: Reflex cache (skip if stuck) ---
         target = self._get_current_target(screen_type)
 
-        # L0 type+context (goal-aware) — preferred when we have a target
+        # L0 type+context (goal-aware) -- preferred when we have a target
         if target and not is_stuck:
             cached = self.reflex_cache.lookup_by_type(screen_type, context=target)
             if cached:
@@ -334,8 +334,8 @@ class VisionBrain(GameBrain):
                     f"{cached.action_type} ({cached.x},{cached.y})")
                 return self._cached_to_action(cached, "L0_type")
 
-        # L0 hash lookup disabled — context-free pHash matching causes
-        # oscillation loops (e.g., lobby→menu_shop→lobby→...) because it
+        # L0 hash lookup disabled -- context-free pHash matching causes
+        # oscillation loops (e.g., lobby->menu_shop->lobby->...) because it
         # replays actions regardless of the current goal. The type+context
         # lookup above handles goal-aware caching for known situations.
 
@@ -362,7 +362,7 @@ class VisionBrain(GameBrain):
                             self._last_l1_edge.action.element)
 
                 if edge_key not in self._vision_retry_edges:
-                    # First failure: recorded coords didn't work → try Vision next
+                    # First failure: recorded coords didn't work -> try Vision next
                     self._vision_retry_edges.add(edge_key)
                     if elem_key in self._element_coord_cache:
                         del self._element_coord_cache[elem_key]
@@ -370,7 +370,7 @@ class VisionBrain(GameBrain):
                         f"{self._last_l1_edge.source}->{self._last_l1_edge.target} "
                         f"[{self._last_l1_edge.action.element}]")
                 else:
-                    # Second failure: Vision coords also failed → mark edge dead
+                    # Second failure: Vision coords also failed -> mark edge dead
                     self.tactical.mark_edge_failed(self._last_l1_edge)
                     if elem_key in self._element_coord_cache:
                         del self._element_coord_cache[elem_key]
@@ -380,7 +380,7 @@ class VisionBrain(GameBrain):
                 self._last_l1_edge = None
             self.tactical.clear_plan()
             if is_oscillating:
-                log(f"  [Brain L2] OSCILLATION → L2 on {screen_type}")
+                log(f"  [Brain L2] OSCILLATION -> L2 on {screen_type}")
             else:
                 log(f"  [Brain L2] STUCK on {screen_type} ({self._same_screen_count}x), fresh vision")
             self._same_screen_count = 0
@@ -397,7 +397,7 @@ class VisionBrain(GameBrain):
             self._l2_recent_coords = []
             self._l2_explore_idx = 0
 
-        # L2 escalation: Vision(1-4) → Explore zones(5-12) → Back(13+)
+        # L2 escalation: Vision(1-4) -> Explore zones(5-12) -> Back(13+)
         if self._l2_stuck_count > self._L2_BACK_THRESHOLD:
             zone_idx = self._l2_stuck_count - self._L2_BACK_THRESHOLD - 1
             if zone_idx < len(self._L2_EXPLORE_ZONES):
@@ -418,7 +418,7 @@ class VisionBrain(GameBrain):
                 }
                 return action
             else:
-                # All zones exhausted → Back key escape
+                # All zones exhausted -> Back key escape
                 log(f"  [Brain L2] ESCAPE: {screen_type} stuck {self._l2_stuck_count}x, Back key")
                 self._l2_stuck_count = 0
                 self._l2_recent_coords = []
@@ -500,7 +500,7 @@ class VisionBrain(GameBrain):
                     path = self.graph.find_path(current_screen, c, excluded_edges=failed)
                     if path is not None and len(path) > 0:
                         return c
-                # No L1 path available — return None so L2 explores freely
+                # No L1 path available -- return None so L2 explores freely
                 return None
 
         return None
@@ -530,7 +530,7 @@ class VisionBrain(GameBrain):
             self._popup_fail_count = 1
             self._popup_fail_type = popup_type
 
-        # Stage 3: Give up — press Back key
+        # Stage 3: Give up -- press Back key
         if self._popup_fail_count >= self._POPUP_GIVEUP_LIMIT:
             log(f"  [Brain] Popup {popup_type} GIVEUP ({self._popup_fail_count}x), pressing Back")
             self._popup_fail_count = 0
@@ -540,7 +540,7 @@ class VisionBrain(GameBrain):
                 inputs=[TouchInput(action_type=ActionType.KEY_PRESS, key="back")],
             )
 
-        # Stage 2: Cached coords failed too many times — re-ask Vision
+        # Stage 2: Cached coords failed too many times -- re-ask Vision
         if self._popup_fail_count >= self._POPUP_RETRY_LIMIT:
             # Invalidate cached coords
             if popup_type in self.popup_handler._dismiss_cache:
@@ -555,7 +555,7 @@ class VisionBrain(GameBrain):
                 log(f"  [Brain] Popup {popup_type} dismiss (re-vision: {x},{y})")
                 return self._make_tap_action(x, y, f"dismiss_popup_{popup_type}")
 
-            # Vision also failed — fallback tap
+            # Vision also failed -- fallback tap
             log(f"  [Brain] Popup {popup_type} Vision re-try failed, fallback")
             return self._make_tap_action(960, 320, f"popup_fallback_{popup_type}")
 
@@ -566,7 +566,7 @@ class VisionBrain(GameBrain):
                 f"[attempt {self._popup_fail_count}/{self._POPUP_RETRY_LIMIT}]")
             return self._make_tap_action(x, y, f"dismiss_popup_{popup_type}")
 
-        # No cache yet — ask Vision
+        # No cache yet -- ask Vision
         coords = self.popup_handler._find_close_button(screenshot_path)
         if coords:
             x, y = coords
@@ -620,7 +620,7 @@ class VisionBrain(GameBrain):
                 log(f"  [Brain L1] Recorded swipe: ({act.x},{act.y})->({act.x2},{act.y2})")
                 return self._make_swipe_action(act.x, act.y, act.x2, act.y2, name)
 
-        # No recorded coords — use local template matching to find the element
+        # No recorded coords -- use local template matching to find the element
         screenshot_path = (Path(self._last_classification.screenshot_path)
                           if self._last_classification else None)
         if screenshot_path and screenshot_path.exists() and act.element:

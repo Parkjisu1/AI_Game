@@ -1,0 +1,56 @@
+{
+  "fileId": "LunaManager",
+  "filePath": "LunaManager.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Playable",
+  "role": "Manager",
+  "system": "LunaManager",
+  "score": 0.4,
+  "usings": [],
+  "classes": [
+    {
+      "className": "LunaManager",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": true,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "End",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void End()",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void End()"
+  ],
+  "requires": [],
+  "tags": {
+    "major": [
+      "StateControl"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "LifeCycle",
+    "Playable"
+  ],
+  "usedBy": []
+}

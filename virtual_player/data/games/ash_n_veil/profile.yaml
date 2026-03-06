@@ -1,63 +1,117 @@
 # Ash & Veil — Game Profile
 # Genre: RPG
 # Used with: play-adb --profile data/games/ash_n_veil/profile.yaml
+#
+# Verified ROIs from pixel analysis (2026-02-26):
+#   XP bar: y=1914-1919, full-width yellow bar → 29.9% matches game's 29.58%
+#   HP/MP: NO traditional bars — character portrait ring only (~30px)
+#   Gold/Gem/Level: OCR via combined top-bar strategy (EasyOCR 3x upscale)
+#   Verified OCR: Lv.23(1.00), 5,470 gem(1.00), 14,606A gold(0.61-0.97)
 
 game_id: ash_n_veil
 game_name: "Ash & Veil"
 package_name: studio.gameberry.anv
 genre: rpg
 
+# Cross-genre config (previously hardcoded in Python)
+reasoner_genre: rpg_anv
+launch_activity: com.unity3d.player.UnityPlayerActivity
+input_method: input_tap
+fallback_positions: [[978,165],[270,1900],[540,1060],[980,1350],[540,1870]]
+pixel_heuristic:
+  y_top: 1700
+  y_bot: 1780
+  rules:
+    - {screen_type: battle, condition: "std > 75"}
+    - {screen_type: lobby, condition: "mean > 30 and std < 75"}
+gauge_bars:
+  mp: {y: 66, x_start: 140, x_end: 250, empty_color: {r_min: 180, b_max: 80}}
+
+skill_slots:
+  - name: skill_1
+    x: 850
+    y: 1700
+    cooldown_s: 8
+    priority: 3
+    type: dps
+  - name: skill_2
+    x: 950
+    y: 1700
+    cooldown_s: 12
+    priority: 2
+    type: dps
+  - name: heal
+    x: 750
+    y: 1700
+    cooldown_s: 15
+    priority: 10
+    type: heal
+
 gauge_overrides:
-  hp:
-    hsv_lower: [35, 100, 100]
-    hsv_upper: [85, 255, 255]
-    color_rgb: [76, 175, 80]
-  mp:
-    hsv_lower: [100, 100, 100]
-    hsv_upper: [130, 255, 255]
-    color_rgb: [33, 150, 243]
   xp:
-    hsv_lower: [20, 100, 100]
+    hsv_lower: [15, 80, 150]
     hsv_upper: [35, 255, 255]
     color_rgb: [255, 193, 7]
 
 screen_rois:
+  # Battle screen — XP bar at bottom, combined OCR for top bar
   battle:
-    hp_bar:
-      region: [50, 60, 400, 20]
+    xp_bar:
+      region: [0, 1914, 1080, 6]
       type: gauge
-      gauge_name: hp
-    mp_bar:
-      region: [50, 85, 400, 15]
-      type: gauge
-      gauge_name: mp
-    stage_number:
-      region: [400, 30, 280, 40]
+      gauge_name: xp
+    _combined:
+      region: [0, 0, 1080, 60]
       type: ocr
-      numeric: true
-      category: stats
+      fields:
+        stage_number:
+          x_range: [350, 550]
+          numeric: true
+          category: stats
+        gold:
+          x_range: [780, 1080]
+          numeric: true
+          category: resources
+        gem:
+          x_range: [550, 780]
+          numeric: true
+          category: resources
+
+  # Lobby — XP bar at bottom, combined OCR for top bar
   lobby:
-    gold:
-      region: [800, 20, 200, 35]
+    xp_bar:
+      region: [0, 1914, 1080, 6]
+      type: gauge
+      gauge_name: xp
+    _combined:
+      region: [0, 0, 1080, 60]
       type: ocr
-      numeric: true
-      category: resources
-    gem:
-      region: [800, 60, 200, 35]
-      type: ocr
-      numeric: true
-      category: resources
-    level:
-      region: [20, 20, 80, 30]
-      type: ocr
-      numeric: true
-      category: stats
+      fields:
+        level:
+          x_range: [0, 220]
+          numeric: true
+          category: stats
+        gold:
+          x_range: [780, 1080]
+          numeric: true
+          category: resources
+        gem:
+          x_range: [550, 780]
+          numeric: true
+          category: resources
+
+  # Shop — combined OCR for top bar
   menu_shop:
-    gold:
-      region: [800, 20, 200, 35]
+    _combined:
+      region: [0, 0, 1080, 60]
       type: ocr
-      numeric: true
-      category: resources
+      fields:
+        gold:
+          x_range: [780, 1080]
+          numeric: true
+          category: resources
+
+  # Character stats (individual regions — larger area, may need tuning)
   menu_character:
     atk:
       region: [600, 300, 150, 30]

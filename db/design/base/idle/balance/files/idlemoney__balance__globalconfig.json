@@ -1,0 +1,161 @@
+{
+  "designId": "idlemoney__balance__globalconfig",
+  "project": "IdleMoney",
+  "domain": "Balance",
+  "genre": "Idle",
+  "system": "GlobalConfig",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "config",
+  "balance_area": "system",
+  "source_file": "ConfigCommon.json",
+  "table_stats": {
+    "row_count": 267,
+    "columns": [
+      "ConfigID",
+      "ConfigType",
+      "ConfigParam1"
+    ],
+    "numeric_columns": [
+      "ConfigID",
+      "ConfigParam1"
+    ],
+    "text_columns": [
+      "ConfigType"
+    ]
+  },
+  "content": {
+    "summary": "GlobalConfig 데이터 테이블 (267행, 3열)",
+    "parameters": {
+      "ConfigID": "0",
+      "ConfigType": "MIN_ADD_DELAY_DURATION",
+      "ConfigParam1": "59"
+    },
+    "balance_points": [
+      {
+        "variable": "ConfigID",
+        "min_value": 0,
+        "max_value": 266,
+        "avg_value": 133,
+        "growth_ratio": 266,
+        "data_points": 267,
+        "impact": "critical"
+      },
+      {
+        "variable": "ConfigParam1",
+        "min_value": 0,
+        "max_value": 3750000000,
+        "avg_value": 18785249.83,
+        "growth_ratio": 3750000000,
+        "data_points": 267,
+        "impact": "critical"
+      }
+    ],
+    "edge_cases": [],
+    "references": []
+  },
+  "data": {
+    "_note": "Table truncated: 267 rows total. First 10 + last 5 shown.",
+    "_total_rows": 267,
+    "_columns": [
+      "ConfigID",
+      "ConfigType",
+      "ConfigParam1"
+    ],
+    "sample_first": [
+      {
+        "ConfigID": "0",
+        "ConfigType": "MIN_ADD_DELAY_DURATION",
+        "ConfigParam1": "59"
+      },
+      {
+        "ConfigID": "1",
+        "ConfigType": "RESELECT_CURRENT_QUEST_AFTER_ADD",
+        "ConfigParam1": "1"
+      },
+      {
+        "ConfigID": "2",
+        "ConfigType": "ACTIVATE_SUPER_HAMMER_AFTER_ADD",
+        "ConfigParam1": "1"
+      },
+      {
+        "ConfigID": "3",
+        "ConfigType": "ENTER_CHALLENGE_AFTER_ADD",
+        "ConfigParam1": "1"
+      },
+      {
+        "ConfigID": "4",
+        "ConfigType": "GET_LOBBY_EVENT_BOX_AFTER_ADD",
+        "ConfigParam1": "1"
+      },
+      {
+        "ConfigID": "5",
+        "ConfigType": "GET_DRONE_MONEY_AFTER_ADD",
+        "ConfigParam1": "1"
+      },
+      {
+        "ConfigID": "6",
+        "ConfigType": "GET_POPUP_MONEY_AFTER_ADD",
+        "ConfigParam1": "1"
+      },
+      {
+        "ConfigID": "7",
+        "ConfigType": "GET_PRODUCT_COMPLETE_DIAMOND_AFTER_ADD",
+        "ConfigParam1": "1"
+      },
+      {
+        "ConfigID": "8",
+        "ConfigType": "GET_STORE_EVENT_BOX_AFTER_ADD",
+        "ConfigParam1": "1"
+      },
+      {
+        "ConfigID": "9",
+        "ConfigType": "EVENT_ROULETTE_REWARD_BOOST_AFTER_ADD",
+        "ConfigParam1": "1"
+      }
+    ],
+    "sample_last": [
+      {
+        "ConfigID": "262",
+        "ConfigType": "OFFLINE_FACTORY_PRODUCT_FACTOR",
+        "ConfigParam1": "10"
+      },
+      {
+        "ConfigID": "263",
+        "ConfigType": "DRONE_MONEY_DISPLAY_RANDOM_ADD_INTERVAL",
+        "ConfigParam1": "120"
+      },
+      {
+        "ConfigID": "264",
+        "ConfigType": "CHALLENGE_SUCCESS_REWARD_BASE",
+        "ConfigParam1": "360000"
+      },
+      {
+        "ConfigID": "265",
+        "ConfigType": "CHALLENGE_FAILED_REWARD_BASE",
+        "ConfigParam1": "720000"
+      },
+      {
+        "ConfigID": "266",
+        "ConfigType": "LEVEL_BOX_GACHA_CYCLE_COUNT",
+        "ConfigParam1": "1"
+      }
+    ]
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from ConfigCommon.json (267 rows)",
+      "note": "Live game data import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T10:32:53.916Z"
+}

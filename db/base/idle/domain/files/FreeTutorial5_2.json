@@ -1,0 +1,136 @@
+{
+  "fileId": "FreeTutorial5_2",
+  "filePath": "Tutorial\\FreeTutorial5_2.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Idle",
+  "role": "Component",
+  "system": "Tutorial",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "FreeTutorial5_2",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "TutorialBase",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "gameModeMain",
+          "fieldType": "GameModeMain",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "stopUpdate",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "condition",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "userInfo",
+          "fieldType": "UserInfo",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Enter",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Enter()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Update",
+          "accessModifier": "public",
+          "returnType": "override void",
+          "parameters": [],
+          "signature": "override void Update()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": true,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Finish",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Finish()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Enter()",
+    "override void Update()",
+    "void Finish()"
+  ],
+  "requires": [
+    "TutorialBase"
+  ],
+  "tags": {
+    "major": [],
+    "minor": []
+  },
+  "uses": [
+    "CloseTutorialFocusWinMgr",
+    "OpenWindowWithTutorialFocusMsg",
+    "TutorialBase"
+  ],
+  "usedBy": []
+}

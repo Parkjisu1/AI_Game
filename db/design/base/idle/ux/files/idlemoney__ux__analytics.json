@@ -1,0 +1,68 @@
+{
+  "designId": "idlemoney__ux__analytics",
+  "project": "IdleMoney",
+  "domain": "UX",
+  "genre": "Idle",
+  "system": "Firebase Analytics",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "spec",
+  "balance_area": "tracking",
+  "source_file": "outgame_content_meta.yaml",
+  "content": {
+    "summary": "Firebase Analytics 기반 이벤트 추적 시스템.\n핵심 이벤트에 progression 파라미터 포함.",
+    "flow": [],
+    "parameters": {
+      "events": [
+        {
+          "{ name": "\"log_offline\", params: \"fac_relv, fac_lv, count, after_lv, skip_flag\" }"
+        },
+        {
+          "{ name": "\"log_shop_enter\", params: \"fac_relv, fac_lv, pl_slot, loopy_have\" }"
+        },
+        {
+          "{ name": "\"log_shop_iap\", params: \"shop_id, shop_price, reward_type, reward_quan\" }"
+        },
+        {
+          "{ name": "\"log_gacha\", params: \"type, place, skip_flag\" }"
+        },
+        {
+          "{ name": "\"log_loopy_get\", params: \"fac_relv, fac_lv, loopy_have, idx, place\" }"
+        },
+        {
+          "{ name": "\"log_attend\", params: \"day, reward_type, skip_flag\" }"
+        },
+        {
+          "{ name": "\"log_shop\", params: \"shop_id, shop_price, reward_type, reward_quan\" }"
+        }
+      ],
+      "common_params": [
+        "fac_relv: SellOffCount (리버스 횟수)",
+        "fac_lv: 현재 월드",
+        "fac_current_lv: 현재 팩토리 레벨",
+        "pl_slot: 오픈된 슬롯 수",
+        "loopy_have: 보유 머신 수",
+        "in_date: 설치 날짜"
+      ],
+      "conditional_compile": "#if !UNITY_EDITOR"
+    },
+    "edge_cases": [],
+    "references": []
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from C# analysis: Firebase Analytics",
+      "note": "Live game code analysis import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T11:08:17.062Z"
+}

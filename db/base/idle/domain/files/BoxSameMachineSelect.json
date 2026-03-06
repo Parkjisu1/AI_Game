@@ -1,0 +1,550 @@
+{
+  "fileId": "BoxSameMachineSelect",
+  "filePath": "Tables\\BoxSameMachineSelect.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Idle",
+  "role": "Data",
+  "system": "Tables",
+  "score": 0.4,
+  "usings": [
+    "System.IO",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "MessagePack",
+    "Newtonsoft.Json"
+  ],
+  "classes": [
+    {
+      "className": "BoxSameMachineSelectTableData",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [
+        "ITableData"
+      ],
+      "fields": [
+        {
+          "fieldName": "TuningLevel",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "SelectWeight",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "DebugPrint",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DebugPrint()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PostProcess",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void PostProcess()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetMaxProbabilityValue",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int GetMaxProbabilityValue()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMaxProbabilityValue",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [
+            {
+              "paramType": "List<int>",
+              "paramName": "selectedLevel"
+            }
+          ],
+          "signature": "int GetMaxProbabilityValue(List<int> selectedLevel)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMachineLevelByRandom",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "levelProbability"
+            },
+            {
+              "paramType": "List<int>",
+              "paramName": "selectableLevels"
+            }
+          ],
+          "signature": "int GetMachineLevelByRandom(int levelProbability, List<int> selectableLevels)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMachineIDByTable",
+          "accessModifier": "public",
+          "returnType": "MachineGrade",
+          "parameters": [
+            {
+              "paramType": "double",
+              "paramName": "probability"
+            }
+          ],
+          "signature": "MachineGrade GetMachineIDByTable(double probability)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "makeAccumChances",
+          "accessModifier": "protected",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "List<int>",
+              "paramName": "selectableLevels"
+            }
+          ],
+          "signature": "bool makeAccumChances(List<int> selectableLevels)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetData",
+          "accessModifier": "public",
+          "returnType": "ITableData",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "tuningLevel"
+            }
+          ],
+          "signature": "ITableData GetData(int tuningLevel)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMax",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int GetMax()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "JsonToByte",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "path"
+            },
+            {
+              "paramType": "string",
+              "paramName": "json"
+            }
+          ],
+          "signature": "bool JsonToByte(string path, string json)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "LoadingPostProcess",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void LoadingPostProcess()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "DebugPrint",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DebugPrint()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    },
+    {
+      "className": "BoxSameMachineSelectTable",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [
+        "ITable<int>",
+        "ITableLoader"
+      ],
+      "fields": [
+        {
+          "fieldName": "TuningLevel",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "SelectWeight",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "DebugPrint",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DebugPrint()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PostProcess",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void PostProcess()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetMaxProbabilityValue",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int GetMaxProbabilityValue()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMaxProbabilityValue",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [
+            {
+              "paramType": "List<int>",
+              "paramName": "selectedLevel"
+            }
+          ],
+          "signature": "int GetMaxProbabilityValue(List<int> selectedLevel)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMachineLevelByRandom",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "levelProbability"
+            },
+            {
+              "paramType": "List<int>",
+              "paramName": "selectableLevels"
+            }
+          ],
+          "signature": "int GetMachineLevelByRandom(int levelProbability, List<int> selectableLevels)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMachineIDByTable",
+          "accessModifier": "public",
+          "returnType": "MachineGrade",
+          "parameters": [
+            {
+              "paramType": "double",
+              "paramName": "probability"
+            }
+          ],
+          "signature": "MachineGrade GetMachineIDByTable(double probability)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "makeAccumChances",
+          "accessModifier": "protected",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "List<int>",
+              "paramName": "selectableLevels"
+            }
+          ],
+          "signature": "bool makeAccumChances(List<int> selectableLevels)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetData",
+          "accessModifier": "public",
+          "returnType": "ITableData",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "tuningLevel"
+            }
+          ],
+          "signature": "ITableData GetData(int tuningLevel)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMax",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int GetMax()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "JsonToByte",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "path"
+            },
+            {
+              "paramType": "string",
+              "paramName": "json"
+            }
+          ],
+          "signature": "bool JsonToByte(string path, string json)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "LoadingPostProcess",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void LoadingPostProcess()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "DebugPrint",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DebugPrint()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void DebugPrint()",
+    "void PostProcess()",
+    "int GetMaxProbabilityValue()",
+    "int GetMaxProbabilityValue(List<int> selectedLevel)",
+    "int GetMachineLevelByRandom(int levelProbability, List<int> selectableLevels)",
+    "MachineGrade GetMachineIDByTable(double probability)",
+    "ITableData GetData(int tuningLevel)",
+    "int GetMax()",
+    "bool JsonToByte(string path, string json)",
+    "void LoadingPostProcess()",
+    "void DebugPrint()",
+    "void DebugPrint()",
+    "void PostProcess()",
+    "int GetMaxProbabilityValue()",
+    "int GetMaxProbabilityValue(List<int> selectedLevel)"
+  ],
+  "requires": [
+    "ITable",
+    "ITableData",
+    "ITableLoader"
+  ],
+  "tags": {
+    "major": [
+      "DataSync"
+    ],
+    "minor": [
+      "Find"
+    ]
+  },
+  "uses": [
+    "BoxSameMachineSelectTableData",
+    "Debug",
+    "File",
+    "ITable",
+    "ITableData",
+    "MessagePackSerializer",
+    "TuningLevel"
+  ],
+  "usedBy": []
+}

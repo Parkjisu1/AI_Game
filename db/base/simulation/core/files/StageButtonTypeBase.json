@@ -1,0 +1,357 @@
+{
+  "fileId": "StageButtonTypeBase",
+  "filePath": "Lobby\\StageButtonTypeBase.cs",
+  "namespace": "using",
+  "layer": "Core",
+  "genre": "Simulation",
+  "role": "Component",
+  "system": "Lobby",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI",
+    "FullSerializer",
+    "ResourcePath",
+    "GameUtils",
+    "Global_Define",
+    "UnityEngine.SceneManagement"
+  ],
+  "classes": [
+    {
+      "className": "StageButtonTypeBase",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [
+        "IApplySprite"
+      ],
+      "fields": [
+        {
+          "fieldName": "buttonImage",
+          "fieldType": "Image",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "star1",
+          "fieldType": "Image",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "star2",
+          "fieldType": "Image",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "star3",
+          "fieldType": "Image",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "missionBlock",
+          "fieldType": "Image",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "stageNumberText",
+          "fieldType": "Text",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "currentStageEffect",
+          "fieldType": "Image",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "activateStarSprite",
+          "fieldType": "Sprite",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "deActivateStarSprite",
+          "fieldType": "Sprite",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "stageClear",
+          "fieldType": "Sprite",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "stageHardClear",
+          "fieldType": "Sprite",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "stageNonClear",
+          "fieldType": "Sprite",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "stageHardNonClear",
+          "fieldType": "Sprite",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "stageNumber",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "currentClearStage",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "stage",
+          "fieldType": "StageTable",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Initialize",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "_stageNumber"
+            },
+            {
+              "paramType": "int",
+              "paramName": "_currentClearStage"
+            },
+            {
+              "paramType": "StageTable",
+              "paramName": "_stage"
+            },
+            {
+              "paramType": "Sprite",
+              "paramName": "_activateStarSprite"
+            },
+            {
+              "paramType": "Sprite",
+              "paramName": "_stageClear"
+            },
+            {
+              "paramType": "Sprite",
+              "paramName": "_stageHardClear"
+            },
+            {
+              "paramType": "Sprite",
+              "paramName": "_stageNonClear"
+            },
+            {
+              "paramType": "Sprite",
+              "paramName": "_stageHardNonClear"
+            }
+          ],
+          "signature": "void Initialize(int _stageNumber, int _currentClearStage, StageTable _stage, Sprite _activateStarSprite, Sprite _stageClear, Sprite _stageHardClear, Sprite _stageNonClear, Sprite _stageHardNonClear)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetApplySprite",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "ResourceNameTable",
+              "paramName": "_resourNameData"
+            }
+          ],
+          "signature": "void SetApplySprite(ResourceNameTable _resourNameData)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "OnClickStageButton",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickStageButton()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "GetLobbyMision",
+          "accessModifier": "private",
+          "returnType": "string",
+          "parameters": [
+            {
+              "paramType": "Goal",
+              "paramName": "goal"
+            }
+          ],
+          "signature": "string GetLobbyMision(Goal goal)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Initialize(int _stageNumber, int _currentClearStage, StageTable _stage, Sprite _activateStarSprite, Sprite _stageClear, Sprite _stageHardClear, Sprite _stageNonClear, Sprite _stageHardNonClear)",
+    "void SetApplySprite(ResourceNameTable _resourNameData)",
+    "void OnClickStageButton()"
+  ],
+  "requires": [
+    "IApplySprite",
+    "StageTable"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification",
+      "ResponseTrigger"
+    ],
+    "minor": [
+      "Assign",
+      "Find"
+    ]
+  },
+  "uses": [
+    "Box",
+    "CGameManager",
+    "CGameUtils",
+    "CSceneManager",
+    "CSoundManager",
+    "CSpriteManager",
+    "Chain2",
+    "CollectableBox",
+    "Contagion",
+    "DarkWing",
+    "Define",
+    "Honey2",
+    "Ice2",
+    "Instance",
+    "PlayerPrefs",
+    "RainbowWing",
+    "Sand1",
+    "Spread",
+    "Totem",
+    "YieldReturnCaching"
+  ],
+  "usedBy": []
+}

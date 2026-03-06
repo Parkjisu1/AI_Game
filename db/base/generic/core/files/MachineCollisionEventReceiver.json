@@ -1,0 +1,292 @@
+{
+  "fileId": "MachineCollisionEventReceiver",
+  "filePath": "MachineCollisionEventReceiver.cs",
+  "namespace": "",
+  "layer": "Core",
+  "genre": "Generic",
+  "role": "Component",
+  "system": "MachineCollisionEventReceiver",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "MachineCollisionEventReceiver",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "owner",
+          "fieldType": "Machine",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "collisionEventReceiver",
+          "fieldType": "CollisionEventReceiverBase",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "myCollider",
+          "fieldType": "Collider2D",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "startTriggerMode",
+          "fieldType": "bool",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "false"
+        },
+        {
+          "fieldName": "addForceValue",
+          "fieldType": "Vector2",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Init",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Machine",
+              "paramName": "owner"
+            }
+          ],
+          "signature": "void Init(Machine owner)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetOwner",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Machine",
+              "paramName": "owner"
+            }
+          ],
+          "signature": "void SetOwner(Machine owner)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "GetOwner",
+          "accessModifier": "public",
+          "returnType": "Machine",
+          "parameters": [],
+          "signature": "Machine GetOwner()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "SetColliderOnOff",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "b"
+            }
+          ],
+          "signature": "void SetColliderOnOff(bool b)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "GetColliderEnable",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool GetColliderEnable()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "OnCollisionEnter2D",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Collision2D",
+              "paramName": "collision"
+            }
+          ],
+          "signature": "void OnCollisionEnter2D(Collision2D collision)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnTriggerEnter2D",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Collider2D",
+              "paramName": "other"
+            }
+          ],
+          "signature": "void OnTriggerEnter2D(Collider2D other)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "sendDamage",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "ProductBase",
+              "paramName": "product"
+            },
+            {
+              "paramType": "Vector3",
+              "paramName": "collisitionPosition"
+            }
+          ],
+          "signature": "void sendDamage(ProductBase product, Vector3 collisitionPosition)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Update",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Update()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ChangeToTrigger",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void ChangeToTrigger()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Init(Machine owner)",
+    "void SetOwner(Machine owner)",
+    "Machine GetOwner()",
+    "void SetColliderOnOff(bool b)",
+    "bool GetColliderEnable()",
+    "void OnCollisionEnter2D(Collision2D collision)",
+    "void OnTriggerEnter2D(Collider2D other)",
+    "void Update()"
+  ],
+  "requires": [
+    "Collider2D",
+    "CollisionEventReceiverBase",
+    "Machine"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification",
+      "ResponseTrigger"
+    ],
+    "minor": [
+      "Assign",
+      "Find"
+    ]
+  },
+  "uses": [
+    "CollisionEventReceiverBase",
+    "LayerMask",
+    "ProductBase"
+  ],
+  "usedBy": []
+}

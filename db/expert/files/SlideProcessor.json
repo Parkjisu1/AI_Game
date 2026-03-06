@@ -1,0 +1,38 @@
+{
+  "fileId": "SlideProcessor",
+  "project": "DropTheCat",
+  "layer": "Domain",
+  "genre": "Puzzle",
+  "role": "Processor",
+  "phase": 2,
+  "namespace": "DropTheCat.Domain",
+  "className": "SlideProcessor",
+  "baseClass": "Singleton<SlideProcessor>",
+  "score": 0.6,
+  "provides": [
+    "void ProcessSlide(Vector2Int tileGridPos, SlideDirection direction)",
+    "bool CanSlide(Vector2Int tileGridPos, SlideDirection direction)",
+    "Vector2Int CalculateSlideTarget(Vector2Int fromPos, SlideDirection direction)",
+    "void UndoLastSlide()",
+    "bool IsProcessing { get; }",
+    "List<SlideRecord> GetMoveHistory()",
+    "void ClearHistory()",
+    "void RegisterTile(Vector2Int gridPos, TileController tile)",
+    "void UnregisterTile(Vector2Int gridPos)",
+    "void ClearTileMap()"
+  ],
+  "requires": [
+    "GridManager.GetCell/SetCellState/IsInBounds",
+    "TileController.SlideTo/CanSlide",
+    "ObstacleManager.CanSlideThrough",
+    "EventManager.Publish",
+    "SoundManager.PlaySFX"
+  ],
+  "definesTypes": ["SlideRecord (struct)"],
+  "tags": {
+    "major": ["FlowControl", "ConditionCheck", "StateControl"],
+    "minor": ["Calculate", "Validate", "Find", "Notify"]
+  },
+  "sourcePath": "E:\\AI\\projects\\DropTheCat\\output\\SlideProcessor.cs",
+  "timestamp": "2026-02-10T05:45:00Z"
+}

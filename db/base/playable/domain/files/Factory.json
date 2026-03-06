@@ -1,0 +1,115 @@
+{
+  "fileId": "Factory",
+  "filePath": "Factory.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Playable",
+  "role": "Factory",
+  "system": "Factory",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "Factory",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "_prefab",
+          "fieldType": "T",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "_initialAmount",
+          "fieldType": "int",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "_pool",
+          "fieldType": "Pool<T>",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "GetObjectFromPool",
+          "accessModifier": "public",
+          "returnType": "T",
+          "parameters": [],
+          "signature": "T GetObjectFromPool()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "ReturnObjectToPool",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "T",
+              "paramName": "obj"
+            }
+          ],
+          "signature": "void ReturnObjectToPool(T obj)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "T GetObjectFromPool()",
+    "void ReturnObjectToPool(T obj)"
+  ],
+  "requires": [
+    "Pool"
+  ],
+  "tags": {
+    "major": [],
+    "minor": [
+      "Find"
+    ]
+  },
+  "uses": [
+    "_pool"
+  ],
+  "usedBy": []
+}

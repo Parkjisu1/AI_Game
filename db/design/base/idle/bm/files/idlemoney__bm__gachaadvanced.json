@@ -1,0 +1,217 @@
+{
+  "designId": "idlemoney__bm__gachaadvanced",
+  "project": "IdleMoney",
+  "domain": "BM",
+  "genre": "Idle",
+  "system": "GachaAdvanced",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "table",
+  "balance_area": "gacha",
+  "source_file": "BoxAdvanced.json",
+  "table_stats": {
+    "row_count": 241,
+    "columns": [
+      "PurchaseCount",
+      "PurchaseDiamondCost",
+      "AcquiredExp",
+      "AcquiredMaterialMin",
+      "AcquiredMaterialMax",
+      "NewMachineSelectChance"
+    ],
+    "numeric_columns": [
+      "PurchaseCount",
+      "PurchaseDiamondCost",
+      "AcquiredExp",
+      "AcquiredMaterialMin",
+      "AcquiredMaterialMax",
+      "NewMachineSelectChance"
+    ],
+    "text_columns": []
+  },
+  "content": {
+    "summary": "GachaAdvanced 데이터 테이블 (241행, 6열)",
+    "parameters": {
+      "PurchaseCount": "0",
+      "PurchaseDiamondCost": "250",
+      "AcquiredExp": "4",
+      "AcquiredMaterialMin": "10",
+      "AcquiredMaterialMax": "10",
+      "NewMachineSelectChance": "1"
+    },
+    "balance_points": [
+      {
+        "variable": "PurchaseCount",
+        "min_value": 0,
+        "max_value": 240,
+        "avg_value": 120,
+        "growth_ratio": 240,
+        "data_points": 241,
+        "impact": "critical"
+      },
+      {
+        "variable": "NewMachineSelectChance",
+        "min_value": 0.2,
+        "max_value": 1,
+        "avg_value": 0.3,
+        "growth_ratio": 5,
+        "data_points": 241,
+        "impact": "medium"
+      }
+    ],
+    "edge_cases": [],
+    "references": []
+  },
+  "data": {
+    "_note": "Table truncated: 241 rows total. First 10 + last 5 shown.",
+    "_total_rows": 241,
+    "_columns": [
+      "PurchaseCount",
+      "PurchaseDiamondCost",
+      "AcquiredExp",
+      "AcquiredMaterialMin",
+      "AcquiredMaterialMax",
+      "NewMachineSelectChance"
+    ],
+    "sample_first": [
+      {
+        "PurchaseCount": "0",
+        "PurchaseDiamondCost": "250",
+        "AcquiredExp": "4",
+        "AcquiredMaterialMin": "10",
+        "AcquiredMaterialMax": "10",
+        "NewMachineSelectChance": "1"
+      },
+      {
+        "PurchaseCount": "1",
+        "PurchaseDiamondCost": "250",
+        "AcquiredExp": "4",
+        "AcquiredMaterialMin": "10",
+        "AcquiredMaterialMax": "10",
+        "NewMachineSelectChance": "1"
+      },
+      {
+        "PurchaseCount": "2",
+        "PurchaseDiamondCost": "250",
+        "AcquiredExp": "4",
+        "AcquiredMaterialMin": "10",
+        "AcquiredMaterialMax": "10",
+        "NewMachineSelectChance": "1"
+      },
+      {
+        "PurchaseCount": "3",
+        "PurchaseDiamondCost": "250",
+        "AcquiredExp": "4",
+        "AcquiredMaterialMin": "10",
+        "AcquiredMaterialMax": "10",
+        "NewMachineSelectChance": "0.2"
+      },
+      {
+        "PurchaseCount": "4",
+        "PurchaseDiamondCost": "250",
+        "AcquiredExp": "4",
+        "AcquiredMaterialMin": "10",
+        "AcquiredMaterialMax": "10",
+        "NewMachineSelectChance": "0.2"
+      },
+      {
+        "PurchaseCount": "5",
+        "PurchaseDiamondCost": "250",
+        "AcquiredExp": "4",
+        "AcquiredMaterialMin": "10",
+        "AcquiredMaterialMax": "10",
+        "NewMachineSelectChance": "0.2"
+      },
+      {
+        "PurchaseCount": "6",
+        "PurchaseDiamondCost": "250",
+        "AcquiredExp": "4",
+        "AcquiredMaterialMin": "10",
+        "AcquiredMaterialMax": "10",
+        "NewMachineSelectChance": "0.2"
+      },
+      {
+        "PurchaseCount": "7",
+        "PurchaseDiamondCost": "250",
+        "AcquiredExp": "4",
+        "AcquiredMaterialMin": "10",
+        "AcquiredMaterialMax": "10",
+        "NewMachineSelectChance": "0.2"
+      },
+      {
+        "PurchaseCount": "8",
+        "PurchaseDiamondCost": "250",
+        "AcquiredExp": "4",
+        "AcquiredMaterialMin": "10",
+        "AcquiredMaterialMax": "10",
+        "NewMachineSelectChance": "0.2"
+      },
+      {
+        "PurchaseCount": "9",
+        "PurchaseDiamondCost": "250",
+        "AcquiredExp": "4",
+        "AcquiredMaterialMin": "10",
+        "AcquiredMaterialMax": "10",
+        "NewMachineSelectChance": "0.2"
+      }
+    ],
+    "sample_last": [
+      {
+        "PurchaseCount": "236",
+        "PurchaseDiamondCost": "250",
+        "AcquiredExp": "4",
+        "AcquiredMaterialMin": "10",
+        "AcquiredMaterialMax": "10",
+        "NewMachineSelectChance": "1"
+      },
+      {
+        "PurchaseCount": "237",
+        "PurchaseDiamondCost": "250",
+        "AcquiredExp": "4",
+        "AcquiredMaterialMin": "10",
+        "AcquiredMaterialMax": "10",
+        "NewMachineSelectChance": "1"
+      },
+      {
+        "PurchaseCount": "238",
+        "PurchaseDiamondCost": "250",
+        "AcquiredExp": "4",
+        "AcquiredMaterialMin": "10",
+        "AcquiredMaterialMax": "10",
+        "NewMachineSelectChance": "1"
+      },
+      {
+        "PurchaseCount": "239",
+        "PurchaseDiamondCost": "250",
+        "AcquiredExp": "4",
+        "AcquiredMaterialMin": "10",
+        "AcquiredMaterialMax": "10",
+        "NewMachineSelectChance": "1"
+      },
+      {
+        "PurchaseCount": "240",
+        "PurchaseDiamondCost": "250",
+        "AcquiredExp": "4",
+        "AcquiredMaterialMin": "10",
+        "AcquiredMaterialMax": "10",
+        "NewMachineSelectChance": "1"
+      }
+    ]
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from BoxAdvanced.json (241 rows)",
+      "note": "Live game data import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T10:32:53.851Z"
+}

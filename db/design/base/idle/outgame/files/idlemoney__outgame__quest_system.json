@@ -1,0 +1,56 @@
+{
+  "designId": "idlemoney__outgame__quest_system",
+  "project": "IdleMoney",
+  "domain": "OutGame",
+  "genre": "Idle",
+  "system": "Quest System",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "flow",
+  "balance_area": "quest",
+  "source_file": "outgame_content_meta.yaml",
+  "content": {
+    "summary": "퀘스트 시스템. 3종 타입의 퀘스트를 병렬 수행.\n특정 제품을 목표 수량만큼 생산하면 보상 수령.",
+    "flow": [],
+    "parameters": {
+      "quest_types": [
+        {
+          "{ type": "0, name: \"Money Reward\", description: \"X개 생산 → 머니 보상\" }"
+        },
+        {
+          "{ type": "1, name: \"Change Quest\", description: \"퀘스트 교체 (비용 발생)\" }"
+        },
+        {
+          "{ type": "2, name: \"Diamond Reward\", description: \"X개 생산 → 다이아 보상\" }"
+        }
+      ],
+      "max_quest_slots": "GlobalConstants.MaxQuestNum",
+      "reward_multiplier": "1x 일반, 2x AD 시청",
+      "quest_data": [
+        "productID: 생산할 제품",
+        "neededCount: 목표 수량",
+        "rewardAmount: 보상 금액",
+        "waitTime: 대기 시간"
+      ],
+      "analytics": "AccomplishQuestMsg(factory, slot, type, amount)"
+    },
+    "edge_cases": [],
+    "references": []
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from C# analysis: Quest System",
+      "note": "Live game code analysis import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T11:08:17.020Z"
+}

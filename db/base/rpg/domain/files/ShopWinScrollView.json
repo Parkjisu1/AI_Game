@@ -1,0 +1,962 @@
+{
+  "fileId": "ShopWinScrollView",
+  "filePath": "UI\\ShopWinScrollView.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Rpg",
+  "role": "Context",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "System",
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "EasingCore",
+    "FancyScrollView"
+  ],
+  "classes": [
+    {
+      "className": "ShopWinScrollContext",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "FancyScrollRectContext",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "SelectedIndex",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "-1"
+        },
+        {
+          "fieldName": "OnCellClicked",
+          "fieldType": "Action<int>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "GetTutorialFirstElement",
+          "accessModifier": "public",
+          "returnType": "ShopBuyComponent",
+          "parameters": [],
+          "signature": "ShopBuyComponent GetTutorialFirstElement()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "RefreshPackageComponentInfo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void RefreshPackageComponentInfo()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "RefreshMachineComponentInfo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void RefreshMachineComponentInfo()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "RefreshCostsStatus",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "UserInfo",
+              "paramName": "userInfo"
+            }
+          ],
+          "signature": "void RefreshCostsStatus(UserInfo userInfo)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnCellClicked",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Action<int>",
+              "paramName": "callback"
+            }
+          ],
+          "signature": "void OnCellClicked(Action<int> callback)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateData",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "IList<ShopWinScrollItemData>",
+              "paramName": "items"
+            }
+          ],
+          "signature": "void UpdateData(IList<ShopWinScrollItemData> items)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "ScrollTo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "index"
+            },
+            {
+              "paramType": "float",
+              "paramName": "duration"
+            },
+            {
+              "paramType": "Ease",
+              "paramName": "easing"
+            },
+            {
+              "paramType": "Alignment alignment =",
+              "paramName": "Alignment.Middle"
+            }
+          ],
+          "signature": "void ScrollTo(int index, float duration, Ease easing, Alignment alignment = Alignment.Middle)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "JumpTo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "index"
+            },
+            {
+              "paramType": "Alignment alignment =",
+              "paramName": "Alignment.Middle"
+            }
+          ],
+          "signature": "void JumpTo(int index, Alignment alignment = Alignment.Middle)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateSelection",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "index"
+            }
+          ],
+          "signature": "void UpdateSelection(int index)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "ResizePool",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "firstPosition"
+            }
+          ],
+          "signature": "void ResizePool(float firstPosition)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetScrollerPosition",
+          "accessModifier": "public",
+          "returnType": "float",
+          "parameters": [],
+          "signature": "float GetScrollerPosition()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "SetScrollOnOff",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "b"
+            }
+          ],
+          "signature": "void SetScrollOnOff(bool b)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetMessageController",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "IMessageController<GameModeMain>",
+              "paramName": "messageController"
+            }
+          ],
+          "signature": "void SetMessageController(IMessageController<GameModeMain> messageController)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        }
+      ]
+    },
+    {
+      "className": "ShopWinScrollItemData",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "TableID",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "GetTutorialFirstElement",
+          "accessModifier": "public",
+          "returnType": "ShopBuyComponent",
+          "parameters": [],
+          "signature": "ShopBuyComponent GetTutorialFirstElement()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "RefreshPackageComponentInfo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void RefreshPackageComponentInfo()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "RefreshMachineComponentInfo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void RefreshMachineComponentInfo()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "RefreshCostsStatus",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "UserInfo",
+              "paramName": "userInfo"
+            }
+          ],
+          "signature": "void RefreshCostsStatus(UserInfo userInfo)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnCellClicked",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Action<int>",
+              "paramName": "callback"
+            }
+          ],
+          "signature": "void OnCellClicked(Action<int> callback)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateData",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "IList<ShopWinScrollItemData>",
+              "paramName": "items"
+            }
+          ],
+          "signature": "void UpdateData(IList<ShopWinScrollItemData> items)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "ScrollTo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "index"
+            },
+            {
+              "paramType": "float",
+              "paramName": "duration"
+            },
+            {
+              "paramType": "Ease",
+              "paramName": "easing"
+            },
+            {
+              "paramType": "Alignment alignment =",
+              "paramName": "Alignment.Middle"
+            }
+          ],
+          "signature": "void ScrollTo(int index, float duration, Ease easing, Alignment alignment = Alignment.Middle)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "JumpTo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "index"
+            },
+            {
+              "paramType": "Alignment alignment =",
+              "paramName": "Alignment.Middle"
+            }
+          ],
+          "signature": "void JumpTo(int index, Alignment alignment = Alignment.Middle)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateSelection",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "index"
+            }
+          ],
+          "signature": "void UpdateSelection(int index)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "ResizePool",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "firstPosition"
+            }
+          ],
+          "signature": "void ResizePool(float firstPosition)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetScrollerPosition",
+          "accessModifier": "public",
+          "returnType": "float",
+          "parameters": [],
+          "signature": "float GetScrollerPosition()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "SetScrollOnOff",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "b"
+            }
+          ],
+          "signature": "void SetScrollOnOff(bool b)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetMessageController",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "IMessageController<GameModeMain>",
+              "paramName": "messageController"
+            }
+          ],
+          "signature": "void SetMessageController(IMessageController<GameModeMain> messageController)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        }
+      ]
+    },
+    {
+      "className": "ShopWinScrollView",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "FancyScrollRect<ShopWinScrollItemData",
+      "interfaces": [
+        "IMessagePort<GameModeMain>"
+      ],
+      "fields": [
+        {
+          "fieldName": "modeMsgController",
+          "fieldType": "IMessageController<GameModeMain>",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": true,
+          "initialValue": null
+        },
+        {
+          "fieldName": "mainInjector",
+          "fieldType": "Injector",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": true,
+          "initialValue": null
+        },
+        {
+          "fieldName": "CellSize",
+          "fieldType": "override float",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "> cellSize"
+        },
+        {
+          "fieldName": "CellPrefab",
+          "fieldType": "override GameObject",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "> cellPrefab"
+        },
+        {
+          "fieldName": "scroller",
+          "fieldType": "Scroller",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "default"
+        },
+        {
+          "fieldName": "scrolling",
+          "fieldType": "bool",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "DataCount",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "> ItemsSource.Count"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "GetTutorialFirstElement",
+          "accessModifier": "public",
+          "returnType": "ShopBuyComponent",
+          "parameters": [],
+          "signature": "ShopBuyComponent GetTutorialFirstElement()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "RefreshPackageComponentInfo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void RefreshPackageComponentInfo()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "RefreshMachineComponentInfo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void RefreshMachineComponentInfo()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "RefreshCostsStatus",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "UserInfo",
+              "paramName": "userInfo"
+            }
+          ],
+          "signature": "void RefreshCostsStatus(UserInfo userInfo)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnCellClicked",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Action<int>",
+              "paramName": "callback"
+            }
+          ],
+          "signature": "void OnCellClicked(Action<int> callback)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateData",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "IList<ShopWinScrollItemData>",
+              "paramName": "items"
+            }
+          ],
+          "signature": "void UpdateData(IList<ShopWinScrollItemData> items)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "ScrollTo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "index"
+            },
+            {
+              "paramType": "float",
+              "paramName": "duration"
+            },
+            {
+              "paramType": "Ease",
+              "paramName": "easing"
+            },
+            {
+              "paramType": "Alignment alignment =",
+              "paramName": "Alignment.Middle"
+            }
+          ],
+          "signature": "void ScrollTo(int index, float duration, Ease easing, Alignment alignment = Alignment.Middle)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "JumpTo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "index"
+            },
+            {
+              "paramType": "Alignment alignment =",
+              "paramName": "Alignment.Middle"
+            }
+          ],
+          "signature": "void JumpTo(int index, Alignment alignment = Alignment.Middle)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateSelection",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "index"
+            }
+          ],
+          "signature": "void UpdateSelection(int index)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "ResizePool",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "firstPosition"
+            }
+          ],
+          "signature": "void ResizePool(float firstPosition)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetScrollerPosition",
+          "accessModifier": "public",
+          "returnType": "float",
+          "parameters": [],
+          "signature": "float GetScrollerPosition()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "SetScrollOnOff",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "b"
+            }
+          ],
+          "signature": "void SetScrollOnOff(bool b)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetMessageController",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "IMessageController<GameModeMain>",
+              "paramName": "messageController"
+            }
+          ],
+          "signature": "void SetMessageController(IMessageController<GameModeMain> messageController)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "ShopBuyComponent GetTutorialFirstElement()",
+    "void RefreshPackageComponentInfo()",
+    "void RefreshMachineComponentInfo()",
+    "void RefreshCostsStatus(UserInfo userInfo)",
+    "void OnCellClicked(Action<int> callback)",
+    "void UpdateData(IList<ShopWinScrollItemData> items)",
+    "void ScrollTo(int index, float duration, Ease easing, Alignment alignment = Alignment.Middle)",
+    "void JumpTo(int index, Alignment alignment = Alignment.Middle)",
+    "float GetScrollerPosition()",
+    "void SetScrollOnOff(bool b)",
+    "void SetMessageController(IMessageController<GameModeMain> messageController)",
+    "ShopBuyComponent GetTutorialFirstElement()",
+    "void RefreshPackageComponentInfo()",
+    "void RefreshMachineComponentInfo()",
+    "void RefreshCostsStatus(UserInfo userInfo)"
+  ],
+  "requires": [
+    "FancyScrollRect",
+    "FancyScrollRectContext",
+    "GameModeMain",
+    "IMessageController",
+    "IMessagePort",
+    "Injector",
+    "Scroller",
+    "ShopBuyChildComponentBase",
+    "ShopBuyComponent"
+  ],
+  "tags": {
+    "major": [
+      "DataSync",
+      "ValueModification",
+      "ResponseTrigger"
+    ],
+    "minor": [
+      "Find",
+      "Assign"
+    ]
+  },
+  "uses": [
+    "Addressables",
+    "Debug",
+    "FancyCell",
+    "FancyScrollRect",
+    "FancyScrollRectContext",
+    "GameModeMain",
+    "GetAlignment",
+    "Mathf",
+    "MissingComponentException",
+    "RefreshShopMachineBuyComponentMsg",
+    "RefreshShopPackageBuyComponentMsg",
+    "ShopBuyChildComponentBase",
+    "ShopBuyComponent",
+    "ShopWinScrollItemData"
+  ],
+  "usedBy": []
+}

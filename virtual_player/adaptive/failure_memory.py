@@ -1,5 +1,5 @@
 """
-Failure Memory — Failed Action Tracking
+Failure Memory -- Failed Action Tracking
 =========================================
 Persistent memory of failed actions to avoid repeating mistakes.
 Records failures per (screen_type, action_name, coords) tuple and
@@ -28,7 +28,7 @@ class FailureRecord:
 class FailureMemory:
     """Persistent memory of failed actions to avoid repeating mistakes."""
 
-    COORD_TOLERANCE = 40    # pixels — treat as same location
+    COORD_TOLERANCE = 40    # pixels -- treat as same location
     EXPIRY_HOURS = 24       # forget after 24 hours
     MIN_FAILURES = 2        # mark as known-bad after 2 failures
 
@@ -77,7 +77,7 @@ class FailureMemory:
         action_name: str,
         coords: Tuple[int, int],
     ) -> None:
-        """Record success — reduce failure count, remove if zeroed."""
+        """Record success -- reduce failure count, remove if zeroed."""
         existing = self._find_record(screen_type, action_name, coords)
         if existing:
             existing.count = max(0, existing.count - 1)

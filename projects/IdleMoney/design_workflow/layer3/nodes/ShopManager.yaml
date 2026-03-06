@@ -1,0 +1,96 @@
+metadata:
+  nodeId: "ShopManager"
+  version: "1.0.0"
+  phase: 2
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "CurrencyManager"
+    - "IAPManager"
+    - "GachaManager"
+    - "DataManager"
+    - "EventManager"
+  external:
+    - "UnityEngine.MonoBehaviour"
+    - "System.Collections.Generic"
+
+contract:
+  provides:
+    - "shop_display"
+    - "purchase_flow"
+    - "tab_management"
+  requires:
+    - "currency_system"
+    - "iap_manager"
+    - "gacha_manager"
+    - "data_table"
+
+tags:
+  layer: "Domain"
+  genre: "Idle"
+  role: "Manager"
+  system: "ShopSystem"
+  majorFunctions:
+    - "StateControl"
+    - "ConditionCheck"
+    - "ResourceTransfer"
+    - "DataSync"
+  minorFunctions:
+    - "Validate"
+    - "Find"
+    - "Assign"
+    - "Notify"
+    - "Iterate"
+
+logicFlow:
+  - step: 1
+    tag: "StateControl.Assign"
+    action: "OpenShop: 상점 팝업 활성화, 기본 탭(Machine) 선택 상태로 초기화"
+    next: 2
+  - step: 2
+    tag: "FlowControl.Assign"
+    action: "SelectTab: 4개 탭(Machine/Package/Diamond/Etc) 중 선택된 탭 인덱스 저장, 탭 UI 갱신"
+    next: 3
+  - step: 3
+    tag: "DataSync.Iterate"
+    action: "DisplayItems: ShopItemTable[tabId] 순회하여 현재 탭 아이템 목록 바인딩, 보유 통화 기반 구매 가능 여부 표시"
+    next: 4
+  - step: 4
+    tag: "ConditionCheck.Validate"
+    action: "OnBuy.ValidateBalance: 선택 아이템 비용 타입(머니/다이아/IAP) 확인 후 CurrencyManager 잔액 검증"
+    next: 5
+  - step: 5
+    tag: "ResourceTransfer.Assign"
+    action: "ExecutePurchase: 검증 통과 후 비용 차감(소프트/하드) 또는 IAPManager 결제 플로우 호출"
+    next: 6
+  - step: 6
+    tag: "ResourceTransfer.Assign"
+    action: "GiveReward: ShopRewardTable[itemId] 기반 보상 지급, GachaManager 호출(머신 탭인 경우)"
+    next: 7
+  - step: 7
+    tag: "DataSync.Notify"
+    action: "LogAnalytics: 구매 이벤트 Analytics 로깅(itemId, price, currency), UI 재바인딩 이벤트 발행"
+    next: 2
+
+referencePatterns:
+  - source: "idlemoney__bm__store_diamond"
+    pattern: "다이아 탭 아이템 구성 및 IAP 연동 플로우"
+  - source: "idlemoney__bm__store_package"
+    pattern: "패키지 탭 구성 및 시간 제한 패키지 표시 조건"
+  - source: "idlemoney__bm__store_etc"
+    pattern: "기타 탭 아이템 구성 및 소프트/하드 통화 혼합 구매"
+
+codeHints:
+  patterns:
+    - "SerializeField for Inspector"
+    - "MessagePack serialization"
+    - "DontDestroyOnLoad singleton"
+    - "Enum for ShopTab (Machine/Package/Diamond/Etc)"
+    - "IAPManager wrapper for Unity IAP integration"
+  avoidPatterns:
+    - "Find/FindObjectOfType for UI"
+    - "dynamic UI creation"
+    - "hardcoded magic numbers"
+    - "Direct Unity IAP calls without IAPManager wrapper"

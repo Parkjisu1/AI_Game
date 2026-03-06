@@ -1,0 +1,361 @@
+{
+  "fileId": "GameEventController",
+  "filePath": "GameEventController.cs",
+  "namespace": "",
+  "layer": "Core",
+  "genre": "Tycoon",
+  "role": "Controller",
+  "system": "GameEventController",
+  "score": 0.4,
+  "usings": [
+    "System",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "GameEventController",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "runningEvents",
+          "fieldType": "List<IEventDuringController>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<IEventDuringController>()"
+        },
+        {
+          "fieldName": "coolTimeEvents",
+          "fieldType": "List<EventInterval>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<EventInterval>()"
+        },
+        {
+          "fieldName": "eventControllers",
+          "fieldType": "Dictionary<GameEvent, List<IEventDuringController>>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Dictionary<GameEvent, List<IEventDuringController>>()"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "LoadSavedData",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "UserInfo",
+              "paramName": "userInfo"
+            }
+          ],
+          "signature": "void LoadSavedData(UserInfo userInfo)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "GetRunningEvent",
+          "accessModifier": "public",
+          "returnType": "IEventDuringController",
+          "parameters": [
+            {
+              "paramType": "GameEvent",
+              "paramName": "eventType"
+            },
+            {
+              "paramType": "int",
+              "paramName": "factoryIndex"
+            }
+          ],
+          "signature": "IEventDuringController GetRunningEvent(GameEvent eventType, int factoryIndex)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "Register",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "EventInterval",
+              "paramName": "coolTime"
+            },
+            {
+              "paramType": "IEventDuringController",
+              "paramName": "runningController"
+            }
+          ],
+          "signature": "bool Register(EventInterval coolTime, IEventDuringController runningController)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "UnRegister",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "GameEvent",
+              "paramName": "type"
+            },
+            {
+              "paramType": "int",
+              "paramName": "factoryIndex"
+            }
+          ],
+          "signature": "bool UnRegister(GameEvent type, int factoryIndex)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "StartAll",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void StartAll()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "StartCoolTime",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "GameEvent",
+              "paramName": "eventType"
+            },
+            {
+              "paramType": "int",
+              "paramName": "factoryIndex"
+            }
+          ],
+          "signature": "void StartCoolTime(GameEvent eventType, int factoryIndex)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "StopCoolTime",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "GameEvent",
+              "paramName": "eventType"
+            },
+            {
+              "paramType": "int",
+              "paramName": "factoryIndex"
+            }
+          ],
+          "signature": "void StopCoolTime(GameEvent eventType, int factoryIndex)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "StartEvent",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "GameEvent",
+              "paramName": "eventType"
+            },
+            {
+              "paramType": "int",
+              "paramName": "factoryIndex"
+            },
+            {
+              "paramType": "float lifeTime =",
+              "paramName": "GlobalConstants.InvalidTimeSec"
+            }
+          ],
+          "signature": "bool StartEvent(GameEvent eventType, int factoryIndex, float lifeTime = GlobalConstants.InvalidTimeSec)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "FinishEvent",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "GameEvent",
+              "paramName": "eventType"
+            },
+            {
+              "paramType": "int",
+              "paramName": "factoryIndex"
+            }
+          ],
+          "signature": "void FinishEvent(GameEvent eventType, int factoryIndex)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetEventInterval",
+          "accessModifier": "protected",
+          "returnType": "EventInterval",
+          "parameters": [
+            {
+              "paramType": "GameEvent",
+              "paramName": "eventType"
+            },
+            {
+              "paramType": "int",
+              "paramName": "factoryIndex"
+            }
+          ],
+          "signature": "EventInterval GetEventInterval(GameEvent eventType, int factoryIndex)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetEvent",
+          "accessModifier": "protected",
+          "returnType": "IEventDuringController",
+          "parameters": [
+            {
+              "paramType": "GameEvent",
+              "paramName": "eventType"
+            },
+            {
+              "paramType": "int",
+              "paramName": "factoryIndex"
+            }
+          ],
+          "signature": "IEventDuringController GetEvent(GameEvent eventType, int factoryIndex)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "UpdateLogic",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "UserInfo",
+              "paramName": "userInfo"
+            },
+            {
+              "paramType": "float",
+              "paramName": "deltaTime"
+            }
+          ],
+          "signature": "void UpdateLogic(UserInfo userInfo, float deltaTime)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void LoadSavedData(UserInfo userInfo)",
+    "IEventDuringController GetRunningEvent(GameEvent eventType, int factoryIndex)",
+    "bool Register(EventInterval coolTime, IEventDuringController runningController)",
+    "bool UnRegister(GameEvent type, int factoryIndex)",
+    "void StartAll()",
+    "void StartCoolTime(GameEvent eventType, int factoryIndex)",
+    "void StopCoolTime(GameEvent eventType, int factoryIndex)",
+    "bool StartEvent(GameEvent eventType, int factoryIndex, float lifeTime = GlobalConstants.InvalidTimeSec)",
+    "void FinishEvent(GameEvent eventType, int factoryIndex)",
+    "void UpdateLogic(UserInfo userInfo, float deltaTime)"
+  ],
+  "requires": [],
+  "tags": {
+    "major": [
+      "StateControl",
+      "DataSync"
+    ],
+    "minor": [
+      "Find"
+    ]
+  },
+  "uses": [
+    "Debug",
+    "EventInterval",
+    "GameEvent",
+    "IEventDuringController"
+  ],
+  "usedBy": []
+}

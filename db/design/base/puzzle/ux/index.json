@@ -1,0 +1,48 @@
+[
+  {
+    "designId": "carmatch__ux__ui_layout",
+    "domain": "Ux",
+    "genre": "Puzzle",
+    "system": "UI Layout",
+    "score": 0.4,
+    "source": "observed",
+    "data_type": "spec",
+    "balance_area": "user_experience",
+    "version": "1.0.0",
+    "project": "CarMatch",
+    "provides": [
+      "screen_layout",
+      "navigation_system",
+      "ui_structure"
+    ],
+    "requires": [],
+    "tags": [
+      "ux",
+      "ui",
+      "navigation",
+      "layout",
+      "puzzle"
+    ]
+  },
+  {
+    "designId": "carmatch__ux__auto",
+    "domain": "UX",
+    "genre": "Puzzle",
+    "system": "Auto-detected UX parameters",
+    "score": 0.4,
+    "source": "observed",
+    "data_type": "spec",
+    "balance_area": "ux",
+    "version": "1.0.0",
+    "project": "Carmatch",
+    "provides": [
+      "ux_params"
+    ],
+    "requires": [],
+    "tags": [
+      "puzzle",
+      "ux",
+      "auto_detected"
+    ]
+  }
+]

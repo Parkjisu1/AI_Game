@@ -1,5 +1,5 @@
 """
-SLGSchema — Strategy (SLG) Genre Configuration
+SLGSchema -- Strategy (SLG) Genre Configuration
 ================================================
 Concepts, ROIs, goals, actions, and interrupt rules for SLG / 4X Strategy games.
 Focus: resource gathering, troop training, territory expansion, base defense.

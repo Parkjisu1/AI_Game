@@ -1,0 +1,311 @@
+{
+  "fileId": "PackageBuyComponent",
+  "filePath": "UI\\PackageBuyComponent.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Tycoon",
+  "role": "Component",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI",
+    "TMPro"
+  ],
+  "classes": [
+    {
+      "className": "PackageBuyComponent",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "ShopBuyChildComponentBase",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "titleTxt",
+          "fieldType": "LanguageText",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "componentBGImg",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "packageImg",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "packageImgRect",
+          "fieldType": "RectTransform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "valueTxt",
+          "fieldType": "LanguageText",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "costTxt",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "price",
+          "fieldType": "string",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "remainTime",
+          "fieldType": "string",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "productID",
+          "fieldType": "string",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "tableID",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "SetData",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "StorePackageTableData",
+              "paramName": "data"
+            },
+            {
+              "paramType": "ResourceAllocator",
+              "paramName": "resourceAllocator"
+            }
+          ],
+          "signature": "void SetData(StorePackageTableData data, ResourceAllocator resourceAllocator)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetData",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "ShopGoodsAmountIcon",
+              "paramName": "icon"
+            },
+            {
+              "paramType": "ResourceAllocator",
+              "paramName": "resourceAllocator"
+            },
+            {
+              "paramType": "RewardType",
+              "paramName": "rewardType"
+            },
+            {
+              "paramType": "int",
+              "paramName": "rewardAmount"
+            }
+          ],
+          "signature": "void SetData(ShopGoodsAmountIcon icon, ResourceAllocator resourceAllocator,\r\n                            RewardType rewardType, int rewardAmount)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetMarketInfo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "price"
+            },
+            {
+              "paramType": "string",
+              "paramName": "remainTime"
+            }
+          ],
+          "signature": "void SetMarketInfo(string price, string remainTime)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "Refresh",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Refresh()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "MakeInvalid",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void MakeInvalid()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "RefreshCost",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "UserInfo",
+              "paramName": "userInfo"
+            }
+          ],
+          "signature": "void RefreshCost(UserInfo userInfo)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnClickBuy",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickBuy()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void SetData(StorePackageTableData data, ResourceAllocator resourceAllocator)",
+    "void SetMarketInfo(string price, string remainTime)",
+    "void Refresh()",
+    "void MakeInvalid()",
+    "void RefreshCost(UserInfo userInfo)",
+    "void OnClickBuy()"
+  ],
+  "requires": [
+    "LanguageText",
+    "ShopBuyChildComponentBase",
+    "TextMeshProUGUI"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification",
+      "DataSync",
+      "ResponseTrigger"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "MyPlugins",
+    "OpenPackageDetailInfoWinMsg",
+    "ShopBuyChildComponentBase"
+  ],
+  "usedBy": []
+}

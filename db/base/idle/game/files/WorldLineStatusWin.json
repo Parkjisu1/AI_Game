@@ -1,0 +1,479 @@
+{
+  "fileId": "WorldLineStatusWin",
+  "filePath": "UI\\WorldSpaceUI\\WorldLineStatusWin.cs",
+  "namespace": "",
+  "layer": "Game",
+  "genre": "Idle",
+  "role": "View",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI",
+    "TMPro",
+    "DG.Tweening"
+  ],
+  "classes": [
+    {
+      "className": "WorldLineStatusWin",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "WorldSpaceWindowBase",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "regularRewardNode",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "idleCashNode",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "effects",
+          "fieldType": "GOEffectParticleHandler[]",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "idleCashRewardCoolImg",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "idleCashRewardTxt",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "timeGaugeSlider",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "timeGaugeSliderImg",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "timeGaugeRemainTimeTxt",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "timeGaugeProfitTxt",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "rewardIconImg",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "reddotNotification",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "rewardAmountTxt",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "worldFactorySlot",
+          "fieldType": "WorldSlot",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "userInfo",
+          "fieldType": "UserInfo",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "calculator",
+          "fieldType": "GameStatCalculator",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "regularRewardCoolTime",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "idleCashCoolTime",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "idleCashFactor",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "GetWorldFactoryID",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int GetWorldFactoryID()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "SetData",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "UserInfo",
+              "paramName": "userInfo"
+            },
+            {
+              "paramType": "GameStatCalculator",
+              "paramName": "gameStatCalculator"
+            },
+            {
+              "paramType": "WorldSlot",
+              "paramName": "worldFactorySlot"
+            },
+            {
+              "paramType": "float",
+              "paramName": "idleCashCoolTime"
+            },
+            {
+              "paramType": "float",
+              "paramName": "idleCashFactor"
+            }
+          ],
+          "signature": "void SetData(UserInfo userInfo, GameStatCalculator gameStatCalculator, WorldSlot worldFactorySlot, float idleCashCoolTime, float idleCashFactor)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetRegularRewardInfo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "long",
+              "paramName": "startTime"
+            },
+            {
+              "paramType": "float",
+              "paramName": "coolTime"
+            },
+            {
+              "paramType": "RewardType",
+              "paramName": "rewardType"
+            },
+            {
+              "paramType": "double",
+              "paramName": "amount"
+            }
+          ],
+          "signature": "void SetRegularRewardInfo(long startTime, float coolTime, RewardType rewardType, double amount)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "refreshTime",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void refreshTime()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "refreshIdleCashTime",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void refreshIdleCashTime()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "receiveIdleCash",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void receiveIdleCash()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "refreshIdleCashRewardText",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void refreshIdleCashRewardText()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetData",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "long",
+              "paramName": "remainTime"
+            },
+            {
+              "paramType": "long",
+              "paramName": "totalTime"
+            },
+            {
+              "paramType": "double",
+              "paramName": "profit"
+            },
+            {
+              "paramType": "int",
+              "paramName": "machineCount"
+            }
+          ],
+          "signature": "void SetData(long remainTime, long totalTime, double profit, int machineCount)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "Update",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Update()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnClick",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClick()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "GetIdleCashNode",
+          "accessModifier": "public",
+          "returnType": "Transform",
+          "parameters": [],
+          "signature": "Transform GetIdleCashNode()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "int GetWorldFactoryID()",
+    "void SetData(UserInfo userInfo, GameStatCalculator gameStatCalculator, WorldSlot worldFactorySlot, float idleCashCoolTime, float idleCashFactor)",
+    "void SetRegularRewardInfo(long startTime, float coolTime, RewardType rewardType, double amount)",
+    "void SetData(long remainTime, long totalTime, double profit, int machineCount)",
+    "void Update()",
+    "void OnClick()",
+    "Transform GetIdleCashNode()"
+  ],
+  "requires": [
+    "GOEffectParticleHandler",
+    "TextMeshProUGUI",
+    "UserInfo",
+    "WorldSlot",
+    "WorldSpaceWindowBase"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification",
+      "ResponseTrigger"
+    ],
+    "minor": [
+      "Assign",
+      "Find"
+    ]
+  },
+  "uses": [
+    "AddUserMoneyMsg",
+    "CurrencyConverter",
+    "GlobalConstants",
+    "Holder",
+    "ReceiveRegularRewardMsg",
+    "StringUtils",
+    "System",
+    "WorldSpaceWindowBase"
+  ],
+  "usedBy": []
+}

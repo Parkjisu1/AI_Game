@@ -1,0 +1,122 @@
+{
+  "designId": "idlemoney__ux__localization_zh",
+  "project": "IdleMoney",
+  "domain": "UX",
+  "genre": "Idle",
+  "system": "Localization_ZH",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "config",
+  "balance_area": "text",
+  "source_file": "Language_ChineseTraditional.json",
+  "table_stats": {
+    "row_count": 897,
+    "columns": [
+      "TextID",
+      "Message"
+    ],
+    "numeric_columns": [],
+    "text_columns": [
+      "TextID",
+      "Message"
+    ]
+  },
+  "content": {
+    "summary": "Localization_ZH 데이터 테이블 (897행, 2열)",
+    "parameters": {
+      "TextID": "Product_Name_0_0",
+      "Message": "碗"
+    },
+    "balance_points": [],
+    "edge_cases": [],
+    "references": []
+  },
+  "data": {
+    "_note": "Table truncated: 897 rows total. First 10 + last 5 shown.",
+    "_total_rows": 897,
+    "_columns": [
+      "TextID",
+      "Message"
+    ],
+    "sample_first": [
+      {
+        "TextID": "Product_Name_0_0",
+        "Message": "碗"
+      },
+      {
+        "TextID": "Product_Name_0_1",
+        "Message": "鹽瓶"
+      },
+      {
+        "TextID": "Product_Name_0_2",
+        "Message": "水壺"
+      },
+      {
+        "TextID": "Product_Name_0_3",
+        "Message": "馬克杯"
+      },
+      {
+        "TextID": "Product_Name_0_4",
+        "Message": "茶杯"
+      },
+      {
+        "TextID": "Product_Name_0_5",
+        "Message": "咖啡機"
+      },
+      {
+        "TextID": "Product_Name_1_0",
+        "Message": "檯燈"
+      },
+      {
+        "TextID": "Product_Name_1_1",
+        "Message": "桌子"
+      },
+      {
+        "TextID": "Product_Name_1_2",
+        "Message": "椅子"
+      },
+      {
+        "TextID": "Product_Name_1_3",
+        "Message": "木製抽屜"
+      }
+    ],
+    "sample_last": [
+      {
+        "TextID": "Special_Dungeon_Special_Reward",
+        "Message": "特殊補償"
+      },
+      {
+        "TextID": "Guide_Win_Loopy_Mine",
+        "Message": "盧比銅礦"
+      },
+      {
+        "TextID": "Guide_Win_Loopy_Mine_Info",
+        "Message": "是可以獲得盧比硬幣的地方！\n請儘可能多地破壞產品，獲得盧比幣!"
+      },
+      {
+        "TextID": "Guide_Win_Lab",
+        "Message": "研究所"
+      },
+      {
+        "TextID": "Guide_Win_Lab_Info",
+        "Message": "可以永久地取得研究效果！\n取得研究效果，獲得更多收益吧！"
+      }
+    ]
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from Language_ChineseTraditional.json (897 rows)",
+      "note": "Live game data import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T10:32:53.960Z"
+}

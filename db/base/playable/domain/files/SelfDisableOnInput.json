@@ -1,0 +1,99 @@
+{
+  "fileId": "SelfDisableOnInput",
+  "filePath": "UI\\SelfDisableOnInput.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Playable",
+  "role": "Component",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine",
+    "System.Collections"
+  ],
+  "classes": [
+    {
+      "className": "SelfDisableOnInput",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "duration",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "hasInputReceived",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Update",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Update()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "DisableAfterDelay",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "delay"
+            }
+          ],
+          "signature": "IEnumerator DisableAfterDelay(float delay)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": "StateControl",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [],
+  "requires": [],
+  "tags": {
+    "major": [
+      "StateControl"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "Input",
+    "WaitForSeconds"
+  ],
+  "usedBy": []
+}

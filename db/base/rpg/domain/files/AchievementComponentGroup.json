@@ -1,0 +1,223 @@
+{
+  "fileId": "AchievementComponentGroup",
+  "filePath": "UI\\AchievementComponentGroup.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Rpg",
+  "role": "Message",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "FancyScrollView"
+  ],
+  "classes": [
+    {
+      "className": "AchievementComponentGroup",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "FancyScrollRectCell<AchievementComponentScrollItemData",
+      "interfaces": [
+        "IMessagePort<GameModeMain>"
+      ],
+      "fields": [
+        {
+          "fieldName": "achievements",
+          "fieldType": "List<AchievementComponent>",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "new List<AchievementComponent>()"
+        },
+        {
+          "fieldName": "modeMsgController",
+          "fieldType": "IMessageController<GameModeMain>",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": true,
+          "initialValue": null
+        },
+        {
+          "fieldName": "data",
+          "fieldType": "AchievementComponentScrollItemData",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "scroller",
+          "fieldType": "Scroller",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "default"
+        },
+        {
+          "fieldName": "component",
+          "fieldType": "AchievementComponent",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "achievementID",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Initialize",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Initialize()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateContent",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "AchievementComponentScrollItemData",
+              "paramName": "itemData"
+            }
+          ],
+          "signature": "void UpdateContent(AchievementComponentScrollItemData itemData)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnClickRewardButton",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "AchievementComponent",
+              "paramName": "component"
+            },
+            {
+              "paramType": "int",
+              "paramName": "achievementID"
+            }
+          ],
+          "signature": "void OnClickRewardButton(AchievementComponent component, int achievementID)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "onclickReward",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void onclickReward()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetMessageController",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "IMessageController<GameModeMain>",
+              "paramName": "messageController"
+            }
+          ],
+          "signature": "void SetMessageController(IMessageController<GameModeMain> messageController)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Initialize()",
+    "void UpdateContent(AchievementComponentScrollItemData itemData)",
+    "void OnClickRewardButton(AchievementComponent component, int achievementID)",
+    "void SetMessageController(IMessageController<GameModeMain> messageController)"
+  ],
+  "requires": [
+    "AchievementComponent",
+    "AchievementComponentScrollItemData",
+    "FancyScrollRectCell",
+    "GameModeMain",
+    "IMessageController",
+    "IMessagePort",
+    "Scroller"
+  ],
+  "tags": {
+    "major": [
+      "DataSync",
+      "ResponseTrigger",
+      "ValueModification"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "AchievementComponent",
+    "FancyScrollRectCell",
+    "GameModeMain",
+    "ReceiveAchievementRewardMsg",
+    "RefreshAchievementComponentMsg"
+  ],
+  "usedBy": []
+}

@@ -1,0 +1,410 @@
+{
+  "fileId": "EffectManager",
+  "filePath": "unity_project\\Assets\\Scripts\\Managers\\EffectManager.cs",
+  "namespace": "",
+  "layer": "Core",
+  "genre": "Rpg",
+  "role": "Manager",
+  "system": "unity_project",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI"
+  ],
+  "classes": [
+    {
+      "className": "EffectManager",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "Singleton<EffectManager>",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "m_DamageNumberPrefab",
+          "fieldType": "GameObject",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_HitEffectPrefab",
+          "fieldType": "GameObject",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_DeathEffectPrefab",
+          "fieldType": "GameObject",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_PoolSize",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "20"
+        },
+        {
+          "fieldName": "m_DamageNumberDuration",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.8f"
+        },
+        {
+          "fieldName": "m_DamageNumberRiseSpeed",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "2f"
+        },
+        {
+          "fieldName": "m_DamageColor",
+          "fieldType": "Color",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "Color.red"
+        },
+        {
+          "fieldName": "m_HealColor",
+          "fieldType": "Color",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "Color.green"
+        },
+        {
+          "fieldName": "m_DamageFont",
+          "fieldType": "Font",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_DamageNumberPool",
+          "fieldType": "Queue<GameObject>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_EffectsParent",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_MainCamera",
+          "fieldType": "Camera",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_IsInitialized",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        },
+        {
+          "fieldName": "m_WaitDamageNumber",
+          "fieldType": "WaitForSeconds",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Init",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Init()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "InitializeDamageNumberPool",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void InitializeDamageNumberPool()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "CreateDamageNumber",
+          "accessModifier": "private",
+          "returnType": "GameObject",
+          "parameters": [],
+          "signature": "GameObject CreateDamageNumber()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "GetDamageFont",
+          "accessModifier": "private",
+          "returnType": "Font",
+          "parameters": [],
+          "signature": "Font GetDamageFont()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "ShowDamageNumber",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector3",
+              "paramName": "position"
+            },
+            {
+              "paramType": "int",
+              "paramName": "damage"
+            },
+            {
+              "paramType": "bool isHeal =",
+              "paramName": "false"
+            }
+          ],
+          "signature": "void ShowDamageNumber(Vector3 position, int damage, bool isHeal = false)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "AnimateDamageNumber",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "GameObject",
+              "paramName": "numObj"
+            }
+          ],
+          "signature": "IEnumerator AnimateDamageNumber(GameObject numObj)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PlayHitEffect",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector3",
+              "paramName": "position"
+            }
+          ],
+          "signature": "void PlayHitEffect(Vector3 position)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SimpleHitEffect",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "Vector3",
+              "paramName": "position"
+            }
+          ],
+          "signature": "IEnumerator SimpleHitEffect(Vector3 position)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PlayDeathEffect",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector3",
+              "paramName": "position"
+            }
+          ],
+          "signature": "void PlayDeathEffect(Vector3 position)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SimpleDeathEffect",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "Vector3",
+              "paramName": "position"
+            }
+          ],
+          "signature": "IEnumerator SimpleDeathEffect(Vector3 position)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnReset",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnReset()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Init()",
+    "void ShowDamageNumber(Vector3 position, int damage, bool isHeal = false)",
+    "void PlayHitEffect(Vector3 position)",
+    "void PlayDeathEffect(Vector3 position)",
+    "void OnReset()"
+  ],
+  "requires": [
+    "Font",
+    "Renderer",
+    "Singleton"
+  ],
+  "tags": {
+    "major": [
+      "StateControl",
+      "ResponseTrigger"
+    ],
+    "minor": [
+      "Spawn",
+      "Find"
+    ]
+  },
+  "uses": [
+    "Debug",
+    "Font",
+    "Outline",
+    "Renderer",
+    "Singleton",
+    "WaitForSeconds"
+  ],
+  "usedBy": []
+}

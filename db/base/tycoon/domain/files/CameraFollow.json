@@ -1,0 +1,164 @@
+{
+  "fileId": "CameraFollow",
+  "filePath": "Gameplay\\CameraFollow.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Tycoon",
+  "role": "Model",
+  "system": "Gameplay",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine",
+    "Luna.Unity"
+  ],
+  "classes": [
+    {
+      "className": "CameraFollow",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "target",
+          "fieldType": "Transform",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "portraitOffset",
+          "fieldType": "Vector3",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Vector3(4f, 5f, 0f)"
+        },
+        {
+          "fieldName": "landscapeOffset",
+          "fieldType": "Vector3",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Vector3(3f, 4f, 0f)"
+        },
+        {
+          "fieldName": "currentOffset",
+          "fieldType": "Vector3",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Start",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Start()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "LateUpdate",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void LateUpdate()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetPortraitOffset",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void SetPortraitOffset()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetLandscapeOffset",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void SetLandscapeOffset()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "CheckInitialOrientation",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void CheckInitialOrientation()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [],
+  "requires": [],
+  "tags": {
+    "major": [
+      "ValueModification",
+      "ConditionCheck"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "4f",
+    "5f",
+    "Debug",
+    "OnLandscapeMode",
+    "OnPortraitMode"
+  ],
+  "usedBy": []
+}

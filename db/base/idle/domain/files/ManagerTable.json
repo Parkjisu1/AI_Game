@@ -1,0 +1,674 @@
+{
+  "fileId": "ManagerTable",
+  "filePath": "Tables\\ManagerTable.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Idle",
+  "role": "Model",
+  "system": "Tables",
+  "score": 0.4,
+  "usings": [
+    "System.IO",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "MessagePack",
+    "Newtonsoft.Json",
+    "PseudoRandom"
+  ],
+  "classes": [
+    {
+      "className": "ManagerTableData",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [
+        "ITableData"
+      ],
+      "fields": [
+        {
+          "fieldName": "ManagerID",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "MinRebirthCount",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "SelectionWeight",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "FixSpeedMin",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "FixSpeedMax",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "MoveSpeedMin",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "MoveSpeedMax",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "StaminaMin",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "StaminaMax",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "SkinName",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "IconName",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "TextID",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "DebugPrint",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DebugPrint()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PostProcess",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void PostProcess()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetData",
+          "accessModifier": "public",
+          "returnType": "ITableData",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "managerId"
+            }
+          ],
+          "signature": "ITableData GetData(int managerId)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMax",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int GetMax()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "JsonToByte",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "path"
+            },
+            {
+              "paramType": "string",
+              "paramName": "json"
+            }
+          ],
+          "signature": "bool JsonToByte(string path, string json)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "LoadingPostProcess",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void LoadingPostProcess()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "GetMaxWeight",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "rebirthCount"
+            }
+          ],
+          "signature": "int GetMaxWeight(int rebirthCount)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetGachaPick",
+          "accessModifier": "public",
+          "returnType": "ManagerStat",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "rebirthCount"
+            },
+            {
+              "paramType": "int",
+              "paramName": "pickedRandomNumber"
+            }
+          ],
+          "signature": "ManagerStat GetGachaPick(int rebirthCount, int pickedRandomNumber)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "DebugPrint",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DebugPrint()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    },
+    {
+      "className": "ManagerTable",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [
+        "ITable<int>",
+        "ITableLoader"
+      ],
+      "fields": [
+        {
+          "fieldName": "ManagerID",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "MinRebirthCount",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "SelectionWeight",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "FixSpeedMin",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "FixSpeedMax",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "MoveSpeedMin",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "MoveSpeedMax",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "StaminaMin",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "StaminaMax",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "SkinName",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "IconName",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "TextID",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "DebugPrint",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DebugPrint()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PostProcess",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void PostProcess()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetData",
+          "accessModifier": "public",
+          "returnType": "ITableData",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "managerId"
+            }
+          ],
+          "signature": "ITableData GetData(int managerId)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMax",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int GetMax()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "JsonToByte",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "path"
+            },
+            {
+              "paramType": "string",
+              "paramName": "json"
+            }
+          ],
+          "signature": "bool JsonToByte(string path, string json)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "LoadingPostProcess",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void LoadingPostProcess()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "GetMaxWeight",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "rebirthCount"
+            }
+          ],
+          "signature": "int GetMaxWeight(int rebirthCount)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetGachaPick",
+          "accessModifier": "public",
+          "returnType": "ManagerStat",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "rebirthCount"
+            },
+            {
+              "paramType": "int",
+              "paramName": "pickedRandomNumber"
+            }
+          ],
+          "signature": "ManagerStat GetGachaPick(int rebirthCount, int pickedRandomNumber)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "DebugPrint",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DebugPrint()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void DebugPrint()",
+    "void PostProcess()",
+    "ITableData GetData(int managerId)",
+    "int GetMax()",
+    "bool JsonToByte(string path, string json)",
+    "void LoadingPostProcess()",
+    "int GetMaxWeight(int rebirthCount)",
+    "ManagerStat GetGachaPick(int rebirthCount, int pickedRandomNumber)",
+    "void DebugPrint()",
+    "void DebugPrint()",
+    "void PostProcess()",
+    "ITableData GetData(int managerId)",
+    "int GetMax()",
+    "bool JsonToByte(string path, string json)",
+    "void LoadingPostProcess()"
+  ],
+  "requires": [
+    "ITable",
+    "ITableData",
+    "ITableLoader"
+  ],
+  "tags": {
+    "major": [
+      "DataSync"
+    ],
+    "minor": [
+      "Find"
+    ]
+  },
+  "uses": [
+    "Debug",
+    "File",
+    "FixSpeedMax",
+    "ITable",
+    "ITableData",
+    "IconName",
+    "ManagerID",
+    "ManagerStat",
+    "ManagerTableData",
+    "MessagePackSerializer",
+    "MoveSpeedMax",
+    "Random",
+    "SelectionWeight",
+    "StaminaMax"
+  ],
+  "usedBy": []
+}

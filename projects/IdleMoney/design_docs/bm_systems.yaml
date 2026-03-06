@@ -1,0 +1,339 @@
+---
+project: IdleMoney
+genre: idle
+domain: bm
+source: internal_original
+version: "1.0.0"
+---
+
+# ============================================================
+# Business Model Systems - Monetization, IAP, Gacha
+# ============================================================
+
+systems:
+  # ----------------------------------------------------------
+  # 1. Diamond Shop (IAP)
+  # ----------------------------------------------------------
+  - designId: idlemoney__bm__diamond_iap
+    system: "Diamond IAP"
+    data_type: config
+    balance_area: iap
+    tags: [diamond, iap, real_money, premium]
+    provides:
+      - diamond_purchase
+      - premium_currency_source
+    requires:
+      - iap_integration
+    content:
+      summary: |
+        다이아몬드 직접 구매 (실제 돈 → 프리미엄 재화).
+        플랫폼별(Android/iOS) PID 분리, 기본량 + 보너스량 구성.
+      parameters:
+        fields_per_tier:
+          - "DiamondID: 고유 ID"
+          - "AndroidPID / ApplePID: 플랫폼별 상품 ID"
+          - "AOSPrice: 표시 가격 문자열"
+          - "RewardGoodsBaseAmount: 기본 다이아"
+          - "RewardGoodsBonusAmount: 보너스 다이아"
+          - "IconImageName, NameTextID: UI 에셋"
+        purchase_flow:
+          - "BuyProductMsg → AllPlugins.Purchase(ProductID)"
+          - "IAP 콜백: InAppPuchaseSuccessMsg → AddMoneyDiaMsg"
+          - "영수증 검증: UnityEngine.Purchasing.Security"
+        analytics: "log_shop_iap: IAP 구매 이벤트 로깅"
+
+  # ----------------------------------------------------------
+  # 2. Package Shop (Subscription & Bundles)
+  # ----------------------------------------------------------
+  - designId: idlemoney__bm__package_system
+    system: "Package Subscription"
+    data_type: config
+    balance_area: iap
+    tags: [package, subscription, daily_reward, bundle]
+    provides:
+      - package_purchase
+      - daily_diamond_reward
+      - gameplay_effects
+    requires:
+      - iap_integration
+      - diamond_currency
+    content:
+      summary: |
+        구독/번들 패키지 시스템. 일회성 보상 + 매일 보상(BonusCheckTime) 제공.
+        게임플레이 효과(광고 제거, 무료 레벨업, 오프라인 보상 증가) 포함.
+      parameters:
+        package_effects:
+          - { id: 1, name: "RemoveAD", packages: [1, 7], effect: "광고 제거 + 패시브 혜택" }
+          - { id: 2, name: "FreeLevelUp", packages: [2, 8], effect: "무료 레벨업" }
+          - { id: 3, name: "OfflineRewardUp", packages: [3, 9], effect: "오프라인 보상 증가" }
+          - { id: 4, name: "DailyDia1", effect: "일일 다이아 보상 1" }
+          - { id: 5, name: "DailyDia2", effect: "일일 다이아 보상 2" }
+        daily_reward_tracking: "LastPIDPackageXRewardTime (LongUserInfoIndex 351-356)"
+        bonus_check_time: "float seconds (쿨다운 타이머)"
+        fields_per_package:
+          - "ShopOrder: 표시 순서"
+          - "IsDisplayed: 표시 여부"
+          - "DailyRewardGoodsType1/2 + Amount1/2: 매일 보상"
+          - "RewardGoodsType1/2 + Amount1/2: 일회성 보상"
+          - "PackageValue: 총 가치 표시"
+
+  # ----------------------------------------------------------
+  # 3. Gacha System (Machine Recruitment)
+  # ----------------------------------------------------------
+  - designId: idlemoney__bm__gacha_system
+    system: "Gacha Machine Recruitment"
+    data_type: flow
+    balance_area: gacha
+    tags: [gacha, lootbox, machine, rng, pity]
+    provides:
+      - machine_acquisition
+      - material_acquisition
+      - gacha_probability
+    requires:
+      - diamond_currency
+      - money_currency
+      - machine_system
+    content:
+      summary: |
+        머신 가챠 시스템. 7종 박스 타입, 5등급 머신 확률 테이블.
+        처음 2회 보장 드롭, 이후 확률 기반. 중복 머신은 튜닝 EXP로 변환.
+      flow:
+        - step: "가챠 비용 지불"
+          detail: "BoxGeneral=Money, BoxAdvanced/Super=Diamond"
+        - step: "보장 드롭 체크"
+          detail: "첫 번째 뽑기=Machine ID 0, 두 번째=Machine ID 1 (강제)"
+        - step: "등급 결정"
+          detail: "GeneralMachineChance ~ SuperLegendMachineChance 누적 확률"
+        - step: "머신 선택"
+          detail: "NewMachineSelectChance로 신규/중복 결정"
+        - step: "재료 부가 보상"
+          detail: "Random.Range(AcquiredMaterialMin, AcquiredMaterialMax+1)"
+        - step: "결과 처리"
+          detail: "신규=컬렉션 추가, 중복=튜닝 EXP 추가"
+      parameters:
+        box_types:
+          - { type: "BoxGeneral", cost: "Money (PurchaseMoneyCost)", pity: "처음 2회 보장" }
+          - { type: "BoxAdvanced", cost: "Diamond (PurchaseDiamondCost)", pity: "등급별 확률 분포" }
+          - { type: "BoxSuper", cost: "Diamond (PurchaseDiamondCost)", pity: "높은 고등급 확률" }
+          - { type: "BoxStoreEvent", cost: "이벤트 한정", pity: "없음" }
+          - { type: "BoxLobbyEvent", cost: "이벤트 한정", pity: "없음" }
+          - { type: "LevelGachaBox", cost: "레벨 게이트", pity: "경험치 기반" }
+          - { type: "BoxSameMachineSelect", cost: "튜닝 선택", pity: "가중치 기반" }
+        grade_distribution:
+          - "Grade0 (General): GeneralMachineChance"
+          - "Grade1 (Advanced): AdvancedMachineChance"
+          - "Grade2 (Super): SuperMachineChance"
+          - "Grade3 (Legend): LegendMachineChance"
+          - "Grade4 (SuperLegend): SuperLegendMachineChance"
+        new_machine_chance: "NewMachineSelectChance (0.0~1.0)"
+        analytics: "log_gacha: type, place, skip_flag"
+
+  # ----------------------------------------------------------
+  # 4. Store Diamond (Direct Purchase)
+  # ----------------------------------------------------------
+  - designId: idlemoney__bm__store_diamond
+    system: "Diamond Store"
+    data_type: config
+    balance_area: iap
+    tags: [store, diamond, iap, pricing]
+    provides:
+      - diamond_tiers
+      - platform_pricing
+    requires:
+      - iap_integration
+    content:
+      summary: |
+        다이아몬드 상점. 6개 구매 티어, 플랫폼별 가격.
+      parameters:
+        tiers: 6
+        reward_structure: "기본량 + 보너스량"
+        platform_branching: "AndroidPID vs ApplePID"
+
+  # ----------------------------------------------------------
+  # 5. Store Package (Bundles)
+  # ----------------------------------------------------------
+  - designId: idlemoney__bm__store_package
+    system: "Package Store"
+    data_type: config
+    balance_area: iap
+    tags: [store, package, bundle, subscription]
+    provides:
+      - package_listing
+      - subscription_management
+    requires:
+      - iap_integration
+    content:
+      summary: |
+        패키지 상점. 최대 10개 패키지, 구독형/일회성 혼합.
+        ShopOrder로 표시 순서 제어, IsDisplayed로 표시 여부.
+      parameters:
+        max_packages: 10
+        daily_reward: "BonusCheckTime 쿨다운 기반"
+        platform_messages: "MessageAOSTextID vs MessageAppleTextID"
+
+  # ----------------------------------------------------------
+  # 6. Store Etc (General Store)
+  # ----------------------------------------------------------
+  - designId: idlemoney__bm__store_etc
+    system: "General Store"
+    data_type: config
+    balance_area: iap
+    tags: [store, misc, items, purchase]
+    provides:
+      - misc_item_purchase
+      - currency_conversion
+    requires:
+      - diamond_currency
+      - gold_currency
+    content:
+      summary: |
+        기타 상점. 다이아/골드로 다양한 아이템 구매.
+        4개 아이템, CostGoodsType으로 결제 재화 결정.
+      parameters:
+        fields: ["EtcID", "CostGoodsType", "CostGoodsAmount", "RewardGoodsType", "RewardGoodsAmount"]
+        analytics: "log_shop: shop_id, shop_price, reward_type, reward_quan"
+
+  # ----------------------------------------------------------
+  # 7. Store LoopyCoin (Secondary Currency)
+  # ----------------------------------------------------------
+  - designId: idlemoney__bm__store_loopycoin
+    system: "LoopyCoin Store"
+    data_type: config
+    balance_area: currency
+    tags: [loopycoin, secondary_currency, store]
+    provides:
+      - loopycoin_spending
+      - secondary_currency_sink
+    requires:
+      - gold_currency
+    content:
+      summary: |
+        루피코인(세컨더리 커런시) 전용 상점. 3개 아이템.
+        골드(Credit)를 사용한 특수 아이템 구매.
+      parameters:
+        items: 3
+        currency: "Gold/Credit"
+
+  # ----------------------------------------------------------
+  # 8. Ad Monetization System
+  # ----------------------------------------------------------
+  - designId: idlemoney__bm__ad_monetization
+    system: "Ad Monetization"
+    data_type: spec
+    balance_area: ad_revenue
+    tags: [ad, reward_video, banner, monetization]
+    provides:
+      - ad_reward_delivery
+      - ad_frequency_management
+      - ad_revenue_generation
+    requires:
+      - boost_events
+      - offline_earnings
+      - gacha_system
+    content:
+      summary: |
+        광고 수익화 시스템. 리워드 동영상 기반. 다양한 게임 지점에서 광고 시청 유도.
+        세션당 최대 10회, 쿨다운 타이머로 빈도 제어.
+      parameters:
+        ad_unit_ids:
+          ios: "dd88982da69b30a5"
+          android: "129f4f878b596ae3"
+        max_per_session: 10
+        ad_reward_points:
+          - { point: "오프라인 보상 2배", trigger: "OfflineRewardWin" }
+          - { point: "일일 보상 10배", trigger: "DailyRewardWin" }
+          - { point: "머신 가챠 재도전", trigger: "GachaResultWin" }
+          - { point: "챌린지 재도전", trigger: "ChallengeResultWin" }
+          - { point: "던전 재도전", trigger: "CoinDungeonResultWin" }
+          - { point: "파워 부스트 활성화", trigger: "BoostWin" }
+          - { point: "머니 부스트 활성화", trigger: "BoostWin" }
+          - { point: "공급 부스트 활성화", trigger: "BoostWin" }
+        cooldown_tracking:
+          - "LastShowADBannerTime"
+          - "LastShowADMachineGachaTime"
+        anti_fraud: "영수증 검증 + 콜백 1회 제한"
+
+  # ----------------------------------------------------------
+  # 9. Roulette System
+  # ----------------------------------------------------------
+  - designId: idlemoney__bm__roulette
+    system: "Roulette Spin"
+    data_type: config
+    balance_area: reward
+    tags: [roulette, spin, random_reward, event]
+    provides:
+      - roulette_reward
+      - roulette_cooldown
+    requires:
+      - rebirth_system
+      - ad_system
+    content:
+      summary: |
+        룰렛 시스템. 리버스 횟수 기반 해금. 최대 8개 보상 옵션.
+        가중치 기반 랜덤 보상, 쿨다운 간격으로 빈도 제한.
+      parameters:
+        max_reward_options: 8
+        unlock: "ConditionRebirthCount per roulette item"
+        weight_range: "SelectionWeight1~8 (0-100 scale)"
+        cooldown: "EVENT_ROULETTE_DISPLAY_INTERVAL"
+        ad_boost: "EVENT_ROULETTE_REWARD_BOOST_VALUE"
+
+  # ----------------------------------------------------------
+  # 10. Piggy Bank & AD Bank
+  # ----------------------------------------------------------
+  - designId: idlemoney__bm__piggy_bank
+    system: "Piggy Bank & AD Bank"
+    data_type: spec
+    balance_area: monetization
+    tags: [piggy_bank, ad_bank, passive_income, diamond]
+    provides:
+      - passive_diamond_accumulation
+      - ad_bank_reward
+    requires:
+      - iap_integration
+      - ad_system
+    content:
+      summary: |
+        피기뱅크(다이아 누적 저금통)와 AD뱅크(광고 보상 누적).
+        피기뱅크는 IAP로 열기, AD뱅크는 광고로 누적.
+      parameters:
+        piggy_bank_pid: "GlobalConstants.DiaBankPID0 (플랫폼별)"
+        ad_bank_start: "AD_BANK_START_DIAMOND"
+        ui_windows: ["PiggyBankWin", "ADBankWin", "LobbyADBankBannerWin"]
+
+  # ----------------------------------------------------------
+  # 11. IAP Integration Architecture
+  # ----------------------------------------------------------
+  - designId: idlemoney__bm__iap_architecture
+    system: "IAP Integration"
+    data_type: spec
+    balance_area: technical
+    tags: [iap, unity_purchasing, receipt_validation, platform]
+    provides:
+      - iap_purchase_flow
+      - receipt_validation
+      - platform_abstraction
+    requires: []
+    content:
+      summary: |
+        Unity Purchasing 5.0 기반 IAP 통합 아키텍처.
+        구매 요청 → 플랫폼 처리 → 영수증 검증 → 보상 지급.
+      parameters:
+        unity_purchasing_version: "5.0"
+        platform_services:
+          android: "IGooglePlayStoreExtendedService"
+          ios: "IAppleStoreExtendedService"
+        callbacks:
+          - "onInAppInitialize: 초기화 완료"
+          - "onInAppInitializeFailed: 초기화 실패"
+          - "onPurchaseSuccess: 구매 성공 (PendingOrder)"
+          - "onPurchaseFailed: 구매 실패 (FailedOrder)"
+        validation: "UnityEngine.Purchasing.Security (영수증 검증)"
+        special_pids:
+          - "im_aos_pre_registration_1: 사전 등록 보상 (300 다이아)"
+          - "DiaBankPID0: 피기뱅크"
+        flow:
+          - "BuyProductMsg → AllPlugins.Purchase(PID)"
+          - "Platform callback → InAppPuchaseSuccessMsg"
+          - "StoreDiamondTable/StorePackageTable PID 조회"
+          - "보상 지급 + Firebase 로깅"

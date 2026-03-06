@@ -1,0 +1,256 @@
+[
+  {
+    "designId": "idlemoney__ux__localization_zh",
+    "domain": "UX",
+    "genre": "Idle",
+    "system": "Localization_ZH",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "config",
+    "balance_area": "text",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "Language_ChineseTraditional_data"
+    ],
+    "requires": [],
+    "tags": [
+      "text",
+      "config"
+    ]
+  },
+  {
+    "designId": "idlemoney__ux__localization_en",
+    "domain": "UX",
+    "genre": "Idle",
+    "system": "Localization_EN",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "config",
+    "balance_area": "text",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "Language_English_data"
+    ],
+    "requires": [],
+    "tags": [
+      "text",
+      "config"
+    ]
+  },
+  {
+    "designId": "idlemoney__ux__localization_ja",
+    "domain": "UX",
+    "genre": "Idle",
+    "system": "Localization_JA",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "config",
+    "balance_area": "text",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "Language_Japanese_data"
+    ],
+    "requires": [],
+    "tags": [
+      "text",
+      "config"
+    ]
+  },
+  {
+    "designId": "idlemoney__ux__localization_ko",
+    "domain": "UX",
+    "genre": "Idle",
+    "system": "Localization_KO",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "config",
+    "balance_area": "text",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "Language_Korean_data"
+    ],
+    "requires": [],
+    "tags": [
+      "text",
+      "config"
+    ]
+  },
+  {
+    "designId": "idlemoney__ux__ui_navigation",
+    "domain": "UX",
+    "genre": "Idle",
+    "system": "UI Navigation",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "flow",
+    "balance_area": "ui_flow",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "screen_navigation",
+      "popup_management",
+      "hud_system"
+    ],
+    "requires": [],
+    "tags": [
+      "ui",
+      "navigation",
+      "window",
+      "popup",
+      "hud"
+    ]
+  },
+  {
+    "designId": "idlemoney__ux__tutorial_flow",
+    "domain": "UX",
+    "genre": "Idle",
+    "system": "Tutorial Flow",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "flow",
+    "balance_area": "onboarding",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "tutorial_progression",
+      "tutorial_rewards",
+      "ui_highlighting"
+    ],
+    "requires": [
+      "ui_navigation",
+      "factory_progression"
+    ],
+    "tags": [
+      "tutorial",
+      "onboarding",
+      "guide",
+      "new_user"
+    ]
+  },
+  {
+    "designId": "idlemoney__ux__reddot_system",
+    "domain": "UX",
+    "genre": "Idle",
+    "system": "Reddot Notification",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "spec",
+    "balance_area": "engagement",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "notification_badge_system",
+      "refresh_mechanism"
+    ],
+    "requires": [
+      "ui_navigation"
+    ],
+    "tags": [
+      "notification",
+      "reddot",
+      "badge",
+      "engagement"
+    ]
+  },
+  {
+    "designId": "idlemoney__ux__sound_system",
+    "domain": "UX",
+    "genre": "Idle",
+    "system": "Sound Manager",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "spec",
+    "balance_area": "audio",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "bgm_playback",
+      "sfx_playback",
+      "audio_settings"
+    ],
+    "requires": [],
+    "tags": [
+      "sound",
+      "audio",
+      "bgm",
+      "sfx"
+    ]
+  },
+  {
+    "designId": "idlemoney__ux__save_system",
+    "domain": "UX",
+    "genre": "Idle",
+    "system": "Save/Load System",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "spec",
+    "balance_area": "data_persistence",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "local_save",
+      "cloud_save",
+      "data_migration"
+    ],
+    "requires": [],
+    "tags": [
+      "save",
+      "load",
+      "cloud",
+      "messagepack",
+      "persistence"
+    ]
+  },
+  {
+    "designId": "idlemoney__ux__localization",
+    "domain": "UX",
+    "genre": "Idle",
+    "system": "Localization",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "config",
+    "balance_area": "text",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "multi_language_support",
+      "language_switching"
+    ],
+    "requires": [],
+    "tags": [
+      "localization",
+      "language",
+      "i18n",
+      "text"
+    ]
+  },
+  {
+    "designId": "idlemoney__ux__analytics",
+    "domain": "UX",
+    "genre": "Idle",
+    "system": "Firebase Analytics",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "spec",
+    "balance_area": "tracking",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "event_logging",
+      "player_progression_tracking"
+    ],
+    "requires": [
+      "firebase_sdk"
+    ],
+    "tags": [
+      "analytics",
+      "firebase",
+      "tracking",
+      "kpi"
+    ]
+  }
+]

@@ -1,0 +1,765 @@
+[
+  {
+    "fileId": "RewardBoxBase",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "Popup",
+    "score": 0.4,
+    "provides": [
+      "void SetRewardBox()",
+      "void OnClickGet()",
+      "void OnClickOpen()",
+      "void OnClickDoubleReward()",
+      "void SetApplyLanguage()"
+    ],
+    "requires": [
+      "CPopupBase",
+      "RawImage",
+      "RewardBoxItem"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "GoalUiElement",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "InGame",
+    "score": 0.4,
+    "provides": [
+      "void Fill(Goal goal)",
+      "void UpdateGoal(GameState state, GameObject exploedObject = null)",
+      "void SetCompleteGoal(bool _isCompleted)"
+    ],
+    "requires": [
+      "PooledObject"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "DataSync",
+        "ConditionCheck"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "DailyRewardPopup",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "Popup",
+    "score": 0.4,
+    "provides": [
+      "void SetDailyReward()",
+      "void OnClickGameStore_Bottom()",
+      "void OnClickRewardAds()",
+      "void OnClickGet()",
+      "void SetApplyLanguage()"
+    ],
+    "requires": [
+      "CPopupBase",
+      "RawImage",
+      "RewardBoxItem"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "MissionFailPopup_Lose",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "Popup",
+    "score": 0.4,
+    "provides": [
+      "void OnClickRetry()",
+      "void OnClickShop()",
+      "void OnClickRewardAds()",
+      "void SetEndGame(GameState gameState)",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "CPopupBase",
+      "GoalUiElement",
+      "RawImage"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "MissionPopup",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "Popup",
+    "score": 0.4,
+    "provides": [
+      "void SetGoal(List<Goal> goals, bool isHardStage, bool isScaleImages = false)",
+      "void OnTutorialPopup()",
+      "void ClosePopup()",
+      "void OnClickReward()",
+      "void SetApplyLanguage()"
+    ],
+    "requires": [
+      "CPopupBase",
+      "GoalUiElement"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger",
+        "StateControl"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "RewardBoxPopup",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "Popup",
+    "score": 0.4,
+    "provides": [
+      "void SetRewardBox(bool isStarBox)",
+      "void OnClickOpen()",
+      "void OnClickGet()",
+      "void OnClickDoubleReward()",
+      "void SetApplyLanguage()"
+    ],
+    "requires": [
+      "CPopupBase",
+      "RawImage",
+      "RewardBoxItem"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "CheatWin",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "Debug",
+    "score": 0.4,
+    "provides": [
+      "void Init(Injector injector)",
+      "void Close()",
+      "void Show()",
+      "void OnClickAddMoney()",
+      "void OnClickAddDia()"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageController",
+      "Injector",
+      "MachineComponentScrollView",
+      "TextMeshProUGUI"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "DataSync",
+        "StateControl"
+      ],
+      "minor": [
+        "Despawn"
+      ]
+    }
+  },
+  {
+    "fileId": "CoinDungeonTopHUDSetCurrentCoinMsg",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "CoinDungeonTopHUDSetGoalCoinMsg",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "CoinDungeonTopHUDSetRemainTimeMsg",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenADLoadingWinToGameMainMsg",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenCoinDungeonResultWinToGameModeMsg",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "DungeonTableData",
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenCoinDungeonRewardResultWin",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "DungeonTableData",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenCoinDungeonWinMsg",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenDungeonWinMsg",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenEnterCoinDungeonWinToGameModeMsg",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshSupplyerInfoWinMsg",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WorldSpaceWindowManager> sender, WorldSpaceWindowManager controller)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "WorldSpaceWindowManager"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "AchievementWin",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "UniTask Open()",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "AchievementScrollView",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ResponseTrigger"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "CoinDungeonResultWin",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(bool win, DungeonTableData tableData, int targetCoin, int currentCoin, bool showRetry)",
+      "void OnClickClose()",
+      "UniTask Close()",
+      "void OnClickRetryWithAD()"
+    ],
+    "requires": [
+      "LanguageText",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification",
+        "StateControl"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "CoinDungeonRewardResultWin",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(DungeonTableData data, int coin, bool isWin)",
+      "UniTask Open()",
+      "void OnClickClose()",
+      "UniTask Close()"
+    ],
+    "requires": [
+      "LanguageText",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "CoinDungeonTopHUDWin",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetTime(float time)",
+      "void SetGoalCoin(int goalCoin)",
+      "void SetCurrentCoin(int currentCoin)"
+    ],
+    "requires": [
+      "LanguageText",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "CoinDungeonWin",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "void Refresh()",
+      "UniTask Open()",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "CoinDungeonComponentScrollView",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ResponseTrigger"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "EnterCoinDungeonWin",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "UniTask Open()",
+      "void SetData(DungeonTableData tableData, \r\n                        int retryDiaCost, long lastTryTime, float retryWaitingTime, int retryCount)",
+      "void Update()",
+      "void DungeonWithAD()",
+      "void DungeonWithDia()"
+    ],
+    "requires": [
+      "LanguageText",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "LaborataryWin",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "UniTask Open()",
+      "void SetScroll(bool b)",
+      "void RefreshStat()",
+      "void Refresh()"
+    ],
+    "requires": [
+      "LabAllItemStatComponent",
+      "LabMountComponentScrollView",
+      "Scroller",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ValueModification",
+        "DataSync"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "LobbyBannerWin",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "UniTask Open()",
+      "void Refresh()",
+      "void ShowPackage(int packageID)",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "LobbyBannerScrollView",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ResponseTrigger",
+        "ConditionCheck"
+      ],
+      "minor": [
+        "Despawn"
+      ]
+    }
+  },
+  {
+    "fileId": "MachineDetailWin",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "UniTask Open()",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "MachineComponentScrollView",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ResponseTrigger"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "MachineMountWin",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "UniTask Open()",
+      "void Refresh()",
+      "void SetData(MachineMountComponentGroup.Mode showMode, int worldFactoryIndex, int lineIndex, int slotNum)",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "MachineMountComponentScrollView",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "ManagerWin",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "int GetSelectedFactoryIndex()",
+      "void SetData(int factoryIndex)",
+      "UniTask Open()",
+      "void Refresh()"
+    ],
+    "requires": [
+      "ManagerMountComponent",
+      "ManagerMountComponentScrollView",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ProductWin",
+    "layer": "Game",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "void SetFactoryIndex(int index)",
+      "void RefreshScroll()",
+      "UniTask Open()",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "SelectProductComponentScrollView",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ValueModification",
+        "DataSync"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  }
+]

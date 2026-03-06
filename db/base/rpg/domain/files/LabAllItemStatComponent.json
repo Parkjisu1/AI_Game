@@ -1,0 +1,97 @@
+{
+  "fileId": "LabAllItemStatComponent",
+  "filePath": "UI\\LabAllItemStatComponent.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Rpg",
+  "role": "Component",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI",
+    "TMPro"
+  ],
+  "classes": [
+    {
+      "className": "LabAllItemStatComponent",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "iconImg",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "statTxt",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "SetStat",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "char",
+              "paramName": "sign"
+            },
+            {
+              "paramType": "float",
+              "paramName": "stat"
+            }
+          ],
+          "signature": "void SetStat(char sign, float stat)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void SetStat(char sign, float stat)"
+  ],
+  "requires": [
+    "TextMeshProUGUI"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "StringUtils"
+  ],
+  "usedBy": []
+}

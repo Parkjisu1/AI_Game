@@ -1,0 +1,71 @@
+{
+  "designId": "idlemoney__ingame__vehicle_system",
+  "project": "IdleMoney",
+  "domain": "InGame",
+  "genre": "Idle",
+  "system": "Vehicle System",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "flow",
+  "balance_area": "core_mechanic",
+  "source_file": "ingame_flows.yaml",
+  "content": {
+    "summary": "운송차(Transporter)가 완성된 제품을 수집하여 이익을 전달하는 시스템.\n라인당 3대, 각 3슬롯. 6단계 상태 머신으로 동작.",
+    "flow": [
+      {
+        "step": "HideWaiting",
+        "detail": "비활성 대기"
+      },
+      {
+        "step": "MoveToLoad",
+        "detail": "픽업 위치로 이동"
+      },
+      {
+        "step": "Waiting",
+        "detail": "픽업 지점에서 제품 대기"
+      },
+      {
+        "step": "Loading",
+        "detail": "제품 적재 (usedSlot에 추가)"
+      },
+      {
+        "step": "FullLoading",
+        "detail": "모든 슬롯 가득 참, 출발 준비"
+      },
+      {
+        "step": "Transporting",
+        "detail": "목적지로 이동, 도착 시 profitCallback 호출"
+      }
+    ],
+    "parameters": {
+      "states": [
+        "HideWaiting",
+        "MoveToLoad",
+        "Waiting",
+        "Loading",
+        "FullLoading",
+        "Transporting"
+      ],
+      "vehicles_per_line": 3,
+      "slots_per_vehicle": 3
+    },
+    "edge_cases": [],
+    "references": []
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from C# analysis: Vehicle System",
+      "note": "Live game code analysis import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T11:08:17.003Z"
+}

@@ -1,0 +1,278 @@
+{
+  "fileId": "SwordPickup",
+  "filePath": "Props\\SwordPickup.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Rpg",
+  "role": "Component",
+  "system": "Props",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine",
+    "System.Collections"
+  ],
+  "classes": [
+    {
+      "className": "SwordPickup",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "gameSingleton",
+          "fieldType": "GameSingleton",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "initialRepelForce",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "3f"
+        },
+        {
+          "fieldName": "baseSpeed",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "5f"
+        },
+        {
+          "fieldName": "maxSpeed",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "20f"
+        },
+        {
+          "fieldName": "minDistanceToCollect",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.1f"
+        },
+        {
+          "fieldName": "repelDuration",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.2f"
+        },
+        {
+          "fieldName": "attractDelay",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.1f"
+        },
+        {
+          "fieldName": "animator",
+          "fieldType": "Animator",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "isAnimating",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        },
+        {
+          "fieldName": "targetCharacter",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "itemCollider",
+          "fieldType": "CircleCollider2D",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "repelDirection",
+          "fieldType": "Vector2",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Start",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Start()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Update",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Update()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnTriggerEnter2D",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Collider2D",
+              "paramName": "other"
+            }
+          ],
+          "signature": "void OnTriggerEnter2D(Collider2D other)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "AnimatePickup",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [],
+          "signature": "IEnumerator AnimatePickup()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "CollectSword",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Character",
+              "paramName": "character"
+            }
+          ],
+          "signature": "void CollectSword(Character character)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Aggregate"
+        },
+        {
+          "methodName": "OnDestroy",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnDestroy()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [],
+  "requires": [
+    "Character",
+    "CircleCollider2D",
+    "GameSingleton"
+  ],
+  "tags": {
+    "major": [
+      "ResponseTrigger"
+    ],
+    "minor": [
+      "Aggregate"
+    ]
+  },
+  "uses": [
+    "Character",
+    "CircleCollider2D",
+    "Mathf",
+    "WaitForSeconds"
+  ],
+  "usedBy": []
+}

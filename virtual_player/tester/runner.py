@@ -97,7 +97,7 @@ class TesterRunner:
     def __init__(
         self,
         playbook: Optional[Playbook] = None,
-        model: str = "claude-haiku-4-5-20251001",
+        model: str = "claude-sonnet-4-6",
         temp_dir: Optional[Path] = None,
         log_file: Optional[Path] = None,
         use_lookahead: bool = False,
@@ -131,15 +131,18 @@ class TesterRunner:
         # 상태
         self._current_board: Optional[BoardState] = None
         self._running = False
+        self._skip_next_perception = False  # 예측 스킵 플래그
+        self._assumed_screen: Optional[str] = None  # 스킵 시 가정할 화면
 
     def run(self, duration_minutes: int = 60):
         """메인 루프 실행."""
         target = datetime.now() + timedelta(minutes=duration_minutes)
 
+        mode = "SDK" if self.perception._use_sdk else "CLI (optimized)"
         self._log(f"=== AI Game Tester v2 START ===")
         self._log(f"Game: {self.playbook.game_id}")
         self._log(f"Target: {target.strftime('%Y-%m-%d %H:%M')}")
-        self._log(f"Model: {self.perception.model}")
+        self._log(f"Model: {self.perception.model} | Mode: {mode}")
         self._running = True
 
         try:
@@ -151,6 +154,15 @@ class TesterRunner:
         finally:
             self._running = False
             self._print_report()
+
+    # 예측 가능한 화면 전환 (action 후 예상 결과)
+    # key: (현재 screen_type, action reason 키워드)
+    # value: (예상 다음 screen, 대기 시간)
+    _PREDICTABLE_TRANSITIONS = {
+        ("lobby", "Level N"):           ("gameplay", 4.0),
+        ("win", "Continue"):            ("lobby", 3.0),
+        ("fail_result", "Try Again"):   ("gameplay", 4.0),
+    }
 
     def _game_loop(self, target: datetime):
         """핵심 루프: perceive → decide → execute → verify."""
@@ -165,10 +177,32 @@ class TesterRunner:
                     continue
 
                 # Step 2: Layer 1 — Perception
-                board = self.perception.perceive(img)
-                self._log(f"Screen: {board.screen_type} | "
-                          f"Holder: {self._format_holder(board.holder)} | "
-                          f"Cars: {len(board.active_cars)}")
+                if self._skip_next_perception and self._assumed_screen:
+                    assumed = self._assumed_screen
+                    self._skip_next_perception = False
+                    self._assumed_screen = None
+                    if assumed != "gameplay":
+                        # 비-gameplay 예측 → Vision 스킵 OK
+                        board = BoardState(screen_type=assumed, holder=[None]*7)
+                        self._log(f"Screen: {board.screen_type} (predicted, skip vision)")
+                    else:
+                        # gameplay 예측 → Phase 1 스킵하되 Phase 2는 실행
+                        self.perception._last_screen = "gameplay"
+                        t0 = time.time()
+                        board = self.perception.perceive(img)
+                        elapsed = time.time() - t0
+                        self._log(f"Screen: {board.screen_type} | "
+                                  f"Holder: {self._format_holder(board.holder)} | "
+                                  f"Cars: {len(board.active_cars)} | "
+                                  f"Vision: {elapsed:.1f}s (P1 skip)")
+                else:
+                    t0 = time.time()
+                    board = self.perception.perceive(img)
+                    elapsed = time.time() - t0
+                    self._log(f"Screen: {board.screen_type} | "
+                              f"Holder: {self._format_holder(board.holder)} | "
+                              f"Cars: {len(board.active_cars)} | "
+                              f"Vision: {elapsed:.1f}s")
 
                 prev_board = self._current_board or board
 
@@ -185,6 +219,9 @@ class TesterRunner:
                 # Step 5: Layer 4+5 — Execute + Verify
                 self._current_board = self.executor.execute(actions, board)
 
+                # 예측 스킵 판정: 이 액션 후 화면 전환이 예상되는가?
+                self._check_predictable_transition(board.screen_type, actions)
+
                 # 주기적 통계
                 if self.memory.total_turns % 10 == 0:
                     self._log(f"--- Stats: {self.memory.games_won}W/"
@@ -196,6 +233,17 @@ class TesterRunner:
             except Exception as e:
                 self._log(f"ERROR: {e}")
                 time.sleep(3)
+
+    def _check_predictable_transition(self, screen: str, actions):
+        """액션 후 예측 가능한 화면 전환이면 다음 턴 Vision 스킵."""
+        for action in actions:
+            for (src_screen, keyword), (dest, wait) in self._PREDICTABLE_TRANSITIONS.items():
+                if screen == src_screen and keyword in action.reason:
+                    self._skip_next_perception = True
+                    self._assumed_screen = dest
+                    self._log(f"  >> Predict: {src_screen} -> {dest} (skip next vision, wait {wait}s)")
+                    time.sleep(wait)
+                    return
 
     def _print_report(self):
         """최종 보고서."""
@@ -260,9 +308,12 @@ def main():
                         help="Use 1-move lookahead simulation")
     parser.add_argument("--deep", action="store_true",
                         help="Use 2-move deep lookahead simulation")
+    parser.add_argument("--model", type=str, default="claude-sonnet-4-6",
+                        help="Vision model (default: claude-sonnet-4-6)")
     args = parser.parse_args()
 
     runner = TesterRunner(
+        model=args.model,
         use_lookahead=args.lookahead,
         use_deep_lookahead=args.deep,
     )

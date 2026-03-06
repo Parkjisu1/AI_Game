@@ -1,0 +1,164 @@
+scoring:
+  game: "CarMatch"
+  genre: "Casual Puzzle"
+  condition: "C10_plus_v25"
+  scored_by: "AI autonomous play + vision analysis"
+  scored_date: "2026-03-04"
+  source: "carmatch_ai.py 자율 플레이 + 비전 분석 + overnight runner"
+
+  results:
+    # ===================== A. 게임 구조 =====================
+
+    - id: CM01
+      name: board_layout
+      ground_truth: "3D grid, variable per level"
+      generated: "grid with parked cars, variable per level"
+      score: 0.7
+      note: "Close - 기본 구조 정확, 구체적 레벨별 차량 수/패턴은 미추출"
+
+    - id: CM02
+      name: holder_slot_count
+      ground_truth: 7
+      generated: 7
+      score: 1.0
+      note: "Exact - 7슬롯 좌표까지 정밀 측정"
+
+    - id: CM03
+      name: match_rule
+      ground_truth: "같은 색 3개 자동 매치"
+      generated: "같은 색 3개 = 자동 매치 소멸"
+      score: 1.0
+      note: "Exact - 5회 검증 완료"
+
+    - id: CM04
+      name: color_count
+      ground_truth: "7+ (레벨에 따라 가변)"
+      generated: 7
+      score: 0.7
+      note: "Close - 7색 식별 완료, 고레벨에서 추가 색상 존재 가능성"
+
+    - id: CM05
+      name: win_condition
+      ground_truth: "보드 모든 차량 제거"
+      generated: "보드 위 모든 차량 제거 (홀더 경유 매치)"
+      score: 1.0
+      note: "Exact - 규칙 정확 파악 (실제 승리 미달성이지만 규칙 확정)"
+
+    - id: CM06
+      name: lose_condition
+      ground_truth: "홀더 7칸 가득 + 매치 불가"
+      generated: "홀더 7칸 가득 찬 상태에서 매치 불가"
+      score: 1.0
+      note: "Exact - Out of Space 팝업 다수 관찰"
+
+    # ===================== B. 생명/진행 =====================
+
+    - id: CM07
+      name: lives_system
+      ground_truth: "life 소모제, 시간 재생 + 광고 획득"
+      generated: "life 소모제, 재생 25~30분, 광고 시청으로 +1"
+      score: 1.0
+      note: "Exact - timer + ad-for-life 모두 검증"
+
+    - id: CM08
+      name: booster_system
+      ground_truth: "다양한 부스터 존재"
+      generated: "있음 (영역 확인, 상세 미캡처)"
+      score: 0.4
+      note: "Partial - 존재만 확인, 종류/효과 미파악"
+
+    - id: CM09
+      name: streak_race
+      ground_truth: "연승 보너스 모드"
+      generated: "연승 시 Streak Race 모드 진입"
+      score: 0.7
+      note: "Close - UI 버튼 위치 확인, 규칙/보상 상세 미파악"
+
+    # ===================== C. 광고/BM =====================
+
+    - id: CM10
+      name: ad_system
+      ground_truth: "인터스티셜 + 리워드 + 배너"
+      generated: "인터스티셜 + 리워드 광고"
+      score: 0.7
+      note: "Close - 배너 광고 미관찰, 나머지 확정"
+
+    # ===================== D. 기술/시스템 =====================
+
+    - id: CM11
+      name: ui_resolution
+      ground_truth: "1080x1920 (portrait)"
+      generated: "1080x1920"
+      score: 1.0
+      note: "Exact"
+
+    - id: CM12
+      name: input_method
+      ground_truth: "Unity 3D touch input"
+      generated: "3D=monkey -p, UI=input tap"
+      score: 1.0
+      note: "Exact - ADB 레벨에서 가장 상세한 분석"
+
+    - id: CM13
+      name: player_level
+      ground_truth: "117 (관찰 시점)"
+      generated: "117"
+      score: 1.0
+      note: "Exact"
+
+    - id: CM14
+      name: navigation_bar
+      ground_truth: "하단 네비게이션"
+      generated: "Y=1800"
+      score: 1.0
+      note: "Exact - 좌표까지 정밀 측정"
+
+    - id: CM15
+      name: screen_states
+      ground_truth: "7+ 화면 상태"
+      generated: 7
+      score: 0.7
+      note: "Close - 7개 분류 완료, 추가 상태 존재 가능"
+
+    - id: CM16
+      name: animation_settle_time
+      ground_truth: "가변 (홀더 상태 의존)"
+      generated: "4.0~6.0초 (상태별 가변)"
+      score: 1.0
+      note: "Exact - 3단계 세틀 타임 + late arrival 패턴 정밀 분석"
+
+  summary:
+    total: 16
+    exact_count: 10
+    close_count: 4
+    partial_count: 1
+    wrong_count: 0
+    missing_count: 1
+
+    # Exact(1.0)x10 + Close(0.7)x4 + Partial(0.4)x1 + Missing(0.0)x1
+    # = 10.0 + 2.8 + 0.4 + 0.0 = 13.2
+    sum: 13.2
+    average: 0.825
+
+    # ============================================================
+    # 결론
+    # ============================================================
+    #
+    # C10+ v2.5 Casual Puzzle 정확도: 82.5%
+    #
+    # 강점:
+    #   - 메커닉 핵심 (매칭/홀더/색상/승패) 완벽 파악
+    #   - Unity 3D 입력 시스템 심층 분석 (monkey -p 발견)
+    #   - 세틀 타임/late arrival 등 미세 타이밍까지 정밀 측정
+    #
+    # 약점:
+    #   - 승리 0회 → win 화면 상세 미캡처
+    #   - 부스터 시스템 상세 미파악
+    #   - 재화/상점 시스템 미탐색
+    #   - 고레벨 난이도 변화 패턴 미분석
+    #
+    # 개선 방향:
+    #   1. 승리 달성 → win 화면, 별 평가, 보상 캡처
+    #   2. 부스터 UI 상세 탐색
+    #   3. 상점/재화 시스템 분석
+    #   4. monkey -p 광고 중단 문제 해결

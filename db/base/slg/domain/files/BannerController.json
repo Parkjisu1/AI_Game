@@ -1,0 +1,126 @@
+{
+  "fileId": "BannerController",
+  "filePath": "PlaygroundConnections\\BannerController.cs",
+  "namespace": "PlayableAdsKit.Scripts.PlaygroundConnections",
+  "layer": "Domain",
+  "genre": "Slg",
+  "role": "Controller",
+  "system": "PlaygroundConnections",
+  "score": 0.4,
+  "usings": [
+    "DG.Tweening",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "BannerController",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "_logoShineEffect",
+          "fieldType": "RectTransform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "_button",
+          "fieldType": "RectTransform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Start",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Start()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "CallStore",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void CallStore()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "AnimateLogoShineEffect",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void AnimateLogoShineEffect()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "AnimateButton",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void AnimateButton()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void CallStore()"
+  ],
+  "requires": [],
+  "tags": {
+    "major": [],
+    "minor": []
+  },
+  "uses": [
+    "3f",
+    "Analytics",
+    "CtaController",
+    "Instance",
+    "_button",
+    "_logoShineEffect"
+  ],
+  "usedBy": []
+}

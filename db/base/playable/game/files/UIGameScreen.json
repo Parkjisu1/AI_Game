@@ -1,0 +1,615 @@
+{
+  "fileId": "UIGameScreen",
+  "filePath": "unity_project\\Assets\\Scripts\\UI\\UIGameScreen.cs",
+  "namespace": "",
+  "layer": "Game",
+  "genre": "Playable",
+  "role": "View",
+  "system": "unity_project",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI"
+  ],
+  "classes": [
+    {
+      "className": "UIGameScreen",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "UIBase",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "m_MessageText",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_TurnText",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_TopPanel",
+          "fieldType": "RectTransform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_BottomPanel",
+          "fieldType": "RectTransform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_MonsterPanel",
+          "fieldType": "RectTransform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_MonsterPortraitContainer",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_MonsterPortraitPrefab",
+          "fieldType": "GameObject",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_MonsterPortraits",
+          "fieldType": "List<Image>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "new List<Image>()"
+        },
+        {
+          "fieldName": "m_BtnAttack",
+          "fieldType": "Button",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_BtnAttackText",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_BtnAttackImage",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_SelectedUnitPortrait",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_SelectedUnitName",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_MessageCoroutine",
+          "fieldType": "Coroutine",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_WaitMessageHide",
+          "fieldType": "WaitForSeconds",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "OnInit",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnInit()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnShow",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnShow()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "CreateUIElements",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void CreateUIElements()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "CreateMonsterPanel",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void CreateMonsterPanel()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "CreateBottomPanel",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void CreateBottomPanel()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "SubscribeToEvents",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void SubscribeToEvents()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateMonsterPortraits",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "List<UnitBase>",
+              "paramName": "enemies"
+            }
+          ],
+          "signature": "void UpdateMonsterPortraits(List<UnitBase> enemies)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "CreateMonsterPortrait",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "UnitBase",
+              "paramName": "enemy"
+            }
+          ],
+          "signature": "void CreateMonsterPortrait(UnitBase enemy)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "GetUnitColor",
+          "accessModifier": "private",
+          "returnType": "Color",
+          "parameters": [
+            {
+              "paramType": "UnitBase",
+              "paramName": "unit"
+            }
+          ],
+          "signature": "Color GetUnitColor(UnitBase unit)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "OnEnemyDeath",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Image",
+              "paramName": "portrait"
+            },
+            {
+              "paramType": "Image",
+              "paramName": "background"
+            }
+          ],
+          "signature": "void OnEnemyDeath(Image portrait, Image background)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "ClearMonsterPortraits",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void ClearMonsterPortraits()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnTurnChanged",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "turn"
+            }
+          ],
+          "signature": "void OnTurnChanged(int turn)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnUnitSelected",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "UnitBase",
+              "paramName": "unit"
+            }
+          ],
+          "signature": "void OnUnitSelected(UnitBase unit)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnPhaseChanged",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "TurnManager.TurnPhase",
+              "paramName": "phase"
+            }
+          ],
+          "signature": "void OnPhaseChanged(TurnManager.TurnPhase phase)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnAttackButtonClicked",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnAttackButtonClicked()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateAttackButtonState",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "interactable"
+            }
+          ],
+          "signature": "void UpdateAttackButtonState(bool interactable)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "ShowMessage",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "message"
+            },
+            {
+              "paramType": "bool autoHide =",
+              "paramName": "false"
+            }
+          ],
+          "signature": "void ShowMessage(string message, bool autoHide = false)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "HideMessage",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void HideMessage()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "HideMessageCoroutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [],
+          "signature": "IEnumerator HideMessageCoroutine()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateTurnText",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "turn"
+            }
+          ],
+          "signature": "void UpdateTurnText(int turn)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnUIReset",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnUIReset()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "UnsubscribeFromEvents",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void UnsubscribeFromEvents()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnDestroy",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnDestroy()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void UpdateMonsterPortraits(List<UnitBase> enemies)",
+    "void UpdateAttackButtonState(bool interactable)",
+    "void ShowMessage(string message, bool autoHide = false)",
+    "void HideMessage()",
+    "void UpdateTurnText(int turn)"
+  ],
+  "requires": [
+    "UIBase"
+  ],
+  "tags": {
+    "major": [
+      "ResponseTrigger",
+      "DataSync"
+    ],
+    "minor": [
+      "Spawn",
+      "Find"
+    ]
+  },
+  "uses": [
+    "10",
+    "60f",
+    "Font",
+    "GameManager",
+    "HorizontalLayoutGroup",
+    "Instance",
+    "Mathf",
+    "Outline",
+    "RectOffset",
+    "Renderer",
+    "UIBase",
+    "UXEffectManager",
+    "UnitBase",
+    "WaitForSeconds"
+  ],
+  "usedBy": []
+}

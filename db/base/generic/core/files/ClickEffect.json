@@ -1,0 +1,100 @@
+{
+  "fileId": "ClickEffect",
+  "filePath": "InGame\\Pool\\ClickEffect.cs",
+  "namespace": "",
+  "layer": "Core",
+  "genre": "Generic",
+  "role": "UX",
+  "system": "InGame",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "ClickEffect",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "clickEffectPool",
+          "fieldType": "ClickEffectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "isLoading",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Initialize",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "ClickEffectPool",
+              "paramName": "_clickEffectPool"
+            }
+          ],
+          "signature": "void Initialize(ClickEffectPool _clickEffectPool)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ReturnPool",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void ReturnPool()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Initialize(ClickEffectPool _clickEffectPool)",
+    "void ReturnPool()"
+  ],
+  "requires": [
+    "ClickEffectPool"
+  ],
+  "tags": {
+    "major": [],
+    "minor": []
+  },
+  "uses": [],
+  "usedBy": []
+}

@@ -1,0 +1,817 @@
+{
+  "fileId": "LabMountComponentScrollView",
+  "filePath": "UI\\LabMountComponentScrollView.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Rpg",
+  "role": "Context",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "System",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "EasingCore",
+    "FancyScrollView"
+  ],
+  "classes": [
+    {
+      "className": "LabMountScrollContext",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "FancyScrollRectContext",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "SelectedIndex",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "-1"
+        },
+        {
+          "fieldName": "OnCellClicked",
+          "fieldType": "Action<int>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Clear",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Clear()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetData",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int[]",
+              "paramName": "ids"
+            },
+            {
+              "paramType": "int",
+              "paramName": "maxTableID"
+            }
+          ],
+          "signature": "void SetData(int[] ids, int maxTableID)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "OnCellClicked",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Action<int>",
+              "paramName": "callback"
+            }
+          ],
+          "signature": "void OnCellClicked(Action<int> callback)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateData",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "IList<LabMountScrollItemData>",
+              "paramName": "items"
+            }
+          ],
+          "signature": "void UpdateData(IList<LabMountScrollItemData> items)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "ScrollTo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "index"
+            },
+            {
+              "paramType": "float",
+              "paramName": "duration"
+            },
+            {
+              "paramType": "Ease",
+              "paramName": "easing"
+            },
+            {
+              "paramType": "Alignment alignment =",
+              "paramName": "Alignment.Middle"
+            }
+          ],
+          "signature": "void ScrollTo(int index, float duration, Ease easing, Alignment alignment = Alignment.Middle)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "JumpTo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "index"
+            },
+            {
+              "paramType": "Alignment alignment =",
+              "paramName": "Alignment.Middle"
+            }
+          ],
+          "signature": "void JumpTo(int index, Alignment alignment = Alignment.Middle)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateSelection",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "index"
+            }
+          ],
+          "signature": "void UpdateSelection(int index)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "ResizePool",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "firstPosition"
+            }
+          ],
+          "signature": "void ResizePool(float firstPosition)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetTutorialFirstElement",
+          "accessModifier": "public",
+          "returnType": "RectTransform",
+          "parameters": [],
+          "signature": "RectTransform GetTutorialFirstElement()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "SetMessageController",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "IMessageController<GameModeMain>",
+              "paramName": "messageController"
+            }
+          ],
+          "signature": "void SetMessageController(IMessageController<GameModeMain> messageController)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        }
+      ]
+    },
+    {
+      "className": "LabMountScrollItemData",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "Items",
+          "fieldType": "int[]",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new int[GlobalConstants.LabItemMaxView]"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Clear",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Clear()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetData",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int[]",
+              "paramName": "ids"
+            },
+            {
+              "paramType": "int",
+              "paramName": "maxTableID"
+            }
+          ],
+          "signature": "void SetData(int[] ids, int maxTableID)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "OnCellClicked",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Action<int>",
+              "paramName": "callback"
+            }
+          ],
+          "signature": "void OnCellClicked(Action<int> callback)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateData",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "IList<LabMountScrollItemData>",
+              "paramName": "items"
+            }
+          ],
+          "signature": "void UpdateData(IList<LabMountScrollItemData> items)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "ScrollTo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "index"
+            },
+            {
+              "paramType": "float",
+              "paramName": "duration"
+            },
+            {
+              "paramType": "Ease",
+              "paramName": "easing"
+            },
+            {
+              "paramType": "Alignment alignment =",
+              "paramName": "Alignment.Middle"
+            }
+          ],
+          "signature": "void ScrollTo(int index, float duration, Ease easing, Alignment alignment = Alignment.Middle)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "JumpTo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "index"
+            },
+            {
+              "paramType": "Alignment alignment =",
+              "paramName": "Alignment.Middle"
+            }
+          ],
+          "signature": "void JumpTo(int index, Alignment alignment = Alignment.Middle)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateSelection",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "index"
+            }
+          ],
+          "signature": "void UpdateSelection(int index)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "ResizePool",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "firstPosition"
+            }
+          ],
+          "signature": "void ResizePool(float firstPosition)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetTutorialFirstElement",
+          "accessModifier": "public",
+          "returnType": "RectTransform",
+          "parameters": [],
+          "signature": "RectTransform GetTutorialFirstElement()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "SetMessageController",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "IMessageController<GameModeMain>",
+              "paramName": "messageController"
+            }
+          ],
+          "signature": "void SetMessageController(IMessageController<GameModeMain> messageController)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        }
+      ]
+    },
+    {
+      "className": "LabMountComponentScrollView",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "FancyScrollRect<LabMountScrollItemData",
+      "interfaces": [
+        "IMessagePort<GameModeMain>"
+      ],
+      "fields": [
+        {
+          "fieldName": "modeMsgController",
+          "fieldType": "IMessageController<GameModeMain>",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": true,
+          "initialValue": null
+        },
+        {
+          "fieldName": "userInfo",
+          "fieldType": "UserInfo",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": true,
+          "initialValue": null
+        },
+        {
+          "fieldName": "mainInjector",
+          "fieldType": "Injector",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": true,
+          "initialValue": null
+        },
+        {
+          "fieldName": "CellSize",
+          "fieldType": "override float",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "> cellSize"
+        },
+        {
+          "fieldName": "CellPrefab",
+          "fieldType": "override GameObject",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "> cellPrefab"
+        },
+        {
+          "fieldName": "DataCount",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "> ItemsSource.Count"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Clear",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Clear()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetData",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int[]",
+              "paramName": "ids"
+            },
+            {
+              "paramType": "int",
+              "paramName": "maxTableID"
+            }
+          ],
+          "signature": "void SetData(int[] ids, int maxTableID)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "OnCellClicked",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Action<int>",
+              "paramName": "callback"
+            }
+          ],
+          "signature": "void OnCellClicked(Action<int> callback)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateData",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "IList<LabMountScrollItemData>",
+              "paramName": "items"
+            }
+          ],
+          "signature": "void UpdateData(IList<LabMountScrollItemData> items)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "ScrollTo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "index"
+            },
+            {
+              "paramType": "float",
+              "paramName": "duration"
+            },
+            {
+              "paramType": "Ease",
+              "paramName": "easing"
+            },
+            {
+              "paramType": "Alignment alignment =",
+              "paramName": "Alignment.Middle"
+            }
+          ],
+          "signature": "void ScrollTo(int index, float duration, Ease easing, Alignment alignment = Alignment.Middle)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "JumpTo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "index"
+            },
+            {
+              "paramType": "Alignment alignment =",
+              "paramName": "Alignment.Middle"
+            }
+          ],
+          "signature": "void JumpTo(int index, Alignment alignment = Alignment.Middle)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateSelection",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "index"
+            }
+          ],
+          "signature": "void UpdateSelection(int index)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "ResizePool",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "firstPosition"
+            }
+          ],
+          "signature": "void ResizePool(float firstPosition)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetTutorialFirstElement",
+          "accessModifier": "public",
+          "returnType": "RectTransform",
+          "parameters": [],
+          "signature": "RectTransform GetTutorialFirstElement()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "SetMessageController",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "IMessageController<GameModeMain>",
+              "paramName": "messageController"
+            }
+          ],
+          "signature": "void SetMessageController(IMessageController<GameModeMain> messageController)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Clear()",
+    "void SetData(int[] ids, int maxTableID)",
+    "void OnCellClicked(Action<int> callback)",
+    "void UpdateData(IList<LabMountScrollItemData> items)",
+    "void ScrollTo(int index, float duration, Ease easing, Alignment alignment = Alignment.Middle)",
+    "void JumpTo(int index, Alignment alignment = Alignment.Middle)",
+    "RectTransform GetTutorialFirstElement()",
+    "void SetMessageController(IMessageController<GameModeMain> messageController)",
+    "void Clear()",
+    "void SetData(int[] ids, int maxTableID)",
+    "void OnCellClicked(Action<int> callback)",
+    "void UpdateData(IList<LabMountScrollItemData> items)",
+    "void ScrollTo(int index, float duration, Ease easing, Alignment alignment = Alignment.Middle)",
+    "void JumpTo(int index, Alignment alignment = Alignment.Middle)",
+    "RectTransform GetTutorialFirstElement()"
+  ],
+  "requires": [
+    "FancyScrollRect",
+    "FancyScrollRectContext",
+    "GameModeMain",
+    "IMessageController",
+    "IMessagePort",
+    "Injector",
+    "LabMountComponentGroup",
+    "UserInfo"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification",
+      "DataSync",
+      "ResponseTrigger"
+    ],
+    "minor": [
+      "Assign",
+      "Find"
+    ]
+  },
+  "uses": [
+    "Addressables",
+    "Debug",
+    "FancyCell",
+    "FancyScrollRect",
+    "FancyScrollRectContext",
+    "GameModeMain",
+    "GetAlignment",
+    "LabMountComponentGroup",
+    "LabMountScrollItemData",
+    "Mathf",
+    "MissingComponentException"
+  ],
+  "usedBy": []
+}

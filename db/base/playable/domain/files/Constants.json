@@ -1,0 +1,357 @@
+{
+  "fileId": "Constants",
+  "filePath": "Scratch\\Core\\Constants.cs",
+  "namespace": "ScratchCardAsset.Core",
+  "layer": "Domain",
+  "genre": "Playable",
+  "role": "Config",
+  "system": "Scratch",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "Constants",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": true,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "PixelsPerUnit",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "100f"
+        },
+        {
+          "fieldName": "BlendOpShaderParam",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"_BlendOpValue\""
+        },
+        {
+          "fieldName": "SrcColorBlend",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"_SrcColorBlend\""
+        },
+        {
+          "fieldName": "DstColorBlend",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"_DstColorBlend\""
+        },
+        {
+          "fieldName": "SrcAlphaBlend",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"_SrcAlphaBlend\""
+        },
+        {
+          "fieldName": "DstAlphaBlend",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"_DstAlphaBlend\""
+        },
+        {
+          "fieldName": "SourceTextureParam",
+          "fieldType": "string",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"_SourceTex\""
+        },
+        {
+          "fieldName": "SourceTexture",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "Shader.PropertyToID(SourceTextureParam)"
+        },
+        {
+          "fieldName": "MaskTextureParam",
+          "fieldType": "string",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"_MaskTex\""
+        },
+        {
+          "fieldName": "OffsetParam",
+          "fieldType": "string",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"_Offset\""
+        },
+        {
+          "fieldName": "MaskTexture",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "Shader.PropertyToID(MaskTextureParam)"
+        },
+        {
+          "fieldName": "Offset",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "Shader.PropertyToID(OffsetParam)"
+        }
+      ],
+      "properties": [],
+      "methods": []
+    },
+    {
+      "className": "General",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": true,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "PixelsPerUnit",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "100f"
+        }
+      ],
+      "properties": [],
+      "methods": []
+    },
+    {
+      "className": "BrushShader",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": true,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "BlendOpShaderParam",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"_BlendOpValue\""
+        },
+        {
+          "fieldName": "SrcColorBlend",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"_SrcColorBlend\""
+        },
+        {
+          "fieldName": "DstColorBlend",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"_DstColorBlend\""
+        },
+        {
+          "fieldName": "SrcAlphaBlend",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"_SrcAlphaBlend\""
+        },
+        {
+          "fieldName": "DstAlphaBlend",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"_DstAlphaBlend\""
+        }
+      ],
+      "properties": [],
+      "methods": []
+    },
+    {
+      "className": "ProgressShader",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": true,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "SourceTextureParam",
+          "fieldType": "string",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"_SourceTex\""
+        },
+        {
+          "fieldName": "SourceTexture",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "Shader.PropertyToID(SourceTextureParam)"
+        }
+      ],
+      "properties": [],
+      "methods": []
+    },
+    {
+      "className": "MaskShader",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": true,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "MaskTextureParam",
+          "fieldType": "string",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"_MaskTex\""
+        },
+        {
+          "fieldName": "OffsetParam",
+          "fieldType": "string",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"_Offset\""
+        },
+        {
+          "fieldName": "MaskTexture",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "Shader.PropertyToID(MaskTextureParam)"
+        },
+        {
+          "fieldName": "Offset",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "Shader.PropertyToID(OffsetParam)"
+        }
+      ],
+      "properties": [],
+      "methods": []
+    }
+  ],
+  "provides": [],
+  "requires": [],
+  "tags": {
+    "major": [],
+    "minor": []
+  },
+  "uses": [],
+  "usedBy": []
+}

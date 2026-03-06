@@ -1,0 +1,153 @@
+{
+  "fileId": "ProductHPTextWin",
+  "filePath": "UI\\WorldSpaceUI\\ProductHPTextWin.cs",
+  "namespace": "",
+  "layer": "Game",
+  "genre": "Idle",
+  "role": "View",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "TMPro"
+  ],
+  "classes": [
+    {
+      "className": "ProductHPTextWin",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "InGameTextWin",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "target",
+          "fieldType": "ProductBase",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "SetData",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "ProductBase",
+              "paramName": "target"
+            },
+            {
+              "paramType": "int",
+              "paramName": "fontSize"
+            }
+          ],
+          "signature": "bool SetData(ProductBase target, int fontSize)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "Update",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Update()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "TurnOff",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void TurnOff()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "IsSameProduct",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "ProductBase",
+              "paramName": "product"
+            }
+          ],
+          "signature": "bool IsSameProduct(ProductBase product)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "syncPosition",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void syncPosition()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "bool SetData(ProductBase target, int fontSize)",
+    "void Update()",
+    "void TurnOff()",
+    "bool IsSameProduct(ProductBase product)"
+  ],
+  "requires": [
+    "InGameTextWin",
+    "ProductBase"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification",
+      "ConditionCheck"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "CurrencyConverter",
+    "InGameTextWin",
+    "StringUtils"
+  ],
+  "usedBy": []
+}

@@ -1,0 +1,268 @@
+{
+  "fileId": "GameState",
+  "filePath": "InGame\\GameState.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Puzzle",
+  "role": "Model",
+  "system": "InGame",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "Global_Define",
+    "System"
+  ],
+  "classes": [
+    {
+      "className": "GameState",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "score",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "isDestroyAllContagion",
+          "fieldType": "bool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "dicCollectedJewels",
+          "fieldType": "Dictionary<eJewelColor, int>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Dictionary<eJewelColor, int>()"
+        },
+        {
+          "fieldName": "dicCollectedElements",
+          "fieldType": "Dictionary<eElementType, int>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Dictionary<eElementType, int>()"
+        },
+        {
+          "fieldName": "dicCollectedSpeicalBlocks",
+          "fieldType": "Dictionary<eSpecialBlockType, int>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Dictionary<eSpecialBlockType, int>()"
+        },
+        {
+          "fieldName": "dicCollectedCollectables",
+          "fieldType": "Dictionary<eCollectableType, int>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Dictionary<eCollectableType, int>()"
+        },
+        {
+          "fieldName": "dicCollectedSpecialElements",
+          "fieldType": "Dictionary<eSpecialElement, int>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Dictionary<eSpecialElement, int>()"
+        },
+        {
+          "fieldName": "dicDigCollections",
+          "fieldType": "Dictionary<eKindOfDigCollection, int>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Dictionary<eKindOfDigCollection, int>()"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Reset",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Reset()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "AddJewel",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "eJewelColor",
+              "paramName": "_jewel"
+            }
+          ],
+          "signature": "void AddJewel(eJewelColor _jewel)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": null
+        },
+        {
+          "methodName": "AddElement",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "eElementType",
+              "paramName": "_element"
+            }
+          ],
+          "signature": "void AddElement(eElementType _element)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": null
+        },
+        {
+          "methodName": "AddSpecialElement",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "eSpecialElement",
+              "paramName": "_specialElement"
+            }
+          ],
+          "signature": "void AddSpecialElement(eSpecialElement _specialElement)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": null
+        },
+        {
+          "methodName": "AddSpecialBlock",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "eSpecialBlockType",
+              "paramName": "_block"
+            }
+          ],
+          "signature": "void AddSpecialBlock(eSpecialBlockType _block)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": null
+        },
+        {
+          "methodName": "AddCollectable",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "eCollectableType",
+              "paramName": "_collectable"
+            }
+          ],
+          "signature": "void AddCollectable(eCollectableType _collectable)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": null
+        },
+        {
+          "methodName": "AddDigCollection",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "eKindOfDigCollection",
+              "paramName": "_dig"
+            }
+          ],
+          "signature": "void AddDigCollection(eKindOfDigCollection _dig)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Reset()",
+    "void AddJewel(eJewelColor _jewel)",
+    "void AddElement(eElementType _element)",
+    "void AddSpecialElement(eSpecialElement _specialElement)",
+    "void AddSpecialBlock(eSpecialBlockType _block)",
+    "void AddCollectable(eCollectableType _collectable)",
+    "void AddDigCollection(eKindOfDigCollection _dig)"
+  ],
+  "requires": [],
+  "tags": {
+    "major": [
+      "ValueModification"
+    ],
+    "minor": []
+  },
+  "uses": [],
+  "usedBy": []
+}

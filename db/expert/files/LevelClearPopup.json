@@ -1,0 +1,33 @@
+{
+  "fileId": "LevelClearPopup",
+  "project": "DropTheCat",
+  "layer": "Game",
+  "genre": "Puzzle",
+  "role": "Handler",
+  "phase": 3,
+  "namespace": "DropTheCat.Game",
+  "className": "LevelClearPopup",
+  "baseClass": "MonoBehaviour",
+  "score": 0.6,
+  "provides": [
+    "void Show(int stars, int score, int coinReward)",
+    "void Hide()",
+    "void OnNextLevelClicked()",
+    "void OnRetryClicked()",
+    "void OnMainMenuClicked()"
+  ],
+  "requires": [
+    "LevelManager.NextLevel/RetryLevel",
+    "CurrencyManager.AddCoins",
+    "SoundManager.PlaySFX",
+    "GameManager.GoToMain",
+    "DG.Tweening (DOTween, #if DOTWEEN)"
+  ],
+  "definesTypes": [],
+  "tags": {
+    "major": ["FlowControl", "ResponseTrigger"],
+    "minor": ["Assign", "Delay", "Notify"]
+  },
+  "sourcePath": "E:\\AI\\projects\\DropTheCat\\output\\LevelClearPopup.cs",
+  "timestamp": "2026-02-10T06:30:00Z"
+}

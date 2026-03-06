@@ -1,0 +1,180 @@
+{
+  "fileId": "ShopTable",
+  "filePath": "Data\\ShopTable.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Tycoon",
+  "role": "Model",
+  "system": "Data",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "Global_Define"
+  ],
+  "classes": [
+    {
+      "className": "ShopTable",
+      "classType": "struct",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "id",
+          "fieldType": "eShopProductType",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "productType",
+          "fieldType": "eShopProductType",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "liProductValue",
+          "fieldType": "List<int>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "productBonus",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "priceType",
+          "fieldType": "eShopPriceType",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "priceValue_Google",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "priceValue_Apple",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "storePurchaseCode",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "SetData",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "_id"
+            },
+            {
+              "paramType": "string",
+              "paramName": "_liProductValue"
+            },
+            {
+              "paramType": "string",
+              "paramName": "_productBonus"
+            },
+            {
+              "paramType": "string",
+              "paramName": "_priceType"
+            },
+            {
+              "paramType": "string",
+              "paramName": "_priceValue_Google"
+            },
+            {
+              "paramType": "string",
+              "paramName": "_priceValue_Apple"
+            },
+            {
+              "paramType": "string",
+              "paramName": "_storePurchaseCode"
+            }
+          ],
+          "signature": "void SetData(string _id, string _liProductValue, string _productBonus, string _priceType, string _priceValue_Google, string _priceValue_Apple, string _storePurchaseCode)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void SetData(string _id, string _liProductValue, string _productBonus, string _priceType, string _priceValue_Google, string _priceValue_Apple, string _storePurchaseCode)"
+  ],
+  "requires": [],
+  "tags": {
+    "major": [
+      "ValueModification"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "_liProductValue"
+  ],
+  "usedBy": []
+}

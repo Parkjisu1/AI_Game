@@ -1,0 +1,123 @@
+{
+  "fileId": "Enemy",
+  "filePath": "Enemy.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Rpg",
+  "role": "Component",
+  "system": "Enemy",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "Enemy",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "despawnTime",
+          "fieldType": "float speed,",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "3f"
+        },
+        {
+          "fieldName": "shouldDestroy",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "true"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Start",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Start()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnEnable",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnEnable()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Update",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Update()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "DestroyRoutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [],
+          "signature": "IEnumerator DestroyRoutine()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": "Despawn"
+        }
+      ]
+    }
+  ],
+  "provides": [],
+  "requires": [],
+  "tags": {
+    "major": [],
+    "minor": [
+      "Despawn"
+    ]
+  },
+  "uses": [
+    "EnemyFactory",
+    "GameManager",
+    "Instance"
+  ],
+  "usedBy": []
+}

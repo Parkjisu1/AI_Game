@@ -1,0 +1,244 @@
+{
+  "fileId": "GameRuleOutGame",
+  "filePath": "GameRuleOutGame.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Idle",
+  "role": "Message",
+  "system": "GameRuleOutGame",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.EventSystems"
+  ],
+  "classes": [
+    {
+      "className": "GameRuleOutGame",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "GameRuleBase",
+      "interfaces": [
+        "IMessagePort<GameModeMain>"
+      ],
+      "fields": [
+        {
+          "fieldName": "modeMsgController",
+          "fieldType": "IMessageController<GameModeMain>",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": true,
+          "initialValue": null
+        },
+        {
+          "fieldName": "selected",
+          "fieldType": "WorldSlot",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "winFactory",
+          "fieldType": "WorldSlot",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "pressed",
+          "fieldType": "Vector3",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "SetNewWorldFactory",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "WorldSlot",
+              "paramName": "winFactory"
+            }
+          ],
+          "signature": "void SetNewWorldFactory(WorldSlot winFactory)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "UpdateLogic",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "deltaTime"
+            }
+          ],
+          "signature": "void UpdateLogic(float deltaTime)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "updateInput",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void updateInput()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnHammerDamage",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "ProductBase",
+              "paramName": "product"
+            },
+            {
+              "paramType": "Vector3",
+              "paramName": "hitPosition"
+            },
+            {
+              "paramType": "int",
+              "paramName": "raycastHittedIndex"
+            }
+          ],
+          "signature": "void OnHammerDamage(ProductBase product, Vector3 hitPosition, int raycastHittedIndex)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnEnableRule",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnEnableRule()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnDisableRule",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnDisableRule()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "SetMessageController",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "IMessageController<GameModeMain>",
+              "paramName": "messageController"
+            }
+          ],
+          "signature": "void SetMessageController(IMessageController<GameModeMain> messageController)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void SetNewWorldFactory(WorldSlot winFactory)",
+    "void UpdateLogic(float deltaTime)",
+    "void OnHammerDamage(ProductBase product, Vector3 hitPosition, int raycastHittedIndex)",
+    "void OnEnableRule()",
+    "void OnDisableRule()",
+    "void SetMessageController(IMessageController<GameModeMain> messageController)"
+  ],
+  "requires": [
+    "GameModeMain",
+    "GameRuleBase",
+    "IMessageController",
+    "IMessagePort",
+    "WorldSlot"
+  ],
+  "tags": {
+    "major": [
+      "ResponseTrigger",
+      "ValueModification",
+      "DataSync"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "100",
+    "GameModeMain",
+    "GameRuleBase",
+    "Input",
+    "LayerMask",
+    "Mathf",
+    "OnOffGameNodeIndexMsg",
+    "Physics2D",
+    "SetUserIntDataMsg",
+    "ShowVFXMsg",
+    "WorldSlot"
+  ],
+  "usedBy": []
+}

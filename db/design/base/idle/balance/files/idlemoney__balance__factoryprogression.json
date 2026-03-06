@@ -1,0 +1,272 @@
+{
+  "designId": "idlemoney__balance__factoryprogression",
+  "project": "IdleMoney",
+  "domain": "Balance",
+  "genre": "Idle",
+  "system": "FactoryProgression",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "table",
+  "balance_area": "progression",
+  "source_file": "FactoryLevelUp.json",
+  "table_stats": {
+    "row_count": 1600,
+    "columns": [
+      "FactoryLevel",
+      "LevelUpMoneyCost",
+      "LevelUpMoneyCostFactor",
+      "MaxOpenProductGroupID",
+      "HammerPower",
+      "MoneyBonus",
+      "MoneyBonusUpriseCheckPoint"
+    ],
+    "numeric_columns": [
+      "FactoryLevel",
+      "LevelUpMoneyCost",
+      "LevelUpMoneyCostFactor",
+      "MaxOpenProductGroupID",
+      "HammerPower",
+      "MoneyBonus",
+      "MoneyBonusUpriseCheckPoint"
+    ],
+    "text_columns": []
+  },
+  "content": {
+    "summary": "FactoryProgression 데이터 테이블 (1600행, 7열)",
+    "parameters": {
+      "FactoryLevel": "1",
+      "LevelUpMoneyCost": "1",
+      "LevelUpMoneyCostFactor": "0",
+      "MaxOpenProductGroupID": "0",
+      "HammerPower": "1",
+      "MoneyBonus": "0",
+      "MoneyBonusUpriseCheckPoint": "0"
+    },
+    "balance_points": [
+      {
+        "variable": "FactoryLevel",
+        "min_value": 1,
+        "max_value": 1600,
+        "avg_value": 800.5,
+        "growth_ratio": 1600,
+        "data_points": 1600,
+        "impact": "critical"
+      },
+      {
+        "variable": "LevelUpMoneyCost",
+        "min_value": -1,
+        "max_value": 2.27086117963664e+44,
+        "avg_value": 2.4311033999738712e+42,
+        "growth_ratio": -2.27086117963664e+44,
+        "data_points": 1600,
+        "impact": "medium"
+      },
+      {
+        "variable": "MaxOpenProductGroupID",
+        "min_value": 0,
+        "max_value": 14,
+        "avg_value": 8.67,
+        "growth_ratio": 14,
+        "data_points": 1600,
+        "impact": "high"
+      },
+      {
+        "variable": "HammerPower",
+        "min_value": 1,
+        "max_value": 9.95451146253295e+24,
+        "avg_value": 2.0596583608926616e+23,
+        "growth_ratio": 9.95451146253295e+24,
+        "data_points": 1600,
+        "impact": "critical"
+      },
+      {
+        "variable": "MoneyBonus",
+        "min_value": 0,
+        "max_value": 1327.945,
+        "avg_value": 500.82,
+        "growth_ratio": 1327.95,
+        "data_points": 1600,
+        "impact": "critical"
+      },
+      {
+        "variable": "MoneyBonusUpriseCheckPoint",
+        "min_value": 0,
+        "max_value": 1,
+        "avg_value": 0.01,
+        "growth_ratio": 1,
+        "data_points": 1600,
+        "impact": "medium"
+      }
+    ],
+    "edge_cases": [],
+    "references": []
+  },
+  "data": {
+    "_note": "Table truncated: 1600 rows total. First 10 + last 5 shown.",
+    "_total_rows": 1600,
+    "_columns": [
+      "FactoryLevel",
+      "LevelUpMoneyCost",
+      "LevelUpMoneyCostFactor",
+      "MaxOpenProductGroupID",
+      "HammerPower",
+      "MoneyBonus",
+      "MoneyBonusUpriseCheckPoint"
+    ],
+    "sample_first": [
+      {
+        "FactoryLevel": "1",
+        "LevelUpMoneyCost": "1",
+        "LevelUpMoneyCostFactor": "0",
+        "MaxOpenProductGroupID": "0",
+        "HammerPower": "1",
+        "MoneyBonus": "0",
+        "MoneyBonusUpriseCheckPoint": "0"
+      },
+      {
+        "FactoryLevel": "2",
+        "LevelUpMoneyCost": "2",
+        "LevelUpMoneyCostFactor": "0",
+        "MaxOpenProductGroupID": "0",
+        "HammerPower": "2",
+        "MoneyBonus": "0.055",
+        "MoneyBonusUpriseCheckPoint": "0"
+      },
+      {
+        "FactoryLevel": "3",
+        "LevelUpMoneyCost": "29",
+        "LevelUpMoneyCostFactor": "0",
+        "MaxOpenProductGroupID": "0",
+        "HammerPower": "4",
+        "MoneyBonus": "0.11",
+        "MoneyBonusUpriseCheckPoint": "0"
+      },
+      {
+        "FactoryLevel": "4",
+        "LevelUpMoneyCost": "41",
+        "LevelUpMoneyCostFactor": "0",
+        "MaxOpenProductGroupID": "0",
+        "HammerPower": "6",
+        "MoneyBonus": "0.165",
+        "MoneyBonusUpriseCheckPoint": "0"
+      },
+      {
+        "FactoryLevel": "5",
+        "LevelUpMoneyCost": "55",
+        "LevelUpMoneyCostFactor": "0",
+        "MaxOpenProductGroupID": "0",
+        "HammerPower": "9",
+        "MoneyBonus": "0.22",
+        "MoneyBonusUpriseCheckPoint": "0"
+      },
+      {
+        "FactoryLevel": "6",
+        "LevelUpMoneyCost": "71",
+        "LevelUpMoneyCostFactor": "0",
+        "MaxOpenProductGroupID": "0",
+        "HammerPower": "13",
+        "MoneyBonus": "0.275",
+        "MoneyBonusUpriseCheckPoint": "0"
+      },
+      {
+        "FactoryLevel": "7",
+        "LevelUpMoneyCost": "89",
+        "LevelUpMoneyCostFactor": "0",
+        "MaxOpenProductGroupID": "0",
+        "HammerPower": "17",
+        "MoneyBonus": "0.33",
+        "MoneyBonusUpriseCheckPoint": "0"
+      },
+      {
+        "FactoryLevel": "8",
+        "LevelUpMoneyCost": "109",
+        "LevelUpMoneyCostFactor": "0",
+        "MaxOpenProductGroupID": "0",
+        "HammerPower": "21",
+        "MoneyBonus": "0.385",
+        "MoneyBonusUpriseCheckPoint": "0"
+      },
+      {
+        "FactoryLevel": "9",
+        "LevelUpMoneyCost": "131",
+        "LevelUpMoneyCostFactor": "0",
+        "MaxOpenProductGroupID": "0",
+        "HammerPower": "26",
+        "MoneyBonus": "0.44",
+        "MoneyBonusUpriseCheckPoint": "0"
+      },
+      {
+        "FactoryLevel": "10",
+        "LevelUpMoneyCost": "156",
+        "LevelUpMoneyCostFactor": "0",
+        "MaxOpenProductGroupID": "0",
+        "HammerPower": "30",
+        "MoneyBonus": "0.495",
+        "MoneyBonusUpriseCheckPoint": "0"
+      }
+    ],
+    "sample_last": [
+      {
+        "FactoryLevel": "1596",
+        "LevelUpMoneyCost": "1.89590702537142E+44",
+        "LevelUpMoneyCostFactor": "0",
+        "MaxOpenProductGroupID": "14",
+        "HammerPower": "8.94825139147152E+24",
+        "MoneyBonus": "1327.725",
+        "MoneyBonusUpriseCheckPoint": "0"
+      },
+      {
+        "FactoryLevel": "1597",
+        "LevelUpMoneyCost": "2.01345326094445E+44",
+        "LevelUpMoneyCostFactor": "0",
+        "MaxOpenProductGroupID": "14",
+        "HammerPower": "9.18985417904125E+24",
+        "MoneyBonus": "1327.78",
+        "MoneyBonusUpriseCheckPoint": "0"
+      },
+      {
+        "FactoryLevel": "1598",
+        "LevelUpMoneyCost": "2.13828736312301E+44",
+        "LevelUpMoneyCostFactor": "0",
+        "MaxOpenProductGroupID": "14",
+        "HammerPower": "9.43798024187536E+24",
+        "MoneyBonus": "1327.835",
+        "MoneyBonusUpriseCheckPoint": "0"
+      },
+      {
+        "FactoryLevel": "1599",
+        "LevelUpMoneyCost": "2.27086117963664E+44",
+        "LevelUpMoneyCostFactor": "0",
+        "MaxOpenProductGroupID": "14",
+        "HammerPower": "9.69280570840599E+24",
+        "MoneyBonus": "1327.89",
+        "MoneyBonusUpriseCheckPoint": "0"
+      },
+      {
+        "FactoryLevel": "1600",
+        "LevelUpMoneyCost": "-1",
+        "LevelUpMoneyCostFactor": "0",
+        "MaxOpenProductGroupID": "14",
+        "HammerPower": "9.95451146253295E+24",
+        "MoneyBonus": "1327.945",
+        "MoneyBonusUpriseCheckPoint": "0"
+      }
+    ]
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from FactoryLevelUp.json (1600 rows)",
+      "note": "Live game data import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T10:32:53.932Z"
+}

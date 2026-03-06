@@ -1,0 +1,512 @@
+{
+  "fileId": "MissionPool",
+  "filePath": "InGame\\Pool\\MissionPool.cs",
+  "namespace": "",
+  "layer": "Core",
+  "genre": "Generic",
+  "role": "Pool",
+  "system": "InGame",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "Global_Define"
+  ],
+  "classes": [
+    {
+      "className": "MissionPool",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "blueJewelPool",
+          "fieldType": "ObjectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "greenJewelPool",
+          "fieldType": "ObjectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "skyBlueJewelPool",
+          "fieldType": "ObjectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "purpleJewelPool",
+          "fieldType": "ObjectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "redJewelPool",
+          "fieldType": "ObjectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "yellowJewelPool",
+          "fieldType": "ObjectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "honeyPool",
+          "fieldType": "ObjectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "sandPool",
+          "fieldType": "ObjectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "spreadPool",
+          "fieldType": "ObjectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "icePool",
+          "fieldType": "ObjectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "chainPool",
+          "fieldType": "ObjectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "runePool",
+          "fieldType": "ObjectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "boxPool",
+          "fieldType": "ObjectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "collectableBoxPool",
+          "fieldType": "ObjectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "collectableBox10Pool",
+          "fieldType": "ObjectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "collectableBox20Pool",
+          "fieldType": "ObjectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "contagionPool",
+          "fieldType": "ObjectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "digPool2_1",
+          "fieldType": "ObjectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "digPool2_2",
+          "fieldType": "ObjectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "digPool2_3",
+          "fieldType": "ObjectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "raindowWingPool",
+          "fieldType": "ObjectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "darkWingPool",
+          "fieldType": "ObjectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "comboTextPool",
+          "fieldType": "ObjectPool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "liJewels",
+          "fieldType": "List<ObjectPool>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<ObjectPool>()"
+        },
+        {
+          "fieldName": "liElements",
+          "fieldType": "List<ObjectPool>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<ObjectPool>()"
+        },
+        {
+          "fieldName": "liSpecialBlock",
+          "fieldType": "List<ObjectPool>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<ObjectPool>()"
+        },
+        {
+          "fieldName": "liSpecialElement",
+          "fieldType": "List<ObjectPool>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<ObjectPool>()"
+        },
+        {
+          "fieldName": "liCollectables",
+          "fieldType": "List<ObjectPool>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<ObjectPool>()"
+        },
+        {
+          "fieldName": "liDig",
+          "fieldType": "List<ObjectPool>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<ObjectPool>()"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Initialize",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Initialize()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetJewelPool",
+          "accessModifier": "public",
+          "returnType": "ObjectPool",
+          "parameters": [
+            {
+              "paramType": "eJewelColor",
+              "paramName": "_color"
+            }
+          ],
+          "signature": "ObjectPool GetJewelPool(eJewelColor _color)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetElementPool",
+          "accessModifier": "public",
+          "returnType": "ObjectPool",
+          "parameters": [
+            {
+              "paramType": "eElementType",
+              "paramName": "_element"
+            }
+          ],
+          "signature": "ObjectPool GetElementPool(eElementType _element)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetSpecialElement",
+          "accessModifier": "public",
+          "returnType": "ObjectPool",
+          "parameters": [
+            {
+              "paramType": "eSpecialElement",
+              "paramName": "_specialElement"
+            }
+          ],
+          "signature": "ObjectPool GetSpecialElement(eSpecialElement _specialElement)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetSpecialBlock",
+          "accessModifier": "public",
+          "returnType": "ObjectPool",
+          "parameters": [
+            {
+              "paramType": "eSpecialBlockType",
+              "paramName": "_specialBlock"
+            }
+          ],
+          "signature": "ObjectPool GetSpecialBlock(eSpecialBlockType _specialBlock)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetDig",
+          "accessModifier": "public",
+          "returnType": "ObjectPool",
+          "parameters": [],
+          "signature": "ObjectPool GetDig()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetCollectable",
+          "accessModifier": "public",
+          "returnType": "ObjectPool",
+          "parameters": [
+            {
+              "paramType": "eCollectableType",
+              "paramName": "_collectable"
+            }
+          ],
+          "signature": "ObjectPool GetCollectable(eCollectableType _collectable)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetComboText",
+          "accessModifier": "public",
+          "returnType": "ObjectPool",
+          "parameters": [],
+          "signature": "ObjectPool GetComboText()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Initialize()",
+    "ObjectPool GetJewelPool(eJewelColor _color)",
+    "ObjectPool GetElementPool(eElementType _element)",
+    "ObjectPool GetSpecialElement(eSpecialElement _specialElement)",
+    "ObjectPool GetSpecialBlock(eSpecialBlockType _specialBlock)",
+    "ObjectPool GetDig()",
+    "ObjectPool GetCollectable(eCollectableType _collectable)",
+    "ObjectPool GetComboText()"
+  ],
+  "requires": [
+    "ObjectPool"
+  ],
+  "tags": {
+    "major": [],
+    "minor": [
+      "Find"
+    ]
+  },
+  "uses": [
+    "ObjectPool"
+  ],
+  "usedBy": []
+}

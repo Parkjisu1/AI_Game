@@ -1,0 +1,404 @@
+{
+  "fileId": "MoneySystem",
+  "filePath": "Managers\\MoneySystem.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Tycoon",
+  "role": "Model",
+  "system": "Managers",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine",
+    "TMPro",
+    "DG.Tweening",
+    "Luna.Unity",
+    "System.Collections"
+  ],
+  "classes": [
+    {
+      "className": "MoneySystem",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "instance",
+          "fieldType": "MoneySystem",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "moneyText",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "incomeText",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "endGameCard",
+          "fieldType": "GameObject",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "baseDailyIncome",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "1000"
+        },
+        {
+          "fieldName": "dailyIncome",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "1"
+        },
+        {
+          "fieldName": "incomeInterval",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "1.5f"
+        },
+        {
+          "fieldName": "currentMoney",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0"
+        },
+        {
+          "fieldName": "incomeMultiplier",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "isProcessingDeduction",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        },
+        {
+          "fieldName": "winCondition",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "1000001"
+        },
+        {
+          "fieldName": "hasGameEnded",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Awake",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Awake()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Start",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Start()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "IncomeCoroutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [],
+          "signature": "IEnumerator IncomeCoroutine()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "EarnIncome",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void EarnIncome()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "UpgradeDailyIncome",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "amount"
+            }
+          ],
+          "signature": "void UpgradeDailyIncome(int amount)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateIncomeUI",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void UpdateIncomeUI()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "AnimateMoneyUpdate",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "earnedAmount"
+            }
+          ],
+          "signature": "void AnimateMoneyUpdate(int earnedAmount)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "AddMoney",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "amount"
+            }
+          ],
+          "signature": "void AddMoney(int amount)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": null
+        },
+        {
+          "methodName": "DeductMoney",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "amount"
+            }
+          ],
+          "signature": "void DeductMoney(int amount)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ProcessDeduction",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "amount"
+            }
+          ],
+          "signature": "IEnumerator ProcessDeduction(int amount)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": "FlowControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "CheckBalance",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "amount"
+            }
+          ],
+          "signature": "bool CheckBalance(int amount)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "CheckWinCondition",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void CheckWinCondition()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "TriggerEndGame",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void TriggerEndGame()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void UpgradeDailyIncome(int amount)",
+    "void AddMoney(int amount)",
+    "void DeductMoney(int amount)",
+    "bool CheckBalance(int amount)"
+  ],
+  "requires": [
+    "MoneySystem",
+    "TextMeshProUGUI"
+  ],
+  "tags": {
+    "major": [
+      "ConditionCheck",
+      "DataSync",
+      "ValueModification"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "Analytics",
+    "DOTween",
+    "Debug",
+    "Mathf",
+    "WaitForSeconds"
+  ],
+  "usedBy": []
+}

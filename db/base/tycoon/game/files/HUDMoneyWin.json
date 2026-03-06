@@ -1,0 +1,222 @@
+{
+  "fileId": "HUDMoneyWin",
+  "filePath": "UI\\HUDMoneyWin.cs",
+  "namespace": "",
+  "layer": "Game",
+  "genre": "Tycoon",
+  "role": "View",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "TMPro",
+    "System",
+    "DG.Tweening"
+  ],
+  "classes": [
+    {
+      "className": "HUDMoneyWin",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "WindowBase",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "totalMoneyText",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "earningPerSecondText",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "calculatorPerSec",
+          "fieldType": "AlarmTimer",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "currentMoney",
+          "fieldType": "double",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "InitWindow",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "WindowManager",
+              "paramName": "owner"
+            },
+            {
+              "paramType": "WindowManager>",
+              "paramName": "messageController"
+            }
+          ],
+          "signature": "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "SetTotalMoney",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "double",
+              "paramName": "money"
+            }
+          ],
+          "signature": "void SetTotalMoney(double money)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetEarningPerSecondMoney",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "double",
+              "paramName": "money"
+            }
+          ],
+          "signature": "void SetEarningPerSecondMoney(double money)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetMoney",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "double",
+              "paramName": "totalMoney"
+            },
+            {
+              "paramType": "double",
+              "paramName": "earningPerSecondMoney"
+            }
+          ],
+          "signature": "void SetMoney(double totalMoney, double earningPerSecondMoney)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "Update",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Update()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "RefreshPerSecondMoney",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void RefreshPerSecondMoney()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+    "void SetTotalMoney(double money)",
+    "void SetEarningPerSecondMoney(double money)",
+    "void SetMoney(double totalMoney, double earningPerSecondMoney)",
+    "void Update()",
+    "void RefreshPerSecondMoney()"
+  ],
+  "requires": [
+    "AlarmTimer",
+    "TextMeshProUGUI",
+    "WindowBase"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification",
+      "StateControl",
+      "DataSync"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "AlarmTimer",
+    "CurrencyConverter",
+    "StringUtils",
+    "WindowBase",
+    "WindowID"
+  ],
+  "usedBy": []
+}

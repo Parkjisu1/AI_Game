@@ -1,0 +1,83 @@
+{
+  "fileId": "DetachProductTextHPMsg",
+  "filePath": "Messages\\DetachProductTextHPMsg.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Idle",
+  "role": "Message",
+  "system": "Messages",
+  "score": 0.4,
+  "usings": [],
+  "classes": [
+    {
+      "className": "DetachProductTextHPMsg",
+      "classType": "struct",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [
+        "IMessageAction<WorldSpaceWindowManager>"
+      ],
+      "fields": [
+        {
+          "fieldName": "targetProduct",
+          "fieldType": "ProductBase",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Execute",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "IMessagePort<WorldSpaceWindowManager>",
+              "paramName": "sender"
+            },
+            {
+              "paramType": "WorldSpaceWindowManager",
+              "paramName": "controller"
+            }
+          ],
+          "signature": "bool Execute(IMessagePort<WorldSpaceWindowManager> sender, WorldSpaceWindowManager controller)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "FlowControl",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "bool Execute(IMessagePort<WorldSpaceWindowManager> sender, WorldSpaceWindowManager controller)"
+  ],
+  "requires": [
+    "IMessageAction",
+    "ProductBase",
+    "WorldSpaceWindowManager"
+  ],
+  "tags": {
+    "major": [
+      "FlowControl"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "IMessageAction",
+    "WorldSpaceWindowManager"
+  ],
+  "usedBy": []
+}

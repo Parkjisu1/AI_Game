@@ -1,0 +1,161 @@
+{
+  "fileId": "HomeScene",
+  "filePath": "Scene\\HomeScene.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Rpg",
+  "role": "Component",
+  "system": "Scene",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI",
+    "Global_Define",
+    "DG.Tweening"
+  ],
+  "classes": [
+    {
+      "className": "HomeScene",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "SceneBase",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "touchText",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "blockImage",
+          "fieldType": "GameObject",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Start",
+          "accessModifier": "private",
+          "returnType": "new void",
+          "parameters": [],
+          "signature": "new void Start()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "onClickStart",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void onClickStart()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "LoadingTime",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [],
+          "signature": "IEnumerator LoadingTime()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "SetTouchScreen",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [],
+          "signature": "IEnumerator SetTouchScreen()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetApplyLanguage",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void SetApplyLanguage()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void onClickStart()",
+    "void SetApplyLanguage()"
+  ],
+  "requires": [
+    "SceneBase"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification",
+      "DataSync"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "Analytics",
+    "CAdManager",
+    "CApplicationManager",
+    "CGameManager",
+    "CPopupManager",
+    "CSceneManager",
+    "CSoundManager",
+    "Debug",
+    "Instance",
+    "Key",
+    "LoadingPopup",
+    "PlayerPrefs",
+    "SceneBase",
+    "TimeServer",
+    "YieldReturnCaching"
+  ],
+  "usedBy": []
+}

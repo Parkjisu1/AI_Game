@@ -1,0 +1,87 @@
+metadata:
+  nodeId: "AttendanceManager"
+  version: "1.0.0"
+  phase: 2
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "CurrencyManager"
+    - "SaveManager"
+    - "AdManager"
+    - "EventManager"
+  external:
+    - "UnityEngine.MonoBehaviour"
+    - "System"
+
+contract:
+  provides:
+    - "daily_reward"
+    - "attendance_cycle"
+    - "ad_multiplier"
+  requires:
+    - "currency_system"
+    - "save_system"
+    - "ad_manager"
+
+tags:
+  layer: "Domain"
+  genre: "Idle"
+  role: "Manager"
+  system: "AttendanceSystem"
+  majorFunctions:
+    - "StateControl"
+    - "ConditionCheck"
+    - "ResourceTransfer"
+    - "DataSync"
+  minorFunctions:
+    - "Compare"
+    - "Assign"
+    - "Validate"
+    - "Notify"
+
+logicFlow:
+  - step: 1
+    tag: "ConditionCheck.Compare"
+    action: "CheckDay: SaveManager에서 lastClaimDate 로드, 오늘 날짜와 비교하여 출석 가능 여부 판정(0~6일 인덱스)"
+    next: 2
+  - step: 2
+    tag: "DataSync.Assign"
+    action: "DisplayCalendar: 7일 캘린더 각 칸에 WillReceive/Receive/Received 상태 바인딩 및 보상 아이콘 표시"
+    next: 3
+  - step: 3
+    tag: "ResourceTransfer.Assign"
+    action: "ClaimReward: AttendanceDayRewardTable[dayIndex] 기반 보상(머니/다이아/아이템) CurrencyManager 통해 지급"
+    next: 4
+  - step: 4
+    tag: "ConditionCheck.Validate"
+    action: "CheckAD: AdManager에 광고 시청 가능 여부 확인, 시청 시 10x 배율 보상 제안 팝업 표시"
+    next: 5
+  - step: 5
+    tag: "StateControl.Assign"
+    action: "IncrementDay: dayIndex = (dayIndex + 1) % 7 사이클 처리, 7일 완료 시 0으로 리셋"
+    next: 6
+  - step: 6
+    tag: "DataSync.Assign"
+    action: "SaveTimestamp: 현재 날짜를 lastClaimDate로 SaveManager에 저장, 다음 출석 가능 시간 계산"
+    next: 1
+
+referencePatterns:
+  - source: "idlemoney__liveops__daily_login"
+    pattern: "7일 사이클 출석 보상 테이블, 날짜 기반 클레임 중복 방지 로직"
+  - source: "idlemoney__bm__store_etc"
+    pattern: "광고 시청 10x 배율 패턴 참조"
+
+codeHints:
+  patterns:
+    - "SerializeField for Inspector"
+    - "MessagePack serialization"
+    - "DontDestroyOnLoad singleton"
+    - "DateTime.UtcNow.Date for day comparison"
+    - "dayIndex % 7 for cycle reset"
+  avoidPatterns:
+    - "Find/FindObjectOfType for UI"
+    - "dynamic UI creation"
+    - "hardcoded magic numbers"
+    - "Local time for claim validation (use UtcNow)"

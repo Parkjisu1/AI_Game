@@ -1,0 +1,89 @@
+{
+  "fileId": "ComboDetector",
+  "filePath": "InGame\\Combo\\ComboDetector.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Puzzle",
+  "role": "Component",
+  "system": "InGame",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "ComboDetector",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "GetCombo",
+          "accessModifier": "public",
+          "returnType": "Combo",
+          "parameters": [
+            {
+              "paramType": "Tile",
+              "paramName": "tileA"
+            },
+            {
+              "paramType": "Tile",
+              "paramName": "tileB"
+            }
+          ],
+          "signature": "Combo GetCombo(Tile tileA, Tile tileB)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "Combo GetCombo(Tile tileA, Tile tileB)"
+  ],
+  "requires": [
+    "ColorBomb",
+    "Jewel",
+    "StripedJewel",
+    "TargettedJewel",
+    "WrappedJewel"
+  ],
+  "tags": {
+    "major": [],
+    "minor": [
+      "Find"
+    ]
+  },
+  "uses": [
+    "ColorBomb",
+    "ColorBombWithJewelCombo",
+    "ColorBombWithStripedJewelCombo",
+    "ColorBombWithTargettedJewelCombo",
+    "ColorBombWithWrappedJewelCombo",
+    "Jewel",
+    "StripedJewel",
+    "StripedWithTargettedJewelCombo",
+    "TargettedJewel",
+    "TwoColorBombCombo",
+    "TwoStripedJewelCombo",
+    "TwoTargettedJewelCombo",
+    "TwoWrappedJewelCombo",
+    "WrappedJewel",
+    "WrappedWithStripedJewelCombo",
+    "WrappedWithTargettedJewelCombo"
+  ],
+  "usedBy": []
+}

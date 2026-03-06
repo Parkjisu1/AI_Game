@@ -1,0 +1,591 @@
+[
+  {
+    "designId": "idlemoney__bm__gachaadvanced",
+    "domain": "BM",
+    "genre": "Idle",
+    "system": "GachaAdvanced",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "table",
+    "balance_area": "gacha",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "BoxAdvanced_data",
+      "BoxAdvanced.PurchaseCount",
+      "BoxAdvanced.PurchaseDiamondCost",
+      "BoxAdvanced.AcquiredExp",
+      "BoxAdvanced.AcquiredMaterialMin",
+      "BoxAdvanced.AcquiredMaterialMax"
+    ],
+    "requires": [],
+    "tags": [
+      "gacha",
+      "data_table"
+    ]
+  },
+  {
+    "designId": "idlemoney__bm__gachageneral",
+    "domain": "BM",
+    "genre": "Idle",
+    "system": "GachaGeneral",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "table",
+    "balance_area": "gacha",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "BoxGeneral_data",
+      "BoxGeneral.PurchaseCount",
+      "BoxGeneral.PurchaseMoneyCost",
+      "BoxGeneral.AcquiredExp",
+      "BoxGeneral.AcquiredMaterialMin",
+      "BoxGeneral.AcquiredMaterialMax"
+    ],
+    "requires": [],
+    "tags": [
+      "gacha",
+      "data_table"
+    ]
+  },
+  {
+    "designId": "idlemoney__bm__gachalobbyevent",
+    "domain": "BM",
+    "genre": "Idle",
+    "system": "GachaLobbyEvent",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "table",
+    "balance_area": "gacha",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "BoxLobbyEvent_data",
+      "BoxLobbyEvent.PurchaseCount",
+      "BoxLobbyEvent.AcquiredExp",
+      "BoxLobbyEvent.AcquiredMaterialMin",
+      "BoxLobbyEvent.AcquiredMaterialMax",
+      "BoxLobbyEvent.NewMachineSelectChance"
+    ],
+    "requires": [],
+    "tags": [
+      "gacha",
+      "data_table"
+    ]
+  },
+  {
+    "designId": "idlemoney__bm__gachastoreevent",
+    "domain": "BM",
+    "genre": "Idle",
+    "system": "GachaStoreEvent",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "table",
+    "balance_area": "gacha",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "BoxStoreEvent_data",
+      "BoxStoreEvent.PurchaseCount",
+      "BoxStoreEvent.AcquiredExp",
+      "BoxStoreEvent.AcquiredMaterialMin",
+      "BoxStoreEvent.AcquiredMaterialMax",
+      "BoxStoreEvent.NewMachineSelectChance"
+    ],
+    "requires": [],
+    "tags": [
+      "gacha",
+      "data_table",
+      "monetization"
+    ]
+  },
+  {
+    "designId": "idlemoney__bm__gachasuper",
+    "domain": "BM",
+    "genre": "Idle",
+    "system": "GachaSuper",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "table",
+    "balance_area": "gacha",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "BoxSuper_data",
+      "BoxSuper.PurchaseCount",
+      "BoxSuper.PurchaseDiamondCost",
+      "BoxSuper.AcquiredExp",
+      "BoxSuper.AcquiredMaterialMin",
+      "BoxSuper.AcquiredMaterialMax"
+    ],
+    "requires": [],
+    "tags": [
+      "gacha",
+      "data_table"
+    ]
+  },
+  {
+    "designId": "idlemoney__bm__levelgacha",
+    "domain": "BM",
+    "genre": "Idle",
+    "system": "LevelGacha",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "table",
+    "balance_area": "gacha",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "LevelGachaBox_data",
+      "LevelGachaBox.BoxLevel",
+      "LevelGachaBox.GeneralMachineChance",
+      "LevelGachaBox.AdvancedMachineChance",
+      "LevelGachaBox.SuperMachineChance",
+      "LevelGachaBox.LegendMachineChance"
+    ],
+    "requires": [],
+    "tags": [
+      "gacha",
+      "data_table",
+      "progression"
+    ]
+  },
+  {
+    "designId": "idlemoney__bm__boxshop",
+    "domain": "BM",
+    "genre": "Idle",
+    "system": "BoxShop",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "config",
+    "balance_area": "gacha",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "StoreBox_data",
+      "StoreBox.BoxID",
+      "StoreBox.GachaType",
+      "StoreBox.CostType",
+      "StoreBox.GeneralMachineChance",
+      "StoreBox.AdvancedMachineChance"
+    ],
+    "requires": [],
+    "tags": [
+      "gacha",
+      "config",
+      "monetization"
+    ]
+  },
+  {
+    "designId": "idlemoney__bm__diamondshop",
+    "domain": "BM",
+    "genre": "Idle",
+    "system": "DiamondShop",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "config",
+    "balance_area": "iap",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "StoreDiamond_data",
+      "StoreDiamond.DiamondID",
+      "StoreDiamond.AOSPrice",
+      "StoreDiamond.RewardGoodsType",
+      "StoreDiamond.RewardGoodsBaseAmount",
+      "StoreDiamond.RewardGoodsBonusAmount"
+    ],
+    "requires": [],
+    "tags": [
+      "iap",
+      "config",
+      "monetization"
+    ]
+  },
+  {
+    "designId": "idlemoney__bm__miscshop",
+    "domain": "BM",
+    "genre": "Idle",
+    "system": "MiscShop",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "config",
+    "balance_area": "iap",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "StoreEtc_data",
+      "StoreEtc.EtcID",
+      "StoreEtc.CostGoodsType",
+      "StoreEtc.CostGoodsAmount",
+      "StoreEtc.RewardGoodsType",
+      "StoreEtc.RewardGoodsAmount"
+    ],
+    "requires": [],
+    "tags": [
+      "iap",
+      "config",
+      "monetization"
+    ]
+  },
+  {
+    "designId": "idlemoney__bm__secondarycurrencyshop",
+    "domain": "BM",
+    "genre": "Idle",
+    "system": "SecondaryCurrencyShop",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "config",
+    "balance_area": "currency",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "StoreLoopyCoin_data",
+      "StoreLoopyCoin.LoopyCoinID",
+      "StoreLoopyCoin.CostGoodsType",
+      "StoreLoopyCoin.CostGoodsAmount",
+      "StoreLoopyCoin.RewardGoodsType",
+      "StoreLoopyCoin.RewardGoodsAmount"
+    ],
+    "requires": [],
+    "tags": [
+      "currency",
+      "config",
+      "monetization"
+    ]
+  },
+  {
+    "designId": "idlemoney__bm__packageshop",
+    "domain": "BM",
+    "genre": "Idle",
+    "system": "PackageShop",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "config",
+    "balance_area": "iap",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "StorePackage_data",
+      "StorePackage.PackageID",
+      "StorePackage.AOSPrice",
+      "StorePackage.ShopOrder",
+      "StorePackage.IsDisplayed",
+      "StorePackage.BonusCheckTime"
+    ],
+    "requires": [],
+    "tags": [
+      "iap",
+      "config",
+      "monetization"
+    ]
+  },
+  {
+    "designId": "idlemoney__bm__gachasamemachine",
+    "domain": "BM",
+    "genre": "Idle",
+    "system": "GachaSameMachine",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "table",
+    "balance_area": "gacha",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "BoxSameMachineSelect_data",
+      "BoxSameMachineSelect.TuningLevel",
+      "BoxSameMachineSelect.SelectWeight"
+    ],
+    "requires": [],
+    "tags": [
+      "gacha",
+      "data_table"
+    ]
+  },
+  {
+    "designId": "idlemoney__bm__diamond_iap",
+    "domain": "BM",
+    "genre": "Idle",
+    "system": "Diamond IAP",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "config",
+    "balance_area": "iap",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "diamond_purchase",
+      "premium_currency_source"
+    ],
+    "requires": [
+      "iap_integration"
+    ],
+    "tags": [
+      "diamond",
+      "iap",
+      "real_money",
+      "premium"
+    ]
+  },
+  {
+    "designId": "idlemoney__bm__package_system",
+    "domain": "BM",
+    "genre": "Idle",
+    "system": "Package Subscription",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "config",
+    "balance_area": "iap",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "package_purchase",
+      "daily_diamond_reward",
+      "gameplay_effects"
+    ],
+    "requires": [
+      "iap_integration",
+      "diamond_currency"
+    ],
+    "tags": [
+      "package",
+      "subscription",
+      "daily_reward",
+      "bundle"
+    ]
+  },
+  {
+    "designId": "idlemoney__bm__gacha_system",
+    "domain": "BM",
+    "genre": "Idle",
+    "system": "Gacha Machine Recruitment",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "flow",
+    "balance_area": "gacha",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "machine_acquisition",
+      "material_acquisition",
+      "gacha_probability"
+    ],
+    "requires": [
+      "diamond_currency",
+      "money_currency",
+      "machine_system"
+    ],
+    "tags": [
+      "gacha",
+      "lootbox",
+      "machine",
+      "rng",
+      "pity"
+    ]
+  },
+  {
+    "designId": "idlemoney__bm__store_diamond",
+    "domain": "BM",
+    "genre": "Idle",
+    "system": "Diamond Store",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "config",
+    "balance_area": "iap",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "diamond_tiers",
+      "platform_pricing"
+    ],
+    "requires": [
+      "iap_integration"
+    ],
+    "tags": [
+      "store",
+      "diamond",
+      "iap",
+      "pricing"
+    ]
+  },
+  {
+    "designId": "idlemoney__bm__store_package",
+    "domain": "BM",
+    "genre": "Idle",
+    "system": "Package Store",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "config",
+    "balance_area": "iap",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "package_listing",
+      "subscription_management"
+    ],
+    "requires": [
+      "iap_integration"
+    ],
+    "tags": [
+      "store",
+      "package",
+      "bundle",
+      "subscription"
+    ]
+  },
+  {
+    "designId": "idlemoney__bm__store_etc",
+    "domain": "BM",
+    "genre": "Idle",
+    "system": "General Store",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "config",
+    "balance_area": "iap",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "misc_item_purchase",
+      "currency_conversion"
+    ],
+    "requires": [
+      "diamond_currency",
+      "gold_currency"
+    ],
+    "tags": [
+      "store",
+      "misc",
+      "items",
+      "purchase"
+    ]
+  },
+  {
+    "designId": "idlemoney__bm__store_loopycoin",
+    "domain": "BM",
+    "genre": "Idle",
+    "system": "LoopyCoin Store",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "config",
+    "balance_area": "currency",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "loopycoin_spending",
+      "secondary_currency_sink"
+    ],
+    "requires": [
+      "gold_currency"
+    ],
+    "tags": [
+      "loopycoin",
+      "secondary_currency",
+      "store"
+    ]
+  },
+  {
+    "designId": "idlemoney__bm__ad_monetization",
+    "domain": "BM",
+    "genre": "Idle",
+    "system": "Ad Monetization",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "spec",
+    "balance_area": "ad_revenue",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "ad_reward_delivery",
+      "ad_frequency_management",
+      "ad_revenue_generation"
+    ],
+    "requires": [
+      "boost_events",
+      "offline_earnings",
+      "gacha_system"
+    ],
+    "tags": [
+      "ad",
+      "reward_video",
+      "banner",
+      "monetization"
+    ]
+  },
+  {
+    "designId": "idlemoney__bm__roulette",
+    "domain": "BM",
+    "genre": "Idle",
+    "system": "Roulette Spin",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "config",
+    "balance_area": "reward",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "roulette_reward",
+      "roulette_cooldown"
+    ],
+    "requires": [
+      "rebirth_system",
+      "ad_system"
+    ],
+    "tags": [
+      "roulette",
+      "spin",
+      "random_reward",
+      "event"
+    ]
+  },
+  {
+    "designId": "idlemoney__bm__piggy_bank",
+    "domain": "BM",
+    "genre": "Idle",
+    "system": "Piggy Bank & AD Bank",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "spec",
+    "balance_area": "monetization",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "passive_diamond_accumulation",
+      "ad_bank_reward"
+    ],
+    "requires": [
+      "iap_integration",
+      "ad_system"
+    ],
+    "tags": [
+      "piggy_bank",
+      "ad_bank",
+      "passive_income",
+      "diamond"
+    ]
+  },
+  {
+    "designId": "idlemoney__bm__iap_architecture",
+    "domain": "BM",
+    "genre": "Idle",
+    "system": "IAP Integration",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "spec",
+    "balance_area": "technical",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "iap_purchase_flow",
+      "receipt_validation",
+      "platform_abstraction"
+    ],
+    "requires": [],
+    "tags": [
+      "iap",
+      "unity_purchasing",
+      "receipt_validation",
+      "platform"
+    ]
+  }
+]

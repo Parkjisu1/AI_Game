@@ -1,0 +1,147 @@
+{
+  "fileId": "HelpWinType10",
+  "filePath": "UI\\HelpWinType10.cs",
+  "namespace": "",
+  "layer": "Game",
+  "genre": "Slg",
+  "role": "Component",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI",
+    "TMPro"
+  ],
+  "classes": [
+    {
+      "className": "HelpWinType10",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "amountTxt",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "titleTxt",
+          "fieldType": "LanguageText",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "noticeTxt",
+          "fieldType": "LanguageText",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "goldImg",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "tuingMaterialImg",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "SetData",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "RewardType",
+              "paramName": "reward"
+            },
+            {
+              "paramType": "int",
+              "paramName": "amount"
+            },
+            {
+              "paramType": "string",
+              "paramName": "titleTextID"
+            },
+            {
+              "paramType": "string",
+              "paramName": "noticeTextID"
+            },
+            {
+              "paramType": "string",
+              "paramName": "arg0"
+            },
+            {
+              "paramType": "string",
+              "paramName": "arg1"
+            }
+          ],
+          "signature": "void SetData(RewardType reward, int amount, string titleTextID, string noticeTextID, string arg0, string arg1)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void SetData(RewardType reward, int amount, string titleTextID, string noticeTextID, string arg0, string arg1)"
+  ],
+  "requires": [
+    "LanguageText",
+    "TextMeshProUGUI"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "StringUtils"
+  ],
+  "usedBy": []
+}

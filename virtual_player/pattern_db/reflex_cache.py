@@ -42,8 +42,8 @@ class ReflexCache:
     """L0 reflex cache: screen_hash + screen_type -> action.
 
     Two lookup keys:
-    1. phash (perceptual hash) — exact visual match (<50ms)
-    2. screen_type + context_key — type-level match (for common patterns)
+    1. phash (perceptual hash) -- exact visual match (<50ms)
+    2. screen_type + context_key -- type-level match (for common patterns)
 
     Both map to CachedAction with reliability tracking.
     """
@@ -65,7 +65,7 @@ class ReflexCache:
         self._load()
 
     def lookup_by_hash(self, img_hash: int) -> Optional[CachedAction]:
-        """Find best action for a perceptual hash (L0 — <50ms)."""
+        """Find best action for a perceptual hash (L0 -- <50ms)."""
         best_action = None
         best_dist = self.HASH_THRESHOLD + 1
 

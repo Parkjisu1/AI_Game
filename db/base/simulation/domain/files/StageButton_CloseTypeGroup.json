@@ -1,0 +1,246 @@
+{
+  "fileId": "StageButton_CloseTypeGroup",
+  "filePath": "Lobby\\StageButton_CloseTypeGroup.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Simulation",
+  "role": "Component",
+  "system": "Lobby",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI",
+    "GameUtils",
+    "Global_Define",
+    "ResourcePath"
+  ],
+  "classes": [
+    {
+      "className": "StageButton_CloseTypeGroup",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "stageButtonRoot",
+          "fieldType": "GameObject",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "groupBackground",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "groupStar",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "groupNumber",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "groupStageRange",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "layoutElement",
+          "fieldType": "LayoutElement",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "rect",
+          "fieldType": "RectTransform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "liStages",
+          "fieldType": "List<StageButton_CloseType>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<StageButton_CloseType>()"
+        },
+        {
+          "fieldName": "isGroupExpand",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "SetStageGroup",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "_groupIndex"
+            },
+            {
+              "paramType": "int",
+              "paramName": "_groupCount"
+            },
+            {
+              "paramType": "string",
+              "paramName": "_stageButtonTypeName"
+            },
+            {
+              "paramType": "Sprite",
+              "paramName": "_backgroundImage"
+            },
+            {
+              "paramType": "Sprite",
+              "paramName": "_groupStar"
+            }
+          ],
+          "signature": "void SetStageGroup(int _groupIndex, int _groupCount,\r\n        string _stageButtonTypeName, Sprite _backgroundImage, Sprite _groupStar)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "GetStageButton",
+          "accessModifier": "private",
+          "returnType": "StageButton_CloseType",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "_stageButtonType"
+            }
+          ],
+          "signature": "StageButton_CloseType GetStageButton(string _stageButtonType)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "OnClickGroupButton",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickGroupButton()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "SetGroupExpandAnimation",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "_state"
+            }
+          ],
+          "signature": "IEnumerator SetGroupExpandAnimation(bool _state)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void SetStageGroup(int _groupIndex, int _groupCount,\r\n        string _stageButtonTypeName, Sprite _backgroundImage, Sprite _groupStar)",
+    "void OnClickGroupButton()"
+  ],
+  "requires": [
+    "LayoutElement",
+    "StageButton_CloseType"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification",
+      "ResponseTrigger"
+    ],
+    "minor": [
+      "Assign",
+      "Find"
+    ]
+  },
+  "uses": [
+    "CGameUtils",
+    "PlayerPrefs",
+    "StageButton_CloseType"
+  ],
+  "usedBy": []
+}

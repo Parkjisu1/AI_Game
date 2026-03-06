@@ -1,5 +1,5 @@
 """
-StateReader — Perception Layer Orchestrator
+StateReader -- Perception Layer Orchestrator
 ============================================
 스크린샷 경로 + 화면 타입을 받아 GameStateSnapshot을 반환.
 GaugeReader, OCRReader, RegionRegistry를 조합하여 완전한 상태 추출.
@@ -42,19 +42,19 @@ class StateReader:
             screen_type: 화면 타입 식별자 ("ingame", "lobby" 등)
 
         Returns:
-            GameStateSnapshot — ROI 설정이 없으면 빈 스냅샷 반환
+            GameStateSnapshot -- ROI 설정이 없으면 빈 스냅샷 반환
         """
         snapshot = GameStateSnapshot(screen_type=screen_type)
 
         # 1. 화면 타입에 대한 ROI 설정 조회
         roi = self._registry.get(screen_type)
         if roi is None:
-            log(f"  [StateReader] No ROI config for screen_type='{screen_type}' — skipping")
+            log(f"  [StateReader] No ROI config for screen_type='{screen_type}' -- skipping")
             return snapshot
 
         # 2. 이미지 로드
         if not _CV2_AVAILABLE:
-            log("  [StateReader] cv2 not available — cannot read image")
+            log("  [StateReader] cv2 not available -- cannot read image")
             return snapshot
 
         image = cv2.imread(str(screenshot_path))
@@ -70,8 +70,14 @@ class StateReader:
         if roi.ocr_regions:
             all_ocr = self._ocr.read_all(image, roi.ocr_regions)
             for key, reading in all_ocr.items():
-                cfg = roi.ocr_regions.get(key, {})
-                category = cfg.get("category", "resources")
+                # Combined OCR 결과에서 카테고리 조회
+                combined_cfg = roi.ocr_regions.get("_combined", {})
+                combined_fields = combined_cfg.get("fields", {})
+                if key in combined_fields:
+                    category = combined_fields[key].get("category", "resources")
+                else:
+                    cfg = roi.ocr_regions.get(key, {})
+                    category = cfg.get("category", "resources")
                 if category == "stats":
                     snapshot.stats[key] = reading
                 else:

@@ -1,0 +1,372 @@
+{
+  "fileId": "ManagerWin",
+  "filePath": "UI\\ManagerWin.cs",
+  "namespace": "",
+  "layer": "Game",
+  "genre": "Rpg",
+  "role": "View",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.AddressableAssets",
+    "UnityEngine.UI",
+    "Cysharp.Threading.Tasks",
+    "TMPro"
+  ],
+  "classes": [
+    {
+      "className": "ManagerWin",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "WindowBase",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "workedManager",
+          "fieldType": "ManagerMountComponent",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "scroll",
+          "fieldType": "ManagerMountComponentScrollView",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "default"
+        },
+        {
+          "fieldName": "items",
+          "fieldType": "List<ManagerMountScrollItemData>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<ManagerMountScrollItemData>()"
+        },
+        {
+          "fieldName": "cacheditems",
+          "fieldType": "List<ManagerMountScrollItemData>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<ManagerMountScrollItemData>()"
+        },
+        {
+          "fieldName": "ManagerOnNode",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "ManagerOffNode",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "employCostTxt",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "hireBtnPos",
+          "fieldType": "RectTransform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "tutorialPos",
+          "fieldType": "RectTransform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "factoryIndex",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "InitWindow",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "WindowManager",
+              "paramName": "owner"
+            },
+            {
+              "paramType": "WindowManager>",
+              "paramName": "messageController"
+            }
+          ],
+          "signature": "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "GetSelectedFactoryIndex",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int GetSelectedFactoryIndex()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "SetData",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "factoryIndex"
+            }
+          ],
+          "signature": "void SetData(int factoryIndex)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "Open",
+          "accessModifier": "public",
+          "returnType": "UniTask",
+          "parameters": [],
+          "signature": "UniTask Open()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "refreshEmployCost",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void refreshEmployCost()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Refresh",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Refresh()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnClickClose",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickClose()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "Close",
+          "accessModifier": "public",
+          "returnType": "UniTask",
+          "parameters": [],
+          "signature": "UniTask Close()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnClickHireManager",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickHireManager()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnClickDisplacement",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickDisplacement()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "GetHireButtonPos",
+          "accessModifier": "public",
+          "returnType": "RectTransform",
+          "parameters": [],
+          "signature": "RectTransform GetHireButtonPos()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetFirstManagerPos",
+          "accessModifier": "public",
+          "returnType": "RectTransform",
+          "parameters": [],
+          "signature": "RectTransform GetFirstManagerPos()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+    "int GetSelectedFactoryIndex()",
+    "void SetData(int factoryIndex)",
+    "UniTask Open()",
+    "void Refresh()",
+    "void OnClickClose()",
+    "UniTask Close()",
+    "void OnClickHireManager()",
+    "void OnClickDisplacement()",
+    "RectTransform GetHireButtonPos()",
+    "RectTransform GetFirstManagerPos()"
+  ],
+  "requires": [
+    "ManagerMountComponent",
+    "ManagerMountComponentScrollView",
+    "TextMeshProUGUI",
+    "WindowBase"
+  ],
+  "tags": {
+    "major": [
+      "StateControl",
+      "ResponseTrigger",
+      "ValueModification"
+    ],
+    "minor": [
+      "Find",
+      "Assign"
+    ]
+  },
+  "uses": [
+    "CloseWindowMsg",
+    "Debug",
+    "DisplacementManagerMsg",
+    "Holder",
+    "ManagerEmployMsg",
+    "ManagerMountScrollItemData",
+    "OpenAlertWinMsg",
+    "RefreshManagerWin",
+    "StringUtils",
+    "WindowBase",
+    "WindowID"
+  ],
+  "usedBy": []
+}

@@ -1,0 +1,720 @@
+{
+  "fileId": "ShopWin",
+  "filePath": "UI\\ShopWin.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Rpg",
+  "role": "View",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "Cysharp.Threading.Tasks",
+    "UnityEngine",
+    "UnityEngine.AddressableAssets",
+    "UnityEngine.UI",
+    "TMPro",
+    "DG.Tweening",
+    "Firebase.Analytics"
+  ],
+  "classes": [
+    {
+      "className": "ShopWin",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "WindowBase",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "blinkEffect",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "blink",
+          "fieldType": "DOTweenAnimation",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "scroll",
+          "fieldType": "ShopWinScrollView",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "default"
+        },
+        {
+          "fieldName": "items",
+          "fieldType": "List<ShopWinScrollItemData>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<ShopWinScrollItemData>()"
+        },
+        {
+          "fieldName": "togglePositions",
+          "fieldType": "Dictionary<Index, int>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Dictionary<Index, int>()"
+        },
+        {
+          "fieldName": "toggleValues",
+          "fieldType": "List<int>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "toggles",
+          "fieldType": "List<Toggle>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "closeButton",
+          "fieldType": "RectTransform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "refundNoticeNode",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "toggleIndex",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "ignoreToggleCallback",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "InitWindow",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "WindowManager",
+              "paramName": "owner"
+            },
+            {
+              "paramType": "WindowManager>",
+              "paramName": "messageController"
+            }
+          ],
+          "signature": "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "GetNormalCardButtonPos",
+          "accessModifier": "public",
+          "returnType": "RectTransform",
+          "parameters": [],
+          "signature": "RectTransform GetNormalCardButtonPos()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "Open",
+          "accessModifier": "public",
+          "returnType": "UniTask",
+          "parameters": [],
+          "signature": "UniTask Open()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "RefreshPackageInfo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void RefreshPackageInfo()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "RefreshMachineInfo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void RefreshMachineInfo()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "RefreshCost",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void RefreshCost()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "Refresh",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Refresh()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnClickClose",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickClose()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "Close",
+          "accessModifier": "public",
+          "returnType": "UniTask",
+          "parameters": [],
+          "signature": "UniTask Close()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnClickToggle",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "index"
+            }
+          ],
+          "signature": "void OnClickToggle(int index)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "SetToggle",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "index"
+            }
+          ],
+          "signature": "void SetToggle(int index)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "getToggledIndex",
+          "accessModifier": "protected",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int getToggledIndex()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Update",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Update()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetScrollOnOff",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "b"
+            }
+          ],
+          "signature": "void SetScrollOnOff(bool b)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "GetCloseButtonPos",
+          "accessModifier": "public",
+          "returnType": "RectTransform",
+          "parameters": [],
+          "signature": "RectTransform GetCloseButtonPos()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "OnClickRefundNotice",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickRefundNotice()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        }
+      ]
+    },
+    {
+      "className": "Index",
+      "classType": "enum",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "short",
+      "interfaces": [],
+      "fields": [],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "InitWindow",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "WindowManager",
+              "paramName": "owner"
+            },
+            {
+              "paramType": "WindowManager>",
+              "paramName": "messageController"
+            }
+          ],
+          "signature": "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "GetNormalCardButtonPos",
+          "accessModifier": "public",
+          "returnType": "RectTransform",
+          "parameters": [],
+          "signature": "RectTransform GetNormalCardButtonPos()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "Open",
+          "accessModifier": "public",
+          "returnType": "UniTask",
+          "parameters": [],
+          "signature": "UniTask Open()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "RefreshPackageInfo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void RefreshPackageInfo()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "RefreshMachineInfo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void RefreshMachineInfo()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "RefreshCost",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void RefreshCost()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "Refresh",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Refresh()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnClickClose",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickClose()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "Close",
+          "accessModifier": "public",
+          "returnType": "UniTask",
+          "parameters": [],
+          "signature": "UniTask Close()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnClickToggle",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "index"
+            }
+          ],
+          "signature": "void OnClickToggle(int index)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "SetToggle",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "index"
+            }
+          ],
+          "signature": "void SetToggle(int index)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "getToggledIndex",
+          "accessModifier": "protected",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int getToggledIndex()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Update",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Update()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetScrollOnOff",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "b"
+            }
+          ],
+          "signature": "void SetScrollOnOff(bool b)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "GetCloseButtonPos",
+          "accessModifier": "public",
+          "returnType": "RectTransform",
+          "parameters": [],
+          "signature": "RectTransform GetCloseButtonPos()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "OnClickRefundNotice",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickRefundNotice()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+    "RectTransform GetNormalCardButtonPos()",
+    "UniTask Open()",
+    "void RefreshPackageInfo()",
+    "void RefreshMachineInfo()",
+    "void RefreshCost()",
+    "void Refresh()",
+    "void OnClickClose()",
+    "UniTask Close()",
+    "void OnClickToggle(int index)",
+    "void SetToggle(int index)",
+    "void Update()",
+    "void SetScrollOnOff(bool b)",
+    "RectTransform GetCloseButtonPos()",
+    "void OnClickRefundNotice()"
+  ],
+  "requires": [
+    "DOTweenAnimation",
+    "ShopWinScrollView",
+    "Toggle",
+    "WindowBase"
+  ],
+  "tags": {
+    "major": [
+      "StateControl",
+      "DataSync",
+      "ResponseTrigger"
+    ],
+    "minor": [
+      "Find",
+      "Assign"
+    ]
+  },
+  "uses": [
+    "Application",
+    "CloseWindowMsg",
+    "Etc",
+    "Index",
+    "Mathf",
+    "MyPlugins",
+    "Package",
+    "Parameter",
+    "SendTutorialConditionSignalMsg",
+    "ShopWinScrollItemData",
+    "System",
+    "Toggle",
+    "WindowBase",
+    "WindowID"
+  ],
+  "usedBy": []
+}

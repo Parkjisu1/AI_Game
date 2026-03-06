@@ -1,0 +1,167 @@
+{
+  "designId": "idlemoney__liveops__dailylogin",
+  "project": "IdleMoney",
+  "domain": "LiveOps",
+  "genre": "Idle",
+  "system": "DailyLogin",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "content_data",
+  "balance_area": "reward",
+  "source_file": "AttendanceReward.json",
+  "table_stats": {
+    "row_count": 7,
+    "columns": [
+      "RewardID",
+      "GoodsTypeAllAddExist",
+      "GoodsAmountAllAddExist",
+      "GoodsTypeAllAddOff",
+      "GoodsAmountAllAddOff",
+      "IconImageName"
+    ],
+    "numeric_columns": [
+      "RewardID",
+      "GoodsTypeAllAddExist",
+      "GoodsAmountAllAddExist",
+      "GoodsTypeAllAddOff",
+      "GoodsAmountAllAddOff"
+    ],
+    "text_columns": [
+      "IconImageName"
+    ]
+  },
+  "content": {
+    "summary": "DailyLogin 데이터 테이블 (7행, 6열)",
+    "parameters": {
+      "RewardID": "0",
+      "GoodsTypeAllAddExist": "7",
+      "GoodsAmountAllAddExist": "0",
+      "GoodsTypeAllAddOff": "0",
+      "GoodsAmountAllAddOff": "25",
+      "IconImageName": "icon_salary"
+    },
+    "balance_points": [
+      {
+        "variable": "RewardID",
+        "min_value": 0,
+        "max_value": 6,
+        "avg_value": 3,
+        "growth_ratio": 6,
+        "data_points": 7,
+        "impact": "medium"
+      },
+      {
+        "variable": "GoodsTypeAllAddExist",
+        "min_value": 0,
+        "max_value": 7,
+        "avg_value": 3,
+        "growth_ratio": 7,
+        "data_points": 7,
+        "impact": "medium"
+      },
+      {
+        "variable": "GoodsAmountAllAddExist",
+        "min_value": 0,
+        "max_value": 25,
+        "avg_value": 8.86,
+        "growth_ratio": 25,
+        "data_points": 7,
+        "impact": "high"
+      },
+      {
+        "variable": "GoodsTypeAllAddOff",
+        "min_value": 0,
+        "max_value": 6,
+        "avg_value": 2.14,
+        "growth_ratio": 6,
+        "data_points": 7,
+        "impact": "medium"
+      },
+      {
+        "variable": "GoodsAmountAllAddOff",
+        "min_value": 25,
+        "max_value": 200,
+        "avg_value": 77.14,
+        "growth_ratio": 8,
+        "data_points": 7,
+        "impact": "medium"
+      }
+    ],
+    "edge_cases": [],
+    "references": []
+  },
+  "data": [
+    {
+      "RewardID": "0",
+      "GoodsTypeAllAddExist": "7",
+      "GoodsAmountAllAddExist": "0",
+      "GoodsTypeAllAddOff": "0",
+      "GoodsAmountAllAddOff": "25",
+      "IconImageName": "icon_salary"
+    },
+    {
+      "RewardID": "1",
+      "GoodsTypeAllAddExist": "0",
+      "GoodsAmountAllAddExist": "5",
+      "GoodsTypeAllAddOff": "1",
+      "GoodsAmountAllAddOff": "35",
+      "IconImageName": "icon_shop_dia"
+    },
+    {
+      "RewardID": "2",
+      "GoodsTypeAllAddExist": "0",
+      "GoodsAmountAllAddExist": "15",
+      "GoodsTypeAllAddOff": "3",
+      "GoodsAmountAllAddOff": "100",
+      "IconImageName": "icon_shop_dia_dailyreward"
+    },
+    {
+      "RewardID": "3",
+      "GoodsTypeAllAddExist": "7",
+      "GoodsAmountAllAddExist": "0",
+      "GoodsTypeAllAddOff": "0",
+      "GoodsAmountAllAddOff": "50",
+      "IconImageName": "icon_salary"
+    },
+    {
+      "RewardID": "4",
+      "GoodsTypeAllAddExist": "0",
+      "GoodsAmountAllAddExist": "17",
+      "GoodsTypeAllAddOff": "6",
+      "GoodsAmountAllAddOff": "60",
+      "IconImageName": "img_gem_pile1"
+    },
+    {
+      "RewardID": "5",
+      "GoodsTypeAllAddExist": "7",
+      "GoodsAmountAllAddExist": "0",
+      "GoodsTypeAllAddOff": "1",
+      "GoodsAmountAllAddOff": "70",
+      "IconImageName": "icon_salary"
+    },
+    {
+      "RewardID": "6",
+      "GoodsTypeAllAddExist": "0",
+      "GoodsAmountAllAddExist": "25",
+      "GoodsTypeAllAddOff": "4",
+      "GoodsAmountAllAddOff": "200",
+      "IconImageName": "img_gem_pile2"
+    }
+  ],
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from AttendanceReward.json (7 rows)",
+      "note": "Live game data import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T10:32:53.847Z"
+}

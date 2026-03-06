@@ -1,0 +1,486 @@
+{
+  "fileId": "CharacterSelector",
+  "filePath": "CharacterSelector.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Rpg",
+  "role": "Model",
+  "system": "CharacterSelector",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine",
+    "UnityEngine.UI",
+    "UnityEngine.SceneManagement"
+  ],
+  "classes": [
+    {
+      "className": "CharacterSelector",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "outfitSprite",
+          "fieldType": "Sprite",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "customScale",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "1f"
+        },
+        {
+          "fieldName": "verticalShiftY",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0f"
+        },
+        {
+          "fieldName": "name",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "characterObj",
+          "fieldType": "Image",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "undressedSprite",
+          "fieldType": "Sprite",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "undressedScale",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "1f"
+        },
+        {
+          "fieldName": "initialAnchoredPosition",
+          "fieldType": "Vector2",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "outfits",
+          "fieldType": "OutfitData[]",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "allCharacters",
+          "fieldType": "CharacterData[]",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "nextLevelName",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"Game_Map\""
+        },
+        {
+          "fieldName": "currentIndex",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0"
+        },
+        {
+          "fieldName": "currentOutfitIndex",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "-1"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "ChangeAnimal",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "direction"
+            }
+          ],
+          "signature": "void ChangeAnimal(int direction)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": null
+        },
+        {
+          "methodName": "ChangeOutfit",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "outfitIndex"
+            }
+          ],
+          "signature": "void ChangeOutfit(int outfitIndex)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": null
+        },
+        {
+          "methodName": "ConfirmSelectionAndStart",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void ConfirmSelectionAndStart()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    },
+    {
+      "className": "OutfitData",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "outfitSprite",
+          "fieldType": "Sprite",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "customScale",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "1f"
+        },
+        {
+          "fieldName": "verticalShiftY",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0f"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "ChangeAnimal",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "direction"
+            }
+          ],
+          "signature": "void ChangeAnimal(int direction)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": null
+        },
+        {
+          "methodName": "ChangeOutfit",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "outfitIndex"
+            }
+          ],
+          "signature": "void ChangeOutfit(int outfitIndex)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": null
+        },
+        {
+          "methodName": "ConfirmSelectionAndStart",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void ConfirmSelectionAndStart()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    },
+    {
+      "className": "CharacterData",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "name",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "characterObj",
+          "fieldType": "Image",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "undressedSprite",
+          "fieldType": "Sprite",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "undressedScale",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "1f"
+        },
+        {
+          "fieldName": "initialAnchoredPosition",
+          "fieldType": "Vector2",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "outfits",
+          "fieldType": "OutfitData[]",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "ChangeAnimal",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "direction"
+            }
+          ],
+          "signature": "void ChangeAnimal(int direction)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": null
+        },
+        {
+          "methodName": "ChangeOutfit",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "outfitIndex"
+            }
+          ],
+          "signature": "void ChangeOutfit(int outfitIndex)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": null
+        },
+        {
+          "methodName": "ConfirmSelectionAndStart",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void ConfirmSelectionAndStart()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void ChangeAnimal(int direction)",
+    "void ChangeOutfit(int outfitIndex)",
+    "void ConfirmSelectionAndStart()",
+    "void ChangeAnimal(int direction)",
+    "void ChangeOutfit(int outfitIndex)",
+    "void ConfirmSelectionAndStart()",
+    "void ChangeAnimal(int direction)",
+    "void ChangeOutfit(int outfitIndex)",
+    "void ConfirmSelectionAndStart()"
+  ],
+  "requires": [
+    "CharacterData",
+    "OutfitData"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "PlayerPrefs",
+    "SceneManager"
+  ],
+  "usedBy": []
+}

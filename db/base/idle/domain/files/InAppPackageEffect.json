@@ -1,0 +1,181 @@
+{
+  "fileId": "InAppPackageEffect",
+  "filePath": "InAppPackageEffect.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Idle",
+  "role": "UX",
+  "system": "InAppPackageEffect",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "InAppPackageEffect",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": true,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "IsOnEffect",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "PackageEffectID",
+              "paramName": "effectID"
+            }
+          ],
+          "signature": "bool IsOnEffect(PackageEffectID effectID)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "SetEffectOn",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "packageTableID"
+            },
+            {
+              "paramType": "bool",
+              "paramName": "b"
+            }
+          ],
+          "signature": "void SetEffectOn(int packageTableID, bool b)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "DebugPrint",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DebugPrint()",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    },
+    {
+      "className": "PackageEffectID",
+      "classType": "enum",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "IsOnEffect",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "PackageEffectID",
+              "paramName": "effectID"
+            }
+          ],
+          "signature": "bool IsOnEffect(PackageEffectID effectID)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "SetEffectOn",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "packageTableID"
+            },
+            {
+              "paramType": "bool",
+              "paramName": "b"
+            }
+          ],
+          "signature": "void SetEffectOn(int packageTableID, bool b)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "DebugPrint",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DebugPrint()",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "bool IsOnEffect(PackageEffectID effectID)",
+    "void SetEffectOn(int packageTableID, bool b)",
+    "void DebugPrint()",
+    "bool IsOnEffect(PackageEffectID effectID)",
+    "void SetEffectOn(int packageTableID, bool b)",
+    "void DebugPrint()"
+  ],
+  "requires": [],
+  "tags": {
+    "major": [
+      "ConditionCheck",
+      "ValueModification"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "DailyDia1",
+    "Debug",
+    "FreeLevelUp"
+  ],
+  "usedBy": []
+}

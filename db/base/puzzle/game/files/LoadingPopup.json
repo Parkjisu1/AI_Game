@@ -1,0 +1,160 @@
+{
+  "fileId": "LoadingPopup",
+  "filePath": "Popup\\LoadingPopup.cs",
+  "namespace": "",
+  "layer": "Game",
+  "genre": "Puzzle",
+  "role": "View",
+  "system": "Popup",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI",
+    "DG.Tweening",
+    "Global_Define"
+  ],
+  "classes": [
+    {
+      "className": "LoadingPopup",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "CPopupBase",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "blueJewel",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "greenJewel",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "purpleJewel",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "skyBlueJewel",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "yellowJewel",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "jewels",
+          "fieldType": "Transform[]",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "loadingText",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "SetLoadingPopup",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void SetLoadingPopup()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "LoadingText",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [],
+          "signature": "IEnumerator LoadingText()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": "DataSync",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void SetLoadingPopup()"
+  ],
+  "requires": [
+    "CPopupBase"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification",
+      "DataSync"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "CPopupBase",
+    "YieldReturnCaching"
+  ],
+  "usedBy": []
+}

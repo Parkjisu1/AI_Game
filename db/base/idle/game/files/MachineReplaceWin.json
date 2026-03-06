@@ -1,0 +1,163 @@
+{
+  "fileId": "MachineReplaceWin",
+  "filePath": "UI\\MachineReplaceWin.cs",
+  "namespace": "",
+  "layer": "Game",
+  "genre": "Idle",
+  "role": "View",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "MachineReplaceWin",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "WindowBase",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "description",
+          "fieldType": "LanguageText",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "component",
+          "fieldType": "MachineMountComponent",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "newWorldFactoryIndex",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "GetMachineMountComponent",
+          "accessModifier": "public",
+          "returnType": "MachineMountComponent",
+          "parameters": [],
+          "signature": "MachineMountComponent GetMachineMountComponent()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "SetData",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "machineNameTextID"
+            },
+            {
+              "paramType": "int",
+              "paramName": "oldWorldFactoryIndex"
+            },
+            {
+              "paramType": "int",
+              "paramName": "newWorldFactoryIndex"
+            }
+          ],
+          "signature": "void SetData(string machineNameTextID, int oldWorldFactoryIndex, int newWorldFactoryIndex)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "OnClickOK",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickOK()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnClickClose",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickClose()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "MachineMountComponent GetMachineMountComponent()",
+    "void SetData(string machineNameTextID, int oldWorldFactoryIndex, int newWorldFactoryIndex)",
+    "void OnClickOK()",
+    "void OnClickClose()"
+  ],
+  "requires": [
+    "LanguageText",
+    "MachineMountComponent",
+    "WindowBase"
+  ],
+  "tags": {
+    "major": [
+      "ResponseTrigger",
+      "ValueModification"
+    ],
+    "minor": [
+      "Find",
+      "Assign"
+    ]
+  },
+  "uses": [
+    "CloseWindowMsg",
+    "Holder",
+    "RefreshMachineMountWinMsg",
+    "ReplaceMachineFromWorldFactoryMsg",
+    "WindowBase"
+  ],
+  "usedBy": []
+}

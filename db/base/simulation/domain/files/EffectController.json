@@ -1,0 +1,215 @@
+{
+  "fileId": "EffectController",
+  "filePath": "Controller\\EffectController.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Simulation",
+  "role": "Enum",
+  "system": "Controller",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "EffectType",
+      "classType": "enum",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Init",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "EffectType",
+              "paramName": "_type"
+            },
+            {
+              "paramType": "float _x =",
+              "paramName": "0"
+            },
+            {
+              "paramType": "float _z =",
+              "paramName": "0"
+            },
+            {
+              "paramType": "float _rotationY =",
+              "paramName": "0"
+            },
+            {
+              "paramType": "float _scale =",
+              "paramName": "1f"
+            }
+          ],
+          "signature": "void Init(EffectType _type, float _x = 0, float _z = 0, float _rotationY = 0, float _scale = 1f)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    },
+    {
+      "className": "EffectController",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "durationLength",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "speed",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "2f"
+        },
+        {
+          "fieldName": "noiseScale",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0.1f"
+        },
+        {
+          "fieldName": "fadeCurve",
+          "fieldType": "AnimationCurve",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "AnimationCurve.EaseInOut(0, 0, 1, 1)"
+        },
+        {
+          "fieldName": "m_offest",
+          "fieldType": "Vector3",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "curDuration",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0"
+        },
+        {
+          "fieldName": "m_type",
+          "fieldType": "EffectType",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Init",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "EffectType",
+              "paramName": "_type"
+            },
+            {
+              "paramType": "float _x =",
+              "paramName": "0"
+            },
+            {
+              "paramType": "float _z =",
+              "paramName": "0"
+            },
+            {
+              "paramType": "float _rotationY =",
+              "paramName": "0"
+            },
+            {
+              "paramType": "float _scale =",
+              "paramName": "1f"
+            }
+          ],
+          "signature": "void Init(EffectType _type, float _x = 0, float _z = 0, float _rotationY = 0, float _scale = 1f)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Init(EffectType _type, float _x = 0, float _z = 0, float _rotationY = 0, float _scale = 1f)",
+    "void Init(EffectType _type, float _x = 0, float _z = 0, float _rotationY = 0, float _scale = 1f)"
+  ],
+  "requires": [
+    "AnimationCurve",
+    "EffectType"
+  ],
+  "tags": {
+    "major": [],
+    "minor": []
+  },
+  "uses": [
+    "AnimationCurve",
+    "Hit",
+    "Instance",
+    "ObjectPool",
+    "StartCoroutine",
+    "WaitForSeconds",
+    "_rotationY"
+  ],
+  "usedBy": []
+}

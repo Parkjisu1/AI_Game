@@ -1,0 +1,503 @@
+{
+  "fileId": "ProductBase",
+  "filePath": "ProductBase.cs",
+  "namespace": "",
+  "layer": "Core",
+  "genre": "Rpg",
+  "role": "Entity",
+  "system": "ProductBase",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "DG.Tweening"
+  ],
+  "classes": [
+    {
+      "className": "ProductBase",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "PooledGameObject",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "mySpriteRenderer",
+          "fieldType": "SpriteRenderer",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "myRigidbody",
+          "fieldType": "Rigidbody2D",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "myColliders",
+          "fieldType": "List<CircleCollider2D>",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "stepNode",
+          "fieldType": "List<Transform>",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "hpNode",
+          "fieldType": "Transform",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "hp",
+          "fieldType": "double",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "lastDamagedTime",
+          "fieldType": "float",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "currentStep",
+          "fieldType": "int",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0"
+        },
+        {
+          "fieldName": "tableID",
+          "fieldType": "int",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "tintColor",
+          "fieldType": "Color",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "Color.red"
+        },
+        {
+          "fieldName": "tintTime",
+          "fieldType": "float",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "1f"
+        },
+        {
+          "fieldName": "canChangeSprite",
+          "fieldType": "bool",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "true"
+        },
+        {
+          "fieldName": "currentTweeners",
+          "fieldType": "List<Tweener>",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "new List<Tweener>()"
+        },
+        {
+          "fieldName": "punchTweener",
+          "fieldType": "Tweener",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "TurnOn",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void TurnOn()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "TurnOff",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "returnToOwner"
+            }
+          ],
+          "signature": "void TurnOff(bool returnToOwner)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetData",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "double",
+              "paramName": "hp"
+            },
+            {
+              "paramType": "int",
+              "paramName": "step"
+            }
+          ],
+          "signature": "void SetData(double hp, int step)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetStep",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "tableID"
+            },
+            {
+              "paramType": "Sprite",
+              "paramName": "sprite"
+            },
+            {
+              "paramType": "double",
+              "paramName": "hp"
+            },
+            {
+              "paramType": "int",
+              "paramName": "step"
+            }
+          ],
+          "signature": "bool SetStep(int tableID, Sprite sprite, double hp, int step)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetStep",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "Sprite",
+              "paramName": "sprite"
+            },
+            {
+              "paramType": "double",
+              "paramName": "hp"
+            },
+            {
+              "paramType": "int",
+              "paramName": "step"
+            }
+          ],
+          "signature": "bool SetStep(Sprite sprite, double hp, int step)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetStep",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "double",
+              "paramName": "hp"
+            },
+            {
+              "paramType": "int",
+              "paramName": "step"
+            }
+          ],
+          "signature": "bool SetStep(double hp, int step)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetStep",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "currentStep"
+            }
+          ],
+          "signature": "void SetStep(int currentStep)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "Damage",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "double",
+              "paramName": "damage"
+            }
+          ],
+          "signature": "void Damage(double damage)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "IsOnLine",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool IsOnLine()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnLineMode",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "b"
+            }
+          ],
+          "signature": "void OnLineMode(bool b)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "GetHpNodePosition",
+          "accessModifier": "public",
+          "returnType": "Vector3",
+          "parameters": [],
+          "signature": "Vector3 GetHpNodePosition()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "IsValidStep",
+          "accessModifier": "protected",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool IsValidStep()",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "DoPunch",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector3",
+              "paramName": "scale"
+            },
+            {
+              "paramType": "float",
+              "paramName": "time"
+            },
+            {
+              "paramType": "Ease",
+              "paramName": "ease"
+            }
+          ],
+          "signature": "void DoPunch(Vector3 scale, float time, Ease ease)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "FlowControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "KillAllTween",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void KillAllTween()",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Despawn"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void TurnOn()",
+    "void TurnOff(bool returnToOwner)",
+    "bool SetStep(int tableID, Sprite sprite, double hp, int step)",
+    "bool SetStep(Sprite sprite, double hp, int step)",
+    "bool SetStep(double hp, int step)",
+    "void Damage(double damage)",
+    "bool IsOnLine()",
+    "void OnLineMode(bool b)",
+    "Vector3 GetHpNodePosition()",
+    "void DoPunch(Vector3 scale, float time, Ease ease)",
+    "void KillAllTween()"
+  ],
+  "requires": [
+    "CircleCollider2D",
+    "PooledGameObject",
+    "Rigidbody2D",
+    "SpriteRenderer",
+    "Tweener"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification",
+      "ConditionCheck",
+      "ResponseTrigger"
+    ],
+    "minor": [
+      "Assign",
+      "Find",
+      "Despawn"
+    ]
+  },
+  "uses": [
+    "CircleCollider2D",
+    "DOTween",
+    "PooledGameObject",
+    "Tweener"
+  ],
+  "usedBy": []
+}

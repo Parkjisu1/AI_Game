@@ -1,0 +1,50 @@
+{
+  "designId": "idlemoney__bm__diamond_iap",
+  "project": "IdleMoney",
+  "domain": "BM",
+  "genre": "Idle",
+  "system": "Diamond IAP",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "config",
+  "balance_area": "iap",
+  "source_file": "bm_systems.yaml",
+  "content": {
+    "summary": "다이아몬드 직접 구매 (실제 돈 → 프리미엄 재화).\n플랫폼별(Android/iOS) PID 분리, 기본량 + 보너스량 구성.",
+    "flow": [],
+    "parameters": {
+      "fields_per_tier": [
+        "DiamondID: 고유 ID",
+        "AndroidPID / ApplePID: 플랫폼별 상품 ID",
+        "AOSPrice: 표시 가격 문자열",
+        "RewardGoodsBaseAmount: 기본 다이아",
+        "RewardGoodsBonusAmount: 보너스 다이아",
+        "IconImageName, NameTextID: UI 에셋"
+      ],
+      "purchase_flow": [
+        "BuyProductMsg → AllPlugins.Purchase(ProductID)",
+        "IAP 콜백: InAppPuchaseSuccessMsg → AddMoneyDiaMsg",
+        "영수증 검증: UnityEngine.Purchasing.Security"
+      ],
+      "analytics": "log_shop_iap: IAP 구매 이벤트 로깅"
+    },
+    "edge_cases": [],
+    "references": []
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from C# analysis: Diamond IAP",
+      "note": "Live game code analysis import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T11:08:16.958Z"
+}

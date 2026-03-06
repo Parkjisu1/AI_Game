@@ -1,0 +1,200 @@
+{
+  "fileId": "Stage_OpenType",
+  "filePath": "Lobby\\Stage_OpenType.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Rpg",
+  "role": "Component",
+  "system": "Lobby",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "GameUtils",
+    "Global_Define",
+    "ResourcePath"
+  ],
+  "classes": [
+    {
+      "className": "Stage_OpenType",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "StageTypeBase",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "stageButtonRoot",
+          "fieldType": "GameObject",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "liStages",
+          "fieldType": "List<StageButton_OpenType>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<StageButton_OpenType>()"
+        },
+        {
+          "fieldName": "activateStarSprite",
+          "fieldType": "Sprite",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "deActivateStarSprite",
+          "fieldType": "Sprite",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "stageClear",
+          "fieldType": "Sprite",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "stageHardClear",
+          "fieldType": "Sprite",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "stageNonClear",
+          "fieldType": "Sprite",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "stageHardNonClear",
+          "fieldType": "Sprite",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "SetStageButton",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "_stageCount"
+            }
+          ],
+          "signature": "void SetStageButton(int _stageCount)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "GetStageButton",
+          "accessModifier": "private",
+          "returnType": "StageButton_OpenType",
+          "parameters": [],
+          "signature": "StageButton_OpenType GetStageButton()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "SetApplySprite",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "ResourceNameTable",
+              "paramName": "_resourNameData"
+            }
+          ],
+          "signature": "void SetApplySprite(ResourceNameTable _resourNameData)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void SetStageButton(int _stageCount)"
+  ],
+  "requires": [
+    "StageButton_OpenType",
+    "StageTypeBase"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification"
+    ],
+    "minor": [
+      "Assign",
+      "Find"
+    ]
+  },
+  "uses": [
+    "CGameUtils",
+    "CSpriteManager",
+    "Instance",
+    "PlayerPrefs",
+    "StageButton_OpenType",
+    "StageTypeBase"
+  ],
+  "usedBy": []
+}

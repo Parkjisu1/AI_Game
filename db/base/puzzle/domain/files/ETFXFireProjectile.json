@@ -1,0 +1,365 @@
+{
+  "fileId": "ETFXFireProjectile",
+  "filePath": "ETFXFireProjectile.cs",
+  "namespace": "EpicToonFX",
+  "layer": "Domain",
+  "genre": "Puzzle",
+  "role": "Model",
+  "system": "ETFXFireProjectile",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine",
+    "UnityEngine.SceneManagement",
+    "UnityEngine.UI",
+    "UnityEngine.EventSystems",
+    "System.Collections"
+  ],
+  "classes": [
+    {
+      "className": "ETFXFireProjectile",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "projectiles",
+          "fieldType": "GameObject[]",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "missileNameText",
+          "fieldType": "Text",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "speedSlider",
+          "fieldType": "Slider",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "cleanUpMissileName",
+          "fieldType": "bool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        },
+        {
+          "fieldName": "spawnPosition",
+          "fieldType": "Transform",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "currentProjectile",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0"
+        },
+        {
+          "fieldName": "speed",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "1000"
+        },
+        {
+          "fieldName": "spawnOffset",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0.3f"
+        },
+        {
+          "fieldName": "fireRate",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0.13f"
+        },
+        {
+          "fieldName": "isFullAuto",
+          "fieldType": "bool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "true"
+        },
+        {
+          "fieldName": "gunPrefab",
+          "fieldType": "GameObject",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "gunOffset",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0.5f"
+        },
+        {
+          "fieldName": "canShoot",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "true"
+        },
+        {
+          "fieldName": "instantiatedGun",
+          "fieldType": "GameObject",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Start",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Start()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Update",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Update()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Shoot",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [],
+          "signature": "IEnumerator Shoot()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ShootProjectile",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void ShootProjectile()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateGunPositionAndRotation",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void UpdateGunPositionAndRotation()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "nextEffect",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void nextEffect()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "previousEffect",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void previousEffect()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateDisplayName",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void UpdateDisplayName()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "CleanUpMissileName",
+          "accessModifier": "private",
+          "returnType": "string",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "name"
+            }
+          ],
+          "signature": "string CleanUpMissileName(string name)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnSpeedSliderChanged",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "value"
+            }
+          ],
+          "signature": "void OnSpeedSliderChanged(float value)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void nextEffect()",
+    "void previousEffect()"
+  ],
+  "requires": [
+    "ETFXProjectileScript",
+    "Slider",
+    "Toggle"
+  ],
+  "tags": {
+    "major": [
+      "DataSync",
+      "ResponseTrigger"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "Debug",
+    "ETFXProjectileScript",
+    "GetComponentInChildren",
+    "Input",
+    "Mathf",
+    "Physics",
+    "Toggle",
+    "WaitForSeconds"
+  ],
+  "usedBy": []
+}

@@ -1,0 +1,370 @@
+{
+  "fileId": "CDataManager",
+  "filePath": "Manager\\CDataManager.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Rpg",
+  "role": "Model",
+  "system": "Manager",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "FullSerializer",
+    "Global_Define",
+    "GameUtils",
+    "LitJson"
+  ],
+  "classes": [
+    {
+      "className": "CDataManager",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "resourceNameData",
+          "fieldType": "ResourceNameData",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "constData",
+          "fieldType": "ConstData",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "constData",
+          "fieldType": "ConstTable",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "resourceNameData",
+          "fieldType": "ResourceNameTable",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "itemRateData",
+          "fieldType": "Dictionary<int,  ItemRateTable",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "dicStageData",
+          "fieldType": "Dictionary<int, StageTable>",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Dictionary<int, StageTable>()"
+        },
+        {
+          "fieldName": "dicShopTable",
+          "fieldType": "Dictionary<eShopProductType, ShopTable>",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Dictionary<eShopProductType, ShopTable>()"
+        },
+        {
+          "fieldName": "dicStringTable",
+          "fieldType": "Dictionary<string, StringTable>",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Dictionary<string, StringTable>()"
+        },
+        {
+          "fieldName": "dicItemRateTable",
+          "fieldType": "Dictionary<int, ItemRateTable>",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Dictionary<int, ItemRateTable>()"
+        },
+        {
+          "fieldName": "dicItemBoxNeedStar",
+          "fieldType": "Dictionary<int, int>",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Dictionary<int, int>()"
+        },
+        {
+          "fieldName": "dicDailyRewardTable",
+          "fieldType": "Dictionary<eRewardBoxItem, DailyRewardTable>",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Dictionary<eRewardBoxItem, DailyRewardTable>()"
+        },
+        {
+          "fieldName": "dicShopRewardTable",
+          "fieldType": "Dictionary<eRewardBoxItem, ShopRewardTable>",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Dictionary<eRewardBoxItem, ShopRewardTable>()"
+        },
+        {
+          "fieldName": "itemRateLastStep",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0"
+        },
+        {
+          "fieldName": "jsonTables",
+          "fieldType": "string[]",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "{ \"ItemRateTable\", \"ShopTable\", \"StringTable\", \"DailyRewardTable\", \"ShopRewardTable\" }"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Awake",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Awake()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "setDataTableInitialize",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void setDataTableInitialize()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetJsonTable",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void SetJsonTable()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetItemRateTable",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "JsonData",
+              "paramName": "data"
+            }
+          ],
+          "signature": "void SetItemRateTable(JsonData data)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetShopTable",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "JsonData",
+              "paramName": "data"
+            }
+          ],
+          "signature": "void SetShopTable(JsonData data)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetStringTable",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "JsonData",
+              "paramName": "data"
+            }
+          ],
+          "signature": "void SetStringTable(JsonData data)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetDailyRewardTable",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "JsonData",
+              "paramName": "data"
+            }
+          ],
+          "signature": "void SetDailyRewardTable(JsonData data)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetShopRewardTable",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "JsonData",
+              "paramName": "data"
+            }
+          ],
+          "signature": "void SetShopRewardTable(JsonData data)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void setDataTableInitialize()",
+    "void SetJsonTable()"
+  ],
+  "requires": [
+    "CDataManager",
+    "ConstData",
+    "ConstTable",
+    "ResourceNameData",
+    "ResourceNameTable"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "CGameUtils",
+    "ConstData",
+    "ConstTable",
+    "DailyRewardTable",
+    "Define",
+    "ItemRateTable",
+    "JsonMapper",
+    "PlayerPrefs",
+    "Rand",
+    "ResourceNameData",
+    "ResourceNameTable",
+    "Resources",
+    "SetDailyRewardTable",
+    "SetItemRateTable",
+    "SetShopRewardTable",
+    "SetShopTable",
+    "SetStringTable",
+    "ShopRewardTable",
+    "ShopTable",
+    "StageTable",
+    "StringTable"
+  ],
+  "usedBy": []
+}

@@ -1,5 +1,5 @@
 """
-SetupWizard — New Game Profile Onboarding
+SetupWizard -- New Game Profile Onboarding
 ==========================================
 Creates a GameProfile for a new game, seeding it with genre defaults
 from the appropriate GenreSchema. Saves a profile.yaml ready for use.

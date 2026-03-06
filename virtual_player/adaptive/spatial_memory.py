@@ -1,5 +1,5 @@
 """
-Spatial Memory — Zone Awareness
+Spatial Memory -- Zone Awareness
 =================================
 Remembers what is available in each game screen/zone:
 resources, danger level, visit frequency, and known elements.
@@ -30,7 +30,7 @@ class ZoneInfo:
 
 
 class SpatialMemory:
-    """Spatial awareness — remember what is in each zone."""
+    """Spatial awareness -- remember what is in each zone."""
 
     def __init__(self, cache_path: Optional[Path] = None) -> None:
         self._zones: Dict[str, ZoneInfo] = {}

@@ -1,0 +1,123 @@
+{
+  "fileId": "BallSelectionController",
+  "filePath": "GameManager\\BallSelectionController.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Playable",
+  "role": "Controller",
+  "system": "GameManager",
+  "score": 0.4,
+  "usings": [
+    "System",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "BallSelectionController",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "selectionPanel",
+          "fieldType": "GameObject",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "onSelectionConfirmed",
+          "fieldType": "Action<int>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "prevTimeScale",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "1f"
+        },
+        {
+          "fieldName": "isPaused",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Show",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Show()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Hide",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "bool confirmed =",
+              "paramName": "false"
+            },
+            {
+              "paramType": "int selectedIndex =",
+              "paramName": "-1"
+            }
+          ],
+          "signature": "void Hide(bool confirmed = false, int selectedIndex = -1)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Show()",
+    "void Hide(bool confirmed = false, int selectedIndex = -1)"
+  ],
+  "requires": [],
+  "tags": {
+    "major": [],
+    "minor": []
+  },
+  "uses": [],
+  "usedBy": []
+}

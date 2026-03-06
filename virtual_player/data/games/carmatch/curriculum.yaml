@@ -1,0 +1,119 @@
+game_id: carmatch
+package: com.grandgames.carmatch
+input_method: monkey
+genre: puzzle
+
+core_loop:
+  - lobby
+  - gameplay
+  - win
+  - lobby
+
+screens:
+  lobby:
+    description: "Main menu with green Play button and level number"
+    actions:
+      - name: tap_play
+        type: tap
+        x: 551
+        y: 1498
+        target: gameplay
+        description: "Start current level"
+
+  gameplay:
+    description: "3D parking lot with colored cars and bottom holder (7 slots)"
+    actions:
+      - name: tap_car_center
+        type: tap
+        x: 540
+        y: 700
+        description: "Tap a car in center area"
+      - name: tap_car_left
+        type: tap
+        x: 250
+        y: 600
+        description: "Tap a car in left area"
+      - name: tap_car_right
+        type: tap
+        x: 800
+        y: 600
+        description: "Tap a car in right area"
+      - name: tap_car_top
+        type: tap
+        x: 540
+        y: 400
+        description: "Tap a car in top area"
+    wait_behavior: "Cars animate to holder (4-6 sec). Match 3 same color = clear"
+
+  win:
+    description: "Level complete with stars and Continue button"
+    actions:
+      - name: tap_continue
+        type: tap
+        x: 540
+        y: 1400
+        target: lobby
+        description: "Return to lobby after win"
+
+  fail:
+    description: "Game over - Out of Space popup"
+    actions:
+      - name: tap_retry
+        type: tap
+        x: 540
+        y: 1200
+        target: gameplay
+        description: "Retry the level"
+
+  ad:
+    description: "Interstitial or reward ad (landscape or portrait)"
+    actions:
+      - name: close_ad_portrait
+        type: tap
+        x: 1050
+        y: 30
+        target: lobby
+        description: "Close portrait ad X button"
+      - name: close_ad_landscape
+        type: tap
+        x: 1895
+        y: 35
+        target: lobby
+        description: "Close landscape ad X button"
+
+  more_lives:
+    description: "More Lives popup when lives = 0"
+    actions:
+      - name: tap_watch_ad
+        type: tap
+        x: 541
+        y: 1250
+        description: "Watch ad for +1 life"
+      - name: close_popup
+        type: tap
+        x: 890
+        y: 440
+        target: lobby
+        description: "Close More Lives popup"
+
+  streak_race:
+    description: "Win streak bonus popup"
+    actions:
+      - name: tap_continue
+        type: tap
+        x: 540
+        y: 1870
+        target: lobby
+        description: "Continue streak race"
+      - name: close_streak
+        type: tap
+        x: 970
+        y: 155
+        target: lobby
+        description: "Close streak race popup"
+
+danger_zones:
+  - keywords: ["purchase", "buy", "구매", "$", "₩", "install"]
+    reason: "Real money or app install"
+  - region: [0, 1730, 1080, 50]
+    reason: "Booster area - may cost currency"

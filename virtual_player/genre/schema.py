@@ -1,5 +1,5 @@
 """
-GenreSchema — Abstract Base for Genre-Specific Game Configurations
+GenreSchema -- Abstract Base for Genre-Specific Game Configurations
 ===================================================================
 Defines the contract that each genre schema must fulfill:
 concepts, screen ROIs, goals, actions, interrupts, and gauge profiles.
@@ -75,4 +75,27 @@ class GenreSchema(ABC):
 
     def get_screen_types(self) -> Dict[str, str]:
         """Get typical screen types for this genre as {key: description}."""
+        return {}
+
+    def get_exploration_hints(self) -> Dict[str, list]:
+        """
+        Get hints for the ExplorationEngine specific to this genre.
+
+        Returns:
+            Dict with optional keys:
+            - "priority_screens": screens to explore first
+            - "safe_screens": screens where exploration is always safe
+            - "danger_screens": screens to avoid exploring
+            - "ocr_keywords": keywords indicating important UI elements
+        """
+        return {}
+
+    def get_combat_config(self) -> dict:
+        """Get combat configuration for CombatController.
+
+        Returns:
+            Dict with optional keys:
+            - "skill_slots": list of skill slot dicts (name, x, y, cooldown_s, priority, type)
+        Defaults to empty dict (no combat controller will be created).
+        """
         return {}

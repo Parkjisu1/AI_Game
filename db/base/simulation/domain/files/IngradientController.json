@@ -1,0 +1,621 @@
+{
+  "fileId": "IngradientController",
+  "filePath": "Controller\\IngradientController.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Simulation",
+  "role": "Enum",
+  "system": "Controller",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "IngradientType",
+      "classType": "enum",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Init",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "IngradientType resourceType =",
+              "paramName": "IngradientType.None"
+            },
+            {
+              "paramType": "Vector3 spawnPosition =",
+              "paramName": "default"
+            }
+          ],
+          "signature": "void Init(IngradientType resourceType = IngradientType.None, Vector3 spawnPosition = default)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnScaleChange",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnScaleChange()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "SetTarget",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "_target"
+            },
+            {
+              "paramType": "bool _consume =",
+              "paramName": "false"
+            }
+          ],
+          "signature": "void SetTarget(Transform _target, bool _consume = false)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetParabolicArc",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "enable"
+            },
+            {
+              "paramType": "float height =",
+              "paramName": "2f"
+            },
+            {
+              "paramType": "float duration =",
+              "paramName": "1f"
+            }
+          ],
+          "signature": "void SetParabolicArc(bool enable, float height = 2f, float duration = 1f)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "IsUsingParabolicFlight",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool IsUsingParabolicFlight()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        }
+      ]
+    },
+    {
+      "className": "IngradientController",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "m_type",
+          "fieldType": "IngradientType",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "IngradientType.None"
+        },
+        {
+          "fieldName": "flySpeed",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "10f"
+        },
+        {
+          "fieldName": "acceleration",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "1.1f"
+        },
+        {
+          "fieldName": "playerDetectionRange",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "2f"
+        },
+        {
+          "fieldName": "useParabolicArc",
+          "fieldType": "bool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "true"
+        },
+        {
+          "fieldName": "arcHeight",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "2.0f"
+        },
+        {
+          "fieldName": "arcDuration",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "1.0f"
+        },
+        {
+          "fieldName": "arcCurve",
+          "fieldType": "AnimationCurve",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "AnimationCurve.EaseInOut(0, 0, 1, 1)"
+        },
+        {
+          "fieldName": "HorizontalStand",
+          "fieldType": "bool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        },
+        {
+          "fieldName": "bounceCount",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "2"
+        },
+        {
+          "fieldName": "maxBounceHeight",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "1.1f"
+        },
+        {
+          "fieldName": "bounceDecayRate",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0.5f"
+        },
+        {
+          "fieldName": "delayBeforeFly",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0.2f"
+        },
+        {
+          "fieldName": "collectDelay",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0.5f"
+        },
+        {
+          "fieldName": "ScaleUpRate",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "1.3f"
+        },
+        {
+          "fieldName": "delayToStack",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0.1f"
+        },
+        {
+          "fieldName": "OriScale",
+          "fieldType": "Vector3",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "storageDetectionRange",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "20f"
+        },
+        {
+          "fieldName": "Meat",
+          "fieldType": "GameObject",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "Coin",
+          "fieldType": "GameObject",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "Humble",
+          "fieldType": "GameObject",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "target",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "player",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "isFlying",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        },
+        {
+          "fieldName": "currentFlySpeed",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "isUsingParabolicFlight",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        },
+        {
+          "fieldName": "arcStartPosition",
+          "fieldType": "Vector3",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "arcTargetPosition",
+          "fieldType": "Vector3",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "arcStartTime",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Init",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "IngradientType resourceType =",
+              "paramName": "IngradientType.None"
+            },
+            {
+              "paramType": "Vector3 spawnPosition =",
+              "paramName": "default"
+            }
+          ],
+          "signature": "void Init(IngradientType resourceType = IngradientType.None, Vector3 spawnPosition = default)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnScaleChange",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnScaleChange()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "SetTarget",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "_target"
+            },
+            {
+              "paramType": "bool _consume =",
+              "paramName": "false"
+            }
+          ],
+          "signature": "void SetTarget(Transform _target, bool _consume = false)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetParabolicArc",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "enable"
+            },
+            {
+              "paramType": "float height =",
+              "paramName": "2f"
+            },
+            {
+              "paramType": "float duration =",
+              "paramName": "1f"
+            }
+          ],
+          "signature": "void SetParabolicArc(bool enable, float height = 2f, float duration = 1f)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "IsUsingParabolicFlight",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool IsUsingParabolicFlight()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Init(IngradientType resourceType = IngradientType.None, Vector3 spawnPosition = default)",
+    "void OnScaleChange()",
+    "void SetTarget(Transform _target, bool _consume = false)",
+    "void SetParabolicArc(bool enable, float height = 2f, float duration = 1f)",
+    "bool IsUsingParabolicFlight()",
+    "void Init(IngradientType resourceType = IngradientType.None, Vector3 spawnPosition = default)",
+    "void OnScaleChange()",
+    "void SetTarget(Transform _target, bool _consume = false)",
+    "void SetParabolicArc(bool enable, float height = 2f, float duration = 1f)",
+    "bool IsUsingParabolicFlight()"
+  ],
+  "requires": [
+    "AnimationCurve",
+    "ICollectable",
+    "IngradientType",
+    "IngradientType resourceType =",
+    "PlayerController",
+    "ResourceStorage",
+    "Vector3 spawnPosition ="
+  ],
+  "tags": {
+    "major": [
+      "ValueModification",
+      "ResponseTrigger",
+      "ConditionCheck"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "AnimationCurve",
+    "AudioManager",
+    "Coin",
+    "Debug",
+    "Delivered",
+    "GameManager",
+    "Humble",
+    "ICollectable",
+    "Instance",
+    "Mathf",
+    "Meat",
+    "ObjectPool",
+    "OriScale",
+    "PlayerController",
+    "ResourceStorage",
+    "StartCoroutine",
+    "WaitForSeconds",
+    "_collect",
+    "_player",
+    "_storage",
+    "_upScale"
+  ],
+  "usedBy": []
+}

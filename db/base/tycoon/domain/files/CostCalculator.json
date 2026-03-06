@@ -1,0 +1,120 @@
+{
+  "fileId": "CostCalculator",
+  "filePath": "CostCalculator.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Tycoon",
+  "role": "Service",
+  "system": "CostCalculator",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "CostCalculator",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [
+        "IInjectable"
+      ],
+      "fields": [],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "GetGachaGeneral",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "BoxGeneralTable",
+              "paramName": "table"
+            },
+            {
+              "paramType": "int",
+              "paramName": "count"
+            }
+          ],
+          "signature": "double GetGachaGeneral(BoxGeneralTable table, int count)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetGachaAdvanced",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [
+            {
+              "paramType": "BoxAdvancedTable",
+              "paramName": "table"
+            },
+            {
+              "paramType": "int",
+              "paramName": "count"
+            }
+          ],
+          "signature": "int GetGachaAdvanced(BoxAdvancedTable table, int count)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetGachaSuper",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [
+            {
+              "paramType": "BoxSuperTable",
+              "paramName": "table"
+            },
+            {
+              "paramType": "int",
+              "paramName": "count"
+            }
+          ],
+          "signature": "int GetGachaSuper(BoxSuperTable table, int count)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "double GetGachaGeneral(BoxGeneralTable table, int count)",
+    "int GetGachaAdvanced(BoxAdvancedTable table, int count)",
+    "int GetGachaSuper(BoxSuperTable table, int count)"
+  ],
+  "requires": [
+    "IInjectable"
+  ],
+  "tags": {
+    "major": [],
+    "minor": [
+      "Find"
+    ]
+  },
+  "uses": [
+    "IInjectable"
+  ],
+  "usedBy": []
+}

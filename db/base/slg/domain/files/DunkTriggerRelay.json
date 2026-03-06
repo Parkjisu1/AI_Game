@@ -1,0 +1,84 @@
+{
+  "fileId": "DunkTriggerRelay",
+  "filePath": "BallHandler\\DunkTriggerRelay.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Slg",
+  "role": "Component",
+  "system": "BallHandler",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "DunkTriggerRelay",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "_detector",
+          "fieldType": "DunkDetector",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "_isTop",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "true"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "OnTriggerEnter",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Collider",
+              "paramName": "other"
+            }
+          ],
+          "signature": "void OnTriggerEnter(Collider other)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [],
+  "requires": [
+    "DunkDetector"
+  ],
+  "tags": {
+    "major": [],
+    "minor": []
+  },
+  "uses": [
+    "Debug",
+    "_detector"
+  ],
+  "usedBy": []
+}

@@ -1,0 +1,1832 @@
+{
+  "fileId": "GameBoard",
+  "filePath": "InGame\\GameBoard.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Puzzle",
+  "role": "Component",
+  "system": "InGame",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI",
+    "FullSerializer",
+    "Global_Define",
+    "GameUtils",
+    "DG.Tweening",
+    "TempleGem.Common"
+  ],
+  "classes": [
+    {
+      "className": "GameBoard",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": true,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "gameScene",
+          "fieldType": "GameScene",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "tileRoot",
+          "fieldType": "GameObject",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "inGame_BottomUi",
+          "fieldType": "InGame_BottomUi",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "inGame_TopUi",
+          "fieldType": "InGame_TopUi",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "specialItem",
+          "fieldType": "SpecialItem",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "tilePool",
+          "fieldType": "TilePool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "cameraShake",
+          "fieldType": "CameraShake",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "missionPool",
+          "fieldType": "MissionPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "effectPool",
+          "fieldType": "EffectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "scoreEffectPool",
+          "fieldType": "ScoreEffectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "missionEffectCenterIndex",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0"
+        },
+        {
+          "fieldName": "stage",
+          "fieldType": "StageTable",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "gameState",
+          "fieldType": "GameState",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new GameState()"
+        },
+        {
+          "fieldName": "currentMoveCount",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "currentLimitTime",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "isCollectableStage",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "isMatching",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "isActivaingTagettedJewel",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "isCurrentlyAwarding",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "isInputLocked",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "isCurrentlySwapping",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "isDrag",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "isExplodeContagion",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "isDigState",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "consecutiveCascades",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "lastSelectedTileX",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "lastSelectedTileY",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "lastOtherSelectedTileX",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "lastOtherSelectedTileY",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "tileWidth",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "tileHeight",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "swapDirection",
+          "fieldType": "eSwapDirection",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "lastSelectedJewelColor",
+          "fieldType": "eJewelColor",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "lastOtherSelectedJewelColor",
+          "fieldType": "eJewelColor",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "selectedTile",
+          "fieldType": "GameObject",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "lastSelectedTile",
+          "fieldType": "GameObject",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "lastOtherSelectedTile",
+          "fieldType": "GameObject",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "shadowChangeSize",
+          "fieldType": "Vector3",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Vector3(1.1f, 1.1f, 1.1f)"
+        },
+        {
+          "fieldName": "liTiles",
+          "fieldType": "List<GameObject>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "liHoney1",
+          "fieldType": "List<GameObject>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "liHoney2",
+          "fieldType": "List<GameObject>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "liSands1",
+          "fieldType": "List<GameObject>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "liSands2",
+          "fieldType": "List<GameObject>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "liSpread",
+          "fieldType": "List<GameObject>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "liElements",
+          "fieldType": "List<GameObject>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "liIce1",
+          "fieldType": "List<GameObject>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "liIce2",
+          "fieldType": "List<GameObject>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "liIces",
+          "fieldType": "List<GameObject>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "liChain1",
+          "fieldType": "List<GameObject>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "liChain2",
+          "fieldType": "List<GameObject>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "liSpecialElements",
+          "fieldType": "List<GameObject>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "liDig",
+          "fieldType": "List<GameObject>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "liDigTiles",
+          "fieldType": "List<DigTile>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "liSpecialElementState",
+          "fieldType": "List<bool>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "liCollectableBoxState",
+          "fieldType": "List<bool>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "liDigTiles",
+          "fieldType": "List<DigTile>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<DigTile>()"
+        },
+        {
+          "fieldName": "liEmptyColumn",
+          "fieldType": "List<int>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<int>()"
+        },
+        {
+          "fieldName": "liCollectables",
+          "fieldType": "List<eCollectableType>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<eCollectableType>()"
+        },
+        {
+          "fieldName": "liTilePositions",
+          "fieldType": "List<Vector3>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<Vector3>()"
+        },
+        {
+          "fieldName": "liSuggestedMatch",
+          "fieldType": "List<GameObject>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<GameObject>()"
+        },
+        {
+          "fieldName": "liPossibleSwaps",
+          "fieldType": "List<Swap>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<Swap>()"
+        },
+        {
+          "fieldName": "constData",
+          "fieldType": "ConstTable",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "comboDetector",
+          "fieldType": "ComboDetector",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new ComboDetector()"
+        },
+        {
+          "fieldName": "oneSize",
+          "fieldType": "Vector3",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Vector3(1, 1, 1)"
+        },
+        {
+          "fieldName": "horizontalMatchDetector",
+          "fieldType": "MatchDetector",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new HorizontalMatchDetector()"
+        },
+        {
+          "fieldName": "verticalMatchDetector",
+          "fieldType": "MatchDetector",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new VerticalMatchDetector()"
+        },
+        {
+          "fieldName": "tShapedMatchDetector",
+          "fieldType": "MatchDetector",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new TShapedMatchDetector()"
+        },
+        {
+          "fieldName": "lShapedMatchDetector",
+          "fieldType": "MatchDetector",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new LShapedMatchDetector()"
+        },
+        {
+          "fieldName": "squareMatchDetector",
+          "fieldType": "MatchDetector",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new SquareMatchDetector()"
+        },
+        {
+          "fieldName": "colorBombMatchDetector",
+          "fieldType": "MatchDetector",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new ColorBombMatchDetector()"
+        },
+        {
+          "fieldName": "suggestedMatchCoroutine",
+          "fieldType": "Coroutine",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "timeLimitCoroutine",
+          "fieldType": "Coroutine",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "applyGravityCoroutine",
+          "fieldType": "Coroutine",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Initialize",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "_stageNumber"
+            }
+          ],
+          "signature": "void Initialize(int _stageNumber)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "InitializeObjectPool",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void InitializeObjectPool()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "StartGame",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void StartGame()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "EndGame",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void EndGame()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "Continue",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Continue()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetStage",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "_stageNumber"
+            }
+          ],
+          "signature": "void SetStage(int _stageNumber)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "UpdateScore",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "_score"
+            }
+          ],
+          "signature": "void UpdateScore(int _score)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "PerfomMove",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void PerfomMove()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ClearSuggestedMatch",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void ClearSuggestedMatch()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "StartCountDown",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [],
+          "signature": "IEnumerator StartCountDown()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "IsNormalJewel",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "GameObject",
+              "paramName": "tile"
+            }
+          ],
+          "signature": "bool IsNormalJewel(GameObject tile)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "IsSpecialJewel",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "GameObject",
+              "paramName": "tile"
+            }
+          ],
+          "signature": "bool IsSpecialJewel(GameObject tile)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "GetRandomJewelColor",
+          "accessModifier": "private",
+          "returnType": "eJewelColor",
+          "parameters": [],
+          "signature": "eJewelColor GetRandomJewelColor()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetPossibleSwaps",
+          "accessModifier": "private",
+          "returnType": "List<Swap>",
+          "parameters": [],
+          "signature": "List<Swap> GetPossibleSwaps()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "SetTile",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "GameObject",
+              "paramName": "_tile"
+            },
+            {
+              "paramType": "int",
+              "paramName": "x"
+            },
+            {
+              "paramType": "int",
+              "paramName": "y"
+            }
+          ],
+          "signature": "void SetTile(GameObject _tile, int x, int y)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "IsMatch",
+          "accessModifier": "private",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "x"
+            },
+            {
+              "paramType": "int",
+              "paramName": "y"
+            }
+          ],
+          "signature": "bool IsMatch(int x, int y)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "SquareMatch",
+          "accessModifier": "private",
+          "returnType": "Swap",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "x"
+            },
+            {
+              "paramType": "int",
+              "paramName": "y"
+            }
+          ],
+          "signature": "Swap SquareMatch(int x, int y)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "IsHorizontalMatch",
+          "accessModifier": "private",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "x"
+            },
+            {
+              "paramType": "int",
+              "paramName": "y"
+            }
+          ],
+          "signature": "bool IsHorizontalMatch(int x, int y)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "IsVerticalMatch",
+          "accessModifier": "private",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "x"
+            },
+            {
+              "paramType": "int",
+              "paramName": "y"
+            }
+          ],
+          "signature": "bool IsVerticalMatch(int x, int y)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "CreateTileFromStage",
+          "accessModifier": "private",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "StageTile",
+              "paramName": "_stageTile"
+            },
+            {
+              "paramType": "int",
+              "paramName": "x"
+            },
+            {
+              "paramType": "int",
+              "paramName": "y"
+            }
+          ],
+          "signature": "GameObject CreateTileFromStage(StageTile _stageTile, int x, int y)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "GetTile",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "x"
+            },
+            {
+              "paramType": "int",
+              "paramName": "y"
+            }
+          ],
+          "signature": "GameObject GetTile(int x, int y)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "IsOnIce",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "x"
+            },
+            {
+              "paramType": "int",
+              "paramName": "y"
+            }
+          ],
+          "signature": "bool IsOnIce(int x, int y)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "IsOnSpecialElement",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "x"
+            },
+            {
+              "paramType": "int",
+              "paramName": "y"
+            }
+          ],
+          "signature": "bool IsOnSpecialElement(int x, int y)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "CreateDigCollection",
+          "accessModifier": "private",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "DigTile",
+              "paramName": "digTile"
+            }
+          ],
+          "signature": "GameObject CreateDigCollection(DigTile digTile)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "CreateTilePlaying",
+          "accessModifier": "private",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "x"
+            },
+            {
+              "paramType": "int",
+              "paramName": "y"
+            },
+            {
+              "paramType": "bool",
+              "paramName": "isRunTime"
+            }
+          ],
+          "signature": "GameObject CreateTilePlaying(int x, int y, bool isRunTime)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "CreateTile",
+          "accessModifier": "private",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "x"
+            },
+            {
+              "paramType": "int",
+              "paramName": "y"
+            },
+            {
+              "paramType": "bool",
+              "paramName": "isRunTime"
+            }
+          ],
+          "signature": "GameObject CreateTile(int x, int y, bool isRunTime)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "CreateHorizontalStripedTile",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "x"
+            },
+            {
+              "paramType": "int",
+              "paramName": "y"
+            },
+            {
+              "paramType": "eJewelColor",
+              "paramName": "color"
+            },
+            {
+              "paramType": "List<GameObject> matchTiles =",
+              "paramName": "null"
+            },
+            {
+              "paramType": "GameObject centerObject =",
+              "paramName": "null"
+            }
+          ],
+          "signature": "GameObject CreateHorizontalStripedTile(int x, int y, eJewelColor color, List<GameObject> matchTiles = null, GameObject centerObject = null)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "CreateVerticalStripedTile",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "x"
+            },
+            {
+              "paramType": "int",
+              "paramName": "y"
+            },
+            {
+              "paramType": "eJewelColor",
+              "paramName": "color"
+            },
+            {
+              "paramType": "List<GameObject> matchTiles =",
+              "paramName": "null"
+            },
+            {
+              "paramType": "GameObject centerObject =",
+              "paramName": "null"
+            }
+          ],
+          "signature": "GameObject CreateVerticalStripedTile(int x, int y, eJewelColor color, List<GameObject> matchTiles = null, GameObject centerObject = null)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "CreateWrappedTile",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "x"
+            },
+            {
+              "paramType": "int",
+              "paramName": "y"
+            },
+            {
+              "paramType": "eJewelColor",
+              "paramName": "color"
+            },
+            {
+              "paramType": "List<GameObject> matchTiles =",
+              "paramName": "null"
+            },
+            {
+              "paramType": "GameObject centerObject =",
+              "paramName": "null"
+            }
+          ],
+          "signature": "GameObject CreateWrappedTile(int x, int y, eJewelColor color, List<GameObject> matchTiles = null, GameObject centerObject = null)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "CreateTargettedTile",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "x"
+            },
+            {
+              "paramType": "int",
+              "paramName": "y"
+            },
+            {
+              "paramType": "eJewelColor",
+              "paramName": "color"
+            },
+            {
+              "paramType": "List<GameObject> matchTiles =",
+              "paramName": "null"
+            },
+            {
+              "paramType": "GameObject centerObject =",
+              "paramName": "null"
+            }
+          ],
+          "signature": "GameObject CreateTargettedTile(int x, int y, eJewelColor color, List<GameObject> matchTiles = null, GameObject centerObject = null)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "CreateColorBomb",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "x"
+            },
+            {
+              "paramType": "int",
+              "paramName": "y"
+            },
+            {
+              "paramType": "List<GameObject> matchTiles =",
+              "paramName": "null"
+            },
+            {
+              "paramType": "GameObject centerObject =",
+              "paramName": "null"
+            }
+          ],
+          "signature": "GameObject CreateColorBomb(int x, int y, List<GameObject> matchTiles = null, GameObject centerObject = null)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "CreateContagion",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "x"
+            },
+            {
+              "paramType": "int",
+              "paramName": "y"
+            }
+          ],
+          "signature": "GameObject CreateContagion(int x, int y)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "CreateSpawnParticles",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector2",
+              "paramName": "position"
+            }
+          ],
+          "signature": "void CreateSpawnParticles(Vector2 position)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "AwardSpecialJewels",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void AwardSpecialJewels()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "AwardSpecialJewelsAsync",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [],
+          "signature": "IEnumerator AwardSpecialJewelsAsync()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnSpecialItemModeEnabled",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnSpecialItemModeEnabled()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnSpecialItemModeDisabled",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnSpecialItemModeDisabled()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "ConsumeSpecialItem",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "SpecialItemButton",
+              "paramName": "button"
+            }
+          ],
+          "signature": "void ConsumeSpecialItem(SpecialItemButton button)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetLiTiles",
+          "accessModifier": "public",
+          "returnType": "List<GameObject>",
+          "parameters": [],
+          "signature": "List<GameObject> GetLiTiles()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "UpdateRealTimeGold",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "end"
+            }
+          ],
+          "signature": "void UpdateRealTimeGold(int end)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateRewardMoveCount",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "count"
+            }
+          ],
+          "signature": "void UpdateRewardMoveCount(int count)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateSpeicalItemCount",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void UpdateSpeicalItemCount()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdatePossibleSwapState",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void UpdatePossibleSwapState()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "GetSwaps",
+          "accessModifier": "public",
+          "returnType": "List<Swap>",
+          "parameters": [],
+          "signature": "List<Swap> GetSwaps()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Initialize(int _stageNumber)",
+    "void StartGame()",
+    "void EndGame()",
+    "void Continue()",
+    "void SetStage(int _stageNumber)",
+    "bool IsNormalJewel(GameObject tile)",
+    "bool IsSpecialJewel(GameObject tile)",
+    "GameObject GetTile(int x, int y)",
+    "bool IsOnIce(int x, int y)",
+    "bool IsOnSpecialElement(int x, int y)",
+    "GameObject CreateHorizontalStripedTile(int x, int y, eJewelColor color, List<GameObject> matchTiles = null, GameObject centerObject = null)",
+    "GameObject CreateVerticalStripedTile(int x, int y, eJewelColor color, List<GameObject> matchTiles = null, GameObject centerObject = null)",
+    "GameObject CreateWrappedTile(int x, int y, eJewelColor color, List<GameObject> matchTiles = null, GameObject centerObject = null)",
+    "GameObject CreateTargettedTile(int x, int y, eJewelColor color, List<GameObject> matchTiles = null, GameObject centerObject = null)",
+    "GameObject CreateColorBomb(int x, int y, List<GameObject> matchTiles = null, GameObject centerObject = null)"
+  ],
+  "requires": [
+    "CameraShake",
+    "Collectable",
+    "ColorBomb",
+    "ComboDetector",
+    "DontMoveHoleTile",
+    "EffectPool",
+    "GameScene",
+    "GameState",
+    "InGame_BottomUi",
+    "InGame_TopUi",
+    "Jewel",
+    "MissionPool",
+    "PooledObject",
+    "ScoreEffect",
+    "ScoreEffectPool"
+  ],
+  "tags": {
+    "major": [
+      "ConditionCheck",
+      "DataSync",
+      "StateControl"
+    ],
+    "minor": [
+      "Spawn",
+      "Find",
+      "Assign"
+    ]
+  },
+  "uses": [
+    "Analytics",
+    "CGameUtils",
+    "CPopupManager",
+    "CSoundManager",
+    "CSpriteManager",
+    "Chain1",
+    "Chain2",
+    "Collectable",
+    "Collection",
+    "ColorBomb",
+    "ColorBombMatchDetector",
+    "ComboDetector",
+    "Debug",
+    "Define",
+    "DigTile",
+    "DontMoveHoleTile",
+    "GameState",
+    "GetRandomJewelColor",
+    "Honey1",
+    "Honey2",
+    "HorizontalMatchDetector",
+    "Ice1",
+    "Ice2",
+    "Instance",
+    "Jewel",
+    "LShapedMatchDetector",
+    "MissionPopup",
+    "MissionSuccessPopup",
+    "ObjectPool",
+    "ParticleSystem",
+    "PlayerPrefs",
+    "PooledObject",
+    "Rand",
+    "Random",
+    "Sand1",
+    "Sand2",
+    "ScoreEffect",
+    "Spread",
+    "SpriteMask",
+    "SpriteRenderer",
+    "SquareMatchDetector",
+    "StageTable",
+    "StripedJewel",
+    "Swap",
+    "TShapedMatchDetector",
+    "TargettedJewel",
+    "Tile",
+    "VerticalMatchDetector",
+    "WrappedJewel",
+    "YieldReturnCaching",
+    "_stageNumber"
+  ],
+  "usedBy": []
+}

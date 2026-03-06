@@ -1,0 +1,253 @@
+{
+  "designId": "idlemoney__balance__machinetuningcost",
+  "project": "IdleMoney",
+  "domain": "Balance",
+  "genre": "Idle",
+  "system": "MachineTuningCost",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "table",
+  "balance_area": "upgrade",
+  "source_file": "MachineTuningMaterial.json",
+  "table_stats": {
+    "row_count": 60,
+    "columns": [
+      "TuningLevel",
+      "RequiredMaterialGeneral",
+      "RequiredMaterialAdvanced",
+      "RequiredMaterialSuper",
+      "RequiredMaterialLegend",
+      "RequiredMaterialSuperLegend"
+    ],
+    "numeric_columns": [
+      "TuningLevel",
+      "RequiredMaterialGeneral",
+      "RequiredMaterialAdvanced",
+      "RequiredMaterialSuper",
+      "RequiredMaterialLegend",
+      "RequiredMaterialSuperLegend"
+    ],
+    "text_columns": []
+  },
+  "content": {
+    "summary": "MachineTuningCost 데이터 테이블 (60행, 6열)",
+    "parameters": {
+      "TuningLevel": "1",
+      "RequiredMaterialGeneral": "0",
+      "RequiredMaterialAdvanced": "0",
+      "RequiredMaterialSuper": "0",
+      "RequiredMaterialLegend": "0",
+      "RequiredMaterialSuperLegend": "0"
+    },
+    "balance_points": [
+      {
+        "variable": "TuningLevel",
+        "min_value": 1,
+        "max_value": 60,
+        "avg_value": 30.5,
+        "growth_ratio": 60,
+        "data_points": 60,
+        "impact": "high"
+      },
+      {
+        "variable": "RequiredMaterialGeneral",
+        "min_value": 0,
+        "max_value": 3735,
+        "avg_value": 1353.75,
+        "growth_ratio": 3735,
+        "data_points": 60,
+        "impact": "critical"
+      },
+      {
+        "variable": "RequiredMaterialAdvanced",
+        "min_value": 0,
+        "max_value": 9338,
+        "avg_value": 3384.75,
+        "growth_ratio": 9338,
+        "data_points": 60,
+        "impact": "critical"
+      },
+      {
+        "variable": "RequiredMaterialSuper",
+        "min_value": 0,
+        "max_value": 21788,
+        "avg_value": 7897.25,
+        "growth_ratio": 21788,
+        "data_points": 60,
+        "impact": "critical"
+      },
+      {
+        "variable": "RequiredMaterialLegend",
+        "min_value": 0,
+        "max_value": 62250,
+        "avg_value": 22562.5,
+        "growth_ratio": 62250,
+        "data_points": 60,
+        "impact": "critical"
+      },
+      {
+        "variable": "RequiredMaterialSuperLegend",
+        "min_value": 0,
+        "max_value": 186750,
+        "avg_value": 67687.5,
+        "growth_ratio": 186750,
+        "data_points": 60,
+        "impact": "critical"
+      }
+    ],
+    "edge_cases": [],
+    "references": []
+  },
+  "data": {
+    "_note": "Table truncated: 60 rows total. First 10 + last 5 shown.",
+    "_total_rows": 60,
+    "_columns": [
+      "TuningLevel",
+      "RequiredMaterialGeneral",
+      "RequiredMaterialAdvanced",
+      "RequiredMaterialSuper",
+      "RequiredMaterialLegend",
+      "RequiredMaterialSuperLegend"
+    ],
+    "sample_first": [
+      {
+        "TuningLevel": "1",
+        "RequiredMaterialGeneral": "0",
+        "RequiredMaterialAdvanced": "0",
+        "RequiredMaterialSuper": "0",
+        "RequiredMaterialLegend": "0",
+        "RequiredMaterialSuperLegend": "0"
+      },
+      {
+        "TuningLevel": "2",
+        "RequiredMaterialGeneral": "15",
+        "RequiredMaterialAdvanced": "38",
+        "RequiredMaterialSuper": "88",
+        "RequiredMaterialLegend": "250",
+        "RequiredMaterialSuperLegend": "750"
+      },
+      {
+        "TuningLevel": "3",
+        "RequiredMaterialGeneral": "30",
+        "RequiredMaterialAdvanced": "75",
+        "RequiredMaterialSuper": "175",
+        "RequiredMaterialLegend": "500",
+        "RequiredMaterialSuperLegend": "1500"
+      },
+      {
+        "TuningLevel": "4",
+        "RequiredMaterialGeneral": "45",
+        "RequiredMaterialAdvanced": "113",
+        "RequiredMaterialSuper": "263",
+        "RequiredMaterialLegend": "750",
+        "RequiredMaterialSuperLegend": "2250"
+      },
+      {
+        "TuningLevel": "5",
+        "RequiredMaterialGeneral": "60",
+        "RequiredMaterialAdvanced": "150",
+        "RequiredMaterialSuper": "350",
+        "RequiredMaterialLegend": "1000",
+        "RequiredMaterialSuperLegend": "3000"
+      },
+      {
+        "TuningLevel": "6",
+        "RequiredMaterialGeneral": "75",
+        "RequiredMaterialAdvanced": "188",
+        "RequiredMaterialSuper": "438",
+        "RequiredMaterialLegend": "1250",
+        "RequiredMaterialSuperLegend": "3750"
+      },
+      {
+        "TuningLevel": "7",
+        "RequiredMaterialGeneral": "90",
+        "RequiredMaterialAdvanced": "225",
+        "RequiredMaterialSuper": "525",
+        "RequiredMaterialLegend": "1500",
+        "RequiredMaterialSuperLegend": "4500"
+      },
+      {
+        "TuningLevel": "8",
+        "RequiredMaterialGeneral": "105",
+        "RequiredMaterialAdvanced": "263",
+        "RequiredMaterialSuper": "613",
+        "RequiredMaterialLegend": "1750",
+        "RequiredMaterialSuperLegend": "5250"
+      },
+      {
+        "TuningLevel": "9",
+        "RequiredMaterialGeneral": "120",
+        "RequiredMaterialAdvanced": "300",
+        "RequiredMaterialSuper": "700",
+        "RequiredMaterialLegend": "2000",
+        "RequiredMaterialSuperLegend": "6000"
+      },
+      {
+        "TuningLevel": "10",
+        "RequiredMaterialGeneral": "135",
+        "RequiredMaterialAdvanced": "338",
+        "RequiredMaterialSuper": "788",
+        "RequiredMaterialLegend": "2250",
+        "RequiredMaterialSuperLegend": "6750"
+      }
+    ],
+    "sample_last": [
+      {
+        "TuningLevel": "56",
+        "RequiredMaterialGeneral": "3315",
+        "RequiredMaterialAdvanced": "8288",
+        "RequiredMaterialSuper": "19338",
+        "RequiredMaterialLegend": "55250",
+        "RequiredMaterialSuperLegend": "165750"
+      },
+      {
+        "TuningLevel": "57",
+        "RequiredMaterialGeneral": "3420",
+        "RequiredMaterialAdvanced": "8550",
+        "RequiredMaterialSuper": "19950",
+        "RequiredMaterialLegend": "57000",
+        "RequiredMaterialSuperLegend": "171000"
+      },
+      {
+        "TuningLevel": "58",
+        "RequiredMaterialGeneral": "3525",
+        "RequiredMaterialAdvanced": "8813",
+        "RequiredMaterialSuper": "20563",
+        "RequiredMaterialLegend": "58750",
+        "RequiredMaterialSuperLegend": "176250"
+      },
+      {
+        "TuningLevel": "59",
+        "RequiredMaterialGeneral": "3630",
+        "RequiredMaterialAdvanced": "9075",
+        "RequiredMaterialSuper": "21175",
+        "RequiredMaterialLegend": "60500",
+        "RequiredMaterialSuperLegend": "181500"
+      },
+      {
+        "TuningLevel": "60",
+        "RequiredMaterialGeneral": "3735",
+        "RequiredMaterialAdvanced": "9338",
+        "RequiredMaterialSuper": "21788",
+        "RequiredMaterialLegend": "62250",
+        "RequiredMaterialSuperLegend": "186750"
+      }
+    ]
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from MachineTuningMaterial.json (60 rows)",
+      "note": "Live game data import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T10:32:53.989Z"
+}

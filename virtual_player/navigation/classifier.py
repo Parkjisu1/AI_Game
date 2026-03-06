@@ -94,7 +94,7 @@ class ScreenClassifier:
 
     def classify(self, screenshot_path: Path) -> ScreenClassification:
         """Classify a single screenshot. Uses cache first, Claude Vision on miss."""
-        # Tier 1: Hash cache lookup (L0 — <50ms)
+        # Tier 1: Hash cache lookup (L0 -- <50ms)
         img_hash = compute_phash(screenshot_path)
         if img_hash is not None:
             cached = self._find_in_cache(img_hash)

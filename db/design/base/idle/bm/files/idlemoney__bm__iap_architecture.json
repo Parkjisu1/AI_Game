@@ -1,0 +1,58 @@
+{
+  "designId": "idlemoney__bm__iap_architecture",
+  "project": "IdleMoney",
+  "domain": "BM",
+  "genre": "Idle",
+  "system": "IAP Integration",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "spec",
+  "balance_area": "technical",
+  "source_file": "bm_systems.yaml",
+  "content": {
+    "summary": "Unity Purchasing 5.0 기반 IAP 통합 아키텍처.\n구매 요청 → 플랫폼 처리 → 영수증 검증 → 보상 지급.",
+    "flow": [],
+    "parameters": {
+      "unity_purchasing_version": "5.0",
+      "platform_services": {
+        "android": "IGooglePlayStoreExtendedService",
+        "ios": "IAppleStoreExtendedService"
+      },
+      "callbacks": [
+        "onInAppInitialize: 초기화 완료",
+        "onInAppInitializeFailed: 초기화 실패",
+        "onPurchaseSuccess: 구매 성공 (PendingOrder)",
+        "onPurchaseFailed: 구매 실패 (FailedOrder)"
+      ],
+      "validation": "UnityEngine.Purchasing.Security (영수증 검증)",
+      "special_pids": [
+        "im_aos_pre_registration_1: 사전 등록 보상 (300 다이아)",
+        "DiaBankPID0: 피기뱅크"
+      ],
+      "flow": [
+        "BuyProductMsg → AllPlugins.Purchase(PID)",
+        "Platform callback → InAppPuchaseSuccessMsg",
+        "StoreDiamondTable/StorePackageTable PID 조회",
+        "보상 지급 + Firebase 로깅"
+      ]
+    },
+    "edge_cases": [],
+    "references": []
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from C# analysis: IAP Integration",
+      "note": "Live game code analysis import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T11:08:16.985Z"
+}

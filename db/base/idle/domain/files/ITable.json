@@ -1,0 +1,64 @@
+{
+  "fileId": "ITable",
+  "filePath": "Tables\\ITable.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Idle",
+  "role": "Interface",
+  "system": "Tables",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "ITableLoader",
+      "classType": "interface",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [],
+      "properties": [],
+      "methods": []
+    },
+    {
+      "className": "ITable",
+      "classType": "interface",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [],
+      "properties": [],
+      "methods": []
+    },
+    {
+      "className": "ITableData",
+      "classType": "interface",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [],
+      "properties": [],
+      "methods": []
+    }
+  ],
+  "provides": [],
+  "requires": [],
+  "tags": {
+    "major": [],
+    "minor": []
+  },
+  "uses": [],
+  "usedBy": []
+}

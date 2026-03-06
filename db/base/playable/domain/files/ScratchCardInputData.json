@@ -1,0 +1,71 @@
+{
+  "fileId": "ScratchCardInputData",
+  "filePath": "Scratch\\Core\\InputData\\ScratchCardInputData.cs",
+  "namespace": "ScratchCardAsset.Core.InputData",
+  "layer": "Domain",
+  "genre": "Playable",
+  "role": "Model",
+  "system": "Scratch",
+  "score": 0.4,
+  "usings": [
+    "System",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "ScratchCardInputData",
+      "classType": "struct",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "Position",
+          "fieldType": "Vector2",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "Pressure",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "Time",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": []
+    }
+  ],
+  "provides": [],
+  "requires": [],
+  "tags": {
+    "major": [],
+    "minor": []
+  },
+  "uses": [],
+  "usedBy": []
+}

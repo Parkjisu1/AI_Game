@@ -26,6 +26,37 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import anthropic
 
+try:
+    from PIL import Image
+    _HAS_PIL = True
+except ImportError:
+    _HAS_PIL = False
+
+# YOLO 로컬 분류 모델 (Phase 1 대체: 8초 → 5ms)
+_YOLO_MODEL = None
+_YOLO_CLASSES = None  # {0: "ad", 1: "fail", ...}
+
+def _load_yolo():
+    """YOLO 모델 lazy load. 없으면 None 반환."""
+    global _YOLO_MODEL, _YOLO_CLASSES
+    if _YOLO_MODEL is not None:
+        return _YOLO_MODEL
+    model_path = Path("E:/AI/virtual_player/data/games/carmatch/yolo_dataset/models/screen_classifier_best.pt")
+    if not model_path.exists():
+        # 학습 산출물에서 찾기
+        alt = Path("E:/AI/virtual_player/data/games/carmatch/yolo_dataset/models/screen_classifier/weights/best.pt")
+        if alt.exists():
+            model_path = alt
+        else:
+            return None
+    try:
+        from ultralytics import YOLO
+        _YOLO_MODEL = YOLO(str(model_path))
+        _YOLO_CLASSES = _YOLO_MODEL.names  # {0: "ad", 1: "fail", ...}
+        return _YOLO_MODEL
+    except Exception:
+        return None
+
 
 # ---------------------------------------------------------------------------
 # 인식 결과 구조체 (고정 포맷)
@@ -84,12 +115,13 @@ class Perception:
     def __init__(
         self,
         model: str = "claude-haiku-4-5-20251001",
-        timeout: int = 60,
+        timeout: int = 300,
         api_key: Optional[str] = None,
     ):
         self.model = model
         self.timeout = timeout
         self._call_count = 0
+        self._last_screen: Optional[str] = None  # 이전 턴 screen_type 캐시
 
         # API 키 확인: 유효한 키가 있으면 SDK 직접 호출, 없으면 CLI 폴백
         resolved_key = api_key or os.environ.get("ANTHROPIC_API_KEY", "")
@@ -105,15 +137,124 @@ class Perception:
         if not screenshot_path.exists():
             return BoardState(screen_type="unknown", holder=[None]*7)
 
-        self._call_count += 1
-        raw = self._call_vision(screenshot_path)
+        # CLI 모드일 때 이미지 압축 (1.7MB → ~200KB)
+        actual_path = self._compress_if_needed(screenshot_path)
 
+        self._call_count += 1
+
+        # CLI 모드: 2단계 인식 (Phase 1: screen_type → Phase 2: 상세)
+        if not self._use_sdk:
+            return self._perceive_two_phase(actual_path)
+
+        # SDK 모드: 기존 1단계 전체 인식
+        raw = self._call_vision(actual_path)
         if not raw:
             return BoardState(screen_type="unknown", holder=[None]*7)
-
         return self._parse_response(raw)
 
-    # 공통 프롬프트
+    def _compress_if_needed(self, img_path: Path) -> Path:
+        """CLI 모드에서 이미지를 540x960 JPEG로 압축."""
+        if self._use_sdk or not _HAS_PIL:
+            return img_path
+        try:
+            compressed = img_path.parent / f"{img_path.stem}_sm.jpg"
+            img = Image.open(img_path)
+            img = img.resize((540, 960), Image.LANCZOS)
+            if img.mode in ("RGBA", "P"):
+                img = img.convert("RGB")
+            img.save(compressed, "JPEG", quality=70)
+            return compressed
+        except Exception:
+            return img_path
+
+    # YOLO 7클래스 → Perception screen_type 매핑
+    _YOLO_TO_SCREEN = {
+        "gameplay": "gameplay",
+        "lobby": "lobby",
+        "win": "win",
+        "fail": "fail_result",
+        "popup": "popup",
+        "ad": "ad",
+        "other": "unknown",
+    }
+
+    def _classify_with_yolo(self, img_path: Path) -> Optional[str]:
+        """YOLO로 screen_type 분류. 실패 시 None 반환."""
+        model = _load_yolo()
+        if model is None:
+            return None
+        try:
+            results = model(str(img_path), verbose=False)
+            if results and results[0].probs is not None:
+                top1_idx = results[0].probs.top1
+                top1_conf = results[0].probs.top1conf.item()
+                class_name = results[0].names[top1_idx]
+                # 신뢰도 60% 이상이면 채택
+                if top1_conf >= 0.6:
+                    return self._YOLO_TO_SCREEN.get(class_name, "unknown")
+            return None
+        except Exception:
+            return None
+
+    def _perceive_two_phase(self, img_path: Path) -> BoardState:
+        """2단계 인식: Phase 1(YOLO or CLI) → Phase 2(상세).
+
+        우선순위: YOLO(5ms) → gameplay 캐시 → CLI Phase 1(8초)
+        """
+        # Phase 1: YOLO 로컬 분류 시도
+        yolo_screen = self._classify_with_yolo(img_path)
+        if yolo_screen is not None:
+            screen = yolo_screen
+        elif self._last_screen == "gameplay":
+            # YOLO 없으면 이전 턴 캐시 사용
+            screen = "gameplay"
+        else:
+            # YOLO도 없고 캐시도 없으면 CLI 폴백
+            raw1 = self._call_vision_cli(img_path, prompt=self._PROMPT_PHASE1)
+            screen = self._parse_screen_type(raw1)
+
+        self._last_screen = screen
+
+        # 비-gameplay면 Phase 1만으로 충분
+        if screen != "gameplay":
+            return BoardState(
+                screen_type=screen,
+                holder=[None] * 7,
+                holder_count=0,
+                confidence=0.5,
+                raw_response="",
+            )
+
+        # Phase 2: gameplay → holder + active_cars 상세 분석
+        raw2 = self._call_vision_cli(img_path, prompt=self._PROMPT_PHASE2)
+        if not raw2:
+            # Phase 2 실패 → 화면이 바뀌었을 가능성 → Phase 1 재시도
+            self._last_screen = None
+            self._call_count += 1
+            raw1_retry = self._call_vision_cli(img_path, prompt=self._PROMPT_PHASE1)
+            retry_screen = self._parse_screen_type(raw1_retry)
+            self._last_screen = retry_screen
+            return BoardState(screen_type=retry_screen, holder=[None]*7)
+
+        board = self._parse_response(raw2)
+
+        # Phase 2 응답에 차가 0대이고 홀더도 비어있으면 → 화면 전환 의심
+        if not board.active_cars and board.holder_count == 0:
+            # Phase 1으로 재확인
+            self._last_screen = None
+            self._call_count += 1
+            raw1_check = self._call_vision_cli(img_path, prompt=self._PROMPT_PHASE1)
+            check_screen = self._parse_screen_type(raw1_check)
+            if check_screen != "gameplay":
+                self._last_screen = check_screen
+                return BoardState(screen_type=check_screen, holder=[None]*7)
+
+        board.screen_type = "gameplay"
+        return board
+
+    # --- 프롬프트 ---
+
+    # SDK용: 1단계로 전부 인식 (빠르니까 OK)
     _PROMPT = """Analyze this 1080x1920 mobile game screenshot. Return ONLY this JSON:
 
 {
@@ -135,6 +276,35 @@ RULES:
 - stacked: if a number (2,3,4,5) is shown on the spot, use that number. Otherwise 1.
 - If screen is NOT "gameplay", set holder to [null,null,null,null,null,null,null] and active_cars to [].
 - Output ONLY the JSON. No explanation, no markdown, no text."""
+
+    # CLI Phase 1: screen_type만 (짧고 빠름)
+    _PROMPT_PHASE1 = """Look at this mobile game screenshot and identify the screen type.
+Reply with ONLY one word from this list:
+gameplay, lobby, win, fail_outofspace, fail_continue, fail_result, ad, popup, lobby_keyblaze, lobby_streakrace, lobby_dailytask, lobby_skylift, lobby_missiongarage, lobby_skyrally, lobby_endlesscoast, lobby_punchout, lobby_citydeal, shop, leaderboard, journey, setting, profile, ingame_setting, ingame_quit_confirm, unknown
+
+Hints:
+- "gameplay" = parking lot with colored 3D cartoon cars and a holder bar at bottom
+- "lobby" = large Level N button at bottom, car character in center
+- "lobby_*" = event popup overlay on lobby (Key Blaze, Streak Race, etc.)
+- "win" = congratulations/victory screen
+- "fail_*" = game over with options (Add Space, Play On, Try Again)
+- "popup" = any modal dialog or overlay
+
+Reply with ONLY the one word. No JSON, no explanation."""
+
+    # CLI Phase 2: gameplay 상세 (holder + cars)
+    # 주의: 압축 이미지(540x960)로 인식하므로 좌표는 원본(1080x1920) 기준으로 2배 해서 보고하도록 지시
+    _PROMPT_PHASE2 = """This is a "gameplay" screen from a car-matching puzzle game (original resolution 1080x1920, this image is scaled down).
+Return ONLY this JSON:
+{"holder":[<7 slots: color or null>],"active_cars":[{"color":"<color>","x":<int>,"y":<int>,"stacked":<1-5>}]}
+
+RULES:
+- holder: 7 bottom slots left-to-right. Colors: red,blue,green,yellow,orange,purple,pink,cyan,white,brown,unknown. null if empty.
+- active_cars: ONLY cars with visible EYES/FACE (not hidden). Max 8 cars.
+- IMPORTANT: x,y coordinates must be for the ORIGINAL 1080x1920 resolution. Since this image is 540x960, multiply your pixel readings by 2.
+- Mystery cars (?) = "unknown" color.
+- stacked: number shown on spot (2-5), or 1 if none.
+- ONLY output the JSON object."""
 
     def _call_vision(self, img_path: Path) -> str:
         """Vision API 호출. SDK 직접 또는 CLI 폴백."""
@@ -182,18 +352,18 @@ RULES:
         except Exception:
             return ""
 
-    def _call_vision_cli(self, img_path: Path) -> str:
-        """Claude CLI 폴백 (느림, ~20-40초). API 키 없을 때 사용."""
+    def _call_vision_cli(self, img_path: Path, prompt: Optional[str] = None) -> str:
+        """Claude CLI 폴백. prompt 파라미터로 Phase 1/2 전환."""
         import subprocess
         import tempfile
 
         img = str(img_path).replace("\\", "/")
-        prompt = f"Use the Read tool to view the screenshot at {img}. Then respond with ONLY the JSON object.\n\n{self._PROMPT}"
+        use_prompt = prompt or self._PROMPT
+        full_prompt = f"Use the Read tool to view the image at {img}. Then respond.\n\n{use_prompt}"
 
         env = os.environ.copy()
         for k in ("CLAUDECODE", "CLAUDE_CODE_ENTRYPOINT"):
             env.pop(k, None)
-        # 잘못된 API 키(placeholder) 제거 → Claude Code 자체 인증 사용
         api_key = env.get("ANTHROPIC_API_KEY", "")
         if api_key and not api_key.startswith("sk-ant-"):
             env.pop("ANTHROPIC_API_KEY", None)
@@ -204,10 +374,10 @@ RULES:
                 [self._claude_cmd, "-p",
                  "--model", self.model,
                  "--output-format", "json",
-                 "--max-turns", "2",
+                 "--max-turns", "5",
                  "--tools", "Read",
                  "--allowedTools", "Read"],
-                input=prompt,
+                input=full_prompt,
                 capture_output=True,
                 timeout=self.timeout,
                 encoding="utf-8",
@@ -226,6 +396,24 @@ RULES:
 
         except (subprocess.TimeoutExpired, Exception):
             return ""
+
+    def _parse_screen_type(self, raw: str) -> str:
+        """Phase 1 응답에서 screen_type 추출."""
+        if not raw:
+            return "unknown"
+        text = raw.strip().lower().replace('"', '').replace("'", "")
+        # 여러 줄이면 첫 줄만
+        text = text.split("\n")[0].strip()
+        # 단어 단위로 매칭
+        for word in text.split():
+            cleaned = word.strip(".,;:!?(){}[]")
+            if cleaned in self.VALID_SCREENS:
+                return cleaned
+        # 부분 매칭
+        for valid in self.VALID_SCREENS:
+            if valid in text:
+                return valid
+        return "unknown"
 
     def _parse_response(self, raw: str) -> BoardState:
         """원본 텍스트 → BoardState. 파싱 실패 시 unknown 반환."""
@@ -288,8 +476,8 @@ RULES:
             y = int(car.get("y", 0))
             stacked = int(car.get("stacked", 1))
 
-            # 좌표 범위 검증 (보드 영역 안이어야 함)
-            if 0 < x < 1080 and 100 < y < 1500:
+            # 좌표 범위 검증 (보드+출구 영역)
+            if 0 < x < 1080 and 100 < y < 1800:
                 x = max(0, min(1080, x))
                 y = max(0, min(1920, y))
                 stacked = max(1, min(5, stacked))

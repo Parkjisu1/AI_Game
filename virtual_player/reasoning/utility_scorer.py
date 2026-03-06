@@ -1,5 +1,5 @@
 """
-Utility Scorer — Dave Mark's Utility AI System
+Utility Scorer -- Dave Mark's Utility AI System
 ================================================
 Evaluates goals using response curves and multiplicative scoring.
 Each goal has multiple Considerations that map world state values
@@ -18,6 +18,7 @@ class CurveType(str, Enum):
     SIGMOID = "sigmoid"     # y = 1/(1+e^(-k*(x-mid)))
     STEP = "step"           # y = 1 if x > threshold else 0
     QUADRATIC = "quadratic" # y = x^2
+    RATE_BASED = "rate_based"  # y = clamp(rate / expected_max_rate, 0, 1)
 
 
 @dataclass
@@ -54,6 +55,10 @@ class Consideration:
             score = 1.0 if input_value >= self.threshold else 0.0
         elif self.curve_type == CurveType.QUADRATIC:
             score = input_value ** 2
+        elif self.curve_type == CurveType.RATE_BASED:
+            # Normalize rate by expected_max_rate (stored in self.m); clamp to [0,1]
+            expected_max = self.m if self.m > 0 else 1.0
+            score = input_value / expected_max
         else:
             score = input_value
 

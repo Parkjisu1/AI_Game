@@ -1,18 +1,18 @@
 """
-Loop Detector — 4 Loop Pattern Detection
+Loop Detector -- 4 Loop Pattern Detection
 ==========================================
 Detects 4 types of loops that indicate the agent is stuck:
 
-1. Screen oscillation  — A→B→A→B or A→B→C→A→B→C
-2. Action repetition   — Same action 5x with no state change
-3. Goal cycling        — Switching between 2+ goals without progress
-4. State stagnation    — Same state hash for 8+ ticks
+1. Screen oscillation  -- A->B->A->B or A->B->C->A->B->C
+2. Action repetition   -- Same action 5x with no state change
+3. Goal cycling        -- Switching between 2+ goals without progress
+4. State stagnation    -- Same state hash for 8+ ticks
 
 Each detection returns an escape_strategy hint:
-  "navigate_hub"       — Go to a safe central zone
-  "alternative_action" — Try a different action on this screen
-  "lock_goal"          — Commit to one goal for N ticks
-  "explore_new"        — Visit an unvisited zone
+  "navigate_hub"       -- Go to a safe central zone
+  "alternative_action" -- Try a different action on this screen
+  "lock_goal"          -- Commit to one goal for N ticks
+  "explore_new"        -- Visit an unvisited zone
 """
 
 import hashlib
@@ -154,7 +154,7 @@ class LoopDetector:
     def _check_oscillation(self) -> Optional[LoopDetection]:
         h = self._screen_history
 
-        # Period-2 oscillation: A→B→A→B
+        # Period-2 oscillation: A->B->A->B
         if (
             len(h) >= 4
             and h[-1] == h[-3]
@@ -168,7 +168,7 @@ class LoopDetector:
                 escape_strategy="navigate_hub",
             )
 
-        # Period-3 oscillation: A→B→C→A→B→C (must have at least 2 distinct screens)
+        # Period-3 oscillation: A->B->C->A->B->C (must have at least 2 distinct screens)
         if (
             len(h) >= 6
             and h[-1] == h[-4]

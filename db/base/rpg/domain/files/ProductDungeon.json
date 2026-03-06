@@ -1,0 +1,149 @@
+{
+  "fileId": "ProductDungeon",
+  "filePath": "ProductDungeon.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Rpg",
+  "role": "Message",
+  "system": "ProductDungeon",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "DG.Tweening"
+  ],
+  "classes": [
+    {
+      "className": "ProductDungeon",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "ProductChallenge",
+      "interfaces": [
+        "IMessagePort<GameModeMain>"
+      ],
+      "fields": [
+        {
+          "fieldName": "modeMsgController",
+          "fieldType": "IMessageController<GameModeMain>",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Damage",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "double",
+              "paramName": "damage"
+            }
+          ],
+          "signature": "void Damage(double damage)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "TurnOff",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "returnToOwner"
+            }
+          ],
+          "signature": "void TurnOff(bool returnToOwner)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnLineMode",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "b"
+            }
+          ],
+          "signature": "void OnLineMode(bool b)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "SetMessageController",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "IMessageController<GameModeMain>",
+              "paramName": "messageController"
+            }
+          ],
+          "signature": "void SetMessageController(IMessageController<GameModeMain> messageController)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Damage(double damage)",
+    "void TurnOff(bool returnToOwner)",
+    "void OnLineMode(bool b)",
+    "void SetMessageController(IMessageController<GameModeMain> messageController)"
+  ],
+  "requires": [
+    "GameModeMain",
+    "IMessageController",
+    "IMessagePort",
+    "ProductChallenge"
+  ],
+  "tags": {
+    "major": [
+      "ResponseTrigger",
+      "ValueModification"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "GameModeMain",
+    "GetSpecialProductProfitMsg",
+    "ProductChallenge"
+  ],
+  "usedBy": []
+}

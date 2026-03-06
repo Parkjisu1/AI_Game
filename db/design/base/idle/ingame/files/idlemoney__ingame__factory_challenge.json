@@ -1,0 +1,73 @@
+{
+  "designId": "idlemoney__ingame__factory_challenge",
+  "project": "IdleMoney",
+  "domain": "InGame",
+  "genre": "Idle",
+  "system": "Factory Rebirth Challenge",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "flow",
+  "balance_area": "prestige",
+  "source_file": "ingame_flows.yaml",
+  "content": {
+    "summary": "팩토리 리버스(프레스티지) 챌린지. 제한 시간 내 목표 금액을 벌어야 함.\n성공 시 SellOff 실행, 다음 월드 해금, 보상 수령.",
+    "flow": [
+      {
+        "step": "챌린지 조건",
+        "detail": "RebirthConditionFactoryLevel 이상 팩토리 레벨 필요"
+      },
+      {
+        "step": "ReadyChallenge",
+        "detail": "hammerPower = HammerPower * EarningMoneyPerPower, 초기화"
+      },
+      {
+        "step": "StartChallenge",
+        "detail": "모든 라인 Challenge 공급 모드, 특수 제품 스폰"
+      },
+      {
+        "step": "플레이",
+        "detail": "탭으로 수익 창출, currentMoney 추적"
+      },
+      {
+        "step": "성공 조건",
+        "detail": "currentMoney >= TargetMoneyAmount"
+      },
+      {
+        "step": "SellOff 실행",
+        "detail": "성공 시 자동 프레스티지, 리버스 카운트 증가"
+      },
+      {
+        "step": "보상",
+        "detail": "FactoryRebirthRewardTable 기반 보상"
+      }
+    ],
+    "parameters": {
+      "target_money": "TargetMoneyAmount",
+      "time_limit": "TimeLimit (seconds)",
+      "earning_multiplier": "EarningMoneyPerPower",
+      "hammer_power": "factoryData.HammerPower * rebirthData.EarningMoneyPerPower",
+      "retry_cost_base": "CHALLENGE_RETRY_DIAMOND_COST_BASE",
+      "retry_cost_add": "CHALLENGE_RETRY_DIAMOND_COST_ADD (per retry)",
+      "supply_speed": "CHALLENGE_PRODUCT_SUPPLY_SPEED",
+      "max_supply": "CHALLENGE_PRODUCT_MAX_SUPPLY_AMOUNT"
+    },
+    "edge_cases": [],
+    "references": []
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from C# analysis: Factory Rebirth Challenge",
+      "note": "Live game code analysis import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T11:08:17.016Z"
+}

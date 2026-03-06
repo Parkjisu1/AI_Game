@@ -35,7 +35,7 @@ DIRECTION_KEYS = {
 
 # Expectimax search depth (skill-based)
 DEPTH_BY_SKILL = {
-    # skill_level range → search depth
+    # skill_level range -> search depth
     0.0: 1,
     0.3: 2,
     0.6: 3,
@@ -189,7 +189,7 @@ def _empty_bonus(board: List[List[int]]) -> float:
     """빈 칸 수 기반 보너스 (log 스케일)."""
     empty = sum(1 for row in board for cell in row if cell == 0)
     if empty == 0:
-        return -100000.0  # 빈 칸 없음 → 큰 페널티
+        return -100000.0  # 빈 칸 없음 -> 큰 페널티
     return math.log2(empty) * 100000
 
 
@@ -305,7 +305,7 @@ def _expectimax(board: List[List[int]], depth: int, is_player: bool) -> float:
                 best = max(best, val)
         return best if best != float("-inf") else _evaluate(board)
     else:
-        # Chance node: random tile spawn (90% → 2, 10% → 4)
+        # Chance node: random tile spawn (90% -> 2, 10% -> 4)
         empty = _get_empty_cells(board)
         if not empty:
             return _evaluate(board)
@@ -342,7 +342,7 @@ class Brain2048(GameBrain):
                 self._depth = depth
 
     def perceive(self, raw_state: Any) -> GameState:
-        """원시 상태 → GameState."""
+        """원시 상태 -> GameState."""
         board = _parse_board(raw_state)
         max_tile = max(cell for row in board for cell in row) if board else 0
 
@@ -361,7 +361,7 @@ class Brain2048(GameBrain):
         """Expectimax로 최적 방향 결정."""
         board = state.parsed["board"]
 
-        # Skill-based: high skill → expectimax, low skill → random
+        # Skill-based: high skill -> expectimax, low skill -> random
         if random.random() < self.skill_level:
             direction = self._expectimax_move(board)
         else:
@@ -382,7 +382,7 @@ class Brain2048(GameBrain):
         )
 
     def translate_to_input(self, action: GameAction) -> List[TouchInput]:
-        """방향 → 키보드 입력."""
+        """방향 -> 키보드 입력."""
         direction = action.metadata.get("direction")
         if not direction or direction not in DIRECTION_KEYS:
             return []

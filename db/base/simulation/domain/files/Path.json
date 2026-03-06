@@ -1,0 +1,94 @@
+{
+  "fileId": "Path",
+  "filePath": "GlobalNaemspace\\Path.cs",
+  "namespace": "ResourcePath",
+  "layer": "Domain",
+  "genre": "Simulation",
+  "role": "Config",
+  "system": "GlobalNaemspace",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "Path",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": true,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "PREFAB_PATH",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"Prefabs/\""
+        },
+        {
+          "fieldName": "PREFAB_PATH_ADD",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"Prefabs/{0}\""
+        },
+        {
+          "fieldName": "POPUP_PATH",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"Popups/{0}\""
+        },
+        {
+          "fieldName": "STAGE_PATH",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"StageType/\""
+        },
+        {
+          "fieldName": "STAGE_BUTTON_PATH",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"StageType/StageButtonType/\""
+        }
+      ],
+      "properties": [],
+      "methods": []
+    }
+  ],
+  "provides": [],
+  "requires": [],
+  "tags": {
+    "major": [],
+    "minor": []
+  },
+  "uses": [],
+  "usedBy": []
+}

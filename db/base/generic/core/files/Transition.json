@@ -1,0 +1,320 @@
+{
+  "fileId": "Transition",
+  "filePath": "Util\\Transition.cs",
+  "namespace": "Ricimi",
+  "layer": "Core",
+  "genre": "Generic",
+  "role": "Component",
+  "system": "Util",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "UnityEngine",
+    "UnityEngine.UI",
+    "UnityEngine.SceneManagement"
+  ],
+  "classes": [
+    {
+      "className": "Transition",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "destroyThis",
+          "fieldType": "bool",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        },
+        {
+          "fieldName": "m_canvas",
+          "fieldType": "GameObject",
+          "accessModifier": "private",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_overlay",
+          "fieldType": "GameObject",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "FadeOut",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "duration"
+            },
+            {
+              "paramType": "Color",
+              "paramName": "color"
+            }
+          ],
+          "signature": "void FadeOut(float duration, Color color)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "StartFadeOut",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "duration"
+            },
+            {
+              "paramType": "Color",
+              "paramName": "color"
+            }
+          ],
+          "signature": "void StartFadeOut(float duration, Color color)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "RunFadeOut",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "duration"
+            },
+            {
+              "paramType": "Color",
+              "paramName": "fadeColor"
+            }
+          ],
+          "signature": "IEnumerator RunFadeOut(float duration, Color fadeColor)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": "FlowControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "LoadLevel",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "level"
+            },
+            {
+              "paramType": "float",
+              "paramName": "duration"
+            },
+            {
+              "paramType": "Color",
+              "paramName": "color"
+            }
+          ],
+          "signature": "void LoadLevel(string level, float duration, Color color)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "StartFade",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "level"
+            },
+            {
+              "paramType": "float",
+              "paramName": "duration"
+            },
+            {
+              "paramType": "Color",
+              "paramName": "fadeColor"
+            }
+          ],
+          "signature": "void StartFade(string level, float duration, Color fadeColor)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "RunFade",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "level"
+            },
+            {
+              "paramType": "float",
+              "paramName": "duration"
+            },
+            {
+              "paramType": "Color",
+              "paramName": "fadeColor"
+            }
+          ],
+          "signature": "IEnumerator RunFade(string level, float duration, Color fadeColor)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": "FlowControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "FadeAction",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "duration"
+            },
+            {
+              "paramType": "Color",
+              "paramName": "color"
+            },
+            {
+              "paramType": "System.Action",
+              "paramName": "a_fpCallback"
+            }
+          ],
+          "signature": "void FadeAction(float duration, Color color, System.Action a_fpCallback)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "StartFade",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "duration"
+            },
+            {
+              "paramType": "Color",
+              "paramName": "fadeColor"
+            },
+            {
+              "paramType": "System.Action",
+              "paramName": "a_fpCallback"
+            }
+          ],
+          "signature": "void StartFade(float duration, Color fadeColor, System.Action a_fpCallback)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "RunFadeAction",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "duration"
+            },
+            {
+              "paramType": "Color",
+              "paramName": "fadeColor"
+            },
+            {
+              "paramType": "System.Action",
+              "paramName": "a_fpCallback"
+            }
+          ],
+          "signature": "IEnumerator RunFadeAction(float duration, Color fadeColor, System.Action a_fpCallback)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": "FlowControl",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void FadeOut(float duration, Color color)",
+    "void LoadLevel(string level, float duration, Color color)",
+    "void FadeAction(float duration, Color color, System.Action a_fpCallback)"
+  ],
+  "requires": [
+    "Transition"
+  ],
+  "tags": {
+    "major": [
+      "StateControl",
+      "FlowControl",
+      "DataSync"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "1f",
+    "Mathf",
+    "SceneManager",
+    "WaitForEndOfFrame"
+  ],
+  "usedBy": []
+}

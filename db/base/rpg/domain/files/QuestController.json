@@ -1,0 +1,367 @@
+{
+  "fileId": "QuestController",
+  "filePath": "QuestController.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Rpg",
+  "role": "Message",
+  "system": "QuestController",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "QuestController",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [
+        "IMessagePort<GameModeMain>",
+        "IMessagePort<WindowID"
+      ],
+      "fields": [
+        {
+          "fieldName": "userInfo",
+          "fieldType": "UserInfo",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": true,
+          "initialValue": null
+        },
+        {
+          "fieldName": "modeMsgController",
+          "fieldType": "IMessageController<GameModeMain>",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": true,
+          "initialValue": null
+        },
+        {
+          "fieldName": "WinMgrMsgController",
+          "fieldType": "IMessageController<WindowID, WindowManager>",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": true,
+          "initialValue": null
+        },
+        {
+          "fieldName": "configTable",
+          "fieldType": "ConfigCommonTable",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "productTable",
+          "fieldType": "ProductTable",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "productIDCache",
+          "fieldType": "List<int>",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<int>(64)"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Init",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "Injector",
+              "paramName": "injector"
+            },
+            {
+              "paramType": "ConfigCommonTable",
+              "paramName": "configTable"
+            },
+            {
+              "paramType": "ProductTable",
+              "paramName": "productTable"
+            }
+          ],
+          "signature": "bool Init(Injector injector, ConfigCommonTable configTable, ProductTable productTable )",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "LoadAndStartQuests",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void LoadAndStartQuests()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateLogic",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "deltaTime"
+            }
+          ],
+          "signature": "void UpdateLogic(float deltaTime)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "MakeNewQuest",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "index"
+            }
+          ],
+          "signature": "bool MakeNewQuest(int index)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetNewQuest",
+          "accessModifier": "public",
+          "returnType": "QuestInfo",
+          "parameters": [],
+          "signature": "QuestInfo GetNewQuest()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "AddQuestProductCount",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "productID"
+            },
+            {
+              "paramType": "int",
+              "paramName": "count"
+            }
+          ],
+          "signature": "void AddQuestProductCount(int productID, int count)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": null
+        },
+        {
+          "methodName": "MakeQuestWaiting",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "questSlotIndex"
+            }
+          ],
+          "signature": "void MakeQuestWaiting(int questSlotIndex)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "IsValidStatus",
+          "accessModifier": "protected",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool IsValidStatus()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "DebugPrint",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DebugPrint()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetMessageController",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "IMessageController<GameModeMain>",
+              "paramName": "messageController"
+            }
+          ],
+          "signature": "void SetMessageController(IMessageController<GameModeMain> messageController)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetMessageController",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "WindowID",
+              "paramName": "id"
+            },
+            {
+              "paramType": "WindowManager>",
+              "paramName": "messageController"
+            }
+          ],
+          "signature": "void SetMessageController(WindowID id, IMessageController<WindowID, WindowManager> messageController)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "GetMessageController",
+          "accessModifier": "public",
+          "returnType": "IMessageController<WindowID, WindowManager>",
+          "parameters": [],
+          "signature": "IMessageController<WindowID, WindowManager> GetMessageController()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "bool Init(Injector injector, ConfigCommonTable configTable, ProductTable productTable )",
+    "void LoadAndStartQuests()",
+    "void UpdateLogic(float deltaTime)",
+    "bool MakeNewQuest(int index)",
+    "QuestInfo GetNewQuest()",
+    "void AddQuestProductCount(int productID, int count)",
+    "void MakeQuestWaiting(int questSlotIndex)",
+    "void DebugPrint()",
+    "void SetMessageController(IMessageController<GameModeMain> messageController)",
+    "void SetMessageController(WindowID id, IMessageController<WindowID, WindowManager> messageController)",
+    "IMessageController<WindowID, WindowManager> GetMessageController()"
+  ],
+  "requires": [
+    "ConfigCommonTable",
+    "GameModeMain",
+    "IMessageController",
+    "IMessagePort",
+    "Injector",
+    "ProductTable",
+    "UserInfo",
+    "WindowID",
+    "WindowManager",
+    "WindowManager>"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification",
+      "DataSync",
+      "ConditionCheck"
+    ],
+    "minor": [
+      "Find",
+      "Assign"
+    ]
+  },
+  "uses": [
+    "ClearConditionAmount",
+    "GameModeMain",
+    "IMessagePort",
+    "QuestInfo",
+    "Random",
+    "RefreshQuestStatusButtonMsg",
+    "WinMgrMsgController",
+    "WindowID"
+  ],
+  "usedBy": []
+}

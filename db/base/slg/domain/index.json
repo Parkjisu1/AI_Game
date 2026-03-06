@@ -1,0 +1,817 @@
+[
+  {
+    "fileId": "Define",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Enum",
+    "system": "Global",
+    "score": 0.4,
+    "provides": [
+      "DateTime UTC_Time()",
+      "void Log(string a_strLog, eLog a_eLogType = eLog.Log)",
+      "void LogError(string a_strLog)",
+      "void DebugBuildLog(string a_strLog)",
+      "void Resolution(int boardSize_width, int boardSize_height)"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": [
+        "Find",
+        "Delay",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "RewardVideoJewels",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Component",
+    "system": "Popup",
+    "score": 0.4,
+    "provides": [
+      "void CloseRewardVideoJewelButton()",
+      "void SetRewardVideoJewels()"
+    ],
+    "requires": [
+      "PooledObject"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "Lobby_TopUI",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void Initialize()",
+      "void UpdateGold()",
+      "void UpdateGoldRealTime(int end)",
+      "void OnClickFacebook()",
+      "void OnClickOurGame()"
+    ],
+    "requires": [
+      "GoldPopup"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "DataSync"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ShopFreeBox",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Component",
+    "system": "Popup",
+    "score": 0.4,
+    "provides": [
+      "void SetFreeReward()"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ShopFreeGold",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Component",
+    "system": "Popup",
+    "score": 0.4,
+    "provides": [
+      "void SetFreeReward()",
+      "void SetApplyLanguage()",
+      "void OnClickRewardGold()"
+    ],
+    "requires": [
+      "IApplyLanguage"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "AddDailyRewardMsg",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "RewardType"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "GiveADBannerRewardMsg",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "RewardType"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "GiveMonthlyPackageDailyRewardMsg",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ReceiveAchievementRewardMsg",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "AchievementComponent",
+      "AchievementTableData",
+      "GameModeMain",
+      "IMessageAction",
+      "UserInfo"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ReceiveRegularRewardMsg",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ReceiveTutorialMissionRewardMsg",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "AchievementTable",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Model",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "int GetAccomplishIndex(int currentValue)",
+      "ITableData GetData(int achievementID)",
+      "int GetMax()"
+    ],
+    "requires": [
+      "AchievementTypeID",
+      "ITable",
+      "ITableData",
+      "ITableLoader",
+      "RewardType"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "AttendanceRewardTable",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Model",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "ITableData GetData(int rewardID)",
+      "int GetMax()",
+      "bool JsonToByte(string path, string json)"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader",
+      "RewardType"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "StoreDiamondTable",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Model",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "ITableData GetData(int key)",
+      "StoreDiamondTableData GetData(string pID)",
+      "int GetMax()"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "StoreEtcTable",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Data",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "ITableData GetData(int key)",
+      "int GetMax()",
+      "bool JsonToByte(string path, string json)"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "TutorialMissionPlayer",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "AchievementComponent",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void Init(System.Action<AchievementComponent, int> onClickCallback)",
+      "void SetData(string nameTextID, AchievementTableData tableData,\r\n        ResourceAllocator resourceAllocator, double currentCount, int receivedRewardCount)",
+      "void OnRewardClick()",
+      "void DoEffectUpgradeStat(Vector3 punch, float time, Ease ease)"
+    ],
+    "requires": [
+      "AchievementRewardButton",
+      "LanguageText",
+      "TextMeshProUGUI"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger",
+        "FlowControl"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "AchievementRewardButton",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(ResourceAllocator resAllocator, bool enable, int rewardsNum)"
+    ],
+    "requires": [
+      "TextMeshProUGUI"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "DailyRewardComponent",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(StatusIndex status, GameStatCalculator calculator, ConfigCommonTable table,\r\n                    ResourceAllocator resourceAllocator, AttendanceRewardTableData data)",
+      "RewardType GetRewardType()",
+      "double GetRewardAmount()",
+      "void SetData(StatusIndex status, GameStatCalculator calculator, ConfigCommonTable table,\r\n                    ResourceAllocator resourceAllocator, AttendanceRewardTableData data)",
+      "RewardType GetRewardType()"
+    ],
+    "requires": [
+      "StatusIndex",
+      "TextMeshProUGUI"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "GachaResultWin",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(GachaResult result)",
+      "UniTask Open()",
+      "void OnClickClose()",
+      "UniTask Close()",
+      "RectTransform GetCloseButtonPos()"
+    ],
+    "requires": [
+      "GachaRewardComponent",
+      "HorizontalLayoutGroup",
+      "LanguageText",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "GachaRewardComponent",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void Show(MachineTableData data, ResourceAllocator resAllocator, int level, double oldPower, double power, int maxExp, int currentExp, int addedExp, bool isNew )",
+      "void Show(ResourceAllocator resAllocator, string materialTextID, int materialNum)",
+      "void Hide()",
+      "void OnDisable()",
+      "void OnEnable()"
+    ],
+    "requires": [
+      "LanguageText",
+      "TextMeshProUGUI",
+      "UISpineMachine"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ShopGoodsAmountIcon",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(ResourceAllocator resourceAllocator, RewardType rewardType, int rewardAmount)",
+      "void MakeInvalid()"
+    ],
+    "requires": [
+      "TextMeshProUGUI"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "UserClicker",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Component",
+    "system": "UserClicker",
+    "score": 0.4,
+    "provides": [
+      "int OnClick(Vector3 mousePosition, float rad)",
+      "RaycastHit2D[] GetHitted()",
+      "void Clear()"
+    ],
+    "requires": [
+      "RaycastHit2D"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "NPCController",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Model",
+    "system": "Controller",
+    "score": 0.4,
+    "provides": [
+      "void Init(Transform _controller = null)",
+      "void SetMoveSpeed(float newSpeed)",
+      "void SetAvoidanceRange(float newRange)",
+      "bool IsMoving()",
+      "Transform GetTarget()"
+    ],
+    "requires": [
+      "EnhanceController",
+      "IHealth",
+      "LayerMask",
+      "Transform _controller =",
+      "TurretController"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ConditionCheck"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "UILowHPWarning",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Component",
+    "system": "unity_project",
+    "score": 0.4,
+    "provides": [
+      "void Init()",
+      "void UpdateWarningState(int alivePlayerCount, int totalPlayerCount, float lowestHPRatio)",
+      "void ShowSurvived()",
+      "void Show()",
+      "void Hide()"
+    ],
+    "requires": [
+      "CanvasGroup"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "DataSync"
+      ],
+      "minor": [
+        "Spawn",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "UIManager",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Manager",
+    "system": "unity_project",
+    "score": 0.4,
+    "provides": [
+      "void Init()",
+      "void OnReset()",
+      "bool IsInitialized()",
+      "void OnGameStateChanged(GameManager.GameState state)",
+      "void UpdateLowHPWarning()"
+    ],
+    "requires": [
+      "CanvasScaler",
+      "IInitializable",
+      "UICTAScreen",
+      "UIGameScreen",
+      "UILowHPWarning"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification",
+        "ConditionCheck"
+      ],
+      "minor": [
+        "Find",
+        "Assign",
+        "Spawn"
+      ]
+    }
+  },
+  {
+    "fileId": "BannerController",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Controller",
+    "system": "PlaygroundConnections",
+    "score": 0.4,
+    "provides": [
+      "void CallStore()"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "CameraZoomAdapter",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Component",
+    "system": "CameraZoomAdapter",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "GoldSpawnerNonUI",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Component",
+    "system": "GoldSpawnerNonUI",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "IncomeIncreaser",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Component",
+    "system": "IncomeIncreaser",
+    "score": 0.4,
+    "provides": [
+      "void AddIncome(int value)"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ParticleEffectsLibrary",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Model",
+    "system": "VFX Library",
+    "score": 0.4,
+    "provides": [
+      "string GetCurrentPENameString()",
+      "void PreviousParticleEffect()",
+      "void NextParticleEffect()",
+      "void SpawnParticleEffect(Vector3 positionInWorldToSpawn)"
+    ],
+    "requires": [
+      "ParticleEffectsLibrary"
+    ],
+    "tags": {
+      "major": [],
+      "minor": [
+        "Find",
+        "Spawn"
+      ]
+    }
+  },
+  {
+    "fileId": "PEButtonScript",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Enum",
+    "system": "VFX Library",
+    "score": 0.4,
+    "provides": [
+      "void OnPointerEnter(PointerEventData eventData)",
+      "void OnPointerExit(PointerEventData eventData)",
+      "void OnButtonClicked()",
+      "void OnPointerEnter(PointerEventData eventData)",
+      "void OnPointerExit(PointerEventData eventData)"
+    ],
+    "requires": [
+      "ButtonTypes",
+      "IEventSystemHandler",
+      "IPointerEnterHandler",
+      "IPointerExitHandler"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "BallDragAndThrow",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Component",
+    "system": "BallHandler",
+    "score": 0.4,
+    "provides": [],
+    "requires": [
+      "LayerMask"
+    ],
+    "tags": {
+      "major": [
+        "StateControl"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "DunkTriggerRelay",
+    "layer": "Domain",
+    "genre": "Slg",
+    "role": "Component",
+    "system": "BallHandler",
+    "score": 0.4,
+    "provides": [],
+    "requires": [
+      "DunkDetector"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  }
+]

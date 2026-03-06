@@ -1,0 +1,104 @@
+[
+  {
+    "fileId": "RefreshWorldLineStatusWin",
+    "layer": "Game",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "WorldLineStatusWin"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenProductDetailWinMsg",
+    "layer": "Game",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ProductionLineWin",
+    "layer": "Game",
+    "genre": "Simulation",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void Init(WorldSpaceWindowManager owner, IMessageController<WorldSpaceWindowManager> messageController)",
+      "int GetFactoryIndex()",
+      "void SetData(int lineIndex)",
+      "void SetSlotState(int index, int level, bool showVFX)",
+      "void RefreshProductionLineNotification()"
+    ],
+    "requires": [
+      "DOTweenAnimation",
+      "IMessageController",
+      "LanguageText",
+      "ProductionLineMachineBtn",
+      "ProductionLineOpenSlot"
+    ],
+    "tags": {
+      "major": [
+        "DataSync",
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "UITitleScreen",
+    "layer": "Game",
+    "genre": "Simulation",
+    "role": "View",
+    "system": "unity_project",
+    "score": 0.4,
+    "provides": [
+      "void SetTitleText(string text)",
+      "void SetTapText(string text)"
+    ],
+    "requires": [
+      "UIBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign",
+        "Spawn"
+      ]
+    }
+  }
+]

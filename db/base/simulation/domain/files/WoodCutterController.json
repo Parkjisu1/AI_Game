@@ -1,0 +1,143 @@
+{
+  "fileId": "WoodCutterController",
+  "filePath": "Controller\\WoodCutterController.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Simulation",
+  "role": "Model",
+  "system": "Controller",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "WoodCutterController",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "moveSpeed",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "3f"
+        },
+        {
+          "fieldName": "arriveDistance",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0.5f"
+        },
+        {
+          "fieldName": "workTime",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "2f"
+        },
+        {
+          "fieldName": "factoryStack",
+          "fieldType": "ResourceStorage",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "outputType",
+          "fieldType": "IngradientType",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "IngradientType.Wood"
+        },
+        {
+          "fieldName": "ingradientPoolTag",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"Ingradient\""
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Init",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "ResourceStorage",
+              "paramName": "stack"
+            },
+            {
+              "paramType": "IngradientType",
+              "paramName": "type"
+            }
+          ],
+          "signature": "void Init(ResourceStorage stack, IngradientType type)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Init(ResourceStorage stack, IngradientType type)"
+  ],
+  "requires": [
+    "IngradientController",
+    "IngradientType",
+    "ResourceStorage"
+  ],
+  "tags": {
+    "major": [],
+    "minor": []
+  },
+  "uses": [
+    "GameManager",
+    "GoodsController",
+    "IngradientController",
+    "Instance",
+    "ObjectPool",
+    "WaitForSeconds",
+    "_goods"
+  ],
+  "usedBy": []
+}

@@ -1,0 +1,85 @@
+metadata:
+  nodeId: "QuestManager"
+  version: "1.0.0"
+  phase: 2
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "ProductionLineManager"
+    - "CurrencyManager"
+    - "DataManager"
+    - "EventManager"
+    - "AdManager"
+  external:
+    - "UnityEngine.MonoBehaviour"
+    - "System.Collections.Generic"
+
+contract:
+  provides:
+    - "quest_generate"
+    - "quest_track"
+    - "quest_reward"
+  requires:
+    - "production_line"
+    - "currency_system"
+    - "data_table"
+
+tags:
+  layer: "Domain"
+  genre: "Idle"
+  role: "Manager"
+  system: "QuestSystem"
+  majorFunctions:
+    - "StateControl"
+    - "ConditionCheck"
+    - "ResourceTransfer"
+    - "ResponseTrigger"
+  minorFunctions:
+    - "Assign"
+    - "Compare"
+    - "Calculate"
+    - "Notify"
+    - "Iterate"
+
+logicFlow:
+  - step: 1
+    tag: "FlowControl.Assign"
+    action: "GenerateQuest: QuestDataTable에서 ProductID, 목표 수량, 보상 타입(머니/교체/다이아) 랜덤 선택하여 활성 퀘스트 생성"
+    next: 2
+  - step: 2
+    tag: "ConditionCheck.Iterate"
+    action: "TrackProduction: ProductionLineManager 생산 이벤트 구독, 퀘스트 대상 ProductID 생산량 누적 카운팅"
+    next: 3
+  - step: 3
+    tag: "ConditionCheck.Compare"
+    action: "CheckComplete: 누적 생산량 >= 목표 수량 비교, 미달 시 TrackProduction 유지"
+    next: 4
+  - step: 4
+    tag: "ResourceTransfer.Assign"
+    action: "GiveReward: 보상 타입에 따라 머니 지급 또는 교체 처리 또는 다이아 지급"
+    next: 5
+  - step: 5
+    tag: "ResponseTrigger.Notify"
+    action: "AD 2배 보상 제안: AdManager에 광고 시청 가능 여부 확인 후 2x 보상 팝업 표시"
+    next: 1
+
+referencePatterns:
+  - source: "idlemoney__outgame__quest_system"
+    pattern: "3종 퀘스트 보상 타입(머니/교체/다이아) 및 생산량 트래킹 설계"
+  - source: "idlemoney__liveops__event_timers"
+    pattern: "퀘스트 갱신 주기 타이머 연동 패턴"
+
+codeHints:
+  patterns:
+    - "SerializeField for Inspector"
+    - "MessagePack serialization"
+    - "DontDestroyOnLoad singleton"
+    - "EventManager subscription for production count events"
+    - "Enum for QuestRewardType (Money/Replace/Diamond)"
+  avoidPatterns:
+    - "Find/FindObjectOfType for UI"
+    - "dynamic UI creation"
+    - "hardcoded magic numbers"
+    - "Polling production count in Update() (use event subscription)"

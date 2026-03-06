@@ -1,0 +1,339 @@
+{
+  "fileId": "AudioManager",
+  "filePath": "AudioManager.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Rpg",
+  "role": "Manager",
+  "system": "AudioManager",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine",
+    "System.Collections.Generic"
+  ],
+  "classes": [
+    {
+      "className": "AudioManager",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "Instance",
+          "fieldType": "AudioManager",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "masterVolume",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "1f"
+        },
+        {
+          "fieldName": "sfxVolume",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "1f"
+        },
+        {
+          "fieldName": "goldSpawnSound",
+          "fieldType": "AudioClip",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "goldCollectSound",
+          "fieldType": "AudioClip",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "arrowAttackSound",
+          "fieldType": "AudioClip",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "itemDropSound",
+          "fieldType": "AudioClip",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "audioSourcePoolSize",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "5"
+        },
+        {
+          "fieldName": "audioSourcePool",
+          "fieldType": "Queue<AudioSource>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "allAudioSources",
+          "fieldType": "List<AudioSource>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "PlayGoldSpawnSound",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector3 position =",
+              "paramName": "default"
+            }
+          ],
+          "signature": "void PlayGoldSpawnSound(Vector3 position = default)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PlayGoldCollectSound",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector3 position =",
+              "paramName": "default"
+            }
+          ],
+          "signature": "void PlayGoldCollectSound(Vector3 position = default)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PlayArrowAttackSound",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector3 position =",
+              "paramName": "default"
+            }
+          ],
+          "signature": "void PlayArrowAttackSound(Vector3 position = default)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PlayItemDropSound",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector3 position =",
+              "paramName": "default"
+            }
+          ],
+          "signature": "void PlayItemDropSound(Vector3 position = default)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PlaySFX",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "AudioClip",
+              "paramName": "clip"
+            },
+            {
+              "paramType": "Vector3 position =",
+              "paramName": "default"
+            },
+            {
+              "paramType": "float volumeScale =",
+              "paramName": "1f"
+            }
+          ],
+          "signature": "void PlaySFX(AudioClip clip, Vector3 position = default, float volumeScale = 1f)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetMasterVolume",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "volume"
+            }
+          ],
+          "signature": "void SetMasterVolume(float volume)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetSFXVolume",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "volume"
+            }
+          ],
+          "signature": "void SetSFXVolume(float volume)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "StopAllSounds",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void StopAllSounds()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "EnableAudio",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void EnableAudio()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void PlayGoldSpawnSound(Vector3 position = default)",
+    "void PlayGoldCollectSound(Vector3 position = default)",
+    "void PlayArrowAttackSound(Vector3 position = default)",
+    "void PlayItemDropSound(Vector3 position = default)",
+    "void PlaySFX(AudioClip clip, Vector3 position = default, float volumeScale = 1f)",
+    "void SetMasterVolume(float volume)",
+    "void SetSFXVolume(float volume)",
+    "void StopAllSounds()",
+    "void EnableAudio()"
+  ],
+  "requires": [
+    "AudioManager"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification",
+      "StateControl"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "Debug",
+    "Mathf",
+    "WaitForSeconds"
+  ],
+  "usedBy": []
+}

@@ -1,5 +1,5 @@
 """
-GameStateSnapshot — Perception Layer Data Model
+GameStateSnapshot -- Perception Layer Data Model
 ================================================
 게임 화면에서 추출한 구조화된 상태 정보.
 GaugeReading(게이지), OCRReading(텍스트/숫자)를 포함.

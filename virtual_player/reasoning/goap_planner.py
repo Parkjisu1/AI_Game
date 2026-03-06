@@ -1,5 +1,5 @@
 """
-GOAP Planner — Goal-Oriented Action Planning Core
+GOAP Planner -- Goal-Oriented Action Planning Core
 ===================================================
 Forward A* search planner: finds cheapest action sequence
 from current WorldState to satisfy a GOAPGoal.
@@ -38,7 +38,20 @@ class WorldState:
 
     @staticmethod
     def from_snapshot(snapshot) -> "WorldState":
-        """Convert GameStateSnapshot to WorldState."""
+        """Convert GameStateSnapshot or plain dict to WorldState.
+
+        PlayEngine._build_snapshot() returns a dict, so we must handle both
+        dict and attribute-based GameStateSnapshot objects.
+        """
+        if isinstance(snapshot, dict):
+            props = dict(snapshot)
+            # Flatten resource_rates into top-level props (gold_rate, xp_rate, etc.)
+            rates = props.pop("resource_rates", None)
+            if isinstance(rates, dict):
+                props.update(rates)
+            return WorldState(props=props)
+
+        # Attribute-based GameStateSnapshot path
         props = {
             "screen_type": snapshot.screen_type,
             "hp_pct": snapshot.hp_pct,
@@ -81,6 +94,7 @@ class GOAPAction:
     preconditions: Dict[str, Any] = field(default_factory=dict)  # key -> value or callable predicate
     effects: Dict[str, Any] = field(default_factory=dict)        # key -> value or callable transform
     required_screen: Optional[str] = None    # screen navigation target
+    blocked_screens: List[str] = field(default_factory=list)  # screens where action must NOT execute
     execute_fn: Optional[Callable] = None    # function to call when on required_screen
     metadata: Dict[str, Any] = field(default_factory=dict)
 

@@ -1,0 +1,57 @@
+{
+  "designId": "idlemoney__ux__sound_system",
+  "project": "IdleMoney",
+  "domain": "UX",
+  "genre": "Idle",
+  "system": "Sound Manager",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "spec",
+  "balance_area": "audio",
+  "source_file": "outgame_content_meta.yaml",
+  "content": {
+    "summary": "사운드 매니저. BGM 1채널 + SFX 다중 채널.\nPlayerPrefs 기반 설정 저장, DontDestroyOnLoad 싱글톤.",
+    "flow": [],
+    "parameters": {
+      "sfx_types": [
+        {
+          "{ id": "0, name: \"WindowOpen\" }"
+        },
+        {
+          "{ id": "1, name: \"WindowClose\" }"
+        },
+        {
+          "{ id": "2, name: \"NormalHammering\" }"
+        },
+        {
+          "{ id": "3, name: \"SuperHammerStart\" }"
+        },
+        {
+          "{ id": "4, name: \"SuperHammering\" }"
+        }
+      ],
+      "prefs_keys": [
+        "BGMOff",
+        "SFXOff"
+      ]
+    },
+    "edge_cases": [],
+    "references": []
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from C# analysis: Sound Manager",
+      "note": "Live game code analysis import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T11:08:17.055Z"
+}

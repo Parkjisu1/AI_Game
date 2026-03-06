@@ -1,0 +1,92 @@
+metadata:
+  nodeId: "DungeonManager"
+  version: "1.0.0"
+  phase: 2
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "RebirthManager"
+    - "ProductionLineManager"
+    - "CurrencyManager"
+    - "EventManager"
+  external:
+    - "UnityEngine.MonoBehaviour"
+    - "System.Collections"
+
+contract:
+  provides:
+    - "dungeon_start"
+    - "dungeon_progress"
+    - "dungeon_reward"
+  requires:
+    - "rebirth_manager"
+    - "production_line"
+    - "currency_system"
+
+tags:
+  layer: "Domain"
+  genre: "Idle"
+  role: "Manager"
+  system: "DungeonSystem"
+  majorFunctions:
+    - "StateControl"
+    - "ConditionCheck"
+    - "ResourceTransfer"
+    - "FlowControl"
+  minorFunctions:
+    - "Validate"
+    - "Compare"
+    - "Calculate"
+    - "Assign"
+    - "Notify"
+
+logicFlow:
+  - step: 1
+    tag: "ConditionCheck.Validate"
+    action: "CheckUnlock: RebirthManager.rebirthCount >= DUNGEON_UNLOCK_REBIRTH_COUNT 조건 검증"
+    next: 2
+  - step: 2
+    tag: "FlowControl.Assign"
+    action: "LoadLevel: DungeonLevelDataTable[levelId] 로드, 목표 코인 개수 및 시간 제한 설정"
+    next: 3
+  - step: 3
+    tag: "StateControl.Assign"
+    action: "SwitchSupplyMode.CoinDungeon: ProductionLineManager 공급 모드를 코인 던전 전용으로 전환"
+    next: 4
+  - step: 4
+    tag: "ResponseTrigger.Calculate"
+    action: "Play.TapBreak: 플레이어 탭 입력 감지 → 코인 제품 파괴 처리 → 획득 코인 카운트 증가"
+    next: 5
+  - step: 5
+    tag: "ConditionCheck.Compare"
+    action: "TimeUp: 남은 시간 <= 0 또는 목표 코인 달성 여부 비교, 미종료 시 Play 단계 반복"
+    next: 6
+  - step: 6
+    tag: "ConditionCheck.Compare"
+    action: "CheckGoal: 획득 코인 >= 목표 코인 비교하여 성공/실패 판정"
+    next: 7
+  - step: 7
+    tag: "ResourceTransfer.Assign"
+    action: "GiveReward: 성공 시 DungeonRewardTable[levelId] 보상 지급 후 레벨 진행 상태 저장"
+    next: 1
+
+referencePatterns:
+  - source: "idlemoney__ingame__coin_dungeon"
+    pattern: "66레벨 던전 구조, 코인 제품 파괴 메카닉 및 시간 제한 설계"
+  - source: "idlemoney__content__dungeon_content"
+    pattern: "레벨별 목표 코인 수량 및 시간 제한 콘텐츠 데이터 테이블"
+
+codeHints:
+  patterns:
+    - "SerializeField for Inspector"
+    - "MessagePack serialization"
+    - "DontDestroyOnLoad singleton"
+    - "Coroutine for countdown timer"
+    - "EventManager for tap input routing in dungeon mode"
+  avoidPatterns:
+    - "Find/FindObjectOfType for UI"
+    - "dynamic UI creation"
+    - "hardcoded magic numbers"
+    - "Direct ProductionLine access without mode switching contract"

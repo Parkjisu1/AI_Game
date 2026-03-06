@@ -1,0 +1,238 @@
+{
+  "designId": "idlemoney__ingame__slot",
+  "project": "IdleMoney",
+  "domain": "InGame",
+  "genre": "Idle",
+  "system": "Slot",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "table",
+  "balance_area": "core_mechanic",
+  "source_file": "Slot.json",
+  "table_stats": {
+    "row_count": 20,
+    "columns": [
+      "SlotID",
+      "ProductionLineID",
+      "LineOrder",
+      "UnlockMoneyCost",
+      "UnlockMoneyCostFactor"
+    ],
+    "numeric_columns": [
+      "SlotID",
+      "ProductionLineID",
+      "LineOrder",
+      "UnlockMoneyCost",
+      "UnlockMoneyCostFactor"
+    ],
+    "text_columns": []
+  },
+  "content": {
+    "summary": "Slot 데이터 테이블 (20행, 5열)",
+    "parameters": {
+      "SlotID": "0",
+      "ProductionLineID": "0",
+      "LineOrder": "0",
+      "UnlockMoneyCost": "0",
+      "UnlockMoneyCostFactor": "0"
+    },
+    "balance_points": [
+      {
+        "variable": "SlotID",
+        "min_value": 0,
+        "max_value": 19,
+        "avg_value": 9.5,
+        "growth_ratio": 19,
+        "data_points": 20,
+        "impact": "high"
+      },
+      {
+        "variable": "ProductionLineID",
+        "min_value": 0,
+        "max_value": 3,
+        "avg_value": 1.5,
+        "growth_ratio": 3,
+        "data_points": 20,
+        "impact": "medium"
+      },
+      {
+        "variable": "LineOrder",
+        "min_value": 0,
+        "max_value": 4,
+        "avg_value": 2,
+        "growth_ratio": 4,
+        "data_points": 20,
+        "impact": "medium"
+      },
+      {
+        "variable": "UnlockMoneyCost",
+        "min_value": 0,
+        "max_value": 3318383738880000000,
+        "avg_value": 184354675204833300,
+        "growth_ratio": 3318383738880000000,
+        "data_points": 20,
+        "impact": "critical"
+      }
+    ],
+    "edge_cases": [],
+    "references": []
+  },
+  "data": [
+    {
+      "SlotID": "0",
+      "ProductionLineID": "0",
+      "LineOrder": "0",
+      "UnlockMoneyCost": "0",
+      "UnlockMoneyCostFactor": "0"
+    },
+    {
+      "SlotID": "1",
+      "ProductionLineID": "0",
+      "LineOrder": "1",
+      "UnlockMoneyCost": "30",
+      "UnlockMoneyCostFactor": "0"
+    },
+    {
+      "SlotID": "2",
+      "ProductionLineID": "0",
+      "LineOrder": "2",
+      "UnlockMoneyCost": "350",
+      "UnlockMoneyCostFactor": "0"
+    },
+    {
+      "SlotID": "3",
+      "ProductionLineID": "0",
+      "LineOrder": "3",
+      "UnlockMoneyCost": "2450",
+      "UnlockMoneyCostFactor": "0"
+    },
+    {
+      "SlotID": "4",
+      "ProductionLineID": "0",
+      "LineOrder": "4",
+      "UnlockMoneyCost": "17150",
+      "UnlockMoneyCostFactor": "0"
+    },
+    {
+      "SlotID": "5",
+      "ProductionLineID": "1",
+      "LineOrder": "0",
+      "UnlockMoneyCost": "137200",
+      "UnlockMoneyCostFactor": "0"
+    },
+    {
+      "SlotID": "6",
+      "ProductionLineID": "1",
+      "LineOrder": "1",
+      "UnlockMoneyCost": "1097600",
+      "UnlockMoneyCostFactor": "0"
+    },
+    {
+      "SlotID": "7",
+      "ProductionLineID": "1",
+      "LineOrder": "2",
+      "UnlockMoneyCost": "8780800",
+      "UnlockMoneyCostFactor": "0"
+    },
+    {
+      "SlotID": "8",
+      "ProductionLineID": "1",
+      "LineOrder": "3",
+      "UnlockMoneyCost": "70246400",
+      "UnlockMoneyCostFactor": "0"
+    },
+    {
+      "SlotID": "9",
+      "ProductionLineID": "1",
+      "LineOrder": "4",
+      "UnlockMoneyCost": "561971200",
+      "UnlockMoneyCostFactor": "0"
+    },
+    {
+      "SlotID": "10",
+      "ProductionLineID": "2",
+      "LineOrder": "0",
+      "UnlockMoneyCost": "5057740800",
+      "UnlockMoneyCostFactor": "0"
+    },
+    {
+      "SlotID": "11",
+      "ProductionLineID": "2",
+      "LineOrder": "1",
+      "UnlockMoneyCost": "45519667200",
+      "UnlockMoneyCostFactor": "0"
+    },
+    {
+      "SlotID": "12",
+      "ProductionLineID": "2",
+      "LineOrder": "2",
+      "UnlockMoneyCost": "409677004800",
+      "UnlockMoneyCostFactor": "0"
+    },
+    {
+      "SlotID": "13",
+      "ProductionLineID": "2",
+      "LineOrder": "3",
+      "UnlockMoneyCost": "3687093043200",
+      "UnlockMoneyCostFactor": "0"
+    },
+    {
+      "SlotID": "14",
+      "ProductionLineID": "2",
+      "LineOrder": "4",
+      "UnlockMoneyCost": "33183837388800",
+      "UnlockMoneyCostFactor": "0"
+    },
+    {
+      "SlotID": "15",
+      "ProductionLineID": "3",
+      "LineOrder": "0",
+      "UnlockMoneyCost": "331838373888000",
+      "UnlockMoneyCostFactor": "0"
+    },
+    {
+      "SlotID": "16",
+      "ProductionLineID": "3",
+      "LineOrder": "1",
+      "UnlockMoneyCost": "3.31838373888E+15",
+      "UnlockMoneyCostFactor": "0"
+    },
+    {
+      "SlotID": "17",
+      "ProductionLineID": "3",
+      "LineOrder": "2",
+      "UnlockMoneyCost": "3.31838373888E+16",
+      "UnlockMoneyCostFactor": "0"
+    },
+    {
+      "SlotID": "18",
+      "ProductionLineID": "3",
+      "LineOrder": "3",
+      "UnlockMoneyCost": "3.31838373888E+17",
+      "UnlockMoneyCostFactor": "0"
+    },
+    {
+      "SlotID": "19",
+      "ProductionLineID": "3",
+      "LineOrder": "4",
+      "UnlockMoneyCost": "3.31838373888E+18",
+      "UnlockMoneyCostFactor": "0"
+    }
+  ],
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from Slot.json (20 rows)",
+      "note": "Live game data import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T10:32:54.006Z"
+}

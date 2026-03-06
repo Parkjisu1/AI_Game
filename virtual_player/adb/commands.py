@@ -2,7 +2,7 @@
 ADB Commands
 ==============
 Low-level ADB control functions for BlueStacks/Android emulator.
-Extracted from C10+ core.py — game control subset only.
+Extracted from C10+ core.py -- game control subset only.
 """
 
 import os
@@ -251,7 +251,7 @@ def claude_vision_annotate(prompt: str, before_path: Path, after_path: Path,
     """Compare two screenshots using Claude Vision, returning parsed JSON.
 
     Sends both before/after images for comparative analysis.
-    Used for action annotation — identifying what was tapped and what changed.
+    Used for action annotation -- identifying what was tapped and what changed.
     """
     full_prompt = (
         f"다음 두 이미지 파일을 Read 도구로 각각 읽어서 비교 분석하세요:\n"

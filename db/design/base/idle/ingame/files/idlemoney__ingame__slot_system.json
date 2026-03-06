@@ -1,0 +1,39 @@
+{
+  "designId": "idlemoney__ingame__slot_system",
+  "project": "IdleMoney",
+  "domain": "InGame",
+  "genre": "Idle",
+  "system": "Slot System",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "spec",
+  "balance_area": "progression",
+  "source_file": "ingame_flows.yaml",
+  "content": {
+    "summary": "팩토리당 5개 슬롯. 슬롯 레벨업으로 장착된 머신의 데미지 증가.\n슬롯 해금은 팩토리 레벨에 의존.",
+    "flow": [],
+    "parameters": {
+      "max_slot_num": 5,
+      "slot_level_cost": "SlotLevelUpTable 참조 (레벨별 비용 증가)",
+      "machine_power_boost": "슬롯 레벨에 비례하여 등급별 파워 보너스"
+    },
+    "edge_cases": [],
+    "references": []
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from C# analysis: Slot System",
+      "note": "Live game code analysis import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T11:08:17.000Z"
+}

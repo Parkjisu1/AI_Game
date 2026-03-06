@@ -1,0 +1,443 @@
+{
+  "fileId": "EnterCoinDungeonWin",
+  "filePath": "UI\\EnterCoinDungeonWin.cs",
+  "namespace": "",
+  "layer": "Game",
+  "genre": "Rpg",
+  "role": "View",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI",
+    "TMPro",
+    "Cysharp.Threading.Tasks"
+  ],
+  "classes": [
+    {
+      "className": "EnterCoinDungeonWin",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "WindowBase",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "floorTxt",
+          "fieldType": "LanguageText",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "type3RewardNode",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "type4RewardNode",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "rewardTxt",
+          "fieldType": "LanguageText[]",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "reward2Txt",
+          "fieldType": "LanguageText[]",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "finishConditionTxt",
+          "fieldType": "LanguageText[]",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "timeLimitTxt",
+          "fieldType": "LanguageText[]",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "diaPriceTxt",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "remainADTime",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "coinDungeonWidthDiaBtn",
+          "fieldType": "Button",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "coinDungeonWithADBtn",
+          "fieldType": "Button",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "coinDungeonWithNormalBtn",
+          "fieldType": "Button",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "RemainTimeBtn",
+          "fieldType": "Button",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "lastTryTime",
+          "fieldType": "long",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0"
+        },
+        {
+          "fieldName": "retryWaitingTime",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0"
+        },
+        {
+          "fieldName": "costDia",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "100"
+        },
+        {
+          "fieldName": "retryCount",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Open",
+          "accessModifier": "public",
+          "returnType": "UniTask",
+          "parameters": [],
+          "signature": "UniTask Open()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "SetData",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "DungeonTableData",
+              "paramName": "tableData"
+            },
+            {
+              "paramType": "int",
+              "paramName": "retryDiaCost"
+            },
+            {
+              "paramType": "long",
+              "paramName": "lastTryTime"
+            },
+            {
+              "paramType": "float",
+              "paramName": "retryWaitingTime"
+            },
+            {
+              "paramType": "int",
+              "paramName": "retryCount"
+            }
+          ],
+          "signature": "void SetData(DungeonTableData tableData, \r\n                        int retryDiaCost, long lastTryTime, float retryWaitingTime, int retryCount)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "refreshButtonState",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "long",
+              "paramName": "lastTryTime"
+            },
+            {
+              "paramType": "float",
+              "paramName": "waitingTime"
+            }
+          ],
+          "signature": "void refreshButtonState(long lastTryTime, float waitingTime)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Update",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Update()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "DungeonWithAD",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DungeonWithAD()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "goCoinDungeonWithAD",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void goCoinDungeonWithAD()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "DungeonWithDia",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DungeonWithDia()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "DungeonWithNormal",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DungeonWithNormal()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "gotoDungeon",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void gotoDungeon()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnClickClose",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickClose()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "StartWithBoost",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void StartWithBoost()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "UniTask Open()",
+    "void SetData(DungeonTableData tableData, \r\n                        int retryDiaCost, long lastTryTime, float retryWaitingTime, int retryCount)",
+    "void Update()",
+    "void DungeonWithAD()",
+    "void DungeonWithDia()",
+    "void DungeonWithNormal()",
+    "void OnClickClose()",
+    "void StartWithBoost()"
+  ],
+  "requires": [
+    "LanguageText",
+    "TextMeshProUGUI",
+    "WindowBase"
+  ],
+  "tags": {
+    "major": [
+      "StateControl",
+      "ValueModification",
+      "ResponseTrigger"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "AddMoneyDiaMsg",
+    "ChangeGameRuleMsg",
+    "CloseWindowMsg",
+    "SetCoinDungeonJoinCostMsg",
+    "ShowRewardADMsg",
+    "StartBoostMsg",
+    "StringUtils",
+    "System",
+    "WindowBase"
+  ],
+  "usedBy": []
+}

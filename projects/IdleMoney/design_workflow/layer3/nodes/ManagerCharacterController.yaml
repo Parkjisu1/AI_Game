@@ -1,0 +1,90 @@
+metadata:
+  nodeId: "ManagerCharacterController"
+  version: "1.0.0"
+  phase: 2
+  role: "Controller"
+
+dependencies:
+  internal:
+    - "MachineController"
+    - "ProductionLineManager"
+    - "DataManager"
+  external:
+    - "UnityEngine.MonoBehaviour"
+    - "System.Collections"
+    - "UnityEngine.Transform"
+
+contract:
+  provides:
+    - "auto_repair"
+    - "stamina_management"
+    - "manager_placement"
+  requires:
+    - "machine_controller"
+    - "production_line"
+    - "data_table"
+
+tags:
+  layer: "Domain"
+  genre: "Idle"
+  role: "Controller"
+  system: "ManagerSystem"
+  majorFunctions:
+    - "StateControl"
+    - "ValueModification"
+    - "ConditionCheck"
+  minorFunctions:
+    - "Find"
+    - "Calculate"
+    - "Compare"
+    - "Assign"
+    - "Delay"
+
+logicFlow:
+  - step: 1
+    tag: "ConditionCheck.Find"
+    action: "Idle.ScanTiredMachine: 담당 라인 내 에너지 고갈된 머신 목록 순회 탐색"
+    next: 2
+  - step: 2
+    tag: "ValueModification.Calculate"
+    action: "Move.CalcMoveTime: 매니저 현재 위치 ~ 타겟 머신 거리 기반 이동 시간 계산 후 이동 시작"
+    next: 3
+  - step: 3
+    tag: "ValueModification.Assign"
+    action: "Fix.RepairSpeed: 매니저 능력치 기반 수리 속도 적용, 머신 에너지 초기화, 스태미나 차감"
+    next: 4
+  - step: 4
+    tag: "ValueModification.Calculate"
+    action: "Fix.DrainStamina: 수리 1회당 스태미나 소모량 차감, 잔여 스태미나 업데이트"
+    next: 5
+  - step: 5
+    tag: "ConditionCheck.Compare"
+    action: "Tired: 스태미나 <= 0 조건 비교, 충족 시 Sleep 전환"
+    next: 6
+  - step: 6
+    tag: "StateControl.Delay"
+    action: "Sleep.RecoverFull: 수면 위치로 이동, 스태미나 회복 시간(ManagerDataTable) 대기 후 최대 스태미나 복구"
+    next: 7
+  - step: 7
+    tag: "StateControl.Assign"
+    action: "Wakeup: 수면 종료, Idle 상태로 전환"
+    next: 1
+
+referencePatterns:
+  - source: "idlemoney__ingame__manager_system"
+    pattern: "Idle/Move/Fix/Tired/Sleep/Wakeup 6상태 FSM 및 스태미나 소모/회복 공식"
+  - source: "idlemoney__balance__factory_progression"
+    pattern: "매니저 등급별 수리 속도 및 스태미나 용량 테이블"
+
+codeHints:
+  patterns:
+    - "SerializeField for Inspector"
+    - "Enum for ManagerState (Idle/Move/Fix/Tired/Sleep/Wakeup)"
+    - "Coroutine for state machine transitions"
+    - "Vector3.MoveTowards for smooth character movement"
+    - "MessagePack serialization for stamina persistence"
+  avoidPatterns:
+    - "Find/FindObjectOfType for UI"
+    - "dynamic UI creation"
+    - "hardcoded magic numbers"
+    - "Update() polling for state transitions (use Coroutine FSM)"

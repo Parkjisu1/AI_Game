@@ -1,0 +1,192 @@
+{
+  "fileId": "CtaController",
+  "filePath": "PlaygroundConnections\\CtaController.cs",
+  "namespace": "PlayableAdsKit.Scripts.PlaygroundConnections",
+  "layer": "Core",
+  "genre": "Tycoon",
+  "role": "Manager",
+  "system": "PlaygroundConnections",
+  "score": 0.4,
+  "usings": [
+    "System",
+    "System.Collections",
+    "PlayableAdsKit.Scripts.Helpers",
+    "PlayableAdsKit.Scripts.Utilities",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "CtaController",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "SingletonBehaviour<CtaController>",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "_openStoreAfterSeconds",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "9999"
+        },
+        {
+          "fieldName": "_openStoreAfterTaps",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "9999"
+        },
+        {
+          "fieldName": "_tapCounter",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "IsFirstInteraction",
+          "fieldType": "bool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        },
+        {
+          "fieldName": "_gameAuthor",
+          "fieldType": "string",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"DogukanKaanBozkurt@dkbozkurt\""
+        },
+        {
+          "fieldName": "_author",
+          "fieldType": "string",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"DogukanKaanBozkurt@dkbozkurt\""
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Start",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Start()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Update",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Update()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OpenStoreWithGameEnded",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OpenStoreWithGameEnded()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "OpenStore",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OpenStore()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnAwake",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnAwake()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void OpenStoreWithGameEnded()",
+    "void OpenStore()"
+  ],
+  "requires": [
+    "SingletonBehaviour"
+  ],
+  "tags": {
+    "major": [
+      "StateControl",
+      "ResponseTrigger"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "Input",
+    "LifeCycle",
+    "Playable",
+    "PlyAdsKitUtils",
+    "SingletonBehaviour"
+  ],
+  "usedBy": []
+}

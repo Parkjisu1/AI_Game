@@ -1,0 +1,237 @@
+{
+  "fileId": "UIResultScreen",
+  "filePath": "unity_project\\Assets\\Scripts\\UI\\UIResultScreen.cs",
+  "namespace": "",
+  "layer": "Game",
+  "genre": "Playable",
+  "role": "View",
+  "system": "unity_project",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine",
+    "UnityEngine.UI"
+  ],
+  "classes": [
+    {
+      "className": "UIResultScreen",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "UIBase",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "m_BackgroundImage",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_ResultText",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_SubText",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_WinIcon",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_DefeatIcon",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_IsVictory",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "OnInit",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnInit()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnShow",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnShow()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "CreateUIElements",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void CreateUIElements()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "SetResult",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "victory"
+            }
+          ],
+          "signature": "void SetResult(bool victory)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "UpdateVisuals",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void UpdateVisuals()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "SetWinIcon",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Sprite",
+              "paramName": "sprite"
+            }
+          ],
+          "signature": "void SetWinIcon(Sprite sprite)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetDefeatIcon",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Sprite",
+              "paramName": "sprite"
+            }
+          ],
+          "signature": "void SetDefeatIcon(Sprite sprite)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void SetResult(bool victory)",
+    "void SetWinIcon(Sprite sprite)",
+    "void SetDefeatIcon(Sprite sprite)"
+  ],
+  "requires": [
+    "UIBase"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification",
+      "ResponseTrigger",
+      "DataSync"
+    ],
+    "minor": [
+      "Assign",
+      "Spawn"
+    ]
+  },
+  "uses": [
+    "Font",
+    "Instance",
+    "Outline",
+    "UIBase",
+    "UXEffectManager"
+  ],
+  "usedBy": []
+}

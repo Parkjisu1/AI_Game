@@ -1,0 +1,102 @@
+{
+  "fileId": "CreateChallengeProductMsg",
+  "filePath": "Messages\\CreateChallengeProductMsg.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Simulation",
+  "role": "Message",
+  "system": "Messages",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "CreateChallengeProductMsg",
+      "classType": "struct",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [
+        "IMessageAction<ProductionLine>"
+      ],
+      "fields": [
+        {
+          "fieldName": "TableID",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "makePosition",
+          "fieldType": "Transform",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Execute",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "IMessagePort<ProductionLine>",
+              "paramName": "sender"
+            },
+            {
+              "paramType": "ProductionLine",
+              "paramName": "controller"
+            }
+          ],
+          "signature": "bool Execute(IMessagePort<ProductionLine> sender, ProductionLine controller)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "FlowControl",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "bool Execute(IMessagePort<ProductionLine> sender, ProductionLine controller)"
+  ],
+  "requires": [
+    "IMessageAction",
+    "ProductBase",
+    "ProductionLine",
+    "Rigidbody2D"
+  ],
+  "tags": {
+    "major": [
+      "FlowControl"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "IMessageAction",
+    "ProductBase",
+    "ProductionLine",
+    "Rigidbody2D",
+    "StringUtils"
+  ],
+  "usedBy": []
+}

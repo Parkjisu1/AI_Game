@@ -1,0 +1,292 @@
+{
+  "fileId": "TableContainer",
+  "filePath": "TableContainer.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Simulation",
+  "role": "Component",
+  "system": "TableContainer",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "System.IO",
+    "MessagePack",
+    "UnityEngine.AddressableAssets",
+    "Newtonsoft.Json",
+    "System",
+    "System.Text"
+  ],
+  "classes": [
+    {
+      "className": "TableContainer",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [
+        "ITableContainer"
+      ],
+      "fields": [
+        {
+          "fieldName": "tables",
+          "fieldType": "Dictionary<TableIndex, ITable<int>>",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Dictionary<TableIndex, ITable<int>>()"
+        },
+        {
+          "fieldName": "init",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "IsInit",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool IsInit()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "LoadAllTables",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void LoadAllTables()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "LoadLanguages",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void LoadLanguages()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "LoadAllTables",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void LoadAllTables()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "GetData",
+          "accessModifier": "public",
+          "returnType": "ITableData",
+          "parameters": [
+            {
+              "paramType": "TableIndex",
+              "paramName": "tableKey"
+            },
+            {
+              "paramType": "int",
+              "paramName": "dataKey"
+            }
+          ],
+          "signature": "ITableData GetData(TableIndex tableKey, int dataKey)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetTable",
+          "accessModifier": "public",
+          "returnType": "ITable<int>",
+          "parameters": [
+            {
+              "paramType": "TableIndex",
+              "paramName": "tableKey"
+            }
+          ],
+          "signature": "ITable<int> GetTable(TableIndex tableKey)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "AddTable",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "TableIndex",
+              "paramName": "index"
+            },
+            {
+              "paramType": "ITable<int>",
+              "paramName": "table"
+            }
+          ],
+          "signature": "void AddTable(TableIndex index, ITable<int> table)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "bool IsInit()",
+    "void LoadAllTables()",
+    "void LoadAllTables()",
+    "ITableData GetData(TableIndex tableKey, int dataKey)",
+    "ITable<int> GetTable(TableIndex tableKey)",
+    "void AddTable(TableIndex index, ITable<int> table)"
+  ],
+  "requires": [
+    "ITableContainer"
+  ],
+  "tags": {
+    "major": [
+      "DataSync",
+      "ConditionCheck",
+      "ValueModification"
+    ],
+    "minor": [
+      "Find"
+    ]
+  },
+  "uses": [
+    "00000000000000000000000000000000",
+    "ADMoneyBonusFactorTable",
+    "ADMoneyBonusFactorTableData",
+    "AchievementTable",
+    "AchievementTableData",
+    "Activator",
+    "AttendanceRewardTable",
+    "AttendanceRewardTableData",
+    "BoxAdvancedTable",
+    "BoxDiamondTableData",
+    "BoxGeneralTable",
+    "BoxGeneralTableData",
+    "BoxSameMachineSelectTable",
+    "BoxSameMachineSelectTableData",
+    "BoxStoreEventTable",
+    "BoxStoreEventTableData",
+    "BoxSuperTable",
+    "CompiledMethods",
+    "ConfigCommonTable",
+    "ConfigCommonTableData",
+    "Debug",
+    "DungeonTable",
+    "DungeonTableData",
+    "FactoryLevelUpTable",
+    "FactoryLevelUpTableData",
+    "FactoryRebirthRewardTable",
+    "FactoryRebirthRewardTableData",
+    "FactoryRebirthTable",
+    "FactoryRebirthTableData",
+    "File",
+    "GoodsTable",
+    "GoodsTableData",
+    "Holder",
+    "ITableContainer",
+    "LabBuffTable",
+    "LabBuffTableData",
+    "LabItemLevelUpTable",
+    "LabItemLevelUpTableData",
+    "LabItemTable",
+    "LabItemTableData",
+    "LanguageTable",
+    "LanguageTableData",
+    "LevelGachaBoxTable",
+    "LevelGachaBoxTableData",
+    "MachineTable",
+    "MachineTableData",
+    "MachineTuningExpTable",
+    "MachineTuningExpTableData",
+    "MachineTuningMaterialTable",
+    "MachineTuningMaterialTableData",
+    "ManagerGradeTable",
+    "ManagerGradeTableData",
+    "ManagerTable",
+    "ManagerTableData",
+    "MessagePackReader",
+    "MessagePackSerializer",
+    "MiscUtils",
+    "Path",
+    "ProductGroupTable",
+    "ProductGroupTableData",
+    "ProductTable",
+    "ProductTableData",
+    "Resources",
+    "RouletteTable",
+    "RouletteTableData",
+    "SlotLevelUpTable",
+    "SlotLevelUpTableData",
+    "SlotTable",
+    "SlotTableData",
+    "StoreBoxTable",
+    "StoreBoxTableData",
+    "StoreDiamondTable",
+    "StoreDiamondTableData",
+    "StoreEtcTable",
+    "StoreEtcTableData",
+    "StorePackageTable",
+    "StorePackageTableData",
+    "SupplyMachineLevelUpTable",
+    "SupplyMachineLevelUpTableData",
+    "SupplyMachineTable",
+    "SupplyMachineTableData",
+    "TableIndex",
+    "TableList",
+    "VehicleTable",
+    "VehicleTableData"
+  ],
+  "usedBy": []
+}

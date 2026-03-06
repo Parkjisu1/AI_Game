@@ -1,20 +1,20 @@
 """
-Plan Adapter — Adaptive Decision Orchestrator
+Plan Adapter -- Adaptive Decision Orchestrator
 ===============================================
 Wraps GoalReasoner with three adaptive layers:
 
-1. FailureMemory  — skip actions known to fail on this screen
-2. LoopDetector   — detect loops and execute escape strategies
-3. SpatialMemory  — track zone info for informed escapes
+1. FailureMemory  -- skip actions known to fail on this screen
+2. LoopDetector   -- detect loops and execute escape strategies
+3. SpatialMemory  -- track zone info for informed escapes
 
 Call flow:
   PlanAdapter.decide(snapshot)
-    → observe_zone (spatial)
-    → detect loops
-    → escape if loop found
-    → GoalReasoner.decide(snapshot)
-    → filter known-bad action
-    → record tick
+    -> observe_zone (spatial)
+    -> detect loops
+    -> escape if loop found
+    -> GoalReasoner.decide(snapshot)
+    -> filter known-bad action
+    -> record tick
 
 Call PlanAdapter.report_outcome() after every executed action.
 """
@@ -66,7 +66,7 @@ class PlanAdapter:
         loop = self._loops.detect()
         if loop.detected:
             log(
-                f"  [PlanAdapter] Loop detected: {loop.loop_type} — {loop.details} "
+                f"  [PlanAdapter] Loop detected: {loop.loop_type} -- {loop.details} "
                 f"(escape: {loop.escape_strategy})"
             )
             escape = self._handle_loop(loop, snapshot)
@@ -78,7 +78,7 @@ class PlanAdapter:
                 )
                 return escape
 
-        # 3. Check locked goal (informational — GoalReasoner honours it via current_goal)
+        # 3. Check locked goal (informational -- GoalReasoner honours it via current_goal)
         locked = self._loops.get_locked_goal()
         if locked:
             log(f"  [PlanAdapter] Goal locked to '{locked}'")
@@ -152,7 +152,7 @@ class PlanAdapter:
             if not hub:
                 safe = self._spatial.get_safe_zones()
                 hub = safe[0] if safe else "lobby"
-            log(f"  [PlanAdapter] Escape navigate_hub → '{hub}'")
+            log(f"  [PlanAdapter] Escape navigate_hub -> '{hub}'")
             return GOAPAction(
                 name=f"escape_to_{hub}",
                 required_screen=hub,
@@ -162,7 +162,7 @@ class PlanAdapter:
         elif strategy == "alternative_action":
             # Signal the caller to pick a different action; PlanAdapter
             # will return None so the navigation layer can handle it.
-            log("  [PlanAdapter] Escape alternative_action — returning None for fallback")
+            log("  [PlanAdapter] Escape alternative_action -- returning None for fallback")
             return None
 
         elif strategy == "lock_goal":
@@ -170,7 +170,7 @@ class PlanAdapter:
             current = self._reasoner.current_goal
             if current:
                 self._loops.lock_goal(current, ticks=10)
-                log(f"  [PlanAdapter] Escape lock_goal → '{current}'")
+                log(f"  [PlanAdapter] Escape lock_goal -> '{current}'")
             # Do not interrupt the current action
             return None
 
@@ -181,13 +181,13 @@ class PlanAdapter:
             unexplored = self._spatial.get_unexplored_zones([])
             if unexplored:
                 target = unexplored[0]
-                log(f"  [PlanAdapter] Escape explore_new → '{target}'")
+                log(f"  [PlanAdapter] Escape explore_new -> '{target}'")
                 return GOAPAction(
                     name=f"explore_{target}",
                     required_screen=target,
                     cost=0.0,
                 )
-            log("  [PlanAdapter] Escape explore_new — no unexplored zones known")
+            log("  [PlanAdapter] Escape explore_new -- no unexplored zones known")
             return None
 
         return None

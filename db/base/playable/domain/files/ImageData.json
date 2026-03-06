@@ -1,0 +1,128 @@
+{
+  "fileId": "ImageData",
+  "filePath": "Scratch\\Core\\ScratchData\\ImageData.cs",
+  "namespace": "ScratchCardAsset.Core.ScratchData",
+  "layer": "Domain",
+  "genre": "Playable",
+  "role": "Data",
+  "system": "Scratch",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine",
+    "UnityEngine.UI"
+  ],
+  "classes": [
+    {
+      "className": "ImageData",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "BaseData",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "image",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "isCanvasOverlay",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "rectTransform",
+          "fieldType": "RectTransform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "Bounds",
+          "fieldType": "override Vector2",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "> rectTransform != null ? rectTransform.rect.size : Vector2.zero"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "CalculateTextureSize",
+          "accessModifier": "protected",
+          "returnType": "Vector2",
+          "parameters": [],
+          "signature": "Vector2 CalculateTextureSize()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Calculate"
+        },
+        {
+          "methodName": "GetScratchPosition",
+          "accessModifier": "public",
+          "returnType": "Vector2",
+          "parameters": [
+            {
+              "paramType": "Vector2",
+              "paramName": "position"
+            }
+          ],
+          "signature": "Vector2 GetScratchPosition(Vector2 position)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "Vector2 GetScratchPosition(Vector2 position)"
+  ],
+  "requires": [
+    "BaseData"
+  ],
+  "tags": {
+    "major": [],
+    "minor": [
+      "Calculate",
+      "Find"
+    ]
+  },
+  "uses": [
+    "BaseData",
+    "RectTransformUtility",
+    "Surface",
+    "Triangle"
+  ],
+  "usedBy": []
+}

@@ -1,0 +1,58 @@
+{
+  "fileId": "ChallengeProductMaker",
+  "filePath": "ChallengeProductMaker.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Idle",
+  "role": "Component",
+  "system": "ChallengeProductMaker",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "ChallengeProductMaker",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "ProductMakerBase",
+      "interfaces": [],
+      "fields": [],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "makeProduct",
+          "accessModifier": "protected",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool makeProduct()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [],
+  "requires": [
+    "ProductMakerBase"
+  ],
+  "tags": {
+    "major": [],
+    "minor": []
+  },
+  "uses": [
+    "CreateChallengeProductMsg",
+    "ProductMakerBase"
+  ],
+  "usedBy": []
+}

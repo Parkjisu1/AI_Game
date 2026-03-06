@@ -1,0 +1,39 @@
+{
+  "designId": "idlemoney__bm__store_package",
+  "project": "IdleMoney",
+  "domain": "BM",
+  "genre": "Idle",
+  "system": "Package Store",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "config",
+  "balance_area": "iap",
+  "source_file": "bm_systems.yaml",
+  "content": {
+    "summary": "패키지 상점. 최대 10개 패키지, 구독형/일회성 혼합.\nShopOrder로 표시 순서 제어, IsDisplayed로 표시 여부.",
+    "flow": [],
+    "parameters": {
+      "max_packages": 10,
+      "daily_reward": "BonusCheckTime 쿨다운 기반",
+      "platform_messages": "MessageAOSTextID vs MessageAppleTextID"
+    },
+    "edge_cases": [],
+    "references": []
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from C# analysis: Package Store",
+      "note": "Live game code analysis import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T11:08:16.968Z"
+}

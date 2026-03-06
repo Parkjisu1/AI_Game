@@ -1,0 +1,479 @@
+{
+  "fileId": "ObjectPool",
+  "filePath": "ObjectPool.cs",
+  "namespace": "",
+  "layer": "Core",
+  "genre": "Generic",
+  "role": "Pool",
+  "system": "ObjectPool",
+  "score": 0.4,
+  "usings": [
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "Pool",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "tag",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "prefab",
+          "fieldType": "GameObject",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "size",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "canExpand",
+          "fieldType": "bool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "true"
+        },
+        {
+          "fieldName": "maxSize",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "1000"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Init",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Init()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SpawnFromPool",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "tag"
+            },
+            {
+              "paramType": "Vector3",
+              "paramName": "position"
+            },
+            {
+              "paramType": "Quaternion",
+              "paramName": "rotation"
+            },
+            {
+              "paramType": "Transform _parent =",
+              "paramName": "null"
+            }
+          ],
+          "signature": "GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation, Transform _parent = null)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "FindActiveObjects",
+          "accessModifier": "public",
+          "returnType": "List<GameObject>",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "_tag"
+            }
+          ],
+          "signature": "List<GameObject> FindActiveObjects(string _tag)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "ReturnToPool",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "GameObject",
+              "paramName": "obj"
+            }
+          ],
+          "signature": "void ReturnToPool(GameObject obj)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetAvailableCount",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "tag"
+            }
+          ],
+          "signature": "int GetAvailableCount(string tag)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetActiveCount",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "tag"
+            }
+          ],
+          "signature": "int GetActiveCount(string tag)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetTotalCount",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "tag"
+            }
+          ],
+          "signature": "int GetTotalCount(string tag)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        }
+      ]
+    },
+    {
+      "className": "ObjectPool",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "Instance",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "pools",
+          "fieldType": "List<Pool>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "showDebugLogs",
+          "fieldType": "bool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        },
+        {
+          "fieldName": "poolDictionary",
+          "fieldType": "Dictionary<string, Queue<GameObject>>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "poolSettings",
+          "fieldType": "Dictionary<string, Pool>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "allPoolObjects",
+          "fieldType": "Dictionary<string, List<GameObject>>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Init",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Init()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SpawnFromPool",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "tag"
+            },
+            {
+              "paramType": "Vector3",
+              "paramName": "position"
+            },
+            {
+              "paramType": "Quaternion",
+              "paramName": "rotation"
+            },
+            {
+              "paramType": "Transform _parent =",
+              "paramName": "null"
+            }
+          ],
+          "signature": "GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation, Transform _parent = null)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "FindActiveObjects",
+          "accessModifier": "public",
+          "returnType": "List<GameObject>",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "_tag"
+            }
+          ],
+          "signature": "List<GameObject> FindActiveObjects(string _tag)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "ReturnToPool",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "GameObject",
+              "paramName": "obj"
+            }
+          ],
+          "signature": "void ReturnToPool(GameObject obj)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetAvailableCount",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "tag"
+            }
+          ],
+          "signature": "int GetAvailableCount(string tag)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetActiveCount",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "tag"
+            }
+          ],
+          "signature": "int GetActiveCount(string tag)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetTotalCount",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "tag"
+            }
+          ],
+          "signature": "int GetTotalCount(string tag)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Init()",
+    "GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation, Transform _parent = null)",
+    "List<GameObject> FindActiveObjects(string _tag)",
+    "void ReturnToPool(GameObject obj)",
+    "int GetAvailableCount(string tag)",
+    "int GetActiveCount(string tag)",
+    "int GetTotalCount(string tag)",
+    "void Init()",
+    "GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation, Transform _parent = null)",
+    "List<GameObject> FindActiveObjects(string _tag)",
+    "void ReturnToPool(GameObject obj)",
+    "int GetAvailableCount(string tag)",
+    "int GetActiveCount(string tag)",
+    "int GetTotalCount(string tag)"
+  ],
+  "requires": [
+    "ObjectPool"
+  ],
+  "tags": {
+    "major": [],
+    "minor": [
+      "Find",
+      "Spawn"
+    ]
+  },
+  "uses": [
+    "Debug",
+    "Pool",
+    "_objects"
+  ],
+  "usedBy": []
+}

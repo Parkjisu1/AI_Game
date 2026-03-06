@@ -1,0 +1,684 @@
+{
+  "fileId": "EffectPool",
+  "filePath": "InGame\\Tiles\\EffectPool.cs",
+  "namespace": "",
+  "layer": "Core",
+  "genre": "Puzzle",
+  "role": "Model",
+  "system": "InGame",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "Global_Define"
+  ],
+  "classes": [
+    {
+      "className": "EffectPool",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "spawnParticles",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "blueJewelExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "greenJewelExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "skyBlueJewelExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "purpleJewelExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "redJewelExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "yellowJewelExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "horizontalStripedJewelExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "verticalStripedJewelExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "blueWrappedJewelExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "greenWrappedJewelExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "skyBlueWrappedJewelExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "purpleWrappedJewelExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "redWrappedJewelExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "yellowWrappedJewelExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "blueTargettedJewelExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "greenTargettedJewelExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "skyBlueTargettedJewelExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "purpleTargettedJewelExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "redTargettedJewelExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "yellowTargettedJewelExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "colorBombExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "DoublecolorBombExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "honeyExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "sandExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "spreadSpawn",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "iceExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "chainExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "boxExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "contagionExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "collectableBoxExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "collectableExplosion",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "complimentTextPool",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "colorBombLineEffectPool",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "axeEffectPool",
+          "fieldType": "ObjectPool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "jewelExplosions",
+          "fieldType": "List<ObjectPool>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<ObjectPool>()"
+        },
+        {
+          "fieldName": "targettedJewelExplosions",
+          "fieldType": "List<ObjectPool>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<ObjectPool>()"
+        },
+        {
+          "fieldName": "wrappedJewelExplosions",
+          "fieldType": "List<ObjectPool>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<ObjectPool>()"
+        },
+        {
+          "fieldName": "elementExplosions",
+          "fieldType": "List<ObjectPool>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<ObjectPool>()"
+        },
+        {
+          "fieldName": "specialBlockExplosions",
+          "fieldType": "List<ObjectPool>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<ObjectPool>()"
+        },
+        {
+          "fieldName": "specialElementExplosion",
+          "fieldType": "List<ObjectPool>",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<ObjectPool>()"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Initialize",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Initialize()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetJewelExplosionPool",
+          "accessModifier": "public",
+          "returnType": "ObjectPool",
+          "parameters": [
+            {
+              "paramType": "eJewelColor",
+              "paramName": "color"
+            }
+          ],
+          "signature": "ObjectPool GetJewelExplosionPool(eJewelColor color)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetStripedJewelExplosionPool",
+          "accessModifier": "public",
+          "returnType": "ObjectPool",
+          "parameters": [
+            {
+              "paramType": "eStripeDirection",
+              "paramName": "direction"
+            }
+          ],
+          "signature": "ObjectPool GetStripedJewelExplosionPool(eStripeDirection direction)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetTargettedJewelExplosionPool",
+          "accessModifier": "public",
+          "returnType": "ObjectPool",
+          "parameters": [
+            {
+              "paramType": "eJewelColor",
+              "paramName": "color"
+            }
+          ],
+          "signature": "ObjectPool GetTargettedJewelExplosionPool(eJewelColor color)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetWrappedJewelExplosionPool",
+          "accessModifier": "public",
+          "returnType": "ObjectPool",
+          "parameters": [
+            {
+              "paramType": "eJewelColor",
+              "paramName": "color"
+            }
+          ],
+          "signature": "ObjectPool GetWrappedJewelExplosionPool(eJewelColor color)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetElementExplosion",
+          "accessModifier": "public",
+          "returnType": "ObjectPool",
+          "parameters": [
+            {
+              "paramType": "eElementType",
+              "paramName": "element"
+            }
+          ],
+          "signature": "ObjectPool GetElementExplosion(eElementType element)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetSpecialBlockExplosion",
+          "accessModifier": "public",
+          "returnType": "ObjectPool",
+          "parameters": [
+            {
+              "paramType": "eSpecialBlockType",
+              "paramName": "block"
+            }
+          ],
+          "signature": "ObjectPool GetSpecialBlockExplosion(eSpecialBlockType block)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetSpecialElementExplosion",
+          "accessModifier": "public",
+          "returnType": "ObjectPool",
+          "parameters": [
+            {
+              "paramType": "eSpecialElement",
+              "paramName": "specialElement"
+            }
+          ],
+          "signature": "ObjectPool GetSpecialElementExplosion(eSpecialElement specialElement)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetColorBombLineEffect",
+          "accessModifier": "public",
+          "returnType": "ObjectPool",
+          "parameters": [],
+          "signature": "ObjectPool GetColorBombLineEffect()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetAxeEffect",
+          "accessModifier": "public",
+          "returnType": "ObjectPool",
+          "parameters": [],
+          "signature": "ObjectPool GetAxeEffect()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Initialize()",
+    "ObjectPool GetJewelExplosionPool(eJewelColor color)",
+    "ObjectPool GetStripedJewelExplosionPool(eStripeDirection direction)",
+    "ObjectPool GetTargettedJewelExplosionPool(eJewelColor color)",
+    "ObjectPool GetWrappedJewelExplosionPool(eJewelColor color)",
+    "ObjectPool GetElementExplosion(eElementType element)",
+    "ObjectPool GetSpecialBlockExplosion(eSpecialBlockType block)",
+    "ObjectPool GetSpecialElementExplosion(eSpecialElement specialElement)",
+    "ObjectPool GetColorBombLineEffect()",
+    "ObjectPool GetAxeEffect()"
+  ],
+  "requires": [
+    "ObjectPool"
+  ],
+  "tags": {
+    "major": [],
+    "minor": [
+      "Find"
+    ]
+  },
+  "uses": [
+    "ObjectPool"
+  ],
+  "usedBy": []
+}

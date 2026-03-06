@@ -1,0 +1,28 @@
+{
+  "fileId": "ColorMatcher",
+  "project": "DropTheCat",
+  "layer": "Domain",
+  "genre": "Puzzle",
+  "role": "Validator",
+  "phase": 2,
+  "namespace": "DropTheCat.Domain",
+  "className": "ColorMatcher",
+  "baseClass": "MonoBehaviour",
+  "score": 0.6,
+  "provides": [
+    "MatchResult CheckMatch(CatController cat, HoleController hole)",
+    "bool IsAllCatsMatched()",
+    "int GetRemainingCatCount()",
+    "List<CatController> GetRemainingCats()"
+  ],
+  "requires": [
+    "CatController.Color/IsCleared",
+    "HoleController.Color/IsRainbow/IsTrap/IsMatched"
+  ],
+  "tags": {
+    "major": ["ConditionCheck"],
+    "minor": ["Compare", "Find", "Validate", "Iterate"]
+  },
+  "sourcePath": "E:\\AI\\projects\\DropTheCat\\output\\ColorMatcher.cs",
+  "timestamp": "2026-02-10T05:30:00Z"
+}

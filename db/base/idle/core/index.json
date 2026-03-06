@@ -1,0 +1,30 @@
+[
+  {
+    "fileId": "UXEffectManager",
+    "layer": "Core",
+    "genre": "Idle",
+    "role": "Manager",
+    "system": "unity_project",
+    "score": 0.4,
+    "provides": [
+      "void Init()",
+      "void PlayHitImpact(Vector3 attackerPos, Vector3 targetPos)",
+      "void PlayDamageFlash()",
+      "void PlayHeavyShake()",
+      "void PlayKnockback(Transform target, Vector3 attackerPos)"
+    ],
+    "requires": [
+      "Renderer",
+      "Singleton"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Spawn"
+      ]
+    }
+  }
+]

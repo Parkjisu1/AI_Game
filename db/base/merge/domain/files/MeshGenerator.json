@@ -1,0 +1,66 @@
+{
+  "fileId": "MeshGenerator",
+  "filePath": "Scratch\\Tools\\MeshGenerator.cs",
+  "namespace": "ScratchCardAsset.Tools",
+  "layer": "Domain",
+  "genre": "Merge",
+  "role": "Component",
+  "system": "Scratch",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "MeshGenerator",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": true,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "GenerateQuad",
+          "accessModifier": "public",
+          "returnType": "Mesh",
+          "parameters": [
+            {
+              "paramType": "Vector3",
+              "paramName": "size"
+            },
+            {
+              "paramType": "Vector3",
+              "paramName": "offset"
+            }
+          ],
+          "signature": "Mesh GenerateQuad(Vector3 size, Vector3 offset)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "Mesh GenerateQuad(Vector3 size, Vector3 offset)"
+  ],
+  "requires": [],
+  "tags": {
+    "major": [],
+    "minor": [
+      "Spawn"
+    ]
+  },
+  "uses": [
+    "0f"
+  ],
+  "usedBy": []
+}

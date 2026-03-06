@@ -1,0 +1,467 @@
+{
+  "fileId": "BallDragAndThrow",
+  "filePath": "BallHandler\\BallDragAndThrow.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Slg",
+  "role": "Component",
+  "system": "BallHandler",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "BallDragAndThrow",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "_camera",
+          "fieldType": "Camera",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "_ballLayer",
+          "fieldType": "LayerMask",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "_touchTrail",
+          "fieldType": "GameObject",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "_maxLaunchForce",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "18f"
+        },
+        {
+          "fieldName": "_dragSensitivity",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "10f"
+        },
+        {
+          "fieldName": "_upwardBiasFactor",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "1.2f"
+        },
+        {
+          "fieldName": "_gentleFactor",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.35f"
+        },
+        {
+          "fieldName": "_forwardMultiplier",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.09f"
+        },
+        {
+          "fieldName": "_verticalMultiplier",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.045f"
+        },
+        {
+          "fieldName": "_horizontalMultiplier",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.02f"
+        },
+        {
+          "fieldName": "_audioSource",
+          "fieldType": "AudioSource",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "_clickSound",
+          "fieldType": "AudioClip",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "_releaseSound",
+          "fieldType": "AudioClip",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "_spinTorque",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "2f"
+        },
+        {
+          "fieldName": "_selectedBall",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "_selectedRb",
+          "fieldType": "Rigidbody",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "_initialScreenPos",
+          "fieldType": "Vector3",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "_dragStartScreenPos",
+          "fieldType": "Vector2",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "_dragStartWorldPoint",
+          "fieldType": "Vector3",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "_dragTargetPos",
+          "fieldType": "Vector3",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "MIN_DRAG_DISTANCE",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": true,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0.02f"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "FixedUpdate",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void FixedUpdate()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "TryBeginDrag",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector2",
+              "paramName": "screenPos"
+            }
+          ],
+          "signature": "void TryBeginDrag(Vector2 screenPos)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ContinueDrag",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector2",
+              "paramName": "screenPos"
+            }
+          ],
+          "signature": "void ContinueDrag(Vector2 screenPos)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "EndDrag",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector2",
+              "paramName": "releaseScreenPos"
+            }
+          ],
+          "signature": "void EndDrag(Vector2 releaseScreenPos)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "ScreenToWorldAtDepth",
+          "accessModifier": "private",
+          "returnType": "Vector3",
+          "parameters": [
+            {
+              "paramType": "Vector2",
+              "paramName": "screenPos"
+            },
+            {
+              "paramType": "float",
+              "paramName": "depth"
+            }
+          ],
+          "signature": "Vector3 ScreenToWorldAtDepth(Vector2 screenPos, float depth)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ApplyThrowForce",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector2",
+              "paramName": "dragStart"
+            },
+            {
+              "paramType": "Vector2",
+              "paramName": "dragEnd"
+            },
+            {
+              "paramType": "Vector3",
+              "paramName": "worldDelta"
+            }
+          ],
+          "signature": "void ApplyThrowForce(Vector2 dragStart, Vector2 dragEnd, Vector3 worldDelta)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "PlaySound",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "AudioClip",
+              "paramName": "clip"
+            }
+          ],
+          "signature": "void PlaySound(AudioClip clip)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "RestorePhysicsAfterDrag",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void RestorePhysicsAfterDrag()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Cleanup",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Cleanup()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnDisable",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnDisable()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [],
+  "requires": [
+    "LayerMask"
+  ],
+  "tags": {
+    "major": [
+      "StateControl"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "0f",
+    "Debug",
+    "Input",
+    "Physics",
+    "_audioSource",
+    "_camera",
+    "_dragTargetPos",
+    "_selectedRb",
+    "_touchTrail"
+  ],
+  "usedBy": []
+}

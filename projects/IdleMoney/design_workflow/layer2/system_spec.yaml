@@ -1,0 +1,2158 @@
+---
+project: IdleMoney
+genre: Idle
+platform: unity
+version: "1.0.0"
+description: >
+  IdleMoney 시스템 명세서. 역설계 기반 89건 DB에서 도출된
+  54개 시스템의 Layer/Role 분류, 책임, 상태, 행동, 관계를 정의.
+---
+
+# ============================================================
+# Layer 2: 시스템 명세서 (system_spec.yaml)
+# ============================================================
+
+system_list:
+  Core:
+    - Singleton
+    - EventManager
+    - ObjectPool
+    - DataTableManager
+    - ResourceManager
+
+  Domain:
+    - CurrencyManager
+    - SaveLoadManager
+    - SoundManager
+    - LocalizationManager
+    - AnalyticsManager
+    - ProductionLineManager
+    - MachineController
+    - SlotController
+    - TransporterController
+    - SupplyMachineController
+    - ManagerCharacterController
+    - ProductController
+    - FactoryManager
+    - RebirthManager
+    - ChallengeManager
+    - DungeonManager
+    - GachaManager
+    - ShopManager
+    - IAPManager
+    - ADManager
+    - QuestManager
+    - AchievementManager
+    - LabManager
+    - MachineTuningManager
+    - BoostEventManager
+    - OfflineRewardCalculator
+    - AttendanceManager
+    - RouletteManager
+    - TutorialManager
+    - NotificationController
+    - WorldMapManager
+    - CollectionManager
+    - PiggyBankManager
+
+  Game:
+    - MainHUDPage
+    - FactoryInfoPopup
+    - ShopPage
+    - GachaResultPopup
+    - MachineInfoPage
+    - ManagerPage
+    - LabPage
+    - AchievementPage
+    - WorldMapPage
+    - DungeonPage
+    - ChallengePage
+    - OfflineRewardPopup
+    - DailyRewardPopup
+    - QuestPopup
+    - OptionPopup
+    - AlertPopup
+
+# ============================================================
+# 시스템 상세 명세
+# ============================================================
+
+systems:
+
+  # ----------------------------------------------------------
+  # Phase 0: Core Layer
+  # ----------------------------------------------------------
+
+  - nodeId: Singleton
+    layer: Core
+    genre: Generic
+    role: Helper
+    purpose: >
+      DontDestroyOnLoad 싱글톤 패턴 베이스 클래스.
+      모든 Manager 계열 클래스의 공통 부모.
+    responsibilities:
+      - 싱글톤 인스턴스 생성 및 중복 방지
+      - DontDestroyOnLoad 적용
+      - 제네릭 타입 파라미터로 타입 안전성 보장
+    states: []
+    behaviors:
+      - trigger: "첫 번째 Instance 접근"
+        action: "새 GameObject 생성 후 AddComponent, DontDestroyOnLoad 등록"
+        result: "싱글톤 인스턴스 반환"
+      - trigger: "두 번째 이후 Instance 접근"
+        action: "기존 인스턴스 반환"
+        result: "중복 생성 방지"
+    relations:
+      uses: []
+      usedBy:
+        - EventManager
+        - ObjectPool
+        - DataTableManager
+        - ResourceManager
+        - CurrencyManager
+        - SaveLoadManager
+        - SoundManager
+        - LocalizationManager
+        - AnalyticsManager
+        - ProductionLineManager
+        - FactoryManager
+        - RebirthManager
+        - ChallengeManager
+        - DungeonManager
+        - GachaManager
+        - ShopManager
+        - IAPManager
+        - ADManager
+        - QuestManager
+        - AchievementManager
+        - LabManager
+        - MachineTuningManager
+        - BoostEventManager
+        - AttendanceManager
+        - RouletteManager
+        - TutorialManager
+        - WorldMapManager
+        - CollectionManager
+        - PiggyBankManager
+      publishes: []
+      subscribes: []
+
+  - nodeId: EventManager
+    layer: Core
+    genre: Generic
+    role: Manager
+    purpose: >
+      전역 메시지/이벤트 발행-구독 시스템.
+      시스템 간 직접 의존 없이 메시지로 통신.
+    responsibilities:
+      - 이벤트 타입별 핸들러 딕셔너리 관리
+      - Subscribe/Unsubscribe 등록
+      - SendMessage로 전체 구독자에게 이벤트 전파
+      - 메모리 누수 방지를 위한 구독 해제 보장
+    states: []
+    behaviors:
+      - trigger: "Subscribe(eventType, handler) 호출"
+        action: "이벤트 타입의 핸들러 리스트에 추가"
+        result: "이후 해당 이벤트 수신 가능"
+      - trigger: "SendMessage(eventType, data) 호출"
+        action: "해당 타입 구독자 전체에 data 전달"
+        result: "모든 구독자 콜백 실행"
+      - trigger: "Unsubscribe(eventType, handler) 호출"
+        action: "핸들러 리스트에서 제거"
+        result: "이후 이벤트 미수신"
+    relations:
+      uses:
+        - Singleton
+      usedBy:
+        - "모든 Domain/Game Layer 시스템"
+      publishes: []
+      subscribes: []
+
+  - nodeId: ObjectPool
+    layer: Core
+    genre: Generic
+    role: Pool
+    purpose: >
+      오브젝트 풀링 시스템. Product, Transporter 등 반복 생성/소멸 오브젝트 관리.
+      GC 부하 최소화.
+    responsibilities:
+      - 오브젝트 타입별 풀 생성 및 유지
+      - Spawn(prefab) → 비활성 오브젝트 반환 또는 신규 생성
+      - Despawn(obj) → 비활성화 후 풀 반환
+      - 최대 풀 크기 제한
+    states:
+      - Idle
+      - Spawning
+      - Despawning
+    behaviors:
+      - trigger: "Spawn(prefab) 호출"
+        action: "풀에서 비활성 오브젝트 검색, 없으면 Instantiate"
+        result: "활성화된 오브젝트 반환"
+      - trigger: "Despawn(obj) 호출"
+        action: "오브젝트 비활성화 후 풀에 반환"
+        result: "메모리 재사용 가능 상태"
+    relations:
+      uses:
+        - Singleton
+      usedBy:
+        - ProductionLineManager
+        - ProductController
+        - TransporterController
+      publishes: []
+      subscribes: []
+
+  - nodeId: DataTableManager
+    layer: Core
+    genre: Generic
+    role: Manager
+    purpose: >
+      JSON 테이블 로드/캐시/조회 시스템. 42개 데이터 테이블을 메모리에 캐시하여
+      전체 시스템에 공급.
+    responsibilities:
+      - 시작 시 42개 테이블 전량 로드 및 파싱
+      - 테이블별 Dictionary 캐시 유지
+      - 테이블 ID 기반 O(1) 조회 제공
+      - 테이블 변경 시 캐시 갱신
+    states:
+      - Loading
+      - Ready
+    behaviors:
+      - trigger: "게임 시작 (Awake)"
+        action: "Resources 폴더에서 JSON 파일 42개 로드, 파싱, 캐시 저장"
+        result: "전체 테이블 Ready 상태"
+      - trigger: "GetTableData<T>(tableId, key) 호출"
+        action: "캐시 Dictionary에서 O(1) 조회"
+        result: "타입 T 데이터 반환"
+    relations:
+      uses:
+        - Singleton
+      usedBy:
+        - ProductionLineManager
+        - FactoryManager
+        - RebirthManager
+        - ChallengeManager
+        - DungeonManager
+        - GachaManager
+        - ShopManager
+        - IAPManager
+        - QuestManager
+        - AchievementManager
+        - LabManager
+        - MachineTuningManager
+        - BoostEventManager
+        - AttendanceManager
+        - RouletteManager
+        - WorldMapManager
+        - OfflineRewardCalculator
+      publishes: []
+      subscribes: []
+
+  - nodeId: ResourceManager
+    layer: Core
+    genre: Generic
+    role: Manager
+    purpose: >
+      프리팹/스프라이트 로드 및 캐시 시스템. Resources.Load 래핑,
+      반복 로드 비용 최소화.
+    responsibilities:
+      - 프리팹 경로 → Prefab 캐시 딕셔너리 관리
+      - 스프라이트 경로 → Sprite 캐시 딕셔너리 관리
+      - 비동기 로드 지원 (Addressables 대비 Resources 폴백)
+      - 캐시 미스 시 Resources.Load 실행
+    states:
+      - Ready
+    behaviors:
+      - trigger: "GetPrefab(path) 호출"
+        action: "캐시 조회 → 미스 시 Resources.Load → 캐시 저장"
+        result: "GameObject 반환"
+      - trigger: "GetSprite(path) 호출"
+        action: "캐시 조회 → 미스 시 Resources.Load"
+        result: "Sprite 반환"
+    relations:
+      uses:
+        - Singleton
+      usedBy:
+        - ObjectPool
+        - ProductionLineManager
+        - GachaManager
+        - MainHUDPage
+        - ShopPage
+        - MachineInfoPage
+        - ManagerPage
+        - CollectionManager
+      publishes: []
+      subscribes: []
+
+  # ----------------------------------------------------------
+  # Phase 1: Base Domain
+  # ----------------------------------------------------------
+
+  - nodeId: CurrencyManager
+    layer: Domain
+    genre: Idle
+    role: Manager
+    purpose: >
+      5종 재화 관리 시스템. Money(Double)/Diamond/Gold/Material/ADSkip 재화의
+      증가, 감소, 조회, 저장 일원화.
+    responsibilities:
+      - 5종 재화 현재 값 메모리 관리
+      - 재화 증감 시 유효성 검증 (음수 방지)
+      - 재화 변경 이벤트 발행
+      - SaveLoadManager를 통한 영속성 보장
+    states:
+      - Ready
+    behaviors:
+      - trigger: "AddMoney(amount) 호출"
+        action: "Money += amount, 변경 이벤트 발행"
+        result: "재화 증가, UI 갱신 트리거"
+      - trigger: "SpendDiamond(amount) 호출"
+        action: "Diamond >= amount 검증 → Diamond -= amount → 이벤트 발행"
+        result: "재화 감소 또는 실패 반환"
+      - trigger: "GetMoney() 호출"
+        action: "현재 Money 값 반환"
+        result: "Double 타입 현재 재화량"
+    relations:
+      uses:
+        - Singleton
+        - EventManager
+        - SaveLoadManager
+      usedBy:
+        - ProductionLineManager
+        - FactoryManager
+        - SlotController
+        - SupplyMachineController
+        - GachaManager
+        - ShopManager
+        - IAPManager
+        - QuestManager
+        - AchievementManager
+        - LabManager
+        - MachineTuningManager
+        - AttendanceManager
+        - RouletteManager
+        - RebirthManager
+        - OfflineRewardCalculator
+        - PiggyBankManager
+      publishes:
+        - OnMoneyChanged
+        - OnDiamondChanged
+        - OnGoldChanged
+        - OnMaterialChanged
+        - OnADSkipChanged
+      subscribes: []
+
+  - nodeId: SaveLoadManager
+    layer: Domain
+    genre: Generic
+    role: Manager
+    purpose: >
+      MessagePack 직렬화 기반 세이브/로드 시스템.
+      로컬 저장 + 클라우드 동기화, 데이터 마이그레이션 지원.
+    responsibilities:
+      - UserInfo 전체를 MessagePack 바이너리로 직렬화/역직렬화
+      - 로컬 파일 시스템 저장/로드
+      - 클라우드 저장/로드 (쿨다운 제한: ~3초)
+      - 튜토리얼 중 클라우드 접근 차단
+      - 구버전 데이터 마이그레이션 (FixV1_03_1, Convert1_05)
+    states:
+      - Idle
+      - Saving
+      - Loading
+      - CloudSyncing
+    behaviors:
+      - trigger: "Save() 호출"
+        action: "UserInfo 직렬화 → 로컬 파일 쓰기 → 클라우드 쿨다운 체크 후 업로드"
+        result: "데이터 영속화 완료"
+      - trigger: "Load() 호출"
+        action: "로컬 파일 읽기 → 역직렬화 → 마이그레이션 체크"
+        result: "UserInfo 복원"
+      - trigger: "CloudLoad() 호출"
+        action: "클라우드에서 데이터 다운로드 → 로컬보다 최신인지 비교 → 갱신"
+        result: "최신 데이터 적용"
+    relations:
+      uses:
+        - Singleton
+      usedBy:
+        - CurrencyManager
+        - ProductionLineManager
+        - FactoryManager
+        - RebirthManager
+        - QuestManager
+        - AchievementManager
+        - LabManager
+        - MachineTuningManager
+        - AttendanceManager
+        - WorldMapManager
+        - CollectionManager
+        - TutorialManager
+      publishes:
+        - OnSaveCompleted
+        - OnLoadCompleted
+      subscribes: []
+
+  - nodeId: SoundManager
+    layer: Domain
+    genre: Generic
+    role: Manager
+    purpose: >
+      BGM 1채널 + SFX 다중채널 AudioSource 관리.
+      PlayerPrefs 기반 설정 저장.
+    responsibilities:
+      - BGM AudioSource 1개 관리 (루프 재생)
+      - SFX AudioSource 풀 관리 (다중 동시 재생)
+      - BGM On/Off, SFX On/Off 설정 저장/복원
+      - 씬 전환 시 BGM 자동 전환
+    states:
+      - BGMPlaying
+      - BGMOff
+      - SFXOn
+      - SFXOff
+    behaviors:
+      - trigger: "PlayBGM(clipId) 호출"
+        action: "현재 BGM 정지 → 새 클립 로드 → 루프 재생"
+        result: "BGM 전환 완료"
+      - trigger: "PlaySFX(sfxId) 호출"
+        action: "SFX On 상태 확인 → 사용 가능한 AudioSource로 원샷 재생"
+        result: "효과음 재생"
+      - trigger: "ToggleBGM() 호출"
+        action: "BGM 상태 토글, PlayerPrefs 저장"
+        result: "BGM 상태 변경 및 영속화"
+    relations:
+      uses:
+        - Singleton
+      usedBy:
+        - MainHUDPage
+        - OptionPopup
+        - MachineController
+        - ProductController
+      publishes: []
+      subscribes: []
+
+  - nodeId: LocalizationManager
+    layer: Domain
+    genre: Generic
+    role: Manager
+    purpose: >
+      4개국어(KO/EN/JA/ZH) 텍스트 관리. 897개 텍스트 키.
+      런타임 언어 전환 지원.
+    responsibilities:
+      - LanguageTable JSON 로드 및 캐시
+      - 언어 ID별 텍스트 딕셔너리 유지
+      - GetText(key) → 현재 언어 텍스트 반환
+      - 언어 변경 이벤트 발행 (UI 전체 갱신)
+    states:
+      - Ready
+    behaviors:
+      - trigger: "ChangeLanguage(languageId) 호출"
+        action: "선택 언어 딕셔너리 활성화, OnLanguageChanged 발행"
+        result: "전체 UI 텍스트 갱신"
+      - trigger: "GetText(key) 호출"
+        action: "현재 언어 딕셔너리에서 key 조회"
+        result: "번역된 문자열 반환"
+    relations:
+      uses:
+        - Singleton
+        - DataTableManager
+        - SaveLoadManager
+      usedBy:
+        - "모든 Game Layer UI 시스템"
+      publishes:
+        - OnLanguageChanged
+      subscribes: []
+
+  - nodeId: AnalyticsManager
+    layer: Domain
+    genre: Generic
+    role: Manager
+    purpose: >
+      Firebase Analytics 이벤트 로깅 시스템.
+      핵심 게임 행동 추적, KPI 데이터 수집.
+    responsibilities:
+      - Firebase Analytics SDK 초기화
+      - 이벤트명 + 파라미터 딕셔너리 형태로 Firebase 전송
+      - 에디터/빌드 환경 분기 (#if !UNITY_EDITOR)
+      - 공통 파라미터 자동 첨부 (fac_relv, fac_lv 등)
+    states:
+      - Initializing
+      - Ready
+      - SimulationMode
+    behaviors:
+      - trigger: "LogEvent(eventName, params) 호출"
+        action: "공통 파라미터 병합 → Firebase.LogEvent 전송"
+        result: "이벤트 전송 완료"
+      - trigger: "에디터 환경 실행"
+        action: "Debug.Log로 시뮬레이션 출력"
+        result: "빌드 에러 방지"
+    relations:
+      uses:
+        - Singleton
+      usedBy:
+        - GachaManager
+        - ShopManager
+        - IAPManager
+        - QuestManager
+        - AttendanceManager
+        - CollectionManager
+        - OfflineRewardCalculator
+      publishes: []
+      subscribes: []
+
+  # ----------------------------------------------------------
+  # Phase 2: Domain Systems
+  # ----------------------------------------------------------
+
+  - nodeId: ProductionLineManager
+    layer: Domain
+    genre: Idle
+    role: Manager
+    purpose: >
+      4개 생산라인 총괄 관리. 라인당 5슬롯 + 3운송차 + 1공급기 구성.
+      수익 계산 공식 적용 및 이익 지급.
+    responsibilities:
+      - 4개 ProductionLine 인스턴스 초기화 및 관리
+      - 라인별 활성화/비활성화 제어
+      - 수익 계산 공식 적용 (productTableProfit × 부스트 × 버프 배율)
+      - 라인 해금 조건 체크 (팩토리 레벨 기반)
+      - 챌린지/던전 모드 전환 시 라인 상태 변경
+    states:
+      - NormalMode
+      - ChallengeMode
+      - DungeonMode
+    behaviors:
+      - trigger: "라인 수익 완료 이벤트"
+        action: "수익 공식 계산 → CurrencyManager.AddMoney 호출"
+        result: "재화 증가"
+      - trigger: "라인 해금 조건 달성"
+        action: "새 ProductionLine 활성화, UI 갱신"
+        result: "라인 추가"
+      - trigger: "챌린지 모드 시작"
+        action: "모든 라인을 ChallengeMode로 전환"
+        result: "특수 공급 모드 적용"
+    relations:
+      uses:
+        - Singleton
+        - EventManager
+        - CurrencyManager
+        - DataTableManager
+        - ObjectPool
+        - SaveLoadManager
+        - BoostEventManager
+        - LabManager
+      usedBy:
+        - FactoryManager
+        - ChallengeManager
+        - DungeonManager
+        - OfflineRewardCalculator
+        - MainHUDPage
+      publishes:
+        - OnLineUnlocked
+        - OnProfitGenerated
+      subscribes:
+        - OnBoostActivated
+        - OnLabBuffChanged
+        - OnRebirthCompleted
+
+  - nodeId: MachineController
+    layer: Domain
+    genre: Idle
+    role: Controller
+    purpose: >
+      개별 머신 제어. 타격, 에너지(duration), 등급, 튜닝 레벨 관리.
+      슬롯에 장착되어 제품 자동 타격 수행.
+    responsibilities:
+      - 머신 데이터(ID, Grade, TuningLevel, Duration) 관리
+      - speed 간격으로 제품 자동 타격
+      - Duration 소진 시 Tired 상태 전환
+      - ManagerCharacterController의 Fix 이벤트 수신 후 에너지 회복
+    states:
+      - Idle
+      - Attacking
+      - Tired
+      - Repairing
+    behaviors:
+      - trigger: "제품이 슬롯 사정거리 진입"
+        action: "speed 타이머 시작, 타격 애니메이션 실행, 제품 HP 감소"
+        result: "제품 단계 진행"
+      - trigger: "duration <= 0"
+        action: "Tired 상태로 전환, 타격 중단"
+        result: "매니저 수리 대기"
+      - trigger: "ManagerFix 이벤트 수신"
+        action: "duration 회복, Attacking 상태로 복귀"
+        result: "자동 타격 재개"
+    relations:
+      uses:
+        - EventManager
+        - DataTableManager
+      usedBy:
+        - SlotController
+        - ManagerCharacterController
+        - MachineTuningManager
+      publishes:
+        - OnMachineTired
+        - OnMachineRepaired
+      subscribes:
+        - OnManagerFix
+
+  - nodeId: SlotController
+    layer: Domain
+    genre: Idle
+    role: Controller
+    purpose: >
+      생산라인 슬롯 제어. 슬롯 레벨업, 머신 장착/해제, 해금 관리.
+    responsibilities:
+      - 슬롯 레벨 및 레벨업 비용 관리
+      - 머신 장착/해제 처리
+      - 슬롯 해금 조건 확인 (팩토리 레벨 기반)
+      - 슬롯 레벨에 따른 머신 파워 보너스 계산
+    states:
+      - Locked
+      - Empty
+      - Occupied
+    behaviors:
+      - trigger: "LevelUp() 호출"
+        action: "비용 확인 → CurrencyManager.SpendMoney → 레벨 증가 → 파워 재계산"
+        result: "슬롯 레벨업, 머신 파워 증가"
+      - trigger: "MountMachine(machineId) 호출"
+        action: "빈 슬롯 확인 → 머신 데이터 로드 → MachineController 생성"
+        result: "머신 장착 완료"
+    relations:
+      uses:
+        - CurrencyManager
+        - DataTableManager
+        - MachineController
+      usedBy:
+        - ProductionLineManager
+        - MachineInfoPage
+      publishes:
+        - OnSlotLevelUp
+        - OnMachineMounted
+        - OnMachineUnmounted
+      subscribes: []
+
+  - nodeId: TransporterController
+    layer: Domain
+    genre: Idle
+    role: Controller
+    purpose: >
+      운송차 6단계 상태머신 제어. 완성 제품 수집 → 배달 → 수익 처리.
+    responsibilities:
+      - 6단계 상태 머신 관리 (HideWaiting → MoveToLoad → Waiting → Loading → FullLoading → Transporting)
+      - 완성 제품 픽업 및 슬롯 관리 (3슬롯)
+      - 목적지 도착 시 수익 콜백 호출
+      - 운송 속도 및 경로 계산
+    states:
+      - HideWaiting
+      - MoveToLoad
+      - Waiting
+      - Loading
+      - FullLoading
+      - Transporting
+    behaviors:
+      - trigger: "완성 제품 감지"
+        action: "MoveToLoad 상태로 전환, 픽업 위치 이동"
+        result: "제품 수집 시작"
+      - trigger: "모든 슬롯 적재 완료"
+        action: "FullLoading → Transporting 전환, 목적지로 이동"
+        result: "배달 시작"
+      - trigger: "목적지 도착"
+        action: "profitCallback 호출, 슬롯 초기화, HideWaiting으로 복귀"
+        result: "수익 지급, 재사용 준비"
+    relations:
+      uses:
+        - ObjectPool
+        - EventManager
+        - ProductionLineManager
+      usedBy:
+        - ProductionLineManager
+      publishes:
+        - OnProfitDelivered
+      subscribes:
+        - OnProductComplete
+
+  - nodeId: SupplyMachineController
+    layer: Domain
+    genre: Idle
+    role: Controller
+    purpose: >
+      공급기 레벨업, 부스트 관리. 제품 생산 속도와 양을 결정하는 핵심 컨트롤러.
+    responsibilities:
+      - 공급 간격(supplyTime), 공급량(supplyAmount) 계산
+      - 머니 보너스 배율(moneyBonus) 관리
+      - 레벨업 시 비용 소비 및 스탯 증가
+      - 부스트 활성화 시 일시적 속도 증가
+      - 팩토리 레벨 기반 해금 체크
+    states:
+      - Locked
+      - Normal
+      - Boosted
+    behaviors:
+      - trigger: "LevelUp() 호출"
+        action: "비용 확인 → 레벨 증가 → supplyAmount/supplyTime 재계산"
+        result: "공급 성능 향상"
+      - trigger: "ActivateBoost() 호출"
+        action: "Boosted 상태 전환, 타이머 시작"
+        result: "공급 속도 일시 증가"
+      - trigger: "부스트 타이머 만료"
+        action: "Normal 상태 복귀"
+        result: "부스트 종료"
+    relations:
+      uses:
+        - CurrencyManager
+        - DataTableManager
+        - EventManager
+      usedBy:
+        - ProductionLineManager
+        - BoostEventManager
+        - FactoryInfoPopup
+      publishes:
+        - OnSupplyBoostActivated
+        - OnSupplyBoostExpired
+      subscribes:
+        - OnBoostEventTriggered
+
+  - nodeId: ManagerCharacterController
+    layer: Domain
+    genre: Idle
+    role: Controller
+    purpose: >
+      매니저 캐릭터 AI. Idle→Move→Fix→Tired→Sleep→Wakeup 6단계 상태머신.
+      에너지 소진된 머신을 자동 수리.
+    responsibilities:
+      - 6단계 상태머신 실행 (Idle/Move/Fix/Tired/Sleep/Wakeup)
+      - Tired 머신 스캔 및 우선순위 선택
+      - 수리 속도(fixSpeed)로 머신 Duration 회복
+      - 스태미나(stamina) 소모 및 회복 관리
+      - 수면(Sleep) 후 완전 회복
+    states:
+      - Idle
+      - Move
+      - Fix
+      - Tired
+      - Sleep
+      - Wakeup
+    behaviors:
+      - trigger: "OnMachineTired 이벤트 수신"
+        action: "타깃 머신 선정, Move 상태로 전환"
+        result: "수리 이동 시작"
+      - trigger: "머신 위치 도달"
+        action: "Fix 상태 전환, fixSpeed로 duration 회복, stamina 소모"
+        result: "머신 수리 중"
+      - trigger: "stamina <= 0"
+        action: "Tired → Sleep 전환, 스태미나 완전 회복 타이머"
+        result: "매니저 수면 시작"
+    relations:
+      uses:
+        - EventManager
+        - MachineController
+      usedBy:
+        - ProductionLineManager
+        - ManagerPage
+      publishes:
+        - OnManagerFixStart
+        - OnManagerFixComplete
+        - OnManagerSleep
+        - OnManagerWakeup
+      subscribes:
+        - OnMachineTired
+        - OnRebirthCompleted
+
+  - nodeId: ProductController
+    layer: Domain
+    genre: Idle
+    role: Controller
+    purpose: >
+      제품 6단계 진행 관리. HP 관리, 단계별 진행, 완성 시 Transporter로 전달.
+    responsibilities:
+      - 제품 MaxStepNum=6 단계 진행 관리
+      - 단계별 HP 감소 처리 (머신 타격 수신)
+      - HP <= 0 시 다음 단계로 전환
+      - 최종 단계 완료 시 Transporter에 수집 신호 발행
+      - ObjectPool 반환 (완성 후 비활성화)
+    states:
+      - Step1
+      - Step2
+      - Step3
+      - Step4
+      - Step5
+      - Step6
+      - Complete
+    behaviors:
+      - trigger: "머신 타격 이벤트"
+        action: "HP -= damage, HP <= 0 이면 NextStep 전환"
+        result: "제품 진행"
+      - trigger: "Step6 완료"
+        action: "OnProductComplete 이벤트 발행, 비활성화 대기"
+        result: "Transporter 픽업 신호"
+    relations:
+      uses:
+        - ObjectPool
+        - EventManager
+      usedBy:
+        - SupplyMachineController
+        - TransporterController
+      publishes:
+        - OnProductComplete
+        - OnProductStepChanged
+      subscribes: []
+
+  - nodeId: FactoryManager
+    layer: Domain
+    genre: Idle
+    role: Manager
+    purpose: >
+      팩토리 레벨업, 슬롯 해금, 생산라인 해금 총괄.
+      1600레벨까지의 진행 관리.
+    responsibilities:
+      - 팩토리 레벨 및 레벨업 비용 관리 (1600행 테이블)
+      - 마일스톤 레벨 도달 시 기능 해금 처리
+      - 슬롯/공급기/매니저 버튼 해금 조건 체크
+      - 레드닷 트리거 (Money >= NextLevelCost)
+      - 팩토리별 독립 데이터 관리 (dicFactories)
+    states:
+      - NormalMode
+      - MaxLevel
+    behaviors:
+      - trigger: "LevelUp() 호출"
+        action: "비용 확인 → 레벨 증가 → 마일스톤 체크 → 기능 해금"
+        result: "팩토리 레벨업"
+      - trigger: "마일스톤 레벨 달성"
+        action: "해당 기능(공급기/매니저/월드 등) 해금 이벤트 발행"
+        result: "새 기능 활성화"
+    relations:
+      uses:
+        - Singleton
+        - CurrencyManager
+        - DataTableManager
+        - SaveLoadManager
+        - ProductionLineManager
+      usedBy:
+        - RebirthManager
+        - NotificationController
+        - FactoryInfoPopup
+        - MainHUDPage
+      publishes:
+        - OnFactoryLevelUp
+        - OnFeatureUnlocked
+        - OnFactoryUpgradeAvailable
+      subscribes:
+        - OnMoneyChanged
+
+  - nodeId: RebirthManager
+    layer: Domain
+    genre: Idle
+    role: Manager
+    purpose: >
+      프레스티지 시스템. 월드 해금, SellOff 처리, 리버스 카운트 관리.
+    responsibilities:
+      - 총 12회 리버스 사이클 관리
+      - SellOff 실행 (팩토리 리셋, 리버스 카운트 증가)
+      - 리버스별 보상 지급 (FactoryRebirthRewardTable)
+      - 새 월드 해금 처리
+      - 리버스 기반 콘텐츠 게이트 해금 (연구소, 던전, 매니저)
+    states:
+      - WaitingForChallenge
+      - ProcessingRebirth
+      - Complete
+    behaviors:
+      - trigger: "챌린지 성공 이벤트 수신"
+        action: "SellOff 실행 → 리버스 카운트 증가 → 보상 지급 → 월드 해금"
+        result: "프레스티지 완료"
+      - trigger: "리버스 카운트 변경"
+        action: "게이트 조건 체크, 연구소/던전/매니저 해금 여부 갱신"
+        result: "콘텐츠 해금 이벤트 발행"
+    relations:
+      uses:
+        - Singleton
+        - CurrencyManager
+        - DataTableManager
+        - SaveLoadManager
+        - FactoryManager
+        - WorldMapManager
+      usedBy:
+        - ChallengeManager
+        - DungeonManager
+        - LabManager
+        - ManagerCharacterController
+      publishes:
+        - OnRebirthCompleted
+        - OnWorldUnlocked
+        - OnContentGateUnlocked
+      subscribes:
+        - OnChallengeSuccess
+
+  - nodeId: ChallengeManager
+    layer: Domain
+    genre: Idle
+    role: Manager
+    purpose: >
+      팩토리 챌린지 모드 관리. 제한 시간 내 목표 금액 달성 목표.
+      성공 시 RebirthManager를 통해 프레스티지 실행.
+    responsibilities:
+      - 챌린지 조건 확인 (팩토리 레벨 >= RebirthConditionFactoryLevel)
+      - 챌린지 초기화 (목표 금액, 시간 제한, 해머 파워 설정)
+      - 실시간 수익 추적
+      - 성공/실패 판정 및 결과 처리
+      - 재도전 비용 관리 (다이아 누적 증가)
+    states:
+      - Idle
+      - Ready
+      - Playing
+      - Success
+      - Failed
+    behaviors:
+      - trigger: "StartChallenge() 호출"
+        action: "목표 설정 → 라인 ChallengeMode 전환 → 타이머 시작"
+        result: "챌린지 플레이 시작"
+      - trigger: "currentMoney >= TargetMoneyAmount"
+        action: "Success 상태, OnChallengeSuccess 발행"
+        result: "프레스티지 트리거"
+      - trigger: "타이머 만료"
+        action: "Failed 상태, 재도전 옵션 제시"
+        result: "챌린지 실패 처리"
+    relations:
+      uses:
+        - Singleton
+        - EventManager
+        - CurrencyManager
+        - DataTableManager
+        - ProductionLineManager
+        - ADManager
+      usedBy:
+        - RebirthManager
+        - ChallengePage
+      publishes:
+        - OnChallengeStart
+        - OnChallengeSuccess
+        - OnChallengeFailed
+      subscribes:
+        - OnProfitGenerated
+
+  - nodeId: DungeonManager
+    layer: Domain
+    genre: Idle
+    role: Manager
+    purpose: >
+      코인 던전 모드 관리. 제한 시간 내 목표 제품 파괴 수 달성.
+      66개 레벨, 특수 레벨 스케일 변경.
+    responsibilities:
+      - 66개 던전 레벨 데이터 관리
+      - 던전 진입 조건 확인 (리버스 카운트 기반)
+      - 던전 초기화 (목표, 시간, HP 설정)
+      - 실시간 파괴 카운터 추적
+      - 특수 레벨 처리 (제품 스케일 변경)
+      - 재도전 비용 관리
+    states:
+      - Idle
+      - Ready
+      - Playing
+      - Success
+      - Failed
+    behaviors:
+      - trigger: "EnterDungeon(level) 호출"
+        action: "레벨 데이터 로드 → 라인 DungeonMode 전환 → 타이머 시작"
+        result: "던전 플레이 시작"
+      - trigger: "파괴 카운터 >= TargetProductBreakAmount"
+        action: "Success 상태, 보상 지급"
+        result: "던전 클리어"
+      - trigger: "특수 레벨 (IsSpecialLevel=1)"
+        action: "제품 스케일 SPECIAL_DUNGEON_SCALE_FACTOR 적용"
+        result: "특수 레벨 연출"
+    relations:
+      uses:
+        - Singleton
+        - EventManager
+        - CurrencyManager
+        - DataTableManager
+        - ProductionLineManager
+        - RebirthManager
+        - ADManager
+      usedBy:
+        - DungeonPage
+      publishes:
+        - OnDungeonStart
+        - OnDungeonSuccess
+        - OnDungeonFailed
+      subscribes:
+        - OnProductComplete
+        - OnRebirthCompleted
+
+  - nodeId: GachaManager
+    layer: Domain
+    genre: Idle
+    role: Manager
+    purpose: >
+      7종 가챠 박스 실행. 등급 확률 계산, 보장 드롭, 중복→EXP 변환 처리.
+    responsibilities:
+      - 7종 박스 타입별 확률 테이블 관리
+      - 첫 2회 보장 드롭 로직
+      - 등급 결정 (General~SuperLegend 누적 확률)
+      - 신규/중복 머신 판정 (NewMachineSelectChance)
+      - 중복 시 MachineTuningManager에 EXP 전달
+      - 부산물 재료(Material) 지급
+      - Analytics 이벤트 로깅
+    states:
+      - Idle
+      - Rolling
+    behaviors:
+      - trigger: "ExecuteGacha(boxType) 호출"
+        action: "비용 차감 → 보장 체크 → 등급 결정 → 머신 선택 → 결과 처리"
+        result: "머신 획득 또는 EXP 전환"
+      - trigger: "중복 머신 획득"
+        action: "MachineTuningManager.AddEXP 호출"
+        result: "튜닝 EXP 추가"
+    relations:
+      uses:
+        - Singleton
+        - CurrencyManager
+        - DataTableManager
+        - MachineTuningManager
+        - CollectionManager
+        - AnalyticsManager
+        - ADManager
+      usedBy:
+        - ShopManager
+        - ShopPage
+        - GachaResultPopup
+      publishes:
+        - OnGachaComplete
+        - OnNewMachineAcquired
+      subscribes: []
+
+  - nodeId: ShopManager
+    layer: Domain
+    genre: Idle
+    role: Manager
+    purpose: >
+      상점 UI 제어. Diamond/Package/Etc/LoopyCoin 4탭 상점 데이터 관리.
+    responsibilities:
+      - 상점 탭별 상품 목록 데이터 공급
+      - 구매 버튼 활성화 조건 관리
+      - IAPManager 구매 요청 중계
+      - 상점 열기/닫기 이벤트 처리
+      - Analytics 상점 진입 이벤트 로깅
+    states:
+      - Closed
+      - Open
+    behaviors:
+      - trigger: "OpenShop(tabId) 호출"
+        action: "탭별 상품 데이터 로드 → UI 갱신"
+        result: "상점 표시"
+      - trigger: "PurchaseItem(itemId) 호출"
+        action: "재화 타입 확인 → IAPManager 또는 CurrencyManager 라우팅"
+        result: "구매 처리"
+    relations:
+      uses:
+        - Singleton
+        - CurrencyManager
+        - DataTableManager
+        - IAPManager
+        - GachaManager
+        - AnalyticsManager
+      usedBy:
+        - ShopPage
+      publishes:
+        - OnShopPurchaseComplete
+      subscribes:
+        - OnIAPSuccess
+
+  - nodeId: IAPManager
+    layer: Domain
+    genre: Generic
+    role: Manager
+    purpose: >
+      Unity Purchasing 5.0 IAP 통합. 영수증 검증 및 보상 지급.
+    responsibilities:
+      - IStoreListener 구현 (초기화/구매/실패 콜백)
+      - 플랫폼별 PID 관리 (Android/iOS)
+      - 영수증 검증 (UnityEngine.Purchasing.Security)
+      - 구매 성공 시 보상 지급 (InAppPuchaseSuccessMsg)
+      - 피기뱅크 특수 PID 처리
+    states:
+      - Initializing
+      - Ready
+      - Processing
+    behaviors:
+      - trigger: "Purchase(productId) 호출"
+        action: "AllPlugins.Purchase(PID) → 플랫폼 결제 트리거"
+        result: "결제 창 표시"
+      - trigger: "onPurchaseSuccess 콜백"
+        action: "영수증 검증 → 보상 조회 → CurrencyManager 지급"
+        result: "보상 지급 완료"
+      - trigger: "onPurchaseFailed 콜백"
+        action: "실패 원인 로깅, UI 복원"
+        result: "구매 취소 처리"
+    relations:
+      uses:
+        - Singleton
+        - CurrencyManager
+        - DataTableManager
+        - AnalyticsManager
+      usedBy:
+        - ShopManager
+        - PiggyBankManager
+      publishes:
+        - OnIAPSuccess
+        - OnIAPFailed
+      subscribes: []
+
+  - nodeId: ADManager
+    layer: Domain
+    genre: Generic
+    role: Manager
+    purpose: >
+      리워드 광고 관리. 빈도 제한(세션 최대 10회), 쿨다운 제어.
+    responsibilities:
+      - 세션 광고 시청 횟수 추적
+      - 쿨다운 타이머 관리 (LastShowADBannerTime 등)
+      - 광고 사용 가능 여부 반환 (IsAdAvailable)
+      - 광고 완료 콜백 → 보상 지급 라우팅
+      - 패키지 RemoveAD 효과 적용
+    states:
+      - Available
+      - OnCooldown
+      - Playing
+      - SessionLimitReached
+    behaviors:
+      - trigger: "ShowRewardAd(rewardType) 호출"
+        action: "가용성 확인 → 광고 로드/재생 → 완료 콜백 대기"
+        result: "광고 재생"
+      - trigger: "광고 완료 콜백"
+        action: "시청 횟수 증가, 쿨다운 타이머 시작, 보상 지급"
+        result: "보상 지급 완료"
+    relations:
+      uses:
+        - Singleton
+        - EventManager
+      usedBy:
+        - ChallengeManager
+        - DungeonManager
+        - OfflineRewardCalculator
+        - AttendanceManager
+        - BoostEventManager
+        - GachaManager
+        - RouletteManager
+      publishes:
+        - OnAdCompleted
+        - OnAdFailed
+      subscribes: []
+
+  - nodeId: QuestManager
+    layer: Domain
+    genre: Idle
+    role: Manager
+    purpose: >
+      퀘스트 생성/추적/보상 시스템. 3종 타입 퀘스트 병렬 수행.
+    responsibilities:
+      - 3종 퀘스트 슬롯 관리 (MaxQuestNum)
+      - 퀘스트 생성 (productID, neededCount, rewardAmount)
+      - 제품 생산 카운터 실시간 추적
+      - 완료 판정 및 보상 지급
+      - 퀘스트 교체 비용 처리 (Change Quest)
+      - Analytics 이벤트 로깅
+    states:
+      - Active
+      - Completed
+    behaviors:
+      - trigger: "OnProductComplete 이벤트"
+        action: "해당 제품 타입 퀘스트 카운터 증가"
+        result: "퀘스트 진행"
+      - trigger: "ClaimReward(questSlot) 호출"
+        action: "완료 확인 → CurrencyManager 보상 지급 → 새 퀘스트 생성"
+        result: "보상 수령, 퀘스트 갱신"
+    relations:
+      uses:
+        - Singleton
+        - CurrencyManager
+        - DataTableManager
+        - SaveLoadManager
+        - AnalyticsManager
+        - ADManager
+      usedBy:
+        - QuestPopup
+        - NotificationController
+      publishes:
+        - OnQuestCompleted
+        - OnQuestUpdated
+      subscribes:
+        - OnProductComplete
+
+  - nodeId: AchievementManager
+    layer: Domain
+    genre: Idle
+    role: Manager
+    purpose: >
+      업적 추적/보상 시스템. 14카테고리 × 15티어 업적, 별 시스템.
+    responsibilities:
+      - 14개 업적 카테고리별 진행도 추적
+      - 티어별 달성 조건 체크
+      - 보상 지급 (Money/Diamond)
+      - 별 시스템 집계 (최대 5별, 3색상)
+      - 레드닷 갱신 알림
+    states:
+      - Tracking
+    behaviors:
+      - trigger: "게임 이벤트 발생 (재화 변경 등)"
+        action: "관련 업적 카운터 증가, 티어 달성 여부 체크"
+        result: "업적 진행"
+      - trigger: "ClaimAchievement(id, tier) 호출"
+        action: "보상 지급 → 레드닷 갱신"
+        result: "보상 수령"
+    relations:
+      uses:
+        - Singleton
+        - CurrencyManager
+        - DataTableManager
+        - SaveLoadManager
+        - EventManager
+      usedBy:
+        - AchievementPage
+        - NotificationController
+      publishes:
+        - OnAchievementUnlocked
+        - OnAchievementClaimed
+      subscribes:
+        - OnMoneyChanged
+        - OnRebirthCompleted
+        - OnNewMachineAcquired
+
+  - nodeId: LabManager
+    layer: Domain
+    genre: Idle
+    role: Manager
+    purpose: >
+      연구소 아이템 레벨업, 영구 버프 계산. 리버스 횟수 기반 해금.
+    responsibilities:
+      - 12개 연구 아이템 레벨 관리
+      - 아이템당 3개 버프 슬롯 계산 (baseValue + addValue × level)
+      - 영구 버프 집계 (LabStats)
+      - 레벨업 비용 소비
+      - 연구소 해금 조건 체크 (LAB_UNLOCK_REBIRTH_COUNT)
+    states:
+      - Locked
+      - Unlocked
+    behaviors:
+      - trigger: "LevelUpLabItem(itemId) 호출"
+        action: "비용 확인 → 레벨 증가 → 버프 재계산 → 이벤트 발행"
+        result: "영구 버프 증가"
+      - trigger: "OnContentGateUnlocked (연구소)"
+        action: "연구소 해금 상태로 전환"
+        result: "연구소 UI 접근 허용"
+    relations:
+      uses:
+        - Singleton
+        - CurrencyManager
+        - DataTableManager
+        - SaveLoadManager
+        - RebirthManager
+      usedBy:
+        - ProductionLineManager
+        - OfflineRewardCalculator
+        - LabPage
+      publishes:
+        - OnLabBuffChanged
+        - OnLabItemLevelUp
+      subscribes:
+        - OnContentGateUnlocked
+
+  - nodeId: MachineTuningManager
+    layer: Domain
+    genre: Idle
+    role: Manager
+    purpose: >
+      머신 EXP 관리, 튜닝 레벨업, 재료 소비 처리.
+    responsibilities:
+      - 머신별 누적 EXP 관리
+      - EXP += 요청 처리 (탭/중복 가챠)
+      - 레벨업 조건 체크 (accumulatedEXP >= RequiredExpByGrade)
+      - 재료(Material) 소비 처리
+      - 튜닝 레벨에 따른 파워 재계산 트리거
+    states:
+      - Idle
+    behaviors:
+      - trigger: "AddEXP(machineId, amount) 호출"
+        action: "EXP 누적 → 레벨업 조건 체크 → 조건 충족 시 레벨업 실행"
+        result: "EXP 증가, 필요 시 레벨업"
+      - trigger: "TuningLevelUp(machineId) 호출"
+        action: "재료 소비 → 튜닝 레벨 증가 → MachineController 파워 재계산"
+        result: "머신 파워 증가"
+    relations:
+      uses:
+        - Singleton
+        - CurrencyManager
+        - DataTableManager
+        - SaveLoadManager
+      usedBy:
+        - GachaManager
+        - MachineController
+        - MachineInfoPage
+      publishes:
+        - OnTuningLevelUp
+      subscribes: []
+
+  - nodeId: BoostEventManager
+    layer: Domain
+    genre: Idle
+    role: Manager
+    purpose: >
+      부스트 이벤트 타이머 관리. Power/Money/Supply/SuperHammer 4종 부스트.
+    responsibilities:
+      - 4종 이벤트 타이머 쿨다운 관리
+      - 팩토리 레벨 게이트 확인 후 이벤트 표시
+      - AD 시청 완료 시 부스트 활성화
+      - 부스트 지속 시간 타이머 및 만료 처리
+      - 이벤트 라이프사이클 관리 (Register→StartCoolTime→StartEvent→FinishEvent→Restart)
+    states:
+      - Cooldown
+      - Available
+      - Active
+      - Expired
+    behaviors:
+      - trigger: "쿨다운 타이머 만료"
+        action: "팩토리 레벨 게이트 확인 → 이벤트 팝업 표시"
+        result: "부스트 이벤트 제안"
+      - trigger: "사용자 광고 수락"
+        action: "ADManager.ShowRewardAd → 완료 시 부스트 활성화"
+        result: "부스트 효과 적용"
+      - trigger: "부스트 지속 타이머 만료"
+        action: "부스트 제거, Cooldown 재시작"
+        result: "부스트 종료"
+    relations:
+      uses:
+        - Singleton
+        - EventManager
+        - ADManager
+        - FactoryManager
+      usedBy:
+        - ProductionLineManager
+        - SupplyMachineController
+      publishes:
+        - OnBoostActivated
+        - OnBoostExpired
+      subscribes:
+        - OnAdCompleted
+        - OnFactoryLevelUp
+
+  - nodeId: OfflineRewardCalculator
+    layer: Domain
+    genre: Idle
+    role: Calculator
+    purpose: >
+      오프라인 수익 계산 공식 적용. 접속하지 않은 시간의 수익 산출.
+    responsibilities:
+      - 오프라인 경과 시간 계산 (현재 - 마지막 접속 시간)
+      - IdleRewardTime 상한 적용 (리버스 레벨별)
+      - 수익 공식 적용 (A + B × time × factoryFactor × labBuff × packageBonus)
+      - 광고 2배 옵션 처리
+      - 결과 팝업 트리거
+    states: []
+    behaviors:
+      - trigger: "게임 시작 (앱 재개)"
+        action: "오프라인 시간 계산 → 공식 적용 → 결과 반환"
+        result: "수익 금액 산출"
+      - trigger: "광고 시청 완료 (2배 선택)"
+        action: "계산 결과 × 2 → CurrencyManager.AddMoney"
+        result: "2배 보상 지급"
+    relations:
+      uses:
+        - CurrencyManager
+        - DataTableManager
+        - LabManager
+        - ADManager
+        - RebirthManager
+      usedBy:
+        - OfflineRewardPopup
+      publishes:
+        - OnOfflineRewardCalculated
+      subscribes: []
+
+  - nodeId: AttendanceManager
+    layer: Domain
+    genre: Idle
+    role: Manager
+    purpose: >
+      7일 출석 보상 사이클 관리. 매일 접속 시 보상 지급.
+    responsibilities:
+      - 7일 사이클 출석 상태 추적 (WillReceive/Receive/Received)
+      - 마지막 수령 시간 기반 일자 계산
+      - 패키지 보너스 보상 적용
+      - AD 시청 10배 보상 처리
+      - Analytics 출석 이벤트 로깅
+    states:
+      - WillReceive
+      - CanReceive
+      - Received
+    behaviors:
+      - trigger: "게임 접속"
+        action: "마지막 수령 시간 비교 → 새 날이면 Receive 상태로 전환"
+        result: "출석 보상 수령 가능"
+      - trigger: "ClaimDailyReward() 호출"
+        action: "보상 계산 → CurrencyManager 지급 → Received 상태"
+        result: "오늘 보상 수령 완료"
+      - trigger: "광고 10배 수락"
+        action: "ADManager.ShowRewardAd → 완료 시 보상 × 10"
+        result: "10배 보상 지급"
+    relations:
+      uses:
+        - Singleton
+        - CurrencyManager
+        - DataTableManager
+        - SaveLoadManager
+        - ADManager
+        - AnalyticsManager
+      usedBy:
+        - DailyRewardPopup
+      publishes:
+        - OnDailyRewardClaimed
+      subscribes: []
+
+  - nodeId: RouletteManager
+    layer: Domain
+    genre: Idle
+    role: Manager
+    purpose: >
+      룰렛 보상 가중치 랜덤 선택. 리버스 횟수 기반 해금.
+    responsibilities:
+      - 리버스 조건 기반 룰렛 해금 체크
+      - 최대 8개 옵션의 가중치 기반 랜덤 선택
+      - 쿨다운 간격(EVENT_ROULETTE_DISPLAY_INTERVAL) 관리
+      - AD 부스트 보상 배율 적용
+      - 보상 지급
+    states:
+      - Locked
+      - Cooldown
+      - Available
+    behaviors:
+      - trigger: "쿨다운 만료"
+        action: "리버스 조건 확인 → 룰렛 표시"
+        result: "룰렛 UI 활성화"
+      - trigger: "Spin() 호출"
+        action: "가중치 기반 랜덤 → 보상 결정 → CurrencyManager 지급"
+        result: "보상 획득"
+    relations:
+      uses:
+        - Singleton
+        - CurrencyManager
+        - DataTableManager
+        - RebirthManager
+        - ADManager
+      usedBy:
+        - MainHUDPage
+      publishes:
+        - OnRouletteRewardGranted
+      subscribes:
+        - OnRebirthCompleted
+
+  - nodeId: TutorialManager
+    layer: Domain
+    genre: Generic
+    role: Manager
+    purpose: >
+      30+ 단계 UnMask 기반 튜토리얼 진행 관리. 신규 유저 온보딩.
+    responsibilities:
+      - 튜토리얼 단계 인덱스 관리 (TutorialIndex)
+      - UnMask 대상 UI 요소 지정 및 하이라이트
+      - 단계별 플레이어 행동 감지 및 다음 단계 전환
+      - 튜토리얼 보상 지급 (TUTORIAL_N_MONEY_REWARD)
+      - FreeTutorial(초기 온보딩) / Normal(메인 캠페인) 분리
+    states:
+      - Inactive
+      - FreeTutorial
+      - NormalTutorial
+      - Completed
+    behaviors:
+      - trigger: "게임 최초 시작"
+        action: "FreeTutorial 시작, Step 1 UnMask 적용"
+        result: "온보딩 시작"
+      - trigger: "플레이어 행동 감지 (대상 UI 탭)"
+        action: "현재 단계 완료 → 다음 단계 UnMask 설정"
+        result: "튜토리얼 진행"
+      - trigger: "모든 단계 완료"
+        action: "Completed 상태, 클라우드 저장 허용"
+        result: "튜토리얼 종료"
+    relations:
+      uses:
+        - Singleton
+        - EventManager
+        - CurrencyManager
+        - SaveLoadManager
+      usedBy:
+        - MainHUDPage
+        - "모든 Game Layer UI (UnMask 요청)"
+      publishes:
+        - OnTutorialStepComplete
+        - OnTutorialComplete
+      subscribes: []
+
+  - nodeId: NotificationController
+    layer: Domain
+    genre: Idle
+    role: Controller
+    purpose: >
+      11종 레드닷 알림 구독/갱신 처리. 상위 메뉴 집계 알림.
+    responsibilities:
+      - 11종 알림 유형별 조건 구독
+      - 조건 변경 시 해당 레드닷 갱신
+      - FoldingMainMenuHUD 상위 집계 처리
+      - 알림 표시/숨김 이벤트 발행
+    states: []
+    behaviors:
+      - trigger: "OnMoneyChanged 이벤트"
+        action: "FactoryInfo/Supplyer/Slot/Shop 레드닷 조건 재평가"
+        result: "해당 레드닷 갱신"
+      - trigger: "OnAchievementUnlocked 이벤트"
+        action: "Achievement 레드닷 활성화"
+        result: "업적 알림 표시"
+      - trigger: "OnRewardTimerExpired 이벤트"
+        action: "WorldMap 레드닷 활성화"
+        result: "월드맵 알림 표시"
+    relations:
+      uses:
+        - EventManager
+        - CurrencyManager
+        - FactoryManager
+        - AchievementManager
+        - QuestManager
+        - WorldMapManager
+      usedBy:
+        - MainHUDPage
+      publishes:
+        - OnNotificationChanged
+      subscribes:
+        - OnMoneyChanged
+        - OnDiamondChanged
+        - OnGoldChanged
+        - OnAchievementUnlocked
+        - OnQuestCompleted
+        - OnNewMachineAcquired
+        - OnRebirthCompleted
+
+  - nodeId: WorldMapManager
+    layer: Domain
+    genre: Idle
+    role: Manager
+    purpose: >
+      월드 선택, 정기 보상 타이머, 월드별 팩토리 데이터 관리.
+    responsibilities:
+      - 12개 월드 해금 상태 관리
+      - 월드별 팩토리 데이터 독립 저장 (dicFactories)
+      - 정기 보상 타이머 3개 관리 (RegularRewardStartTime0~2)
+      - 월드 전환 시 팩토리 데이터 로드/저장
+    states:
+      - Idle
+    behaviors:
+      - trigger: "SelectWorld(worldId) 호출"
+        action: "현재 월드 데이터 저장 → 선택 월드 데이터 로드 → 씬 갱신"
+        result: "월드 전환 완료"
+      - trigger: "정기 보상 타이머 만료"
+        action: "보상 준비 상태로 전환, 레드닷 알림"
+        result: "정기 보상 수령 가능"
+      - trigger: "OnWorldUnlocked 이벤트"
+        action: "새 월드 해금 처리, UI 갱신"
+        result: "월드 선택 가능"
+    relations:
+      uses:
+        - Singleton
+        - CurrencyManager
+        - DataTableManager
+        - SaveLoadManager
+        - RebirthManager
+      usedBy:
+        - WorldMapPage
+        - NotificationController
+      publishes:
+        - OnWorldSelected
+        - OnRegularRewardAvailable
+      subscribes:
+        - OnWorldUnlocked
+
+  - nodeId: CollectionManager
+    layer: Domain
+    genre: Idle
+    role: Manager
+    purpose: >
+      37종 머신 컬렉션 추적. 신규 머신 감지, 중복 처리.
+    responsibilities:
+      - 37종 머신 획득 여부 추적 (UserInfo.MachineInfo)
+      - 신규 머신 획득 시 isNewMachine 플래그 설정
+      - 신규 머신 Analytics 이벤트 로깅
+      - 레드닷 알림 발행
+    states:
+      - Idle
+    behaviors:
+      - trigger: "OnGachaComplete 이벤트 (신규 머신)"
+        action: "컬렉션에 머신 추가, isNewMachine=true 설정, Analytics 로깅"
+        result: "컬렉션 업데이트"
+      - trigger: "OnGachaComplete 이벤트 (중복 머신)"
+        action: "중복 처리 (EXP 전달은 MachineTuningManager가 처리)"
+        result: "레드닷 갱신 (canTraining 체크)"
+    relations:
+      uses:
+        - Singleton
+        - SaveLoadManager
+        - AnalyticsManager
+      usedBy:
+        - GachaManager
+        - MachineInfoPage
+        - NotificationController
+      publishes:
+        - OnNewMachineAcquired
+        - OnCollectionUpdated
+      subscribes:
+        - OnGachaComplete
+
+  - nodeId: PiggyBankManager
+    layer: Domain
+    genre: Idle
+    role: Manager
+    purpose: >
+      피기뱅크/AD뱅크 누적 보상 관리.
+    responsibilities:
+      - 피기뱅크 다이아 누적 및 잠금 상태 관리
+      - AD뱅크 광고 시청 누적 다이아 관리
+      - IAP로 피기뱅크 해금 처리
+      - AD뱅크 수령 처리
+    states:
+      - Locked
+      - Accumulating
+      - ReadyToClaim
+    behaviors:
+      - trigger: "다이아 획득 (누적 누적)"
+        action: "피기뱅크/AD뱅크 누적량 증가"
+        result: "저금 진행"
+      - trigger: "PiggyBankPurchase() (IAP)"
+        action: "IAPManager 구매 → 성공 시 피기뱅크 해금 + 보상 지급"
+        result: "누적 보상 획득"
+      - trigger: "ClaimADBank() 호출"
+        action: "ADManager.ShowRewardAd → 완료 시 누적 다이아 지급"
+        result: "AD뱅크 수령"
+    relations:
+      uses:
+        - Singleton
+        - CurrencyManager
+        - IAPManager
+        - ADManager
+        - SaveLoadManager
+      usedBy:
+        - MainHUDPage
+      publishes:
+        - OnPiggyBankClaimed
+        - OnADBankClaimed
+      subscribes:
+        - OnDiamondChanged
+        - OnIAPSuccess
+
+  # ----------------------------------------------------------
+  # Phase 3: Game Layer (UI)
+  # ----------------------------------------------------------
+
+  - nodeId: MainHUDPage
+    layer: Game
+    genre: Idle
+    role: UX
+    purpose: >
+      메인 HUD 화면. 5버튼 접이식 메뉴, 머니/다이아 표시, 레드닷 집계.
+    responsibilities:
+      - 5개 하단 버튼 (Factory/Shop/Machine/Achievement/World) 표시 및 해금 제어
+      - 머니/다이아 실시간 표시 갱신
+      - 접이식 메뉴(FoldingMainMenuHUD) 애니메이션
+      - 레드닷 집계 표시 (NotificationController 구독)
+      - 팩토리 레벨 기반 버튼 순차 해금
+    states:
+      - Expanded
+      - Collapsed
+    behaviors:
+      - trigger: "OnMoneyChanged 이벤트"
+        action: "머니 텍스트 갱신, 레드닷 조건 재평가"
+        result: "UI 갱신"
+      - trigger: "버튼 탭"
+        action: "해당 페이지/팝업 열기 이벤트 전송"
+        result: "화면 전환"
+      - trigger: "OnNotificationChanged 이벤트"
+        action: "해당 버튼 레드닷 표시/숨김"
+        result: "알림 상태 갱신"
+    relations:
+      uses:
+        - EventManager
+        - CurrencyManager
+        - FactoryManager
+        - NotificationController
+        - TutorialManager
+      usedBy: []
+      publishes: []
+      subscribes:
+        - OnMoneyChanged
+        - OnDiamondChanged
+        - OnNotificationChanged
+        - OnFactoryLevelUp
+        - OnFeatureUnlocked
+
+  - nodeId: FactoryInfoPopup
+    layer: Game
+    genre: Idle
+    role: UX
+    purpose: >
+      팩토리 정보/레벨업 팝업. 현재 레벨, 비용, 슬롯 상태 표시.
+    responsibilities:
+      - 팩토리 레벨/비용 실시간 표시
+      - 레벨업 버튼 활성화 조건 관리
+      - 슬롯 레벨업 UI 제어
+      - 공급기 레벨업 UI 제어
+      - 레드닷 상태 연동
+    states:
+      - Open
+      - Closed
+    behaviors:
+      - trigger: "팝업 열기"
+        action: "FactoryManager에서 데이터 로드 → UI 초기화"
+        result: "팝업 표시"
+      - trigger: "LevelUp 버튼 탭"
+        action: "FactoryManager.LevelUp() 호출"
+        result: "레벨업 처리"
+    relations:
+      uses:
+        - FactoryManager
+        - SlotController
+        - SupplyMachineController
+        - CurrencyManager
+      usedBy: []
+      publishes: []
+      subscribes:
+        - OnFactoryLevelUp
+        - OnSlotLevelUp
+
+  - nodeId: ShopPage
+    layer: Game
+    genre: Idle
+    role: UX
+    purpose: >
+      상점 4탭 UI (Machine/Package/Diamond/Etc). 구매 버튼, 가챠 연출 연결.
+    responsibilities:
+      - 4탭 (머신 가챠/패키지/다이아/기타) UI 구성
+      - 탭별 상품 목록 렌더링
+      - 구매 버튼 탭 → ShopManager 구매 요청
+      - 가챠 탭에서 가챠 실행 → GachaResultPopup 연결
+      - Analytics 상점 진입 이벤트 트리거
+    states:
+      - Open
+      - Closed
+    behaviors:
+      - trigger: "탭 전환"
+        action: "해당 탭 상품 데이터 로드 → 목록 갱신"
+        result: "탭 전환"
+      - trigger: "구매 버튼 탭"
+        action: "ShopManager.PurchaseItem() 호출"
+        result: "구매 처리"
+    relations:
+      uses:
+        - ShopManager
+        - GachaManager
+        - CurrencyManager
+      usedBy: []
+      publishes: []
+      subscribes:
+        - OnShopPurchaseComplete
+        - OnGachaComplete
+
+  - nodeId: GachaResultPopup
+    layer: Game
+    genre: Idle
+    role: UX
+    purpose: >
+      가챠 결과 연출 팝업. 획득 머신 표시, 재도전(AD) 버튼.
+    responsibilities:
+      - 가챠 결과 머신 카드 연출
+      - 신규/중복 여부 표시
+      - 재도전 AD 버튼 제어
+      - 결과 닫기 후 ShopPage 복귀
+    states:
+      - Open
+      - Closed
+    behaviors:
+      - trigger: "OnGachaComplete 이벤트"
+        action: "결과 데이터 수신 → 머신 카드 연출 재생"
+        result: "가챠 결과 표시"
+      - trigger: "AD 재도전 버튼 탭"
+        action: "ADManager.ShowRewardAd → 완료 시 GachaManager.ExecuteGacha"
+        result: "무료 재도전"
+    relations:
+      uses:
+        - GachaManager
+        - ADManager
+        - ResourceManager
+      usedBy: []
+      publishes: []
+      subscribes:
+        - OnGachaComplete
+
+  - nodeId: MachineInfoPage
+    layer: Game
+    genre: Idle
+    role: UX
+    purpose: >
+      머신 상세/튜닝/배치 페이지. 컬렉션 목록, 튜닝 레벨업 UI.
+    responsibilities:
+      - 37종 머신 컬렉션 그리드 표시
+      - 머신 상세 정보 (등급, 파워, 튜닝 레벨)
+      - 튜닝 레벨업 버튼 및 비용 표시
+      - 슬롯 배치 UI 제어
+      - 신규 머신 레드닷 표시
+    states:
+      - Open
+      - Closed
+    behaviors:
+      - trigger: "머신 카드 탭"
+        action: "해당 머신 상세 정보 로드 → 상세 패널 표시"
+        result: "머신 상세 표시"
+      - trigger: "튜닝 레벨업 탭"
+        action: "MachineTuningManager.TuningLevelUp() 호출"
+        result: "튜닝 레벨업"
+    relations:
+      uses:
+        - CollectionManager
+        - MachineTuningManager
+        - SlotController
+        - CurrencyManager
+      usedBy: []
+      publishes: []
+      subscribes:
+        - OnTuningLevelUp
+        - OnCollectionUpdated
+
+  - nodeId: ManagerPage
+    layer: Game
+    genre: Idle
+    role: UX
+    purpose: >
+      매니저 고용/배치/해고 페이지.
+    responsibilities:
+      - 보유 매니저 목록 표시
+      - 고용 비용(Diamond) 표시 및 고용 버튼
+      - 매니저 배치/해제 UI
+      - 매니저 스탯 (fixSpeed/moveSpeed/stamina) 표시
+      - 해금 조건 (리버스 횟수) 표시
+    states:
+      - Open
+      - Closed
+    behaviors:
+      - trigger: "고용 버튼 탭"
+        action: "CurrencyManager.SpendDiamond → ManagerCharacterController 생성"
+        result: "매니저 고용"
+      - trigger: "배치 버튼 탭"
+        action: "ManagerCharacterController 해당 라인에 배치"
+        result: "매니저 활성화"
+    relations:
+      uses:
+        - ManagerCharacterController
+        - CurrencyManager
+        - DataTableManager
+        - RebirthManager
+      usedBy: []
+      publishes: []
+      subscribes:
+        - OnContentGateUnlocked
+
+  - nodeId: LabPage
+    layer: Game
+    genre: Idle
+    role: UX
+    purpose: >
+      연구소 아이템 레벨업 페이지. 12개 연구 아이템 목록, 버프 표시.
+    responsibilities:
+      - 12개 연구 아이템 그리드 표시
+      - 아이템별 레벨, 비용, 버프 효과 표시
+      - 레벨업 버튼 활성화 조건 관리
+      - 버프 집계 (LabStats) 표시
+    states:
+      - Open
+      - Closed
+    behaviors:
+      - trigger: "아이템 레벨업 탭"
+        action: "LabManager.LevelUpLabItem() 호출"
+        result: "아이템 레벨업"
+    relations:
+      uses:
+        - LabManager
+        - CurrencyManager
+      usedBy: []
+      publishes: []
+      subscribes:
+        - OnLabItemLevelUp
+        - OnContentGateUnlocked
+
+  - nodeId: AchievementPage
+    layer: Game
+    genre: Idle
+    role: UX
+    purpose: >
+      업적 2열 그리드 + 별 시스템 UI. 업적 진행도, 보상 수령 버튼.
+    responsibilities:
+      - 14개 업적 카테고리 2열 그리드 표시
+      - 각 업적 15티어 진행 바 표시
+      - 별(★) 진행도 표시 (Gold/Blue/Red)
+      - 보상 수령 버튼 활성화 관리
+    states:
+      - Open
+      - Closed
+    behaviors:
+      - trigger: "보상 수령 탭"
+        action: "AchievementManager.ClaimAchievement() 호출"
+        result: "보상 수령"
+    relations:
+      uses:
+        - AchievementManager
+        - CurrencyManager
+      usedBy: []
+      publishes: []
+      subscribes:
+        - OnAchievementUnlocked
+        - OnAchievementClaimed
+
+  - nodeId: WorldMapPage
+    layer: Game
+    genre: Idle
+    role: UX
+    purpose: >
+      월드맵 선택/정기 보상 페이지. 해금된 월드 목록, 보상 타이머.
+    responsibilities:
+      - 12개 월드 목록 표시 (해금/잠금 상태)
+      - 정기 보상 타이머 표시
+      - 월드 선택 시 팩토리 전환
+      - 보상 수령 버튼 관리
+    states:
+      - Open
+      - Closed
+    behaviors:
+      - trigger: "월드 탭"
+        action: "WorldMapManager.SelectWorld() 호출"
+        result: "월드 전환"
+      - trigger: "보상 수령 탭"
+        action: "정기 보상 지급, 타이머 재시작"
+        result: "보상 획득"
+    relations:
+      uses:
+        - WorldMapManager
+        - CurrencyManager
+      usedBy: []
+      publishes: []
+      subscribes:
+        - OnWorldSelected
+        - OnRegularRewardAvailable
+        - OnWorldUnlocked
+
+  - nodeId: DungeonPage
+    layer: Game
+    genre: Idle
+    role: UX
+    purpose: >
+      던전 레벨 선택/결과 페이지. 66개 레벨 목록, 클리어 결과 표시.
+    responsibilities:
+      - 66개 던전 레벨 목록 표시 (클리어/미클리어)
+      - 레벨 선택 시 진입 조건 확인
+      - 던전 진행 중 타이머/카운터 UI
+      - 결과 팝업 (성공/실패, 재도전 옵션)
+    states:
+      - LevelSelect
+      - Playing
+      - Result
+    behaviors:
+      - trigger: "레벨 탭"
+        action: "DungeonManager.EnterDungeon() 호출"
+        result: "던전 시작"
+      - trigger: "OnDungeonSuccess/Failed 이벤트"
+        action: "결과 화면 표시, 보상 또는 재도전 버튼"
+        result: "결과 처리"
+    relations:
+      uses:
+        - DungeonManager
+        - ADManager
+      usedBy: []
+      publishes: []
+      subscribes:
+        - OnDungeonStart
+        - OnDungeonSuccess
+        - OnDungeonFailed
+
+  - nodeId: ChallengePage
+    layer: Game
+    genre: Idle
+    role: UX
+    purpose: >
+      챌린지 카운트다운/결과 페이지. 목표 금액, 타이머, 결과 표시.
+    responsibilities:
+      - 목표 금액 및 현재 수익 실시간 표시
+      - 카운트다운 타이머 표시
+      - 성공/실패 결과 화면 전환
+      - 재도전 버튼 (Diamond 비용 증가 표시)
+    states:
+      - Playing
+      - Result
+    behaviors:
+      - trigger: "OnChallengeStart 이벤트"
+        action: "목표/타이머 초기화, 실시간 수익 구독"
+        result: "챌린지 UI 활성화"
+      - trigger: "OnChallengeSuccess/Failed 이벤트"
+        action: "결과 화면 전환"
+        result: "결과 처리"
+    relations:
+      uses:
+        - ChallengeManager
+        - ADManager
+      usedBy: []
+      publishes: []
+      subscribes:
+        - OnChallengeStart
+        - OnChallengeSuccess
+        - OnChallengeFailed
+        - OnProfitGenerated
+
+  - nodeId: OfflineRewardPopup
+    layer: Game
+    genre: Idle
+    role: UX
+    purpose: >
+      오프라인 보상 팝업. 1x/2x(AD) 선택 UI.
+    responsibilities:
+      - OfflineRewardCalculator 결과 금액 표시
+      - 1x 수령 버튼
+      - 2x AD 시청 버튼
+      - 보상 지급 후 팝업 닫기
+    states:
+      - Open
+      - Closed
+    behaviors:
+      - trigger: "게임 시작 (오프라인 보상 존재)"
+        action: "보상 금액 표시, 선택 UI 활성화"
+        result: "팝업 표시"
+      - trigger: "2x 버튼 탭"
+        action: "ADManager.ShowRewardAd → 완료 시 2배 지급"
+        result: "2배 보상 획득"
+    relations:
+      uses:
+        - OfflineRewardCalculator
+        - ADManager
+        - CurrencyManager
+      usedBy: []
+      publishes: []
+      subscribes:
+        - OnOfflineRewardCalculated
+        - OnAdCompleted
+
+  - nodeId: DailyRewardPopup
+    layer: Game
+    genre: Idle
+    role: UX
+    purpose: >
+      7일 출석 보상 팝업. 날짜별 보상 표시, 수령 버튼.
+    responsibilities:
+      - 7일 보상 일정표 표시
+      - 오늘 보상 수령 버튼
+      - AD 10배 버튼
+      - 패키지 추가 보상 표시
+    states:
+      - Open
+      - Closed
+    behaviors:
+      - trigger: "출석 보상 수령 버튼 탭"
+        action: "AttendanceManager.ClaimDailyReward() 호출"
+        result: "보상 수령"
+      - trigger: "AD 10배 버튼 탭"
+        action: "ADManager.ShowRewardAd → 완료 시 10배 지급"
+        result: "10배 보상 획득"
+    relations:
+      uses:
+        - AttendanceManager
+        - ADManager
+      usedBy: []
+      publishes: []
+      subscribes:
+        - OnDailyRewardClaimed
+
+  - nodeId: QuestPopup
+    layer: Game
+    genre: Idle
+    role: UX
+    purpose: >
+      퀘스트 진행/보상 팝업. 3개 퀘스트 슬롯, 진행바, 수령 버튼.
+    responsibilities:
+      - 3개 퀘스트 슬롯 실시간 진행도 표시
+      - 완료된 퀘스트 보상 수령 버튼 활성화
+      - 퀘스트 교체 버튼 (비용 표시)
+      - AD 2배 보상 버튼
+    states:
+      - Open
+      - Closed
+    behaviors:
+      - trigger: "보상 수령 탭"
+        action: "QuestManager.ClaimReward() 호출"
+        result: "보상 수령, 퀘스트 갱신"
+    relations:
+      uses:
+        - QuestManager
+        - CurrencyManager
+        - ADManager
+      usedBy: []
+      publishes: []
+      subscribes:
+        - OnQuestCompleted
+        - OnQuestUpdated
+
+  - nodeId: OptionPopup
+    layer: Game
+    genre: Generic
+    role: UX
+    purpose: >
+      설정 팝업. 언어/사운드/클라우드/CS 옵션.
+    responsibilities:
+      - BGM/SFX 토글 버튼
+      - 언어 선택 드롭다운 (4개 언어)
+      - 클라우드 저장/로드 버튼
+      - CS(고객 지원) 링크
+    states:
+      - Open
+      - Closed
+    behaviors:
+      - trigger: "BGM 토글 탭"
+        action: "SoundManager.ToggleBGM() 호출"
+        result: "BGM 상태 변경"
+      - trigger: "언어 선택"
+        action: "LocalizationManager.ChangeLanguage() 호출"
+        result: "언어 전환"
+      - trigger: "클라우드 저장 탭"
+        action: "SaveLoadManager.CloudSave() 호출"
+        result: "클라우드 동기화"
+    relations:
+      uses:
+        - SoundManager
+        - LocalizationManager
+        - SaveLoadManager
+      usedBy: []
+      publishes: []
+      subscribes: []
+
+  - nodeId: AlertPopup
+    layer: Game
+    genre: Generic
+    role: UX
+    purpose: >
+      범용 알림 팝업. 확인/취소 2버튼 또는 단일 확인.
+    responsibilities:
+      - 제목/메시지/버튼 레이아웃 동적 구성
+      - 확인/취소 콜백 처리
+      - 팝업 스택 관리 (중복 표시 방지)
+    states:
+      - Open
+      - Closed
+    behaviors:
+      - trigger: "ShowAlert(title, msg, onConfirm, onCancel) 호출"
+        action: "내용 설정 → 팝업 표시"
+        result: "알림 표시"
+      - trigger: "확인/취소 버튼 탭"
+        action: "해당 콜백 실행 → 팝업 닫기"
+        result: "사용자 결정 처리"
+    relations:
+      uses:
+        - EventManager
+      usedBy:
+        - "모든 시스템 (범용 알림 사용)"
+      publishes: []
+      subscribes: []

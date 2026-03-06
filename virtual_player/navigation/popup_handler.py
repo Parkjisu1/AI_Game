@@ -51,7 +51,7 @@ class PopupHandler:
         """
         popup_type = classification.screen_type
 
-        # 1. Try cached coordinates (L0 — instant)
+        # 1. Try cached coordinates (L0 -- instant)
         if popup_type in self._dismiss_cache:
             x, y = self._dismiss_cache[popup_type]
             log(f"  [Popup] Dismissing {popup_type} (cached: {x},{y})")

@@ -1,0 +1,67 @@
+## CarMatch — Session 01: 초기 게임 분석 및 입력 방법 탐색
+
+---
+
+### 실행 환경
+- 기기: BlueStacks (emulator-5554), 1920x1080 native
+- 게임: CarMatch (com.grandgames.carmatch), Level 87 시점
+- 날짜: 2026-02-27 ~ 2026-03-01
+
+---
+
+### 1. 게임 기본 규칙 파악
+
+**게임 개요**: 주차장 퍼즐 게임. 보드 위 차량을 탭하면 하단 홀더(7칸)로 이동.
+같은 색 차량 3대가 모이면 자동 매치(소멸). 모든 차량을 클리어하면 승리.
+홀더 7칸이 가득 차면 "Out of Space" → 패배.
+
+**보드 구조**:
+- 보드 영역: (125,100) ~ (959,1295)
+- 다양한 차량이 겹쳐서 배치 (3D 오브젝트)
+- 레벨마다 차량 수, 색상 배합, 배치 패턴이 다름
+
+**홀더 구조**:
+- Y=1500 고정, 7슬롯
+- 슬롯 X 좌표: [173, 296, 419, 543, 667, 793, 912]
+- 빈 슬롯 = 어두운 회색, 차량 존재 = 해당 색상 표시
+
+---
+
+### 2. 입력 방법 실험 (핵심 발견)
+
+| 방법 | 3D 차량 탭 | UI 버튼 | Intent 트리거 |
+|------|:---------:|:------:|:----------:|
+| monkey -p 스크립트 | O | O | O (광고 발생) |
+| input tap | X | O | X |
+| sendevent | X | X | - |
+| monkey (no -p) | X | X | X |
+
+**결론**: 3D 오브젝트(차량)는 `monkey -p com.grandgames.carmatch` 방식만 탭 가능.
+Unity 게임 렌더링 레이어가 Android input 이벤트를 직접 수신하지 않는 구조.
+
+---
+
+### 3. 색상 식별
+
+비전 분석으로 7가지 차량 색상 식별:
+- **red**: R > 150, G < 80, B < 80
+- **orange**: R > 180, G: 80~160, B < 80
+- **yellow**: R > 180, G > 180, B < 100
+- **green**: G > 150, R < 100, B < 100
+- **cyan**: G > 150, B > 150, R < 100
+- **blue**: B > 150, R < 80, G < 80
+- **purple**: R > 100, B > 100, G < 80
+
+---
+
+### 4. 화면 분류 기준
+
+| 화면 | 판별 기준 |
+|------|-----------|
+| ad | landscape (w > h) 또는 portrait + no nav bar + colorful |
+| loading | full_std < 12 |
+| fail | dark_overlay + top_brightness < 40 |
+| win | dark_overlay + top_brightness > 120 + green |
+| popup | dark_overlay (기타) |
+| gameplay | holder 3+ 슬롯 유효 + board_std > 20 |
+| lobby | green Play 버튼 (btn_green > 40) + nav bar |

@@ -1,0 +1,89 @@
+metadata:
+  nodeId: "OfflineRewardCalculator"
+  version: "1.0.0"
+  phase: 2
+  role: "Calculator"
+
+dependencies:
+  internal:
+    - "LabManager"
+    - "ProductionLineManager"
+    - "SaveManager"
+    - "AdManager"
+    - "EventManager"
+  external:
+    - "UnityEngine.MonoBehaviour"
+    - "System"
+
+contract:
+  provides:
+    - "offline_income_calculation"
+    - "offline_time_cap"
+  requires:
+    - "lab_manager"
+    - "production_line"
+    - "save_system"
+
+tags:
+  layer: "Domain"
+  genre: "Idle"
+  role: "Calculator"
+  system: "OfflineSystem"
+  majorFunctions:
+    - "ValueModification"
+    - "ConditionCheck"
+    - "ResourceTransfer"
+  minorFunctions:
+    - "Calculate"
+    - "Compare"
+    - "Assign"
+    - "Notify"
+
+logicFlow:
+  - step: 1
+    tag: "ValueModification.Calculate"
+    action: "CalcOfflineTime: 현재 시간 - SaveManager.lastSaveTimestamp, min(실제경과시간, OFFLINE_MAX_HOURS) 적용"
+    next: 2
+  - step: 2
+    tag: "ValueModification.Calculate"
+    action: "CalcBaseIncome: A 계수 × B 계수 × 오프라인시간(초) 공식으로 기본 오프라인 수익 산출"
+    next: 3
+  - step: 3
+    tag: "ValueModification.Calculate"
+    action: "ApplyFactoryFactor: 현재 팩토리 레벨 기반 FactoryMultiplierTable 배율 적용"
+    next: 4
+  - step: 4
+    tag: "ValueModification.Calculate"
+    action: "ApplyLabBuff: LabManager에서 오프라인 수익 관련 버프 수치 조회하여 최종 배율 적용"
+    next: 5
+  - step: 5
+    tag: "ValueModification.Calculate"
+    action: "ApplyPackageBonus: 구매된 패키지 오프라인 보너스 테이블 조회 및 추가 배율 적용"
+    next: 6
+  - step: 6
+    tag: "ResponseTrigger.Notify"
+    action: "ShowPopup: 계산된 오프라인 수익 금액으로 팝업 표시 이벤트 발행, 1x 수령 또는 2x(광고) 선택 제공"
+    next: 7
+  - step: 7
+    tag: "ResourceTransfer.Assign"
+    action: "GiveReward: 선택에 따라 기본 또는 2배 수익을 CurrencyManager에 전달하여 지급"
+    next: 1
+
+referencePatterns:
+  - source: "idlemoney__balance__offline_earnings"
+    pattern: "오프라인 수익 공식 (A×B계수), 최대 오프라인 시간 캡, 팩토리/연구소/패키지 배율 적용 순서"
+  - source: "idlemoney__balance__lab_system"
+    pattern: "오프라인 시간 연장 버프 타입 참조"
+
+codeHints:
+  patterns:
+    - "SerializeField for Inspector"
+    - "MessagePack serialization"
+    - "DontDestroyOnLoad singleton"
+    - "DateTime.UtcNow for timestamp comparison"
+    - "BigDouble or double for large offline income values"
+  avoidPatterns:
+    - "Find/FindObjectOfType for UI"
+    - "dynamic UI creation"
+    - "hardcoded magic numbers"
+    - "float for large currency values (use double/BigDouble)"

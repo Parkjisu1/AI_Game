@@ -1,0 +1,67 @@
+[
+  {
+    "designId": "ash_n_veil__ingame__combat__damage_formula",
+    "domain": "InGame",
+    "genre": "RPG",
+    "system": "전투 > 데미지 판정",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "formula",
+    "balance_area": "전투 밸런스",
+    "version": "1.0.0",
+    "project": "ash_n_veil",
+    "provides": [
+      "damage_calculation",
+      "min_damage_rule"
+    ],
+    "requires": [
+      "character_stats",
+      "equipment_stats"
+    ],
+    "tags": [
+      "combat",
+      "damage",
+      "subtraction_formula"
+    ]
+  },
+  {
+    "designId": "ash_n_veil__ingame__combat__skill_system",
+    "domain": "InGame",
+    "genre": "RPG",
+    "system": "전투 > 스킬",
+    "score": 0.5,
+    "source": "internal_original",
+    "data_type": "flow",
+    "balance_area": "전투 밸런스",
+    "version": "1.0.0",
+    "project": "ash_n_veil",
+    "provides": [
+      "skill_execution",
+      "cooldown_management"
+    ],
+    "requires": [
+      "mana_system",
+      "character_stats"
+    ],
+    "tags": [
+      "combat",
+      "skill",
+      "cooldown"
+    ]
+  },
+  {
+    "designId": "test_rpg__combat__전투_시스템",
+    "domain": "InGame",
+    "genre": "Rpg",
+    "system": "전투 시스템",
+    "score": 0.4,
+    "source": "internal_produced",
+    "data_type": "spec",
+    "balance_area": null,
+    "version": "1.0.0",
+    "project": "test_rpg",
+    "provides": [],
+    "requires": [],
+    "tags": []
+  }
+]

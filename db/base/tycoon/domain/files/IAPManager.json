@@ -1,0 +1,119 @@
+{
+  "fileId": "IAPManager",
+  "filePath": "Manager\\IAPManager.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Tycoon",
+  "role": "Manager",
+  "system": "Manager",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine",
+    "UnityEngine.Purchasing",
+    "UnityEngine.Purchasing.Security",
+    "Global_Define",
+    "System"
+  ],
+  "classes": [
+    {
+      "className": "IAPManager",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [
+        "IStoreListener"
+      ],
+      "fields": [
+        {
+          "fieldName": "storeController",
+          "fieldType": "IStoreController",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "null"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "OnBtnPurchaseClicked",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnBtnPurchaseClicked()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "InAppPurchase",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "purchaseStoreCode"
+            },
+            {
+              "paramType": "Action",
+              "paramName": "_completeAction"
+            }
+          ],
+          "signature": "void InAppPurchase(string purchaseStoreCode, Action _completeAction)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void OnBtnPurchaseClicked()",
+    "void InAppPurchase(string purchaseStoreCode, Action _completeAction)"
+  ],
+  "requires": [
+    "IAPManager",
+    "IStoreController",
+    "IStoreListener"
+  ],
+  "tags": {
+    "major": [
+      "ResponseTrigger"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "Analytics",
+    "AppleTangle",
+    "CAdManager",
+    "CGameManager",
+    "CPopupManager",
+    "ConfigurationBuilder",
+    "CrossPlatformValidator",
+    "Debug",
+    "FirebaseAnalytics",
+    "GooglePlayTangle",
+    "IDs",
+    "IStoreListener",
+    "Instance",
+    "LoadingPopup",
+    "PlayerPrefs",
+    "StandardPurchasingModule",
+    "UnityPurchasing"
+  ],
+  "usedBy": []
+}

@@ -1,0 +1,205 @@
+{
+  "fileId": "DailyRewardWin",
+  "filePath": "UI\\DailyRewardWin.cs",
+  "namespace": "",
+  "layer": "Game",
+  "genre": "Slg",
+  "role": "View",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "Cysharp.Threading.Tasks",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "DailyRewardWin",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "WindowBase",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "dailyRewardComponents",
+          "fieldType": "List<DailyRewardComponent>",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "new List<DailyRewardComponent>()"
+        },
+        {
+          "fieldName": "effect",
+          "fieldType": "RectTransform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "currentReward",
+          "fieldType": "RewardType",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "RewardType.Max"
+        },
+        {
+          "fieldName": "currentRewardAmount",
+          "fieldType": "double",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0"
+        },
+        {
+          "fieldName": "currentDay",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Open",
+          "accessModifier": "public",
+          "returnType": "UniTask",
+          "parameters": [],
+          "signature": "UniTask Open()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnClickOK",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickOK()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnClickOKWithAD",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickOKWithAD()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "rewardWithAD",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void rewardWithAD()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "getRewardKey",
+          "accessModifier": "private",
+          "returnType": "string",
+          "parameters": [],
+          "signature": "string getRewardKey()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "getReward",
+          "accessModifier": "private",
+          "returnType": "string",
+          "parameters": [
+            {
+              "paramType": "double",
+              "paramName": "rewardAmount"
+            }
+          ],
+          "signature": "string getReward(double rewardAmount)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "UniTask Open()",
+    "void OnClickOK()",
+    "void OnClickOKWithAD()"
+  ],
+  "requires": [
+    "DailyRewardComponent",
+    "WindowBase"
+  ],
+  "tags": {
+    "major": [
+      "ResponseTrigger",
+      "StateControl"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "AddDailyRewardMsg",
+    "CurrencyConverter",
+    "DailyRewardComponent",
+    "InAppPackageEffect",
+    "MyPlugins",
+    "OpenAlertWinMsg",
+    "ShowRewardADMsg",
+    "StringUtils",
+    "WindowBase"
+  ],
+  "usedBy": []
+}

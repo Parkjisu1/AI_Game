@@ -1,0 +1,72 @@
+{
+  "designId": "idlemoney__bm__ad_monetization",
+  "project": "IdleMoney",
+  "domain": "BM",
+  "genre": "Idle",
+  "system": "Ad Monetization",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "spec",
+  "balance_area": "ad_revenue",
+  "source_file": "bm_systems.yaml",
+  "content": {
+    "summary": "광고 수익화 시스템. 리워드 동영상 기반. 다양한 게임 지점에서 광고 시청 유도.\n세션당 최대 10회, 쿨다운 타이머로 빈도 제어.",
+    "flow": [],
+    "parameters": {
+      "ad_unit_ids": {
+        "ios": "dd88982da69b30a5",
+        "android": "129f4f878b596ae3"
+      },
+      "max_per_session": 10,
+      "ad_reward_points": [
+        {
+          "{ point": "\"오프라인 보상 2배\", trigger: \"OfflineRewardWin\" }"
+        },
+        {
+          "{ point": "\"일일 보상 10배\", trigger: \"DailyRewardWin\" }"
+        },
+        {
+          "{ point": "\"머신 가챠 재도전\", trigger: \"GachaResultWin\" }"
+        },
+        {
+          "{ point": "\"챌린지 재도전\", trigger: \"ChallengeResultWin\" }"
+        },
+        {
+          "{ point": "\"던전 재도전\", trigger: \"CoinDungeonResultWin\" }"
+        },
+        {
+          "{ point": "\"파워 부스트 활성화\", trigger: \"BoostWin\" }"
+        },
+        {
+          "{ point": "\"머니 부스트 활성화\", trigger: \"BoostWin\" }"
+        },
+        {
+          "{ point": "\"공급 부스트 활성화\", trigger: \"BoostWin\" }"
+        }
+      ],
+      "cooldown_tracking": [
+        "LastShowADBannerTime",
+        "LastShowADMachineGachaTime"
+      ],
+      "anti_fraud": "영수증 검증 + 콜백 1회 제한"
+    },
+    "edge_cases": [],
+    "references": []
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from C# analysis: Ad Monetization",
+      "note": "Live game code analysis import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T11:08:16.977Z"
+}

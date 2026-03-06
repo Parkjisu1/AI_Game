@@ -1,0 +1,37 @@
+{
+  "fileId": "ShopPopup",
+  "project": "DropTheCat",
+  "layer": "Game",
+  "genre": "Puzzle",
+  "role": "Handler",
+  "phase": 3,
+  "namespace": "DropTheCat.Game",
+  "className": "ShopPopup",
+  "baseClass": "MonoBehaviour",
+  "score": 0.6,
+  "provides": [
+    "void Show()",
+    "void Hide()",
+    "void OnPurchaseCoinPack(int packIndex)",
+    "void OnPurchaseBoosterPack()",
+    "void OnRemoveAds()",
+    "void OnRestorePurchases()",
+    "void RefreshUI()",
+    "void GrantCoinPack(int packIndex)",
+    "void GrantBoosterPack()",
+    "void GrantRemoveAds()"
+  ],
+  "requires": [
+    "CurrencyManager.AddCoins/GetBalance",
+    "BoosterManager.AddBooster",
+    "SoundManager.PlaySFX",
+    "EventManager.Subscribe/Unsubscribe"
+  ],
+  "definesTypes": [],
+  "tags": {
+    "major": ["ResourceTransfer", "FlowControl"],
+    "minor": ["Assign", "Notify", "Iterate"]
+  },
+  "sourcePath": "E:\\AI\\projects\\DropTheCat\\output\\ShopPopup.cs",
+  "timestamp": "2026-02-10T06:30:00Z"
+}

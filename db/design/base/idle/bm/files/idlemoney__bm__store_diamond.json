@@ -1,0 +1,39 @@
+{
+  "designId": "idlemoney__bm__store_diamond",
+  "project": "IdleMoney",
+  "domain": "BM",
+  "genre": "Idle",
+  "system": "Diamond Store",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "config",
+  "balance_area": "iap",
+  "source_file": "bm_systems.yaml",
+  "content": {
+    "summary": "다이아몬드 상점. 6개 구매 티어, 플랫폼별 가격.",
+    "flow": [],
+    "parameters": {
+      "tiers": 6,
+      "reward_structure": "기본량 + 보너스량",
+      "platform_branching": "AndroidPID vs ApplePID"
+    },
+    "edge_cases": [],
+    "references": []
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from C# analysis: Diamond Store",
+      "note": "Live game code analysis import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T11:08:16.966Z"
+}

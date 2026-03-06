@@ -1,0 +1,1120 @@
+{
+  "fileId": "PlyAdsKitUtils",
+  "filePath": "Utilities\\PlyAdsKitUtils.cs",
+  "namespace": "PlayableAdsKit.Scripts.Utilities",
+  "layer": "Core",
+  "genre": "Generic",
+  "role": "Config",
+  "system": "Utilities",
+  "score": 0.4,
+  "usings": [
+    "System",
+    "System.Collections",
+    "System.Collections.Generic",
+    "System.Linq",
+    "DG.Tweening",
+    "UnityEngine",
+    "UnityEngine.EventSystems"
+  ],
+  "classes": [
+    {
+      "className": "PlyAdsKitUtils",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": true,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "_camera",
+          "fieldType": "Camera",
+          "accessModifier": "private",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "_maxRayDistance",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": true,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "1000"
+        },
+        {
+          "fieldName": "_plane",
+          "fieldType": "Plane",
+          "accessModifier": "private",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Plane(Vector3.up, 0)"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "IsLandscape",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool IsLandscape()",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "GetScreenWidth",
+          "accessModifier": "public",
+          "returnType": "float",
+          "parameters": [],
+          "signature": "float GetScreenWidth()",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetScreenHeight",
+          "accessModifier": "public",
+          "returnType": "float",
+          "parameters": [],
+          "signature": "float GetScreenHeight()",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "IsPointerOverUI",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool IsPointerOverUI()",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "GetMouseScreenPosition",
+          "accessModifier": "public",
+          "returnType": "Vector3",
+          "parameters": [],
+          "signature": "Vector3 GetMouseScreenPosition()",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetScreenToWorldPointWithDistance",
+          "accessModifier": "public",
+          "returnType": "Vector3",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "distanceFromCamera=0f"
+            }
+          ],
+          "signature": "Vector3 GetScreenToWorldPointWithDistance(float distanceFromCamera=0f)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetScreenPointToRay",
+          "accessModifier": "public",
+          "returnType": "Vector3",
+          "parameters": [],
+          "signature": "Vector3 GetScreenPointToRay()",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMouseWorldPositionOrthographic",
+          "accessModifier": "public",
+          "returnType": "Vector3",
+          "parameters": [],
+          "signature": "Vector3 GetMouseWorldPositionOrthographic()",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMouseWorldPositionWithZ",
+          "accessModifier": "public",
+          "returnType": "Vector3",
+          "parameters": [
+            {
+              "paramType": "Vector3",
+              "paramName": "screenPosition"
+            },
+            {
+              "paramType": "Camera",
+              "paramName": "worldCamera"
+            }
+          ],
+          "signature": "Vector3 GetMouseWorldPositionWithZ(Vector3 screenPosition, Camera worldCamera)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMouseWorldPositionWithZ",
+          "accessModifier": "public",
+          "returnType": "Vector3",
+          "parameters": [],
+          "signature": "Vector3 GetMouseWorldPositionWithZ()",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMouseWorldPositionWithZ",
+          "accessModifier": "public",
+          "returnType": "Vector3",
+          "parameters": [
+            {
+              "paramType": "Camera",
+              "paramName": "worldCamera"
+            }
+          ],
+          "signature": "Vector3 GetMouseWorldPositionWithZ(Camera worldCamera)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMouseWorldPositionRespectToNearClipPlane",
+          "accessModifier": "public",
+          "returnType": "Vector3",
+          "parameters": [],
+          "signature": "Vector3 GetMouseWorldPositionRespectToNearClipPlane()",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMouseWorldPositionWithDistance",
+          "accessModifier": "public",
+          "returnType": "Vector3",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "distanceFromCamera"
+            }
+          ],
+          "signature": "Vector3 GetMouseWorldPositionWithDistance(float distanceFromCamera)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMouseWorldPositionWithDistanceAndOffset",
+          "accessModifier": "public",
+          "returnType": "Vector3",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "distanceFromCamera"
+            },
+            {
+              "paramType": "float xOffset =",
+              "paramName": "0f"
+            },
+            {
+              "paramType": "float yOffset =",
+              "paramName": "0f"
+            }
+          ],
+          "signature": "Vector3 GetMouseWorldPositionWithDistanceAndOffset(float distanceFromCamera, float xOffset = 0f,\r\n            float yOffset = 0f)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMousePositionByCreatingPlaneOnZAxis",
+          "accessModifier": "public",
+          "returnType": "Vector3",
+          "parameters": [],
+          "signature": "Vector3 GetMousePositionByCreatingPlaneOnZAxis()",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMousePositionOnAllObjectsWithCollider",
+          "accessModifier": "public",
+          "returnType": "Vector3",
+          "parameters": [],
+          "signature": "Vector3 GetMousePositionOnAllObjectsWithCollider()",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMousePositionOnSpecifiedTag",
+          "accessModifier": "public",
+          "returnType": "Vector3",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "tagName"
+            }
+          ],
+          "signature": "Vector3 GetMousePositionOnSpecifiedTag(string tagName)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMousePositionOnSpecifiedLayer",
+          "accessModifier": "public",
+          "returnType": "Vector3",
+          "parameters": [
+            {
+              "paramType": "LayerMask",
+              "paramName": "layerMask"
+            }
+          ],
+          "signature": "Vector3 GetMousePositionOnSpecifiedLayer(LayerMask layerMask)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMousePositionExpectSpecifiedLayer",
+          "accessModifier": "public",
+          "returnType": "Vector3",
+          "parameters": [
+            {
+              "paramType": "LayerMask",
+              "paramName": "layerMask"
+            }
+          ],
+          "signature": "Vector3 GetMousePositionExpectSpecifiedLayer(LayerMask layerMask)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "Select2DObjectOnClick",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [],
+          "signature": "GameObject Select2DObjectOnClick()",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Select2DObjectOnClick",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "LayerMask",
+              "paramName": "layerMask"
+            }
+          ],
+          "signature": "GameObject Select2DObjectOnClick(LayerMask layerMask)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Select3DObjectOnClick",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [],
+          "signature": "GameObject Select3DObjectOnClick()",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Select3DObjectOnClick",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "LayerMask",
+              "paramName": "layerMask"
+            }
+          ],
+          "signature": "GameObject Select3DObjectOnClick(LayerMask layerMask)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Select3DObjectOnRelease",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "LayerMask",
+              "paramName": "layerMask"
+            }
+          ],
+          "signature": "GameObject Select3DObjectOnRelease(LayerMask layerMask)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Select3DObjectOnHold",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "LayerMask",
+              "paramName": "layerMask"
+            }
+          ],
+          "signature": "GameObject Select3DObjectOnHold(LayerMask layerMask)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetUIInfo",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "int layerMaskIndex =",
+              "paramName": "5"
+            }
+          ],
+          "signature": "GameObject GetUIInfo(int layerMaskIndex = 5)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetRandomInt",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "min"
+            },
+            {
+              "paramType": "int",
+              "paramName": "max"
+            }
+          ],
+          "signature": "int GetRandomInt(int min,int max)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetRandomFloat",
+          "accessModifier": "public",
+          "returnType": "float",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "min"
+            },
+            {
+              "paramType": "float",
+              "paramName": "max"
+            }
+          ],
+          "signature": "float GetRandomFloat(float min, float max)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetRandomColor",
+          "accessModifier": "public",
+          "returnType": "Color",
+          "parameters": [],
+          "signature": "Color GetRandomColor()",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetUniqueRandomIndexes",
+          "accessModifier": "public",
+          "returnType": "int[]",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "returnArraySize"
+            },
+            {
+              "paramType": "int",
+              "paramName": "randomIndexRange"
+            },
+            {
+              "paramType": "int randomNumStartIndex",
+              "paramName": "=0"
+            }
+          ],
+          "signature": "int[] GetUniqueRandomIndexes(int returnArraySize,int randomIndexRange, int randomNumStartIndex =0)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetRandomSpawnPositionFromTwoCirclesDifferenceOnXY",
+          "accessModifier": "public",
+          "returnType": "Vector3",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "smallerRadius"
+            },
+            {
+              "paramType": "float",
+              "paramName": "greaterRadius"
+            }
+          ],
+          "signature": "Vector3 GetRandomSpawnPositionFromTwoCirclesDifferenceOnXY(float smallerRadius, float greaterRadius)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetRandomSpawnPositionFromTwoCirclesDifferenceOnXZ",
+          "accessModifier": "public",
+          "returnType": "Vector3",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "smallerRadius"
+            },
+            {
+              "paramType": "float",
+              "paramName": "greaterRadius"
+            }
+          ],
+          "signature": "Vector3 GetRandomSpawnPositionFromTwoCirclesDifferenceOnXZ(float smallerRadius, float greaterRadius)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetRandomPointOnSphere",
+          "accessModifier": "public",
+          "returnType": "Vector3",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "sphereRadius"
+            }
+          ],
+          "signature": "Vector3 GetRandomPointOnSphere(float sphereRadius)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetRandomPathBetweenPoints2D",
+          "accessModifier": "public",
+          "returnType": "Vector2[]",
+          "parameters": [
+            {
+              "paramType": "Vector2",
+              "paramName": "startPoint"
+            },
+            {
+              "paramType": "Vector2",
+              "paramName": "endPoint"
+            },
+            {
+              "paramType": "float noiseValue =",
+              "paramName": "2f"
+            }
+          ],
+          "signature": "Vector2[] GetRandomPathBetweenPoints2D(Vector2 startPoint, Vector2 endPoint, float noiseValue = 2f)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetRandomPathBetweenPoints3D",
+          "accessModifier": "public",
+          "returnType": "Vector3[]",
+          "parameters": [
+            {
+              "paramType": "Vector3",
+              "paramName": "startPoint"
+            },
+            {
+              "paramType": "Vector3",
+              "paramName": "endPoint"
+            },
+            {
+              "paramType": "float noiseValue =",
+              "paramName": "2f"
+            }
+          ],
+          "signature": "Vector3[] GetRandomPathBetweenPoints3D(Vector3 startPoint, Vector3 endPoint, float noiseValue = 2f)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetRandomPathBetweenPoints2D",
+          "accessModifier": "public",
+          "returnType": "Vector2[]",
+          "parameters": [
+            {
+              "paramType": "Vector2",
+              "paramName": "startPoint"
+            },
+            {
+              "paramType": "Vector2",
+              "paramName": "endPoint"
+            },
+            {
+              "paramType": "float noiseValue =",
+              "paramName": "2f"
+            },
+            {
+              "paramType": "int numberOfPoints =",
+              "paramName": "3"
+            }
+          ],
+          "signature": "Vector2[] GetRandomPathBetweenPoints2D(Vector2 startPoint, Vector2 endPoint,\r\n            float noiseValue = 2f, int numberOfPoints = 3)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetRandomPathBetweenPoints3D",
+          "accessModifier": "public",
+          "returnType": "Vector3[]",
+          "parameters": [
+            {
+              "paramType": "Vector3",
+              "paramName": "startPoint"
+            },
+            {
+              "paramType": "Vector3",
+              "paramName": "endPoint"
+            },
+            {
+              "paramType": "float noiseValue =",
+              "paramName": "2f"
+            },
+            {
+              "paramType": "int numberOfPoints =",
+              "paramName": "3"
+            }
+          ],
+          "signature": "Vector3[] GetRandomPathBetweenPoints3D(Vector3 startPoint, Vector3 endPoint,\r\n            float noiseValue = 2f, int numberOfPoints = 3)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "ConvertToPositionArray",
+          "accessModifier": "public",
+          "returnType": "Vector3[]",
+          "parameters": [
+            {
+              "paramType": "this Transform[]",
+              "paramName": "thisTransformArray"
+            }
+          ],
+          "signature": "Vector3[] ConvertToPositionArray(this Transform[] thisTransformArray)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "WaitForTimeCoroutine",
+          "accessModifier": "public",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "duration"
+            },
+            {
+              "paramType": "Action callback =",
+              "paramName": "null"
+            }
+          ],
+          "signature": "IEnumerator WaitForTimeCoroutine(float duration,Action callback = null)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": "Delay"
+        },
+        {
+          "methodName": "WaitForOneFrameCoroutine",
+          "accessModifier": "public",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "Action callback =",
+              "paramName": "null"
+            }
+          ],
+          "signature": "IEnumerator WaitForOneFrameCoroutine(Action callback = null)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": "Delay"
+        },
+        {
+          "methodName": "WaitForRealTimeCoroutine",
+          "accessModifier": "public",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "duration"
+            },
+            {
+              "paramType": "Action callback =",
+              "paramName": "null"
+            }
+          ],
+          "signature": "IEnumerator WaitForRealTimeCoroutine(float duration, Action callback = null)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": "Delay"
+        },
+        {
+          "methodName": "WaitUntilTrueCoroutine",
+          "accessModifier": "public",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "Func<bool>",
+              "paramName": "predicate"
+            },
+            {
+              "paramType": "Action callback=",
+              "paramName": "null"
+            }
+          ],
+          "signature": "IEnumerator WaitUntilTrueCoroutine(Func<bool> predicate,Action callback= null)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": "Delay"
+        },
+        {
+          "methodName": "WaitWhileTrueCoroutine",
+          "accessModifier": "public",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "Func<bool>",
+              "paramName": "predicate"
+            },
+            {
+              "paramType": "Action callback=",
+              "paramName": "null"
+            }
+          ],
+          "signature": "IEnumerator WaitWhileTrueCoroutine(Func<bool> predicate,Action callback= null)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": "Delay"
+        },
+        {
+          "methodName": "DeleteChildren",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "this Transform",
+              "paramName": "t"
+            }
+          ],
+          "signature": "void DeleteChildren(this Transform t)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Despawn"
+        },
+        {
+          "methodName": "Reset",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "this Transform",
+              "paramName": "transform"
+            },
+            {
+              "paramType": "bool isLocalTransform =",
+              "paramName": "true"
+            }
+          ],
+          "signature": "void Reset(this Transform transform, bool isLocalTransform = true )",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "LookTargetWithDownVector",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "this Transform",
+              "paramName": "transform"
+            },
+            {
+              "paramType": "Transform",
+              "paramName": "targetTransform"
+            }
+          ],
+          "signature": "void LookTargetWithDownVector(this Transform transform, Transform targetTransform)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "LookTargetWithDownVector",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "this Transform",
+              "paramName": "transform"
+            },
+            {
+              "paramType": "Vector3",
+              "paramName": "targetPosition"
+            }
+          ],
+          "signature": "void LookTargetWithDownVector(this Transform transform, Vector3 targetPosition)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetScreenPositionOfObject",
+          "accessModifier": "public",
+          "returnType": "Vector3",
+          "parameters": [
+            {
+              "paramType": "this Transform",
+              "paramName": "targetTransform"
+            }
+          ],
+          "signature": "Vector3 GetScreenPositionOfObject(this Transform targetTransform)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetScreenPositionOfObject",
+          "accessModifier": "public",
+          "returnType": "Vector3",
+          "parameters": [
+            {
+              "paramType": "this Vector3",
+              "paramName": "targetTransformPosition"
+            }
+          ],
+          "signature": "Vector3 GetScreenPositionOfObject(this Vector3 targetTransformPosition)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "AnimateCurvyPath",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "this Transform",
+              "paramName": "thisTransform"
+            },
+            {
+              "paramType": "Vector3[]",
+              "paramName": "path"
+            },
+            {
+              "paramType": "Vector3",
+              "paramName": "startPoint"
+            },
+            {
+              "paramType": "Vector3",
+              "paramName": "endPoint"
+            },
+            {
+              "paramType": "float",
+              "paramName": "speed"
+            },
+            {
+              "paramType": "Action callback =",
+              "paramName": "null"
+            }
+          ],
+          "signature": "void AnimateCurvyPath(this Transform thisTransform, Vector3[] path, Vector3 startPoint, Vector3 endPoint, float speed, Action callback = null)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "bool IsLandscape()",
+    "float GetScreenWidth()",
+    "float GetScreenHeight()",
+    "bool IsPointerOverUI()",
+    "Vector3 GetMouseScreenPosition()",
+    "Vector3 GetScreenToWorldPointWithDistance(float distanceFromCamera=0f)",
+    "Vector3 GetScreenPointToRay()",
+    "Vector3 GetMouseWorldPositionOrthographic()",
+    "Vector3 GetMouseWorldPositionWithZ(Vector3 screenPosition, Camera worldCamera)",
+    "Vector3 GetMouseWorldPositionWithZ()",
+    "Vector3 GetMouseWorldPositionWithZ(Camera worldCamera)",
+    "Vector3 GetMouseWorldPositionRespectToNearClipPlane()",
+    "Vector3 GetMouseWorldPositionWithDistance(float distanceFromCamera)",
+    "Vector3 GetMouseWorldPositionWithDistanceAndOffset(float distanceFromCamera, float xOffset = 0f,\r\n            float yOffset = 0f)",
+    "Vector3 GetMousePositionByCreatingPlaneOnZAxis()"
+  ],
+  "requires": [],
+  "tags": {
+    "major": [
+      "ConditionCheck"
+    ],
+    "minor": [
+      "Find",
+      "Delay",
+      "Despawn"
+    ]
+  },
+  "uses": [
+    "ArgumentOutOfRangeException",
+    "Debug",
+    "Input",
+    "Mathf",
+    "Physics",
+    "Physics2D",
+    "Plane",
+    "PointerEventData",
+    "Random",
+    "RaycastResult",
+    "WaitForSeconds",
+    "WaitForSecondsRealtime",
+    "WaitUntil",
+    "WaitWhile",
+    "_maxRayDistance",
+    "_plane"
+  ],
+  "usedBy": []
+}

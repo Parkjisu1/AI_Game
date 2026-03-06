@@ -1298,6 +1298,72 @@
       ],
       "elements": [],
       "in_screen_actions": []
+    },
+    "battle_field": {
+      "screen_type": "battle_field",
+      "visit_count": 1,
+      "sample_screenshots": [],
+      "elements": [
+        "skill_slot_1",
+        "skill_slot_2",
+        "skill_slot_3",
+        "skill_slot_4",
+        "skill_slot_5",
+        "skill_slot_6",
+        "auto_button",
+        "stage_indicator",
+        "quest_guide"
+      ],
+      "in_screen_actions": [
+        {
+          "action_type": "tap",
+          "x": 90,
+          "y": 1870,
+          "element": "auto_skill_1",
+          "category": "interaction",
+          "description": "Enable AUTO for skill 1"
+        },
+        {
+          "action_type": "tap",
+          "x": 230,
+          "y": 1870,
+          "element": "auto_skill_2",
+          "category": "interaction",
+          "description": "Enable AUTO for skill 2"
+        },
+        {
+          "action_type": "tap",
+          "x": 370,
+          "y": 1870,
+          "element": "auto_skill_3",
+          "category": "interaction",
+          "description": "Enable AUTO for skill 3"
+        },
+        {
+          "action_type": "tap",
+          "x": 510,
+          "y": 1870,
+          "element": "auto_skill_4",
+          "category": "interaction",
+          "description": "Enable AUTO for skill 4"
+        },
+        {
+          "action_type": "tap",
+          "x": 650,
+          "y": 1870,
+          "element": "auto_skill_5",
+          "category": "interaction",
+          "description": "Enable AUTO for skill 5"
+        },
+        {
+          "action_type": "tap",
+          "x": 790,
+          "y": 1870,
+          "element": "auto_skill_6",
+          "category": "interaction",
+          "description": "Enable AUTO for skill 6"
+        }
+      ]
     }
   },
   "edges": [
@@ -1672,6 +1738,96 @@
         "y2": 0,
         "description": "선택한 스테이지로 입장하기 위해 이동 버튼을 터치하여 로딩 화면으로 전환됨",
         "element": "move_button",
+        "category": "navigation"
+      },
+      "success_count": 1
+    },
+    {
+      "source": "lobby",
+      "target": "stage_select",
+      "action": {
+        "action_type": "tap",
+        "x": 500,
+        "y": 250,
+        "x2": 0,
+        "y2": 0,
+        "description": "Tap map icon (top area) to open stage select",
+        "element": "map_icon",
+        "category": "navigation"
+      },
+      "success_count": 5
+    },
+    {
+      "source": "stage_select",
+      "target": "battle_field",
+      "action": {
+        "action_type": "tap",
+        "x": 540,
+        "y": 1060,
+        "x2": 0,
+        "y2": 0,
+        "description": "Tap 이동하기 (Move) button to enter selected stage",
+        "element": "move_button",
+        "category": "navigation"
+      },
+      "success_count": 5
+    },
+    {
+      "source": "battle_field",
+      "target": "lobby",
+      "action": {
+        "action_type": "auto",
+        "x": 0,
+        "y": 0,
+        "x2": 0,
+        "y2": 0,
+        "description": "Auto-returns to lobby when stage cleared or character dies",
+        "element": "auto_return",
+        "category": "navigation"
+      },
+      "success_count": 10
+    },
+    {
+      "source": "menu_character",
+      "target": "lobby",
+      "action": {
+        "action_type": "tap",
+        "x": 540,
+        "y": 1820,
+        "x2": 0,
+        "y2": 0,
+        "description": "Close character menu and return to lobby",
+        "element": "close_button",
+        "category": "navigation"
+      },
+      "success_count": 1
+    },
+    {
+      "source": "stage_select",
+      "target": "lobby",
+      "action": {
+        "action_type": "tap",
+        "x": 270,
+        "y": 1900,
+        "x2": 0,
+        "y2": 0,
+        "description": "Close stage select screen (X button) to return to lobby",
+        "element": "close_button",
+        "category": "navigation"
+      },
+      "success_count": 3
+    },
+    {
+      "source": "quest_list",
+      "target": "lobby",
+      "action": {
+        "action_type": "tap",
+        "x": 540,
+        "y": 1820,
+        "x2": 0,
+        "y2": 0,
+        "description": "Close quest list and return to lobby",
+        "element": "close_button",
         "category": "navigation"
       },
       "success_count": 1

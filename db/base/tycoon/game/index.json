@@ -1,0 +1,759 @@
+[
+  {
+    "fileId": "GameQuitPopup",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "View",
+    "system": "Popup",
+    "score": 0.4,
+    "provides": [
+      "void SetGameQuit()",
+      "void OnClickPackage()",
+      "void SetApplyLanguage()",
+      "void OnClickNoButton()",
+      "void OnClickYesButton()"
+    ],
+    "requires": [
+      "CPopupBase",
+      "RawImage",
+      "ShopPackageInfo"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "SpecialPackagePopup",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "View",
+    "system": "Popup",
+    "score": 0.4,
+    "provides": [
+      "void SetSpecialPackagePopup()",
+      "void OnClickPurchase()",
+      "void SetApplyLanguage()",
+      "void UpdateRealTimeGold(int end)",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "CPopupBase",
+      "GoldPopup",
+      "ShopPackageInfo"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger",
+        "DataSync"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ChallengeTopHUDSetGoalMoneyMsg",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ChallengeTopHUDSetMoneyMsg",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenHelpWinMsg",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "ConditionCheck",
+        "FlowControl",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenPackageDetailInfoWinMsg",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "SubscriptionInfo"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenPackageDetailInfoWinToGameModeMsg",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenShowADMoneyWinMsg",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshLobbyBannerWinMsg",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "RefreshMoneyBoxWinMsg",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "FactoryInfoWin",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "UniTask Open()",
+      "void SetData(int factoryLevel, int selectedToggleIndex, ResourceAllocator resourceAllocator)",
+      "void RefreshUpgradeStats()",
+      "double GetLevelupCost(FactoryLevelUpTable factoryTable, int factoryLevel, int multiplyValue)",
+      "double GetAmountMoneyPower(FactoryLevelUpTable factoryTable, int factoryLevel, int multiplyValue)"
+    ],
+    "requires": [
+      "LanguageText",
+      "TextMeshProUGUI",
+      "Toggle",
+      "ToggleGroup",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger",
+        "StateControl"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "HeadQuarterWin",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "void RefreshStat()",
+      "UniTask Open()",
+      "void OnClickClose()",
+      "void OnClickUseGold()"
+    ],
+    "requires": [
+      "LanguageText",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "StateControl",
+        "DataSync"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "HelpWinType5",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(int goldAmount, double moneyAmount)"
+    ],
+    "requires": [
+      "TextMeshProUGUI"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "HelpWinType6",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(string descTxtID, double moneyAmount)"
+    ],
+    "requires": [
+      "LanguageText",
+      "TextMeshProUGUI"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "HUDMoneyWin",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "void SetTotalMoney(double money)",
+      "void SetEarningPerSecondMoney(double money)",
+      "void SetMoney(double totalMoney, double earningPerSecondMoney)",
+      "void Update()"
+    ],
+    "requires": [
+      "AlarmTimer",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "StateControl",
+        "DataSync"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "LineSlotOpenWin",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(int factoryIndex, int slotIndex, double cost)",
+      "void Refresh()",
+      "void OnOK()",
+      "RectTransform GetOKButtonPos()",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "LanguageText",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "MachineInfoWin",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "void OnClickBuy(MachineBuyComponent clicked)",
+      "void OnClickHelp(MachineBuyComponent clicked)",
+      "void RefreshGoods()",
+      "UniTask Open()"
+    ],
+    "requires": [
+      "0 = gacha",
+      "IMessageController",
+      "MachineBuyComponent",
+      "MachineComponentScrollView",
+      "Mode"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification",
+        "StateControl"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "MainMenuHUDWin",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "void SetAllOpenStatus()",
+      "void SetEnableButton(int maxButtonindex)",
+      "void SetVisibleButton(int visibleButtons)",
+      "void RefreshArrowStatus()"
+    ],
+    "requires": [
+      "DOTweenAnimation",
+      "ReddotNotificationComponent",
+      "SpeedButtonComponent",
+      "UIFlippable",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ValueModification",
+        "DataSync"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "MoneyBoxWin",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "UniTask Open()",
+      "void RefreshStat()",
+      "void OnClickUseGold()",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "LanguageText",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "StateControl",
+        "DataSync"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "oldFactoryInfoWin",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void Awake()",
+      "UniTask Open()",
+      "void OnClickLevelUp()",
+      "void OnClickLevelUpStep1()",
+      "void OnClickLevelUpStep2()"
+    ],
+    "requires": [
+      "Slider",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "StateControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OptionWin",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void OnClickChangeLanguage()",
+      "void OnClickCS()",
+      "UniTask Open()",
+      "void BGMToggle(int index)",
+      "void SFXToggle(int index)"
+    ],
+    "requires": [
+      "OptionType",
+      "Toggle",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "DataSync",
+        "StateControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "PackageDetailInfoWin",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(StorePackageTableData data, ResourceAllocator resourceAllocator, string price, string startedfromPurchase)",
+      "void RefreshTime(string startedfromPurchase)",
+      "void OnClickBuy()",
+      "void OnClickClose()",
+      "void OnClickRefundNotice()"
+    ],
+    "requires": [
+      "LanguageText",
+      "ShopGoodsAmountIcon",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification",
+        "DataSync"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "PiggyBankWin",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(PiggyBankType openType)",
+      "void ReceiveMoney()",
+      "void ReceiveDiamond()",
+      "void OnClickMoney()",
+      "void OnClickBuyDia()"
+    ],
+    "requires": [
+      "DOTweenAnimation",
+      "LanguageText",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ResourceTransfer",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "RightSideHUDWin",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void Awake()",
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "void Update()",
+      "void SetSuperHammerMode(bool b)",
+      "void OnClickBoost(int index)"
+    ],
+    "requires": [
+      "LanguageText",
+      "Slider",
+      "TextMeshProUGUI",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "WorldBottomHUDWin",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void RefreshArrow()",
+      "RectTransform GetLabBtn()",
+      "void OnClickMoneyBox()",
+      "void OnClickLab()",
+      "void OnClickFactory()"
+    ],
+    "requires": [
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "ProfitTextContainerWin",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void Add(CostType costType, double value, Vector3 position)",
+      "void Remove(ProfitTextWin profitTextWin)",
+      "void Update()",
+      "void Init(WorldSpaceWindowManager owner, IMessageController<WorldSpaceWindowManager> messageController)"
+    ],
+    "requires": [
+      "IMessageController",
+      "ProfitTextWin",
+      "WorldSpaceWindowBase",
+      "WorldSpaceWindowManager"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Despawn"
+      ]
+    }
+  },
+  {
+    "fileId": "ProfitTextWin",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool IsInit()",
+      "void Init(ResourceAllocator resourceAllocator)",
+      "void ShowText(CostType costType,  double value, Vector3 position)",
+      "bool IsFinish()",
+      "void Update()"
+    ],
+    "requires": [
+      "InGameTextWin",
+      "ResourceAllocator"
+    ],
+    "tags": {
+      "major": [
+        "ConditionCheck"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "UICTAScreen",
+    "layer": "Game",
+    "genre": "Tycoon",
+    "role": "View",
+    "system": "unity_project",
+    "score": 0.4,
+    "provides": [
+      "void SetStoreURL(string url)",
+      "void SetCTAText(string text)",
+      "void SetButtonText(string text)"
+    ],
+    "requires": [
+      "UIBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign",
+        "Spawn"
+      ]
+    }
+  }
+]

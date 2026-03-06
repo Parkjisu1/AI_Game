@@ -1,5 +1,5 @@
 """
-RPGSchema — RPG Genre Configuration
+RPGSchema -- RPG Genre Configuration
 =====================================
 Concepts, ROIs, goals, actions, and interrupt rules for RPG games.
 Covers: battle, character management, inventory, shop, skill, quest, summon.

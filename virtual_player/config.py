@@ -66,3 +66,17 @@ FATIGUE_ERROR_THRESHOLD = 0.5
 
 # Max fatigue (session auto-end)
 FATIGUE_MAX = 1.0
+
+# ============================================================
+# AI Tester paths
+# ============================================================
+
+# Cross-game knowledge persistence
+KNOWLEDGE_DIR = DATA_DIR / "knowledge"
+KNOWLEDGE_DB = KNOWLEDGE_DIR / "knowledge.json"
+
+# Session journal
+JOURNAL_DIR = DATA_DIR / "journal"
+
+# Design DB root (for observer export)
+DESIGN_DB_ROOT = Path(__file__).parent.parent / "db" / "design"

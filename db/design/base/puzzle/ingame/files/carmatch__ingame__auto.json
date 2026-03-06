@@ -1,0 +1,57 @@
+{
+  "designId": "carmatch__ingame__auto",
+  "project": "Carmatch",
+  "domain": "Ingame",
+  "genre": "Puzzle",
+  "system": "Auto-detected INGAME parameters",
+  "source": "observed",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "spec",
+  "balance_area": "ingame",
+  "source_file": "virtual_player AI Tester observation",
+  "content": {
+    "summary": "Carmatch (com.grandgames.carmatch) Auto-detected INGAME parameters parameters extracted by AI Tester observation.",
+    "flow": [],
+    "parameters": {
+      "match_threshold": {
+        "name": "match_threshold",
+        "value": 3,
+        "confidence": 0.25
+      }
+    },
+    "edge_cases": [],
+    "references": []
+  },
+  "design_analysis": {
+    "design_intent": "Extract auto-detected ingame parameters design parameters from Carmatch via automated observation.",
+    "context": "External game observation without source code access. Parameters estimated via ADB screenshots + pixel analysis + OCR.",
+    "strengths": [
+      "Direct observation from live game build",
+      "Automated measurement reduces human bias",
+      "Multiple observers cross-validate parameters"
+    ],
+    "concerns": [
+      "No source code access limits parameter accuracy (~85-89%)",
+      "Some parameters require extended play sessions",
+      "OCR-dependent values may have recognition errors"
+    ],
+    "db_recommendation": "puzzle/ingame/files/",
+    "reasoning": "Puzzle genre entry in Design DB. Carmatch provides baseline auto-detected ingame parameters data."
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "AI Tester observation of Carmatch",
+      "note": "External game analysis import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-03-04T19:33:32.085715"
+}

@@ -303,7 +303,19 @@
       "Bash(pip show:*)",
       "Bash(pip install:*)",
       "Bash(\"C:/Program Files/BlueStacks_nxt/HD-Adb.exe\":*)",
-      "Bash(echo Test spec created:*)"
+      "Bash(echo Test spec created:*)",
+      "Bash(cd /e/AI && git branch -M main && git push -u origin main 2>&1)",
+      "Bash(gh auth:*)",
+      "Bash(git config:*)",
+      "Bash(cd /e/AI && git push -u origin main 2>&1)",
+      "Bash(cd /e/AI && git remote set-url origin https://github.com/jisupark-tech/AI_Game.git && git push -u origin main 2>&1)",
+      "Bash(sleep 5 && \"/c/Program Files/BlueStacks_nxt/HD-Adb.exe\" -s emulator-5554 shell \"dumpsys window | grep mCurrentFocus\" 2>&1)",
+      "Bash(\"/c/Program Files/BlueStacks_nxt/HD-Adb.exe\" -s emulator-5554 shell screencap -p /sdcard/test_screen.png && \"/c/Program Files/BlueStacks_nxt/HD-Adb.exe\" -s emulator-5554 pull /sdcard/test_screen.png /e/AI/virtual_player/data/temp/test_screen.png 2>&1)",
+      "Bash(\"/c/Program Files/BlueStacks_nxt/HD-Adb.exe\" -s emulator-5554 shell \"screencap /sdcard/test_screen.png\" 2>&1 && \"/c/Program Files/BlueStacks_nxt/HD-Adb.exe\" -s emulator-5554 pull /sdcard/test_screen.png /e/AI/virtual_player/data/temp/test_screen.png 2>&1)",
+      "Bash(echo === Layer 1 ===:*)",
+      "WebFetch(domain:www.keyzard.cc)",
+      "Bash(\"C:\\\\Program Files\\\\BlueStacks_nxt\\\\HD-Adb.exe\" -s emulator-5554 shell am start -n studio.gameberry.anv/studio.gameberry.anv.MainActivity 2>/dev/null || \"C:\\\\Program Files\\\\BlueStacks_nxt\\\\HD-Adb.exe\" -s emulator-5554 shell monkey -p studio.gameberry.anv -c android.intent.category.LAUNCHER 1 2>/dev/null)",
+      "Bash(xxd:*)"
     ]
   },
   "teammateMode": "tmux",

@@ -1,0 +1,228 @@
+{
+  "fileId": "ProfitTextWin",
+  "filePath": "UI\\WorldSpaceUI\\ProfitTextWin.cs",
+  "namespace": "",
+  "layer": "Game",
+  "genre": "Tycoon",
+  "role": "View",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI",
+    "System"
+  ],
+  "classes": [
+    {
+      "className": "ProfitTextWin",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "InGameTextWin",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "lifeTime",
+          "fieldType": "float",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "2.0f"
+        },
+        {
+          "fieldName": "costTypeIconImg",
+          "fieldType": "Image",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "elapsedTime",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "started",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        },
+        {
+          "fieldName": "finish",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "true"
+        },
+        {
+          "fieldName": "resourceAllocator",
+          "fieldType": "ResourceAllocator",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "IsInit",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool IsInit()",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "Init",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "ResourceAllocator",
+              "paramName": "resourceAllocator"
+            }
+          ],
+          "signature": "void Init(ResourceAllocator resourceAllocator)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ShowText",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "CostType",
+              "paramName": "costType"
+            },
+            {
+              "paramType": "double",
+              "paramName": "value"
+            },
+            {
+              "paramType": "Vector3",
+              "paramName": "position"
+            }
+          ],
+          "signature": "void ShowText(CostType costType,  double value, Vector3 position)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "IsFinish",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool IsFinish()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "Update",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Update()",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "TurnOff",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void TurnOff()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "bool IsInit()",
+    "void Init(ResourceAllocator resourceAllocator)",
+    "void ShowText(CostType costType,  double value, Vector3 position)",
+    "bool IsFinish()",
+    "void Update()",
+    "void TurnOff()"
+  ],
+  "requires": [
+    "InGameTextWin",
+    "ResourceAllocator"
+  ],
+  "tags": {
+    "major": [
+      "ConditionCheck"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "CurrencyConverter",
+    "GlobalConstants",
+    "InGameTextWin",
+    "Math",
+    "StringUtils"
+  ],
+  "usedBy": []
+}

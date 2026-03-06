@@ -1,5 +1,5 @@
 """
-RegionRegistry — ROI (Region of Interest) 설정 관리
+RegionRegistry -- ROI (Region of Interest) 설정 관리
 =====================================================
 화면 타입별로 게이지/OCR 영역 설정을 등록하고 조회.
 게임 프로필 YAML 또는 JSON 파일에서 로드 가능.

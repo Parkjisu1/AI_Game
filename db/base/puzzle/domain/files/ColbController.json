@@ -1,0 +1,177 @@
+{
+  "fileId": "ColbController",
+  "filePath": "ColbController.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Puzzle",
+  "role": "Controller",
+  "system": "ColbController",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "System.Linq",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "ColbController",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "points",
+          "fieldType": "PivotPoint[]",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "new PivotPoint[4]"
+        },
+        {
+          "fieldName": "validated",
+          "fieldType": "bool",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "FillPivotPoints",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void FillPivotPoints()",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ValidateColb",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool ValidateColb()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": "Validate"
+        },
+        {
+          "methodName": "PutBallIn",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "BallController",
+              "paramName": "ball"
+            }
+          ],
+          "signature": "void PutBallIn(BallController ball)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ToggleCollider",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "state"
+            }
+          ],
+          "signature": "void ToggleCollider(bool state)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Interact",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Interact()",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Update",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Update()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void FillPivotPoints()",
+    "bool ValidateColb()",
+    "void PutBallIn(BallController ball)",
+    "void ToggleCollider(bool state)",
+    "void Interact()"
+  ],
+  "requires": [
+    "PivotPoint"
+  ],
+  "tags": {
+    "major": [
+      "ConditionCheck"
+    ],
+    "minor": [
+      "Validate"
+    ]
+  },
+  "uses": [
+    "Ball",
+    "Cannon",
+    "Debug",
+    "GameController",
+    "Input",
+    "Instance",
+    "PivotPoint"
+  ],
+  "usedBy": []
+}

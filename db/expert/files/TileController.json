@@ -1,0 +1,34 @@
+{
+  "fileId": "TileController",
+  "project": "DropTheCat",
+  "layer": "Domain",
+  "genre": "Puzzle",
+  "role": "Controller",
+  "phase": 1,
+  "namespace": "DropTheCat.Domain",
+  "className": "TileController",
+  "baseClass": "MonoBehaviour",
+  "score": 0.6,
+  "provides": [
+    "void Init(CellType cellType, CatColor color, Vector2Int gridPos)",
+    "void SlideTo(Vector3 targetWorldPos, System.Action onComplete)",
+    "void SetState(TileState state)",
+    "TileState CurrentState { get; }",
+    "CellType CellType { get; }",
+    "CatColor HoleColor { get; }",
+    "Vector2Int GridPosition { get; set; }",
+    "bool IsSliding { get; }",
+    "bool CanSlide { get; }"
+  ],
+  "requires": [
+    "GridManager.GridToWorld",
+    "ObjectPool (return)",
+    "DG.Tweening"
+  ],
+  "tags": {
+    "major": ["StateControl", "FlowControl"],
+    "minor": ["Assign", "Validate"]
+  },
+  "sourcePath": "E:\\AI\\projects\\DropTheCat\\output\\TileController.cs",
+  "timestamp": "2026-02-10T04:45:00Z"
+}

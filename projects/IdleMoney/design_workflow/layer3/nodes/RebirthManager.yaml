@@ -1,0 +1,97 @@
+metadata:
+  nodeId: "RebirthManager"
+  version: "1.0.0"
+  phase: 2
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "FactoryManager"
+    - "CurrencyManager"
+    - "ChallengeManager"
+    - "SaveManager"
+    - "EventManager"
+  external:
+    - "UnityEngine.MonoBehaviour"
+    - "System.Collections"
+
+contract:
+  provides:
+    - "rebirth_execute"
+    - "world_unlock"
+    - "rebirth_reward"
+  requires:
+    - "factory_manager"
+    - "currency_system"
+    - "challenge_manager"
+    - "save_system"
+
+tags:
+  layer: "Domain"
+  genre: "Idle"
+  role: "Manager"
+  system: "RebirthSystem"
+  majorFunctions:
+    - "StateControl"
+    - "ConditionCheck"
+    - "ResourceTransfer"
+    - "FlowControl"
+  minorFunctions:
+    - "Validate"
+    - "Compare"
+    - "Assign"
+    - "Notify"
+
+logicFlow:
+  - step: 1
+    tag: "ConditionCheck.Validate"
+    action: "CheckCondition: 팩토리 레벨 >= 리버스 요구 레벨(RebirthRequiredLevelTable[rebirthCount]) 검증"
+    next: 2
+  - step: 2
+    tag: "FlowControl.Assign"
+    action: "StartChallenge: ChallengeManager에 챌린지 모드 시작 요청, 목표 머니 조건 설정"
+    next: 3
+  - step: 3
+    tag: "ValueModification.Calculate"
+    action: "EarnMoney: 챌린지 모드에서 생산 수익 누적, 목표 금액 달성 여부 실시간 트래킹"
+    next: 4
+  - step: 4
+    tag: "ConditionCheck.Compare"
+    action: "CheckGoal: 누적 머니 >= 챌린지 목표금액 비교, 미달 시 챌린지 계속 진행"
+    next: 5
+  - step: 5
+    tag: "ResourceTransfer.Assign"
+    action: "SellOff: 팩토리 초기화, 보유 머니 및 머신 제거, 리버스 보상 산정"
+    next: 6
+  - step: 6
+    tag: "StateControl.Assign"
+    action: "IncrementCount: rebirthCount + 1 증가, SaveManager에 저장"
+    next: 7
+  - step: 7
+    tag: "FlowControl.Notify"
+    action: "UnlockWorld: rebirthCount 기반 신규 월드 해금 조건 체크 후 EventManager 이벤트 발행"
+    next: 8
+  - step: 8
+    tag: "ResourceTransfer.Assign"
+    action: "GiveReward: 리버스 보상(다이아/버프 포인트 등) 지급 및 팩토리 재시작"
+    next: 1
+
+referencePatterns:
+  - source: "idlemoney__balance__rebirth_system"
+    pattern: "리버스 횟수별 요구 팩토리 레벨 및 보상 스케일링 테이블"
+  - source: "idlemoney__ingame__factory_challenge"
+    pattern: "챌린지 목표 금액 설정 및 SellOff 초기화 로직"
+
+codeHints:
+  patterns:
+    - "SerializeField for Inspector"
+    - "MessagePack serialization"
+    - "DontDestroyOnLoad singleton"
+    - "Coroutine for challenge progress monitoring"
+    - "EventManager for world unlock broadcast"
+  avoidPatterns:
+    - "Find/FindObjectOfType for UI"
+    - "dynamic UI creation"
+    - "hardcoded magic numbers"
+    - "Direct FactoryManager field reset without event notification"

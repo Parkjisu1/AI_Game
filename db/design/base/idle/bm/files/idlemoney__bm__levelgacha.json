@@ -1,0 +1,283 @@
+{
+  "designId": "idlemoney__bm__levelgacha",
+  "project": "IdleMoney",
+  "domain": "BM",
+  "genre": "Idle",
+  "system": "LevelGacha",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "table",
+  "balance_area": "gacha",
+  "source_file": "LevelGachaBox.json",
+  "table_stats": {
+    "row_count": 7,
+    "columns": [
+      "BoxLevel",
+      "GeneralMachineChance",
+      "AdvancedMachineChance",
+      "SuperMachineChance",
+      "LegendMachineChance",
+      "SuperLegendMachineChance",
+      "AcquiredExp",
+      "NewMachineSelectChance",
+      "NeededExp",
+      "Cost",
+      "AcquiredMaterialMin",
+      "AcquiredMaterialMax",
+      "ImageName",
+      "GachaAnimName"
+    ],
+    "numeric_columns": [
+      "BoxLevel",
+      "GeneralMachineChance",
+      "AdvancedMachineChance",
+      "SuperMachineChance",
+      "LegendMachineChance",
+      "SuperLegendMachineChance",
+      "AcquiredExp",
+      "NewMachineSelectChance",
+      "NeededExp",
+      "Cost",
+      "AcquiredMaterialMin",
+      "AcquiredMaterialMax"
+    ],
+    "text_columns": [
+      "ImageName",
+      "GachaAnimName"
+    ]
+  },
+  "content": {
+    "summary": "LevelGacha 데이터 테이블 (7행, 14열)",
+    "parameters": {
+      "BoxLevel": "1",
+      "GeneralMachineChance": "0.5",
+      "AdvancedMachineChance": "0",
+      "SuperMachineChance": "0",
+      "LegendMachineChance": "0",
+      "SuperLegendMachineChance": "0",
+      "AcquiredExp": "4",
+      "NewMachineSelectChance": "0.5",
+      "NeededExp": "0",
+      "Cost": "20",
+      "AcquiredMaterialMin": "10",
+      "AcquiredMaterialMax": "10",
+      "ImageName": "package_grade1",
+      "GachaAnimName": "Novice"
+    },
+    "balance_points": [
+      {
+        "variable": "BoxLevel",
+        "min_value": 1,
+        "max_value": 7,
+        "avg_value": 4,
+        "growth_ratio": 7,
+        "data_points": 7,
+        "impact": "medium"
+      },
+      {
+        "variable": "GeneralMachineChance",
+        "min_value": 0.1,
+        "max_value": 0.5,
+        "avg_value": 0.23,
+        "growth_ratio": 5,
+        "data_points": 7,
+        "impact": "medium"
+      },
+      {
+        "variable": "AdvancedMachineChance",
+        "min_value": 0,
+        "max_value": 0.75,
+        "avg_value": 0.41,
+        "growth_ratio": 0.75,
+        "data_points": 7,
+        "impact": "medium"
+      },
+      {
+        "variable": "SuperMachineChance",
+        "min_value": 0,
+        "max_value": 0.5,
+        "avg_value": 0.2,
+        "growth_ratio": 0.5,
+        "data_points": 7,
+        "impact": "medium"
+      },
+      {
+        "variable": "LegendMachineChance",
+        "min_value": 0,
+        "max_value": 0.3,
+        "avg_value": 0.11,
+        "growth_ratio": 0.3,
+        "data_points": 7,
+        "impact": "medium"
+      },
+      {
+        "variable": "SuperLegendMachineChance",
+        "min_value": 0,
+        "max_value": 0.05,
+        "avg_value": 0.01,
+        "growth_ratio": 0.05,
+        "data_points": 7,
+        "impact": "medium"
+      },
+      {
+        "variable": "NewMachineSelectChance",
+        "min_value": 0.1,
+        "max_value": 0.7,
+        "avg_value": 0.41,
+        "growth_ratio": 7,
+        "data_points": 7,
+        "impact": "medium"
+      },
+      {
+        "variable": "NeededExp",
+        "min_value": 0,
+        "max_value": 210,
+        "avg_value": 162,
+        "growth_ratio": 210,
+        "data_points": 7,
+        "impact": "critical"
+      },
+      {
+        "variable": "Cost",
+        "min_value": 20,
+        "max_value": 350,
+        "avg_value": 160,
+        "growth_ratio": 17.5,
+        "data_points": 7,
+        "impact": "high"
+      }
+    ],
+    "edge_cases": [],
+    "references": []
+  },
+  "data": [
+    {
+      "BoxLevel": "1",
+      "GeneralMachineChance": "0.5",
+      "AdvancedMachineChance": "0",
+      "SuperMachineChance": "0",
+      "LegendMachineChance": "0",
+      "SuperLegendMachineChance": "0",
+      "AcquiredExp": "4",
+      "NewMachineSelectChance": "0.5",
+      "NeededExp": "0",
+      "Cost": "20",
+      "AcquiredMaterialMin": "10",
+      "AcquiredMaterialMax": "10",
+      "ImageName": "package_grade1",
+      "GachaAnimName": "Novice"
+    },
+    {
+      "BoxLevel": "2",
+      "GeneralMachineChance": "0.4",
+      "AdvancedMachineChance": "0.6",
+      "SuperMachineChance": "0",
+      "LegendMachineChance": "0",
+      "SuperLegendMachineChance": "0",
+      "AcquiredExp": "4",
+      "NewMachineSelectChance": "0.5",
+      "NeededExp": "84",
+      "Cost": "50",
+      "AcquiredMaterialMin": "10",
+      "AcquiredMaterialMax": "10",
+      "ImageName": "package_grade2",
+      "GachaAnimName": "Rookie"
+    },
+    {
+      "BoxLevel": "3",
+      "GeneralMachineChance": "0.2",
+      "AdvancedMachineChance": "0.75",
+      "SuperMachineChance": "0.05",
+      "LegendMachineChance": "0",
+      "SuperLegendMachineChance": "0",
+      "AcquiredExp": "4",
+      "NewMachineSelectChance": "0.1",
+      "NeededExp": "210",
+      "Cost": "100",
+      "AcquiredMaterialMin": "10",
+      "AcquiredMaterialMax": "10",
+      "ImageName": "package_grade3",
+      "GachaAnimName": "Expert"
+    },
+    {
+      "BoxLevel": "4",
+      "GeneralMachineChance": "0.2",
+      "AdvancedMachineChance": "0.7",
+      "SuperMachineChance": "0.15",
+      "LegendMachineChance": "0",
+      "SuperLegendMachineChance": "0",
+      "AcquiredExp": "4",
+      "NewMachineSelectChance": "0.7",
+      "NeededExp": "210",
+      "Cost": "150",
+      "AcquiredMaterialMin": "10",
+      "AcquiredMaterialMax": "10",
+      "ImageName": "package_grade3",
+      "GachaAnimName": "Expert"
+    },
+    {
+      "BoxLevel": "5",
+      "GeneralMachineChance": "0.1",
+      "AdvancedMachineChance": "0.4",
+      "SuperMachineChance": "0.3",
+      "LegendMachineChance": "0.2",
+      "SuperLegendMachineChance": "0",
+      "AcquiredExp": "4",
+      "NewMachineSelectChance": "0.3",
+      "NeededExp": "210",
+      "Cost": "200",
+      "AcquiredMaterialMin": "10",
+      "AcquiredMaterialMax": "10",
+      "ImageName": "package_grade5",
+      "GachaAnimName": "Master"
+    },
+    {
+      "BoxLevel": "6",
+      "GeneralMachineChance": "0.1",
+      "AdvancedMachineChance": "0.25",
+      "SuperMachineChance": "0.4",
+      "LegendMachineChance": "0.25",
+      "SuperLegendMachineChance": "0",
+      "AcquiredExp": "4",
+      "NewMachineSelectChance": "0.5",
+      "NeededExp": "210",
+      "Cost": "250",
+      "AcquiredMaterialMin": "10",
+      "AcquiredMaterialMax": "10",
+      "ImageName": "package_grade5",
+      "GachaAnimName": "Master"
+    },
+    {
+      "BoxLevel": "7",
+      "GeneralMachineChance": "0.1",
+      "AdvancedMachineChance": "0.2",
+      "SuperMachineChance": "0.5",
+      "LegendMachineChance": "0.3",
+      "SuperLegendMachineChance": "0.05",
+      "AcquiredExp": "4",
+      "NewMachineSelectChance": "0.3",
+      "NeededExp": "210",
+      "Cost": "350",
+      "AcquiredMaterialMin": "10",
+      "AcquiredMaterialMax": "10",
+      "ImageName": "package_grade6",
+      "GachaAnimName": "Elite"
+    }
+  ],
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from LevelGachaBox.json (7 rows)",
+      "note": "Live game data import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T10:32:53.977Z"
+}

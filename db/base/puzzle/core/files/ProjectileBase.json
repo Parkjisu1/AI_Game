@@ -1,0 +1,42 @@
+{
+  "fileId": "ProjectileBase",
+  "filePath": "ProjectileBase.cs",
+  "namespace": "",
+  "layer": "Core",
+  "genre": "Puzzle",
+  "role": "Entity",
+  "system": "ProjectileBase",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "ProjectileBase",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "PooledGameObject",
+      "interfaces": [],
+      "fields": [],
+      "properties": [],
+      "methods": []
+    }
+  ],
+  "provides": [],
+  "requires": [
+    "PooledGameObject"
+  ],
+  "tags": {
+    "major": [],
+    "minor": []
+  },
+  "uses": [
+    "PooledGameObject"
+  ],
+  "usedBy": []
+}

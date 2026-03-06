@@ -1,0 +1,318 @@
+{
+  "fileId": "DailyRewardComponent",
+  "filePath": "UI\\DailyRewardComponent.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Slg",
+  "role": "Component",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI",
+    "TMPro"
+  ],
+  "classes": [
+    {
+      "className": "DailyRewardComponent",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "SelectedBGName",
+          "fieldType": "string",
+          "accessModifier": "private",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"box_2tone3_r5\""
+        },
+        {
+          "fieldName": "NormalBGName",
+          "fieldType": "string",
+          "accessModifier": "private",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"box_2tone1_r5\""
+        },
+        {
+          "fieldName": "statusNode",
+          "fieldType": "Transform[]",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "dailyRewardAmountTxt",
+          "fieldType": "TextMeshProUGUI[]",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "dailyRewardIcon",
+          "fieldType": "Image[]",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "currentStatus",
+          "fieldType": "StatusIndex",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "currentReward",
+          "fieldType": "RewardType",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "currentRewardAmount",
+          "fieldType": "double",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "SetData",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "StatusIndex",
+              "paramName": "status"
+            },
+            {
+              "paramType": "GameStatCalculator",
+              "paramName": "calculator"
+            },
+            {
+              "paramType": "ConfigCommonTable",
+              "paramName": "table"
+            },
+            {
+              "paramType": "ResourceAllocator",
+              "paramName": "resourceAllocator"
+            },
+            {
+              "paramType": "AttendanceRewardTableData",
+              "paramName": "data"
+            }
+          ],
+          "signature": "void SetData(StatusIndex status, GameStatCalculator calculator, ConfigCommonTable table,\r\n                    ResourceAllocator resourceAllocator, AttendanceRewardTableData data)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "refreshCurrentStatus",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void refreshCurrentStatus()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetRewardType",
+          "accessModifier": "public",
+          "returnType": "RewardType",
+          "parameters": [],
+          "signature": "RewardType GetRewardType()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetRewardAmount",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [],
+          "signature": "double GetRewardAmount()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        }
+      ]
+    },
+    {
+      "className": "StatusIndex",
+      "classType": "enum",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "SetData",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "StatusIndex",
+              "paramName": "status"
+            },
+            {
+              "paramType": "GameStatCalculator",
+              "paramName": "calculator"
+            },
+            {
+              "paramType": "ConfigCommonTable",
+              "paramName": "table"
+            },
+            {
+              "paramType": "ResourceAllocator",
+              "paramName": "resourceAllocator"
+            },
+            {
+              "paramType": "AttendanceRewardTableData",
+              "paramName": "data"
+            }
+          ],
+          "signature": "void SetData(StatusIndex status, GameStatCalculator calculator, ConfigCommonTable table,\r\n                    ResourceAllocator resourceAllocator, AttendanceRewardTableData data)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "refreshCurrentStatus",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void refreshCurrentStatus()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetRewardType",
+          "accessModifier": "public",
+          "returnType": "RewardType",
+          "parameters": [],
+          "signature": "RewardType GetRewardType()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetRewardAmount",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [],
+          "signature": "double GetRewardAmount()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void SetData(StatusIndex status, GameStatCalculator calculator, ConfigCommonTable table,\r\n                    ResourceAllocator resourceAllocator, AttendanceRewardTableData data)",
+    "RewardType GetRewardType()",
+    "double GetRewardAmount()",
+    "void SetData(StatusIndex status, GameStatCalculator calculator, ConfigCommonTable table,\r\n                    ResourceAllocator resourceAllocator, AttendanceRewardTableData data)",
+    "RewardType GetRewardType()",
+    "double GetRewardAmount()"
+  ],
+  "requires": [
+    "StatusIndex",
+    "TextMeshProUGUI"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification"
+    ],
+    "minor": [
+      "Find",
+      "Assign"
+    ]
+  },
+  "uses": [
+    "CurrencyConverter",
+    "Max",
+    "Receive",
+    "StringUtils"
+  ],
+  "usedBy": []
+}

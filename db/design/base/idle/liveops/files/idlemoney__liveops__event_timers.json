@@ -1,0 +1,45 @@
+{
+  "designId": "idlemoney__liveops__event_timers",
+  "project": "IdleMoney",
+  "domain": "LiveOps",
+  "genre": "Idle",
+  "system": "Event Timer System",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "spec",
+  "balance_area": "engagement",
+  "source_file": "outgame_content_meta.yaml",
+  "content": {
+    "summary": "이벤트 타이머 시스템. GameEventController가 관리.\n쿨다운 기반 이벤트 표시, 팩토리 레벨 게이트.",
+    "flow": [],
+    "parameters": {
+      "event_interval": [
+        "type: 이벤트 종류",
+        "factoryIndex: 적용 팩토리",
+        "lifeTime: 지속 시간",
+        "addRandomTimeRange: 랜덤 편차",
+        "levelLimit: 팩토리 레벨 제한",
+        "sellOffLimit: 리버스 제한"
+      ],
+      "lifecycle": "Register → StartCoolTime → StartEvent → FinishEvent → Restart"
+    },
+    "edge_cases": [],
+    "references": []
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from C# analysis: Event Timer System",
+      "note": "Live game code analysis import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T11:08:17.045Z"
+}

@@ -1,0 +1,1148 @@
+[
+  {
+    "fileId": "TableBase",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Interface",
+    "system": "Data",
+    "score": 0.4,
+    "provides": [
+      "void SetData(string[] s)",
+      "string ToStringList()",
+      "T key { get; }",
+      "eTable eTb { get; }",
+      "string sFileName { get; }"
+    ],
+    "requires": [
+      "IMemberList",
+      "ITableBase"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ClickEffect",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "UX",
+    "system": "InGame",
+    "score": 0.4,
+    "provides": [
+      "void Initialize(ClickEffectPool _clickEffectPool)",
+      "void ReturnPool()"
+    ],
+    "requires": [
+      "ClickEffectPool"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ClickEffectPool",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Pool",
+    "system": "InGame",
+    "score": 0.4,
+    "provides": [
+      "void Initialize()",
+      "GameObject GetObject()",
+      "void RetrunPool(GameObject _obj)",
+      "void ResetPool()"
+    ],
+    "requires": [
+      "ClickEffect",
+      "PooledObject",
+      "Tile"
+    ],
+    "tags": {
+      "major": [],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "EffectPool",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Pool",
+    "system": "InGame",
+    "score": 0.4,
+    "provides": [
+      "void Initialize()",
+      "ObjectPool GetJewelExplosionPool(eJewelColor color)",
+      "ObjectPool GetStripedJewelExplosionPool(eStripeDirection direction)",
+      "ObjectPool GetTargettedJewelExplosionPool(eJewelColor _color)",
+      "ObjectPool GetWrappedJewelExplosionPool(eJewelColor _color)"
+    ],
+    "requires": [
+      "ObjectPool"
+    ],
+    "tags": {
+      "major": [],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "MissionPool",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Pool",
+    "system": "InGame",
+    "score": 0.4,
+    "provides": [
+      "void Initialize()",
+      "ObjectPool GetJewelPool(eJewelColor _color)",
+      "ObjectPool GetElementPool(eElementType _element)",
+      "ObjectPool GetSpecialElement(eSpecialElement _specialElement)",
+      "ObjectPool GetSpecialBlock(eSpecialBlockType _specialBlock)"
+    ],
+    "requires": [
+      "ObjectPool"
+    ],
+    "tags": {
+      "major": [],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "PooledObject",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Component",
+    "system": "InGame",
+    "score": 0.4,
+    "provides": [],
+    "requires": [
+      "ObjectPool",
+      "SpriteRenderer"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ScoreEffectPool",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Pool",
+    "system": "InGame",
+    "score": 0.4,
+    "provides": [
+      "void Initialize()",
+      "GameObject GetObject(int _score, eJewelColor _eColor, bool _isColorBomb)",
+      "void RetrunPool(GameObject _obj)",
+      "void ResetPool()"
+    ],
+    "requires": [
+      "PooledObject",
+      "ScoreEffect",
+      "Tile"
+    ],
+    "tags": {
+      "major": [],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "StageButtonTypeBase",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Component",
+    "system": "Lobby",
+    "score": 0.4,
+    "provides": [
+      "void Initialize(int _stageNumber, int _currentClearStage, StageTable _stage, Sprite _activateStarSprite, Sprite _stageClear, Sprite _stageHardClear, Sprite _stageNonClear, Sprite _stageHardNonClear, Sprite _stageCurrentHard, Sprite _stageCurrentNonHard, Sprite _stageCurrentHard_Circle, Sprite _stageCurrentNonHard_Circle)",
+      "void SetApplySprite(ResourceNameTable _resourNameData)",
+      "void OnClickStageButton()"
+    ],
+    "requires": [
+      "IApplySprite",
+      "StageTable"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "CFX_AutoDestructShuriken",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Component",
+    "system": "Util",
+    "score": 0.4,
+    "provides": [],
+    "requires": [
+      "ParticleSystem"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "LightningBolt2D_TutorialVersion",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Model",
+    "system": "Util",
+    "score": 0.4,
+    "provides": [
+      "void FireOnce()",
+      "void Generate()",
+      "void BuildMesh()",
+      "float Vector2Angle(Vector2 v)",
+      "Vector2 Angle2Vector(float angle, float power)"
+    ],
+    "requires": [
+      "CanvasRenderer",
+      "MeshFilter",
+      "MeshRenderer"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Spawn",
+        "Calculate"
+      ]
+    }
+  },
+  {
+    "fileId": "Transition",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Component",
+    "system": "Util",
+    "score": 0.4,
+    "provides": [
+      "void FadeOut(float duration, Color color)",
+      "void LoadLevel(string level, float duration, Color color)",
+      "void FadeAction(float duration, Color color, System.Action a_fpCallback)"
+    ],
+    "requires": [
+      "Transition"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "FlowControl",
+        "DataSync"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "StageTypeBase",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Component",
+    "system": "Lobby",
+    "score": 0.4,
+    "provides": [
+      "void setLobbyStages(int _stageCount)",
+      "void setLobbyStages(int _stageCount)"
+    ],
+    "requires": [
+      "Scrollbar"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "SceneBase",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Component",
+    "system": "Scene",
+    "score": 0.4,
+    "provides": [
+      "void CloseAllPopup()",
+      "void CleanUp()"
+    ],
+    "requires": [
+      "CanvasScaler"
+    ],
+    "tags": {
+      "major": [
+        "StateControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "AdjustSafeArea",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Component",
+    "system": "Util",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Analytics",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Component",
+    "system": "Util",
+    "score": 0.4,
+    "provides": [
+      "string IngameClearPlayerPrefs(int stage)",
+      "string IngamePlayPlayerPrefs(int stage)",
+      "string IngameMovementPlayerPrefs(int stage)",
+      "string IngameContinuePlayerPrefs(int stage)",
+      "string IngamePiggyBankPlayerPrefs(int stage)"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ResourceTransfer"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "AutokillObject",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Component",
+    "system": "Util",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "AutoKillPooled",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Component",
+    "system": "Util",
+    "score": 0.4,
+    "provides": [
+      "IEnumerator AutoKill()",
+      "IEnumerator OpenWinPopupAsync()"
+    ],
+    "requires": [
+      "PooledObject"
+    ],
+    "tags": {
+      "major": [
+        "StateControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "CameraShake",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Component",
+    "system": "Util",
+    "score": 0.4,
+    "provides": [
+      "void Shake()"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "FPS_Check",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Component",
+    "system": "Util",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "GameUtill",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Helper",
+    "system": "Util",
+    "score": 0.4,
+    "provides": [
+      "string setStringBuilder(string[] str)",
+      "string setCommaNumber(float value, string str = \"\")",
+      "string setNumStringAppend(int value, string str = \"\")",
+      "string setStringAppend(string str1 = \"\", string str2 = \"\")",
+      "string setStringAppend(string str1 =\"\", string str2 =\"\", string str3 =\"\")"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "TimeServer",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Model",
+    "system": "Util",
+    "score": 0.4,
+    "provides": [
+      "long GettimeServer()",
+      "DateTime serverTime { get; }",
+      "Action<DateTime> OnTimeUpdate { get; }"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ChainGameEventController",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Controller",
+    "system": "ChainGameEventController",
+    "score": 0.4,
+    "provides": [
+      "bool Register(EventInterval coolTime, IEventDuringController runningController)",
+      "void StartController(Injector injector)",
+      "bool StartEvent()",
+      "void FinishEvent()",
+      "void UpdateLogic(float deltaTime)"
+    ],
+    "requires": [
+      "EventInterval",
+      "GameEvent",
+      "IEventDuringController",
+      "UserInfo"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "IEventDuringController",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Interface",
+    "system": "IEventDuringController",
+    "score": 0.4,
+    "provides": [
+      "int GetID()",
+      "bool IsOnEvent()",
+      "void EnterEvent()",
+      "void EnterEvent(float lifeTime)",
+      "void UpdateLogic(float deltaTime)"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ConditionCheck",
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "IMachineAnimEventReceiver",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Interface",
+    "system": "IMachineAnimEventReceiver",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "LobbyADBannerEventController",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Controller",
+    "system": "LobbyADBannerEventController",
+    "score": 0.4,
+    "provides": [
+      "int GetID()",
+      "bool IsOnEvent()",
+      "void EnterEvent()",
+      "void EnterEvent(float lifeTime)",
+      "void UpdateLogic(float deltaTime)"
+    ],
+    "requires": [
+      "IEventDuringController",
+      "IMessageController",
+      "WindowID",
+      "WindowManager"
+    ],
+    "tags": {
+      "major": [
+        "ConditionCheck",
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "MachineCollisionEventReceiver",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Component",
+    "system": "MachineCollisionEventReceiver",
+    "score": 0.4,
+    "provides": [
+      "void Init(Machine owner)",
+      "void SetOwner(Machine owner)",
+      "Machine GetOwner()",
+      "void SetColliderOnOff(bool b)",
+      "bool GetColliderEnable()"
+    ],
+    "requires": [
+      "Collider2D",
+      "CollisionEventReceiverBase",
+      "Machine"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "AddSuperHammer0EventMsg",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ResetEventIntervalMsg",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameEvent",
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RestartEventIntervalMsg",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SaveGameEventUserInfoMsg",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameEvent",
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OnEventIntervalController",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Message",
+    "system": "OnEventIntervalController",
+    "score": 0.4,
+    "provides": [
+      "int GetID()",
+      "void EnterEvent()",
+      "void EnterEvent(float remainTime)",
+      "void UpdateLogic(float deltaTime)",
+      "void FinishEvent()"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IEventDuringController",
+      "IMessageController",
+      "IMessagePort"
+    ],
+    "tags": {
+      "major": [
+        "DataSync",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "SpecialProductEventController",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Controller",
+    "system": "SpecialProductEventController",
+    "score": 0.4,
+    "provides": [
+      "int GetID()",
+      "bool IsOnEvent()",
+      "void EnterEvent()",
+      "void EnterEvent(float lifeTime)",
+      "void UpdateLogic(float deltaTime)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IEventDuringController",
+      "IMessageController"
+    ],
+    "tags": {
+      "major": [
+        "ConditionCheck",
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "TutorialBase",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Base",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "abstract void Enter()",
+      "abstract void Update()",
+      "abstract void Finish()",
+      "void SetFinish(bool b)"
+    ],
+    "requires": [
+      "TutorialManager"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "TutorialMissionConditionCheckerBase",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Base",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "IntUserInfoIndex GetID()",
+      "bool IsValidMember()",
+      "abstract bool CanRun()",
+      "void Finish()",
+      "bool IsFinish()"
+    ],
+    "requires": [
+      "ConfigCommonTable",
+      "UserInfo"
+    ],
+    "tags": {
+      "major": [
+        "ConditionCheck"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "EntityBase",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Base",
+    "system": "unity_project",
+    "score": 0.4,
+    "provides": [
+      "string GetEntityID()",
+      "string GetEntityType()",
+      "bool IsActive()",
+      "Transform GetTransform()",
+      "GameObject GetGameObject()"
+    ],
+    "requires": [
+      "IEntity",
+      "IInitializable"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification",
+        "ConditionCheck"
+      ],
+      "minor": [
+        "Find",
+        "Assign",
+        "Spawn"
+      ]
+    }
+  },
+  {
+    "fileId": "UIBase",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Base",
+    "system": "unity_project",
+    "score": 0.4,
+    "provides": [
+      "void Init()",
+      "void OnReset()",
+      "bool IsInitialized()",
+      "void Show()",
+      "void Hide()"
+    ],
+    "requires": [
+      "AnimationCurve",
+      "CanvasGroup",
+      "IInitializable",
+      "UnityEvent"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification",
+        "ConditionCheck"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "SoundManager",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Manager",
+    "system": "unity_project",
+    "score": 0.4,
+    "provides": [
+      "void Init()",
+      "void PlayBGM()",
+      "void PlayBGM(AudioClip clip)",
+      "void StopBGM()",
+      "void PauseBGM()"
+    ],
+    "requires": [
+      "Singleton"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "StateControl",
+        "ConditionCheck"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "Singleton",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Component",
+    "system": "Util",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ObjectPool",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Pool",
+    "system": "ObjectPool",
+    "score": 0.4,
+    "provides": [
+      "void Init()",
+      "GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation, Transform _parent = null)",
+      "List<GameObject> FindActiveObjects(string _tag)",
+      "void ReturnToPool(GameObject obj)",
+      "int GetAvailableCount(string tag)"
+    ],
+    "requires": [
+      "ObjectPool"
+    ],
+    "tags": {
+      "major": [],
+      "minor": [
+        "Find",
+        "Spawn"
+      ]
+    }
+  },
+  {
+    "fileId": "PadEventHandler",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Handler",
+    "system": "PadEventHandler",
+    "score": 0.4,
+    "provides": [
+      "void Initialize(VirtualPad pad)",
+      "void OnPointerDown(PointerEventData eventData)",
+      "void OnPointerUp(PointerEventData eventData)",
+      "void OnDrag(PointerEventData eventData)"
+    ],
+    "requires": [
+      "IDragHandler",
+      "IPointerDownHandler",
+      "IPointerUpHandler",
+      "VirtualPad"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "MyExtensions",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Component",
+    "system": "MyExtensions",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Pool",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Pool",
+    "system": "Pool",
+    "score": 0.4,
+    "provides": [
+      "T GetObject()",
+      "void ReturnObjectToPool(T obj)"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "AudioManager",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Enum",
+    "system": "Base",
+    "score": 0.4,
+    "provides": [
+      "void PlaySound(AudioName audioName)",
+      "void PauseSound(AudioName audioName)",
+      "void StopSound(AudioName audioName)",
+      "void PlaySound(AudioName audioName)",
+      "void PauseSound(AudioName audioName)"
+    ],
+    "requires": [
+      "AudioName",
+      "SingletonBehaviour",
+      "Sound"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "StateControl"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "MuteButtonBase",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Component",
+    "system": "Base",
+    "score": 0.4,
+    "provides": [
+      "void Toggle()"
+    ],
+    "requires": [
+      "AudioListener"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "SingletonBehaviour",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Base",
+    "system": "Helpers",
+    "score": 0.4,
+    "provides": [],
+    "requires": [
+      "MonoBehaviour where T : MonoBehaviour"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "TutorialController",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Manager",
+    "system": "PlaygroundConnections",
+    "score": 0.4,
+    "provides": [
+      "void Activate()",
+      "void Deactivate(float duration = 0f)",
+      "void TutorialTextSetter(bool status)",
+      "void TutorialHandSetter(bool status, string animName=\"\", string animToSetFalse = \"\")",
+      "void SetHandPositionWithClick(Transform obj)"
+    ],
+    "requires": [
+      "CanvasGroup",
+      "SingletonBehaviour"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "PlyAdsKitUtils",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Config",
+    "system": "Utilities",
+    "score": 0.4,
+    "provides": [
+      "bool IsLandscape()",
+      "float GetScreenWidth()",
+      "float GetScreenHeight()",
+      "bool IsPointerOverUI()",
+      "Vector3 GetMouseScreenPosition()"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ConditionCheck"
+      ],
+      "minor": [
+        "Find",
+        "Delay",
+        "Despawn"
+      ]
+    }
+  },
+  {
+    "fileId": "BaseData",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Base",
+    "system": "Scratch",
+    "score": 0.4,
+    "provides": [
+      "Vector2 GetScratchPosition(Vector2 position)",
+      "Vector2 GetLocalPosition(Vector2 texturePosition)",
+      "void ResetTextureSize()"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ConditionCheck"
+      ],
+      "minor": [
+        "Find",
+        "Calculate",
+        "Validate"
+      ]
+    }
+  },
+  {
+    "fileId": "EventSystemHelper",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Helper",
+    "system": "Scratch",
+    "score": 0.4,
+    "provides": [],
+    "requires": [
+      "EventSystem",
+      "InputSystemUIInputModule",
+      "StandaloneInputModule"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ETFXEffectControllerPooled",
+    "layer": "Core",
+    "genre": "Generic",
+    "role": "Model",
+    "system": "ETFXEffectControllerPooled",
+    "score": 0.4,
+    "provides": [
+      "void InitializeLoop()",
+      "void NextEffect()",
+      "void PreviousEffect()"
+    ],
+    "requires": [
+      "ETFXMouseOrbit",
+      "ParticleSystem"
+    ],
+    "tags": {
+      "major": [
+        "StateControl"
+      ],
+      "minor": []
+    }
+  }
+]

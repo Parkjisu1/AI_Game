@@ -1,0 +1,41 @@
+{
+  "fileId": "FPS_Check",
+  "filePath": "Util\\FPS_Check.cs",
+  "namespace": "",
+  "layer": "Core",
+  "genre": "Generic",
+  "role": "Component",
+  "system": "Util",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "FPS_Check",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [],
+      "properties": [],
+      "methods": []
+    }
+  ],
+  "provides": [],
+  "requires": [],
+  "tags": {
+    "major": [],
+    "minor": []
+  },
+  "uses": [
+    "GUI",
+    "GUIStyle"
+  ],
+  "usedBy": []
+}

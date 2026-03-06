@@ -1,0 +1,88 @@
+{
+  "fileId": "EventSystemHelper",
+  "filePath": "Scratch\\Tools\\EventSystemHelper.cs",
+  "namespace": "ScratchCardAsset.Tools",
+  "layer": "Core",
+  "genre": "Generic",
+  "role": "Helper",
+  "system": "Scratch",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine",
+    "UnityEngine.EventSystems",
+    "UnityEngine.InputSystem.UI"
+  ],
+  "classes": [
+    {
+      "className": "EventSystemHelper",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "eventSystem",
+          "fieldType": "EventSystem",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Awake",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Awake()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnValidate",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnValidate()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [],
+  "requires": [
+    "EventSystem",
+    "InputSystemUIInputModule",
+    "StandaloneInputModule"
+  ],
+  "tags": {
+    "major": [
+      "ResponseTrigger"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "InputSystemUIInputModule",
+    "StandaloneInputModule"
+  ],
+  "usedBy": []
+}

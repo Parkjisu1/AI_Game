@@ -2,7 +2,7 @@
 GameAdapter Abstract Base Class
 ================================
 게임과의 연결을 담당하는 어댑터 인터페이스.
-connect → get_game_state → send_input → disconnect.
+connect -> get_game_state -> send_input -> disconnect.
 """
 
 from abc import ABC, abstractmethod

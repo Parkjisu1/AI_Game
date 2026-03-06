@@ -1,0 +1,489 @@
+[
+  {
+    "designId": "idle_heroes__balance__growth__offline_reward",
+    "domain": "Balance",
+    "genre": "Idle",
+    "system": "성장 > 오프라인 보상",
+    "score": 0.4,
+    "source": "observed",
+    "data_type": "formula",
+    "balance_area": "성장 밸런스",
+    "version": "1.0.0",
+    "project": "idle_heroes",
+    "provides": [
+      "offline_income_formula"
+    ],
+    "requires": [
+      "play_time_tracking"
+    ],
+    "tags": [
+      "idle",
+      "offline",
+      "reward"
+    ]
+  },
+  {
+    "designId": "idlemoney__balance__adrewardcurve",
+    "domain": "Balance",
+    "genre": "Idle",
+    "system": "AdRewardCurve",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "formula",
+    "balance_area": "economy",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "ADMoneyBonusFactor_data",
+      "ADMoneyBonusFactor.FactoryLevel",
+      "ADMoneyBonusFactor.RebirthCount0",
+      "ADMoneyBonusFactor.RebirthCount1",
+      "ADMoneyBonusFactor.RebirthCount2",
+      "ADMoneyBonusFactor.RebirthCount3"
+    ],
+    "requires": [],
+    "tags": [
+      "economy",
+      "formula"
+    ]
+  },
+  {
+    "designId": "idlemoney__balance__globalconfig",
+    "domain": "Balance",
+    "genre": "Idle",
+    "system": "GlobalConfig",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "config",
+    "balance_area": "system",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "ConfigCommon_data",
+      "ConfigCommon.ConfigID",
+      "ConfigCommon.ConfigParam1"
+    ],
+    "requires": [],
+    "tags": [
+      "system",
+      "config"
+    ]
+  },
+  {
+    "designId": "idlemoney__balance__factoryprogression",
+    "domain": "Balance",
+    "genre": "Idle",
+    "system": "FactoryProgression",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "table",
+    "balance_area": "progression",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "FactoryLevelUp_data",
+      "FactoryLevelUp.FactoryLevel",
+      "FactoryLevelUp.LevelUpMoneyCost",
+      "FactoryLevelUp.LevelUpMoneyCostFactor",
+      "FactoryLevelUp.MaxOpenProductGroupID",
+      "FactoryLevelUp.HammerPower"
+    ],
+    "requires": [],
+    "tags": [
+      "progression",
+      "data_table"
+    ]
+  },
+  {
+    "designId": "idlemoney__balance__rebirthsystem",
+    "domain": "Balance",
+    "genre": "Idle",
+    "system": "RebirthSystem",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "table",
+    "balance_area": "prestige",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "FactoryRebirth_data",
+      "FactoryRebirth.RebirthCount",
+      "FactoryRebirth.RebirthConditionFactoryLevel",
+      "FactoryRebirth.TargetMoneyAmount",
+      "FactoryRebirth.TimeLimit",
+      "FactoryRebirth.EarningMoneyPerPower"
+    ],
+    "requires": [],
+    "tags": [
+      "prestige",
+      "data_table"
+    ]
+  },
+  {
+    "designId": "idlemoney__balance__rebirthreward",
+    "domain": "Balance",
+    "genre": "Idle",
+    "system": "RebirthReward",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "table",
+    "balance_area": "prestige",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "FactoryRebirthReward_data",
+      "FactoryRebirthReward.FactoryLevel",
+      "FactoryRebirthReward.RewardCredit",
+      "FactoryRebirthReward.RebirthRewardCreditFactor"
+    ],
+    "requires": [],
+    "tags": [
+      "prestige",
+      "data_table",
+      "economy"
+    ]
+  },
+  {
+    "designId": "idlemoney__balance__labprogression",
+    "domain": "Balance",
+    "genre": "Idle",
+    "system": "LabProgression",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "table",
+    "balance_area": "research",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "LabItemLevelUp_data",
+      "LabItemLevelUp.TargetLevel",
+      "LabItemLevelUp.ReqCoinAmountGeneral",
+      "LabItemLevelUp.ReqCoinAmountAdv",
+      "LabItemLevelUp.ReqCoinAmountSup"
+    ],
+    "requires": [],
+    "tags": [
+      "research",
+      "data_table",
+      "progression"
+    ]
+  },
+  {
+    "designId": "idlemoney__balance__machinetuning",
+    "domain": "Balance",
+    "genre": "Idle",
+    "system": "MachineTuning",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "table",
+    "balance_area": "upgrade",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "MachineTuningExp_data",
+      "MachineTuningExp.TuningLevel",
+      "MachineTuningExp.RequiredExpGeneral",
+      "MachineTuningExp.RequiredExpAdvanced",
+      "MachineTuningExp.RequiredExpSuper",
+      "MachineTuningExp.RequiredExpLegend"
+    ],
+    "requires": [],
+    "tags": [
+      "upgrade",
+      "data_table",
+      "progression"
+    ]
+  },
+  {
+    "designId": "idlemoney__balance__machinetuningcost",
+    "domain": "Balance",
+    "genre": "Idle",
+    "system": "MachineTuningCost",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "table",
+    "balance_area": "upgrade",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "MachineTuningMaterial_data",
+      "MachineTuningMaterial.TuningLevel",
+      "MachineTuningMaterial.RequiredMaterialGeneral",
+      "MachineTuningMaterial.RequiredMaterialAdvanced",
+      "MachineTuningMaterial.RequiredMaterialSuper",
+      "MachineTuningMaterial.RequiredMaterialLegend"
+    ],
+    "requires": [],
+    "tags": [
+      "upgrade",
+      "data_table"
+    ]
+  },
+  {
+    "designId": "idlemoney__balance__slotprogression",
+    "domain": "Balance",
+    "genre": "Idle",
+    "system": "SlotProgression",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "table",
+    "balance_area": "progression",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "SlotLevelUp_data",
+      "SlotLevelUp.SlotLevel",
+      "SlotLevelUp.Line0LevelUpMoneyCost",
+      "SlotLevelUp.Line1LevelUpMoneyCost",
+      "SlotLevelUp.Line2LevelUpMoneyCost",
+      "SlotLevelUp.Line3LevelUpMoneyCost"
+    ],
+    "requires": [],
+    "tags": [
+      "progression",
+      "data_table"
+    ]
+  },
+  {
+    "designId": "idlemoney__balance__supplyprogression",
+    "domain": "Balance",
+    "genre": "Idle",
+    "system": "SupplyProgression",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "table",
+    "balance_area": "progression",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "SupplyMachineLevelUp_data",
+      "SupplyMachineLevelUp.SupplyMachineLevel",
+      "SupplyMachineLevelUp.MaxSupplyCount",
+      "SupplyMachineLevelUp.Line0LevelUpMoneyCost",
+      "SupplyMachineLevelUp.Line1LevelUpMoneyCost",
+      "SupplyMachineLevelUp.Line2LevelUpMoneyCost"
+    ],
+    "requires": [],
+    "tags": [
+      "progression",
+      "data_table"
+    ]
+  },
+  {
+    "designId": "idlemoney__balance__factory_progression",
+    "domain": "Balance",
+    "genre": "Idle",
+    "system": "Factory Progression",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "formula",
+    "balance_area": "progression",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "factory_level_cost",
+      "factory_unlock_conditions",
+      "factory_power_scaling"
+    ],
+    "requires": [
+      "money_currency",
+      "slot_system"
+    ],
+    "tags": [
+      "factory",
+      "level",
+      "cost_curve",
+      "progression"
+    ]
+  },
+  {
+    "designId": "idlemoney__balance__slot_progression",
+    "domain": "Balance",
+    "genre": "Idle",
+    "system": "Slot Level Progression",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "formula",
+    "balance_area": "progression",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "slot_level_cost",
+      "machine_power_by_slot"
+    ],
+    "requires": [
+      "money_currency",
+      "machine_system"
+    ],
+    "tags": [
+      "slot",
+      "level",
+      "power_scaling",
+      "progression"
+    ]
+  },
+  {
+    "designId": "idlemoney__balance__rebirth_system",
+    "domain": "Balance",
+    "genre": "Idle",
+    "system": "Rebirth Prestige",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "flow",
+    "balance_area": "prestige",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "rebirth_progression",
+      "world_unlock",
+      "idle_reward_scaling",
+      "manager_unlock_gate"
+    ],
+    "requires": [
+      "factory_challenge",
+      "factory_progression"
+    ],
+    "tags": [
+      "rebirth",
+      "prestige",
+      "reset",
+      "progression"
+    ]
+  },
+  {
+    "designId": "idlemoney__balance__economy_flow",
+    "domain": "Balance",
+    "genre": "Idle",
+    "system": "Economy Currency Flow",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "flow",
+    "balance_area": "economy",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "currency_income_sources",
+      "currency_sink_points",
+      "economy_balance"
+    ],
+    "requires": [
+      "production_line",
+      "factory_progression",
+      "shop_system"
+    ],
+    "tags": [
+      "economy",
+      "currency",
+      "income",
+      "sink",
+      "flow"
+    ]
+  },
+  {
+    "designId": "idlemoney__balance__offline_earnings",
+    "domain": "Balance",
+    "genre": "Idle",
+    "system": "Offline Earnings",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "formula",
+    "balance_area": "economy",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "offline_income_calculation",
+      "offline_time_cap"
+    ],
+    "requires": [
+      "production_line",
+      "lab_system",
+      "package_system"
+    ],
+    "tags": [
+      "offline",
+      "idle",
+      "earnings",
+      "time_based"
+    ]
+  },
+  {
+    "designId": "idlemoney__balance__boost_events",
+    "domain": "Balance",
+    "genre": "Idle",
+    "system": "Boost Event Timers",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "rule",
+    "balance_area": "economy",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "power_boost",
+      "money_boost",
+      "supply_boost"
+    ],
+    "requires": [
+      "factory_progression",
+      "ad_system"
+    ],
+    "tags": [
+      "boost",
+      "event",
+      "multiplier",
+      "temporary"
+    ]
+  },
+  {
+    "designId": "idlemoney__balance__lab_system",
+    "domain": "Balance",
+    "genre": "Idle",
+    "system": "Lab Research",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "spec",
+    "balance_area": "research",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "permanent_buffs",
+      "lab_item_progression"
+    ],
+    "requires": [
+      "rebirth_system",
+      "money_currency"
+    ],
+    "tags": [
+      "lab",
+      "research",
+      "buff",
+      "permanent",
+      "upgrade"
+    ]
+  },
+  {
+    "designId": "idlemoney__balance__ad_reward_curve",
+    "domain": "Balance",
+    "genre": "Idle",
+    "system": "AD Reward Scaling",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "formula",
+    "balance_area": "economy",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "ad_reward_calculation",
+      "ad_frequency_cap"
+    ],
+    "requires": [
+      "factory_progression",
+      "boost_events"
+    ],
+    "tags": [
+      "ad",
+      "reward",
+      "scaling",
+      "monetization"
+    ]
+  }
+]

@@ -1,0 +1,48 @@
+{
+  "designId": "idlemoney__content__dungeon_content",
+  "project": "IdleMoney",
+  "domain": "Content",
+  "genre": "Idle",
+  "system": "Dungeon Content",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "content_data",
+  "balance_area": "stage",
+  "source_file": "outgame_content_meta.yaml",
+  "content": {
+    "summary": "던전 콘텐츠 데이터. 66개 스테이지, 일반/특수 레벨 구분.\n레벨별 목표, 시간 제한, 보상, 제품 HP 정의.",
+    "flow": [],
+    "parameters": {
+      "total_levels": 66,
+      "level_data": [
+        "DungeonLevel: 스테이지 번호",
+        "TargetProductBreakAmount: 파괴 목표",
+        "SupplySpeed: 스폰 속도 배율",
+        "ProductHp: 제품 HP",
+        "TimeLimit: 시간 제한 (초)",
+        "IsSpecialLevel: 특수 레벨 플래그",
+        "SpecialRewardType/Amount: 특수 보상",
+        "ClearRewardCoinAmount: 클리어 코인"
+      ],
+      "special_levels": "IsSpecialLevel=1, 제품 스케일 변경, 배경 변경"
+    },
+    "edge_cases": [],
+    "references": []
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from C# analysis: Dungeon Content",
+      "note": "Live game code analysis import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T11:08:17.029Z"
+}

@@ -1,0 +1,462 @@
+{
+  "fileId": "Resourcestorage",
+  "filePath": "Resourcestorage.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Simulation",
+  "role": "Enum",
+  "system": "Resourcestorage",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "ResourceType",
+      "classType": "enum",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Init",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Init()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "TransferResourceTo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "_target"
+            },
+            {
+              "paramType": "int _amount =",
+              "paramName": "1"
+            }
+          ],
+          "signature": "void TransferResourceTo(Transform _target, int _amount = 1)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResourceTransfer",
+          "minorTag": null
+        },
+        {
+          "methodName": "CollectResource",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "IngradientController",
+              "paramName": "resource"
+            }
+          ],
+          "signature": "void CollectResource(IngradientController resource)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Aggregate"
+        },
+        {
+          "methodName": "RemoveResource",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "amount"
+            },
+            {
+              "paramType": "Transform _target =",
+              "paramName": "null"
+            }
+          ],
+          "signature": "bool RemoveResource(int amount,Transform _target = null)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Despawn"
+        },
+        {
+          "methodName": "GetCurrentAmount",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int GetCurrentAmount()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetResourceStackTopPos",
+          "accessModifier": "public",
+          "returnType": "Transform",
+          "parameters": [],
+          "signature": "Transform GetResourceStackTopPos()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "CollectGold",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void CollectGold()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Aggregate"
+        }
+      ]
+    },
+    {
+      "className": "ResourceStorage",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [
+        "ICollectable"
+      ],
+      "fields": [
+        {
+          "fieldName": "playerDetectionRange",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "1.5f"
+        },
+        {
+          "fieldName": "checkInterval",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0.1f"
+        },
+        {
+          "fieldName": "intervalTime",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0.2f"
+        },
+        {
+          "fieldName": "storageType",
+          "fieldType": "ResourceType",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "ResourceType.Gold"
+        },
+        {
+          "fieldName": "m_UseSearch",
+          "fieldType": "bool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        },
+        {
+          "fieldName": "maxCapacity",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "999"
+        },
+        {
+          "fieldName": "currentAmount",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0"
+        },
+        {
+          "fieldName": "maxResourcesPerLayer",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "1"
+        },
+        {
+          "fieldName": "collectPoint",
+          "fieldType": "Transform",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "collectRadius",
+          "fieldType": "float",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "2f"
+        },
+        {
+          "fieldName": "resourcesLayers",
+          "fieldType": "List<List<IngradientController>>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<List<IngradientController>>()"
+        },
+        {
+          "fieldName": "playerController",
+          "fieldType": "PlayerController",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Init",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Init()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "TransferResourceTo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "_target"
+            },
+            {
+              "paramType": "int _amount =",
+              "paramName": "1"
+            }
+          ],
+          "signature": "void TransferResourceTo(Transform _target, int _amount = 1)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResourceTransfer",
+          "minorTag": null
+        },
+        {
+          "methodName": "CollectResource",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "IngradientController",
+              "paramName": "resource"
+            }
+          ],
+          "signature": "void CollectResource(IngradientController resource)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Aggregate"
+        },
+        {
+          "methodName": "RemoveResource",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "amount"
+            },
+            {
+              "paramType": "Transform _target =",
+              "paramName": "null"
+            }
+          ],
+          "signature": "bool RemoveResource(int amount,Transform _target = null)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Despawn"
+        },
+        {
+          "methodName": "GetCurrentAmount",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int GetCurrentAmount()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetResourceStackTopPos",
+          "accessModifier": "public",
+          "returnType": "Transform",
+          "parameters": [],
+          "signature": "Transform GetResourceStackTopPos()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "CollectGold",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void CollectGold()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Aggregate"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Init()",
+    "void TransferResourceTo(Transform _target, int _amount = 1)",
+    "void CollectResource(IngradientController resource)",
+    "bool RemoveResource(int amount,Transform _target = null)",
+    "int GetCurrentAmount()",
+    "Transform GetResourceStackTopPos()",
+    "void CollectGold()",
+    "void Init()",
+    "void TransferResourceTo(Transform _target, int _amount = 1)",
+    "void CollectResource(IngradientController resource)",
+    "bool RemoveResource(int amount,Transform _target = null)",
+    "int GetCurrentAmount()",
+    "Transform GetResourceStackTopPos()",
+    "void CollectGold()"
+  ],
+  "requires": [
+    "ICollectable",
+    "ResourceType"
+  ],
+  "tags": {
+    "major": [
+      "ResourceTransfer"
+    ],
+    "minor": [
+      "Aggregate",
+      "Find",
+      "Despawn"
+    ]
+  },
+  "uses": [
+    "Collected",
+    "Debug",
+    "GameManager",
+    "IngradientController",
+    "Mathf",
+    "Transferred",
+    "WaitForSeconds"
+  ],
+  "usedBy": []
+}

@@ -1,0 +1,99 @@
+{
+  "designId": "idlemoney__outgame__goods",
+  "project": "IdleMoney",
+  "domain": "OutGame",
+  "genre": "Idle",
+  "system": "Goods",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "config",
+  "balance_area": "item",
+  "source_file": "Goods.json",
+  "table_stats": {
+    "row_count": 9,
+    "columns": [
+      "GoodsID",
+      "TextID"
+    ],
+    "numeric_columns": [
+      "GoodsID"
+    ],
+    "text_columns": [
+      "TextID"
+    ]
+  },
+  "content": {
+    "summary": "Goods 데이터 테이블 (9행, 2열)",
+    "parameters": {
+      "GoodsID": "0",
+      "TextID": "Money_Name_0"
+    },
+    "balance_points": [
+      {
+        "variable": "GoodsID",
+        "min_value": 0,
+        "max_value": 8,
+        "avg_value": 4,
+        "growth_ratio": 8,
+        "data_points": 9,
+        "impact": "medium"
+      }
+    ],
+    "edge_cases": [],
+    "references": []
+  },
+  "data": [
+    {
+      "GoodsID": "0",
+      "TextID": "Money_Name_0"
+    },
+    {
+      "GoodsID": "1",
+      "TextID": "Diamond_Name_0"
+    },
+    {
+      "GoodsID": "2",
+      "TextID": "Credit_Name_0"
+    },
+    {
+      "GoodsID": "3",
+      "TextID": "Booster_Name_0"
+    },
+    {
+      "GoodsID": "4",
+      "TextID": "TuningExp_Name_0"
+    },
+    {
+      "GoodsID": "5",
+      "TextID": "TuningMaterial_Name_0"
+    },
+    {
+      "GoodsID": "6",
+      "TextID": "Hammer_Name_0"
+    },
+    {
+      "GoodsID": "7",
+      "TextID": "SuperHammer_Name_0"
+    },
+    {
+      "GoodsID": "8",
+      "TextID": "SpecialProduct_Name_0"
+    }
+  ],
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from Goods.json (9 rows)",
+      "note": "Live game data import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T10:32:53.945Z"
+}

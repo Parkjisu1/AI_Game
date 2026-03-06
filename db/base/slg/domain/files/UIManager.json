@@ -1,0 +1,571 @@
+{
+  "fileId": "UIManager",
+  "filePath": "unity_project\\Assets\\Scripts\\UI\\UIManager.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Slg",
+  "role": "Manager",
+  "system": "unity_project",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine",
+    "UnityEngine.UI"
+  ],
+  "classes": [
+    {
+      "className": "UIManager",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [
+        "IInitializable"
+      ],
+      "fields": [
+        {
+          "fieldName": "m_MainCanvas",
+          "fieldType": "Canvas",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_CanvasScaler",
+          "fieldType": "CanvasScaler",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_TitleScreen",
+          "fieldType": "UITitleScreen",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_GameScreen",
+          "fieldType": "UIGameScreen",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_ResultScreen",
+          "fieldType": "UIResultScreen",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_CTAScreen",
+          "fieldType": "UICTAScreen",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_LowHPWarning",
+          "fieldType": "UILowHPWarning",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_ReferenceResolution",
+          "fieldType": "Vector2",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "new Vector2(1080, 1920)"
+        },
+        {
+          "fieldName": "m_IsInitialized",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        },
+        {
+          "fieldName": "GameScreen",
+          "fieldType": "UIGameScreen",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "> m_GameScreen"
+        },
+        {
+          "fieldName": "ResultScreen",
+          "fieldType": "UIResultScreen",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "> m_ResultScreen"
+        },
+        {
+          "fieldName": "LowHPWarning",
+          "fieldType": "UILowHPWarning",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "> m_LowHPWarning"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Init",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Init()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnReset",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnReset()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "IsInitialized",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool IsInitialized()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "SetupCanvas",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void SetupCanvas()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "InitializeScreens",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void InitializeScreens()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "CreateWarningUI",
+          "accessModifier": "private",
+          "returnType": "UILowHPWarning",
+          "parameters": [],
+          "signature": "UILowHPWarning CreateWarningUI()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "SubscribeToEvents",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void SubscribeToEvents()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnGameStateChanged",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "GameManager.GameState",
+              "paramName": "state"
+            }
+          ],
+          "signature": "void OnGameStateChanged(GameManager.GameState state)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnPhaseChanged",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "TurnManager.TurnPhase",
+              "paramName": "phase"
+            }
+          ],
+          "signature": "void OnPhaseChanged(TurnManager.TurnPhase phase)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnAttackPerformed",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "UnitBase",
+              "paramName": "attacker"
+            },
+            {
+              "paramType": "UnitBase",
+              "paramName": "target"
+            },
+            {
+              "paramType": "int",
+              "paramName": "damage"
+            }
+          ],
+          "signature": "void OnAttackPerformed(UnitBase attacker, UnitBase target, int damage)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateLowHPWarning",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void UpdateLowHPWarning()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnGameEnd",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "victory"
+            }
+          ],
+          "signature": "void OnGameEnd(bool victory)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "HideAllScreens",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void HideAllScreens()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ShowScreen",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "UIBase",
+              "paramName": "screen"
+            }
+          ],
+          "signature": "void ShowScreen(UIBase screen)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetMainCanvas",
+          "accessModifier": "public",
+          "returnType": "Canvas",
+          "parameters": [],
+          "signature": "Canvas GetMainCanvas()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetTitleScreen",
+          "accessModifier": "public",
+          "returnType": "UITitleScreen",
+          "parameters": [],
+          "signature": "UITitleScreen GetTitleScreen()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetGameScreen",
+          "accessModifier": "public",
+          "returnType": "UIGameScreen",
+          "parameters": [],
+          "signature": "UIGameScreen GetGameScreen()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetResultScreen",
+          "accessModifier": "public",
+          "returnType": "UIResultScreen",
+          "parameters": [],
+          "signature": "UIResultScreen GetResultScreen()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetCTAScreen",
+          "accessModifier": "public",
+          "returnType": "UICTAScreen",
+          "parameters": [],
+          "signature": "UICTAScreen GetCTAScreen()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "SetScreens",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "UITitleScreen",
+              "paramName": "title"
+            },
+            {
+              "paramType": "UIGameScreen",
+              "paramName": "game"
+            },
+            {
+              "paramType": "UIResultScreen",
+              "paramName": "result"
+            },
+            {
+              "paramType": "UICTAScreen",
+              "paramName": "cta"
+            }
+          ],
+          "signature": "void SetScreens(UITitleScreen title, UIGameScreen game, UIResultScreen result, UICTAScreen cta)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "UnsubscribeFromEvents",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void UnsubscribeFromEvents()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnDestroy",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnDestroy()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Init()",
+    "void OnReset()",
+    "bool IsInitialized()",
+    "void OnGameStateChanged(GameManager.GameState state)",
+    "void UpdateLowHPWarning()",
+    "void HideAllScreens()",
+    "void ShowScreen(UIBase screen)",
+    "Canvas GetMainCanvas()",
+    "UITitleScreen GetTitleScreen()",
+    "UIGameScreen GetGameScreen()",
+    "UIResultScreen GetResultScreen()",
+    "UICTAScreen GetCTAScreen()",
+    "void SetScreens(UITitleScreen title, UIGameScreen game, UIResultScreen result, UICTAScreen cta)"
+  ],
+  "requires": [
+    "CanvasScaler",
+    "IInitializable",
+    "UICTAScreen",
+    "UIGameScreen",
+    "UILowHPWarning",
+    "UIResultScreen",
+    "UITitleScreen"
+  ],
+  "tags": {
+    "major": [
+      "ResponseTrigger",
+      "ValueModification",
+      "ConditionCheck"
+    ],
+    "minor": [
+      "Find",
+      "Assign",
+      "Spawn"
+    ]
+  },
+  "uses": [
+    "CanvasScaler",
+    "GameManager",
+    "GraphicRaycaster",
+    "UIBase",
+    "UICTAScreen",
+    "UIGameScreen",
+    "UILowHPWarning",
+    "UIResultScreen",
+    "UITitleScreen"
+  ],
+  "usedBy": []
+}

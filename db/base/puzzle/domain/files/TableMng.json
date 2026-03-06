@@ -1,0 +1,88 @@
+{
+  "fileId": "TableMng",
+  "filePath": "Data\\GoogleSpreadSheet\\TableMng.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Puzzle",
+  "role": "Component",
+  "system": "Data",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "Global_Define"
+  ],
+  "classes": [
+    {
+      "className": "TableMng",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "m_bTableDownLoadState",
+          "fieldType": "bool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        }
+      ],
+      "properties": [
+        {
+          "propertyName": "interstitialTable",
+          "propertyType": "InterstitialTable",
+          "accessModifier": "public",
+          "hasGetter": true,
+          "hasSetter": false
+        }
+      ],
+      "methods": [
+        {
+          "methodName": "GetITable",
+          "accessModifier": "public",
+          "returnType": "ITable",
+          "parameters": [
+            {
+              "paramType": "eTable",
+              "paramName": "a_eTable"
+            }
+          ],
+          "signature": "ITable GetITable(eTable a_eTable)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "ITable GetITable(eTable a_eTable)",
+    "InterstitialTable interstitialTable { get; }"
+  ],
+  "requires": [
+    "TableMng"
+  ],
+  "tags": {
+    "major": [],
+    "minor": [
+      "Find"
+    ]
+  },
+  "uses": [
+    "InterstitialTable"
+  ],
+  "usedBy": []
+}

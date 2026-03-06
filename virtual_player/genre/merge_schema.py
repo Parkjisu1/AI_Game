@@ -1,9 +1,9 @@
 """
-MergeSchema — Merge Genre Configuration
+MergeSchema -- Merge Genre Configuration
 =========================================
 Concepts, ROIs, goals, actions, and interrupt rules for Merge games.
 Focus: board management, piece merging, order fulfillment, energy.
-No HP/MP gauges — board state analysis is primary.
+No HP/MP gauges -- board state analysis is primary.
 """
 
 from typing import Dict, List

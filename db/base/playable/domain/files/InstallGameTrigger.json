@@ -1,0 +1,60 @@
+{
+  "fileId": "InstallGameTrigger",
+  "filePath": "Gameplay\\InstallGameTrigger.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Playable",
+  "role": "Component",
+  "system": "Gameplay",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine",
+    "Luna.Unity"
+  ],
+  "classes": [
+    {
+      "className": "InstallGameTrigger",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "OnTriggerEnter",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Collider",
+              "paramName": "other"
+            }
+          ],
+          "signature": "void OnTriggerEnter(Collider other)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [],
+  "requires": [],
+  "tags": {
+    "major": [],
+    "minor": []
+  },
+  "uses": [
+    "Debug",
+    "Playable"
+  ],
+  "usedBy": []
+}

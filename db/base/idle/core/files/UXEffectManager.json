@@ -1,0 +1,1478 @@
+{
+  "fileId": "UXEffectManager",
+  "filePath": "unity_project\\Assets\\Scripts\\Managers\\UXEffectManager.cs",
+  "namespace": "",
+  "layer": "Core",
+  "genre": "Idle",
+  "role": "Manager",
+  "system": "unity_project",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI"
+  ],
+  "classes": [
+    {
+      "className": "UXEffectManager",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "Singleton<UXEffectManager>",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "m_FlashDuration",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.05f"
+        },
+        {
+          "fieldName": "m_FlashColor",
+          "fieldType": "Color",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "new Color(1f, 1f, 1f, 0.6f)"
+        },
+        {
+          "fieldName": "m_FadeDuration",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.4f"
+        },
+        {
+          "fieldName": "m_BannerSlideSpeed",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.3f"
+        },
+        {
+          "fieldName": "m_BannerHoldDuration",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "1.0f"
+        },
+        {
+          "fieldName": "m_IdleBounceSpeed",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "2f"
+        },
+        {
+          "fieldName": "m_IdleBounceAmount",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.05f"
+        },
+        {
+          "fieldName": "m_KnockbackDistance",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.3f"
+        },
+        {
+          "fieldName": "m_KnockbackDuration",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.15f"
+        },
+        {
+          "fieldName": "m_TelegraphScaleUp",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "1.15f"
+        },
+        {
+          "fieldName": "m_TelegraphDuration",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.25f"
+        },
+        {
+          "fieldName": "m_BurstParticleCount",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "10"
+        },
+        {
+          "fieldName": "m_BurstDuration",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.6f"
+        },
+        {
+          "fieldName": "m_BurstSpread",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "2.5f"
+        },
+        {
+          "fieldName": "m_VictoryJumpHeight",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.5f"
+        },
+        {
+          "fieldName": "m_VictoryScaleUp",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "1.15f"
+        },
+        {
+          "fieldName": "m_ButtonPressScale",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.9f"
+        },
+        {
+          "fieldName": "m_ButtonPressDuration",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.08f"
+        },
+        {
+          "fieldName": "m_SelectBounceScale",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "1.1f"
+        },
+        {
+          "fieldName": "m_SelectBounceDuration",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.15f"
+        },
+        {
+          "fieldName": "m_EnemyTurnTint",
+          "fieldType": "Color",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "new Color(0.3f, 0f, 0f, 0.15f)"
+        },
+        {
+          "fieldName": "m_OverlayFadeDuration",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.3f"
+        },
+        {
+          "fieldName": "m_GlowPulseSpeed",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "3f"
+        },
+        {
+          "fieldName": "m_GlowMinAlpha",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.3f"
+        },
+        {
+          "fieldName": "m_GlowMaxAlpha",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.8f"
+        },
+        {
+          "fieldName": "m_CriticalScale",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "1.5f"
+        },
+        {
+          "fieldName": "m_CriticalColor",
+          "fieldType": "Color",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "Color.yellow"
+        },
+        {
+          "fieldName": "m_CriticalThreshold",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "30"
+        },
+        {
+          "fieldName": "m_ResultBounceScale",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "1.3f"
+        },
+        {
+          "fieldName": "m_VictoryParticleCount",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "12"
+        },
+        {
+          "fieldName": "m_DesaturationDuration",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.5f"
+        },
+        {
+          "fieldName": "m_CTAGlowPulseSpeed",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "4f"
+        },
+        {
+          "fieldName": "m_CTAArrowBounceSpeed",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "3f"
+        },
+        {
+          "fieldName": "m_CTAArrowBounceAmount",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "15f"
+        },
+        {
+          "fieldName": "m_OverlayCanvas",
+          "fieldType": "Canvas",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_ScreenFlashImage",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_ScreenFadeImage",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_EnemyTurnOverlayImage",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_TurnBannerRect",
+          "fieldType": "RectTransform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_TurnBannerText",
+          "fieldType": "Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_TurnBannerBg",
+          "fieldType": "Image",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_EffectsParent",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_MainCamera",
+          "fieldType": "Camera",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_IsInitialized",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        },
+        {
+          "fieldName": "m_IdleBounceCoroutines",
+          "fieldType": "Dictionary<Transform, Coroutine>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Dictionary<Transform, Coroutine>()"
+        },
+        {
+          "fieldName": "m_IdleBounceOriginalPos",
+          "fieldType": "Dictionary<Transform, Vector3>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Dictionary<Transform, Vector3>()"
+        },
+        {
+          "fieldName": "m_GlowRenderers",
+          "fieldType": "List<SpriteRenderer>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<SpriteRenderer>()"
+        },
+        {
+          "fieldName": "m_GlowCoroutine",
+          "fieldType": "Coroutine",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_BannerCoroutine",
+          "fieldType": "Coroutine",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_EnemyOverlayCoroutine",
+          "fieldType": "Coroutine",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_WaitFlash",
+          "fieldType": "WaitForSeconds",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_WaitButtonPress",
+          "fieldType": "WaitForSeconds",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Init",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Init()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "CreateOverlayCanvas",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void CreateOverlayCanvas()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "CreateFullscreenImage",
+          "accessModifier": "private",
+          "returnType": "Image",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "parent"
+            },
+            {
+              "paramType": "string",
+              "paramName": "name"
+            },
+            {
+              "paramType": "Color",
+              "paramName": "color"
+            }
+          ],
+          "signature": "Image CreateFullscreenImage(Transform parent, string name, Color color)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "CreateTurnBanner",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "parent"
+            }
+          ],
+          "signature": "void CreateTurnBanner(Transform parent)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "PlayHitImpact",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector3",
+              "paramName": "attackerPos"
+            },
+            {
+              "paramType": "Vector3",
+              "paramName": "targetPos"
+            }
+          ],
+          "signature": "void PlayHitImpact(Vector3 attackerPos, Vector3 targetPos)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "HitImpactCoroutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "Vector3",
+              "paramName": "attackerPos"
+            },
+            {
+              "paramType": "Vector3",
+              "paramName": "targetPos"
+            }
+          ],
+          "signature": "IEnumerator HitImpactCoroutine(Vector3 attackerPos, Vector3 targetPos)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PlayDamageFlash",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void PlayDamageFlash()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "DamageFlashCoroutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [],
+          "signature": "IEnumerator DamageFlashCoroutine()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PlayHeavyShake",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void PlayHeavyShake()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PlayKnockback",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "target"
+            },
+            {
+              "paramType": "Vector3",
+              "paramName": "attackerPos"
+            }
+          ],
+          "signature": "void PlayKnockback(Transform target, Vector3 attackerPos)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "KnockbackCoroutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "target"
+            },
+            {
+              "paramType": "Vector3",
+              "paramName": "attackerPos"
+            }
+          ],
+          "signature": "IEnumerator KnockbackCoroutine(Transform target, Vector3 attackerPos)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PlayAttackTelegraph",
+          "accessModifier": "public",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "unit"
+            }
+          ],
+          "signature": "IEnumerator PlayAttackTelegraph(Transform unit)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PlayDeathBurst",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector3",
+              "paramName": "position"
+            },
+            {
+              "paramType": "Color",
+              "paramName": "unitColor"
+            }
+          ],
+          "signature": "void PlayDeathBurst(Vector3 position, Color unitColor)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "DeathBurstCoroutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "Vector3",
+              "paramName": "position"
+            },
+            {
+              "paramType": "Color",
+              "paramName": "unitColor"
+            }
+          ],
+          "signature": "IEnumerator DeathBurstCoroutine(Vector3 position, Color unitColor)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PlayVictoryPose",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "unit"
+            }
+          ],
+          "signature": "void PlayVictoryPose(Transform unit)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "VictoryPoseCoroutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "unit"
+            }
+          ],
+          "signature": "IEnumerator VictoryPoseCoroutine(Transform unit)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "StartIdleBounce",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "unit"
+            }
+          ],
+          "signature": "void StartIdleBounce(Transform unit)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "StopIdleBounce",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "unit"
+            }
+          ],
+          "signature": "void StopIdleBounce(Transform unit)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "IdleBounceCoroutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "unit"
+            }
+          ],
+          "signature": "IEnumerator IdleBounceCoroutine(Transform unit)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PlayScreenFade",
+          "accessModifier": "public",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "fadeIn"
+            }
+          ],
+          "signature": "IEnumerator PlayScreenFade(bool fadeIn)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ShowEnemyTurnOverlay",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void ShowEnemyTurnOverlay()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "HideEnemyTurnOverlay",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void HideEnemyTurnOverlay()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "EnemyTurnOverlayCoroutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "show"
+            }
+          ],
+          "signature": "IEnumerator EnemyTurnOverlayCoroutine(bool show)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "StartPlayerTurnGlow",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "List<UnitBase>",
+              "paramName": "playerUnits"
+            }
+          ],
+          "signature": "void StartPlayerTurnGlow(List<UnitBase> playerUnits)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "StopPlayerTurnGlow",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void StopPlayerTurnGlow()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "PlayerTurnGlowCoroutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [],
+          "signature": "IEnumerator PlayerTurnGlowCoroutine()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ShowTurnBanner",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "text"
+            },
+            {
+              "paramType": "Color",
+              "paramName": "textColor"
+            }
+          ],
+          "signature": "void ShowTurnBanner(string text, Color textColor)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "TurnBannerCoroutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "text"
+            },
+            {
+              "paramType": "Color",
+              "paramName": "textColor"
+            }
+          ],
+          "signature": "IEnumerator TurnBannerCoroutine(string text, Color textColor)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PlayButtonPress",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "buttonTransform"
+            }
+          ],
+          "signature": "void PlayButtonPress(Transform buttonTransform)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ButtonPressCoroutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "btn"
+            }
+          ],
+          "signature": "IEnumerator ButtonPressCoroutine(Transform btn)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PlayUnitSelectFeedback",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "unit"
+            }
+          ],
+          "signature": "void PlayUnitSelectFeedback(Transform unit)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "UnitSelectBounceCoroutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "unit"
+            }
+          ],
+          "signature": "IEnumerator UnitSelectBounceCoroutine(Transform unit)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ShowEnhancedDamageNumber",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector3",
+              "paramName": "position"
+            },
+            {
+              "paramType": "int",
+              "paramName": "damage"
+            }
+          ],
+          "signature": "void ShowEnhancedDamageNumber(Vector3 position, int damage)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "CriticalDamageCoroutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "Vector3",
+              "paramName": "position"
+            },
+            {
+              "paramType": "int",
+              "paramName": "damage"
+            }
+          ],
+          "signature": "IEnumerator CriticalDamageCoroutine(Vector3 position, int damage)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PlayVictoryScreenEffect",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "resultTextTransform"
+            }
+          ],
+          "signature": "void PlayVictoryScreenEffect(Transform resultTextTransform)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "VictoryScreenCoroutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "textTransform"
+            }
+          ],
+          "signature": "IEnumerator VictoryScreenCoroutine(Transform textTransform)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ResultTextBounceCoroutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "textTransform"
+            }
+          ],
+          "signature": "IEnumerator ResultTextBounceCoroutine(Transform textTransform)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "VictoryParticlesCoroutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [],
+          "signature": "IEnumerator VictoryParticlesCoroutine()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PlayDefeatScreenEffect",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void PlayDefeatScreenEffect()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "DefeatDesaturationCoroutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [],
+          "signature": "IEnumerator DefeatDesaturationCoroutine()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "PlayCTAUrgency",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "RectTransform",
+              "paramName": "buttonRect"
+            },
+            {
+              "paramType": "RectTransform",
+              "paramName": "arrowRect"
+            }
+          ],
+          "signature": "void PlayCTAUrgency(RectTransform buttonRect, RectTransform arrowRect)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "CTAGlowCoroutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "RectTransform",
+              "paramName": "buttonRect"
+            }
+          ],
+          "signature": "IEnumerator CTAGlowCoroutine(RectTransform buttonRect)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "CTAArrowBounceCoroutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "RectTransform",
+              "paramName": "arrowRect"
+            }
+          ],
+          "signature": "IEnumerator CTAArrowBounceCoroutine(RectTransform arrowRect)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnReset",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnReset()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Init()",
+    "void PlayHitImpact(Vector3 attackerPos, Vector3 targetPos)",
+    "void PlayDamageFlash()",
+    "void PlayHeavyShake()",
+    "void PlayKnockback(Transform target, Vector3 attackerPos)",
+    "IEnumerator PlayAttackTelegraph(Transform unit)",
+    "void PlayDeathBurst(Vector3 position, Color unitColor)",
+    "void PlayVictoryPose(Transform unit)",
+    "void StartIdleBounce(Transform unit)",
+    "void StopIdleBounce(Transform unit)",
+    "IEnumerator PlayScreenFade(bool fadeIn)",
+    "void ShowEnemyTurnOverlay()",
+    "void HideEnemyTurnOverlay()",
+    "void StartPlayerTurnGlow(List<UnitBase> playerUnits)",
+    "void StopPlayerTurnGlow()"
+  ],
+  "requires": [
+    "Renderer",
+    "Singleton"
+  ],
+  "tags": {
+    "major": [
+      "StateControl",
+      "ResponseTrigger"
+    ],
+    "minor": [
+      "Spawn"
+    ]
+  },
+  "uses": [
+    "0f",
+    "1f",
+    "CameraController",
+    "CanvasScaler",
+    "EffectManager",
+    "Font",
+    "GameManager",
+    "GraphicRaycaster",
+    "Mathf",
+    "Outline",
+    "Random",
+    "Renderer",
+    "Singleton",
+    "SpriteRenderer",
+    "UX",
+    "UnitBase",
+    "WaitForSeconds"
+  ],
+  "usedBy": []
+}

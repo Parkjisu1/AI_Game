@@ -1,0 +1,54 @@
+{
+  "fileId": "CFX_AutoDestructShuriken",
+  "filePath": "Util\\CFX_AutoDestructShuriken.cs",
+  "namespace": "",
+  "layer": "Core",
+  "genre": "Generic",
+  "role": "Component",
+  "system": "Util",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine",
+    "System.Collections"
+  ],
+  "classes": [
+    {
+      "className": "CFX_AutoDestructShuriken",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "OnlyDeactivate",
+          "fieldType": "bool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": []
+    }
+  ],
+  "provides": [],
+  "requires": [
+    "ParticleSystem"
+  ],
+  "tags": {
+    "major": [],
+    "minor": []
+  },
+  "uses": [
+    "ParticleSystem",
+    "WaitForSeconds"
+  ],
+  "usedBy": []
+}

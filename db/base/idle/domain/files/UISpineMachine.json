@@ -1,0 +1,75 @@
+{
+  "fileId": "UISpineMachine",
+  "filePath": "UI\\UISpineMachine.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Idle",
+  "role": "Entity",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "Spine.Unity"
+  ],
+  "classes": [
+    {
+      "className": "UISpineMachine",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "PooledGameObject",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "skeletonGraphicUI",
+          "fieldType": "SkeletonGraphic",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "GetSkeleton",
+          "accessModifier": "public",
+          "returnType": "SkeletonGraphic",
+          "parameters": [],
+          "signature": "SkeletonGraphic GetSkeleton()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "SkeletonGraphic GetSkeleton()"
+  ],
+  "requires": [
+    "PooledGameObject",
+    "SkeletonGraphic"
+  ],
+  "tags": {
+    "major": [],
+    "minor": [
+      "Find"
+    ]
+  },
+  "uses": [
+    "PooledGameObject"
+  ],
+  "usedBy": []
+}

@@ -1,5 +1,5 @@
 """
-GaugeReader — HP/MP/XP Bar Pixel Analysis
+GaugeReader -- HP/MP/XP Bar Pixel Analysis
 ==========================================
 OpenCV HSV 색상 필터로 게이지 바 비율을 측정.
 OCR 불필요, 게이지당 <10ms 목표.
@@ -171,7 +171,7 @@ class GaugeReader:
                     hsv_upper=tuple(cfg["hsv_upper"]),
                 )
             else:
-                # 프로필 미지정 → auto detect
+                # 프로필 미지정 -> auto detect
                 reading = self.auto_detect(image, region)
                 if reading:
                     reading.name = name

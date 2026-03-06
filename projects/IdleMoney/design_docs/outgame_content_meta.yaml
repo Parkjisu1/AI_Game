@@ -1,0 +1,542 @@
+---
+project: IdleMoney
+genre: idle
+domain: outgame
+source: internal_original
+version: "1.0.0"
+---
+
+# ============================================================
+# OutGame, Content, Meta, LiveOps, UX Systems
+# ============================================================
+
+# ---- OUTGAME SYSTEMS ----
+
+outgame_systems:
+  # ----------------------------------------------------------
+  # 1. Quest System
+  # ----------------------------------------------------------
+  - designId: idlemoney__outgame__quest_system
+    domain: outgame
+    system: "Quest System"
+    data_type: flow
+    balance_area: quest
+    tags: [quest, mission, reward, production_goal]
+    provides:
+      - quest_generation
+      - quest_reward
+      - quest_progression
+    requires:
+      - production_line
+      - money_currency
+      - diamond_currency
+    content:
+      summary: |
+        퀘스트 시스템. 3종 타입의 퀘스트를 병렬 수행.
+        특정 제품을 목표 수량만큼 생산하면 보상 수령.
+      parameters:
+        quest_types:
+          - { type: 0, name: "Money Reward", description: "X개 생산 → 머니 보상" }
+          - { type: 1, name: "Change Quest", description: "퀘스트 교체 (비용 발생)" }
+          - { type: 2, name: "Diamond Reward", description: "X개 생산 → 다이아 보상" }
+        max_quest_slots: "GlobalConstants.MaxQuestNum"
+        reward_multiplier: "1x 일반, 2x AD 시청"
+        quest_data:
+          - "productID: 생산할 제품"
+          - "neededCount: 목표 수량"
+          - "rewardAmount: 보상 금액"
+          - "waitTime: 대기 시간"
+        analytics: "AccomplishQuestMsg(factory, slot, type, amount)"
+
+  # ----------------------------------------------------------
+  # 2. World Map System
+  # ----------------------------------------------------------
+  - designId: idlemoney__outgame__world_map
+    domain: outgame
+    system: "World Map"
+    data_type: flow
+    balance_area: progression
+    tags: [world, map, progression, unlock]
+    provides:
+      - world_selection
+      - world_progression
+      - regular_reward_timer
+    requires:
+      - rebirth_system
+      - factory_progression
+    content:
+      summary: |
+        월드맵 시스템. 리버스 완료 시 새 월드 해금.
+        각 월드별 독립적 팩토리 데이터, 정기 보상 타이머.
+      parameters:
+        max_worlds: 12
+        unlock_condition: "WORLD_UNLOCK_FACTORY_LEVEL"
+        per_world_data:
+          - "mounted machines"
+          - "selected product (productGroupID)"
+          - "supplier levels"
+          - "manager GUID"
+          - "slot info (duration, mounted machine)"
+        regular_reward: "RegularRewardStartTime0~2 (per world timer)"
+        world_factory_tracking: "UserInfo.dicFactories"
+
+  # ----------------------------------------------------------
+  # 3. Inventory / Goods System
+  # ----------------------------------------------------------
+  - designId: idlemoney__outgame__goods_system
+    domain: outgame
+    system: "Goods Inventory"
+    data_type: config
+    balance_area: item
+    tags: [goods, inventory, item, currency_type]
+    provides:
+      - goods_definition
+      - reward_type_mapping
+    requires: []
+    content:
+      summary: |
+        게임 내 재화/아이템 정의 테이블. 9종 재화.
+        RewardType 열거형과 매핑되어 보상 시스템 전체에서 참조.
+      parameters:
+        reward_types:
+          - { type: "Money", description: "기본 재화 (Double)" }
+          - { type: "Diamond", description: "프리미엄 재화" }
+          - { type: "Gold/Credit", description: "세컨더리 재화" }
+          - { type: "MachineMaterial/Doughnut", description: "튜닝 재료" }
+          - { type: "ADSkipMoney/Chocolate", description: "광고 스킵 재화" }
+          - { type: "BoxGeneral", description: "일반 가챠 박스" }
+          - { type: "BoxAdvanced", description: "고급 가챠 박스" }
+          - { type: "BoxSuper", description: "슈퍼 가챠 박스" }
+          - { type: "LevelGacha", description: "레벨 가챠 박스" }
+
+# ---- CONTENT SYSTEMS ----
+
+content_systems:
+  # ----------------------------------------------------------
+  # 4. Dungeon Content
+  # ----------------------------------------------------------
+  - designId: idlemoney__content__dungeon_content
+    domain: content
+    system: "Dungeon Content"
+    data_type: content_data
+    balance_area: stage
+    tags: [dungeon, stages, difficulty, content]
+    provides:
+      - dungeon_stage_data
+      - dungeon_difficulty_curve
+      - special_level_design
+    requires:
+      - coin_dungeon_system
+      - rebirth_system
+    content:
+      summary: |
+        던전 콘텐츠 데이터. 66개 스테이지, 일반/특수 레벨 구분.
+        레벨별 목표, 시간 제한, 보상, 제품 HP 정의.
+      parameters:
+        total_levels: 66
+        level_data:
+          - "DungeonLevel: 스테이지 번호"
+          - "TargetProductBreakAmount: 파괴 목표"
+          - "SupplySpeed: 스폰 속도 배율"
+          - "ProductHp: 제품 HP"
+          - "TimeLimit: 시간 제한 (초)"
+          - "IsSpecialLevel: 특수 레벨 플래그"
+          - "SpecialRewardType/Amount: 특수 보상"
+          - "ClearRewardCoinAmount: 클리어 코인"
+        special_levels: "IsSpecialLevel=1, 제품 스케일 변경, 배경 변경"
+
+  # ----------------------------------------------------------
+  # 5. Challenge Content
+  # ----------------------------------------------------------
+  - designId: idlemoney__content__challenge_content
+    domain: content
+    system: "Challenge Content"
+    data_type: content_data
+    balance_area: quest
+    tags: [challenge, missions, progression, content]
+    provides:
+      - challenge_stage_data
+      - challenge_goals
+    requires:
+      - factory_challenge
+    content:
+      summary: |
+        챌린지 콘텐츠. 30개 스테이지. 팩토리 리버스를 위한 목표 금액/시간 제한.
+      parameters:
+        total_stages: 30
+
+  # ----------------------------------------------------------
+  # 6. Lab Content
+  # ----------------------------------------------------------
+  - designId: idlemoney__content__lab_content
+    domain: content
+    system: "Lab Items & Buffs"
+    data_type: content_data
+    balance_area: research
+    tags: [lab, items, buffs, research, content]
+    provides:
+      - lab_item_definitions
+      - buff_type_definitions
+    requires:
+      - lab_system
+    content:
+      summary: |
+        연구소 아이템/버프 콘텐츠. 12개 연구 아이템, 21개 버프 정의.
+        아이템당 3개 버프 슬롯, 등급별 기본/추가 버프 값.
+      parameters:
+        items: 12
+        buffs: 21
+        buff_per_item: 3
+        item_fields:
+          - "LabItemID, Grade"
+          - "LabItemBuffType1~3"
+          - "BuffBasePercent1~3"
+          - "BuffAddPercent1~3"
+          - "ImageName, NameTextID"
+
+# ---- META SYSTEMS ----
+
+meta_systems:
+  # ----------------------------------------------------------
+  # 7. Achievement System
+  # ----------------------------------------------------------
+  - designId: idlemoney__meta__achievement_system
+    domain: meta
+    system: "Achievement System"
+    data_type: flow
+    balance_area: progression
+    tags: [achievement, milestone, reward, progression]
+    provides:
+      - achievement_tracking
+      - achievement_rewards
+      - star_progression
+    requires:
+      - money_currency
+      - diamond_currency
+    content:
+      summary: |
+        업적 시스템. 14개 업적 카테고리, 각 15티어.
+        별 시스템(MaxLevelCount=5), 3색상 구분(Gold/Blue/Red).
+      parameters:
+        total_achievements: 14
+        tiers_per_achievement: 15
+        star_system:
+          max_stars: 5
+          colors: ["Gold (1st)", "Blue (2nd)", "Red (3rd)"]
+        reward_types: ["Money", "Diamond"]
+        tracking: "Dictionary<achievementID, Dictionary<rewardLevel, currentCount>>"
+        reddot_notification: "ReddotNotificationID.Achievement"
+        types:
+          - "ACCUMED_MONEY_AMOUNT: 누적 수익"
+          - "기타 다수"
+
+  # ----------------------------------------------------------
+  # 8. Machine Collection System
+  # ----------------------------------------------------------
+  - designId: idlemoney__meta__machine_collection
+    domain: meta
+    system: "Machine Collection"
+    data_type: spec
+    balance_area: collection
+    tags: [collection, machine, gacha, completionism]
+    provides:
+      - machine_collection_tracking
+      - new_machine_detection
+    requires:
+      - gacha_system
+      - machine_system
+    content:
+      summary: |
+        머신 컬렉션 시스템. 가챠에서 획득한 머신을 수집.
+        37종 머신 + 5등급, 중복 획득 시 튜닝 EXP 변환.
+      parameters:
+        total_machines: 37
+        collection_tracking: "UserInfo.MachineInfo"
+        new_machine_flag: "GachaResult.isNewMachine"
+        analytics: "log_loopy_get: 신규 머신 획득 이벤트"
+
+# ---- LIVEOPS SYSTEMS ----
+
+liveops_systems:
+  # ----------------------------------------------------------
+  # 9. Daily Login Rewards
+  # ----------------------------------------------------------
+  - designId: idlemoney__liveops__daily_login
+    domain: liveops
+    system: "Daily Login Reward"
+    data_type: flow
+    balance_area: retention
+    tags: [daily, login, attendance, retention]
+    provides:
+      - daily_reward_delivery
+      - login_streak_tracking
+    requires:
+      - goods_system
+      - ad_system
+    content:
+      summary: |
+        7일 출석 보상 시스템. 매일 접속 시 보상 수령.
+        패키지 보유 시 추가 보상, AD 시청 시 10배 보상.
+      parameters:
+        cycle: 7
+        states: ["WillReceive (미래)", "Receive (오늘, 수령 가능)", "Received (수령 완료)"]
+        reward_types: ["Diamond", "TuningMaterial", "BoxGeneral", "BoxAdvanced", "BoxSuper", "LevelGacha", "Credit", "ADSkipMoney", "Money"]
+        ad_multiplier: 10
+        package_bonus: "GoodsTypeAllAddExist / GoodsAmountAllAddExist"
+        tracking: "DailyRewardReceiveDay, LastReceivedDailyRewardTime"
+
+  # ----------------------------------------------------------
+  # 10. Event Boost Timers
+  # ----------------------------------------------------------
+  - designId: idlemoney__liveops__event_timers
+    domain: liveops
+    system: "Event Timer System"
+    data_type: spec
+    balance_area: engagement
+    tags: [event, timer, boost, engagement]
+    provides:
+      - event_scheduling
+      - boost_activation
+    requires:
+      - factory_progression
+    content:
+      summary: |
+        이벤트 타이머 시스템. GameEventController가 관리.
+        쿨다운 기반 이벤트 표시, 팩토리 레벨 게이트.
+      parameters:
+        event_interval:
+          - "type: 이벤트 종류"
+          - "factoryIndex: 적용 팩토리"
+          - "lifeTime: 지속 시간"
+          - "addRandomTimeRange: 랜덤 편차"
+          - "levelLimit: 팩토리 레벨 제한"
+          - "sellOffLimit: 리버스 제한"
+        lifecycle: "Register → StartCoolTime → StartEvent → FinishEvent → Restart"
+
+# ---- UX SYSTEMS ----
+
+ux_systems:
+  # ----------------------------------------------------------
+  # 11. UI Navigation Flow
+  # ----------------------------------------------------------
+  - designId: idlemoney__ux__ui_navigation
+    domain: ux
+    system: "UI Navigation"
+    data_type: flow
+    balance_area: ui_flow
+    tags: [ui, navigation, window, popup, hud]
+    provides:
+      - screen_navigation
+      - popup_management
+      - hud_system
+    requires: []
+    content:
+      summary: |
+        127개 윈도우 ID 기반 UI 내비게이션 시스템.
+        메시지 기반 윈도우 열기/닫기, HUD + 모달 + 전체화면 구조.
+      parameters:
+        total_windows: 127
+        main_hud_buttons: ["Factory(0)", "Shop(1)", "Machine(2)", "Achievement(3)", "World(4)"]
+        unlock_gates:
+          - "Machine: MACHINE_BUTTON_UNLOCK_FACTORY_LEVEL"
+          - "Achievement: ACHIEVEMENT_BUTTON_UNLOCK_FACTORY_LEVEL"
+          - "World: WORLD_BUTTON_UNLOCK_FACTORY_LEVEL"
+        window_types:
+          - "HUD: MainMenuHUDWin, HUDMoneyWin, RightSideHUDWin"
+          - "Modal: AlertPopupWin, BubbleTooltipWin"
+          - "Loading: LoadingWin, DefaultLoadingWin, ADLoadingWin"
+          - "Feature: ShopWin, GachaResultWin, ManagerWin"
+          - "Reward: OfflineRewardWin, DailyRewardWin"
+
+  # ----------------------------------------------------------
+  # 12. Tutorial Flow
+  # ----------------------------------------------------------
+  - designId: idlemoney__ux__tutorial_flow
+    domain: ux
+    system: "Tutorial Flow"
+    data_type: flow
+    balance_area: onboarding
+    tags: [tutorial, onboarding, guide, new_user]
+    provides:
+      - tutorial_progression
+      - tutorial_rewards
+      - ui_highlighting
+    requires:
+      - ui_navigation
+      - factory_progression
+    content:
+      summary: |
+        튜토리얼 시스템. 30+ 단계 UnMask 기반 진행.
+        각 단계마다 특정 UI 요소를 하이라이트하고 플레이어 행동 유도.
+      parameters:
+        tutorial_types: ["Normal (메인 캠페인)", "FreeTutorial (초기 온보딩)"]
+        unmask_steps:
+          - "PositionUnMask, FactoryIconClick, FactoryLevelUp, FactoryClose"
+          - "ShopIconClick, GachaNormal, GachaResultClose, ShopClose"
+          - "SelectFirstSlot, SelectMachine"
+          - "SelectOpenSlot, OpenSlotBtnClick"
+          - "OpenSupplyMachineBtnClick, SupplyMachineUpgradeClick"
+          - "MachineUpgradeClick, MachineUpgradeCloseClick"
+          - "ManagerBtnClick, ManagerHire, ManagerHireResultClose"
+          - "SelectManager, PlacementManager"
+          - "SupplyBoostBtnClick, SupplyBoostStartClick"
+          - "FirstWorldSlot, SecondWorldSlot"
+          - "LabClick, LabFirstIconClick, LabFirstIconUnlockClick"
+          - "DungeonClick, DungeonFirstLineClick, EnterDungeonClick"
+        mission_rewards: "TUTORIAL_N_MONEY_REWARD (N=1~10)"
+        tracking: "IntUserInfoIndex.TutorialIndex"
+
+  # ----------------------------------------------------------
+  # 13. Notification (Reddot) System
+  # ----------------------------------------------------------
+  - designId: idlemoney__ux__reddot_system
+    domain: ux
+    system: "Reddot Notification"
+    data_type: spec
+    balance_area: engagement
+    tags: [notification, reddot, badge, engagement]
+    provides:
+      - notification_badge_system
+      - refresh_mechanism
+    requires:
+      - ui_navigation
+    content:
+      summary: |
+        레드닷 알림 시스템. 11종 알림 유형, 구독 패턴.
+        상위 메뉴가 하위 알림을 집계(FoldingMainMenuHUD).
+      parameters:
+        notification_types:
+          - { id: "FactoryInfo", trigger: "Money >= NextLevelCost" }
+          - { id: "Loopy", trigger: "HasNewMachine OR canTraining" }
+          - { id: "Shop", trigger: "Money >= GachaGeneral OR Diamond >= GachaAdvanced" }
+          - { id: "Achievement", trigger: "완료 미수령 업적 존재" }
+          - { id: "WorldMap", trigger: "Gold > 0 OR RegularReward 타이머" }
+          - { id: "Supplyer", trigger: "Money >= SupplyMachineLevelUp 비용" }
+          - { id: "FactorySlot", trigger: "Money >= SlotLevelUp 비용" }
+          - { id: "ManagerNew", trigger: "Diamond >= HireCost AND 빈 슬롯" }
+          - { id: "OpenProductionLine", trigger: "Money >= UnlockMoneyCost" }
+          - { id: "OpenFactoryLine", trigger: "Money >= OpenSlotCost" }
+          - { id: "Gold", trigger: "Gold > 0" }
+        aggregate: "FoldingMainMenuHUD → (FactoryInfo, Loopy, Achievement, Shop, WorldMap)"
+
+  # ----------------------------------------------------------
+  # 14. Sound System
+  # ----------------------------------------------------------
+  - designId: idlemoney__ux__sound_system
+    domain: ux
+    system: "Sound Manager"
+    data_type: spec
+    balance_area: audio
+    tags: [sound, audio, bgm, sfx]
+    provides:
+      - bgm_playback
+      - sfx_playback
+      - audio_settings
+    requires: []
+    content:
+      summary: |
+        사운드 매니저. BGM 1채널 + SFX 다중 채널.
+        PlayerPrefs 기반 설정 저장, DontDestroyOnLoad 싱글톤.
+      parameters:
+        sfx_types:
+          - { id: 0, name: "WindowOpen" }
+          - { id: 1, name: "WindowClose" }
+          - { id: 2, name: "NormalHammering" }
+          - { id: 3, name: "SuperHammerStart" }
+          - { id: 4, name: "SuperHammering" }
+        prefs_keys: ["BGMOff", "SFXOff"]
+
+  # ----------------------------------------------------------
+  # 15. Save/Load System
+  # ----------------------------------------------------------
+  - designId: idlemoney__ux__save_system
+    domain: ux
+    system: "Save/Load System"
+    data_type: spec
+    balance_area: data_persistence
+    tags: [save, load, cloud, messagepack, persistence]
+    provides:
+      - local_save
+      - cloud_save
+      - data_migration
+    requires: []
+    content:
+      summary: |
+        MessagePack 바이너리 기반 세이브/로드 시스템.
+        로컬 저장 + 클라우드 동기화. 레이트 리미트 + 튜토리얼 잠금.
+      parameters:
+        serialization: "MessagePack binary (.bytes)"
+        cloud_cooldown:
+          save: "CloudSaveTryLimitTime (~3s)"
+          load: "CloudLoadTryLimitTime (~3s)"
+        tutorial_lock: "IsTutorial / IsFreeTutorial 중 클라우드 불가"
+        data_migration: ["FixV1_03_1_MachineBug()", "Convert1_05_SaveFile()"]
+        data_indices:
+          int: "Language, SellOffCount, Diamond, Gold, BoxPurchaseCount..."
+          float: "Boost timers, resource multipliers"
+          double: "Money (primary currency)"
+          long: "Timestamps (AppInstallTime, RewardTimes, LoginTimes)"
+          custom: "FactoryInfo, MachineInfo, MachineUpgradeInfo, QuestInfo, ManagerStat, LabItemInfo"
+
+  # ----------------------------------------------------------
+  # 16. Localization System
+  # ----------------------------------------------------------
+  - designId: idlemoney__ux__localization
+    domain: ux
+    system: "Localization"
+    data_type: config
+    balance_area: text
+    tags: [localization, language, i18n, text]
+    provides:
+      - multi_language_support
+      - language_switching
+    requires: []
+    content:
+      summary: |
+        4개 언어 지원 로컬라이제이션. 897개 텍스트 키.
+        LanguageTable.Holder.ChangeLanguage()로 런타임 전환.
+      parameters:
+        languages:
+          - { id: 0, name: "Default (English)" }
+          - { id: 1, name: "Korean" }
+          - { id: 2, name: "English" }
+          - { id: 3, name: "Japanese" }
+          - { id: 4, name: "ChineseTraditional" }
+        total_text_keys: 897
+        tracking: "IntUserInfoIndex.Language"
+
+  # ----------------------------------------------------------
+  # 17. Analytics System
+  # ----------------------------------------------------------
+  - designId: idlemoney__ux__analytics
+    domain: ux
+    system: "Firebase Analytics"
+    data_type: spec
+    balance_area: tracking
+    tags: [analytics, firebase, tracking, kpi]
+    provides:
+      - event_logging
+      - player_progression_tracking
+    requires:
+      - firebase_sdk
+    content:
+      summary: |
+        Firebase Analytics 기반 이벤트 추적 시스템.
+        핵심 이벤트에 progression 파라미터 포함.
+      parameters:
+        events:
+          - { name: "log_offline", params: "fac_relv, fac_lv, count, after_lv, skip_flag" }
+          - { name: "log_shop_enter", params: "fac_relv, fac_lv, pl_slot, loopy_have" }
+          - { name: "log_shop_iap", params: "shop_id, shop_price, reward_type, reward_quan" }
+          - { name: "log_gacha", params: "type, place, skip_flag" }
+          - { name: "log_loopy_get", params: "fac_relv, fac_lv, loopy_have, idx, place" }
+          - { name: "log_attend", params: "day, reward_type, skip_flag" }
+          - { name: "log_shop", params: "shop_id, shop_price, reward_type, reward_quan" }
+        common_params:
+          - "fac_relv: SellOffCount (리버스 횟수)"
+          - "fac_lv: 현재 월드"
+          - "fac_current_lv: 현재 팩토리 레벨"
+          - "pl_slot: 오픈된 슬롯 수"
+          - "loopy_have: 보유 머신 수"
+          - "in_date: 설치 날짜"
+        conditional_compile: "#if !UNITY_EDITOR"

@@ -1,0 +1,31 @@
+{
+  "fileId": "LevelFailPopup",
+  "project": "DropTheCat",
+  "layer": "Game",
+  "genre": "Puzzle",
+  "role": "Handler",
+  "phase": 3,
+  "namespace": "DropTheCat.Game",
+  "className": "LevelFailPopup",
+  "baseClass": "MonoBehaviour",
+  "score": 0.6,
+  "provides": [
+    "void Show(string failReason)",
+    "void Hide()",
+    "void OnRetryClicked()",
+    "void OnWatchAdClicked()",
+    "void OnQuitClicked()"
+  ],
+  "requires": [
+    "LevelManager.RetryLevel",
+    "BoosterManager.AddBooster",
+    "GameManager.GoToMain"
+  ],
+  "definesTypes": [],
+  "tags": {
+    "major": ["FlowControl", "ResponseTrigger"],
+    "minor": ["Assign", "Notify"]
+  },
+  "sourcePath": "E:\\AI\\projects\\DropTheCat\\output\\LevelFailPopup.cs",
+  "timestamp": "2026-02-10T06:30:00Z"
+}

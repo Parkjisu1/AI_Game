@@ -1,0 +1,90 @@
+metadata:
+  nodeId: "GachaManager"
+  version: "1.0.0"
+  phase: 2
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "CurrencyManager"
+    - "CollectionManager"
+    - "DataManager"
+    - "EventManager"
+  external:
+    - "UnityEngine.MonoBehaviour"
+    - "System.Collections.Generic"
+    - "UnityEngine.Random"
+
+contract:
+  provides:
+    - "gacha_execute"
+    - "grade_probability"
+    - "guaranteed_drop"
+    - "material_reward"
+  requires:
+    - "currency_system"
+    - "collection_manager"
+    - "data_table"
+
+tags:
+  layer: "Domain"
+  genre: "Idle"
+  role: "Manager"
+  system: "GachaSystem"
+  majorFunctions:
+    - "ConditionCheck"
+    - "ResourceTransfer"
+    - "ValueModification"
+    - "ResponseTrigger"
+  minorFunctions:
+    - "Validate"
+    - "Calculate"
+    - "Compare"
+    - "Assign"
+    - "Notify"
+
+logicFlow:
+  - step: 1
+    tag: "ResourceTransfer.Validate"
+    action: "PayCost: 가챠 타입별 비용(7종 테이블) 검증 후 CurrencyManager에 차감 요청"
+    next: 2
+  - step: 2
+    tag: "ConditionCheck.Compare"
+    action: "CheckGuaranteed: 첫 번째 뽑기=ID0 머신 보장, 두 번째 뽑기=ID1 머신 보장 여부 확인"
+    next: 3
+  - step: 3
+    tag: "ValueModification.Calculate"
+    action: "RollGrade: GradeProbabilityTable[gachaType] 기반 1~5등급 확률 연산으로 등급 결정"
+    next: 4
+  - step: 4
+    tag: "ConditionCheck.Find"
+    action: "SelectMachine: 결정된 등급 내 머신 풀 검색, 미보유 머신 우선 선택(없으면 중복 처리)"
+    next: 5
+  - step: 5
+    tag: "ResourceTransfer.Assign"
+    action: "GiveMaterial: 중복 머신인 경우 재료 아이템으로 전환 지급, CollectionManager 갱신"
+    next: 6
+  - step: 6
+    tag: "ResponseTrigger.Notify"
+    action: "ShowResult: 결과 팝업 표시 이벤트 발행, 획득 머신/재료 정보 전달"
+    next: 1
+
+referencePatterns:
+  - source: "idlemoney__bm__gacha_system"
+    pattern: "7종 가챠 타입별 비용/등급 확률 테이블 및 보장 드롭 카운터 설계"
+  - source: "idlemoney__meta__achievement_system"
+    pattern: "가챠 횟수 업적 카운터 연동 패턴"
+
+codeHints:
+  patterns:
+    - "SerializeField for Inspector"
+    - "MessagePack serialization"
+    - "DontDestroyOnLoad singleton"
+    - "Weighted random selection via cumulative probability array"
+    - "Dictionary<int, int> for pull counter (guaranteeTracker)"
+  avoidPatterns:
+    - "Find/FindObjectOfType for UI"
+    - "dynamic UI creation"
+    - "hardcoded magic numbers"
+    - "UnityEngine.Random.Range for weighted probability (use cumulative array)"

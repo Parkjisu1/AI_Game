@@ -1,0 +1,147 @@
+{
+  "designId": "idlemoney__content__labbuff",
+  "project": "IdleMoney",
+  "domain": "Content",
+  "genre": "Idle",
+  "system": "LabBuff",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "config",
+  "balance_area": "research",
+  "source_file": "LabBuff.json",
+  "table_stats": {
+    "row_count": 21,
+    "columns": [
+      "BuffID",
+      "BuffNameTextID"
+    ],
+    "numeric_columns": [
+      "BuffID"
+    ],
+    "text_columns": [
+      "BuffNameTextID"
+    ]
+  },
+  "content": {
+    "summary": "LabBuff 데이터 테이블 (21행, 2열)",
+    "parameters": {
+      "BuffID": "1",
+      "BuffNameTextID": "Buff_Name_0"
+    },
+    "balance_points": [
+      {
+        "variable": "BuffID",
+        "min_value": 1,
+        "max_value": 21,
+        "avg_value": 11,
+        "growth_ratio": 21,
+        "data_points": 21,
+        "impact": "high"
+      }
+    ],
+    "edge_cases": [],
+    "references": []
+  },
+  "data": [
+    {
+      "BuffID": "1",
+      "BuffNameTextID": "Buff_Name_0"
+    },
+    {
+      "BuffID": "2",
+      "BuffNameTextID": "Buff_Name_1"
+    },
+    {
+      "BuffID": "3",
+      "BuffNameTextID": "Buff_Name_2"
+    },
+    {
+      "BuffID": "4",
+      "BuffNameTextID": "Buff_Name_3"
+    },
+    {
+      "BuffID": "5",
+      "BuffNameTextID": "Buff_Name_4"
+    },
+    {
+      "BuffID": "6",
+      "BuffNameTextID": "Buff_Name_5"
+    },
+    {
+      "BuffID": "7",
+      "BuffNameTextID": "Buff_Name_6"
+    },
+    {
+      "BuffID": "8",
+      "BuffNameTextID": "Buff_Name_7"
+    },
+    {
+      "BuffID": "9",
+      "BuffNameTextID": "Buff_Name_8"
+    },
+    {
+      "BuffID": "10",
+      "BuffNameTextID": "Buff_Name_9"
+    },
+    {
+      "BuffID": "11",
+      "BuffNameTextID": "Buff_Name_10"
+    },
+    {
+      "BuffID": "12",
+      "BuffNameTextID": "Buff_Name_11"
+    },
+    {
+      "BuffID": "13",
+      "BuffNameTextID": "Buff_Name_12"
+    },
+    {
+      "BuffID": "14",
+      "BuffNameTextID": "Buff_Name_13"
+    },
+    {
+      "BuffID": "15",
+      "BuffNameTextID": "Buff_Name_14"
+    },
+    {
+      "BuffID": "16",
+      "BuffNameTextID": "Buff_Name_15"
+    },
+    {
+      "BuffID": "17",
+      "BuffNameTextID": "Buff_Name_16"
+    },
+    {
+      "BuffID": "18",
+      "BuffNameTextID": "Buff_Name_17"
+    },
+    {
+      "BuffID": "19",
+      "BuffNameTextID": "Buff_Name_18"
+    },
+    {
+      "BuffID": "20",
+      "BuffNameTextID": "Buff_Name_19"
+    },
+    {
+      "BuffID": "21",
+      "BuffNameTextID": "Buff_Name_20"
+    }
+  ],
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from LabBuff.json (21 rows)",
+      "note": "Live game data import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T10:32:53.948Z"
+}

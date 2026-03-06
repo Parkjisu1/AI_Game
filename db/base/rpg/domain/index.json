@@ -1,0 +1,3935 @@
+[
+  {
+    "fileId": "TableWWW",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Data",
+    "score": 0.4,
+    "provides": [
+      "bool Validator(object sender, X509Certificate certificate, X509Chain chain,\r\n                                  SslPolicyErrors sslPolicyErrors)",
+      "object GetInstance(string strFullyQualifiedName, string[] arrArg)"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "RewardBoxTable",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Model",
+    "system": "Data",
+    "score": 0.4,
+    "provides": [
+      "void SetData(string _id, string _item, string _rate, string _minCount, string _maxCount)"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ItemPurchasePopup",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "Popup",
+    "score": 0.4,
+    "provides": [
+      "void SetItemPurchasePopup(eSpecialItem _specialItem)",
+      "void OnClickPurchaseItem()",
+      "void OnClickRewardItem()",
+      "void SetApplyLanguage()"
+    ],
+    "requires": [
+      "CPopupBase",
+      "RawImage"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "DailyRewardTable",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Model",
+    "system": "Data",
+    "score": 0.4,
+    "provides": [
+      "void SetData(string _id, string _item, string _rate, string _minCount, string _maxCount)"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ItemRateTable",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Model",
+    "system": "Data",
+    "score": 0.4,
+    "provides": [
+      "void SetData(string _id, string _itemGroup, string _need_Star, string _reward_Item, string _rate, string _minCount, string _maxCount)"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "JsonHandler",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Handler",
+    "system": "Data",
+    "score": 0.4,
+    "provides": [
+      "void SetJsonTable()"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ShopRewardTable",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Model",
+    "system": "Data",
+    "score": 0.4,
+    "provides": [
+      "void SetData(string _id, string _item, string _rate, string _minCount, string _maxCount)"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "StageTable",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Model",
+    "system": "Data",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Define",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Enum",
+    "system": "GlobalNaemspace",
+    "score": 0.4,
+    "provides": [
+      "void Log(string a_strLog, eLog a_eLogType = eLog.Log)",
+      "void LogError(string a_strLog)",
+      "void Resolution(int boardSize)",
+      "void Resolution()",
+      "Vector3 MovePathPos(Vector3 startPos, Vector3 targetPos)"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Find",
+        "Delay",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "SpecialItem",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "InGame",
+    "score": 0.4,
+    "provides": [
+      "void Initialize(ResourceNameTable _resourceNameData)",
+      "void SetSpeicialItem(StageTable _stage)",
+      "void UpdateCount(eSpecialItem specialItem, int _count)"
+    ],
+    "requires": [
+      "ResourceNameTable",
+      "SpecialItemButton"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "DataSync"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "InGame_BottomUi",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "InGame",
+    "score": 0.4,
+    "provides": [
+      "void Initialize(ResourceNameTable _resourceNameData)",
+      "void FillPiggyBank(int n)",
+      "void UpdateItemCount(eItem _eItem, int _updateCount)",
+      "void SetApplySprite(ResourceNameTable _resourNameData)"
+    ],
+    "requires": [
+      "GoldPig",
+      "IApplySprite",
+      "ResourceNameTable",
+      "SpecialItem"
+    ],
+    "tags": {
+      "major": [
+        "DataSync",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "InGame_MissionBlock",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "InGame",
+    "score": 0.4,
+    "provides": [
+      "void Initialize(ResourceNameTable _resourceNameData, int _missionCount)",
+      "void SetApplySprite(ResourceNameTable _resourNameData)",
+      "void UpdateBlockCount(int _missionCount)"
+    ],
+    "requires": [
+      "IApplySprite",
+      "ResourceNameTable"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "DataSync"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "Lobby_BottomUI",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Lobby",
+    "score": 0.4,
+    "provides": [
+      "void Initialize(ResourceNameTable _resourceNameData)",
+      "void SetApplySprite(ResourceNameTable _resourNameData)",
+      "void UpdateStar()",
+      "void OnClickShop()",
+      "void OnClickRewardBox()"
+    ],
+    "requires": [
+      "IApplySprite",
+      "ResourceNameTable"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification",
+        "DataSync"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "StageButton_MapTypeGroup",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Lobby",
+    "score": 0.4,
+    "provides": [
+      "void SetStageGroup(int _groupIndex, int _groupCount, string _stageGroupBackground,\r\n    string _stageButtonType)"
+    ],
+    "requires": [
+      "StageButton_MapType"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "Stage_OpenType",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Lobby",
+    "score": 0.4,
+    "provides": [
+      "void SetStageButton(int _stageCount)"
+    ],
+    "requires": [
+      "StageButton_OpenType",
+      "StageTypeBase"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "CDataManager",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Model",
+    "system": "Manager",
+    "score": 0.4,
+    "provides": [
+      "void setDataTableInitialize()",
+      "void SetJsonTable()"
+    ],
+    "requires": [
+      "CDataManager",
+      "ConstData",
+      "ConstTable",
+      "ResourceNameData",
+      "ResourceNameTable"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "CSpriteManager",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Manager",
+    "system": "Manager",
+    "score": 0.4,
+    "provides": [
+      "Sprite GetStageButtonSprite(string _spriteName)",
+      "Sprite GetHomeSceneSprite(string _spriteName)",
+      "Sprite GetGameSceneSprite(string _spriteName)",
+      "Sprite GetLobbySceneSprite(string _spriteName)",
+      "Sprite GetTileSprite(string _spriteName)"
+    ],
+    "requires": [
+      "CSpriteManager",
+      "SpriteAtlas"
+    ],
+    "tags": {
+      "major": [],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "EnableItemPopup",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "Popup",
+    "score": 0.4,
+    "provides": [
+      "void SetEnableItemPopup(eSpecialItem item)",
+      "void SetApplyLanguage()"
+    ],
+    "requires": [
+      "CPopupBase"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "RewardBoxItem",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Popup",
+    "score": 0.4,
+    "provides": [
+      "void SetItem(eRewardBoxItem _boxItem, int _count)",
+      "void UpdateItemCount()"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "DataSync"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ShopItemInfo",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Data",
+    "system": "Popup",
+    "score": 0.4,
+    "provides": [
+      "void SetShopItemInfo()",
+      "void OnClickPurchaseItem()",
+      "void UpdateCount()"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger",
+        "DataSync"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ShopPopup",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "Popup",
+    "score": 0.4,
+    "provides": [
+      "void SetShopPopup(bool isItemPage = false)",
+      "void OnClickPage(string page)",
+      "void SetCountDown(string rewardType)",
+      "void OnClickBoxReward()",
+      "void OnClickGoldReward()"
+    ],
+    "requires": [
+      "CPopupBase",
+      "GoldPopup",
+      "ShopGoldInfo",
+      "ShopItemInfo",
+      "ShopPackageInfo"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification",
+        "DataSync"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "GameScene",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Scene",
+    "score": 0.4,
+    "provides": [
+      "void StartGame()",
+      "void EndGame()",
+      "void RestartGame()",
+      "void Continue()",
+      "void CheckEndGame()"
+    ],
+    "requires": [
+      "GameBoard",
+      "SceneBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ConditionCheck"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "HomeScene",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Scene",
+    "score": 0.4,
+    "provides": [
+      "void onClickStart()",
+      "void SetApplyLanguage()"
+    ],
+    "requires": [
+      "SceneBase"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "DataSync"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "AutoFindClicker",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "AutoFindClicker",
+    "score": 0.4,
+    "provides": [
+      "void DoClick(Vector3 clickPosition)",
+      "void SetMessageController(IMessageController<GameModeMain> messageController)",
+      "IMessageController<GameModeMain> GetGameModeMsgController()"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort",
+      "ProductionLine"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "CoinDungeonConditionalEffectPlayer",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "CoinDungeonConditionalEffectPlayer",
+    "score": 0.4,
+    "provides": [
+      "void TurnOn()",
+      "void TurnOff()"
+    ],
+    "requires": [
+      "GOEffectParticleHandler"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "MachineStatComponentDebug",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Debug",
+    "score": 0.4,
+    "provides": [
+      "void OnClickCheatGet()",
+      "void OnClickCheatRemove()",
+      "void OnClickCheatExpUp()",
+      "void OnClickCheatExpDown()"
+    ],
+    "requires": [
+      "MachineStatComponent"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "DungeonProductMaker",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "DungeonProductMaker",
+    "score": 0.4,
+    "provides": [],
+    "requires": [
+      "ProductMakerBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "GameModeMain",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "GameModeMain",
+    "score": 0.4,
+    "provides": [
+      "bool Init(AppMain owner, Injector injector)",
+      "bool IsCameraScroll()",
+      "GachaGenerator GetGachaBox()",
+      "QuestController GetQuestController()",
+      "CostCalculator GetCostCalculator()"
+    ],
+    "requires": [
+      "AppMain",
+      "CameraMoveLimitHolder",
+      "CameraResolution2D",
+      "ChainGameEventController",
+      "GachaGenerator"
+    ],
+    "tags": {
+      "major": [
+        "ConditionCheck",
+        "StateControl",
+        "ValueModification"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "GameRuleChallenge",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "GameRuleChallenge",
+    "score": 0.4,
+    "provides": [
+      "void Setdata(FactoryRebirthTableData rebirthData, FactoryLevelUpTableData factoryData, float bonusTime)",
+      "void SetJoinType(int joinType, int diaCost)",
+      "double GetDamageFactor()",
+      "void ReadyChallenge()",
+      "void StartChallenge()"
+    ],
+    "requires": [
+      "FactoryRebirthTableData",
+      "GameModeMain",
+      "GameRuleBase",
+      "HammerInfo",
+      "IMessageController"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger",
+        "StateControl"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "GameRuleCoinDungeon",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "GameRuleCoinDungeon",
+    "score": 0.4,
+    "provides": [
+      "void Setdata(DungeonTableData dungeonData, float bonusTime, double hammerPower, float specialScaleFactor)",
+      "void SetJoinType(int joinType, int diaCost)",
+      "void ReadyChallenge()",
+      "void StartDungeon()",
+      "void FinishChallenge()"
+    ],
+    "requires": [
+      "DungeonTableData",
+      "GameModeMain",
+      "GameRuleBase",
+      "HammerInfo",
+      "IMessageController"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger",
+        "StateControl"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "GameRuleTutorial",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "GameRuleTutorial",
+    "score": 0.4,
+    "provides": [
+      "void Setdata(FactoryRebirthTableData rebirthData, FactoryLevelUpTableData factoryData)",
+      "double GetDamageFactor()",
+      "void OnHammerDamage(ProductBase product, Vector3 hitPosition, int raycastHittedIndex)",
+      "void OnHammer()",
+      "void UpdateLogic(float deltaTime)"
+    ],
+    "requires": [
+      "FactoryRebirthTableData",
+      "GameModeMain",
+      "GameRuleBase",
+      "HammerInfo",
+      "IMessageController"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification",
+        "DataSync"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "GlobalEnums",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Enum",
+    "system": "GlobalEnums",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "IGameRule",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Interface",
+    "system": "IGameRule",
+    "score": 0.4,
+    "provides": [
+      "void Init()",
+      "void UpdateLogic(float deltaTime)",
+      "void OnEnableRule()",
+      "void OnDisableRule()",
+      "void SetHammerPower(double hammerPower)"
+    ],
+    "requires": [
+      "IInjectable"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "DataSync",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "LabStats",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "LabStats",
+    "score": 0.4,
+    "provides": [
+      "void RefreshStats(UserInfo userInfo, LabItemTable table)",
+      "float CalculateStat(int level, float baseValue, float addValue)",
+      "float GetBuffStat(CoinBuffID ID)"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Calculate",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "LanguageText",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "LanguageText",
+    "score": 0.4,
+    "provides": [
+      "void Awake()",
+      "TextMeshProUGUI GetTextComponent()",
+      "void RefreshLanguage()",
+      "void SetTextData()",
+      "void SetDebugText(string text)"
+    ],
+    "requires": [
+      "LanguageTextHolder",
+      "TextMeshProUGUI"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "DataSync"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "MachineProjectile",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Entity",
+    "system": "MachineProjectile",
+    "score": 0.4,
+    "provides": [
+      "void Awake()",
+      "float GetForce()",
+      "void SetData(Machine owner)",
+      "void TurnOn()",
+      "void StartToTarget(Vector3 startPosition, Vector3 targetPosition, Vector2 force, string hitVFX)"
+    ],
+    "requires": [
+      "AlarmTimer",
+      "Collider2D",
+      "CollisionEventReceiverBase",
+      "Machine",
+      "ParticleEffectPlayer"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger",
+        "StateControl"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "AccomplishQuestMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "RewardType"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "AddCoinDungeonRewardMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "DungeonTableData",
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "AddLabItemMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "AddQuestProductCountMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ChangeProductionLineOpenSlotBGMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WorldSpaceWindowManager> sender, WorldSpaceWindowManager controller)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "WorldSpaceWindowManager"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ChangeQuestMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "QuestInfo"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "GoNextStepDungeonProductMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "ProductDungeon"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "GoNextStepProductMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "ProductBase"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "MakeNewQuestMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenQuestWinMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "QuestStatusButton"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "RefreshCoinDungeonComponentMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "CoinDungeonComponent",
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshItemUpgradeWinMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshLabItemMountComponentMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "LabMountComponent"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshMachineStatComponentMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "MachineScrollItemData",
+      "MachineStatComponent"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshProductMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "SelectProductComponent",
+      "SelectProductComponentScrollItemData"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshQuestStatusButtonMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "QuestStatusButton"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshQuestStatusIconMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshShopChildComponentMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "ShopBuyChildComponentBase"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshShopDiamondBuyComponentMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "ShopBuyChildComponentBase"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshShopEtcBuyComponentMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "ShopBuyChildComponentBase"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshShopMachineBuyComponentMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "ShopBuyChildComponentBase"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshShopPackageBuyComponentMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "ShopBuyChildComponentBase"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshSupplyerInfoMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<ProductionLine> sender, ProductionLine controller)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "ProductionLine"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RemoveLabItemMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SendAutoClickDamageToProductMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "ProductBase"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SendDamageToProductMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "ProductBase"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SetCoinDungeonJoinCostMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SetUpCoinDungeonInfoMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "GameRuleCoinDungeon",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ShowRewardADMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "RewardType"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "StartNewQuestMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "QuestStatusButton"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "UpgradeLabItemMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ProductDungeon",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "ProductDungeon",
+    "score": 0.4,
+    "provides": [
+      "void Damage(double damage)",
+      "void TurnOff(bool returnToOwner)",
+      "void OnLineMode(bool b)",
+      "void SetMessageController(IMessageController<GameModeMain> messageController)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort",
+      "ProductChallenge"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ProductSupplyer",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Entity",
+    "system": "ProductSupplyer",
+    "score": 0.4,
+    "provides": [
+      "delegate void BoostEvent()",
+      "void InitSupplyer(IMessageController<ProductionLine> modeMsgController)",
+      "bool ChangeSupplyer(SupplyerType supplyerType)",
+      "void SetProduct(SupplyerType supplyerType, int tableID, float supplyTime, int supplyAmount, int maxSupplyNum, bool runImmediately)",
+      "void SetProductScale(SupplyerType supplyerType, float scale)"
+    ],
+    "requires": [
+      "IMessageController",
+      "IMessagePort",
+      "PooledGameObject",
+      "ProductionLine",
+      "SpriteRenderer"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "StateControl",
+        "FlowControl"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "QuestController",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "QuestController",
+    "score": 0.4,
+    "provides": [
+      "bool Init(Injector injector, ConfigCommonTable configTable, ProductTable productTable )",
+      "void LoadAndStartQuests()",
+      "void UpdateLogic(float deltaTime)",
+      "bool MakeNewQuest(int index)",
+      "QuestInfo GetNewQuest()"
+    ],
+    "requires": [
+      "ConfigCommonTable",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort",
+      "Injector"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "DataSync",
+        "ConditionCheck"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "DungeonTable",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Model",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "ITableData GetData(int key)",
+      "int GetMax()",
+      "int GetMaxLevel(int selloffCount)"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "LabBuffTable",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Data",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "ITableData GetData(int key)",
+      "int GetMax()",
+      "bool JsonToByte(string path, string json)"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "LabItemLevelUpTable",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Data",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "ITableData GetData(int level)",
+      "int GetMax()",
+      "bool JsonToByte(string path, string json)"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "LabItemTable",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Model",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "ITableData GetData(int key)",
+      "ITableData GetDataByOrder(int order)",
+      "int GetMax()"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "ManagerGradeTable",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Data",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "ITableData GetData(int managerGrade)",
+      "int GetMax()",
+      "int GetGrade(int statPoint)"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "ProductTable",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Data",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "ITableData GetData(int id)",
+      "ITableData GetData(int groupID, int order)",
+      "int GetMaxIDNums()"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "LabTutorial5",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial1_5",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial2_4",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial3_4",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial5_10",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial5_9",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "override void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial7_3",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial8_2",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial9_4",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "AchievementComponentGroup",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void Initialize()",
+      "void UpdateContent(AchievementComponentScrollItemData itemData)",
+      "void OnClickRewardButton(AchievementComponent component, int achievementID)",
+      "void SetMessageController(IMessageController<GameModeMain> messageController)"
+    ],
+    "requires": [
+      "AchievementComponent",
+      "AchievementComponentScrollItemData",
+      "FancyScrollRectCell",
+      "GameModeMain",
+      "IMessageController"
+    ],
+    "tags": {
+      "major": [
+        "DataSync",
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "AchievementScrollView",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Context",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void OnCellClicked(Action<int> callback)",
+      "void UpdateData(IList<AchievementComponentScrollItemData> items)",
+      "void ScrollTo(int index, float duration, Ease easing, Alignment alignment = Alignment.Middle)",
+      "void JumpTo(int index, Alignment alignment = Alignment.Middle)",
+      "void SetMessageController(IMessageController<GameModeMain> messageController)"
+    ],
+    "requires": [
+      "FancyScrollRect",
+      "FancyScrollRectContext",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort"
+    ],
+    "tags": {
+      "major": [
+        "DataSync",
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "CoinDungeonComponent",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void UpdateContent(CoinDungeonScrollItemData itemData)",
+      "void SetData(int selloffCount, DungeonTableData data, ResourceAllocator resourceAllocator, int currentFloor, bool sameGroupFloor)",
+      "void OnClick()",
+      "void SetMessageController(IMessageController<GameModeMain> messageController)"
+    ],
+    "requires": [
+      "CoinDungeonScrollItemData",
+      "FancyScrollRectCell",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "DataSync",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "CoinDungeonComponentScrollView",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Context",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void OnCellClicked(Action<int> callback)",
+      "void UpdateData(IList<CoinDungeonScrollItemData> items)",
+      "void ScrollTo(int index, float duration, Ease easing, Alignment alignment = Alignment.Middle)",
+      "void JumpTo(int index, Alignment alignment = Alignment.Middle)",
+      "void SetMessageController(IMessageController<GameModeMain> messageController)"
+    ],
+    "requires": [
+      "FancyScrollRect",
+      "FancyScrollRectContext",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort"
+    ],
+    "tags": {
+      "major": [
+        "DataSync",
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ItemUpgradeStatComponent",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [],
+    "requires": [
+      "TextMeshProUGUI"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "LabAllItemStatComponent",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetStat(char sign, float stat)"
+    ],
+    "requires": [
+      "TextMeshProUGUI"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "LabItemUpgradeWin",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "void SetData(UserInfo userInfo, LabItemTableData labItemData, LabItemLevelUpTableData nextLevel)",
+      "UniTask Open()",
+      "void OnClickClose()",
+      "void OnClickUpgrade()"
+    ],
+    "requires": [
+      "GOEffectParticleHandler",
+      "ItemUpgradeStatComponent",
+      "LabMountComponent",
+      "LanguageText",
+      "TextMeshProUGUI"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "StateControl",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "LabMountComponent",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void Init(System.Action<int> onClickCallback)",
+      "int GetItemID()",
+      "void SetData(GameModeMain debug, int itemID, LabItemTableData data, ResourceAllocator resAllocator, int level,\r\n                                bool isNew, bool canLevelUp)",
+      "void TurnOn()",
+      "void TurnOff()"
+    ],
+    "requires": [
+      "LanguageText",
+      "ReddotNotificationComponent",
+      "System.Action",
+      "TextMeshProUGUI"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "LabMountComponentGroup",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void Initialize()",
+      "void UpdateContent(LabMountScrollItemData itemData)",
+      "void ShowUpgradeWin(int itemID)",
+      "void SendMsgSlotControlWin(int factoryIndex, int slotIndex)",
+      "RectTransform GetFirstSlot()"
+    ],
+    "requires": [
+      "FancyScrollRectCell",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort",
+      "LabMountComponent"
+    ],
+    "tags": {
+      "major": [
+        "DataSync",
+        "ResourceTransfer",
+        "ValueModification"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "LabMountComponentScrollView",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Context",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void Clear()",
+      "void SetData(int[] ids, int maxTableID)",
+      "void OnCellClicked(Action<int> callback)",
+      "void UpdateData(IList<LabMountScrollItemData> items)",
+      "void ScrollTo(int index, float duration, Ease easing, Alignment alignment = Alignment.Middle)"
+    ],
+    "requires": [
+      "FancyScrollRect",
+      "FancyScrollRectContext",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "DataSync",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "LobbyBannerComponent",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "int GetPackageID()",
+      "void SetData(Sprite sprite)",
+      "void UpdateContent(LobbyBannerScrollItemData itemData)",
+      "void OnClick()",
+      "void MakeInvalid()"
+    ],
+    "requires": [
+      "FancyScrollRectCell",
+      "IMessageController",
+      "IMessagePort",
+      "LobbyBannerScrollItemData",
+      "WindowID"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "DataSync",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "LobbyBannerScrollView",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Context",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void Awake()",
+      "void SetRefreshTime(float time)",
+      "void OnCellClicked(Action<int> callback)",
+      "void UpdateData(IList<LobbyBannerScrollItemData> items)",
+      "void ScrollTo(int index, float duration, Ease easing, Alignment alignment = Alignment.Middle)"
+    ],
+    "requires": [
+      "FancyScrollRect",
+      "FancyScrollRectContext",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort"
+    ],
+    "tags": {
+      "major": [
+        "DataSync",
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "MachineComponentScrollView",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Context",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void OnCellClicked(Action<int> callback)",
+      "void UpdateData(IList<MachineScrollItemData> items)",
+      "void ScrollTo(int index, float duration, Ease easing, Alignment alignment = Alignment.Middle)",
+      "void JumpTo(int index, Alignment alignment = Alignment.Middle)",
+      "void SetMessageController(IMessageController<GameModeMain> messageController)"
+    ],
+    "requires": [
+      "FancyScrollRect",
+      "FancyScrollRectContext",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort"
+    ],
+    "tags": {
+      "major": [
+        "DataSync",
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "MachineInfoScrollView",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Data",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void OnCellClicked(Action<int> callback)",
+      "void UpdateData(IList<InfiniteItemData> items)",
+      "void ScrollTo(int index, float duration, Ease easing, Alignment alignment = Alignment.Middle)",
+      "void JumpTo(int index, Alignment alignment = Alignment.Middle)",
+      "void OnCellClicked(Action<int> callback)"
+    ],
+    "requires": [
+      "FancyScrollRect"
+    ],
+    "tags": {
+      "major": [
+        "DataSync",
+        "ResponseTrigger"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "MachineMountComponentGroup",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void Initialize()",
+      "void UpdateContent(MachineMountScrollItemData itemData)",
+      "void SendMsgMountMachine(MachineMountComponent component)",
+      "void SendMsgSlotControlWin(int factoryIndex, int slotIndex)",
+      "RectTransform GetFirstElement()"
+    ],
+    "requires": [
+      "FancyScrollRectCell",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort",
+      "MachineMountComponent"
+    ],
+    "tags": {
+      "major": [
+        "ResourceTransfer",
+        "DataSync",
+        "ValueModification"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "MachineMountComponentScrollView",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Context",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetMachineID(int itemDataSlot, int machineID, bool mounted)",
+      "void SetFactoryInfo(MachineMountComponentGroup.Mode mode, int itemDataSlot,\r\n        int worldFactoryIndex, int lineIndex, int slotIndex,\r\n        int selectedWorldFactoryIndex, int seletedLineIndex, int selectedSlotIndex)",
+      "void SetMachineTableMaxNum(List<int> allIDs, int maxNum)",
+      "void OnCellClicked(Action<int> callback)",
+      "void UpdateData(IList<MachineMountScrollItemData> items, MachineMountComponentGroup.Mode mode)"
+    ],
+    "requires": [
+      "FancyScrollRect",
+      "FancyScrollRectContext",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "DataSync",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "MachineStatComponent",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetDataType1(ResourceAllocator resourceAllocator,\r\n        MachineTableData data, bool mounted, int level, int exp, int maxExp, double power, bool isNew, bool canTrain)",
+      "void SetDataType2(ResourceAllocator resourceAllocator, GameStatCalculator calculator,\r\n        MachineTableData data, MachineTuningExpTableData currentTuning, MachineTuningExpTableData nextTuning, int level, int exp)",
+      "void UpdateContent(MachineScrollItemData itemData)",
+      "int GetMachineID()",
+      "void SetMessageController(IMessageController<GameModeMain> messageController)"
+    ],
+    "requires": [
+      "FancyScrollRectCell",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort",
+      "LanguageText"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification",
+        "DataSync"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "ManagerMountComponentGroup",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void Initialize()",
+      "void UpdateContent(ManagerMountScrollItemData itemData)",
+      "void SendMsgShowDetail(ManagerStat stat)",
+      "void SendMsgSlotControlWin(int factoryIndex, int slotIndex)",
+      "void SetMessageController(IMessageController<GameModeMain> messageController)"
+    ],
+    "requires": [
+      "FancyScrollRectCell",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort",
+      "ManagerMountComponent"
+    ],
+    "tags": {
+      "major": [
+        "ResourceTransfer",
+        "DataSync",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ManagerMountComponentScrollView",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Context",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetManagerStat(ManagerStat stat, int index)",
+      "void SetManagerStat(ManagerStat stat1, ManagerStat stat2)",
+      "void Clear()",
+      "RectTransform GetTutorialFirstElement()",
+      "void OnCellClicked(Action<int> callback)"
+    ],
+    "requires": [
+      "FancyScrollRect",
+      "FancyScrollRectContext",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "DataSync",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "oldProductGroupComponent",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(bool isLock, bool isSelected, ResourceAllocator resourceAllocator,\r\n        ProductTable productTable,\r\n        int openStep, bool isLastOpen, string name, string productTime)",
+      "void UpdateContent(oldProductGroupScrollItemData itemData)",
+      "void SetMessageController(IMessageController<GameModeMain> messageController)",
+      "void OnClick()",
+      "void OnCheatAdd()"
+    ],
+    "requires": [
+      "FancyScrollRectCell",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort",
+      "Scroller"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification",
+        "DataSync"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "oldProductGroupComponentScrollView",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Context",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetFactoryIndex(int factoryIndex)",
+      "void OnCellClicked(Action<int> callback)",
+      "void UpdateData(IList<oldProductGroupScrollItemData> items)",
+      "void ScrollTo(int index, float duration, Ease easing, Alignment alignment = Alignment.Middle)",
+      "void JumpTo(int index, Alignment alignment = Alignment.Middle)"
+    ],
+    "requires": [
+      "FancyScrollRect",
+      "FancyScrollRectContext",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "DataSync",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "OpenLabItemUpgradeWinMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "QuestHUDWin",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "void RefreshQuests()",
+      "void OnClickQuestBtn(int index)",
+      "void OnClickLockedQuestBtn(int index)",
+      "void OnRequestNewQuest(int index)"
+    ],
+    "requires": [
+      "QuestStatusButton",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "StateControl",
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "QuestStatusButton",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void Init(QuestHUDWin owner, QuestInfo quest, System.Action<int> clickCallback, System.Action<int> startNewQuestCallback)",
+      "Status GetCurrentStatus()",
+      "int GetSlotIndex()",
+      "QuestInfo GetQuestInfo()",
+      "void SetQuest(QuestInfo quest)"
+    ],
+    "requires": [
+      "DOTweenAnimation",
+      "QuestHUDWin",
+      "QuestInfo",
+      "Status",
+      "System.Action"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "DataSync"
+      ],
+      "minor": [
+        "Find",
+        "Assign",
+        "Delay"
+      ]
+    }
+  },
+  {
+    "fileId": "QuestWin",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetDataTypeReward(int slotIndex, string productName, int productAmount, RewardType type,  double rewardAmount)",
+      "void SetDataType1(QuestInfo newQuest, RewardType type, double rewardAmount, string productTextID, int clickedIndex, int neededCount)",
+      "bool IsValid(Index nodeIndex)",
+      "void OnClickChangeQuest()",
+      "void OnClickOKShowAD()"
+    ],
+    "requires": [
+      "Index",
+      "LanguageText",
+      "QuestInfo",
+      "RewardType",
+      "TextMeshProUGUI"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification",
+        "ConditionCheck"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "RefreshLabItemUpgradeWinMsg",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SelectProductComponent",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void UpdateContent(SelectProductComponentScrollItemData itemData)",
+      "void SetData(ResourceAllocator resourceAllocator, ProductTable table, float productTime, int openedLevel, int openedOrder, bool selected)",
+      "void MakeOpen(bool selected)",
+      "void MakeUnLock(int openedLevel)",
+      "void OnClickSelect()"
+    ],
+    "requires": [
+      "FancyScrollRectCell",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort",
+      "LanguageText"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification",
+        "DataSync"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "SelectProductComponentScrollView",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Context",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetFactoryIndex(int factoryIndex)",
+      "void OnCellClicked(Action<int> callback)",
+      "void UpdateData(IList<SelectProductComponentScrollItemData> items)",
+      "void ScrollTo(int index, float duration, Ease easing, Alignment alignment = Alignment.Middle)",
+      "void JumpTo(int index, Alignment alignment = Alignment.Middle)"
+    ],
+    "requires": [
+      "FancyScrollRect",
+      "FancyScrollRectContext",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "DataSync",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ShopBuyChildComponentBase",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Base",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetOwner(WindowManager owner)",
+      "void SetItemData(ShopWinScrollItemData itemData)",
+      "ShopWinScrollItemData GetItemData()",
+      "abstract void Refresh()",
+      "abstract void MakeInvalid()"
+    ],
+    "requires": [
+      "ShopWinScrollItemData",
+      "WindowManager"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "DataSync"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "ShopBuyComponent",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void Initialize()",
+      "void UpdateContent(ShopWinScrollItemData itemData)",
+      "ShopBuyChildComponentBase GetComponent(ComponentIndex index)",
+      "void MakeAllInvalidComponent()",
+      "void SetMessageController(IMessageController<GameModeMain> messageController)"
+    ],
+    "requires": [
+      "ComponentIndex",
+      "FancyScrollRectCell",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "DataSync"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ShopWin",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "RectTransform GetNormalCardButtonPos()",
+      "UniTask Open()",
+      "void RefreshPackageInfo()",
+      "void RefreshMachineInfo()"
+    ],
+    "requires": [
+      "DOTweenAnimation",
+      "ShopWinScrollView",
+      "Toggle",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "DataSync",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ShopWinScrollView",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Context",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "ShopBuyComponent GetTutorialFirstElement()",
+      "void RefreshPackageComponentInfo()",
+      "void RefreshMachineComponentInfo()",
+      "void RefreshCostsStatus(UserInfo userInfo)",
+      "void OnCellClicked(Action<int> callback)"
+    ],
+    "requires": [
+      "FancyScrollRect",
+      "FancyScrollRectContext",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort"
+    ],
+    "tags": {
+      "major": [
+        "DataSync",
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "UserInfo",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Data",
+    "system": "UserInfo",
+    "score": 0.4,
+    "provides": [
+      "object Clone()",
+      "object Clone()",
+      "void Set(int questProductID, int needCount, int currentCount, int rewardType)",
+      "void AddCount(int count)",
+      "void SetWaitTime(float waitTime)"
+    ],
+    "requires": [
+      "FactoryInfo",
+      "ICloneable",
+      "IInjectable",
+      "MachineInfo",
+      "MachineUpgradeInfo"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ConditionCheck",
+        "StateControl"
+      ],
+      "minor": [
+        "Find",
+        "Assign",
+        "Despawn"
+      ]
+    }
+  },
+  {
+    "fileId": "WorldLine",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "WorldLine",
+    "score": 0.4,
+    "provides": [
+      "void Init(GameMode modeOwner, int mapPage, Injector injector)",
+      "WorldSlot GetSlot(int index)",
+      "WorldSlot GetSpecialSlot(int index)",
+      "int GetSlotBy(WorldSlot slot)",
+      "int GetSlotIndex(WorldSlot slot)"
+    ],
+    "requires": [
+      "CoinDungeonConditionalEffectPlayer",
+      "GameMode",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort"
+    ],
+    "tags": {
+      "major": [
+        "DataSync",
+        "ValueModification",
+        "ResourceTransfer"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "WorldSlot",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Message",
+    "system": "WorldSlot",
+    "score": 0.4,
+    "provides": [
+      "void InitWithID(Injector injector, int slotID)",
+      "void Init(Injector injector)",
+      "int GetID()",
+      "void SetFactoryStatus(StatusIndex index)",
+      "void SetFactoryImage(Sprite factory)"
+    ],
+    "requires": [
+      "DOTweenAnimation",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort",
+      "Injector"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "StateControl",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "HomeItem",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Home",
+    "score": 0.4,
+    "provides": [
+      "string Serialize()",
+      "HomeItem Deserialize(string serializedData)"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "HomeItemController",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Controller",
+    "system": "Home",
+    "score": 0.4,
+    "provides": [
+      "void Buy()"
+    ],
+    "requires": [
+      "HomeItem",
+      "SpriteRenderer",
+      "TMP_Text"
+    ],
+    "tags": {
+      "major": [
+        "ResourceTransfer"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "CharacterSelector",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Model",
+    "system": "CharacterSelector",
+    "score": 0.4,
+    "provides": [
+      "void ChangeAnimal(int direction)",
+      "void ChangeOutfit(int outfitIndex)",
+      "void ConfirmSelectionAndStart()",
+      "void ChangeAnimal(int direction)",
+      "void ChangeOutfit(int outfitIndex)"
+    ],
+    "requires": [
+      "CharacterData",
+      "OutfitData"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "TurnManager",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Model",
+    "system": "unity_project",
+    "score": 0.4,
+    "provides": [
+      "void Init()",
+      "void OnReset()",
+      "bool IsInitialized()",
+      "void StartBattle()",
+      "void StopBattle()"
+    ],
+    "requires": [
+      "IInitializable",
+      "TurnPhase",
+      "UnitBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ConditionCheck",
+        "FlowControl"
+      ],
+      "minor": [
+        "Assign",
+        "Delay"
+      ]
+    }
+  },
+  {
+    "fileId": "UnitManager",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Model",
+    "system": "unity_project",
+    "score": 0.4,
+    "provides": [
+      "void Init()",
+      "void OnReset()",
+      "bool IsInitialized()",
+      "void SpawnPlayerUnits(int count)",
+      "void SpawnEnemyUnits(int count = 0)"
+    ],
+    "requires": [
+      "AnimationClip",
+      "IInitializable",
+      "UnitBase",
+      "UnitData",
+      "UnitType"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ConditionCheck",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign",
+        "Spawn",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "AudioManager",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Manager",
+    "system": "AudioManager",
+    "score": 0.4,
+    "provides": [
+      "void PlayGoldSpawnSound(Vector3 position = default)",
+      "void PlayGoldCollectSound(Vector3 position = default)",
+      "void PlayArrowAttackSound(Vector3 position = default)",
+      "void PlayItemDropSound(Vector3 position = default)",
+      "void PlaySFX(AudioClip clip, Vector3 position = default, float volumeScale = 1f)"
+    ],
+    "requires": [
+      "AudioManager"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "StateControl"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "CombatComponent",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Component",
+    "score": 0.4,
+    "provides": [
+      "void Initialize()",
+      "void Attack(Transform target)",
+      "void SetWeapon(IWeapon weapon)",
+      "void SetTarget(Transform target)",
+      "Transform GetCurrentTarget()"
+    ],
+    "requires": [
+      "BulletController",
+      "ICombat",
+      "IHealth",
+      "LayerMask",
+      "PlayerController"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ConditionCheck",
+        "StateControl"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "WeaponComponent",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Data",
+    "system": "Component",
+    "score": 0.4,
+    "provides": [
+      "void Fire(Vector3 startPosition, Transform target, BulletOwner owner, object shooter = null)",
+      "bool CanFire()",
+      "float GetFireRate()",
+      "float GetRange()",
+      "string GetBulletType()"
+    ],
+    "requires": [
+      "BulletController",
+      "IWeapon",
+      "WeaponData"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "EnemyController",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Enum",
+    "system": "Controller",
+    "score": 0.4,
+    "provides": [
+      "void Initialize(Transform _targetPos, List<Transform> _boundary = null, bool _respawn = false)",
+      "void TakeDamage(int damage)",
+      "void TakeDamage(int damage, BulletOwner killer, TurretController killerTurret = null)",
+      "int GetCurrentHealth()",
+      "int GetMaxHealth()"
+    ],
+    "requires": [
+      "EffectController",
+      "EnemyController",
+      "IHealth",
+      "IngradientController",
+      "SkinnedMeshRenderer"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResourceTransfer",
+        "ConditionCheck"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "EnhanceController",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Enum",
+    "system": "Controller",
+    "score": 0.4,
+    "provides": [
+      "void Init()",
+      "void SetVisibility(bool visible)",
+      "void CollectGold()",
+      "bool IsBuilt()",
+      "int GetCurrentHealth()"
+    ],
+    "requires": [
+      "EffectController",
+      "GimmicKType",
+      "ICollectable",
+      "IHealth",
+      "SpriteRenderer"
+    ],
+    "tags": {
+      "major": [
+        "ConditionCheck",
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Find",
+        "Assign",
+        "Aggregate"
+      ]
+    }
+  },
+  {
+    "fileId": "MineController",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Model",
+    "system": "Controller",
+    "score": 0.4,
+    "provides": [
+      "void Init()",
+      "void SetVisibility(bool visible)",
+      "void CollectGold()",
+      "int GetStoredGold()",
+      "bool CollectGold(int amount)"
+    ],
+    "requires": [
+      "EffectController",
+      "GoldPickup",
+      "GoldStorage",
+      "ICollectable",
+      "IHealth"
+    ],
+    "tags": {
+      "major": [
+        "ConditionCheck",
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Find",
+        "Aggregate",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "NPCController",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Enum",
+    "system": "Controller",
+    "score": 0.4,
+    "provides": [
+      "void Init(NPCType type, int _idx = 0, Transform _controller = null)",
+      "bool OnGetpurchaseSuccessful()",
+      "void SetWaitingPosition(Vector3 position)",
+      "void StartShopping()",
+      "void OnPurchaseCompleted(bool success)"
+    ],
+    "requires": [
+      "CombatComponent",
+      "NPCType",
+      "SpriteRenderer",
+      "TextMeshPro",
+      "Transform _controller ="
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification",
+        "StateControl"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ShopController",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Controller",
+    "system": "Controller",
+    "score": 0.4,
+    "provides": [
+      "void Init()",
+      "bool RegisterNPCToQueue(NPCController npc)",
+      "void RemoveNPCFromQueue(NPCController npc)",
+      "Vector3 GetQueuePosition(int queueIndex)",
+      "bool ProcessNPCPurchase_SimpleNoQueue(NPCController npc, int meatAmount)"
+    ],
+    "requires": [
+      "IngradientController",
+      "PlayerController",
+      "ResourceStorage",
+      "ResourceType",
+      "SpriteRenderer"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "DataSync",
+        "ConditionCheck"
+      ],
+      "minor": [
+        "Find",
+        "Despawn"
+      ]
+    }
+  },
+  {
+    "fileId": "TurretController",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Model",
+    "system": "Controller",
+    "score": 0.4,
+    "provides": [
+      "void Init()",
+      "void SetVisibility(bool visible,bool _ruleHide = false)",
+      "void CollectGold()",
+      "int GetStoredGold()",
+      "bool CollectResource(int amount)"
+    ],
+    "requires": [
+      "BulletController",
+      "CombatComponent",
+      "EffectController",
+      "GoldPickup",
+      "GoldStorage"
+    ],
+    "tags": {
+      "major": [
+        "ConditionCheck",
+        "ResponseTrigger",
+        "ValueModification"
+      ],
+      "minor": [
+        "Find",
+        "Aggregate",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ICombat",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Interface",
+    "system": "Interface",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "IHealth",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Interface",
+    "system": "Interface",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "CharacterAnimationController",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Controller",
+    "system": "Gameplay",
+    "score": 0.4,
+    "provides": [
+      "void PlayWalk()",
+      "void PlayIdle()"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "CharacterController",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Model",
+    "system": "Gameplay",
+    "score": 0.4,
+    "provides": [],
+    "requires": [
+      "Joystick"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "PathFollower",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Gameplay",
+    "score": 0.4,
+    "provides": [],
+    "requires": [
+      "CharacterAnimationController",
+      "Ease",
+      "PathType"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Enemy",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Enemy",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": [
+        "Despawn"
+      ]
+    }
+  },
+  {
+    "fileId": "EnemyFactory",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Factory",
+    "system": "EnemyFactory",
+    "score": 0.4,
+    "provides": [
+      "Enemy GetObjectFromPool()",
+      "void ReturnObjectToPool(Enemy obj)"
+    ],
+    "requires": [
+      "Enemy"
+    ],
+    "tags": {
+      "major": [],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "EnemySpawner",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "EnemySpawner",
+    "score": 0.4,
+    "provides": [
+      "void Update()"
+    ],
+    "requires": [
+      "Enemy"
+    ],
+    "tags": {
+      "major": [],
+      "minor": [
+        "Spawn"
+      ]
+    }
+  },
+  {
+    "fileId": "BaseCharacter",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "BaseCharacter",
+    "score": 0.4,
+    "provides": [
+      "void OnEnable()"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "MinerComponent",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "MinerComponent",
+    "score": 0.4,
+    "provides": [
+      "void GatherGold()"
+    ],
+    "requires": [
+      "BaseCharacter",
+      "GoldSpawnerNonUI",
+      "IncomeIncreaser"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Transporter",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Transporter",
+    "score": 0.4,
+    "provides": [],
+    "requires": [
+      "BaseCharacter",
+      "SpriteRenderer"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Character",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Base",
+    "system": "Characters",
+    "score": 0.4,
+    "provides": [
+      "void AddSwords(int amount)",
+      "void RemoveSwords(int amount)",
+      "bool HandleHit()",
+      "int GetSwordCount()",
+      "int GetHealth()"
+    ],
+    "requires": [
+      "AnimationCurve",
+      "Collider2D",
+      "GameSingleton",
+      "Rigidbody2D",
+      "SpriteRenderer"
+    ],
+    "tags": {
+      "major": [
+        "DataSync",
+        "ValueModification",
+        "ResourceTransfer"
+      ],
+      "minor": [
+        "Find",
+        "Despawn",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "NPC",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Characters",
+    "score": 0.4,
+    "provides": [],
+    "requires": [
+      "Character",
+      "Rigidbody2D"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find",
+        "Spawn"
+      ]
+    }
+  },
+  {
+    "fileId": "Player",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Characters",
+    "score": 0.4,
+    "provides": [
+      "void AddSwords(int amount)"
+    ],
+    "requires": [
+      "Character",
+      "CircleCollider2D",
+      "DynamicJoystick"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SwordComponent",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Characters",
+    "score": 0.4,
+    "provides": [
+      "void UpdateSwordCount(int newCount)",
+      "void RemoveSpecificSword(Sword swordToRemove)"
+    ],
+    "requires": [
+      "Character",
+      "Sword"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Despawn",
+        "Spawn"
+      ]
+    }
+  },
+  {
+    "fileId": "SwordPickup",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Props",
+    "score": 0.4,
+    "provides": [],
+    "requires": [
+      "Character",
+      "CircleCollider2D",
+      "GameSingleton"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Aggregate"
+      ]
+    }
+  },
+  {
+    "fileId": "ScratchCardRenderer",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Component",
+    "system": "Scratch",
+    "score": 0.4,
+    "provides": [
+      "void Release()",
+      "void ScratchHole(Vector2 position, float pressure = 1f)",
+      "void ScratchLine(Vector2 startPosition, Vector2 endPosition, float startPressure = 1f, float endPressure = 1f)",
+      "void FillRenderTextureWithColor(Color color)"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ConditionCheck"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ETFXSceneManager",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Manager",
+    "system": "ETFXSceneManager",
+    "score": 0.4,
+    "provides": [
+      "void LoadScene2DDemo()",
+      "void LoadSceneCards()",
+      "void LoadSceneCombat()",
+      "void LoadSceneDecals()",
+      "void LoadSceneDecals2()"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "BallItem",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Model",
+    "system": "BallSelection",
+    "score": 0.4,
+    "provides": [
+      "void SetSelected(bool selected)"
+    ],
+    "requires": [
+      "MeshRenderer"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "BallWheelController",
+    "layer": "Domain",
+    "genre": "Rpg",
+    "role": "Model",
+    "system": "BallSelection",
+    "score": 0.4,
+    "provides": [
+      "void CollectItems()",
+      "void OnPointerDown(PointerEventData eventData)",
+      "void OnDrag(PointerEventData eventData)",
+      "void OnEndDrag(PointerEventData eventData)",
+      "int GetSelectedIndex()"
+    ],
+    "requires": [
+      "BallItem",
+      "IDragHandler",
+      "IEndDragHandler\r\n//",
+      "IPointerDownHandler"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "DataSync"
+      ],
+      "minor": [
+        "Find",
+        "Aggregate",
+        "Assign"
+      ]
+    }
+  }
+]

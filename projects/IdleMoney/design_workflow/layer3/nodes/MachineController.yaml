@@ -1,0 +1,80 @@
+metadata:
+  nodeId: "MachineController"
+  version: "1.0.0"
+  phase: 2
+  role: "Controller"
+
+dependencies:
+  internal:
+    - "ProductionLineManager"
+    - "DataManager"
+  external:
+    - "UnityEngine.MonoBehaviour"
+    - "System.Collections"
+
+contract:
+  provides:
+    - "machine_attack"
+    - "machine_energy"
+    - "machine_grade"
+  requires:
+    - "slot_system"
+    - "data_table"
+
+tags:
+  layer: "Domain"
+  genre: "Idle"
+  role: "Controller"
+  system: "MachineSystem"
+  majorFunctions:
+    - "StateControl"
+    - "ValueModification"
+    - "ConditionCheck"
+  minorFunctions:
+    - "Calculate"
+    - "Compare"
+    - "Assign"
+
+logicFlow:
+  - step: 1
+    tag: "FlowControl.Spawn"
+    action: "Spawn: 슬롯에 머신 인스턴스 생성, 데이터 테이블에서 머신 타입 정보 로드"
+    next: 2
+  - step: 2
+    tag: "StateControl.Assign"
+    action: "SetGrade: 머신 등급(1~5) 설정, 등급에 따른 데미지/에너지 소모량 초기화"
+    next: 3
+  - step: 3
+    tag: "ValueModification.Calculate"
+    action: "AttackLoop: 공격 인터벌 타이머 체크 → DealDamage(등급배율 × 기본데미지) 적용"
+    next: 4
+  - step: 4
+    tag: "ValueModification.Calculate"
+    action: "ConsumeEnergy: 공격 1회당 에너지 소모량 차감, 현재 에너지 잔량 업데이트"
+    next: 5
+  - step: 5
+    tag: "ConditionCheck.Compare"
+    action: "EnergyDepleted: 에너지 <= 0 조건 체크, 충족 시 동작 중단 및 수리 대기 상태 전환"
+    next: 6
+  - step: 6
+    tag: "StateControl.Assign"
+    action: "WaitRepair: 수리 대기 플래그 설정, ManagerCharacterController 수리 감지 대상으로 등록"
+    next: 3
+
+referencePatterns:
+  - source: "idlemoney__ingame__machine_system"
+    pattern: "5등급 머신 데미지/에너지 테이블 및 AttackLoop 타이밍 설계"
+  - source: "idlemoney__balance__factory_progression"
+    pattern: "등급별 생산 기여 배율 참조"
+
+codeHints:
+  patterns:
+    - "SerializeField for Inspector"
+    - "Coroutine for AttackLoop interval control"
+    - "Enum for MachineGrade (Grade1~Grade5)"
+    - "MessagePack serialization for machine state persistence"
+  avoidPatterns:
+    - "Find/FindObjectOfType for UI"
+    - "dynamic UI creation"
+    - "hardcoded magic numbers"
+    - "Update() for attack timing (use Coroutine instead)"

@@ -1,0 +1,81 @@
+metadata:
+  nodeId: "ProductionLineManager"
+  version: "1.0.0"
+  phase: 2
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "EventManager"
+    - "DataManager"
+    - "CurrencyManager"
+  external:
+    - "UnityEngine.MonoBehaviour"
+    - "System.Collections.Generic"
+
+contract:
+  provides:
+    - "production_line_init"
+    - "line_profit_calculation"
+    - "line_state_management"
+  requires:
+    - "singleton"
+    - "event_system"
+    - "data_table"
+    - "currency_system"
+
+tags:
+  layer: "Domain"
+  genre: "Idle"
+  role: "Manager"
+  system: "ProductionLine"
+  majorFunctions:
+    - "StateControl"
+    - "ValueModification"
+    - "FlowControl"
+  minorFunctions:
+    - "Iterate"
+    - "Calculate"
+    - "Assign"
+
+logicFlow:
+  - step: 1
+    tag: "FlowControl.Assign"
+    action: "Init: 팩토리 4개 라인 데이터 테이블 로드 및 라인 컨테이너 초기화"
+    next: 2
+  - step: 2
+    tag: "FlowControl.Spawn"
+    action: "CreateLines(4): 라인 0~3 순서대로 ProductionLine 인스턴스 생성"
+    next: 3
+  - step: 3
+    tag: "StateControl.Iterate"
+    action: "PerLine: 각 라인에 슬롯 5개 + 공급기(Supplyer) 1개 + 운송차(Transporter) 3개 생성 및 배치"
+    next: 4
+  - step: 4
+    tag: "ValueModification.Calculate"
+    action: "UpdateLoop: 매 틱마다 활성 라인 순회하여 라인별 생산량 × 등급 배율 × 버프 계산"
+    next: 5
+  - step: 5
+    tag: "ValueModification.Assign"
+    action: "AddMoney: 계산된 수익을 CurrencyManager에 전달하여 보유 머니 증가"
+    next: 4
+
+referencePatterns:
+  - source: "idlemoney__ingame__production_line"
+    pattern: "라인별 5슬롯 + 3운송차 + 1공급기 구조 및 수익 계산 공식"
+  - source: "idlemoney__balance__factory_progression"
+    pattern: "팩토리 레벨에 따른 라인 활성화 조건 및 수익 배율 테이블"
+
+codeHints:
+  patterns:
+    - "SerializeField for Inspector"
+    - "MessagePack serialization"
+    - "DontDestroyOnLoad singleton"
+    - "Event-driven profit notification via EventManager"
+    - "List<ProductionLine> for line container management"
+  avoidPatterns:
+    - "Find/FindObjectOfType for UI"
+    - "dynamic UI creation"
+    - "hardcoded magic numbers"
+    - "Direct cross-line state mutation"

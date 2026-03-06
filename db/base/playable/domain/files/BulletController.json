@@ -1,0 +1,380 @@
+{
+  "fileId": "BulletController",
+  "filePath": "Controller\\BulletController.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Playable",
+  "role": "Enum",
+  "system": "Controller",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine",
+    "System.Collections"
+  ],
+  "classes": [
+    {
+      "className": "BulletOwner",
+      "classType": "enum",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "SetTarget",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "_target"
+            },
+            {
+              "paramType": "BulletOwner",
+              "paramName": "_owner"
+            },
+            {
+              "paramType": "TurretController _ownerTurret =",
+              "paramName": "null"
+            }
+          ],
+          "signature": "void SetTarget(Transform _target, BulletOwner _owner, TurretController _ownerTurret = null)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetBulletColor",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Color",
+              "paramName": "color"
+            }
+          ],
+          "signature": "void SetBulletColor(Color color)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetBulletWidth",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "width"
+            }
+          ],
+          "signature": "void SetBulletWidth(float width)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetBulletSpeed",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "newSpeed"
+            }
+          ],
+          "signature": "void SetBulletSpeed(float newSpeed)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        }
+      ]
+    },
+    {
+      "className": "BulletController",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "speed",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "20f"
+        },
+        {
+          "fieldName": "lineMaterial",
+          "fieldType": "Material",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "widthCurve",
+          "fieldType": "AnimationCurve",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "AnimationCurve.Linear(0f, 1f, 1f, 0f)"
+        },
+        {
+          "fieldName": "bulletColor",
+          "fieldType": "Color",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "Color.yellow"
+        },
+        {
+          "fieldName": "fadeDuration",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.2f"
+        },
+        {
+          "fieldName": "m_Target",
+          "fieldType": "Transform",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_Owner",
+          "fieldType": "BulletOwner",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "BulletOwner.Player"
+        },
+        {
+          "fieldName": "m_OwnerTurret",
+          "fieldType": "TurretController",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "lineRenderer",
+          "fieldType": "LineRenderer",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "startPosition",
+          "fieldType": "Vector3",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "targetPosition",
+          "fieldType": "Vector3",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "isInitialized",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "SetTarget",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "_target"
+            },
+            {
+              "paramType": "BulletOwner",
+              "paramName": "_owner"
+            },
+            {
+              "paramType": "TurretController _ownerTurret =",
+              "paramName": "null"
+            }
+          ],
+          "signature": "void SetTarget(Transform _target, BulletOwner _owner, TurretController _ownerTurret = null)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetBulletColor",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Color",
+              "paramName": "color"
+            }
+          ],
+          "signature": "void SetBulletColor(Color color)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetBulletWidth",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "width"
+            }
+          ],
+          "signature": "void SetBulletWidth(float width)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetBulletSpeed",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "newSpeed"
+            }
+          ],
+          "signature": "void SetBulletSpeed(float newSpeed)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void SetTarget(Transform _target, BulletOwner _owner, TurretController _ownerTurret = null)",
+    "void SetBulletColor(Color color)",
+    "void SetBulletWidth(float width)",
+    "void SetBulletSpeed(float newSpeed)",
+    "void SetTarget(Transform _target, BulletOwner _owner, TurretController _ownerTurret = null)",
+    "void SetBulletColor(Color color)",
+    "void SetBulletWidth(float width)",
+    "void SetBulletSpeed(float newSpeed)"
+  ],
+  "requires": [
+    "AnimationCurve",
+    "EnemyController",
+    "MovementComponent"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "0f",
+    "1f",
+    "AnimationCurve",
+    "EnemyController",
+    "Instance",
+    "Mathf",
+    "MovementComponent",
+    "ObjectPool",
+    "Turret"
+  ],
+  "usedBy": []
+}

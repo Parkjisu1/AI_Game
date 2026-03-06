@@ -1,0 +1,155 @@
+{
+  "fileId": "CSceneManager",
+  "filePath": "Manager\\CSceneManager.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Puzzle",
+  "role": "Manager",
+  "system": "Manager",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "Global_Define",
+    "Ricimi",
+    "UnityEngine.SceneManagement"
+  ],
+  "classes": [
+    {
+      "className": "CSceneManager",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "refScene",
+          "fieldType": "SceneBase",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "fadeColor",
+          "fieldType": "Color",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Color(0, 0, 0, 170f / 255f)"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "ChangeScene",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "eScene",
+              "paramName": "_eScene"
+            }
+          ],
+          "signature": "void ChangeScene(eScene _eScene)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": null
+        },
+        {
+          "methodName": "FadeOutScene",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void FadeOutScene()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "FadeIn",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "System.Action",
+              "paramName": "_fpCallback"
+            }
+          ],
+          "signature": "void FadeIn(System.Action _fpCallback)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetScene",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "SceneBase",
+              "paramName": "_refScene"
+            }
+          ],
+          "signature": "void SetScene(SceneBase _refScene)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void ChangeScene(eScene _eScene)",
+    "void FadeOutScene()",
+    "void FadeIn(System.Action _fpCallback)",
+    "void SetScene(SceneBase _refScene)"
+  ],
+  "requires": [
+    "CSceneManager",
+    "SceneBase"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "CPopupManager",
+    "GC",
+    "LoadingPopup",
+    "SceneManager",
+    "Transition",
+    "_eScene"
+  ],
+  "usedBy": []
+}

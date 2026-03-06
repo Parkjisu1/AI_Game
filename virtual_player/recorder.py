@@ -4,8 +4,8 @@ Gameplay Recorder (Event-Driven)
 Records user touch events with precise before/after screenshots.
 
 Two capture modes (auto-detected):
-  1. getevent mode  — real Android devices / emulators that support getevent
-  2. mouse capture  — BlueStacks / Windows emulators (captures host mouse clicks)
+  1. getevent mode  -- real Android devices / emulators that support getevent
+  2. mouse capture  -- BlueStacks / Windows emulators (captures host mouse clicks)
 
 Both modes produce identical output:
   recording.json with events[] each having screenshot_before/screenshot_after.
@@ -213,14 +213,14 @@ def record(game_key: str, transition_wait: float = 0.8):
     getevent_works = _test_getevent(touch_device)
 
     if getevent_works:
-        log(f"getevent OK — using getevent mode")
+        log(f"getevent OK -- using getevent mode")
         return _record_getevent(game_key, rec_dir, frames_dir,
                                 screen_w, screen_h, touch_device, transition_wait)
     else:
         # Try Windows mouse capture (BlueStacks)
         hwnd = _find_bluestacks_hwnd()
         if hwnd:
-            log(f"getevent unavailable — using Windows mouse capture (BlueStacks)")
+            log(f"getevent unavailable -- using Windows mouse capture (BlueStacks)")
             return _record_mouse_capture(game_key, rec_dir, frames_dir,
                                          screen_w, screen_h, hwnd, transition_wait)
         else:

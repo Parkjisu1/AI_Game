@@ -1,0 +1,150 @@
+{
+  "fileId": "HammerInfo",
+  "filePath": "HammerInfo.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Idle",
+  "role": "Data",
+  "system": "HammerInfo",
+  "score": 0.4,
+  "usings": [],
+  "classes": [
+    {
+      "className": "HammerInfo",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "hammerName",
+          "fieldType": "string",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "hammerFlipName",
+          "fieldType": "string",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "hammeringVFXName",
+          "fieldType": "string",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "GetHammerName",
+          "accessModifier": "public",
+          "returnType": "string",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "flip"
+            }
+          ],
+          "signature": "string GetHammerName(bool flip)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetHammeringVFXName",
+          "accessModifier": "public",
+          "returnType": "string",
+          "parameters": [],
+          "signature": "string GetHammeringVFXName()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "SetHammeringVFX",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "vfxName"
+            }
+          ],
+          "signature": "void SetHammeringVFX(string vfxName)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetHammerInfo",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "GameEvent",
+              "paramName": "gameEvent"
+            }
+          ],
+          "signature": "void SetHammerInfo(GameEvent gameEvent)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "string GetHammerName(bool flip)",
+    "string GetHammeringVFXName()",
+    "void SetHammeringVFX(string vfxName)",
+    "void SetHammerInfo(GameEvent gameEvent)"
+  ],
+  "requires": [],
+  "tags": {
+    "major": [
+      "ValueModification"
+    ],
+    "minor": [
+      "Find",
+      "Assign"
+    ]
+  },
+  "uses": [],
+  "usedBy": []
+}

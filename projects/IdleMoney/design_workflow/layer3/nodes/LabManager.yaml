@@ -1,0 +1,93 @@
+metadata:
+  nodeId: "LabManager"
+  version: "1.0.0"
+  phase: 2
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "RebirthManager"
+    - "CurrencyManager"
+    - "DataManager"
+    - "EventManager"
+    - "ProductionLineManager"
+  external:
+    - "UnityEngine.MonoBehaviour"
+    - "System.Collections.Generic"
+
+contract:
+  provides:
+    - "lab_buff_calculate"
+    - "lab_item_levelup"
+    - "permanent_buffs"
+  requires:
+    - "rebirth_manager"
+    - "currency_system"
+    - "data_table"
+
+tags:
+  layer: "Domain"
+  genre: "Idle"
+  role: "Manager"
+  system: "LabSystem"
+  majorFunctions:
+    - "StateControl"
+    - "ValueModification"
+    - "ConditionCheck"
+    - "DataSync"
+  minorFunctions:
+    - "Validate"
+    - "Calculate"
+    - "Assign"
+    - "Iterate"
+    - "Notify"
+
+logicFlow:
+  - step: 1
+    tag: "ConditionCheck.Validate"
+    action: "CheckUnlock: RebirthManager.rebirthCount >= LAB_UNLOCK_REBIRTH_COUNT 조건 검증"
+    next: 2
+  - step: 2
+    tag: "FlowControl.Assign"
+    action: "SelectItem: 플레이어가 선택한 연구소 아이템(12종) 식별 및 현재 레벨 로드"
+    next: 3
+  - step: 3
+    tag: "ConditionCheck.Validate"
+    action: "PayCost: LabItemLevelUpTable[itemId][currentLevel] 비용 로드, CurrencyManager 잔액 검증 후 차감"
+    next: 4
+  - step: 4
+    tag: "StateControl.Assign"
+    action: "LevelUp: 선택 아이템 레벨 +1 증가, SaveManager에 저장"
+    next: 5
+  - step: 5
+    tag: "ValueModification.Calculate"
+    action: "RecalcBuffs: 아이템 3슬롯 버프 순회, baseValue + addValue × (level - 1) 공식으로 버프 수치 재계산"
+    next: 6
+  - step: 6
+    tag: "DataSync.Assign"
+    action: "ApplyToProduction: 5종 버프 타입(생산속도/머니배율/오프라인시간/기타) ProductionLineManager에 갱신 반영"
+    next: 7
+  - step: 7
+    tag: "ResponseTrigger.Notify"
+    action: "EventManager.Publish(LAB_BUFF_UPDATED): UI 갱신 및 영향받는 시스템에 버프 변경 알림"
+    next: 2
+
+referencePatterns:
+  - source: "idlemoney__balance__lab_system"
+    pattern: "baseValue + addValue × (level - 1) 버프 공식 및 12아이템 × 3슬롯 구조"
+  - source: "idlemoney__content__lab_content"
+    pattern: "5종 버프 타입 정의 및 아이템별 레벨업 비용 곡선"
+
+codeHints:
+  patterns:
+    - "SerializeField for Inspector"
+    - "MessagePack serialization"
+    - "DontDestroyOnLoad singleton"
+    - "struct LabBuffSlot { BuffType type; float baseValue; float addValue; }"
+    - "Dictionary<int, LabItem> for item lookup"
+  avoidPatterns:
+    - "Find/FindObjectOfType for UI"
+    - "dynamic UI creation"
+    - "hardcoded magic numbers"
+    - "Recalculating buffs on every frame (only recalc on levelup)"

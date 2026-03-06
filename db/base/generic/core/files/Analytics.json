@@ -1,0 +1,271 @@
+{
+  "fileId": "Analytics",
+  "filePath": "Util\\Analytics.cs",
+  "namespace": "",
+  "layer": "Core",
+  "genre": "Generic",
+  "role": "Component",
+  "system": "Util",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "System",
+    "UnityEngine",
+    "Global_Define",
+    "GameUtils"
+  ],
+  "classes": [
+    {
+      "className": "Analytics",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "IngameClearPlayerPrefs",
+          "accessModifier": "public",
+          "returnType": "string",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "stage"
+            }
+          ],
+          "signature": "string IngameClearPlayerPrefs(int stage)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "IngamePlayPlayerPrefs",
+          "accessModifier": "public",
+          "returnType": "string",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "stage"
+            }
+          ],
+          "signature": "string IngamePlayPlayerPrefs(int stage)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "IngameMovementPlayerPrefs",
+          "accessModifier": "public",
+          "returnType": "string",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "stage"
+            }
+          ],
+          "signature": "string IngameMovementPlayerPrefs(int stage)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "IngameContinuePlayerPrefs",
+          "accessModifier": "public",
+          "returnType": "string",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "stage"
+            }
+          ],
+          "signature": "string IngameContinuePlayerPrefs(int stage)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "IngamePiggyBankPlayerPrefs",
+          "accessModifier": "public",
+          "returnType": "string",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "stage"
+            }
+          ],
+          "signature": "string IngamePiggyBankPlayerPrefs(int stage)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SendSingleEvent",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "log"
+            }
+          ],
+          "signature": "void SendSingleEvent(string log)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResourceTransfer",
+          "minorTag": null
+        },
+        {
+          "methodName": "SendIngameClearEvent",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "stage"
+            }
+          ],
+          "signature": "void SendIngameClearEvent(int stage)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResourceTransfer",
+          "minorTag": null
+        },
+        {
+          "methodName": "SendIngamePlayEvent",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "stage"
+            }
+          ],
+          "signature": "void SendIngamePlayEvent(int stage)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResourceTransfer",
+          "minorTag": null
+        },
+        {
+          "methodName": "SendIngameMovementEvent",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "stage"
+            }
+          ],
+          "signature": "void SendIngameMovementEvent(int stage)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResourceTransfer",
+          "minorTag": null
+        },
+        {
+          "methodName": "SendIngameContinueEvent",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "stage"
+            }
+          ],
+          "signature": "void SendIngameContinueEvent(int stage)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResourceTransfer",
+          "minorTag": null
+        },
+        {
+          "methodName": "SendIngamePiggyBankEvent",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "stage"
+            }
+          ],
+          "signature": "void SendIngamePiggyBankEvent(int stage)",
+          "isStatic": true,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResourceTransfer",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "string IngameClearPlayerPrefs(int stage)",
+    "string IngamePlayPlayerPrefs(int stage)",
+    "string IngameMovementPlayerPrefs(int stage)",
+    "string IngameContinuePlayerPrefs(int stage)",
+    "string IngamePiggyBankPlayerPrefs(int stage)",
+    "void SendSingleEvent(string log)",
+    "void SendIngameClearEvent(int stage)",
+    "void SendIngamePlayEvent(int stage)",
+    "void SendIngameMovementEvent(int stage)",
+    "void SendIngameContinueEvent(int stage)",
+    "void SendIngamePiggyBankEvent(int stage)"
+  ],
+  "requires": [],
+  "tags": {
+    "major": [
+      "ResourceTransfer"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "Define",
+    "FirebaseAnalytics",
+    "PlayerPrefs",
+    "TimeServer",
+    "TimeSpan"
+  ],
+  "usedBy": []
+}

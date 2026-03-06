@@ -1,0 +1,581 @@
+{
+  "fileId": "GameBoard_Explode",
+  "filePath": "InGame\\GameBoard_Explode.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Puzzle",
+  "role": "Component",
+  "system": "InGame",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI",
+    "FullSerializer",
+    "Global_Define",
+    "GameUtils",
+    "DG.Tweening",
+    "System",
+    "TempleGem.Common"
+  ],
+  "classes": [
+    {
+      "className": "GameBoard",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": true,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "ExplodeTile",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "GameObject",
+              "paramName": "tile"
+            },
+            {
+              "paramType": "bool isOnSpreadState =",
+              "paramName": "false"
+            },
+            {
+              "paramType": "List<GameObject> matchTiles =",
+              "paramName": "null"
+            }
+          ],
+          "signature": "void ExplodeTile(GameObject tile, bool isOnSpreadState = false, List<GameObject> matchTiles = null)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ExplodeTileOverFourMatch",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "GameObject",
+              "paramName": "tile"
+            },
+            {
+              "paramType": "bool isOnSpreadState =",
+              "paramName": "false"
+            },
+            {
+              "paramType": "List<GameObject> matchTiles =",
+              "paramName": "null"
+            }
+          ],
+          "signature": "void ExplodeTileOverFourMatch(GameObject tile, bool isOnSpreadState = false, List<GameObject> matchTiles = null)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ExplodeTile_TargettedCheck",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "GameObject",
+              "paramName": "tile"
+            },
+            {
+              "paramType": "bool isOnSpreadState =",
+              "paramName": "false"
+            },
+            {
+              "paramType": "List<GameObject> matchTiles =",
+              "paramName": "null"
+            }
+          ],
+          "signature": "bool ExplodeTile_TargettedCheck(GameObject tile, bool isOnSpreadState = false, List<GameObject> matchTiles = null)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ExplodeTileOverFourMatch_TargettedCheck",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "GameObject",
+              "paramName": "tile"
+            },
+            {
+              "paramType": "bool isOnSpreadState =",
+              "paramName": "false"
+            },
+            {
+              "paramType": "List<GameObject> matchTiles =",
+              "paramName": "null"
+            }
+          ],
+          "signature": "bool ExplodeTileOverFourMatch_TargettedCheck(GameObject tile, bool isOnSpreadState = false, List<GameObject> matchTiles = null)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ExplodeTileNonRecursive",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "GameObject",
+              "paramName": "tile"
+            },
+            {
+              "paramType": "bool",
+              "paramName": "isNeighbourSpecialBlockExplode"
+            },
+            {
+              "paramType": "bool isShowExplosion =",
+              "paramName": "true"
+            },
+            {
+              "paramType": "bool isOnSpread =",
+              "paramName": "false"
+            },
+            {
+              "paramType": "bool isScoreUpdate =",
+              "paramName": "true"
+            }
+          ],
+          "signature": "void ExplodeTileNonRecursive(GameObject tile, bool isNeighbourSpecialBlockExplode, bool isShowExplosion = true, bool isOnSpread = false, bool isScoreUpdate = true)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "DeleteTileBeforeChangeSpecialJewel",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "GameObject",
+              "paramName": "tile"
+            }
+          ],
+          "signature": "void DeleteTileBeforeChangeSpecialJewel(GameObject tile)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Despawn"
+        },
+        {
+          "methodName": "ExplodeTileRecursive",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "GameObject",
+              "paramName": "tile"
+            },
+            {
+              "paramType": "List<GameObject>",
+              "paramName": "explodedTiles"
+            }
+          ],
+          "signature": "void ExplodeTileRecursive(GameObject tile, List<GameObject> explodedTiles)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ExplodeGeneratedTiles",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "List<GameObject>",
+              "paramName": "genTiles"
+            },
+            {
+              "paramType": "float",
+              "paramName": "explodeDelayTime"
+            },
+            {
+              "paramType": "bool",
+              "paramName": "isOnSpread"
+            },
+            {
+              "paramType": "bool isTwoColorBomb =",
+              "paramName": "false"
+            },
+            {
+              "paramType": "bool isWrappedCombo =",
+              "paramName": "false"
+            }
+          ],
+          "signature": "void ExplodeGeneratedTiles(List<GameObject> genTiles, float explodeDelayTime, bool isOnSpread, bool isTwoColorBomb = false, bool isWrappedCombo = false)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ExplodeGeneratedTilesAsync",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "List<GameObject>",
+              "paramName": "genTiles"
+            },
+            {
+              "paramType": "float",
+              "paramName": "explodeDelayTime"
+            },
+            {
+              "paramType": "bool",
+              "paramName": "isOnSpread"
+            },
+            {
+              "paramType": "bool isTwoColorBomb =",
+              "paramName": "false"
+            },
+            {
+              "paramType": "bool isWrappedCombo =",
+              "paramName": "false"
+            }
+          ],
+          "signature": "IEnumerator ExplodeGeneratedTilesAsync(List<GameObject> genTiles, float explodeDelayTime, bool isOnSpread, bool isTwoColorBomb = false, bool isWrappedCombo = false)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ExplodeStripedEffect",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "GameObject",
+              "paramName": "explodedTile"
+            },
+            {
+              "paramType": "Tile",
+              "paramName": "cTile"
+            }
+          ],
+          "signature": "void ExplodeStripedEffect(GameObject explodedTile, Tile cTile)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ExplodeTargettingTiles",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "List<GameObject>",
+              "paramName": "targettedTiles"
+            },
+            {
+              "paramType": "float time =",
+              "paramName": "0f"
+            },
+            {
+              "paramType": "List<GameObject> comboTiles =",
+              "paramName": "null"
+            },
+            {
+              "paramType": "bool isCrossItem =",
+              "paramName": "false"
+            }
+          ],
+          "signature": "void ExplodeTargettingTiles(List<GameObject> targettedTiles, float time = 0f, List<GameObject> comboTiles = null, bool isCrossItem = false)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ExplodeTargettingTilesLoop",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "List<GameObject>",
+              "paramName": "liTargettedTiles"
+            },
+            {
+              "paramType": "float time =",
+              "paramName": "0f"
+            },
+            {
+              "paramType": "List<GameObject> comboTiles =",
+              "paramName": "null"
+            },
+            {
+              "paramType": "bool isCrossItem =",
+              "paramName": "false"
+            }
+          ],
+          "signature": "void ExplodeTargettingTilesLoop(List<GameObject> liTargettedTiles, float time = 0f, List<GameObject> comboTiles = null, bool isCrossItem = false)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ExplodeTargettingOneTile",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "GameObject",
+              "paramName": "tile"
+            },
+            {
+              "paramType": "List<GameObject> comboTiles =",
+              "paramName": "null"
+            },
+            {
+              "paramType": "bool isCrossItem =",
+              "paramName": "false"
+            },
+            {
+              "paramType": "bool isApplyGravity =",
+              "paramName": "true"
+            }
+          ],
+          "signature": "void ExplodeTargettingOneTile(GameObject tile, List<GameObject> comboTiles = null, bool isCrossItem = false, bool isApplyGravity = true)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ExplodeTargettingTilesInternal",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "GameObject",
+              "paramName": "tile"
+            },
+            {
+              "paramType": "List<GameObject> comboTiles =",
+              "paramName": "null"
+            },
+            {
+              "paramType": "bool isCrossItem =",
+              "paramName": "false"
+            }
+          ],
+          "signature": "void ExplodeTargettingTilesInternal(GameObject tile, List<GameObject> comboTiles = null, bool isCrossItem = false)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "TargettedGameObject",
+          "accessModifier": "private",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "List<GameObject>",
+              "paramName": "liBoxes"
+            },
+            {
+              "paramType": "int",
+              "paramName": "randomIndex"
+            },
+            {
+              "paramType": "GameObject",
+              "paramName": "tile"
+            },
+            {
+              "paramType": "List<GameObject>",
+              "paramName": "comboTiles"
+            },
+            {
+              "paramType": "bool isSpreadStage =",
+              "paramName": "false"
+            },
+            {
+              "paramType": "bool isCrossItem =",
+              "paramName": "false"
+            }
+          ],
+          "signature": "bool TargettedGameObject(List<GameObject> liBoxes, int randomIndex, GameObject tile, List<GameObject> comboTiles, bool isSpreadStage = false, bool isCrossItem = false)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "TargettedStageTile",
+          "accessModifier": "private",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "List<StageTile>",
+              "paramName": "liElementObjects"
+            },
+            {
+              "paramType": "int",
+              "paramName": "randomElementIndex"
+            },
+            {
+              "paramType": "GameObject",
+              "paramName": "tile"
+            },
+            {
+              "paramType": "List<GameObject>",
+              "paramName": "comboTiles"
+            },
+            {
+              "paramType": "bool isSpreadStage =",
+              "paramName": "false"
+            },
+            {
+              "paramType": "bool isCrossItem =",
+              "paramName": "false"
+            },
+            {
+              "paramType": "List<GameObject> liElement =",
+              "paramName": "null"
+            }
+          ],
+          "signature": "bool TargettedStageTile(List<StageTile> liElementObjects, int randomElementIndex, GameObject tile, List<GameObject> comboTiles, bool isSpreadStage = false, bool isCrossItem = false, List<GameObject> liElement = null)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void ExplodeTile(GameObject tile, bool isOnSpreadState = false, List<GameObject> matchTiles = null)",
+    "void ExplodeTileOverFourMatch(GameObject tile, bool isOnSpreadState = false, List<GameObject> matchTiles = null)",
+    "bool ExplodeTile_TargettedCheck(GameObject tile, bool isOnSpreadState = false, List<GameObject> matchTiles = null)",
+    "bool ExplodeTileOverFourMatch_TargettedCheck(GameObject tile, bool isOnSpreadState = false, List<GameObject> matchTiles = null)",
+    "void ExplodeTileNonRecursive(GameObject tile, bool isNeighbourSpecialBlockExplode, bool isShowExplosion = true, bool isOnSpread = false, bool isScoreUpdate = true)",
+    "void ExplodeGeneratedTiles(List<GameObject> genTiles, float explodeDelayTime, bool isOnSpread, bool isTwoColorBomb = false, bool isWrappedCombo = false)",
+    "void ExplodeTargettingTiles(List<GameObject> targettedTiles, float time = 0f, List<GameObject> comboTiles = null, bool isCrossItem = false)"
+  ],
+  "requires": [
+    "Box",
+    "Collectable",
+    "CollectableBox",
+    "ColorBomb",
+    "Contagion",
+    "DontMoveHoleTile",
+    "GoldPopup",
+    "Jewel",
+    "PooledObject",
+    "SpecialBlock",
+    "SpriteRenderer",
+    "StripedJewel",
+    "TargettedEffect",
+    "TargettedJewel",
+    "Tile"
+  ],
+  "tags": {
+    "major": [],
+    "minor": [
+      "Despawn"
+    ]
+  },
+  "uses": [
+    "Box",
+    "CGameUtils",
+    "CPopupManager",
+    "CSoundManager",
+    "CSpriteManager",
+    "Collectable",
+    "CollectableBox",
+    "ColorBomb",
+    "Contagion",
+    "Curve",
+    "Debug",
+    "DontMoveHoleTile",
+    "Goal",
+    "GoldPopup",
+    "Instance",
+    "Jewel",
+    "PooledObject",
+    "Random",
+    "SpecialBlock",
+    "SpriteRenderer",
+    "StageTile",
+    "StripedJewel",
+    "TargettedEffect",
+    "TargettedJewel",
+    "Tile",
+    "Unbreakable",
+    "WrappedJewel",
+    "YieldReturnCaching"
+  ],
+  "usedBy": []
+}

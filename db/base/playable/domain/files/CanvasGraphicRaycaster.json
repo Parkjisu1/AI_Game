@@ -1,0 +1,112 @@
+{
+  "fileId": "CanvasGraphicRaycaster",
+  "filePath": "Scratch\\Core\\InputData\\CanvasGraphicRaycaster.cs",
+  "namespace": "ScratchCardAsset.Core.InputData",
+  "layer": "Domain",
+  "genre": "Playable",
+  "role": "Component",
+  "system": "Scratch",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine",
+    "UnityEngine.UI",
+    "UnityEngine.EventSystems",
+    "System.Collections.Generic"
+  ],
+  "classes": [
+    {
+      "className": "CanvasGraphicRaycaster",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "raycaster",
+          "fieldType": "GraphicRaycaster",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "eventSystem",
+          "fieldType": "EventSystem",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "pointerEventData",
+          "fieldType": "PointerEventData",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "raycastResults",
+          "fieldType": "List<RaycastResult>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "GetRaycasts",
+          "accessModifier": "public",
+          "returnType": "List<RaycastResult>",
+          "parameters": [
+            {
+              "paramType": "Vector2",
+              "paramName": "position"
+            }
+          ],
+          "signature": "List<RaycastResult> GetRaycasts(Vector2 position)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "List<RaycastResult> GetRaycasts(Vector2 position)"
+  ],
+  "requires": [],
+  "tags": {
+    "major": [],
+    "minor": [
+      "Find"
+    ]
+  },
+  "uses": [
+    "EventSystem",
+    "PointerEventData",
+    "RaycastResult"
+  ],
+  "usedBy": []
+}

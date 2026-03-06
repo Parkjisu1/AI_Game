@@ -1,0 +1,161 @@
+{
+  "fileId": "SpecialItem",
+  "filePath": "InGame\\SpecialItem\\SpecialItem.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Rpg",
+  "role": "Component",
+  "system": "InGame",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI",
+    "Global_Define"
+  ],
+  "classes": [
+    {
+      "className": "SpecialItem",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "item1",
+          "fieldType": "SpecialItemButton",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "item2",
+          "fieldType": "SpecialItemButton",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "item3",
+          "fieldType": "SpecialItemButton",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "item4",
+          "fieldType": "SpecialItemButton",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Initialize",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "ResourceNameTable",
+              "paramName": "_resourceNameData"
+            }
+          ],
+          "signature": "void Initialize(ResourceNameTable _resourceNameData)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetSpeicialItem",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "StageTable",
+              "paramName": "_stage"
+            }
+          ],
+          "signature": "void SetSpeicialItem(StageTable _stage)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "UpdateCount",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "eSpecialItem",
+              "paramName": "specialItem"
+            },
+            {
+              "paramType": "int",
+              "paramName": "_count"
+            }
+          ],
+          "signature": "void UpdateCount(eSpecialItem specialItem, int _count)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Initialize(ResourceNameTable _resourceNameData)",
+    "void SetSpeicialItem(StageTable _stage)",
+    "void UpdateCount(eSpecialItem specialItem, int _count)"
+  ],
+  "requires": [
+    "ResourceNameTable",
+    "SpecialItemButton"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification",
+      "DataSync"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "PlayerPrefs"
+  ],
+  "usedBy": []
+}

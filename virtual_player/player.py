@@ -1,7 +1,7 @@
 """
 VirtualPlayer Orchestrator
 ============================
-메인 루프: connect → perceive → decide → input → log.
+메인 루프: connect -> perceive -> decide -> input -> log.
 모든 모듈을 통합하여 자동 게임 플레이를 실행합니다.
 
 Modes:
@@ -147,6 +147,8 @@ class VirtualPlayer:
         async with self.adapter:
             last_state: Optional[GameState] = None
             action_count = 0
+            # Outcome reporting: track previous action info for PlanAdapter learning
+            _prev_action_info = None  # (action_name, screen_type, coords) or None
 
             while not session_state.is_finished:
                 # Update session state
@@ -162,6 +164,16 @@ class VirtualPlayer:
                 # Get game state
                 raw_state = await self.adapter.get_game_state()
                 game_state = self.brain.perceive(raw_state)
+
+                # Report outcome of previous action (now that we have new screen)
+                if _prev_action_info and hasattr(self.brain, '_plan_adapter') and self.brain._plan_adapter:
+                    pa_name, pa_screen, pa_coords = _prev_action_info
+                    new_screen = game_state.parsed.get("screen_type")
+                    success = (new_screen != pa_screen)
+                    self.brain._plan_adapter.report_outcome(
+                        pa_name, pa_screen, pa_coords, success, new_screen
+                    )
+                    _prev_action_info = None
 
                 # Check game over
                 if game_state.is_game_over:
@@ -185,8 +197,13 @@ class VirtualPlayer:
                 )
                 action.inputs = humanized
 
-                # Track pre-action screen for outcome reporting
+                # Track pre-action info for outcome reporting on next iteration
                 prev_screen = game_state.parsed.get("screen_type")
+                action_coords = None
+                if action.inputs:
+                    inp = action.inputs[0]
+                    action_coords = (int(getattr(inp, 'x', 0)), int(getattr(inp, 'y', 0)))
+                _prev_action_info = (action.name, prev_screen, action_coords)
 
                 # Send input
                 await self.adapter.send_input(action.inputs)
@@ -280,6 +297,7 @@ class VirtualPlayer:
             # Apply screen ROIs from profile
             # Profile format: {screen: {name: {type, region, ...}}}
             # Registry format: {screen: {gauge_regions: {...}, ocr_regions: {...}}}
+            # Special key "_combined" -> combined OCR region with x-range field mapping
             if profile.screen_rois:
                 converted = {}
                 for screen_type, entries in profile.screen_rois.items():
@@ -292,6 +310,12 @@ class VirtualPlayer:
                             gauge_regions[gauge_name] = {
                                 "region": cfg.get("region", [0, 0, 0, 0]),
                                 "profile": cfg.get("profile", gauge_name),
+                            }
+                        elif name == "_combined":
+                            # Combined OCR region: pass through as-is
+                            ocr_regions["_combined"] = {
+                                "region": cfg.get("region", [0, 0, 0, 0]),
+                                "fields": cfg.get("fields", {}),
                             }
                         else:
                             ocr_regions[name] = {

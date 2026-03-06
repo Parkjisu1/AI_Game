@@ -1,0 +1,48 @@
+{
+  "designId": "idlemoney__ingame__hammer_system",
+  "project": "IdleMoney",
+  "domain": "InGame",
+  "genre": "Idle",
+  "system": "Hammer System",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "spec",
+  "balance_area": "core_mechanic",
+  "source_file": "ingame_flows.yaml",
+  "content": {
+    "summary": "플레이어가 화면을 탭하여 제품에 데미지를 가하는 핵심 인터랙션.\n일반 해머와 슈퍼 해머(이벤트) 모드 존재.",
+    "flow": [
+      {
+        "step": "일반 탭",
+        "detail": "해머 파워로 제품 HP 감소"
+      },
+      {
+        "step": "슈퍼 해머 이벤트",
+        "detail": "일정 시간 후 팝업, AD 시청 시 강화 해머 모드"
+      }
+    ],
+    "parameters": {
+      "base_power": "factoryData.HammerPower",
+      "super_hammer_interval": "SUPER_HAMMER_DISPLAY_INTERVAL",
+      "super_hammer_duration": "SUPER_HAMMER_DURATION"
+    },
+    "edge_cases": [],
+    "references": []
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from C# analysis: Hammer System",
+      "note": "Live game code analysis import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T11:08:17.010Z"
+}

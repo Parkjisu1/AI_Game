@@ -1,0 +1,53 @@
+## CarMatch — Session 04: Overnight Runner 통합 테스트
+
+---
+
+### 실행 환경
+- 스크립트: run_overnight.py → virtual_player.overnight_runner
+- 기기: BlueStacks (emulator-5554)
+- 게임: CarMatch (carmatch) + Ash & Veil (ash_n_veil) 교대
+- 날짜: 2026-03-04 22:36 ~ 2026-03-05 10:09
+
+---
+
+### 1. Overnight Runner 구성
+
+| 항목 | 값 |
+|------|-----|
+| 총 시간 | 12시간 |
+| 사이클 | 30분씩 게임 교대 |
+| 게임 목록 | ['ash_n_veil', 'carmatch'] |
+| 최대 재시작 | 50회 |
+| 자동 크래시 복구 | O |
+
+---
+
+### 2. CarMatch Cycle 결과
+
+**Cycle 1 (23:32~)**: 시작 즉시 screenshot failed
+- 원인: `[WinError 1455] 페이징 파일이 너무 작습니다` — Windows 메모리 부족
+- `can't start new thread` — 시스템 리소스 고갈
+- `[WinError 308] 이미지 유형을 지원하는 데 필요한 하위 시스템이 없습니다`
+- Perception 초기화 성공 (genre='puzzle', 14 screen types) 하지만 실제 플레이 불가
+
+**Cycle 2~11**: 동일 패턴 반복
+- 매 cycle 시작 시 screenshot 전부 실패
+- ADB 연결은 유지되지만 screencap 불가
+- 총 11 cycles 모두 실질적 플레이 0
+
+---
+
+### 3. 실패 원인 분석
+
+| 원인 | 영향 | 근거 |
+|------|------|------|
+| Windows 메모리 부족 | 전체 세션 실패 | WinError 1455 (paging file too small) |
+| BlueStacks + Python + ADB 동시 | 리소스 고갈 | can't start new thread |
+| 장시간 ADB 연결 | 세션 불안정 | 연속 screenshot failed |
+
+### 4. 개선 방안
+
+1. Windows 가상 메모리(페이지 파일) 크기 증설
+2. BlueStacks 메모리 할당 감소 (2GB → 1.5GB)
+3. 게임 교대 시 이전 게임 force-stop + 메모리 해제
+4. ADB screencap 실패 시 ADB 서버 재시작 (adb kill-server && adb start-server)

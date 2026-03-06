@@ -1,0 +1,79 @@
+[
+  {
+    "designId": "idlemoney__liveops__dailylogin",
+    "domain": "LiveOps",
+    "genre": "Idle",
+    "system": "DailyLogin",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "content_data",
+    "balance_area": "reward",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "AttendanceReward_data",
+      "AttendanceReward.RewardID",
+      "AttendanceReward.GoodsTypeAllAddExist",
+      "AttendanceReward.GoodsAmountAllAddExist",
+      "AttendanceReward.GoodsTypeAllAddOff",
+      "AttendanceReward.GoodsAmountAllAddOff"
+    ],
+    "requires": [],
+    "tags": [
+      "reward",
+      "content",
+      "economy"
+    ]
+  },
+  {
+    "designId": "idlemoney__liveops__daily_login",
+    "domain": "LiveOps",
+    "genre": "Idle",
+    "system": "Daily Login Reward",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "flow",
+    "balance_area": "retention",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "daily_reward_delivery",
+      "login_streak_tracking"
+    ],
+    "requires": [
+      "goods_system",
+      "ad_system"
+    ],
+    "tags": [
+      "daily",
+      "login",
+      "attendance",
+      "retention"
+    ]
+  },
+  {
+    "designId": "idlemoney__liveops__event_timers",
+    "domain": "LiveOps",
+    "genre": "Idle",
+    "system": "Event Timer System",
+    "score": 0.4,
+    "source": "internal_original",
+    "data_type": "spec",
+    "balance_area": "engagement",
+    "version": "1.0.0",
+    "project": "IdleMoney",
+    "provides": [
+      "event_scheduling",
+      "boost_activation"
+    ],
+    "requires": [
+      "factory_progression"
+    ],
+    "tags": [
+      "event",
+      "timer",
+      "boost",
+      "engagement"
+    ]
+  }
+]

@@ -1,0 +1,167 @@
+{
+  "fileId": "OpenQuestWinMsg",
+  "filePath": "Messages\\OpenQuestWinMsg.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Rpg",
+  "role": "Message",
+  "system": "Messages",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "OpenQuestWinMsg",
+      "classType": "struct",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [
+        "IMessageAction<WindowID"
+      ],
+      "fields": [
+        {
+          "fieldName": "ClickedButton",
+          "fieldType": "QuestStatusButton",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Execute",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "WindowManager>",
+              "paramName": "sender"
+            },
+            {
+              "paramType": "WindowManager",
+              "paramName": "controller"
+            }
+          ],
+          "signature": "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "FlowControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "IsOverDelay",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool IsOverDelay()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "AddElapsedTime",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "time"
+            }
+          ],
+          "signature": "void AddElapsedTime(float time)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": null
+        },
+        {
+          "methodName": "GetReward",
+          "accessModifier": "private",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "GameStatCalculator",
+              "paramName": "statCaculator"
+            },
+            {
+              "paramType": "UserInfo",
+              "paramName": "userInfo"
+            },
+            {
+              "paramType": "ConfigCommonTable",
+              "paramName": "configTable"
+            },
+            {
+              "paramType": "int",
+              "paramName": "productID"
+            },
+            {
+              "paramType": "int",
+              "paramName": "questClearAmount"
+            },
+            {
+              "paramType": "double",
+              "paramName": "questDataMoneyReward"
+            }
+          ],
+          "signature": "double GetReward(GameStatCalculator statCaculator, UserInfo userInfo, ConfigCommonTable configTable, int productID, int questClearAmount, double questDataMoneyReward)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+    "bool IsOverDelay()",
+    "void AddElapsedTime(float time)"
+  ],
+  "requires": [
+    "IMessageAction",
+    "QuestStatusButton"
+  ],
+  "tags": {
+    "major": [
+      "FlowControl",
+      "ConditionCheck",
+      "ValueModification"
+    ],
+    "minor": [
+      "Find"
+    ]
+  },
+  "uses": [
+    "ClickedButton",
+    "Debug",
+    "Holder",
+    "IMessageAction",
+    "WindowID"
+  ],
+  "usedBy": []
+}

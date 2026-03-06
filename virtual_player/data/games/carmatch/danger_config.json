@@ -1,0 +1,18 @@
+{
+  "blocked_regions": [
+    {
+      "region": [0, 1730, 1080, 190],
+      "reason": "Gameplay booster bar - boosters cost 900/600 coins"
+    }
+  ],
+  "blocked_keywords": [
+    "purchase", "buy", "구매", "$", "₩", "install", "설치",
+    "W3,300", "W5,000", "W7,500", "W13,000", "W25,000", "W42,000", "W85,000", "W170,000", "W1,700",
+    "Add Space", "Play On"
+  ],
+  "safe_screens": ["lobby", "gameplay", "win", "fail_result"],
+  "escape_action": {
+    "type": "back",
+    "description": "Android back button as universal escape"
+  }
+}

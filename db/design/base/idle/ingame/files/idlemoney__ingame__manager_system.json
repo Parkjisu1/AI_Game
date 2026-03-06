@@ -1,0 +1,77 @@
+{
+  "designId": "idlemoney__ingame__manager_system",
+  "project": "IdleMoney",
+  "domain": "InGame",
+  "genre": "Idle",
+  "system": "Manager System",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "flow",
+  "balance_area": "character",
+  "source_file": "ingame_flows.yaml",
+  "content": {
+    "summary": "매니저는 에너지 소진된 머신을 자동 수리하는 캐릭터.\n다이아몬드로 고용, 랜덤 스탯(수리속도/이동속도/스태미나) 부여.\n스태미나 소진 시 수면 후 자동 회복.",
+    "flow": [
+      {
+        "step": "Idle",
+        "detail": "대기 상태, 수리 대상 스캔"
+      },
+      {
+        "step": "Move",
+        "detail": "Tired 머신 발견 → 이동 (GetTimeSecByMoveSpeed)"
+      },
+      {
+        "step": "Fix",
+        "detail": "fixSpeed로 수리, 스태미나 소모 (MANAGER_STAMINA_DECREASE_RATE)"
+      },
+      {
+        "step": "Tired",
+        "detail": "스태미나 <= 0, 수리 중단"
+      },
+      {
+        "step": "Sleep",
+        "detail": "MANAGER_SLEEP_ANIM_DURATION_MIN~MAX 사이 수면, 스태미나 완전 회복"
+      },
+      {
+        "step": "Wakeup",
+        "detail": "기상 → Idle로 복귀"
+      }
+    ],
+    "parameters": {
+      "hire_cost": "MANAGER_HIRE_DIAMOND_COST",
+      "sell_return": "MANAGER_SELL_DIAMOND_RETURN",
+      "stats": {
+        "fix_speed": "[FixSpeedMin, FixSpeedMax] random",
+        "move_speed": "[MoveSpeedMin, MoveSpeedMax] random",
+        "stamina": "[StaminaMin, StaminaMax] random"
+      },
+      "unlock_condition": "MinRebirthCount per manager",
+      "state_machine": [
+        "Idle",
+        "Move",
+        "Fix",
+        "Tired",
+        "Sleep",
+        "Wakeup"
+      ]
+    },
+    "edge_cases": [],
+    "references": []
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from C# analysis: Manager System",
+      "note": "Live game code analysis import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T11:08:17.008Z"
+}

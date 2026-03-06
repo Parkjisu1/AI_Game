@@ -1,0 +1,92 @@
+metadata:
+  nodeId: "BoostEventManager"
+  version: "1.0.0"
+  phase: 2
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "FactoryManager"
+    - "AdManager"
+    - "EventManager"
+  external:
+    - "UnityEngine.MonoBehaviour"
+    - "System.Collections"
+    - "System.Collections.Generic"
+
+contract:
+  provides:
+    - "boost_activation"
+    - "boost_timer"
+    - "boost_multiplier"
+  requires:
+    - "factory_manager"
+    - "ad_manager"
+    - "event_system"
+
+tags:
+  layer: "Domain"
+  genre: "Idle"
+  role: "Manager"
+  system: "BoostSystem"
+  majorFunctions:
+    - "StateControl"
+    - "ValueModification"
+    - "FlowControl"
+    - "ResponseTrigger"
+  minorFunctions:
+    - "Assign"
+    - "Delay"
+    - "Calculate"
+    - "Notify"
+    - "Compare"
+
+logicFlow:
+  - step: 1
+    tag: "FlowControl.Assign"
+    action: "RegisterEvent: 4종 부스트 타입(Power/Money/Supply/SuperHammer) 각각 interval/duration 설정하여 타이머 등록"
+    next: 2
+  - step: 2
+    tag: "StateControl.Delay"
+    action: "StartCooldown: 부스트 타입별 쿨다운 코루틴 시작, 남은 시간 실시간 업데이트"
+    next: 3
+  - step: 3
+    tag: "ResponseTrigger.Notify"
+    action: "ShowPopup: 쿨다운 종료 시 EventManager 이벤트 발행하여 해당 부스트 팝업 표시 요청"
+    next: 4
+  - step: 4
+    tag: "ConditionCheck.Compare"
+    action: "WatchAD: AdManager에 광고 시청 요청, 시청 완료 콜백 수신 대기"
+    next: 5
+  - step: 5
+    tag: "StateControl.Assign"
+    action: "ActivateBoost: 부스트 활성 플래그 설정, 부스트 지속 시간 카운트다운 코루틴 시작"
+    next: 6
+  - step: 6
+    tag: "ValueModification.Calculate"
+    action: "ApplyMultiplier: BoostMultiplierTable[boostType] 배율을 FactoryManager에 전달하여 생산/머니에 적용"
+    next: 7
+  - step: 7
+    tag: "StateControl.Delay"
+    action: "Duration끝: 지속 시간 경과 후 배율 제거, 부스트 비활성화 후 쿨다운 재시작"
+    next: 2
+
+referencePatterns:
+  - source: "idlemoney__balance__boost_events"
+    pattern: "4종 부스트 타입별 배율/지속시간/쿨다운 밸런스 데이터"
+  - source: "idlemoney__liveops__event_timers"
+    pattern: "이벤트 타이머 등록 패턴 및 쿨다운 상태 저장 설계"
+
+codeHints:
+  patterns:
+    - "SerializeField for Inspector"
+    - "MessagePack serialization"
+    - "DontDestroyOnLoad singleton"
+    - "Enum for BoostType (Power/Money/Supply/SuperHammer)"
+    - "Dictionary<BoostType, Coroutine> for active timer tracking"
+  avoidPatterns:
+    - "Find/FindObjectOfType for UI"
+    - "dynamic UI creation"
+    - "hardcoded magic numbers"
+    - "Multiple Update() timers (use Coroutine per boost)"

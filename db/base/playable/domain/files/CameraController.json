@@ -1,0 +1,571 @@
+{
+  "fileId": "CameraController",
+  "filePath": "unity_project\\Assets\\Scripts\\Controllers\\CameraController.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Playable",
+  "role": "Controller",
+  "system": "unity_project",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "CameraController",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [
+        "IInitializable"
+      ],
+      "fields": [
+        {
+          "fieldName": "m_MainCamera",
+          "fieldType": "Camera",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_DefaultOrthoSize",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "8f"
+        },
+        {
+          "fieldName": "m_ZoomInOrthoSize",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "3f"
+        },
+        {
+          "fieldName": "m_DefaultPosition",
+          "fieldType": "Vector3",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "new Vector3(0, 10, -5)"
+        },
+        {
+          "fieldName": "m_DefaultRotation",
+          "fieldType": "Vector3",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "new Vector3(60, 0, 0)"
+        },
+        {
+          "fieldName": "m_ZoomDuration",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.8f"
+        },
+        {
+          "fieldName": "m_MoveDuration",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "0.6f"
+        },
+        {
+          "fieldName": "m_HoldDuration",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "1.0f"
+        },
+        {
+          "fieldName": "m_ZoomCurve",
+          "fieldType": "AnimationCurve",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "AnimationCurve.EaseInOut(0, 0, 1, 1)"
+        },
+        {
+          "fieldName": "m_MoveCurve",
+          "fieldType": "AnimationCurve",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "AnimationCurve.EaseInOut(0, 0, 1, 1)"
+        },
+        {
+          "fieldName": "m_IsInitialized",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        },
+        {
+          "fieldName": "m_IsAnimating",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        },
+        {
+          "fieldName": "m_TargetPosition",
+          "fieldType": "Vector3",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_TargetOrthoSize",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "m_WaitHold",
+          "fieldType": "WaitForSeconds",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "IsAnimating",
+          "fieldType": "bool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "> m_IsAnimating"
+        },
+        {
+          "fieldName": "m_IsCrisisZoom",
+          "fieldType": "bool",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        },
+        {
+          "fieldName": "m_CrisisZoomAmount",
+          "fieldType": "float",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0.5f"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Init",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Init()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnReset",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnReset()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "IsInitialized",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool IsInitialized()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "SetupDefaultCamera",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void SetupDefaultCamera()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "ZoomToTargetCoroutine",
+          "accessModifier": "public",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "target"
+            }
+          ],
+          "signature": "IEnumerator ZoomToTargetCoroutine(Transform target)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ZoomOutCoroutine",
+          "accessModifier": "public",
+          "returnType": "IEnumerator",
+          "parameters": [],
+          "signature": "IEnumerator ZoomOutCoroutine()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetZoomImmediate",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "orthoSize"
+            }
+          ],
+          "signature": "void SetZoomImmediate(float orthoSize)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetPositionImmediate",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector3",
+              "paramName": "position"
+            }
+          ],
+          "signature": "void SetPositionImmediate(Vector3 position)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "AnimateCameraCoroutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "Vector3",
+              "paramName": "targetPos"
+            },
+            {
+              "paramType": "float",
+              "paramName": "targetOrtho"
+            }
+          ],
+          "signature": "IEnumerator AnimateCameraCoroutine(Vector3 targetPos, float targetOrtho)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "FollowTargetCoroutine",
+          "accessModifier": "public",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "Transform",
+              "paramName": "target"
+            },
+            {
+              "paramType": "float",
+              "paramName": "duration"
+            }
+          ],
+          "signature": "IEnumerator FollowTargetCoroutine(Transform target, float duration)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetCrisisZoom",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "active"
+            }
+          ],
+          "signature": "void SetCrisisZoom(bool active)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "CrisisZoomCoroutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "targetOrtho"
+            }
+          ],
+          "signature": "IEnumerator CrisisZoomCoroutine(float targetOrtho)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "Shake",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float intensity =",
+              "paramName": "0.3f"
+            },
+            {
+              "paramType": "float duration =",
+              "paramName": "0.2f"
+            }
+          ],
+          "signature": "void Shake(float intensity = 0.3f, float duration = 0.2f)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ShakeCoroutine",
+          "accessModifier": "private",
+          "returnType": "IEnumerator",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "intensity"
+            },
+            {
+              "paramType": "float",
+              "paramName": "duration"
+            }
+          ],
+          "signature": "IEnumerator ShakeCoroutine(float intensity, float duration)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": true,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetCamera",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Camera",
+              "paramName": "camera"
+            }
+          ],
+          "signature": "void SetCamera(Camera camera)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetDefaultSettings",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector3",
+              "paramName": "position"
+            },
+            {
+              "paramType": "Vector3",
+              "paramName": "rotation"
+            },
+            {
+              "paramType": "float",
+              "paramName": "orthoSize"
+            }
+          ],
+          "signature": "void SetDefaultSettings(Vector3 position, Vector3 rotation, float orthoSize)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Init()",
+    "void OnReset()",
+    "bool IsInitialized()",
+    "IEnumerator ZoomToTargetCoroutine(Transform target)",
+    "IEnumerator ZoomOutCoroutine()",
+    "void SetZoomImmediate(float orthoSize)",
+    "void SetPositionImmediate(Vector3 position)",
+    "IEnumerator FollowTargetCoroutine(Transform target, float duration)",
+    "void SetCrisisZoom(bool active)",
+    "void Shake(float intensity = 0.3f, float duration = 0.2f)",
+    "void SetCamera(Camera camera)",
+    "void SetDefaultSettings(Vector3 position, Vector3 rotation, float orthoSize)"
+  ],
+  "requires": [
+    "AnimationCurve",
+    "IInitializable"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification",
+      "ResponseTrigger",
+      "ConditionCheck"
+    ],
+    "minor": [
+      "Assign"
+    ]
+  },
+  "uses": [
+    "10",
+    "5f",
+    "AnimationCurve",
+    "Mathf",
+    "Random",
+    "WaitForSeconds"
+  ],
+  "usedBy": []
+}

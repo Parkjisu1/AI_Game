@@ -1,0 +1,1413 @@
+[
+  {
+    "fileId": "CDataManager",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Model",
+    "system": "Manager",
+    "score": 0.4,
+    "provides": [
+      "void SetDataTableInitialize()",
+      "void SetJsonTable()"
+    ],
+    "requires": [
+      "CDataManager",
+      "ConstTable",
+      "ResourceNameTable"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ResourceNameTable",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Model",
+    "system": "Data",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Path",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Config",
+    "system": "GlobalNaemspace",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "LobbyBoard",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Component",
+    "system": "Lobby",
+    "score": 0.4,
+    "provides": [
+      "void SetSpecialPackage()",
+      "void Initialize()",
+      "void SetStage(string _stageType, int _stageCount, int _stageGroupCount)",
+      "void UpdateCount()",
+      "void UpdateRealTime(int end)"
+    ],
+    "requires": [
+      "Lobby_BottomUI",
+      "Lobby_TopUI",
+      "Stage_CloseType",
+      "Stage_MapType",
+      "Stage_OpenType"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "DataSync",
+        "StateControl"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "StageButton_CloseTypeGroup",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Component",
+    "system": "Lobby",
+    "score": 0.4,
+    "provides": [
+      "void SetStageGroup(int _groupIndex, int _groupCount,\r\n        string _stageButtonTypeName, Sprite _backgroundImage, Sprite _groupStar)",
+      "void OnClickGroupButton()"
+    ],
+    "requires": [
+      "LayoutElement",
+      "StageButton_CloseType"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "StageButton_OpenType",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Component",
+    "system": "Lobby",
+    "score": 0.4,
+    "provides": [],
+    "requires": [
+      "StageButtonTypeBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Stage_CloseType",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Component",
+    "system": "Lobby",
+    "score": 0.4,
+    "provides": [
+      "void SetLobbyStageGroups(int _stageCount, int _groupCount)"
+    ],
+    "requires": [
+      "StageButton_CloseTypeGroup",
+      "StageTypeBase"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "Stage_MapType",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Component",
+    "system": "Lobby",
+    "score": 0.4,
+    "provides": [
+      "void SetLobbyStageGroups(int _stageCount, int _groupCount)"
+    ],
+    "requires": [
+      "ScrollRect",
+      "StageButton_MapTypeGroup",
+      "StageTypeBase"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "GOResourceAllocator",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Entity",
+    "system": "GOResourceAllocator",
+    "score": 0.4,
+    "provides": [
+      "void Init()",
+      "void SetHierachyRoot(Transform hierarchyRoot)"
+    ],
+    "requires": [
+      "PooledObjectContainer"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ILineControlObject",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Interface",
+    "system": "ILineControlObject",
+    "score": 0.4,
+    "provides": [
+      "void StartObject()",
+      "void StopObject()",
+      "void HoldObject()",
+      "void RestartObject()",
+      "void ClearObject()"
+    ],
+    "requires": [
+      "IMessagePort",
+      "ProductionLine"
+    ],
+    "tags": {
+      "major": [
+        "StateControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ImgResourceAllocator",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Component",
+    "system": "ImgResourceAllocator",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Line",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Entity",
+    "system": "Line",
+    "score": 0.4,
+    "provides": [
+      "Transform GetSlot(int index)",
+      "void Stop()",
+      "void Play()",
+      "void SetMessageController(IMessageController<ProductionLine> messageController)"
+    ],
+    "requires": [
+      "IMessageController",
+      "IMessagePort",
+      "PooledGameObject",
+      "ProductionLine",
+      "SpriteRenderer"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ValueModification"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "AddEmoticonMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "Machine"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "AddTiredMachineMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<ProductionLine> sender, ProductionLine controller)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "Machine",
+      "ProductionLine"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "CreateChallengeProductMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<ProductionLine> sender, ProductionLine controller)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "ProductBase",
+      "ProductionLine",
+      "Rigidbody2D"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "CreateDungeonProductMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<ProductionLine> sender, ProductionLine controller)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "ProductBase",
+      "ProductionLine",
+      "Rigidbody2D"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "CreateMachineProjectileMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "MachineProjectile",
+      "MachineRange"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "CreateManagerProjectileMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "Manager",
+      "ManagerProjectile"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "CreateProductMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<ProductionLine> sender, ProductionLine controller)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "ProductBase",
+      "ProductionLine",
+      "Rigidbody2D"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "CreateSpecialProductMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "Rigidbody2D",
+      "SpecialProduct",
+      "SpecialProductName"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "GoNextStepSpecialProductMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "SpecialProduct"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshAchievementComponentMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "AchievementComponent",
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshDurationMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<ProductionLine> sender, ProductionLine controller)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "ProductionLine"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshIngameManagerIconMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WorldSpaceWindowManager> sender, WorldSpaceWindowManager controller)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "WorldSpaceWindowManager"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshMachineDurationSliderMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WorldSpaceWindowManager> sender, WorldSpaceWindowManager controller)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "WorldSpaceWindowManager"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshManagerMountComponentMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "ManagerMountComponent"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshProductionLineCostStatusMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WorldSpaceWindowManager> sender, WorldSpaceWindowManager controller)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "WorldSpaceWindowManager"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshProductionLineSlotBtnToGameModeMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "ProductionLineMachineBtn"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshProductionLineSlotsToGameModeMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshStackedProductNumMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WorldSpaceWindowManager> sender, WorldSpaceWindowManager controller)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "WorldSpaceWindowManager"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshWorldSlotMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RemoveTiredMachineMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<ProductionLine> sender, ProductionLine controller)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "Machine",
+      "ProductionLine"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RetrieveProductMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<ProductionLine> sender, ProductionLine controller)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "ProductBase",
+      "ProductionLine"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SetProductionLineChallengeModeOnOffMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WorldSpaceWindowManager> sender, WorldSpaceWindowManager controller)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "WorldSpaceWindowManager"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SetProductScaleMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SetupProductionLineMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "UserInfo"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ShippingTutorialProductMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<ProductionLine> sender, ProductionLine controller)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "ProductBase",
+      "ProductionLine",
+      "Transporter"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ShowNewManagerPlacementMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WorldSpaceWindowManager> sender, WorldSpaceWindowManager controller)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "WorldSpaceWindowManager"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ShowVFXMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "StartBoostIntervalTimerMsg",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameEvent",
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ProductionLine",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Entity",
+    "system": "ProductionLine",
+    "score": 0.4,
+    "provides": [
+      "Transporter GetActiveTransporter()",
+      "ProductBase GetProduct(int index)",
+      "bool IsMyProduct(ProductBase product)",
+      "ProductBase GetClosestProduct(Vector3 pos)",
+      "int GetSuppliedProductCount()"
+    ],
+    "requires": [
+      "AutoFindClicker",
+      "GameMode",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "DataSync",
+        "ResourceTransfer"
+      ],
+      "minor": [
+        "Find",
+        "Assign",
+        "Despawn"
+      ]
+    }
+  },
+  {
+    "fileId": "ResourceAllocator",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Service",
+    "system": "ResourceAllocator",
+    "score": 0.4,
+    "provides": [
+      "void Init()",
+      "void SetRoot(Transform hierarchyRoot)",
+      "Sprite GetSprite(string name)",
+      "bool Return(PooledGameObject pooled)",
+      "PooledGameObject Get(string key)"
+    ],
+    "requires": [
+      "IInjectable",
+      "Machine"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "SafetyLine",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Component",
+    "system": "SafetyLine",
+    "score": 0.4,
+    "provides": [],
+    "requires": [
+      "ProductionLine"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "TableContainer",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Component",
+    "system": "TableContainer",
+    "score": 0.4,
+    "provides": [
+      "bool IsInit()",
+      "void LoadAllTables()",
+      "void LoadAllTables()",
+      "ITableData GetData(TableIndex tableKey, int dataKey)",
+      "ITable<int> GetTable(TableIndex tableKey)"
+    ],
+    "requires": [
+      "ITableContainer"
+    ],
+    "tags": {
+      "major": [
+        "DataSync",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "FreeTutorial5_1",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "override void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial1_12",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial6_3",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ProductionLineMachineBtn",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void Init(int index, System.Action<int> onRunningCallback, System.Action<int> onEquipCallback)",
+      "void SetLevelText(string text)",
+      "void SetDuration(float fillAmount)",
+      "void OnClickRunning()",
+      "void OnClickEquip()"
+    ],
+    "requires": [
+      "State",
+      "System.Action",
+      "TextMeshProUGUI"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "ProductionLineOpenSlot",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void ChangeBGImg(Sprite newImage)",
+      "Transform GetButtonPosition()",
+      "void SetState(State state)",
+      "void ChangeBGImg(Sprite newImage)",
+      "Transform GetButtonPosition()"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "EffectController",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Enum",
+    "system": "Controller",
+    "score": 0.4,
+    "provides": [
+      "void Init(EffectType _type, float _x = 0, float _z = 0, float _rotationY = 0, float _scale = 1f)",
+      "void Init(EffectType _type, float _x = 0, float _z = 0, float _rotationY = 0, float _scale = 1f)"
+    ],
+    "requires": [
+      "AnimationCurve",
+      "EffectType"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "FactoryController",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Model",
+    "system": "Controller",
+    "score": 0.4,
+    "provides": [
+      "void Init()",
+      "void CollectGold()"
+    ],
+    "requires": [
+      "ICollectable",
+      "IngradientType",
+      "PlayerController",
+      "ResourceStorage",
+      "SpriteRenderer"
+    ],
+    "tags": {
+      "major": [],
+      "minor": [
+        "Aggregate"
+      ]
+    }
+  },
+  {
+    "fileId": "IngradientController",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Enum",
+    "system": "Controller",
+    "score": 0.4,
+    "provides": [
+      "void Init(IngradientType resourceType = IngradientType.None, Vector3 spawnPosition = default)",
+      "void OnScaleChange()",
+      "void SetTarget(Transform _target, bool _consume = false)",
+      "void SetParabolicArc(bool enable, float height = 2f, float duration = 1f)",
+      "bool IsUsingParabolicFlight()"
+    ],
+    "requires": [
+      "AnimationCurve",
+      "ICollectable",
+      "IngradientType",
+      "IngradientType resourceType =",
+      "PlayerController"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger",
+        "ConditionCheck"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "MainCenterController",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Controller",
+    "system": "Controller",
+    "score": 0.4,
+    "provides": [
+      "void Init()",
+      "void SetAvailableForUpgrade(bool available)",
+      "void StartUpgrade()",
+      "void ForceUpgrade()",
+      "void ResetUpgrade()"
+    ],
+    "requires": [
+      "AnimationCurve",
+      "IHealth",
+      "SpriteRenderer",
+      "TextMeshPro"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ConditionCheck",
+        "StateControl"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "PlayerController",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Model",
+    "system": "Controller",
+    "score": 0.4,
+    "provides": [
+      "void Init()",
+      "void TriggerAttackAnimation()",
+      "void OnSendIngradientToTurret(Transform turretTransform)",
+      "void OnSendIngradientToStorage(IngradientType _type, ResourceStorage _storage)",
+      "void OnSendIngradientToFactory(Transform _factoryTransform)"
+    ],
+    "requires": [
+      "CombatComponent",
+      "IHealth",
+      "LayerMask",
+      "MovementComponent",
+      "SpriteRenderer"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ConditionCheck",
+        "ResourceTransfer"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "WoodCutterController",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Model",
+    "system": "Controller",
+    "score": 0.4,
+    "provides": [
+      "void Init(ResourceStorage stack, IngradientType type)"
+    ],
+    "requires": [
+      "IngradientController",
+      "IngradientType",
+      "ResourceStorage"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Resourcestorage",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Enum",
+    "system": "Resourcestorage",
+    "score": 0.4,
+    "provides": [
+      "void Init()",
+      "void TransferResourceTo(Transform _target, int _amount = 1)",
+      "void CollectResource(IngradientController resource)",
+      "bool RemoveResource(int amount,Transform _target = null)",
+      "int GetCurrentAmount()"
+    ],
+    "requires": [
+      "ICollectable",
+      "ResourceType"
+    ],
+    "tags": {
+      "major": [
+        "ResourceTransfer"
+      ],
+      "minor": [
+        "Aggregate",
+        "Find",
+        "Despawn"
+      ]
+    }
+  },
+  {
+    "fileId": "SelfDisableWithTimer",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "FinishLineHandler",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Handler",
+    "system": "FinishLineHandler",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": [
+        "Spawn"
+      ]
+    }
+  },
+  {
+    "fileId": "UpgraderComponent",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Component",
+    "system": "UpgraderComponent",
+    "score": 0.4,
+    "provides": [
+      "void Upgrade()"
+    ],
+    "requires": [
+      "IncomeIncreaser",
+      "SpriteRenderer"
+    ],
+    "tags": {
+      "major": [
+        "StateControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ETFXProjectileScript",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Model",
+    "system": "ETFXProjectileScript",
+    "score": 0.4,
+    "provides": [],
+    "requires": [
+      "ETFXTarget",
+      "SphereCollider"
+    ],
+    "tags": {
+      "major": [],
+      "minor": [
+        "Despawn"
+      ]
+    }
+  },
+  {
+    "fileId": "GameManager",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Model",
+    "system": "GameManager",
+    "score": 0.4,
+    "provides": [
+      "void StartGame()",
+      "void EndGame()",
+      "void ApplySelectedBall(int index)"
+    ],
+    "requires": [
+      "BallSelectionController",
+      "BasketRingMover",
+      "ScoreManager",
+      "SoundManager",
+      "TimerManager"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "TimerManager",
+    "layer": "Domain",
+    "genre": "Simulation",
+    "role": "Manager",
+    "system": "GameManager",
+    "score": 0.4,
+    "provides": [
+      "void StartTimer(float overrideDuration = -1)",
+      "void StopTimer()"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "StateControl"
+      ],
+      "minor": []
+    }
+  }
+]

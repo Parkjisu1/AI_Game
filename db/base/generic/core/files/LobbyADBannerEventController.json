@@ -1,0 +1,232 @@
+{
+  "fileId": "LobbyADBannerEventController",
+  "filePath": "LobbyADBannerEventController.cs",
+  "namespace": "",
+  "layer": "Core",
+  "genre": "Generic",
+  "role": "Controller",
+  "system": "LobbyADBannerEventController",
+  "score": 0.4,
+  "usings": [
+    "System",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "LobbyADBannerEventController",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [
+        "IEventDuringController"
+      ],
+      "fields": [
+        {
+          "fieldName": "eventType",
+          "fieldType": "GameEvent",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "finishCallback",
+          "fieldType": "Action",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "finishCallbackEx",
+          "fieldType": "Action<GameEvent, int>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "windowMsgController",
+          "fieldType": "IMessageController<WindowID, WindowManager>",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": true,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "GetID",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int GetID()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "IsOnEvent",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool IsOnEvent()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "EnterEvent",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void EnterEvent()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "EnterEvent",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "lifeTime"
+            }
+          ],
+          "signature": "void EnterEvent(float lifeTime)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateLogic",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "deltaTime"
+            }
+          ],
+          "signature": "void UpdateLogic(float deltaTime)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "FinishEvent",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void FinishEvent()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetRemainTimeSec",
+          "accessModifier": "public",
+          "returnType": "float",
+          "parameters": [],
+          "signature": "float GetRemainTimeSec()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetFullTimesec",
+          "accessModifier": "public",
+          "returnType": "float",
+          "parameters": [],
+          "signature": "float GetFullTimesec()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "int GetID()",
+    "bool IsOnEvent()",
+    "void EnterEvent()",
+    "void EnterEvent(float lifeTime)",
+    "void UpdateLogic(float deltaTime)",
+    "void FinishEvent()",
+    "float GetRemainTimeSec()",
+    "float GetFullTimesec()"
+  ],
+  "requires": [
+    "IEventDuringController",
+    "IMessageController",
+    "WindowID",
+    "WindowManager"
+  ],
+  "tags": {
+    "major": [
+      "ConditionCheck",
+      "DataSync"
+    ],
+    "minor": [
+      "Find"
+    ]
+  },
+  "uses": [
+    "GameEvent",
+    "GetID",
+    "IEventDuringController",
+    "OpenLobbyADBannerWinMsg",
+    "WindowID"
+  ],
+  "usedBy": []
+}

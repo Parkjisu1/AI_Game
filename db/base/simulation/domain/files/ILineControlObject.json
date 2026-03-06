@@ -1,0 +1,124 @@
+{
+  "fileId": "ILineControlObject",
+  "filePath": "ILineControlObject.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Simulation",
+  "role": "Interface",
+  "system": "ILineControlObject",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "__ILineControlObject",
+      "classType": "interface",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [
+        "IMessagePort<ProductionLine>"
+      ],
+      "fields": [],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "StartObject",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void StartObject()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "StopObject",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void StopObject()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "StateControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "HoldObject",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void HoldObject()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "RestartObject",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void RestartObject()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ClearObject",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void ClearObject()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void StartObject()",
+    "void StopObject()",
+    "void HoldObject()",
+    "void RestartObject()",
+    "void ClearObject()"
+  ],
+  "requires": [
+    "IMessagePort",
+    "ProductionLine"
+  ],
+  "tags": {
+    "major": [
+      "StateControl"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "IMessagePort"
+  ],
+  "usedBy": []
+}

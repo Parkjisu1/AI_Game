@@ -1,0 +1,272 @@
+{
+  "fileId": "ScratchCardRenderer",
+  "filePath": "Scratch\\Core\\ScratchCardRenderer.cs",
+  "namespace": "ScratchCardAsset.Core",
+  "layer": "Domain",
+  "genre": "Rpg",
+  "role": "Component",
+  "system": "Scratch",
+  "score": 0.4,
+  "usings": [
+    "System.Collections.Generic",
+    "ScratchCardAsset.Tools",
+    "UnityEngine",
+    "UnityEngine.Rendering"
+  ],
+  "classes": [
+    {
+      "className": "ScratchCardRenderer",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "IsScratched",
+          "fieldType": "bool",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "scratchCard",
+          "fieldType": "ScratchCard",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": true,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "meshHole",
+          "fieldType": "Mesh",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "meshLine",
+          "fieldType": "Mesh",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "commandBuffer",
+          "fieldType": "CommandBuffer",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "localBounds",
+          "fieldType": "Bounds",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "positions",
+          "fieldType": "List<Vector3>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<Vector3>()"
+        },
+        {
+          "fieldName": "colors",
+          "fieldType": "List<Color>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<Color>()"
+        },
+        {
+          "fieldName": "indices",
+          "fieldType": "List<int>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<int>()"
+        },
+        {
+          "fieldName": "uv",
+          "fieldType": "List<Vector2>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new List<Vector2>()"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Release",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Release()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "IsInBounds",
+          "accessModifier": "private",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "Rect",
+              "paramName": "rect"
+            }
+          ],
+          "signature": "bool IsInBounds(Rect rect)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "ScratchHole",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector2",
+              "paramName": "position"
+            },
+            {
+              "paramType": "float pressure =",
+              "paramName": "1f"
+            }
+          ],
+          "signature": "void ScratchHole(Vector2 position, float pressure = 1f)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ScratchLine",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector2",
+              "paramName": "startPosition"
+            },
+            {
+              "paramType": "Vector2",
+              "paramName": "endPosition"
+            },
+            {
+              "paramType": "float startPressure =",
+              "paramName": "1f"
+            },
+            {
+              "paramType": "float endPressure =",
+              "paramName": "1f"
+            }
+          ],
+          "signature": "void ScratchLine(Vector2 startPosition, Vector2 endPosition, float startPressure = 1f, float endPressure = 1f)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "FillRenderTextureWithColor",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Color",
+              "paramName": "color"
+            }
+          ],
+          "signature": "void FillRenderTextureWithColor(Color color)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Release()",
+    "void ScratchHole(Vector2 position, float pressure = 1f)",
+    "void ScratchLine(Vector2 startPosition, Vector2 endPosition, float startPressure = 1f, float endPressure = 1f)",
+    "void FillRenderTextureWithColor(Color color)"
+  ],
+  "requires": [],
+  "tags": {
+    "major": [
+      "ConditionCheck"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "Bounds",
+    "CommandBuffer",
+    "Debug",
+    "GL",
+    "Graphics",
+    "Mathf",
+    "MeshGenerator"
+  ],
+  "usedBy": []
+}

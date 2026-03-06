@@ -1,0 +1,667 @@
+{
+  "fileId": "ObjectPoolManager",
+  "filePath": "Base\\ObjectPoolManager.cs",
+  "namespace": "PlayableAdsKit.Scripts.Base",
+  "layer": "Core",
+  "genre": "Rpg",
+  "role": "Enum",
+  "system": "Base",
+  "score": 0.4,
+  "usings": [
+    "System",
+    "System.Collections.Generic",
+    "PlayableAdsKit.Scripts.Helpers",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "ObjectName",
+      "classType": "enum",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [],
+      "properties": [
+        {
+          "propertyName": "PooledObjects",
+          "propertyType": "List<GameObject>",
+          "accessModifier": "public",
+          "hasGetter": true,
+          "hasSetter": true
+        }
+      ],
+      "methods": [
+        {
+          "methodName": "Awake",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Awake()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "CreatePool",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void CreatePool()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "GetPooledObject",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "ObjectName",
+              "paramName": "objectName"
+            }
+          ],
+          "signature": "GameObject GetPooledObject(ObjectName objectName)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetPooledObject",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "ObjectName",
+              "paramName": "objectName"
+            },
+            {
+              "paramType": "Transform",
+              "paramName": "parent"
+            }
+          ],
+          "signature": "GameObject GetPooledObject(ObjectName objectName, Transform parent)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetPooledObject",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "ObjectName",
+              "paramName": "objectName"
+            },
+            {
+              "paramType": "Vector3",
+              "paramName": "objectPosition"
+            },
+            {
+              "paramType": "Quaternion",
+              "paramName": "objectRotation"
+            },
+            {
+              "paramType": "Transform parent =",
+              "paramName": "null"
+            },
+            {
+              "paramType": "bool isLocalPos =",
+              "paramName": "false"
+            }
+          ],
+          "signature": "GameObject GetPooledObject(ObjectName objectName, Vector3 objectPosition, Quaternion objectRotation, Transform parent = null, bool isLocalPos = false)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "DeactivateAllPooledObjects",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DeactivateAllPooledObjects()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "CallPooledObject",
+          "accessModifier": "private",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "ObjectName",
+              "paramName": "objectName"
+            }
+          ],
+          "signature": "GameObject CallPooledObject(ObjectName objectName)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GenerateNewObject",
+          "accessModifier": "private",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "ObjectPoolItem",
+              "paramName": "item"
+            }
+          ],
+          "signature": "GameObject GenerateNewObject(ObjectPoolItem item)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        }
+      ]
+    },
+    {
+      "className": "ObjectPoolItem",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "_objectName",
+          "fieldType": "ObjectName",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "_objectToPool",
+          "fieldType": "GameObject",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "_amountToPool",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "ObjectName",
+          "fieldType": "ObjectName",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "> _objectName"
+        },
+        {
+          "fieldName": "ObjectToPool",
+          "fieldType": "GameObject",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "> _objectToPool"
+        },
+        {
+          "fieldName": "AmountToPool",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "> _amountToPool"
+        }
+      ],
+      "properties": [
+        {
+          "propertyName": "PooledObjects",
+          "propertyType": "List<GameObject>",
+          "accessModifier": "public",
+          "hasGetter": true,
+          "hasSetter": true
+        }
+      ],
+      "methods": [
+        {
+          "methodName": "Awake",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Awake()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "CreatePool",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void CreatePool()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "GetPooledObject",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "ObjectName",
+              "paramName": "objectName"
+            }
+          ],
+          "signature": "GameObject GetPooledObject(ObjectName objectName)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetPooledObject",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "ObjectName",
+              "paramName": "objectName"
+            },
+            {
+              "paramType": "Transform",
+              "paramName": "parent"
+            }
+          ],
+          "signature": "GameObject GetPooledObject(ObjectName objectName, Transform parent)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetPooledObject",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "ObjectName",
+              "paramName": "objectName"
+            },
+            {
+              "paramType": "Vector3",
+              "paramName": "objectPosition"
+            },
+            {
+              "paramType": "Quaternion",
+              "paramName": "objectRotation"
+            },
+            {
+              "paramType": "Transform parent =",
+              "paramName": "null"
+            },
+            {
+              "paramType": "bool isLocalPos =",
+              "paramName": "false"
+            }
+          ],
+          "signature": "GameObject GetPooledObject(ObjectName objectName, Vector3 objectPosition, Quaternion objectRotation, Transform parent = null, bool isLocalPos = false)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "DeactivateAllPooledObjects",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DeactivateAllPooledObjects()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "CallPooledObject",
+          "accessModifier": "private",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "ObjectName",
+              "paramName": "objectName"
+            }
+          ],
+          "signature": "GameObject CallPooledObject(ObjectName objectName)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GenerateNewObject",
+          "accessModifier": "private",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "ObjectPoolItem",
+              "paramName": "item"
+            }
+          ],
+          "signature": "GameObject GenerateNewObject(ObjectPoolItem item)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        }
+      ]
+    },
+    {
+      "className": "ObjectPoolManager",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "_objectPoolItems",
+          "fieldType": "ObjectPoolItem[]",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [
+        {
+          "propertyName": "PooledObjects",
+          "propertyType": "List<GameObject>",
+          "accessModifier": "public",
+          "hasGetter": true,
+          "hasSetter": true
+        }
+      ],
+      "methods": [
+        {
+          "methodName": "Awake",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Awake()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "CreatePool",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void CreatePool()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        },
+        {
+          "methodName": "GetPooledObject",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "ObjectName",
+              "paramName": "objectName"
+            }
+          ],
+          "signature": "GameObject GetPooledObject(ObjectName objectName)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetPooledObject",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "ObjectName",
+              "paramName": "objectName"
+            },
+            {
+              "paramType": "Transform",
+              "paramName": "parent"
+            }
+          ],
+          "signature": "GameObject GetPooledObject(ObjectName objectName, Transform parent)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetPooledObject",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "ObjectName",
+              "paramName": "objectName"
+            },
+            {
+              "paramType": "Vector3",
+              "paramName": "objectPosition"
+            },
+            {
+              "paramType": "Quaternion",
+              "paramName": "objectRotation"
+            },
+            {
+              "paramType": "Transform parent =",
+              "paramName": "null"
+            },
+            {
+              "paramType": "bool isLocalPos =",
+              "paramName": "false"
+            }
+          ],
+          "signature": "GameObject GetPooledObject(ObjectName objectName, Vector3 objectPosition, Quaternion objectRotation, Transform parent = null, bool isLocalPos = false)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "DeactivateAllPooledObjects",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void DeactivateAllPooledObjects()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "CallPooledObject",
+          "accessModifier": "private",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "ObjectName",
+              "paramName": "objectName"
+            }
+          ],
+          "signature": "GameObject CallPooledObject(ObjectName objectName)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GenerateNewObject",
+          "accessModifier": "private",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "ObjectPoolItem",
+              "paramName": "item"
+            }
+          ],
+          "signature": "GameObject GenerateNewObject(ObjectPoolItem item)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "GameObject GetPooledObject(ObjectName objectName)",
+    "GameObject GetPooledObject(ObjectName objectName, Transform parent)",
+    "GameObject GetPooledObject(ObjectName objectName, Vector3 objectPosition, Quaternion objectRotation, Transform parent = null, bool isLocalPos = false)",
+    "void DeactivateAllPooledObjects()",
+    "List<GameObject> PooledObjects { get; }",
+    "GameObject GetPooledObject(ObjectName objectName)",
+    "GameObject GetPooledObject(ObjectName objectName, Transform parent)",
+    "GameObject GetPooledObject(ObjectName objectName, Vector3 objectPosition, Quaternion objectRotation, Transform parent = null, bool isLocalPos = false)",
+    "void DeactivateAllPooledObjects()",
+    "List<GameObject> PooledObjects { get; }",
+    "GameObject GetPooledObject(ObjectName objectName)",
+    "GameObject GetPooledObject(ObjectName objectName, Transform parent)",
+    "GameObject GetPooledObject(ObjectName objectName, Vector3 objectPosition, Quaternion objectRotation, Transform parent = null, bool isLocalPos = false)",
+    "void DeactivateAllPooledObjects()",
+    "List<GameObject> PooledObjects { get; }"
+  ],
+  "requires": [
+    "ObjectName",
+    "ObjectPoolItem"
+  ],
+  "tags": {
+    "major": [],
+    "minor": [
+      "Find",
+      "Spawn"
+    ]
+  },
+  "uses": [
+    "PooledObjects",
+    "Type2"
+  ],
+  "usedBy": []
+}

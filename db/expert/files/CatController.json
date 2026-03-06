@@ -1,0 +1,33 @@
+{
+  "fileId": "CatController",
+  "project": "DropTheCat",
+  "layer": "Domain",
+  "genre": "Puzzle",
+  "role": "Controller",
+  "phase": 1,
+  "namespace": "DropTheCat.Domain",
+  "className": "CatController",
+  "baseClass": "MonoBehaviour",
+  "score": 0.6,
+  "provides": [
+    "void Init(CatColor color, Vector2Int gridPos)",
+    "void PlayDropAnimation(Vector3 holeWorldPos, System.Action onComplete)",
+    "void PlayIdleAnimation()",
+    "void StopAnimation()",
+    "CatColor Color { get; }",
+    "Vector2Int GridPosition { get; }",
+    "CatState CurrentState { get; }",
+    "bool IsCleared { get; }"
+  ],
+  "requires": [
+    "GridManager.GridToWorld",
+    "ObjectPool (return)",
+    "DG.Tweening"
+  ],
+  "tags": {
+    "major": ["StateControl", "FlowControl"],
+    "minor": ["Assign", "Spawn", "Despawn"]
+  },
+  "sourcePath": "E:\\AI\\projects\\DropTheCat\\output\\CatController.cs",
+  "timestamp": "2026-02-10T04:45:00Z"
+}

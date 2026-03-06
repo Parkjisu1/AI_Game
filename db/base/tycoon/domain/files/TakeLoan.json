@@ -1,0 +1,80 @@
+{
+  "fileId": "TakeLoan",
+  "filePath": "Gameplay\\TakeLoan.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Tycoon",
+  "role": "Component",
+  "system": "Gameplay",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "TakeLoan",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "notificationText",
+          "fieldType": "string",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "loan",
+          "fieldType": "GameObject",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "TakeOutLoan",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void TakeOutLoan()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResourceTransfer",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void TakeOutLoan()"
+  ],
+  "requires": [],
+  "tags": {
+    "major": [
+      "ResourceTransfer"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "Analytics"
+  ],
+  "usedBy": []
+}

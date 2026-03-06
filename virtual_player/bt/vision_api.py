@@ -63,6 +63,8 @@ class VisionPlanner:
 
         # If screen changed, reset everything
         if screen_type != self._plan_screen:
+            if self._plan_screen:
+                print(f"[AI] Screen changed: {self._plan_screen} -> {screen_type}, replanning")
             self._plan.clear()
             self._failed_taps.clear()
             self._consecutive_fails = 0
@@ -71,16 +73,23 @@ class VisionPlanner:
         if self._plan:
             move = self._plan.pop(0)
             self._cache_hits += 1
-            logger.info("VisionPlanner: cached move %s (%d remaining)",
-                        move.get("description", "?"), len(self._plan))
+            desc = move.get("description", "?")
+            action = move.get("action", "?")
+            if action == "tap":
+                print(f"[AI] Cached move ({len(self._plan)} left): "
+                      f"tap ({move['x']},{move['y']}) - {desc}")
+            elif action == "wait":
+                pass  # Don't spam wait messages
             return move
 
         # No cached moves - call Claude CLI
+        print(f"[AI] Analyzing screenshot... (this takes ~20-30s)")
         result = self._query_claude(screenshot_path, screen_type, ocr_texts)
         if not result:
             self._consecutive_fails += 1
-            # After 3 consecutive failures, return a random safe tap
+            print(f"[AI] Analysis failed (attempt {self._consecutive_fails}/3)")
             if self._consecutive_fails >= 3:
+                print(f"[AI] Falling back to random tap")
                 return self._fallback_tap(screen_type)
             return None
 
@@ -91,6 +100,12 @@ class VisionPlanner:
         moves = result if isinstance(result, list) else [result]
         if not moves:
             return None
+
+        tap_count = sum(1 for m in moves if m.get("action") == "tap")
+        print(f"[AI] Got {tap_count} tap moves planned:")
+        for m in moves:
+            if m.get("action") == "tap":
+                print(f"  -> ({m['x']},{m['y']}): {m.get('description','?')}")
 
         # First move returned immediately, rest cached
         first = moves[0]
@@ -226,7 +241,7 @@ SCREEN: {screen_type} | OCR: {ocr_str}{failed_context}
 RULES:
 1. Check HOLDER (y~1400): count cars and their colors.
 2. If 2 same-color in holder, find 3rd on board and tap it immediately.
-3. BLOCKED = another car is between it and the board exit. Tap front cars first.
+3. ACTIVE vs BLOCKED: A car is ACTIVE (tappable) if you can see its EYES/FACE. If eyes are hidden behind another car, it is BLOCKED. ONLY tap cars with visible eyes!
 4. Each car tap coordinate must be the CENTER of the car body (not the edge).
 5. Keep holder under 5 cars. Use Undo booster (108, 1830) if 5+ with no match.
 6. NEVER tap boosters at y>1800 unless using Undo.
@@ -334,9 +349,11 @@ GAME_CONTEXTS = {
         "Cars you tap move from the board to the holder. "
         "MATCHING: When 3 same-color cars are in the holder, they vanish (matched). "
         "LOSE: If all 7 holder slots fill with no match possible = game over. "
-        "BLOCKED CARS: Some cars are behind other cars. "
-        "You CANNOT tap a blocked car - you must remove the car in front first. "
-        "Cars in the FRONT ROW (larger, closer to bottom) can always be tapped. "
+        "BLOCKED vs ACTIVE CARS: "
+        "- ACTIVE (tappable): You can see the car's EYES/FACE. These cars can be tapped. "
+        "- BLOCKED (not tappable): The car's eyes are hidden behind another car in front. "
+        "- ONLY tap cars whose eyes/face are visible! "
+        "- To unblock a car, tap the car in front of it first. "
         "STACKED SPOTS: A number (2,3,4,5) on a spot means multiple cars stacked. "
         "Tap to take the top car; the number decreases. Colors underneath are hidden. "
         "MYSTERY CARS (?): Unknown color until tapped. Only tap when 3+ holder slots empty. "

@@ -40,9 +40,9 @@ def generate_user_agent(device: DeviceProfile) -> str:
     """
     디바이스 프로필에 맞는 UA 문자열 생성.
 
-    Android  → Chrome Mobile UA
-    iOS      → Safari Mobile UA (iPhone 또는 iPad)
-    기타      → 범용 fallback UA
+    Android  -> Chrome Mobile UA
+    iOS      -> Safari Mobile UA (iPhone 또는 iPad)
+    기타      -> 범용 fallback UA
 
     Args:
         device: DeviceProfile 인스턴스.

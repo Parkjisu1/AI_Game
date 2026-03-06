@@ -1,0 +1,12 @@
+# CarMatch — Game Profile
+# Genre: Puzzle (car matching)
+# Note: input tap doesn't work on this game — must use monkey random touch
+
+game_id: carmatch
+game_name: "CarMatch"
+package_name: com.grandgames.carmatch
+genre: puzzle
+
+input_method: auto
+launch_activity: com.unity3d.player.UnityPlayerActivity
+fallback_positions: [[540,1700],[540,960],[980,100]]

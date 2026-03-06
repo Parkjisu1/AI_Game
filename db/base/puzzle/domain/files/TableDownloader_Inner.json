@@ -1,0 +1,96 @@
+{
+  "fileId": "TableDownloader_Inner",
+  "filePath": "Data\\GoogleSpreadSheet\\TableDownloader_Inner.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Puzzle",
+  "role": "Model",
+  "system": "Data",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "Global_Define"
+  ],
+  "classes": [
+    {
+      "className": "TableDownloader",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": true,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "destroyThis",
+          "fieldType": "bool",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        },
+        {
+          "fieldName": "m_nNowDownloadCount",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0"
+        },
+        {
+          "fieldName": "m_nSuccessCount",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "(int)eTable.Max"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "AllFileSave",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void AllFileSave()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void AllFileSave()"
+  ],
+  "requires": [
+    "TableDownloader"
+  ],
+  "tags": {
+    "major": [],
+    "minor": []
+  },
+  "uses": [
+    "Debug",
+    "Item1",
+    "TableDownloader"
+  ],
+  "usedBy": []
+}

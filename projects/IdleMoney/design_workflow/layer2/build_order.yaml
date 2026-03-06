@@ -1,0 +1,851 @@
+---
+project: IdleMoney
+genre: Idle
+platform: unity
+version: "1.0.0"
+description: >
+  IdleMoney 빌드 오더. Phase 0~3 의존성 기반 빌드 순서 정의.
+  총 54개 시스템 (Core 5 + Domain 28 + Game 16 + Editor 4 + SDK 1).
+  Phase 0 완료 후 Phase 1, Phase 1 완료 후 Phase 2 병렬 진행 가능.
+---
+
+# ============================================================
+# 빌드 오더 규칙
+# ============================================================
+# Phase 0: Core Layer - 의존성 없음, 최우선 빌드
+# Phase 1: Base Domain - Core에만 의존, 병렬 가능
+# Phase 2: Domain Systems - Phase 1 완료 후 병렬 진행
+# Phase 3: Game Layer (UI) - 모든 Domain 완료 후 진행
+# ============================================================
+
+assignee_guide:
+  main_coder:
+    - Phase 0 전체 (Core 아키텍처 + _ARCHITECTURE.md)
+    - Phase 1 복잡한 시스템 (SaveLoadManager, CurrencyManager)
+    - Phase 2 핵심 시스템 (ProductionLineManager, FactoryManager, RebirthManager)
+  sub_coder_1:
+    - Phase 1 나머지 (SoundManager, LocalizationManager, AnalyticsManager)
+    - Phase 2 인게임 컨트롤러 (MachineController ~ ProductController)
+    - Phase 3 인게임 UI (MainHUDPage, FactoryInfoPopup, ShopPage, GachaResultPopup, MachineInfoPage)
+  sub_coder_2:
+    - Phase 2 매니저/서비스 (GachaManager ~ PiggyBankManager)
+    - Phase 3 콘텐츠 UI (ManagerPage, LabPage, AchievementPage, WorldMapPage, DungeonPage, ChallengePage)
+    - Phase 3 팝업 (OfflineRewardPopup, DailyRewardPopup, QuestPopup, OptionPopup, AlertPopup)
+
+# ============================================================
+# Phase 0: Core Layer
+# 의존성 없음. Main Coder 전담. _ARCHITECTURE.md 생성 필수.
+# ============================================================
+
+phases:
+  - phase: 0
+    name: "Core Layer"
+    description: >
+      게임 전체의 기반 아키텍처. 싱글톤, 이벤트, 풀링, 데이터, 리소스.
+      이 Phase 완료 전까지 다른 Phase 진행 불가.
+    assignee: main-coder
+    deliverables:
+      - _ARCHITECTURE.md  # Core 아키텍처 설명 문서
+    parallel: false
+    nodes:
+      - nodeId: Singleton
+        layer: Core
+        role: Helper
+        priority: 1
+        dependencies: []
+        notes: >
+          모든 Manager의 부모 클래스. 제네릭 기반 타입 안전 싱글톤.
+          DontDestroyOnLoad 포함. 가장 먼저 구현.
+
+      - nodeId: EventManager
+        layer: Core
+        role: Manager
+        priority: 2
+        dependencies:
+          - Singleton
+        notes: >
+          전역 메시지 버스. Subscribe/Unsubscribe/SendMessage 3종 API.
+          모든 시스템 간 통신의 핵심. Singleton 직후 구현.
+
+      - nodeId: ObjectPool
+        layer: Core
+        role: Pool
+        priority: 3
+        dependencies:
+          - Singleton
+        notes: >
+          Product, Transporter용 풀. Spawn/Despawn API.
+          EventManager와 병렬 구현 가능.
+
+      - nodeId: DataTableManager
+        layer: Core
+        role: Manager
+        priority: 4
+        dependencies:
+          - Singleton
+        notes: >
+          42개 JSON 테이블 로드/캐시. GetTableData<T>(id, key) API.
+          Singleton 이후 즉시 구현. 모든 Domain이 의존.
+
+      - nodeId: ResourceManager
+        layer: Core
+        role: Manager
+        priority: 5
+        dependencies:
+          - Singleton
+        notes: >
+          프리팹/스프라이트 캐시. GetPrefab(path), GetSprite(path) API.
+          DataTableManager와 병렬 구현 가능.
+
+  # ============================================================
+  # Phase 1: Base Domain
+  # Core에만 의존. Sub Coder 병렬 참여 시작.
+  # ============================================================
+
+  - phase: 1
+    name: "Base Domain"
+    description: >
+      핵심 도메인 기반 시스템. 재화, 저장, 사운드, 로컬라이제이션, 분석.
+      Phase 2 모든 시스템이 이 Phase에 의존하므로 완전 완료 후 진행.
+    parallel: true
+    parallel_notes: "SaveLoadManager와 CurrencyManager는 순차 필요. 나머지 3개는 독립적으로 병렬 가능."
+    nodes:
+      - nodeId: SaveLoadManager
+        layer: Domain
+        role: Manager
+        priority: 1
+        assignee: main-coder
+        dependencies:
+          - Singleton
+        notes: >
+          MessagePack 기반 UserInfo 직렬화/역직렬화.
+          로컬 + 클라우드 저장, 마이그레이션 로직 포함.
+          CurrencyManager보다 먼저 구현 (CurrencyManager가 의존).
+
+      - nodeId: CurrencyManager
+        layer: Domain
+        role: Manager
+        priority: 2
+        assignee: main-coder
+        dependencies:
+          - Singleton
+          - EventManager
+          - SaveLoadManager
+        notes: >
+          5종 재화 (Money/Diamond/Gold/Material/ADSkip) 통합 관리.
+          AddMoney, SpendDiamond 등 재화 API. SaveLoadManager 완료 후 구현.
+
+      - nodeId: SoundManager
+        layer: Domain
+        role: Manager
+        priority: 3
+        assignee: sub-coder-1
+        dependencies:
+          - Singleton
+        notes: >
+          BGM 1채널 + SFX 다중채널. PlayerPrefs 설정 저장.
+          CurrencyManager와 병렬 구현 가능.
+
+      - nodeId: LocalizationManager
+        layer: Domain
+        role: Manager
+        priority: 4
+        assignee: sub-coder-1
+        dependencies:
+          - Singleton
+          - DataTableManager
+          - SaveLoadManager
+        notes: >
+          4개국어 897키 텍스트 관리. ChangeLanguage(), GetText(key) API.
+          DataTableManager 완료 후 구현.
+
+      - nodeId: AnalyticsManager
+        layer: Domain
+        role: Manager
+        priority: 5
+        assignee: sub-coder-1
+        dependencies:
+          - Singleton
+        notes: >
+          Firebase Analytics 래퍼. #if FIREBASE_ANALYTICS 조건부 컴파일.
+          SDK 미설치 시 Debug.Log 시뮬레이션 모드.
+
+  # ============================================================
+  # Phase 2: Domain Systems
+  # Phase 1 완료 후 진행. Main + Sub Coder 병렬 진행.
+  # 내부 의존성에 따라 그룹 A/B/C로 순차 처리.
+  # ============================================================
+
+  - phase: 2
+    name: "Domain Systems"
+    description: >
+      핵심 게임플레이 시스템. 인게임 컨트롤러, 매니저, 서비스.
+      Phase 2 내부에서도 의존 순서 존재: Group A → Group B → Group C.
+    parallel: true
+    parallel_notes: >
+      Group A (독립 컨트롤러)와 Group B (매니저 기반)는 병렬 가능.
+      Group C는 Group A/B 완료 후 진행.
+
+    groups:
+      - group: "A"
+        name: "인게임 컨트롤러 (기반)"
+        description: "Phase 1에만 의존하는 컨트롤러. 가장 먼저 구현."
+        assignee: sub-coder-1
+        nodes:
+          - nodeId: ProductController
+            layer: Domain
+            role: Controller
+            priority: 1
+            dependencies:
+              - ObjectPool
+              - EventManager
+            notes: "제품 6단계 진행, HP 관리. ObjectPool Spawn/Despawn 사용."
+
+          - nodeId: TransporterController
+            layer: Domain
+            role: Controller
+            priority: 2
+            dependencies:
+              - ObjectPool
+              - EventManager
+            notes: "6단계 상태머신. ProductController와 병렬 구현 가능."
+
+          - nodeId: SupplyMachineController
+            layer: Domain
+            role: Controller
+            priority: 3
+            dependencies:
+              - CurrencyManager
+              - DataTableManager
+              - EventManager
+            notes: "공급기 레벨업, 부스트. CurrencyManager 의존."
+
+          - nodeId: MachineController
+            layer: Domain
+            role: Controller
+            priority: 4
+            dependencies:
+              - EventManager
+              - DataTableManager
+            notes: "머신 타격, 에너지 관리. 4개 상태 (Idle/Attacking/Tired/Repairing)."
+
+          - nodeId: SlotController
+            layer: Domain
+            role: Controller
+            priority: 5
+            dependencies:
+              - CurrencyManager
+              - DataTableManager
+              - MachineController
+            notes: "슬롯 레벨업, 머신 장착/해제. MachineController 완료 후."
+
+      - group: "B"
+        name: "핵심 매니저 (독립)"
+        description: "Phase 1에만 의존하는 매니저. Group A와 병렬 구현 가능."
+        assignee: main-coder
+        nodes:
+          - nodeId: RebirthManager
+            layer: Domain
+            role: Manager
+            priority: 1
+            dependencies:
+              - Singleton
+              - CurrencyManager
+              - DataTableManager
+              - SaveLoadManager
+            notes: >
+              12회 프레스티지 사이클. SellOff 처리, 월드/콘텐츠 해금.
+              많은 시스템이 의존하므로 가장 먼저 구현.
+
+          - nodeId: FactoryManager
+            layer: Domain
+            role: Manager
+            priority: 2
+            dependencies:
+              - Singleton
+              - CurrencyManager
+              - DataTableManager
+              - SaveLoadManager
+            notes: "1600레벨 팩토리 진행. 마일스톤 해금. RebirthManager와 병렬 가능."
+
+          - nodeId: OfflineRewardCalculator
+            layer: Domain
+            role: Calculator
+            priority: 3
+            dependencies:
+              - CurrencyManager
+              - DataTableManager
+            notes: "오프라인 수익 공식. 독립적으로 구현 가능."
+
+          - nodeId: ADManager
+            layer: Domain
+            role: Manager
+            priority: 4
+            dependencies:
+              - Singleton
+              - EventManager
+            notes: "광고 빈도 제한, 쿨다운. 다수 시스템이 의존하므로 조기 구현."
+
+          - nodeId: IAPManager
+            layer: Domain
+            role: Manager
+            priority: 5
+            dependencies:
+              - Singleton
+              - CurrencyManager
+              - DataTableManager
+              - AnalyticsManager
+            notes: "Unity Purchasing 5.0. #if UNITY_IAP 조건부 컴파일."
+
+      - group: "C"
+        name: "복합 시스템 (Group A/B 의존)"
+        description: "Group A와 B의 완료 후 구현. 내부에서도 병렬 가능."
+        nodes:
+          - nodeId: ProductionLineManager
+            layer: Domain
+            role: Manager
+            priority: 1
+            assignee: main-coder
+            dependencies:
+              - Singleton
+              - EventManager
+              - CurrencyManager
+              - DataTableManager
+              - ObjectPool
+              - SaveLoadManager
+              - MachineController
+              - SlotController
+              - TransporterController
+              - SupplyMachineController
+              - ProductController
+            notes: >
+              4개 생산라인 총괄. 모든 인게임 컨트롤러를 조율.
+              Group A 전체 완료 후 구현.
+
+          - nodeId: ManagerCharacterController
+            layer: Domain
+            role: Controller
+            priority: 2
+            assignee: sub-coder-1
+            dependencies:
+              - EventManager
+              - MachineController
+            notes: "매니저 AI 6단계 상태머신. MachineController 완료 후."
+
+          - nodeId: MachineTuningManager
+            layer: Domain
+            role: Manager
+            priority: 3
+            assignee: sub-coder-2
+            dependencies:
+              - Singleton
+              - CurrencyManager
+              - DataTableManager
+              - SaveLoadManager
+            notes: "EXP 누적, 튜닝 레벨업. Group B와 병렬 가능하나 GachaManager보다 먼저."
+
+          - nodeId: CollectionManager
+            layer: Domain
+            role: Manager
+            priority: 4
+            assignee: sub-coder-2
+            dependencies:
+              - Singleton
+              - SaveLoadManager
+              - AnalyticsManager
+            notes: "37종 머신 컬렉션. MachineTuningManager 완료 후 GachaManager 구현 가능."
+
+          - nodeId: GachaManager
+            layer: Domain
+            role: Manager
+            priority: 5
+            assignee: sub-coder-2
+            dependencies:
+              - Singleton
+              - CurrencyManager
+              - DataTableManager
+              - MachineTuningManager
+              - CollectionManager
+              - AnalyticsManager
+              - ADManager
+            notes: "7종 가챠, 확률 계산. MachineTuningManager + CollectionManager 완료 후."
+
+          - nodeId: BoostEventManager
+            layer: Domain
+            role: Manager
+            priority: 6
+            assignee: sub-coder-1
+            dependencies:
+              - Singleton
+              - EventManager
+              - ADManager
+              - FactoryManager
+            notes: "4종 부스트 이벤트 타이머. FactoryManager + ADManager 완료 후."
+
+          - nodeId: LabManager
+            layer: Domain
+            role: Manager
+            priority: 7
+            assignee: sub-coder-2
+            dependencies:
+              - Singleton
+              - CurrencyManager
+              - DataTableManager
+              - SaveLoadManager
+              - RebirthManager
+            notes: "12개 연구 아이템, 영구 버프. RebirthManager 완료 후."
+
+          - nodeId: ChallengeManager
+            layer: Domain
+            role: Manager
+            priority: 8
+            assignee: main-coder
+            dependencies:
+              - Singleton
+              - EventManager
+              - CurrencyManager
+              - DataTableManager
+              - ProductionLineManager
+              - ADManager
+            notes: >
+              팩토리 챌린지 (목표 금액 달성). ProductionLineManager 완료 후.
+              RebirthManager.SellOff와 연동.
+
+          - nodeId: DungeonManager
+            layer: Domain
+            role: Manager
+            priority: 9
+            assignee: sub-coder-2
+            dependencies:
+              - Singleton
+              - EventManager
+              - CurrencyManager
+              - DataTableManager
+              - ProductionLineManager
+              - RebirthManager
+              - ADManager
+            notes: "66레벨 던전. ProductionLineManager 완료 후. ChallengeManager와 병렬 가능."
+
+          - nodeId: ShopManager
+            layer: Domain
+            role: Manager
+            priority: 10
+            assignee: sub-coder-2
+            dependencies:
+              - Singleton
+              - CurrencyManager
+              - DataTableManager
+              - IAPManager
+              - GachaManager
+              - AnalyticsManager
+            notes: "4탭 상점 데이터 관리. GachaManager + IAPManager 완료 후."
+
+          - nodeId: QuestManager
+            layer: Domain
+            role: Manager
+            priority: 11
+            assignee: sub-coder-2
+            dependencies:
+              - Singleton
+              - CurrencyManager
+              - DataTableManager
+              - SaveLoadManager
+              - AnalyticsManager
+              - ADManager
+            notes: "3종 퀘스트 슬롯. ProductionLineManager 구독 필요."
+
+          - nodeId: AchievementManager
+            layer: Domain
+            role: Manager
+            priority: 12
+            assignee: sub-coder-2
+            dependencies:
+              - Singleton
+              - CurrencyManager
+              - DataTableManager
+              - SaveLoadManager
+              - EventManager
+            notes: "14카테고리 × 15티어 업적. CurrencyManager 이벤트 구독."
+
+          - nodeId: AttendanceManager
+            layer: Domain
+            role: Manager
+            priority: 13
+            assignee: sub-coder-2
+            dependencies:
+              - Singleton
+              - CurrencyManager
+              - DataTableManager
+              - SaveLoadManager
+              - ADManager
+              - AnalyticsManager
+            notes: "7일 출석 보상. ADManager 완료 후."
+
+          - nodeId: RouletteManager
+            layer: Domain
+            role: Manager
+            priority: 14
+            assignee: sub-coder-2
+            dependencies:
+              - Singleton
+              - CurrencyManager
+              - DataTableManager
+              - RebirthManager
+              - ADManager
+            notes: "룰렛 가중치 랜덤. RebirthManager + ADManager 완료 후."
+
+          - nodeId: WorldMapManager
+            layer: Domain
+            role: Manager
+            priority: 15
+            assignee: sub-coder-1
+            dependencies:
+              - Singleton
+              - CurrencyManager
+              - DataTableManager
+              - SaveLoadManager
+              - RebirthManager
+            notes: "12개 월드 관리, 정기 보상 타이머. RebirthManager 완료 후."
+
+          - nodeId: TutorialManager
+            layer: Domain
+            role: Manager
+            priority: 16
+            assignee: sub-coder-1
+            dependencies:
+              - Singleton
+              - EventManager
+              - CurrencyManager
+              - SaveLoadManager
+            notes: "30+ 단계 UnMask 튜토리얼. Phase 3 UI 완료 후 연동."
+
+          - nodeId: NotificationController
+            layer: Domain
+            role: Controller
+            priority: 17
+            assignee: sub-coder-1
+            dependencies:
+              - EventManager
+              - CurrencyManager
+              - FactoryManager
+              - AchievementManager
+              - QuestManager
+              - WorldMapManager
+            notes: "11종 레드닷 집계. 대부분의 Domain 완료 후 구현."
+
+          - nodeId: PiggyBankManager
+            layer: Domain
+            role: Manager
+            priority: 18
+            assignee: sub-coder-2
+            dependencies:
+              - Singleton
+              - CurrencyManager
+              - IAPManager
+              - ADManager
+              - SaveLoadManager
+            notes: "피기뱅크/AD뱅크. IAPManager + ADManager 완료 후."
+
+  # ============================================================
+  # Phase 3: Game Layer (UI)
+  # 모든 Phase 2 완료 후 진행. Sub Coder 병렬 진행.
+  # ============================================================
+
+  - phase: 3
+    name: "Game Layer (UI)"
+    description: >
+      프로젝트 특화 UI 시스템. Page, Popup 클래스.
+      모든 Domain 시스템 완료 후 진행.
+      Sub Coder x2가 병렬로 담당 분배.
+    parallel: true
+
+    groups:
+      - group: "A"
+        name: "핵심 HUD 및 인게임 UI"
+        assignee: sub-coder-1
+        nodes:
+          - nodeId: MainHUDPage
+            layer: Game
+            role: UX
+            priority: 1
+            dependencies:
+              - EventManager
+              - CurrencyManager
+              - FactoryManager
+              - NotificationController
+              - TutorialManager
+            notes: >
+              가장 먼저 구현. 5버튼 메뉴, 머니/다이아 표시.
+              모든 다른 페이지의 진입점.
+
+          - nodeId: FactoryInfoPopup
+            layer: Game
+            role: UX
+            priority: 2
+            dependencies:
+              - FactoryManager
+              - SlotController
+              - SupplyMachineController
+              - CurrencyManager
+            notes: "팩토리 레벨업 팝업. MainHUDPage 완료 후."
+
+          - nodeId: ShopPage
+            layer: Game
+            role: UX
+            priority: 3
+            dependencies:
+              - ShopManager
+              - GachaManager
+              - CurrencyManager
+            notes: "4탭 상점 페이지. ShopManager 완료 후."
+
+          - nodeId: GachaResultPopup
+            layer: Game
+            role: UX
+            priority: 4
+            dependencies:
+              - GachaManager
+              - ADManager
+              - ResourceManager
+            notes: "가챠 결과 연출 팝업. ShopPage와 병렬 가능."
+
+          - nodeId: MachineInfoPage
+            layer: Game
+            role: UX
+            priority: 5
+            dependencies:
+              - CollectionManager
+              - MachineTuningManager
+              - SlotController
+              - CurrencyManager
+            notes: "머신 컬렉션/튜닝 페이지. CollectionManager 완료 후."
+
+      - group: "B"
+        name: "콘텐츠 UI"
+        assignee: sub-coder-2
+        nodes:
+          - nodeId: ManagerPage
+            layer: Game
+            role: UX
+            priority: 1
+            dependencies:
+              - ManagerCharacterController
+              - CurrencyManager
+              - DataTableManager
+              - RebirthManager
+            notes: "매니저 고용/배치 페이지."
+
+          - nodeId: LabPage
+            layer: Game
+            role: UX
+            priority: 2
+            dependencies:
+              - LabManager
+              - CurrencyManager
+            notes: "연구소 아이템 레벨업 페이지."
+
+          - nodeId: AchievementPage
+            layer: Game
+            role: UX
+            priority: 3
+            dependencies:
+              - AchievementManager
+              - CurrencyManager
+            notes: "업적 2열 그리드 + 별 시스템."
+
+          - nodeId: WorldMapPage
+            layer: Game
+            role: UX
+            priority: 4
+            dependencies:
+              - WorldMapManager
+              - CurrencyManager
+            notes: "월드맵 선택/정기 보상."
+
+          - nodeId: DungeonPage
+            layer: Game
+            role: UX
+            priority: 5
+            dependencies:
+              - DungeonManager
+              - ADManager
+            notes: "66개 던전 레벨 선택/결과."
+
+          - nodeId: ChallengePage
+            layer: Game
+            role: UX
+            priority: 6
+            dependencies:
+              - ChallengeManager
+              - ADManager
+            notes: "챌린지 카운트다운/결과."
+
+      - group: "C"
+        name: "팝업 UI (공통)"
+        assignee: sub-coder-1
+        notes: "Group A/B와 병렬 구현 가능. 범용성 높은 팝업 우선."
+        nodes:
+          - nodeId: AlertPopup
+            layer: Game
+            role: UX
+            priority: 1
+            dependencies:
+              - EventManager
+            notes: >
+              가장 먼저 구현. 범용 알림 팝업.
+              다른 모든 UI가 AlertPopup을 사용.
+
+          - nodeId: OptionPopup
+            layer: Game
+            role: UX
+            priority: 2
+            dependencies:
+              - SoundManager
+              - LocalizationManager
+              - SaveLoadManager
+            notes: "설정 팝업. AlertPopup 완료 후."
+
+          - nodeId: OfflineRewardPopup
+            layer: Game
+            role: UX
+            priority: 3
+            dependencies:
+              - OfflineRewardCalculator
+              - ADManager
+              - CurrencyManager
+            notes: "오프라인 보상 1x/2x 선택."
+
+          - nodeId: DailyRewardPopup
+            layer: Game
+            role: UX
+            priority: 4
+            dependencies:
+              - AttendanceManager
+              - ADManager
+            notes: "7일 출석 보상."
+
+          - nodeId: QuestPopup
+            layer: Game
+            role: UX
+            priority: 5
+            dependencies:
+              - QuestManager
+              - CurrencyManager
+              - ADManager
+            notes: "퀘스트 진행/보상."
+
+  # ============================================================
+  # Phase 3 추가: Editor & SDK (별도 트랙)
+  # 코드 생성과 동시 진행 가능 (독립적)
+  # ============================================================
+
+  - phase: 3
+    name: "Editor & SDK (병렬 트랙)"
+    description: >
+      씬 빌더, 스크립트 등 Editor 스크립트와 SDK 매니저.
+      Game Layer UI 생성과 병렬로 진행 가능.
+    parallel: true
+    assignee: main-coder
+    nodes:
+      - nodeId: SceneBuilder
+        layer: Game
+        role: Helper
+        priority: 1
+        dependencies: []
+        output_path: "output/Editor/SceneBuilder.cs"
+        notes: >
+          [InitializeOnLoad] 씬 자동 생성. Title/Main/GameScene 3개 씬.
+          EditorPrefs로 1회만 실행 보장.
+
+      - nodeId: SceneSetup
+        layer: Game
+        role: Helper
+        priority: 2
+        dependencies:
+          - SceneBuilder
+        output_path: "output/Editor/SceneSetup.cs"
+        notes: "씬 초기 오브젝트 배치 (Manager 싱글톤 배치 등)."
+
+      - nodeId: FirebaseManager
+        layer: Game
+        role: Manager
+        priority: 3
+        dependencies:
+          - AnalyticsManager
+        output_path: "output/SDK/FirebaseManager.cs"
+        notes: >
+          #if FIREBASE_ANALYTICS 조건부 컴파일.
+          using 문도 #if 블록 안에 포함 필수.
+          #else 블록에 Debug.Log 시뮬레이션 구현.
+
+# ============================================================
+# 빌드 의존성 요약
+# ============================================================
+
+dependency_summary:
+  phase_0_outputs:
+    - "Singleton: 싱글톤 베이스"
+    - "EventManager: 전역 이벤트 버스"
+    - "ObjectPool: 오브젝트 재사용"
+    - "DataTableManager: 42개 테이블 캐시"
+    - "ResourceManager: 에셋 캐시"
+
+  phase_1_outputs:
+    - "CurrencyManager: 5종 재화 API"
+    - "SaveLoadManager: UserInfo 직렬화"
+    - "SoundManager: BGM/SFX API"
+    - "LocalizationManager: 다국어 텍스트 API"
+    - "AnalyticsManager: Firebase 이벤트 API"
+
+  phase_2_critical_path:
+    - step: 1
+      nodes: [ProductController, TransporterController, SupplyMachineController, MachineController]
+      reason: "슬롯/라인 구성 요소. 최우선."
+    - step: 2
+      nodes: [SlotController, RebirthManager, FactoryManager, ADManager, IAPManager]
+      reason: "MachineController 완료 후 SlotController. 독립 매니저 병렬."
+    - step: 3
+      nodes: [ProductionLineManager, ManagerCharacterController, MachineTuningManager, CollectionManager]
+      reason: "컨트롤러 전체 완료 후 ProductionLineManager."
+    - step: 4
+      nodes: [GachaManager, BoostEventManager, LabManager, ChallengeManager, DungeonManager]
+      reason: "MachineTuning + Collection 완료 후 Gacha."
+    - step: 5
+      nodes: [ShopManager, QuestManager, AchievementManager, AttendanceManager, RouletteManager, WorldMapManager, TutorialManager]
+      reason: "Gacha + Challenge + Dungeon 완료 후."
+    - step: 6
+      nodes: [NotificationController, PiggyBankManager]
+      reason: "대부분의 Domain 완료 후 집계."
+
+  phase_3_parallel_groups:
+    group_a: [MainHUDPage, FactoryInfoPopup, ShopPage, GachaResultPopup, MachineInfoPage]
+    group_b: [ManagerPage, LabPage, AchievementPage, WorldMapPage, DungeonPage, ChallengePage]
+    group_c: [AlertPopup, OptionPopup, OfflineRewardPopup, DailyRewardPopup, QuestPopup]
+
+# ============================================================
+# 총 빌드 통계
+# ============================================================
+
+build_statistics:
+  total_nodes: 54
+  by_phase:
+    phase_0: 5
+    phase_1: 5
+    phase_2: 28
+    phase_3: 16
+  by_layer:
+    Core: 5
+    Domain: 28
+    Game: 16
+    Editor: 4
+    SDK: 1
+  by_assignee:
+    main_coder: 12  # Phase 0 전체 + 핵심 시스템
+    sub_coder_1: 21  # 인게임 컨트롤러 + 일부 매니저 + 핵심 UI
+    sub_coder_2: 21  # BM/콘텐츠 매니저 + 콘텐츠 UI
+  estimated_order: >
+    Phase 0 (Core, 1~2일) →
+    Phase 1 (Base Domain, 2~3일) →
+    Phase 2 Group A+B 병렬 (인게임+매니저, 3~4일) →
+    Phase 2 Group C 병렬 (복합 시스템, 3~4일) →
+    Phase 3 병렬 (UI, 2~3일)

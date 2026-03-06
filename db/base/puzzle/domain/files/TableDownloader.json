@@ -1,0 +1,66 @@
+{
+  "fileId": "TableDownloader",
+  "filePath": "Data\\GoogleSpreadSheet\\TableDownloader.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Puzzle",
+  "role": "Component",
+  "system": "Data",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "System",
+    "Global_Define"
+  ],
+  "classes": [
+    {
+      "className": "TableDownloader",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": true,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Download",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool Download()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "FlowControl",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "bool Download()"
+  ],
+  "requires": [],
+  "tags": {
+    "major": [
+      "FlowControl"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "ITable",
+    "Instance",
+    "TableBase",
+    "TableDataIO",
+    "TableMng",
+    "TableWWW"
+  ],
+  "usedBy": []
+}

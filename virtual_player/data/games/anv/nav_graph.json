@@ -1,0 +1,36 @@
+{
+  "nodes": {
+    "lobby": {
+      "type": "lobby",
+      "in_screen_actions": []
+    },
+    "unknown": {
+      "type": "unknown",
+      "in_screen_actions": []
+    }
+  },
+  "edges": [
+    {
+      "from": "lobby",
+      "to": "stage_select",
+      "action": {
+        "action": "tap",
+        "x": 576,
+        "y": 229,
+        "label": "%H"
+      },
+      "success_count": 3
+    },
+    {
+      "from": "unknown",
+      "to": "lobby",
+      "action": {
+        "action": "tap",
+        "x": 576,
+        "y": 814,
+        "label": "btn_576_814"
+      },
+      "success_count": 18
+    }
+  ]
+}

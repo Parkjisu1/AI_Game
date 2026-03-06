@@ -1,0 +1,710 @@
+{
+  "fileId": "MachineStatComponent",
+  "filePath": "UI\\MachineStatComponent.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Rpg",
+  "role": "Message",
+  "system": "UI",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "TMPro",
+    "UnityEngine.UI",
+    "FancyScrollView",
+    "DG.Tweening"
+  ],
+  "classes": [
+    {
+      "className": "MachineStatComponent",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "FancyScrollRectCell<MachineScrollItemData",
+      "interfaces": [
+        "IMessagePort<GameModeMain>",
+        "IMessagePort<WindowID"
+      ],
+      "fields": [
+        {
+          "fieldName": "machineNode",
+          "fieldType": "Transform",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "gradeBGImg",
+          "fieldType": "Image",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "gradeIconImg",
+          "fieldType": "Image",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "levelText",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "sliderNode",
+          "fieldType": "Transform",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "sliderGageImg",
+          "fieldType": "Image",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "expIconImg",
+          "fieldType": "Image",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "nameText",
+          "fieldType": "LanguageText",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "expText",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "powerNameText",
+          "fieldType": "TextMeshProUGUI",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "powerText",
+          "fieldType": "LanguageText",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "upgradePowerText",
+          "fieldType": "LanguageText",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "dontHaveNode",
+          "fieldType": "Transform",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "haveNode",
+          "fieldType": "Transform",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "blinkNode",
+          "fieldType": "Transform",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "modeMsgController",
+          "fieldType": "IMessageController<GameModeMain>",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": true,
+          "initialValue": null
+        },
+        {
+          "fieldName": "windowManagerController",
+          "fieldType": "IMessageController<WindowID, WindowManager>",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": true,
+          "initialValue": null
+        },
+        {
+          "fieldName": "scrollItemData",
+          "fieldType": "MachineScrollItemData",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "scroller",
+          "fieldType": "Scroller",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "default"
+        },
+        {
+          "fieldName": "machineImg",
+          "fieldType": "UISpineMachine",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "trainNotification",
+          "fieldType": "ReddotNotificationComponent",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "newNotification",
+          "fieldType": "ReddotNotificationComponent",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "have",
+          "fieldType": "bool",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "false"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "SetDataType1",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "ResourceAllocator",
+              "paramName": "resourceAllocator"
+            },
+            {
+              "paramType": "MachineTableData",
+              "paramName": "data"
+            },
+            {
+              "paramType": "bool",
+              "paramName": "mounted"
+            },
+            {
+              "paramType": "int",
+              "paramName": "level"
+            },
+            {
+              "paramType": "int",
+              "paramName": "exp"
+            },
+            {
+              "paramType": "int",
+              "paramName": "maxExp"
+            },
+            {
+              "paramType": "double",
+              "paramName": "power"
+            },
+            {
+              "paramType": "bool",
+              "paramName": "isNew"
+            },
+            {
+              "paramType": "bool",
+              "paramName": "canTrain"
+            }
+          ],
+          "signature": "void SetDataType1(ResourceAllocator resourceAllocator,\r\n        MachineTableData data, bool mounted, int level, int exp, int maxExp, double power, bool isNew, bool canTrain)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetDataType2",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "ResourceAllocator",
+              "paramName": "resourceAllocator"
+            },
+            {
+              "paramType": "GameStatCalculator",
+              "paramName": "calculator"
+            },
+            {
+              "paramType": "MachineTableData",
+              "paramName": "data"
+            },
+            {
+              "paramType": "MachineTuningExpTableData",
+              "paramName": "currentTuning"
+            },
+            {
+              "paramType": "MachineTuningExpTableData",
+              "paramName": "nextTuning"
+            },
+            {
+              "paramType": "int",
+              "paramName": "level"
+            },
+            {
+              "paramType": "int",
+              "paramName": "exp"
+            }
+          ],
+          "signature": "void SetDataType2(ResourceAllocator resourceAllocator, GameStatCalculator calculator,\r\n        MachineTableData data, MachineTuningExpTableData currentTuning, MachineTuningExpTableData nextTuning, int level, int exp)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "ShowUIMachine",
+          "accessModifier": "protected",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "ResourceAllocator",
+              "paramName": "resourceAllocator"
+            },
+            {
+              "paramType": "string",
+              "paramName": "prefabName"
+            }
+          ],
+          "signature": "void ShowUIMachine(ResourceAllocator resourceAllocator, string prefabName)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "UpdateContent",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "MachineScrollItemData",
+              "paramName": "itemData"
+            }
+          ],
+          "signature": "void UpdateContent(MachineScrollItemData itemData)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "GetMachineID",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [],
+          "signature": "int GetMachineID()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "SetMessageController",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "IMessageController<GameModeMain>",
+              "paramName": "messageController"
+            }
+          ],
+          "signature": "void SetMessageController(IMessageController<GameModeMain> messageController)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetMessageController",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "WindowID",
+              "paramName": "id"
+            },
+            {
+              "paramType": "WindowManager>",
+              "paramName": "messageController"
+            }
+          ],
+          "signature": "void SetMessageController(WindowID id, IMessageController<WindowID, WindowManager> messageController)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "GetMessageController",
+          "accessModifier": "public",
+          "returnType": "IMessageController<WindowID, WindowManager>",
+          "parameters": [],
+          "signature": "IMessageController<WindowID, WindowManager> GetMessageController()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "DoEffectUpgradeStat",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector3",
+              "paramName": "punch"
+            },
+            {
+              "paramType": "float",
+              "paramName": "time"
+            },
+            {
+              "paramType": "Ease",
+              "paramName": "ease"
+            }
+          ],
+          "signature": "void DoEffectUpgradeStat(Vector3 punch, float time, Ease ease)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "FlowControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "MakeInvalid",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void MakeInvalid()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnClickType1",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickType1()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnClickType2",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickType2()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "ShowRecuiteWin",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void ShowRecuiteWin()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnClickCheatAddMachine",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickCheatAddMachine()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnClickCheatAddExp",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickCheatAddExp()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "OnClickCheatRemove",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnClickCheatRemove()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "GetRuleForCheat",
+          "accessModifier": "private",
+          "returnType": "GameRuleMain",
+          "parameters": [],
+          "signature": "GameRuleMain GetRuleForCheat()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMachineNode",
+          "accessModifier": "public",
+          "returnType": "RectTransform",
+          "parameters": [],
+          "signature": "RectTransform GetMachineNode()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void SetDataType1(ResourceAllocator resourceAllocator,\r\n        MachineTableData data, bool mounted, int level, int exp, int maxExp, double power, bool isNew, bool canTrain)",
+    "void SetDataType2(ResourceAllocator resourceAllocator, GameStatCalculator calculator,\r\n        MachineTableData data, MachineTuningExpTableData currentTuning, MachineTuningExpTableData nextTuning, int level, int exp)",
+    "void UpdateContent(MachineScrollItemData itemData)",
+    "int GetMachineID()",
+    "void SetMessageController(IMessageController<GameModeMain> messageController)",
+    "void SetMessageController(WindowID id, IMessageController<WindowID, WindowManager> messageController)",
+    "IMessageController<WindowID, WindowManager> GetMessageController()",
+    "void DoEffectUpgradeStat(Vector3 punch, float time, Ease ease)",
+    "void MakeInvalid()",
+    "void OnClickType1()",
+    "void OnClickType2()",
+    "void ShowRecuiteWin()",
+    "void OnClickCheatAddMachine()",
+    "void OnClickCheatAddExp()",
+    "void OnClickCheatRemove()"
+  ],
+  "requires": [
+    "FancyScrollRectCell",
+    "GameModeMain",
+    "IMessageController",
+    "IMessagePort",
+    "LanguageText",
+    "MachineScrollItemData",
+    "ReddotNotificationComponent",
+    "Scroller",
+    "TextMeshProUGUI",
+    "UISpineMachine",
+    "WindowID",
+    "WindowManager",
+    "WindowManager>"
+  ],
+  "tags": {
+    "major": [
+      "ResponseTrigger",
+      "ValueModification",
+      "DataSync"
+    ],
+    "minor": [
+      "Assign",
+      "Find"
+    ]
+  },
+  "uses": [
+    "CurrencyConverter",
+    "Debug",
+    "FancyScrollRectCell",
+    "GameModeMain",
+    "GlobalConstants",
+    "IMessagePort",
+    "OpenTrainWindowMsg",
+    "OpenWindowMsg",
+    "RefreshMachineStatComponentMsg",
+    "StringUtils",
+    "TweenUtil",
+    "UISpineMachine",
+    "WindowID"
+  ],
+  "usedBy": []
+}

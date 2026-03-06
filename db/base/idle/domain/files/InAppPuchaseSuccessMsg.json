@@ -1,0 +1,148 @@
+{
+  "fileId": "InAppPuchaseSuccessMsg",
+  "filePath": "Messages\\InAppPuchaseSuccessMsg.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Idle",
+  "role": "Message",
+  "system": "Messages",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.Purchasing",
+    "UnityEngine.Purchasing.Security",
+    "Firebase.Analytics"
+  ],
+  "classes": [
+    {
+      "className": "InAppPuchaseSuccessMsg",
+      "classType": "struct",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [
+        "IMessageAction<GameModeMain>"
+      ],
+      "fields": [
+        {
+          "fieldName": "ProductID",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "Price",
+          "fieldType": "string",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "Subscription",
+          "fieldType": "SubscriptionInfo",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Execute",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [
+            {
+              "paramType": "IMessagePort<GameModeMain>",
+              "paramName": "sender"
+            },
+            {
+              "paramType": "GameModeMain",
+              "paramName": "controller"
+            }
+          ],
+          "signature": "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "FlowControl",
+          "minorTag": null
+        },
+        {
+          "methodName": "addPackageData",
+          "accessModifier": "private",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "GameModeMain",
+              "paramName": "controller"
+            },
+            {
+              "paramType": "RewardType",
+              "paramName": "type"
+            },
+            {
+              "paramType": "int",
+              "paramName": "rewardAmount"
+            }
+          ],
+          "signature": "void addPackageData(GameModeMain controller, RewardType type, int rewardAmount)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+  ],
+  "requires": [
+    "GameModeMain",
+    "IMessageAction",
+    "SubscriptionInfo"
+  ],
+  "tags": {
+    "major": [
+      "FlowControl"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "AddMoneyDiaMsg",
+    "GameModeMain",
+    "Holder",
+    "IMessageAction",
+    "MyPlugins",
+    "OpenAlertWinMsg",
+    "Parameter",
+    "ProductID",
+    "RefreshPackageDetailInfoMsg",
+    "RefreshShopWinPackageInfoMsg",
+    "System"
+  ],
+  "usedBy": []
+}

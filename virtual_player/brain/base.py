@@ -2,7 +2,7 @@
 GameBrain Abstract Base Class
 ==============================
 게임별 AI 두뇌의 공통 인터페이스 정의.
-perceive → decide → translate_to_input 사이클.
+perceive -> decide -> translate_to_input 사이클.
 """
 
 from abc import ABC, abstractmethod
@@ -52,10 +52,10 @@ class GameState:
     """게임 상태 스냅샷.
 
     parsed dict may contain:
-      - "screen_type": str — classified screen type
-      - "confidence": float — classification confidence
-      - "is_popup": bool — popup overlay detected
-      - "snapshot": GameStateSnapshot — structured state from Layer 1 perception
+      - "screen_type": str -- classified screen type
+      - "confidence": float -- classification confidence
+      - "is_popup": bool -- popup overlay detected
+      - "snapshot": GameStateSnapshot -- structured state from Layer 1 perception
         (HP/MP gauges, gold/level OCR readings, etc.)
     """
     raw: Any = None
@@ -74,9 +74,9 @@ class GameBrain(ABC):
     게임별 AI 두뇌 추상 클래스.
 
     각 게임은 이 클래스를 상속하여:
-    1. perceive(): 원시 상태 → 파싱된 상태
-    2. decide(): 파싱된 상태 → 행동 결정
-    3. translate_to_input(): 행동 → 터치/키 입력
+    1. perceive(): 원시 상태 -> 파싱된 상태
+    2. decide(): 파싱된 상태 -> 행동 결정
+    3. translate_to_input(): 행동 -> 터치/키 입력
     """
 
     def __init__(self, skill_level: float = 0.5):
@@ -103,7 +103,7 @@ class GameBrain(ABC):
         ...
 
     def step(self, raw_state: Any) -> GameAction:
-        """perceive → decide → translate_to_input 한 사이클 실행."""
+        """perceive -> decide -> translate_to_input 한 사이클 실행."""
         state = self.perceive(raw_state)
         action = self.decide(state)
         action.inputs = self.translate_to_input(action)

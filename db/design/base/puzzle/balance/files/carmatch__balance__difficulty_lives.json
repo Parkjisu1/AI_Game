@@ -1,0 +1,97 @@
+{
+  "designId": "carmatch__balance__difficulty_lives",
+  "project": "CarMatch",
+  "domain": "Balance",
+  "genre": "Puzzle",
+  "system": "Difficulty & Lives",
+  "source": "observed",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "spec",
+  "balance_area": "difficulty",
+  "source_file": "carmatch_tester.py (AI Tester observation)",
+  "content": {
+    "summary": "CarMatch difficulty and lives. Gradual increase via more cars/colors. Fail=holder full (7/7), Win=board cleared. Lives normally 5 max, ~25 min regen. Currently unlimited lives event. No score display or star rating.",
+    "flow": [],
+    "parameters": {
+      "CM12": {
+        "name": "difficulty_curve_type",
+        "value": "gradual_increase",
+        "confidence": 0.7,
+        "notes": "More colors/cars at higher levels. Lv128 = 82 cars, 7 colors."
+      },
+      "CM13": {
+        "name": "star_rating_system",
+        "value": "not_observed",
+        "confidence": 0.4,
+        "notes": "No star rating visible. May have pass/fail only."
+      },
+      "CM14": {
+        "name": "score_display_exists",
+        "value": false,
+        "confidence": 0.8,
+        "notes": "No score HUD. Only coin count at top-left."
+      },
+      "CM15": {
+        "name": "fail_condition",
+        "value": "holder_full",
+        "confidence": 0.95,
+        "notes": "7/7 holder slots filled = Out of Space fail"
+      },
+      "CM16": {
+        "name": "win_condition",
+        "value": "all_cars_cleared",
+        "confidence": 0.9,
+        "notes": "Clear all cars from board to win"
+      },
+      "CM17": {
+        "name": "lives_max_count",
+        "value": {
+          "normal": 5,
+          "current": "unlimited"
+        },
+        "confidence": 0.6,
+        "notes": "Currently infinity symbol (unlimited event). Normal likely 5."
+      },
+      "CM18": {
+        "name": "lives_regen_minutes",
+        "value": 25,
+        "confidence": 0.4,
+        "notes": "Cannot verify during unlimited event. Genre standard ~25 min."
+      }
+    },
+    "edge_cases": [],
+    "references": []
+  },
+  "design_analysis": {
+    "design_intent": "Extract difficulty & lives design parameters from CarMatch for puzzle genre Design DB",
+    "context": "External game observation without source code access. Parameters estimated via ADB screenshots + pixel analysis + OCR.",
+    "strengths": [
+      "Direct observation from live game build",
+      "Automated measurement reduces human bias",
+      "Multiple observers cross-validate parameters"
+    ],
+    "concerns": [
+      "No source code access limits parameter accuracy (~85-89%)",
+      "Some parameters require extended play sessions for full accuracy",
+      "OCR-dependent values may have recognition errors"
+    ],
+    "db_recommendation": "puzzle/balance/files/",
+    "reasoning": "First puzzle genre entry in Design DB. CarMatch provides baseline parking-lot puzzle mechanics data."
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "AI Tester observation of CarMatch",
+      "note": "External game analysis import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-03-03T11:23:30.524380Z"
+}

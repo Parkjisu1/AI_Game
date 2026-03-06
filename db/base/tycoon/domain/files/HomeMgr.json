@@ -1,0 +1,139 @@
+{
+  "fileId": "HomeMgr",
+  "filePath": "Home\\HomeMgr.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Tycoon",
+  "role": "Component",
+  "system": "Home",
+  "score": 0.4,
+  "usings": [
+    "JetBrains.Annotations",
+    "System.Collections",
+    "System.Collections.Generic",
+    "TMPro",
+    "Unity.VisualScripting",
+    "UnityEditor",
+    "UnityEngine",
+    "UnityEngine.SceneManagement"
+  ],
+  "classes": [
+    {
+      "className": "HomeMgr",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [
+        "ISingleton"
+      ],
+      "fields": [
+        {
+          "fieldName": "instance",
+          "fieldType": "HomeMgr",
+          "accessModifier": "private",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "moneyLabel",
+          "fieldType": "TMP_Text",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "money",
+          "fieldType": "int",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Awake",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Awake()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "OnDestroy",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void OnDestroy()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ChangeLevel",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "string",
+              "paramName": "name"
+            }
+          ],
+          "signature": "void ChangeLevel(string name)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Awake()",
+    "void OnDestroy()",
+    "void ChangeLevel(string name)"
+  ],
+  "requires": [
+    "ISingleton",
+    "TMP_Text"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification"
+    ],
+    "minor": []
+  },
+  "uses": [
+    "PlayerPrefs",
+    "SceneManager"
+  ],
+  "usedBy": []
+}

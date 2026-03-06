@@ -1,0 +1,87 @@
+metadata:
+  nodeId: "FactoryManager"
+  version: "1.0.0"
+  phase: 2
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "EventManager"
+    - "CurrencyManager"
+    - "DataManager"
+    - "ProductionLineManager"
+  external:
+    - "UnityEngine.MonoBehaviour"
+    - "System.Collections.Generic"
+
+contract:
+  provides:
+    - "factory_levelup"
+    - "slot_unlock"
+    - "feature_unlock_gate"
+  requires:
+    - "currency_system"
+    - "data_table"
+    - "event_system"
+
+tags:
+  layer: "Domain"
+  genre: "Idle"
+  role: "Manager"
+  system: "FactorySystem"
+  majorFunctions:
+    - "StateControl"
+    - "ConditionCheck"
+    - "ResourceTransfer"
+    - "FlowControl"
+  minorFunctions:
+    - "Compare"
+    - "Validate"
+    - "Assign"
+    - "Notify"
+
+logicFlow:
+  - step: 1
+    tag: "ConditionCheck.Validate"
+    action: "CheckMoney: 현재 보유 머니 >= 레벨업 비용(FactoryLevelUpCostTable[currentLevel]) 조건 검증"
+    next: 2
+  - step: 2
+    tag: "ResourceTransfer.Assign"
+    action: "PayCost: CurrencyManager에 레벨업 비용 차감 요청"
+    next: 3
+  - step: 3
+    tag: "StateControl.Assign"
+    action: "LevelUp: 팩토리 레벨 증가(최대 1600), 레벨 데이터 저장"
+    next: 4
+  - step: 4
+    tag: "ConditionCheck.Compare"
+    action: "CheckUnlocks: 새 레벨이 해금 임계값(SupplyMachine/Machine/Achievement/World) 도달 여부 비교"
+    next: 5
+  - step: 5
+    tag: "FlowControl.Notify"
+    action: "FeatureUnlockGate: 조건 충족 해금 항목에 대해 EventManager 이벤트 발행, UI 갱신 요청"
+    next: 6
+  - step: 6
+    tag: "DataSync.Assign"
+    action: "RefreshUI: 레벨업 버튼 비용 갱신, 잠금 해제된 슬롯/기능 활성화"
+    next: 1
+
+referencePatterns:
+  - source: "idlemoney__balance__factory_progression"
+    pattern: "1~1600레벨 레벨업 비용 곡선 및 해금 임계값 테이블"
+  - source: "idlemoney__ingame__production_line"
+    pattern: "슬롯 해금 레벨 조건 및 팩토리별 기능 게이트 구조"
+
+codeHints:
+  patterns:
+    - "SerializeField for Inspector"
+    - "MessagePack serialization"
+    - "DontDestroyOnLoad singleton"
+    - "Dictionary<int, UnlockGate> for threshold lookup"
+    - "EventManager.Publish for feature unlock notification"
+  avoidPatterns:
+    - "Find/FindObjectOfType for UI"
+    - "dynamic UI creation"
+    - "hardcoded magic numbers"
+    - "Polling level check in Update()"

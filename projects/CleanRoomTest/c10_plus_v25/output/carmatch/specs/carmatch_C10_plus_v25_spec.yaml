@@ -1,0 +1,102 @@
+```yaml
+game: "CarMatch"
+genre: "Casual Puzzle"
+condition: "C10_plus_v25"
+parameters:
+
+  - id: CM01
+    name: board_layout
+    value: "grid with parked cars, variable per level"
+    confidence: confirmed
+    source: "관찰+비전: 보드 영역 (125,100)-(959,1295), 차량 밀집 배치. 레벨마다 다른 배치"
+
+  - id: CM02
+    name: holder_slot_count
+    value: 7
+    confidence: confirmed
+    source: "관찰+비전: 홀더 Y=1500, 7슬롯 X=[173,296,419,543,667,793,912] 직접 측정"
+
+  - id: CM03
+    name: match_rule
+    value: "같은 색 3개 = 자동 매치 소멸"
+    confidence: confirmed
+    source: "관찰: Orange/Pink/Red/Yellow/Cyan triple 매칭 5회 검증. 2/7→1/7 등 정확한 슬롯 감소 확인"
+
+  - id: CM04
+    name: color_count
+    value: 7
+    confidence: confirmed
+    source: "비전 분석: red, orange, yellow, green, cyan, blue, purple 7색 직접 식별"
+
+  - id: CM05
+    name: win_condition
+    value: "보드 위 모든 차량 제거 (홀더 경유 매치)"
+    confidence: confirmed
+    source: "관찰: 게임 규칙 명확 — 차량 탭 → 홀더 수집 → 3매치 반복 → 보드 클리어 = 승리"
+
+  - id: CM06
+    name: lose_condition
+    value: "홀더 7칸 가득 찬 상태에서 매치 불가"
+    confidence: confirmed
+    source: "관찰: 'Out of Space' 팝업 (fail) 다수 발생. 7/7 상태에서 추가 차량 진입 시 게임 오버"
+
+  - id: CM07
+    name: lives_system
+    value: "life 소모제, 재생 25~30분, 광고 시청으로 +1"
+    confidence: confirmed
+    source: "관찰: Life timer 직접 확인. +1 Life 버튼 (541,1250) → 광고 시청 → 1 life 획득 검증 완료"
+
+  - id: CM08
+    name: booster_system
+    value: "있음 (부스터 영역 Y=1730~1780)"
+    confidence: medium
+    source: "관찰: 부스터 영역 좌표 확인. 구체적 부스터 종류/효과는 미캡처"
+
+  - id: CM09
+    name: streak_race
+    value: "연승 시 Streak Race 모드 진입"
+    confidence: confirmed
+    source: "관찰: Streak Race Continue 버튼 (540,1850-1890) + X (970,155) 직접 확인"
+
+  - id: CM10
+    name: ad_system
+    value: "인터스티셜 + 리워드 광고"
+    confidence: confirmed
+    source: "관찰: monkey -p의 Intent가 5~10분 간격 인터스티셜 트리거. 리워드 광고(+1 Life) 검증 완료"
+
+  - id: CM11
+    name: ui_resolution
+    value: "1080x1920"
+    confidence: confirmed
+    source: "관찰: BlueStacks 1920x1080 native (landscape) → 게임은 portrait 1080x1920"
+
+  - id: CM12
+    name: input_method
+    value: "3D 오브젝트 탭 (monkey -p 전용), UI 버튼 (input tap)"
+    confidence: confirmed
+    source: "실험 검증: input tap은 3D 차량에 무반응. monkey -p 스크립트만 3D 오브젝트 탭 가능. 팝업 버튼은 input tap 작동"
+
+  - id: CM13
+    name: player_level
+    value: "117 (관찰 시점)"
+    confidence: confirmed
+    source: "관찰: Level 117 직접 확인"
+
+  - id: CM14
+    name: navigation_bar
+    value: "하단 내비게이션 바 Y=1800"
+    confidence: confirmed
+    source: "관찰: Play button (551,1498), 내비게이션 바 Y=1800 직접 측정"
+
+  - id: CM15
+    name: screen_states
+    value: 7
+    confidence: confirmed
+    source: "비전 분석: ad, loading, fail, win, popup, gameplay, lobby 7개 화면 상태 분류 완료"
+
+  - id: CM16
+    name: animation_settle_time
+    value: "4.0~6.0초 (홀더 상태에 따라 가변)"
+    confidence: confirmed
+    source: "실험: 0-2칸=4.0초, 3-4칸=5.0초, 5+칸=6.0초+2초 재확인. late arrival 패턴 관찰"
+```

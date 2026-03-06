@@ -1,0 +1,70 @@
+## CarMatch — Session 03: carmatch_ai.py 자율 플레이 세션 및 성능 분석
+
+---
+
+### 실행 환경
+- 스크립트: carmatch_ai.py (~1,050줄)
+- 기기: BlueStacks (emulator-5554)
+- 게임: CarMatch, Level 117
+- 날짜: 2026-03-01 ~ 2026-03-02
+
+---
+
+### 1. 자율 플레이 세션 결과
+
+| 항목 | 값 |
+|------|-----|
+| 세션 시작 | 2026-03-01 23:57 |
+| 경과 시간 | 4.6분 |
+| 탭 수 | 42 |
+| 레벨 시도 | 0 (로비에서 진입 실패) |
+| 승리 | 0 |
+| 패배 | 0 |
+
+**주요 이슈**: 로비 → 게임 진입 과정에서 광고 중단으로 게임플레이 도달하지 못함.
+
+---
+
+### 2. 이전 carmatch_player.py 결과 (참고)
+
+| 항목 | 값 |
+|------|-----|
+| 레벨 시도 | 6 |
+| 승리 | 0 |
+| 패배 | 6 |
+| 주요 원인 | monkey 랜덤 터치로 전략적 차량 선택 불가 |
+
+---
+
+### 3. 핵심 좌표 레퍼런스 (1080x1920)
+
+```python
+BOARD_LEFT, BOARD_TOP = 125, 100
+BOARD_RIGHT, BOARD_BOT = 959, 1295
+HOLDER_Y = 1500
+HOLDER_SLOTS_X = [173, 296, 419, 543, 667, 793, 912]
+BOOSTER_Y_TOP = 1730
+NAV_BAR_Y = 1800
+PLAY_BUTTON = (551, 1498)
+SAFE_TAP_Y_MAX = 1300
+```
+
+### 4. UI 버튼 좌표 (input tap 검증 완료)
+
+| 요소 | 좌표 | 용도 |
+|------|------|------|
+| Streak Race Continue | (540, 1850-1890) | 연승 계속 |
+| Streak Race X | (970, 155) | 연승 닫기 |
+| More Lives +1 Life | (541, 1250) | 광고로 1 life |
+| More Lives X | (890, 440) | 팝업 닫기 |
+| Fail "Out of Space" X | find_red_x() | 동적 탐지 |
+| Lobby Play | (551, 1498) | 게임 시작 |
+
+---
+
+### 4. 미해결 과제
+
+1. **승리 0회**: 전략 작동하지만 광고 중단 + 높은 난이도
+2. **광고 중단**: monkey -p Intent가 주기적으로 광고 트리거
+3. **리워드 광고 닫기**: find_red_x false positive → 일부 광고 닫기 실패
+4. **Portrait 광고 탐지**: nav_bar 없음 + colorful content로 탐지하나 완벽하지 않음

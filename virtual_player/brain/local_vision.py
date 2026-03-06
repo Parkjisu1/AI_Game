@@ -4,7 +4,7 @@ Local Vision
 OpenCV-based screen analysis for mobile games.
 Replaces all Claude Vision API calls with local template matching + SSIM.
 
-Zero API cost — uses reference screenshot database for classification
+Zero API cost -- uses reference screenshot database for classification
 and element finding.
 """
 
@@ -48,7 +48,7 @@ _ELEMENT_SEARCH_EXPAND = 40      # Pixels to expand search area on retry
 
 
 class LocalVision:
-    """OpenCV-based screen analysis — replaces Claude Vision API calls."""
+    """OpenCV-based screen analysis -- replaces Claude Vision API calls."""
 
     def __init__(self, reference_db: ReferenceDB):
         self._ref_db = reference_db
@@ -88,7 +88,7 @@ class LocalVision:
             scored.sort(key=lambda x: x[0])
             candidates = [e for _, e in scored[:_CLASSIFY_PHASH_CANDIDATES]]
         else:
-            # No pHash — sample from each screen type
+            # No pHash -- sample from each screen type
             candidates = []
             for st_entries in self._ref_db.entries.values():
                 candidates.extend(st_entries[:2])

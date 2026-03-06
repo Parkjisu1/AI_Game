@@ -1,0 +1,3912 @@
+[
+  {
+    "fileId": "StripedJewel",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "InGame",
+    "score": 0.4,
+    "provides": [
+      "List<GameObject> Explode()",
+      "void ShowExplosionJewel(EffectPool effectPool)",
+      "void ChangeHighLayer()",
+      "void ChangeLowLayer()",
+      "void DeactivateEffect()"
+    ],
+    "requires": [
+      "Jewel",
+      "ParticleSystemRenderer",
+      "PooledObject",
+      "SpriteRenderer"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ConditionCheck"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ManagerFixUpdate",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "StateHandler",
+    "system": "AnimState",
+    "score": 0.4,
+    "provides": [
+      "void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)",
+      "void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)",
+      "void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)",
+      "void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)",
+      "void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)"
+    ],
+    "requires": [
+      "Manager",
+      "StateMachineBehaviour"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ManagerIdleUpdate",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "StateHandler",
+    "system": "AnimState",
+    "score": 0.4,
+    "provides": [
+      "void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)",
+      "void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)",
+      "void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)",
+      "void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)",
+      "void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)"
+    ],
+    "requires": [
+      "Manager",
+      "SkeletonMecanim",
+      "StateMachineBehaviour"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ManagerMoveUpdate",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "StateHandler",
+    "system": "AnimState",
+    "score": 0.4,
+    "provides": [
+      "void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)",
+      "void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)",
+      "void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)",
+      "void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)",
+      "void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)"
+    ],
+    "requires": [
+      "Manager",
+      "StateMachineBehaviour"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "CameraMoveLimitHolder",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Model",
+    "system": "CameraMoveLimitHolder",
+    "score": 0.4,
+    "provides": [
+      "bool IsValid()"
+    ],
+    "requires": [
+      "BoxCollider2D",
+      "GameRuleID"
+    ],
+    "tags": {
+      "major": [
+        "ConditionCheck"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ChallengeProductMaker",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "ChallengeProductMaker",
+    "score": 0.4,
+    "provides": [],
+    "requires": [
+      "ProductMakerBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "CutSceneNode",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Etc",
+    "score": 0.4,
+    "provides": [
+      "void UpdateLogic(float deltaTime)",
+      "bool IsPassDelay()"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "DataSync",
+        "ConditionCheck"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "GameConfig",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Config",
+    "system": "Etc",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "GachaEffectHandler",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "GachaEffectHandler",
+    "score": 0.4,
+    "provides": [
+      "void SetDependency(IMessageController<WindowID, WindowManager> windowManagerController)",
+      "void SetSkeletonSkin(string skinName)",
+      "void Show()",
+      "void ShowResultWin()",
+      "void SetResultData(string animName, GachaResult result)"
+    ],
+    "requires": [
+      "EffectHandler",
+      "IMessageController",
+      "IMessagePort",
+      "SkeletonGraphic",
+      "WindowID"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "GachaResult",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "GachaResult",
+    "score": 0.4,
+    "provides": [
+      "GachaType GetGachaType()",
+      "void SetGachaType(GachaType type)",
+      "void AddMaterial(int num)",
+      "void AddMachine(int id, int exp, bool isNew)",
+      "int GetRewardMaterialNum()"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ConditionCheck",
+        "DataSync"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "GameRuleMain",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "GameRuleMain",
+    "score": 0.4,
+    "provides": [
+      "void OnHammerDamage(ProductBase product, Vector3 hitPosition, int raycastHittedIndex)",
+      "void ChangeHammer(GameEvent gameEvent)",
+      "void AddExp(int machineID, int value)",
+      "void AddMachine(int machineID)",
+      "void RemoveMachine(int machineID)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "GameRuleBase",
+      "HammerInfo",
+      "IMessageController",
+      "IMessagePort"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger",
+        "StateControl"
+      ],
+      "minor": [
+        "Despawn",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "GameRuleOutGame",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "GameRuleOutGame",
+    "score": 0.4,
+    "provides": [
+      "void SetNewWorldFactory(WorldSlot winFactory)",
+      "void UpdateLogic(float deltaTime)",
+      "void OnHammerDamage(ProductBase product, Vector3 hitPosition, int raycastHittedIndex)",
+      "void OnEnableRule()",
+      "void OnDisableRule()"
+    ],
+    "requires": [
+      "GameModeMain",
+      "GameRuleBase",
+      "IMessageController",
+      "IMessagePort",
+      "WorldSlot"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "ValueModification",
+        "DataSync"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "GlobalConstants",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Config",
+    "system": "GlobalConstants",
+    "score": 0.4,
+    "provides": [
+      "string GetGradeIconName(int grade)",
+      "string GetGradeBGName(int grade)",
+      "string GetGachaBGGrade(int grade)",
+      "string GetGachaGradeImage(int grade)",
+      "string GetGachaRewardCardGradeImage(int grade)"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "HammerInfo",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Data",
+    "system": "HammerInfo",
+    "score": 0.4,
+    "provides": [
+      "string GetHammerName(bool flip)",
+      "string GetHammeringVFXName()",
+      "void SetHammeringVFX(string vfxName)",
+      "void SetHammerInfo(GameEvent gameEvent)"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "InAppPackageEffect",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "UX",
+    "system": "InAppPackageEffect",
+    "score": 0.4,
+    "provides": [
+      "bool IsOnEffect(PackageEffectID effectID)",
+      "void SetEffectOn(int packageTableID, bool b)",
+      "void DebugPrint()",
+      "bool IsOnEffect(PackageEffectID effectID)",
+      "void SetEffectOn(int packageTableID, bool b)"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "IntroMain",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "IntroMain",
+    "score": 0.4,
+    "provides": [
+      "void Update()",
+      "void OnClickSkip()",
+      "void SceneFastMove()",
+      "void SceneNormalMove()"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ResponseTrigger"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Machine",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Entity",
+    "system": "Machine",
+    "score": 0.4,
+    "provides": [
+      "void Awake()",
+      "void SetData(double newPower, float newSpeed, int newMaxDuration, bool refreshDuration)",
+      "Transform GetHittedNode()",
+      "void TurnOff(bool returnToOwner)",
+      "void GoAttack()"
+    ],
+    "requires": [
+      "AnimState",
+      "GameModeMain",
+      "IMachineAnimEventReceiver",
+      "IMessageController",
+      "IMessagePort"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResourceTransfer",
+        "ConditionCheck"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "MachineEmoticon",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Entity",
+    "system": "MachineEmoticon",
+    "score": 0.4,
+    "provides": [
+      "void Awake()",
+      "void TurnOn()",
+      "void SetParent(Machine machine)",
+      "void TurnOff(bool returnToOwner)",
+      "EmoticonType GetEmoticonType()"
+    ],
+    "requires": [
+      "AttachEffectNode",
+      "EmoticonType",
+      "ParticleSystem",
+      "PooledGameObject"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "Manager",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Entity",
+    "system": "Manager",
+    "score": 0.4,
+    "provides": [
+      "bool SetStatData(ManagerStat stat )",
+      "void SetData(float fixSpeed, float moveSpeed)",
+      "SkeletonMecanim GetSkeletonMechanim()",
+      "void TurnOff(bool returnToOwner)",
+      "float GetTimeSecByMoveSpeed(float distance)"
+    ],
+    "requires": [
+      "AnimState",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort",
+      "Machine"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "DataSync",
+        "ResourceTransfer"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ManagerStat",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "ManagerStat",
+    "score": 0.4,
+    "provides": [
+      "int GetTotalStat()",
+      "bool IsValid()",
+      "bool SetData(long guid, string textID, int id, string shapeName, int fixSpeed, int moveSpeed, int stamina)",
+      "void DebugPrint()"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "AddAchievementCountMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "AddBuyGachaMachineExpMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "AddMachineExpMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "AddNewMachineMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "AddNewProductGroupIDMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "AddTuningMaterialMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "AddUserInfoIntValueMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "IntUserInfoIndex"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "AddUserIntDataMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "IntUserInfoIndex"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "AttachProductTextHPMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WorldSpaceWindowManager> sender, WorldSpaceWindowManager controller)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "ProductBase",
+      "WorldSpaceWindowManager"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "BuyGachaMachineMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GachaType",
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ChangeCameraMoveLimitMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ChangeGameRuleMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "GameRuleID",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ChangeHammeringInfoMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameEvent",
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ChangeProductMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ChangeProductSupplyModeMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "DetachProductTextHPMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WorldSpaceWindowManager> sender, WorldSpaceWindowManager controller)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "ProductBase",
+      "WorldSpaceWindowManager"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "DisplacementManagerMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "EnterWorldFactoryMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "FactoryLevelSetMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "FactoryOnOffControlMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "FinishBoostMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameEvent",
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "FinishTutorialMissionNumMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "GetTiredMachineMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<ProductionLine> sender, ProductionLine controller)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "Manager",
+      "ProductionLine"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "GotoIdleManagerMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<ProductionLine> sender, ProductionLine controller)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "Manager",
+      "ProductionLine"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "HealMachineMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "Machine"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "InAppPuchaseSuccessMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "SubscriptionInfo"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "MachineInfoSelectMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction",
+      "MachineStatIconComponent"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "MachineLevelUpgradeMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ManagerEmployMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "MountMachineMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "MoveGameNodeIndexMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "GameNodeIndex",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OnOffGameNodeIndexMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "GameNodeIndex",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OnOpenClickedWorldSlotMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "WorldSlot"
+    ],
+    "tags": {
+      "major": [
+        "ConditionCheck",
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenFactoryLineMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenGachaResultMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GachaResult",
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenGachaResultWinMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "GachaResult",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenMachineGachaProbWinMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "OpenUpdateNoticeMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "PlacementManagerMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "PlayNextTutorialMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshContentsUILockStatusMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshGachaInfoMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshMachineBuyComponentMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "MachineBuyComponent"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshMachineInfoMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshMachineMountComponentMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "MachineMountComponent"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshMachineStatComponentType2Msg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "MachineStatComponent"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshReddotsMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "ReddotNotificationID"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RefreshTutorialMissionNumMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ReloadGameMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "UserInfo"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RemoveEmoticonMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RemoveMachineMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "RemoveProductGroupIDMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ReplaceMachineFromWorldFactoryMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ReplaceManagerFromWorldFactoryMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SellOffMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SendSignalToGameDescripterMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SendTutorialActionSignalMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SendTutorialConditionSignalMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SendTutorialMissionNumMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SetChallangeJoinCostMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SetInAppPackageEffectStatusMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SetMachineDataMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "Machine"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SetManagerDataMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SetUpChallengeInfoMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "GameRuleChallenge",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SetupWorldFactoryUIMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SetUserIntDataMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "IntUserInfoIndex"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SetWorldSlotShapeMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ShowCloudSaveResultMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ShowUIEffectMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<WindowID, WindowManager> sender, WindowManager controller)",
+      "bool IsOverDelay()",
+      "void AddElapsedTime(float time)"
+    ],
+    "requires": [
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl",
+        "ConditionCheck",
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SlotLevelUpgradeMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SlotOnOffMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "StartBoostMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "BonusFactor",
+      "ConfigCommonTable",
+      "GameEvent",
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "StartChallengeMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "StatChangeBroadcastMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)",
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)",
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)",
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction",
+      "RefreshStatType"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SuggestBoostMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameEvent",
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SupplyMachineUpgradeMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "UnmountMachineMsg",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "Messages",
+    "score": 0.4,
+    "provides": [
+      "bool Execute(IMessagePort<GameModeMain> sender, GameModeMain controller)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IMessageAction"
+    ],
+    "tags": {
+      "major": [
+        "FlowControl"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "NormalProductMaker",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "NormalProductMaker",
+    "score": 0.4,
+    "provides": [],
+    "requires": [
+      "ProductMakerBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Product",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Product",
+    "score": 0.4,
+    "provides": [
+      "bool IsMaxStep()"
+    ],
+    "requires": [
+      "ProductBase"
+    ],
+    "tags": {
+      "major": [
+        "ConditionCheck"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ProductChallenge",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "ProductChallenge",
+    "score": 0.4,
+    "provides": [
+      "bool SetStep(Sprite sprite, double hp, int step)",
+      "void TurnOff(bool returnToOwner)",
+      "void OnLineMode(bool b)"
+    ],
+    "requires": [
+      "ProductBase"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ReddotNotificationController",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Message",
+    "system": "ReddotNotificationController",
+    "score": 0.4,
+    "provides": [
+      "void Init(Injector injector)",
+      "void AddSubscriber(ReddotNotificationComponent newSubscriber)",
+      "void AddSubscriber(ReddotNotificationComponent newSubscriber, ReddotNotificationID id)",
+      "void RemoveSubscriber(ReddotNotificationComponent remSubscriber)",
+      "void RefreshAll()"
+    ],
+    "requires": [
+      "CostCalculator",
+      "GameModeMain",
+      "IMessageController",
+      "IMessagePort",
+      "ITableContainer"
+    ],
+    "tags": {
+      "major": [
+        "DataSync",
+        "ValueModification"
+      ],
+      "minor": [
+        "Despawn",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "Shipper",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Entity",
+    "system": "Shipper",
+    "score": 0.4,
+    "provides": [
+      "void Init(System.Action<ProductBase> shipCallback, System.Action<ProductBase> wallColliderCallback)"
+    ],
+    "requires": [
+      "PooledGameObject",
+      "ProductBase",
+      "ShipperWallCollider",
+      "System.Action"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ShipperWallCollider",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "ShipperWallCollider",
+    "score": 0.4,
+    "provides": [
+      "void Init(System.Action<ProductBase> wallColliderCallback)"
+    ],
+    "requires": [
+      "ProductBase",
+      "System.Action"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "SoundManager",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Manager",
+    "system": "SoundManager",
+    "score": 0.4,
+    "provides": [
+      "void PlaySFX(SFXIndex index)",
+      "void PlayBGM()",
+      "void StopBGM()",
+      "void SetBGMOn(bool b, bool save)",
+      "void SetSFXOn(bool b, bool save)"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "StateControl"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "StatRefresher",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "StatRefresher",
+    "score": 0.4,
+    "provides": [
+      "void FactoryStatRefresh(IGameRule ruleMain, GameStatCalculator gameStatCalculator)",
+      "void MachineStatRefresh(Machine mountedMachine, GameStatCalculator gameStatCalculator,\r\n                                int machineLevel, int slotLevel, bool refreshDuration, bool addHeal)",
+      "void RefreshSupplyMachineStat(ProductionLine line, int productGroupID, SupplyMachineLevelUpTableData tableData,\r\n                                            GameStatCalculator gameStatCalculator)"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ADMoneyBonusFactorTable",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Model",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "ITableData GetData(int factoryLevel)",
+      "float GetFactor(int factoryLevel, int selloffCount)",
+      "int GetMax()"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "BoxAdvancedTable",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Data",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "ITableData GetData(int purchaseCount)",
+      "int GetMax()",
+      "bool JsonToByte(string path, string json)"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "BoxSameMachineSelect",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Data",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "int GetMaxProbabilityValue()",
+      "int GetMaxProbabilityValue(List<int> selectedLevel)",
+      "int GetMachineLevelByRandom(int levelProbability, List<int> selectableLevels)"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "BoxSuperTable",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Table",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "ITableData GetData(int purchaseCount)",
+      "int GetMax()",
+      "bool JsonToByte(string path, string json)",
+      "void LoadingPostProcess()",
+      "void DebugPrint()"
+    ],
+    "requires": [
+      "ITable",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "FactoryRebirthRewardTable",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Data",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "ITableData GetData(int factoryLevel)",
+      "int GetMax()",
+      "bool JsonToByte(string path, string json)"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "FactoryRebirthTable",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Model",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "ITableData GetData(int rebirthCount)",
+      "int GetMax()",
+      "bool JsonToByte(string path, string json)"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "GoodsTable",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Data",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "ITableData GetData(int id)",
+      "int GetMax()",
+      "bool JsonToByte(string path, string json)"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "ITable",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Interface",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "ITableContainer",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Interface",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [],
+    "requires": [
+      "IInjectable",
+      "ITable",
+      "ITableContainer",
+      "ITableData"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "LanguageTable",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Data",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "string GetData(string textID)",
+      "ITableData GetData(int id)",
+      "int GetMax()"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "LanguageTextHolder",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void AddData(Language type, List<LanguageTableData> newDatas)",
+      "string GetData(string id)",
+      "void ChangeLanguage(Language newLanguage)",
+      "void AddChild(LanguageText child)",
+      "void RemoveChild(LanguageText remove)"
+    ],
+    "requires": [
+      "LanguageText"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Find",
+        "Despawn"
+      ]
+    }
+  },
+  {
+    "fileId": "LevelGachaBoxTable",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Model",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "MachineGrade GetGradeByRandom(double probability)",
+      "ITableData GetData(int level)",
+      "int GetMax()"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "MachineTable",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Model",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "ITableData GetDataByIndex(int index)",
+      "ITableData GetData(int machineID)",
+      "ITableData GetByOrder(int order)"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "MachineTuningExpTable",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Data",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "int GetRequiredExp(int grade)",
+      "ITableData GetData(int tuningLevel)",
+      "int GetAccumExp(int level, int grade)"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "MachineTuningMaterialTable",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Data",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "int GetMaterialCount(int grade)",
+      "ITableData GetData(int tuningLevel)",
+      "int GetMax()"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "ManagerTable",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Model",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "ITableData GetData(int managerId)",
+      "int GetMax()",
+      "bool JsonToByte(string path, string json)"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "ProductGroupTable",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Data",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "ITableData GetData(int id)",
+      "string GetStringID(int id)",
+      "int GetMax()"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "RouletteTable",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Model",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "ITableData GetData(int key)",
+      "int GetMax()",
+      "bool JsonToByte(string path, string json)"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "TableList",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Config",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "VehicleTable",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Model",
+    "system": "Tables",
+    "score": 0.4,
+    "provides": [
+      "void DebugPrint()",
+      "void PostProcess()",
+      "ITableData GetData(int vehicleID)",
+      "int GetMax()",
+      "bool JsonToByte(string path, string json)"
+    ],
+    "requires": [
+      "ITable",
+      "ITableData",
+      "ITableLoader"
+    ],
+    "tags": {
+      "major": [
+        "DataSync"
+      ],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "ContentTutorialManager",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Service",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [],
+    "requires": [
+      "GameModeMain",
+      "IInjectable",
+      "IMessageController"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "FreeTutorial1",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "FreeTutorial2",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "FreeTutorial3",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "override void Update()",
+      "void Finish()",
+      "void AddHealCount()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "FreeTutorial4",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "override void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "FreeTutorial5",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "override void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "FreeTutorial5_2",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "override void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "IdleMoneyTutorial1",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "IdleMoneyTutorial2",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "LabTutorial1",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "LabTutorial2",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "LabTutorial3",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "LabTutorial4",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "NewFactoryTutorial1",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "NewFactoryTutorial2",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "NewFactoryTutorial3",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "NewFactoryTutorial4",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial1_13",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial1_8",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial4_2",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial4_3",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial4_4",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial4_5",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial5_3",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial5_4",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial5_6",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial5_7",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial6_4",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial7_4",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial7_5",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial8_3",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial8_4",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial9_5",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial9_6",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial9_7",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "Tutorial9_8",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "TutorialManager",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Service",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "int GetRestartID(TutorialType type, int id)",
+      "void UpdateLogic(float deltaTime)",
+      "void UpdateFreeTutorial(float deltaTime)",
+      "void StartFreeTutorial(int order)",
+      "int GetCurrentTutorialOrder(TutorialType type)"
+    ],
+    "requires": [
+      "GameModeMain",
+      "IInjectable",
+      "IMessageController"
+    ],
+    "tags": {
+      "major": [
+        "ConditionCheck",
+        "StateControl",
+        "ValueModification"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "TutorialTextChat",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "Tutorial",
+    "score": 0.4,
+    "provides": [
+      "void Enter()",
+      "void Update()",
+      "string GetTextID()",
+      "void Finish()"
+    ],
+    "requires": [
+      "TutorialBase"
+    ],
+    "tags": {
+      "major": [],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "TweenAnimRestarter",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "TweenAnimRestarter",
+    "score": 0.4,
+    "provides": [],
+    "requires": [
+      "DOTweenAnimation"
+    ],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  },
+  {
+    "fileId": "MachineGachaProbComponent",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(bool currentLevel, int level, float prob1, float prob2, float prob3, float prob4, float prob5)"
+    ],
+    "requires": [
+      "LanguageText",
+      "TextMeshProUGUI"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "MachineGachaProbWin",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "View",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(string titleTextID,string descTextID, params object[] args)",
+      "UniTask Open()",
+      "bool InitWindow(WindowManager owner, IMessageController<WindowID, WindowManager> messageController)",
+      "void OnClickClose()"
+    ],
+    "requires": [
+      "LanguageText",
+      "MachineGachaProbComponent",
+      "WindowBase"
+    ],
+    "tags": {
+      "major": [
+        "StateControl",
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "MachineMountComponent",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void Init(System.Action<MachineMountComponent> onClickCallback)",
+      "void SetData(int worldFactoryIndex, int lineIndex, int slotIndex, int machineID,\r\n                        int targetWorldFactoryIndex, int targetLineIndex, int targetSlotIndex,\r\n                            ResourceAllocator resourceAllocator,  string machineUIName,\r\n                            Sprite gradeImg, int level, bool used, bool sameCurrentFactory)",
+      "void TurnOn()",
+      "void TurnOff()",
+      "void SetUsed(bool b)"
+    ],
+    "requires": [
+      "LanguageText",
+      "MachineMountComponent",
+      "System.Action",
+      "TextMeshProUGUI",
+      "UISpineMachine"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger",
+        "ConditionCheck"
+      ],
+      "minor": [
+        "Find",
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ManagerMountComponent",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void Init(System.Action<ManagerStat> onClickCallback)",
+      "void SetData(ManagerStat stat, ManagerTableData tableData, Sprite gradeIcon, int workingWorldFactoryIndex, \r\n        int workingLineIndex, bool sameCurrentFactory, bool working)",
+      "ManagerStat GetStat()",
+      "void TurnOn()",
+      "void TurnOff()"
+    ],
+    "requires": [
+      "LanguageText",
+      "ManagerStat",
+      "SkeletonGraphic",
+      "System.Action",
+      "TextMeshProUGUI"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "ProductSlotComponent",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetData(string nameTextID, string price, Sprite productImg)",
+      "void MakeInvalid()"
+    ],
+    "requires": [
+      "LanguageText",
+      "TextMeshProUGUI"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "ReddotNotificationComponent",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void SetOn(bool b)",
+      "void SetArguments(int arg0, int arg1)"
+    ],
+    "requires": [
+      "ReddotNotificationID"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "SpeedButtonComponent",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "void Init(int index, string text, System.Action onClick, System.Action<int> onLockClick)",
+      "void SetLock(bool b)",
+      "void SetLockLevel(int level)",
+      "void ShowArrowImg(bool b)",
+      "void RefreshLockLevelTxt()"
+    ],
+    "requires": [
+      "LanguageText",
+      "System.Action",
+      "TextMeshProUGUI"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger",
+        "DataSync"
+      ],
+      "minor": [
+        "Assign",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "UISpineMachine",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Entity",
+    "system": "UI",
+    "score": 0.4,
+    "provides": [
+      "SkeletonGraphic GetSkeleton()"
+    ],
+    "requires": [
+      "PooledGameObject",
+      "SkeletonGraphic"
+    ],
+    "tags": {
+      "major": [],
+      "minor": [
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "WorldBG",
+    "layer": "Domain",
+    "genre": "Idle",
+    "role": "Component",
+    "system": "WorldBG",
+    "score": 0.4,
+    "provides": [],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  }
+]

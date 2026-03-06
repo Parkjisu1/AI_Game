@@ -1,0 +1,237 @@
+{
+  "fileId": "ParticleEffectsLibrary",
+  "filePath": "VFX Library\\ParticleEffectsLibrary.cs",
+  "namespace": "ETFXPEL",
+  "layer": "Domain",
+  "genre": "Slg",
+  "role": "Model",
+  "system": "VFX Library",
+  "score": 0.4,
+  "usings": [
+    "UnityEngine",
+    "System.Collections",
+    "System.Collections.Generic"
+  ],
+  "classes": [
+    {
+      "className": "ParticleEffectsLibrary",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "GlobalAccess",
+          "fieldType": "ParticleEffectsLibrary",
+          "accessModifier": "public",
+          "isStatic": true,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "TotalEffects",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0"
+        },
+        {
+          "fieldName": "CurrentParticleEffectIndex",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0"
+        },
+        {
+          "fieldName": "CurrentParticleEffectNum",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "0"
+        },
+        {
+          "fieldName": "ParticleEffectDisplayNames",
+          "fieldType": "string[]",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "ParticleEffectSpawnOffsets",
+          "fieldType": "Vector3[]",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "ParticleEffectLifetimes",
+          "fieldType": "float[]",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "ParticleEffectPrefabs",
+          "fieldType": "GameObject[]",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "effectNameString",
+          "fieldType": "string",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "\"\""
+        },
+        {
+          "fieldName": "currentActivePEList",
+          "fieldType": "List<Transform>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "spawnPosition",
+          "fieldType": "Vector3",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "Vector3.zero"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "GetCurrentPENameString",
+          "accessModifier": "public",
+          "returnType": "string",
+          "parameters": [],
+          "signature": "string GetCurrentPENameString()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "PreviousParticleEffect",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void PreviousParticleEffect()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "NextParticleEffect",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void NextParticleEffect()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SpawnParticleEffect",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Vector3",
+              "paramName": "positionInWorldToSpawn"
+            }
+          ],
+          "signature": "void SpawnParticleEffect(Vector3 positionInWorldToSpawn)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Spawn"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "string GetCurrentPENameString()",
+    "void PreviousParticleEffect()",
+    "void NextParticleEffect()",
+    "void SpawnParticleEffect(Vector3 positionInWorldToSpawn)"
+  ],
+  "requires": [
+    "ParticleEffectsLibrary"
+  ],
+  "tags": {
+    "major": [],
+    "minor": [
+      "Find",
+      "Spawn"
+    ]
+  },
+  "uses": [
+    "CurrentParticleEffectNum",
+    "Debug",
+    "ParticleEffectLifetimes",
+    "TotalEffects"
+  ],
+  "usedBy": []
+}

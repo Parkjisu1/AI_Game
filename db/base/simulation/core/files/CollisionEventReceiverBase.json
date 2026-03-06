@@ -1,0 +1,222 @@
+{
+  "fileId": "CollisionEventReceiverBase",
+  "filePath": "CollisionEventReceiverBase.cs",
+  "namespace": "",
+  "layer": "Core",
+  "genre": "Simulation",
+  "role": "Component",
+  "system": "CollisionEventReceiverBase",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "System"
+  ],
+  "classes": [
+    {
+      "className": "CollisionEventReceiverBase",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "myCollider",
+          "fieldType": "Collider2D",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "colliderOnTimer",
+          "fieldType": "AlarmTimer",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "repeat",
+          "fieldType": "bool",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Init",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Collider2D",
+              "paramName": "collider"
+            },
+            {
+              "paramType": "float",
+              "paramName": "alarmTimerDiff"
+            },
+            {
+              "paramType": "bool",
+              "paramName": "repeat"
+            },
+            {
+              "paramType": "System.Action",
+              "paramName": "timerCallback"
+            }
+          ],
+          "signature": "void Init(Collider2D collider, float alarmTimerDiff, bool repeat, System.Action timerCallback)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "SetTimer",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "alarmTimerDiff"
+            },
+            {
+              "paramType": "System.Action",
+              "paramName": "timerCallback"
+            }
+          ],
+          "signature": "void SetTimer(float alarmTimerDiff, System.Action timerCallback)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "GetColliderEnable",
+          "accessModifier": "public",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool GetColliderEnable()",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "SetColliderOnOff",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "OnOff"
+            },
+            {
+              "paramType": "bool",
+              "paramName": "controlTimer"
+            }
+          ],
+          "signature": "void SetColliderOnOff(bool OnOff, bool controlTimer)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "SetTriggerMode",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "bool",
+              "paramName": "b"
+            }
+          ],
+          "signature": "void SetTriggerMode(bool b)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ValueModification",
+          "minorTag": "Assign"
+        },
+        {
+          "methodName": "UpdateLogic",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "deltaTime"
+            }
+          ],
+          "signature": "void UpdateLogic(float deltaTime)",
+          "isStatic": false,
+          "isVirtual": true,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Init(Collider2D collider, float alarmTimerDiff, bool repeat, System.Action timerCallback)",
+    "void SetTimer(float alarmTimerDiff, System.Action timerCallback)",
+    "bool GetColliderEnable()",
+    "void SetColliderOnOff(bool OnOff, bool controlTimer)",
+    "void SetTriggerMode(bool b)",
+    "void UpdateLogic(float deltaTime)"
+  ],
+  "requires": [
+    "AlarmTimer",
+    "Collider2D",
+    "System.Action"
+  ],
+  "tags": {
+    "major": [
+      "ValueModification",
+      "DataSync"
+    ],
+    "minor": [
+      "Assign",
+      "Find"
+    ]
+  },
+  "uses": [
+    "AlarmTimer"
+  ],
+  "usedBy": []
+}

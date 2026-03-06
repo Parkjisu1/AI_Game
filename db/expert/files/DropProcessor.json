@@ -1,0 +1,35 @@
+{
+  "fileId": "DropProcessor",
+  "project": "DropTheCat",
+  "layer": "Domain",
+  "genre": "Puzzle",
+  "role": "Processor",
+  "phase": 2,
+  "namespace": "DropTheCat.Domain",
+  "className": "DropProcessor",
+  "baseClass": "Singleton<DropProcessor>",
+  "score": 0.6,
+  "provides": [
+    "void CheckAndProcessDrops()",
+    "bool IsDropping { get; }",
+    "void RegisterCat(CatController cat)",
+    "void RegisterHole(HoleController hole)",
+    "void ClearTrackedObjects()"
+  ],
+  "requires": [
+    "GridManager.GetCell/GetCellOccupant",
+    "ColorMatcher.CheckMatch/IsAllCatsMatched ([SerializeField])",
+    "ScoreCalculator.CalculateStars/CalculateCoinReward ([SerializeField])",
+    "CatController.PlayDropAnimation",
+    "HoleController.OnCatDropped",
+    "EventManager.Publish/Subscribe",
+    "SoundManager.PlaySFX"
+  ],
+  "definesTypes": ["DropCandidate (struct, internal)"],
+  "tags": {
+    "major": ["FlowControl", "ConditionCheck", "ResponseTrigger"],
+    "minor": ["Find", "Validate", "Notify", "Iterate", "Despawn"]
+  },
+  "sourcePath": "E:\\AI\\projects\\DropTheCat\\output\\DropProcessor.cs",
+  "timestamp": "2026-02-10T05:45:00Z"
+}

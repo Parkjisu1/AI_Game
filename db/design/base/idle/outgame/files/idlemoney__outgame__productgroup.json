@@ -1,0 +1,123 @@
+{
+  "designId": "idlemoney__outgame__productgroup",
+  "project": "IdleMoney",
+  "domain": "OutGame",
+  "genre": "Idle",
+  "system": "ProductGroup",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "config",
+  "balance_area": "item",
+  "source_file": "ProductGroup.json",
+  "table_stats": {
+    "row_count": 15,
+    "columns": [
+      "ProductGroupID",
+      "TextID"
+    ],
+    "numeric_columns": [
+      "ProductGroupID"
+    ],
+    "text_columns": [
+      "TextID"
+    ]
+  },
+  "content": {
+    "summary": "ProductGroup 데이터 테이블 (15행, 2열)",
+    "parameters": {
+      "ProductGroupID": "0",
+      "TextID": "Product_Group_Name_0"
+    },
+    "balance_points": [
+      {
+        "variable": "ProductGroupID",
+        "min_value": 0,
+        "max_value": 14,
+        "avg_value": 7,
+        "growth_ratio": 14,
+        "data_points": 15,
+        "impact": "high"
+      }
+    ],
+    "edge_cases": [],
+    "references": []
+  },
+  "data": [
+    {
+      "ProductGroupID": "0",
+      "TextID": "Product_Group_Name_0"
+    },
+    {
+      "ProductGroupID": "1",
+      "TextID": "Product_Group_Name_1"
+    },
+    {
+      "ProductGroupID": "2",
+      "TextID": "Product_Group_Name_2"
+    },
+    {
+      "ProductGroupID": "3",
+      "TextID": "Product_Group_Name_3"
+    },
+    {
+      "ProductGroupID": "4",
+      "TextID": "Product_Group_Name_4"
+    },
+    {
+      "ProductGroupID": "5",
+      "TextID": "Product_Group_Name_5"
+    },
+    {
+      "ProductGroupID": "6",
+      "TextID": "Product_Group_Name_6"
+    },
+    {
+      "ProductGroupID": "7",
+      "TextID": "Product_Group_Name_7"
+    },
+    {
+      "ProductGroupID": "8",
+      "TextID": "Product_Group_Name_8"
+    },
+    {
+      "ProductGroupID": "9",
+      "TextID": "Product_Group_Name_9"
+    },
+    {
+      "ProductGroupID": "10",
+      "TextID": "Product_Group_Name_10"
+    },
+    {
+      "ProductGroupID": "11",
+      "TextID": "Product_Group_Name_11"
+    },
+    {
+      "ProductGroupID": "12",
+      "TextID": "Product_Group_Name_12"
+    },
+    {
+      "ProductGroupID": "13",
+      "TextID": "Product_Group_Name_13"
+    },
+    {
+      "ProductGroupID": "14",
+      "TextID": "Product_Group_Name_14"
+    }
+  ],
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from ProductGroup.json (15 rows)",
+      "note": "Live game data import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T10:32:54.001Z"
+}

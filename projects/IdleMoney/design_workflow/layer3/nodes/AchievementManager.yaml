@@ -1,0 +1,87 @@
+metadata:
+  nodeId: "AchievementManager"
+  version: "1.0.0"
+  phase: 2
+  role: "Manager"
+
+dependencies:
+  internal:
+    - "Singleton"
+    - "CurrencyManager"
+    - "DataManager"
+    - "EventManager"
+  external:
+    - "UnityEngine.MonoBehaviour"
+    - "System.Collections.Generic"
+
+contract:
+  provides:
+    - "achievement_track"
+    - "achievement_reward"
+    - "star_progression"
+  requires:
+    - "currency_system"
+    - "data_table"
+    - "event_system"
+
+tags:
+  layer: "Domain"
+  genre: "Idle"
+  role: "Manager"
+  system: "AchievementSystem"
+  majorFunctions:
+    - "StateControl"
+    - "ConditionCheck"
+    - "ResourceTransfer"
+    - "DataSync"
+  minorFunctions:
+    - "Compare"
+    - "Assign"
+    - "Aggregate"
+    - "Notify"
+    - "Iterate"
+
+logicFlow:
+  - step: 1
+    tag: "ResponseTrigger.Iterate"
+    action: "ListenEvents: EventManager에서 14개 카테고리별 업적 트리거 이벤트 구독 등록"
+    next: 2
+  - step: 2
+    tag: "ValueModification.Assign"
+    action: "IncrementCounter(achievementID): 수신된 이벤트의 achievementID에 해당하는 누적 카운터 +1"
+    next: 3
+  - step: 3
+    tag: "ConditionCheck.Compare"
+    action: "CheckTier: 현재 카운터 >= AchievementTierTable[achievementID][currentTier] 임계값 비교(최대 15티어)"
+    next: 4
+  - step: 4
+    tag: "StateControl.Assign"
+    action: "EnableReward: 달성된 티어에 보상 수령 가능 상태 플래그 설정, UI 알림 배지 활성화"
+    next: 5
+  - step: 5
+    tag: "ResourceTransfer.Assign"
+    action: "ClaimReward: 플레이어 수동 수령 요청 처리, AchievementRewardTable 기반 보상 지급"
+    next: 6
+  - step: 6
+    tag: "ValueModification.Aggregate"
+    action: "UpdateStars: 획득 별 합산, 스타 진행도 UI 갱신 이벤트 발행"
+    next: 1
+
+referencePatterns:
+  - source: "idlemoney__meta__achievement_system"
+    pattern: "14카테고리 × 15티어 구조, 별 시스템 집계 및 업적 카운터 관리 설계"
+  - source: "idlemoney__balance__factory_progression"
+    pattern: "업적 해금 연동 팩토리 레벨 조건 참조"
+
+codeHints:
+  patterns:
+    - "SerializeField for Inspector"
+    - "MessagePack serialization"
+    - "DontDestroyOnLoad singleton"
+    - "Dictionary<string, int> for achievement counters"
+    - "EventManager multi-topic subscription pattern"
+  avoidPatterns:
+    - "Find/FindObjectOfType for UI"
+    - "dynamic UI creation"
+    - "hardcoded magic numbers"
+    - "Storing full achievement data in PlayerPrefs (use MessagePack)"

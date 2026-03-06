@@ -1,0 +1,883 @@
+{
+  "fileId": "GameStatCalculator",
+  "filePath": "GameStatCalculator.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Tycoon",
+  "role": "Service",
+  "system": "GameStatCalculator",
+  "score": 0.4,
+  "usings": [
+    "System",
+    "System.IO",
+    "UnityEngine",
+    "System.Collections.Generic"
+  ],
+  "classes": [
+    {
+      "className": "GameStatCalculator",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [
+        "IInjectable"
+      ],
+      "fields": [
+        {
+          "fieldName": "tables",
+          "fieldType": "ITableContainer",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": true,
+          "initialValue": null
+        },
+        {
+          "fieldName": "userInfo",
+          "fieldType": "UserInfo",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": true,
+          "initialValue": null
+        },
+        {
+          "fieldName": "bonusFactor",
+          "fieldType": "BonusFactor",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new BonusFactor()"
+        },
+        {
+          "fieldName": "labFactor",
+          "fieldType": "LabStats",
+          "accessModifier": "protected",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "new LabStats()"
+        },
+        {
+          "fieldName": "productProfit",
+          "fieldType": "double",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Init",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "Injector",
+              "paramName": "injector"
+            }
+          ],
+          "signature": "void Init(Injector injector)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetHammerPower",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [],
+          "signature": "double GetHammerPower()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetProductProfit",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "double",
+              "paramName": "productTableProfit"
+            },
+            {
+              "paramType": "int",
+              "paramName": "factoryIndex"
+            }
+          ],
+          "signature": "double GetProductProfit(double productTableProfit, int factoryIndex)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetProductBoosts",
+          "accessModifier": "private",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "factoryIndex"
+            }
+          ],
+          "signature": "double GetProductBoosts(int factoryIndex)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMachinePower",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "accumTuningExp"
+            },
+            {
+              "paramType": "int",
+              "paramName": "currentTuningLevel"
+            }
+          ],
+          "signature": "double GetMachinePower(int accumTuningExp, int currentTuningLevel)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMachineBasicPower",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "machineID"
+            },
+            {
+              "paramType": "int",
+              "paramName": "slotLevel"
+            }
+          ],
+          "signature": "double GetMachineBasicPower(int machineID, int slotLevel)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMachinePower",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "machineID"
+            },
+            {
+              "paramType": "int",
+              "paramName": "machineLevel"
+            },
+            {
+              "paramType": "int",
+              "paramName": "slotLevel"
+            }
+          ],
+          "signature": "double GetMachinePower(int machineID, int machineLevel, int slotLevel)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMachineSpeed",
+          "accessModifier": "public",
+          "returnType": "float",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "machineID"
+            }
+          ],
+          "signature": "float GetMachineSpeed(int machineID)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMachineDuration",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "machineID"
+            }
+          ],
+          "signature": "int GetMachineDuration(int machineID)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMachinePowerBoost",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "machineID"
+            },
+            {
+              "paramType": "int",
+              "paramName": "machineLevel"
+            },
+            {
+              "paramType": "int",
+              "paramName": "machineExp"
+            }
+          ],
+          "signature": "double GetMachinePowerBoost(int machineID, int machineLevel, int machineExp)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMachinePowerBoost",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "machineID"
+            },
+            {
+              "paramType": "int",
+              "paramName": "machineLevel"
+            }
+          ],
+          "signature": "double GetMachinePowerBoost(int machineID, int machineLevel)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetPredictMachinePowerBoost",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "machineID"
+            },
+            {
+              "paramType": "int",
+              "paramName": "machineLevel"
+            },
+            {
+              "paramType": "bool",
+              "paramName": "useMachineExp"
+            }
+          ],
+          "signature": "double GetPredictMachinePowerBoost(int machineID, int machineLevel, bool useMachineExp)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMachineEfficiency",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "machineID"
+            },
+            {
+              "paramType": "int",
+              "paramName": "machineLevel"
+            },
+            {
+              "paramType": "int",
+              "paramName": "slotLevel"
+            }
+          ],
+          "signature": "double GetMachineEfficiency(int machineID, int machineLevel, int slotLevel)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetLevelUpMachinePower",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "machineID"
+            },
+            {
+              "paramType": "int",
+              "paramName": "machineLevel"
+            },
+            {
+              "paramType": "int",
+              "paramName": "slotLevel"
+            },
+            {
+              "paramType": "int",
+              "paramName": "addSlotLevel"
+            }
+          ],
+          "signature": "double GetLevelUpMachinePower(int machineID, int machineLevel, int slotLevel, int addSlotLevel)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetLevelUpMachineBasicPower",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "machineID"
+            },
+            {
+              "paramType": "int",
+              "paramName": "slotLevel"
+            },
+            {
+              "paramType": "int",
+              "paramName": "addSlotLevel"
+            }
+          ],
+          "signature": "double GetLevelUpMachineBasicPower(int machineID, int slotLevel, int addSlotLevel)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetSupplyMachineSpeedBoost",
+          "accessModifier": "public",
+          "returnType": "float",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "factoryIndex"
+            }
+          ],
+          "signature": "float GetSupplyMachineSpeedBoost(int factoryIndex)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetSupplyMachineMaxAmountBoost",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "factoryIndex"
+            }
+          ],
+          "signature": "int GetSupplyMachineMaxAmountBoost(int factoryIndex)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetManagerMoveSpeed",
+          "accessModifier": "public",
+          "returnType": "float",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "baseMoveSpeed"
+            }
+          ],
+          "signature": "float GetManagerMoveSpeed(int baseMoveSpeed)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetManagerFixSpeed",
+          "accessModifier": "public",
+          "returnType": "float",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "baseFixpeed"
+            }
+          ],
+          "signature": "float GetManagerFixSpeed(int baseFixpeed)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetSupplyMachineAmountBoost",
+          "accessModifier": "public",
+          "returnType": "float",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "factoryIndex"
+            }
+          ],
+          "signature": "float GetSupplyMachineAmountBoost(int factoryIndex)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "IsValid",
+          "accessModifier": "private",
+          "returnType": "bool",
+          "parameters": [],
+          "signature": "bool IsValid()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ConditionCheck",
+          "minorTag": null
+        },
+        {
+          "methodName": "GetBonusFactors",
+          "accessModifier": "public",
+          "returnType": "BonusFactor",
+          "parameters": [],
+          "signature": "BonusFactor GetBonusFactors()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetFactoryFactor",
+          "accessModifier": "public",
+          "returnType": "float",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "factorA"
+            },
+            {
+              "paramType": "float",
+              "paramName": "factorB"
+            },
+            {
+              "paramType": "int worldFactoryIndex =",
+              "paramName": "-1"
+            }
+          ],
+          "signature": "float GetFactoryFactor(float factorA, float factorB, int worldFactoryIndex = -1)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetRebirthFactor",
+          "accessModifier": "public",
+          "returnType": "float",
+          "parameters": [
+            {
+              "paramType": "float",
+              "paramName": "factorA"
+            }
+          ],
+          "signature": "float GetRebirthFactor(float factorA)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetBuildingLevelUpFactor",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "double",
+              "paramName": "factorA"
+            },
+            {
+              "paramType": "double",
+              "paramName": "factorB"
+            }
+          ],
+          "signature": "double GetBuildingLevelUpFactor(double factorA, double factorB)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetBuildingLevelUpFactorNOBuff",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "double",
+              "paramName": "factorA"
+            },
+            {
+              "paramType": "double",
+              "paramName": "factorB"
+            }
+          ],
+          "signature": "double GetBuildingLevelUpFactorNOBuff(double factorA, double factorB)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetSupplyMachineLevelUpFactor",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "double",
+              "paramName": "factorA"
+            },
+            {
+              "paramType": "double",
+              "paramName": "factorB"
+            }
+          ],
+          "signature": "double GetSupplyMachineLevelUpFactor(double factorA, double factorB)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetSlotLevelUpFactor",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "double",
+              "paramName": "factorA"
+            },
+            {
+              "paramType": "double",
+              "paramName": "factorB"
+            }
+          ],
+          "signature": "double GetSlotLevelUpFactor(double factorA, double factorB)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetSlotLevelUpFactorNOBuff",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "double",
+              "paramName": "factorA"
+            },
+            {
+              "paramType": "double",
+              "paramName": "factorB"
+            }
+          ],
+          "signature": "double GetSlotLevelUpFactorNOBuff(double factorA, double factorB)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetIdleCashReward",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "worldFactoryIndex"
+            }
+          ],
+          "signature": "double GetIdleCashReward(int worldFactoryIndex)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetMountedMachineCount",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [
+            {
+              "paramType": "MachineGrade",
+              "paramName": "grade"
+            },
+            {
+              "paramType": "int",
+              "paramName": "worldFactoryIndex"
+            }
+          ],
+          "signature": "int GetMountedMachineCount(MachineGrade grade, int worldFactoryIndex)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetLabItemTotalStat",
+          "accessModifier": "public",
+          "returnType": "float",
+          "parameters": [
+            {
+              "paramType": "CoinBuffID",
+              "paramName": "buffID"
+            }
+          ],
+          "signature": "float GetLabItemTotalStat(CoinBuffID buffID)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "RefreshLabStats",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void RefreshLabStats()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "DataSync",
+          "minorTag": null
+        },
+        {
+          "methodName": "GetLabItemStat",
+          "accessModifier": "public",
+          "returnType": "float",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "type"
+            },
+            {
+              "paramType": "int",
+              "paramName": "labItemID"
+            },
+            {
+              "paramType": "int",
+              "paramName": "level"
+            }
+          ],
+          "signature": "float GetLabItemStat(int type, int labItemID, int level)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "GetCurrentADBonusRewardMoney",
+          "accessModifier": "public",
+          "returnType": "double",
+          "parameters": [],
+          "signature": "double GetCurrentADBonusRewardMoney()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Init(Injector injector)",
+    "double GetHammerPower()",
+    "double GetProductProfit(double productTableProfit, int factoryIndex)",
+    "double GetMachinePower(int accumTuningExp, int currentTuningLevel)",
+    "double GetMachineBasicPower(int machineID, int slotLevel)",
+    "double GetMachinePower(int machineID, int machineLevel, int slotLevel)",
+    "float GetMachineSpeed(int machineID)",
+    "int GetMachineDuration(int machineID)",
+    "double GetMachinePowerBoost(int machineID, int machineLevel, int machineExp)",
+    "double GetMachinePowerBoost(int machineID, int machineLevel)",
+    "double GetPredictMachinePowerBoost(int machineID, int machineLevel, bool useMachineExp)",
+    "double GetMachineEfficiency(int machineID, int machineLevel, int slotLevel)",
+    "double GetLevelUpMachinePower(int machineID, int machineLevel, int slotLevel, int addSlotLevel)",
+    "double GetLevelUpMachineBasicPower(int machineID, int slotLevel, int addSlotLevel)",
+    "float GetSupplyMachineSpeedBoost(int factoryIndex)"
+  ],
+  "requires": [
+    "BonusFactor",
+    "IInjectable",
+    "ITableContainer",
+    "Injector",
+    "LabStats",
+    "UserInfo"
+  ],
+  "tags": {
+    "major": [
+      "ConditionCheck",
+      "DataSync"
+    ],
+    "minor": [
+      "Find"
+    ]
+  },
+  "uses": [
+    "BonusFactor",
+    "Debug",
+    "GetMachinePower",
+    "GetProductBoosts",
+    "IInjectable",
+    "LabStats",
+    "Lev",
+    "Mathf"
+  ],
+  "usedBy": []
+}

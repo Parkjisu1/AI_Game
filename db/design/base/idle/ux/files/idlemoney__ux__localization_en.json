@@ -1,0 +1,122 @@
+{
+  "designId": "idlemoney__ux__localization_en",
+  "project": "IdleMoney",
+  "domain": "UX",
+  "genre": "Idle",
+  "system": "Localization_EN",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "config",
+  "balance_area": "text",
+  "source_file": "Language_English.json",
+  "table_stats": {
+    "row_count": 897,
+    "columns": [
+      "TextID",
+      "Message"
+    ],
+    "numeric_columns": [],
+    "text_columns": [
+      "TextID",
+      "Message"
+    ]
+  },
+  "content": {
+    "summary": "Localization_EN 데이터 테이블 (897행, 2열)",
+    "parameters": {
+      "TextID": "Product_Name_0_0",
+      "Message": "Plate"
+    },
+    "balance_points": [],
+    "edge_cases": [],
+    "references": []
+  },
+  "data": {
+    "_note": "Table truncated: 897 rows total. First 10 + last 5 shown.",
+    "_total_rows": 897,
+    "_columns": [
+      "TextID",
+      "Message"
+    ],
+    "sample_first": [
+      {
+        "TextID": "Product_Name_0_0",
+        "Message": "Plate"
+      },
+      {
+        "TextID": "Product_Name_0_1",
+        "Message": "Salt Bottle"
+      },
+      {
+        "TextID": "Product_Name_0_2",
+        "Message": "Kettle"
+      },
+      {
+        "TextID": "Product_Name_0_3",
+        "Message": "Mug Cup"
+      },
+      {
+        "TextID": "Product_Name_0_4",
+        "Message": "Tea Cup"
+      },
+      {
+        "TextID": "Product_Name_0_5",
+        "Message": "Coffee Maker"
+      },
+      {
+        "TextID": "Product_Name_1_0",
+        "Message": "Table Lamp"
+      },
+      {
+        "TextID": "Product_Name_1_1",
+        "Message": "Desk"
+      },
+      {
+        "TextID": "Product_Name_1_2",
+        "Message": "Chair"
+      },
+      {
+        "TextID": "Product_Name_1_3",
+        "Message": "Wooden Drawer"
+      }
+    ],
+    "sample_last": [
+      {
+        "TextID": "Special_Dungeon_Special_Reward",
+        "Message": "Special Reward"
+      },
+      {
+        "TextID": "Guide_Win_Loopy_Mine",
+        "Message": "Loopy Coin Mine"
+      },
+      {
+        "TextID": "Guide_Win_Loopy_Mine_Info",
+        "Message": "Destroy as many products as possible\nand gather Loopy coins!"
+      },
+      {
+        "TextID": "Guide_Win_Lab",
+        "Message": "Lab"
+      },
+      {
+        "TextID": "Guide_Win_Lab_Info",
+        "Message": "Get permanent research buffs!\nThey are crucial to your growth!"
+      }
+    ]
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from Language_English.json (897 rows)",
+      "note": "Live game data import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T10:32:53.965Z"
+}

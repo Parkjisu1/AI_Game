@@ -1,0 +1,390 @@
+---
+project: IdleMoney
+genre: idle
+domain: ingame
+source: internal_original
+version: "1.0.0"
+---
+
+# ============================================================
+# InGame Systems - Core Idle Loop & Gameplay Mechanics
+# ============================================================
+
+systems:
+  # ----------------------------------------------------------
+  # 1. Production Line (Core Idle Loop)
+  # ----------------------------------------------------------
+  - designId: idlemoney__ingame__production_line
+    system: "Production Line"
+    data_type: flow
+    balance_area: core_mechanic
+    tags: [core_loop, production, idle, automation]
+    provides:
+      - product_generation
+      - profit_calculation
+      - production_line_management
+    requires:
+      - machine_system
+      - transporter_system
+      - supply_machine_system
+      - manager_system
+    content:
+      summary: |
+        핵심 아이들 루프. 공급기가 제품을 생성하면, 머신이 타격하여 제품을 진행시키고,
+        운송차가 수집하여 이익을 창출하는 자동화 생산 라인.
+      flow:
+        - step: "ProductSupplyer 생성"
+          detail: "supplyTime 간격으로 supplyAmount만큼 제품 생성 (maxSupplyNum 제한)"
+          class: ProductSupplyer
+          parameters:
+            supply_time: "configurable interval (seconds)"
+            supply_amount: "products per cycle"
+            max_supply_num: "cap on simultaneous products"
+        - step: "Product 진행 (6단계)"
+          detail: "Product.MaxStepNum = 6, 각 단계에 HP 값 존재, 머신이 타격하여 다음 단계로 진행"
+          class: Product
+          parameters:
+            max_step_num: 6
+            hp_per_step: "double, varies by product type"
+        - step: "Transporter 수집"
+          detail: "3대 운송차 × 3슬롯, 완성된 제품을 Shipper로 이동"
+          class: Transporter
+          parameters:
+            max_transporter_num: 3
+            slots_per_transporter: 3
+        - step: "Profit 계산"
+          detail: "productTableProfit × (1 + credit + boosts + labBuffs) × moneyBoostFactor"
+          class: ProductionLine.GetProfit
+      parameters:
+        MaxFactoryNum: 4
+        MaxSlotNum: 5
+        MaxTransporterNum: 3
+        DefaultMachineSpeed: 1.0
+        DefaultMachineDuration: 10
+        profit_formula: "productTableProfit * (1 + usedCreditNum + factoryBoost + supplyBoost + vehicleBoost + labBuff) * moneyBoostFactor"
+      edge_cases:
+        - "Supply 머신 없이 시작 시 기본 공급 속도 적용"
+        - "모든 슬롯이 비어있으면 생산 불가"
+        - "Transporter 가득 찼을 때 제품은 라인에 대기"
+
+  # ----------------------------------------------------------
+  # 2. Machine System
+  # ----------------------------------------------------------
+  - designId: idlemoney__ingame__machine_system
+    system: "Machine System"
+    data_type: spec
+    balance_area: core_mechanic
+    tags: [machine, combat, tap, damage]
+    provides:
+      - machine_damage
+      - machine_placement
+      - machine_grade_system
+    requires:
+      - slot_system
+      - machine_tuning
+    content:
+      summary: |
+        머신은 슬롯에 배치되어 제품을 타격하는 핵심 유닛.
+        5등급 시스템(General~SuperLegend)과 튜닝 레벨을 보유.
+      parameters:
+        grades:
+          - { grade: 0, name: "General", description: "기본 머신" }
+          - { grade: 1, name: "Advanced", description: "고급 머신" }
+          - { grade: 2, name: "Super", description: "슈퍼 머신" }
+          - { grade: 3, name: "Legend", description: "레전드 머신" }
+          - { grade: 4, name: "SuperLegend", description: "슈퍼레전드 머신" }
+        power_formula: "basePower + (slotLevelPower * tuningFactor)"
+      flow:
+        - step: "머신 획득 (가챠)"
+          detail: "BoxGeneral/Advanced/Super에서 머신 드롭"
+        - step: "슬롯 배치"
+          detail: "ProductionLine의 빈 슬롯에 머신 장착"
+        - step: "자동 타격"
+          detail: "speed 간격으로 duration(에너지) 소진까지 타격"
+        - step: "에너지 소진 → 매니저 수리 대기"
+          detail: "duration <= 0이면 Tired 상태, 매니저가 Fix"
+
+  # ----------------------------------------------------------
+  # 3. Machine Tuning System
+  # ----------------------------------------------------------
+  - designId: idlemoney__ingame__machine_tuning
+    system: "Machine Tuning"
+    data_type: spec
+    balance_area: upgrade
+    tags: [machine, tuning, upgrade, exp]
+    provides:
+      - machine_power_boost
+      - tuning_level_progression
+    requires:
+      - machine_system
+      - tuning_material
+    content:
+      summary: |
+        머신 튜닝 시스템. 경험치 누적 + 재료 소모로 튜닝 레벨업.
+        등급별 필요 경험치가 다르며, 튜닝 시 기본 파워 증가.
+      flow:
+        - step: "경험치 누적"
+          detail: "플레이어 탭 또는 동일 머신 가챠 시 EXP 추가"
+        - step: "레벨업 조건 확인"
+          detail: "accumulatedEXP >= RequiredExpByGrade[tuningLevel]"
+        - step: "재료 소비"
+          detail: "MachineTuningMaterialTable에서 레벨별 재료 비용"
+        - step: "파워 증가"
+          detail: "basePower + slotLevelPower * tuningFactor"
+      parameters:
+        exp_source: "tap + duplicate gacha"
+        material_source: "SpecialProduct, Quest rewards"
+        material_per_special_product: "SPECIAL_PRODUCT_REWARD_TUNING_MATERIAL_AMOUNT"
+        material_tracking: "IntUserInfoIndex.MachineMaterial"
+
+  # ----------------------------------------------------------
+  # 4. Slot System
+  # ----------------------------------------------------------
+  - designId: idlemoney__ingame__slot_system
+    system: "Slot System"
+    data_type: spec
+    balance_area: progression
+    tags: [slot, upgrade, factory, progression]
+    provides:
+      - slot_unlock
+      - slot_level_progression
+      - machine_placement_slot
+    requires:
+      - factory_system
+      - money_currency
+    content:
+      summary: |
+        팩토리당 5개 슬롯. 슬롯 레벨업으로 장착된 머신의 데미지 증가.
+        슬롯 해금은 팩토리 레벨에 의존.
+      parameters:
+        max_slot_num: 5
+        slot_level_cost: "SlotLevelUpTable 참조 (레벨별 비용 증가)"
+        machine_power_boost: "슬롯 레벨에 비례하여 등급별 파워 보너스"
+
+  # ----------------------------------------------------------
+  # 5. Vehicle (Transporter) System
+  # ----------------------------------------------------------
+  - designId: idlemoney__ingame__vehicle_system
+    system: "Vehicle System"
+    data_type: flow
+    balance_area: core_mechanic
+    tags: [vehicle, transporter, collection, delivery]
+    provides:
+      - product_collection
+      - profit_delivery
+      - vehicle_upgrade
+    requires:
+      - production_line
+      - product_system
+    content:
+      summary: |
+        운송차(Transporter)가 완성된 제품을 수집하여 이익을 전달하는 시스템.
+        라인당 3대, 각 3슬롯. 6단계 상태 머신으로 동작.
+      flow:
+        - step: "HideWaiting"
+          detail: "비활성 대기"
+        - step: "MoveToLoad"
+          detail: "픽업 위치로 이동"
+        - step: "Waiting"
+          detail: "픽업 지점에서 제품 대기"
+        - step: "Loading"
+          detail: "제품 적재 (usedSlot에 추가)"
+        - step: "FullLoading"
+          detail: "모든 슬롯 가득 참, 출발 준비"
+        - step: "Transporting"
+          detail: "목적지로 이동, 도착 시 profitCallback 호출"
+      parameters:
+        states: ["HideWaiting", "MoveToLoad", "Waiting", "Loading", "FullLoading", "Transporting"]
+        vehicles_per_line: 3
+        slots_per_vehicle: 3
+
+  # ----------------------------------------------------------
+  # 6. Supply Machine System
+  # ----------------------------------------------------------
+  - designId: idlemoney__ingame__supply_machine
+    system: "Supply Machine"
+    data_type: spec
+    balance_area: core_mechanic
+    tags: [supply, machine, production, speed]
+    provides:
+      - product_supply_rate
+      - supply_speed_boost
+      - supply_amount_boost
+    requires:
+      - factory_system
+      - money_currency
+    content:
+      summary: |
+        팩토리별 1대의 공급 머신. 제품 생산 속도와 양을 결정.
+        레벨업으로 공급량 증가, 부스트로 일시적 속도 증가.
+      parameters:
+        mapping: "Factory 0 → Supply 0, Factory 1 → Supply 1, ..."
+        supply_amount: "products per cycle"
+        supply_speed: "spawn interval (seconds)"
+        money_bonus: "direct profit multiplier"
+        max_amount_factor: 25
+        speed_factor: 0.1
+        unlock_condition: "SUPPLY_MACHINE_UNLOCK_FACTORY_LEVEL"
+        boost_value: "SUPPLY_MACHINE_SUPPLY_SPEED_BOOST_VALUE"
+        boost_duration: "SUPPLY_MACHINE_BOOST_DURATION"
+
+  # ----------------------------------------------------------
+  # 7. Manager System
+  # ----------------------------------------------------------
+  - designId: idlemoney__ingame__manager_system
+    system: "Manager System"
+    data_type: flow
+    balance_area: character
+    tags: [manager, automation, repair, stamina]
+    provides:
+      - machine_auto_repair
+      - manager_hire
+      - manager_placement
+      - stamina_management
+    requires:
+      - diamond_currency
+      - machine_system
+      - rebirth_system
+    content:
+      summary: |
+        매니저는 에너지 소진된 머신을 자동 수리하는 캐릭터.
+        다이아몬드로 고용, 랜덤 스탯(수리속도/이동속도/스태미나) 부여.
+        스태미나 소진 시 수면 후 자동 회복.
+      flow:
+        - step: "Idle"
+          detail: "대기 상태, 수리 대상 스캔"
+        - step: "Move"
+          detail: "Tired 머신 발견 → 이동 (GetTimeSecByMoveSpeed)"
+        - step: "Fix"
+          detail: "fixSpeed로 수리, 스태미나 소모 (MANAGER_STAMINA_DECREASE_RATE)"
+        - step: "Tired"
+          detail: "스태미나 <= 0, 수리 중단"
+        - step: "Sleep"
+          detail: "MANAGER_SLEEP_ANIM_DURATION_MIN~MAX 사이 수면, 스태미나 완전 회복"
+        - step: "Wakeup"
+          detail: "기상 → Idle로 복귀"
+      parameters:
+        hire_cost: "MANAGER_HIRE_DIAMOND_COST"
+        sell_return: "MANAGER_SELL_DIAMOND_RETURN"
+        stats:
+          fix_speed: "[FixSpeedMin, FixSpeedMax] random"
+          move_speed: "[MoveSpeedMin, MoveSpeedMax] random"
+          stamina: "[StaminaMin, StaminaMax] random"
+        unlock_condition: "MinRebirthCount per manager"
+        state_machine: ["Idle", "Move", "Fix", "Tired", "Sleep", "Wakeup"]
+
+  # ----------------------------------------------------------
+  # 8. Hammer (Player Tap) System
+  # ----------------------------------------------------------
+  - designId: idlemoney__ingame__hammer_system
+    system: "Hammer System"
+    data_type: spec
+    balance_area: core_mechanic
+    tags: [tap, hammer, input, damage]
+    provides:
+      - player_tap_damage
+      - super_hammer_mode
+    requires:
+      - machine_system
+      - product_system
+    content:
+      summary: |
+        플레이어가 화면을 탭하여 제품에 데미지를 가하는 핵심 인터랙션.
+        일반 해머와 슈퍼 해머(이벤트) 모드 존재.
+      parameters:
+        base_power: "factoryData.HammerPower"
+        super_hammer_interval: "SUPER_HAMMER_DISPLAY_INTERVAL"
+        super_hammer_duration: "SUPER_HAMMER_DURATION"
+      flow:
+        - step: "일반 탭"
+          detail: "해머 파워로 제품 HP 감소"
+        - step: "슈퍼 해머 이벤트"
+          detail: "일정 시간 후 팝업, AD 시청 시 강화 해머 모드"
+
+  # ----------------------------------------------------------
+  # 9. Dungeon (Coin Dungeon) System
+  # ----------------------------------------------------------
+  - designId: idlemoney__ingame__coin_dungeon
+    system: "Coin Dungeon"
+    data_type: flow
+    balance_area: content
+    tags: [dungeon, challenge, time_limit, coins]
+    provides:
+      - dungeon_gameplay
+      - dungeon_reward
+      - dungeon_progression
+    requires:
+      - rebirth_system
+      - production_line
+    content:
+      summary: |
+        코인 던전. 제한 시간 내 목표 제품 수를 파괴하는 챌린지 모드.
+        레벨별 난이도 증가, 특수 레벨은 스케일 변경.
+      flow:
+        - step: "던전 진입 조건"
+          detail: "LevelUnlockRebirthCount 이상 리버스 필요"
+        - step: "ReadyChallenge"
+          detail: "DungeonTableData 로드, BG 변경, UI 초기화"
+        - step: "StartDungeon"
+          detail: "모든 라인 CoinDungeon 공급 모드, 특수 제품 스폰"
+        - step: "플레이"
+          detail: "탭하여 제품 파괴, 코인 카운터 증가"
+        - step: "FinishChallenge"
+          detail: "시간 종료 OR 목표 달성, 결과 팝업"
+      parameters:
+        target: "TargetProductBreakAmount"
+        supply_speed: "SupplySpeed (multiplier)"
+        product_hp: "ProductHp (per product)"
+        time_limit: "TimeLimit (seconds)"
+        special_scale: "SPECIAL_DUNGEON_SCALE_FACTOR"
+        retry_cost_base: "DUNGEON_RETRY_DIAMOND_COST_BASE"
+        retry_cost_add: "DUNGEON_RETRY_DIAMOND_COST_ADD (per retry)"
+        reward: "ClearRewardCoinAmount + SpecialRewardType/Amount"
+      edge_cases:
+        - "특수 레벨은 제품 스케일 변경 (bgIndex=1)"
+        - "실패 시 다이아 비용 증가하며 재도전 가능"
+        - "AD 시청으로 재도전 비용 절감"
+
+  # ----------------------------------------------------------
+  # 10. Challenge (Factory Rebirth) System
+  # ----------------------------------------------------------
+  - designId: idlemoney__ingame__factory_challenge
+    system: "Factory Rebirth Challenge"
+    data_type: flow
+    balance_area: prestige
+    tags: [challenge, rebirth, prestige, money_goal]
+    provides:
+      - rebirth_progression
+      - challenge_gameplay
+      - world_unlock
+    requires:
+      - factory_system
+      - production_line
+    content:
+      summary: |
+        팩토리 리버스(프레스티지) 챌린지. 제한 시간 내 목표 금액을 벌어야 함.
+        성공 시 SellOff 실행, 다음 월드 해금, 보상 수령.
+      flow:
+        - step: "챌린지 조건"
+          detail: "RebirthConditionFactoryLevel 이상 팩토리 레벨 필요"
+        - step: "ReadyChallenge"
+          detail: "hammerPower = HammerPower * EarningMoneyPerPower, 초기화"
+        - step: "StartChallenge"
+          detail: "모든 라인 Challenge 공급 모드, 특수 제품 스폰"
+        - step: "플레이"
+          detail: "탭으로 수익 창출, currentMoney 추적"
+        - step: "성공 조건"
+          detail: "currentMoney >= TargetMoneyAmount"
+        - step: "SellOff 실행"
+          detail: "성공 시 자동 프레스티지, 리버스 카운트 증가"
+        - step: "보상"
+          detail: "FactoryRebirthRewardTable 기반 보상"
+      parameters:
+        target_money: "TargetMoneyAmount"
+        time_limit: "TimeLimit (seconds)"
+        earning_multiplier: "EarningMoneyPerPower"
+        hammer_power: "factoryData.HammerPower * rebirthData.EarningMoneyPerPower"
+        retry_cost_base: "CHALLENGE_RETRY_DIAMOND_COST_BASE"
+        retry_cost_add: "CHALLENGE_RETRY_DIAMOND_COST_ADD (per retry)"
+        supply_speed: "CHALLENGE_PRODUCT_SUPPLY_SPEED"
+        max_supply: "CHALLENGE_PRODUCT_MAX_SUPPLY_AMOUNT"

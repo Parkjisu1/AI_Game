@@ -1,0 +1,45 @@
+{
+  "designId": "idlemoney__balance__offline_earnings",
+  "project": "IdleMoney",
+  "domain": "Balance",
+  "genre": "Idle",
+  "system": "Offline Earnings",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "formula",
+  "balance_area": "economy",
+  "source_file": "balance_systems.yaml",
+  "content": {
+    "summary": "오프라인 수익 계산 시스템. 접속하지 않은 시간 동안의 수익을 계산.\n연구소 버프, 패키지 보너스, 리버스 레벨에 따라 배율 적용.",
+    "flow": [],
+    "parameters": {
+      "formula_params": [
+        "OFFLINE_REWARD_MONEY_VALUE_A: 기본 계수",
+        "OFFLINE_REWARD_MONEY_VALUE_B: 시간 계수"
+      ],
+      "max_time": "IdleRewardTime (리버스 레벨별 상이)",
+      "factory_factor": "IdleFactoryFactor (리버스 레벨별)",
+      "lab_buff": "LabStats.IdleCash (연구소 오프라인 버프)",
+      "package_bonus": "InAppPackageEffect.OfflineRewardUp",
+      "ad_multiplier": "2x (광고 시청 시)"
+    },
+    "edge_cases": [],
+    "references": []
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from C# analysis: Offline Earnings",
+      "note": "Live game code analysis import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T11:08:16.908Z"
+}

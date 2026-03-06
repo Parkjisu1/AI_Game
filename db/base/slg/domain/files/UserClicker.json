@@ -1,0 +1,115 @@
+{
+  "fileId": "UserClicker",
+  "filePath": "UserClicker.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Slg",
+  "role": "Component",
+  "system": "UserClicker",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "InputClick",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": null,
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "hitted",
+          "fieldType": "RaycastHit2D[]",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": "new RaycastHit2D[32]"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "OnClick",
+          "accessModifier": "public",
+          "returnType": "int",
+          "parameters": [
+            {
+              "paramType": "Vector3",
+              "paramName": "mousePosition"
+            },
+            {
+              "paramType": "float",
+              "paramName": "rad"
+            }
+          ],
+          "signature": "int OnClick(Vector3 mousePosition, float rad)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": "ResponseTrigger",
+          "minorTag": null
+        },
+        {
+          "methodName": "GetHitted",
+          "accessModifier": "public",
+          "returnType": "RaycastHit2D[]",
+          "parameters": [],
+          "signature": "RaycastHit2D[] GetHitted()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "Clear",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Clear()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "int OnClick(Vector3 mousePosition, float rad)",
+    "RaycastHit2D[] GetHitted()",
+    "void Clear()"
+  ],
+  "requires": [
+    "RaycastHit2D"
+  ],
+  "tags": {
+    "major": [
+      "ResponseTrigger"
+    ],
+    "minor": [
+      "Find"
+    ]
+  },
+  "uses": [
+    "Physics2D",
+    "RaycastHit2D"
+  ],
+  "usedBy": []
+}

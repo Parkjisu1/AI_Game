@@ -1,0 +1,193 @@
+{
+  "fileId": "ScoreEffectPool",
+  "filePath": "InGame\\Tiles\\ScoreEffectPool.cs",
+  "namespace": "",
+  "layer": "Core",
+  "genre": "Puzzle",
+  "role": "Pool",
+  "system": "InGame",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine",
+    "UnityEngine.UI",
+    "Global_Define",
+    "DG.Tweening"
+  ],
+  "classes": [
+    {
+      "className": "ScoreEffectPool",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "MonoBehaviour",
+      "interfaces": [],
+      "fields": [
+        {
+          "fieldName": "prefab",
+          "fieldType": "GameObject",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "scoreEffect",
+          "fieldType": "ScoreEffect",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": true,
+          "hasInject": false,
+          "initialValue": null
+        },
+        {
+          "fieldName": "queueObject",
+          "fieldType": "Queue<GameObject>",
+          "accessModifier": "private",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "new Queue<GameObject>()"
+        },
+        {
+          "fieldName": "nPOOL_COUNT",
+          "fieldType": "int",
+          "accessModifier": "public",
+          "isStatic": false,
+          "isReadonly": false,
+          "isConst": false,
+          "hasSerializeField": false,
+          "hasInject": false,
+          "initialValue": "40"
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Initialize",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void Initialize()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetObject",
+          "accessModifier": "public",
+          "returnType": "GameObject",
+          "parameters": [
+            {
+              "paramType": "int",
+              "paramName": "score"
+            },
+            {
+              "paramType": "eJewelColor",
+              "paramName": "eColor"
+            },
+            {
+              "paramType": "bool",
+              "paramName": "isColorBomb"
+            }
+          ],
+          "signature": "GameObject GetObject(int score, eJewelColor eColor, bool isColorBomb)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        },
+        {
+          "methodName": "RetrunPool",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "GameObject",
+              "paramName": "_obj"
+            }
+          ],
+          "signature": "void RetrunPool(GameObject _obj)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "ResetPool",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [],
+          "signature": "void ResetPool()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        },
+        {
+          "methodName": "GetClone",
+          "accessModifier": "private",
+          "returnType": "GameObject",
+          "parameters": [],
+          "signature": "GameObject GetClone()",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": false,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": "Find"
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Initialize()",
+    "GameObject GetObject(int score, eJewelColor eColor, bool isColorBomb)",
+    "void RetrunPool(GameObject _obj)",
+    "void ResetPool()"
+  ],
+  "requires": [
+    "PooledObject",
+    "ScoreEffect",
+    "Tile"
+  ],
+  "tags": {
+    "major": [],
+    "minor": [
+      "Find"
+    ]
+  },
+  "uses": [
+    "0f",
+    "GetClone",
+    "PooledObject",
+    "ScoreEffect",
+    "Tile",
+    "_obj"
+  ],
+  "usedBy": []
+}

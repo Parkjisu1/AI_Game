@@ -1,0 +1,96 @@
+[
+  {
+    "fileId": "UIGameScreen",
+    "layer": "Game",
+    "genre": "Playable",
+    "role": "View",
+    "system": "unity_project",
+    "score": 0.4,
+    "provides": [
+      "void UpdateMonsterPortraits(List<UnitBase> enemies)",
+      "void UpdateAttackButtonState(bool interactable)",
+      "void ShowMessage(string message, bool autoHide = false)",
+      "void HideMessage()",
+      "void UpdateTurnText(int turn)"
+    ],
+    "requires": [
+      "UIBase"
+    ],
+    "tags": {
+      "major": [
+        "ResponseTrigger",
+        "DataSync"
+      ],
+      "minor": [
+        "Spawn",
+        "Find"
+      ]
+    }
+  },
+  {
+    "fileId": "UIResultScreen",
+    "layer": "Game",
+    "genre": "Playable",
+    "role": "View",
+    "system": "unity_project",
+    "score": 0.4,
+    "provides": [
+      "void SetResult(bool victory)",
+      "void SetWinIcon(Sprite sprite)",
+      "void SetDefeatIcon(Sprite sprite)"
+    ],
+    "requires": [
+      "UIBase"
+    ],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger",
+        "DataSync"
+      ],
+      "minor": [
+        "Assign",
+        "Spawn"
+      ]
+    }
+  },
+  {
+    "fileId": "PanelControl",
+    "layer": "Game",
+    "genre": "Playable",
+    "role": "Component",
+    "system": "PanelControl",
+    "score": 0.4,
+    "provides": [
+      "void Click_Mode()"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [
+        "ValueModification",
+        "ResponseTrigger",
+        "ConditionCheck"
+      ],
+      "minor": [
+        "Assign"
+      ]
+    }
+  },
+  {
+    "fileId": "PanelView",
+    "layer": "Game",
+    "genre": "Playable",
+    "role": "Component",
+    "system": "PanelView",
+    "score": 0.4,
+    "provides": [
+      "void OnEnable()",
+      "void OnDisable()"
+    ],
+    "requires": [],
+    "tags": {
+      "major": [],
+      "minor": []
+    }
+  }
+]

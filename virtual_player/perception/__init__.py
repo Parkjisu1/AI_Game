@@ -1,5 +1,5 @@
 """
-Perception Package — Layer 1: State Perception
+Perception Package -- Layer 1: State Perception
 ===============================================
 스크린샷에서 구조화된 게임 상태를 추출하는 레이어.
 

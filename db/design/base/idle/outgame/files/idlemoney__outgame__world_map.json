@@ -1,0 +1,47 @@
+{
+  "designId": "idlemoney__outgame__world_map",
+  "project": "IdleMoney",
+  "domain": "OutGame",
+  "genre": "Idle",
+  "system": "World Map",
+  "source": "internal_original",
+  "version": "1.0.0",
+  "score": 0.4,
+  "data_type": "flow",
+  "balance_area": "progression",
+  "source_file": "outgame_content_meta.yaml",
+  "content": {
+    "summary": "월드맵 시스템. 리버스 완료 시 새 월드 해금.\n각 월드별 독립적 팩토리 데이터, 정기 보상 타이머.",
+    "flow": [],
+    "parameters": {
+      "max_worlds": 12,
+      "unlock_condition": "WORLD_UNLOCK_FACTORY_LEVEL",
+      "per_world_data": [
+        "mounted machines",
+        "selected product (productGroupID)",
+        "supplier levels",
+        "manager GUID",
+        "slot info (duration, mounted machine)"
+      ],
+      "regular_reward": "RegularRewardStartTime0~2 (per world timer)",
+      "world_factory_tracking": "UserInfo.dicFactories"
+    },
+    "edge_cases": [],
+    "references": []
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "phase": "post_launch",
+      "data": "Parsed from C# analysis: World Map",
+      "note": "Live game code analysis import"
+    }
+  ],
+  "feedback_history": [],
+  "code_mapping": {
+    "code_domain": "",
+    "code_roles": [],
+    "related_code_nodes": []
+  },
+  "timestamp": "2026-02-25T11:08:17.023Z"
+}

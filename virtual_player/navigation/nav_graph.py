@@ -71,7 +71,7 @@ class NavEdge:
 class NavigationGraph:
     """Directed graph of screen transitions + in-screen behavior."""
 
-    COORD_MERGE_THRESHOLD = 80  # pixels — edges with similar coords merge
+    COORD_MERGE_THRESHOLD = 80  # pixels -- edges with similar coords merge
 
     def __init__(self):
         self.nodes: Dict[str, NavNode] = {}
@@ -227,10 +227,10 @@ class NavigationGraph:
             )
 
             if category == "navigation" and before_type != after_type:
-                # Screen transition → graph edge
+                # Screen transition -> graph edge
                 graph.add_edge(before_type, after_type, action)
             elif category in ("scroll", "interaction", "idle"):
-                # Same-screen action → node's in_screen_actions
+                # Same-screen action -> node's in_screen_actions
                 in_action = {
                     "action_type": action.action_type,
                     "x": action.x, "y": action.y,

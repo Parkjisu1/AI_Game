@@ -1,0 +1,76 @@
+{
+  "fileId": "StripedWithTargettedJewelCombo",
+  "filePath": "InGame\\Combo\\StripedWithTargettedJewelCombo.cs",
+  "namespace": "",
+  "layer": "Domain",
+  "genre": "Puzzle",
+  "role": "Component",
+  "system": "InGame",
+  "score": 0.4,
+  "usings": [
+    "System.Collections",
+    "System.Collections.Generic",
+    "UnityEngine"
+  ],
+  "classes": [
+    {
+      "className": "StripedWithTargettedJewelCombo",
+      "classType": "class",
+      "accessModifier": "public",
+      "isPartial": false,
+      "isAbstract": false,
+      "isStatic": false,
+      "baseClass": "Combo",
+      "interfaces": [],
+      "fields": [],
+      "properties": [],
+      "methods": [
+        {
+          "methodName": "Resolve",
+          "accessModifier": "public",
+          "returnType": "void",
+          "parameters": [
+            {
+              "paramType": "GameBoard",
+              "paramName": "board"
+            },
+            {
+              "paramType": "List<GameObject>",
+              "paramName": "tiles"
+            },
+            {
+              "paramType": "EffectPool",
+              "paramName": "effectPool"
+            }
+          ],
+          "signature": "void Resolve(GameBoard board, List<GameObject> tiles, EffectPool effectPool)",
+          "isStatic": false,
+          "isVirtual": false,
+          "isOverride": true,
+          "isAsync": false,
+          "isCoroutine": false,
+          "majorTag": null,
+          "minorTag": null
+        }
+      ]
+    }
+  ],
+  "provides": [
+    "void Resolve(GameBoard board, List<GameObject> tiles, EffectPool effectPool)"
+  ],
+  "requires": [
+    "Combo",
+    "StripedJewel",
+    "TargettedJewel"
+  ],
+  "tags": {
+    "major": [],
+    "minor": []
+  },
+  "uses": [
+    "Combo",
+    "StripedJewel",
+    "TargettedJewel"
+  ],
+  "usedBy": []
+}

@@ -1,0 +1,37 @@
+{
+  "fileId": "LevelManager",
+  "project": "DropTheCat",
+  "layer": "Domain",
+  "genre": "Puzzle",
+  "role": "Manager",
+  "phase": 2,
+  "namespace": "DropTheCat.Domain",
+  "className": "LevelManager",
+  "baseClass": "Singleton<LevelManager>",
+  "score": 0.6,
+  "provides": [
+    "void LoadLevel(int levelNumber)",
+    "void RetryLevel()",
+    "void NextLevel()",
+    "int CurrentLevel { get; }",
+    "int MaxClearedLevel { get; }",
+    "int GetStars(int levelNumber)",
+    "int GetTotalStars()",
+    "bool IsLevelUnlocked(int levelNumber)",
+    "LevelState CurrentState { get; }"
+  ],
+  "requires": [
+    "Singleton<LevelManager>",
+    "LevelDataProvider.LoadLevel",
+    "GridManager.InitGrid/ClearGrid",
+    "SaveManager.Save/Load",
+    "EventManager.Subscribe/Publish"
+  ],
+  "definesTypes": ["LevelState (enum)", "LevelProgressData (class, private)"],
+  "tags": {
+    "major": ["FlowControl", "StateControl", "DataSync"],
+    "minor": ["Calculate", "Validate", "Assign", "Notify"]
+  },
+  "sourcePath": "E:\\AI\\projects\\DropTheCat\\output\\LevelManager.cs",
+  "timestamp": "2026-02-10T05:30:00Z"
+}

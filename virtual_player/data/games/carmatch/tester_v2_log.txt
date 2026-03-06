@@ -1,0 +1,156 @@
+[15:22:50] === AI Game Tester v2 START ===
+[15:22:50] Game: carmatch
+[15:22:50] Target: 2026-03-06 15:27
+[15:22:50] Model: claude-haiku-4-5-20251001
+[15:23:07] Screen: lobby | Holder: [_ _ _ _ _ _ _] | Cars: 0
+[15:23:07]   Plan: TAP(540,1500) [Level N button → start game]
+[15:25:14] Screen: unknown | Holder: [_ _ _ _ _ _ _] | Cars: 0
+[15:25:14]   Plan: BACK [Back from unknown screen]
+[15:25:14]   Plan: TAP(540,960) [Center tap fallback]
+[15:28:01] 
+[15:28:01] ==================================================
+[15:28:01] SESSION COMPLETE
+[15:28:01] ==================================================
+[15:28:01] Games started:  1
+[15:28:01] Games won:      0
+[15:28:01] Games failed:   0
+[15:28:01] Total taps:     2
+[15:28:01] Total matches:  0
+[15:28:01] Total turns:    3
+[15:28:01] Vision calls:   5
+[15:28:01] Stats saved: E:\AI\virtual_player\data\games\carmatch\temp\tester_v2\stats.json
+[15:38:01] === AI Game Tester v2 START ===
+[15:38:01] Game: carmatch
+[15:38:01] Target: 2026-03-06 15:43
+[15:38:01] Model: claude-haiku-4-5-20251001 | Mode: CLI (optimized)
+[15:38:58] Screen: gameplay | Holder: [_ _ _ _ _ _ _] | Cars: 6 | Vision: 55.7s
+[15:38:58]   Plan: TAP(650,900) [SIM: NEW: cyan → holder 1/7 (score=12)]
+[15:40:57] Screen: gameplay | Holder: [_ _ _ _ _ _ _] | Cars: 3 | Vision: 58.7s
+[15:40:57]   Plan: TAP(620,1450) [SIM: NEW: yellow → holder 1/7 (score=14)]
+[15:41:49] Screen: gameplay | Holder: [_ _ _ _ _ _ _] | Cars: 0 | Vision: 25.9s
+[15:41:49]   Plan: WAIT [FALLBACK: no cars]
+[15:44:30] Screen: gameplay | Holder: [_ _ _ _ _ _ _] | Cars: 0 | Vision: 110.9s
+[15:44:30]   Plan: TAP(108,1830) [FALLBACK: Undo after 3 fails]
+[15:45:01] 
+[15:45:01] ==================================================
+[15:45:01] SESSION COMPLETE
+[15:45:01] ==================================================
+[15:45:01] Games started:  0
+[15:45:01] Games won:      0
+[15:45:01] Games failed:   0
+[15:45:01] Total taps:     3
+[15:45:01] Total matches:  0
+[15:45:01] Total turns:    4
+[15:45:01] Vision calls:   16
+[15:45:01] Stats saved: E:\AI\virtual_player\data\games\carmatch\temp\tester_v2\stats.json
+[15:46:57] === AI Game Tester v2 START ===
+[15:46:57] Game: carmatch
+[15:46:57] Target: 2026-03-06 15:51
+[15:46:57] Model: claude-haiku-4-5-20251001 | Mode: CLI (optimized)
+[15:47:53] Screen: gameplay | Holder: [_ _ _ _ _ _ _] | Cars: 7 | Vision: 54.8s
+[15:47:53]   Plan: TAP(420,1400) [SIM: NEW: purple → holder 1/7 (score=14)]
+[15:50:06] Screen: gameplay | Holder: [_ _ _ _ _ _ _] | Cars: 2 | Vision: 61.9s
+[15:50:06]   Plan: TAP(320,1350) [SIM: NEW: orange → holder 1/7 (score=14)]
+[15:52:38] Screen: unknown | Holder: [_ _ _ _ _ _ _] | Cars: 0 | Vision: 83.0s
+[15:52:38]   Plan: BACK [Back from unknown screen]
+[15:52:38]   Plan: TAP(540,960) [Center tap fallback]
+[15:54:16] 
+[15:54:16] ==================================================
+[15:54:16] SESSION COMPLETE
+[15:54:16] ==================================================
+[15:54:16] Games started:  0
+[15:54:16] Games won:      0
+[15:54:16] Games failed:   0
+[15:54:16] Total taps:     3
+[15:54:16] Total matches:  0
+[15:54:16] Total turns:    4
+[15:54:16] Vision calls:   7
+[15:54:16] Stats saved: E:\AI\virtual_player\data\games\carmatch\temp\tester_v2\stats.json
+[15:55:24] === AI Game Tester v2 START ===
+[15:55:24] Game: carmatch
+[15:55:24] Target: 2026-03-06 16:00
+[15:55:24] Model: claude-haiku-4-5-20251001 | Mode: CLI (optimized)
+[15:55:32] Screen: lobby | Holder: [_ _ _ _ _ _ _] | Cars: 0 | Vision: 8.1s
+[15:55:32]   Plan: TAP(540,1500) [Level N button → start game]
+[15:57:31]   >> Predict: lobby -> gameplay (skip next vision, wait 4.0s)
+[15:57:36] Screen: gameplay (predicted, skip vision)
+[15:57:36]   Plan: WAIT [FALLBACK: no cars]
+[15:59:28] Screen: lobby | Holder: [_ _ _ _ _ _ _] | Cars: 0 | Vision: 9.3s
+[15:59:28]   Plan: TAP(540,1500) [Level N button → start game]
+[16:00:36]   >> Predict: lobby -> gameplay (skip next vision, wait 4.0s)
+[16:00:40] 
+[16:00:40] ==================================================
+[16:00:40] SESSION COMPLETE
+[16:00:40] ==================================================
+[16:00:40] Games started:  2
+[16:00:40] Games won:      0
+[16:00:40] Games failed:   0
+[16:00:40] Total taps:     2
+[16:00:40] Total matches:  0
+[16:00:40] Total turns:    3
+[16:00:40] Vision calls:   7
+[16:00:40] Stats saved: E:\AI\virtual_player\data\games\carmatch\temp\tester_v2\stats.json
+[16:01:49] === AI Game Tester v2 START ===
+[16:01:49] Game: carmatch
+[16:01:49] Target: 2026-03-06 16:06
+[16:01:49] Model: claude-haiku-4-5-20251001 | Mode: CLI (optimized)
+[16:03:28] Screen: gameplay | Holder: [_ _ _ _ _ _ _] | Cars: 0 | Vision: 97.4s
+[16:03:28]   Plan: WAIT [FALLBACK: no cars]
+[16:06:11] Screen: gameplay | Holder: [_ _ _ _ _ _ _] | Cars: 4 | Vision: 52.8s
+[16:06:11]   Plan: TAP(180,1360) [SIM: NEW: green → holder 1/7 (score=14)]
+[16:07:28] 
+[16:07:28] ==================================================
+[16:07:28] SESSION COMPLETE
+[16:07:28] ==================================================
+[16:07:28] Games started:  0
+[16:07:28] Games won:      0
+[16:07:28] Games failed:   0
+[16:07:28] Total taps:     1
+[16:07:28] Total matches:  0
+[16:07:28] Total turns:    2
+[16:07:28] Vision calls:   7
+[16:07:28] Stats saved: E:\AI\virtual_player\data\games\carmatch\temp\tester_v2\stats.json
+[18:21:36] === AI Game Tester v2 START ===
+[18:21:36] Game: carmatch
+[18:21:36] Target: 2026-03-06 18:31
+[18:21:36] Model: claude-haiku-4-5-20251001 | Mode: CLI (optimized)
+[18:21:41] Screen: lobby | Holder: [_ _ _ _ _ _ _] | Cars: 0 | Vision: 4.2s
+[18:21:41]   Plan: TAP(540,1500) [Level N button → start game]
+[18:22:28]   >> Predict: lobby -> gameplay (skip next vision, wait 4.0s)
+[18:23:41] Screen: gameplay | Holder: [_ _ _ _ _ _ _] | Cars: 0 | Vision: 68.1s (P1 skip)
+[18:23:41]   Plan: WAIT [FALLBACK: no active cars, wait for re-perceive]
+[18:25:49] Screen: gameplay | Holder: [_ _ _ _ _ _ _] | Cars: 4 | Vision: 47.2s
+[18:25:49]   Plan: TAP(630,1100) [P4: red car (front row clearance)]
+[18:28:15] Screen: gameplay | Holder: [_ _ _ _ _ _ _] | Cars: 0 | Vision: 90.2s
+[18:28:15]   Plan: WAIT [FALLBACK: no active cars, wait for re-perceive]
+[18:30:46] Screen: gameplay | Holder: [_ _ _ _ _ _ _] | Cars: 8 | Vision: 55.7s
+[18:30:46]   Plan: TAP(270,860) [P4: orange car (front row clearance)]
+[18:32:00] 
+[18:32:00] ==================================================
+[18:32:00] SESSION COMPLETE
+[18:32:00] ==================================================
+[18:32:00] Games started:  1
+[18:32:00] Games won:      0
+[18:32:00] Games failed:   0
+[18:32:00] Total taps:     3
+[18:32:00] Total matches:  0
+[18:32:00] Total turns:    5
+[18:32:00] Vision calls:   15
+[18:32:00] Stats saved: E:\AI\virtual_player\data\games\carmatch\temp\tester_v2\stats.json
+[19:51:11] === AI Game Tester v2 START ===
+[19:51:11] Game: carmatch
+[19:51:11] Target: 2026-03-08 19:51
+[19:51:11] Model: claude-sonnet-4-6 | Mode: CLI (optimized)
+[19:51:16] Screen: lobby | Holder: [_ _ _ _ _ _ _] | Cars: 0 | Vision: 4.5s
+[19:51:16]   Plan: TAP(540,1500) [Level N button → start game]
+[19:54:05]   >> Predict: lobby -> gameplay (skip next vision, wait 4.0s)
+[19:56:25] Screen: gameplay | Holder: [_ _ _ _ _ _ _] | Cars: 7 | Vision: 134.9s (P1 skip)
+[19:56:25]   Plan: TAP(130,1140) [P4: purple car (front row clearance)]
+[19:58:33] Screen: gameplay | Holder: [P _ _ _ _ _ _] | Cars: 3 | Vision: 29.2s
+[19:58:33]   Plan: TAP(260,1160) [P4: red car (front row clearance)]
+[20:01:33] Screen: gameplay | Holder: [P R _ _ _ _ _] | Cars: 5 | Vision: 49.4s
+[20:01:33]   Plan: TAP(780,1150) [P3: red car (matches 1 in holder)]
+[20:03:10] Screen: gameplay | Holder: [P R R _ _ _ _] | Cars: 3 | Vision: 46.6s
+[20:03:10]   Plan: TAP(176,1070) [P1: red match completion (2+1=3)]
+[20:04:51] Screen: gameplay | Holder: [P R R _ _ _ _] | Cars: 3 | Vision: 30.8s
+[20:04:51]   Plan: TAP(924,1156) [P4: blue car (front row clearance)]

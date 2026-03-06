@@ -304,7 +304,7 @@ class PlayEngineV2:
         self._actions_executed.append(f"bt:{screen_type}:{status.value}")
 
         if status == Status.FAILURE:
-            logger.debug("V2: BT returned FAILURE for '%s'", screen_type)
+            print(f"[V2] BT FAILURE for '{screen_type}' - no action taken")
 
     # ------------------------------------------------------------------
     # Stuck handling (escalating strategies)
