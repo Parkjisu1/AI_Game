@@ -1,23 +1,69 @@
-# Runtime / Cache
-virtual_player/data/cache/
-virtual_player/data/temp/
-virtual_player/data/db/
-virtual_player/data/recordings/*/frames/
-temp/
-nul
-
-# DB (large JSON files - manage separately)
+# ======================
+# DB (large data files)
+# ======================
 db/base/
 db/expert/
 db/design/base/
 db/design/expert/
+db/design/standards/
+db/design/directions/
+db/ui_meta/
 
+# ======================
+# Project outputs (generated code/designs — project-specific, not workflow infra)
+# ======================
+projects/*/output/
+projects/*/designs/
+projects/*/design_workflow/
+projects/*/design_docs/
+projects/*/feedback/
+projects/*/assets/
+
+# Keep CleanRoomTest docs/code but ignore binary data
+projects/CleanRoomTest/c10_plus_v25/screenshots/
+projects/CleanRoomTest/c10_plus_v25/recordings/
+projects/CleanRoomTest/c10_plus_v25/gui/**/bin/
+projects/CleanRoomTest/c10_plus_v25/gui/**/obj/
+
+# ======================
+# Virtual Player / AI Tester runtime data
+# ======================
+virtual_player/data/cache/
+virtual_player/data/temp/
+virtual_player/data/db/
+virtual_player/data/recordings/
+virtual_player/data/reports/
+virtual_player/data/journal/
+virtual_player/data/knowledge/
+virtual_player/data/games/*/reference_db/
+virtual_player/data/games/*/pattern_db.json
+virtual_player/data/games/*/overnight_run.log
+virtual_player/data/games/*/episodes/
+virtual_player/data/games/*/bt_cache/
+virtual_player/data/games/*/overnight_*.log
+virtual_player/data/games/*/overnight_*.json
+virtual_player/data/games/*/overnight_*.txt
+virtual_player/data/games/*/experience_summary.txt
+
+# ======================
+# Temp / Debug files
+# ======================
+temp/
+nul
+debug_*.png
+test_*.png
+*.npz
+
+# ======================
 # Downloads / SDK binaries
+# ======================
 downloads/
 firebase_sdk/
 Embedding_backup/
 
+# ======================
 # Python
+# ======================
 __pycache__/
 *.pyc
 *.pyo
@@ -25,12 +71,16 @@ __pycache__/
 .venv/
 venv/
 
+# ======================
 # OS
+# ======================
 .DS_Store
 Thumbs.db
 desktop.ini
 
+# ======================
 # IDE
+# ======================
 .vscode/
 .idea/
 *.swp

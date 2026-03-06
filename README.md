@@ -765,38 +765,46 @@ E:\AI\
 │   ├── commands/                      # 슬래시 커맨드 (8종)
 │   └── skills/                        # 자동 트리거 스킬 (3종)
 │
-├── db/                                # 데이터베이스
-│   ├── base/                          #   Code Base DB (.gitignore — 로컬 전용)
-│   ├── expert/                        #   Code Expert DB (.gitignore — 로컬 전용)
+├── db/                                # 데이터베이스 (데이터는 .gitignore — 로컬 전용)
+│   ├── base/                          #   Code Base DB (958개 파일, 8개 장르)
+│   ├── expert/                        #   Code Expert DB (score >= 0.6)
 │   ├── rules/                         #   코드 피드백 규칙 (Git 추적)
 │   ├── design/
-│   │   ├── base/                      #     Design Base DB (.gitignore — 로컬 전용)
-│   │   ├── expert/                    #     Design Expert DB (.gitignore — 로컬 전용)
+│   │   ├── base/                      #     Design Base DB (97개 파일)
+│   │   ├── expert/                    #     Design Expert DB
+│   │   ├── standards/                 #     장르별 설계 표준 (Stage 0)
+│   │   ├── directions/                #     디렉션 히스토리
 │   │   └── rules/                     #     기획 피드백 규칙 (Git 추적)
-│   └── ui_meta/                       #   UI 프리팹 메타데이터 (Git 추적)
+│   └── (ui_meta/ 삭제됨)
 │
-├── projects/                          # 프로젝트별 작업 폴더
-│   ├── {ProjectName}/
-│   │   ├── designs/                   #   기획서 (Layer 1/2/3)
-│   │   ├── design_workflow/           #   8단계 워크플로우 결과물
-│   │   ├── output/                    #   생성된 코드 (C# / HTML5)
-│   │   └── feedback/                  #   검증 피드백
-│   └── Playable/                      #   플레이어블 광고 프로젝트들
+├── projects/                          # 프로젝트별 작업 폴더 (.gitignore — 출력물 로컬 전용)
+│   ├── CleanRoomTest/                 #   클린룸 테스트 프로젝트
+│   ├── IdleMoney/                     #   Idle Money 역설계 프로젝트
+│   └── TestE2E/                       #   E2E 테스트 프로젝트
 │
 ├── scripts/                           # 자동화 스크립트 (18개 + lib 4개)
-│   ├── lib/                           #   공유 라이브러리 (4종)
-│   ├── balance-simulator.js           #   밸런스 시뮬레이션
+│   ├── lib/                           #   공유 라이브러리 (yaml-utils, safe-io, domain-utils, score-manager)
+│   ├── parser.js / parser.py          #   C# 소스 파싱
+│   ├── design-parser.js               #   기획 문서 파싱
+│   ├── batch-parse-project.js         #   Unity JSON 일괄 파싱
+│   ├── batch-parse-yaml-designs.js    #   YAML 기획서 일괄 파싱
 │   ├── db-search.js                   #   Code DB 검색
 │   ├── design-db-search.js            #   Design DB 검색
-│   └── ...
+│   ├── balance-simulator.js           #   밸런스 시뮬레이션 (seeded PRNG)
+│   ├── play-verification.js           #   AI Tester 플레이 검증
+│   ├── virtual-player-bridge.js       #   VP ↔ Design DB 연동
+│   ├── design-version.js              #   기획 버전 관리
+│   └── ...                            #   기타 (generate-kpi, quality_report, analyze 등)
 │
 ├── virtual_player/                    # AI Virtual Player (Python)
-│   ├── brain/                         #   지능 엔진
-│   ├── perception/                    #   화면 인식
-│   ├── reasoning/                     #   의사결정 (GOAP)
-│   ├── adaptive/                      #   적응형 학습
-│   ├── genre/                         #   장르별 스키마
-│   └── navigation/                    #   화면 네비게이션
+│   ├── brain/                         #   지능 엔진 (Vision AI, Local Vision)
+│   ├── perception/                    #   화면 인식 (OCR, Gauge, State)
+│   ├── reasoning/                     #   의사결정 (GOAP Planner, Goal Library)
+│   ├── adaptive/                      #   적응형 학습 (failure_memory, loop_detector)
+│   ├── genre/                         #   장르별 스키마 (RPG, Idle, Merge, SLG, Puzzle 등)
+│   ├── navigation/                    #   화면 네비게이션 (nav_graph, popup_handler)
+│   ├── pattern_db/                    #   패턴 DB (reflex_cache, tactical_rules)
+│   └── data/games/                    #   게임별 프로파일 + 런타임 데이터 (로컬)
 │
 ├── ai_tester/                         # Cross-genre 게임 테스트 프레임워크 (개발 중)
 │   ├── core/                          #   ADB, 상태 추적, UI 탐색
@@ -810,18 +818,13 @@ E:\AI\
 ├── proposal/                          # Workflow 설계 문서
 │   ├── workflow/                      #   현행 워크플로우 (정본)
 │   │   ├── AI_workflow_개발.md        #     코드 Workflow 원본 (6단계)
-│   │   ├── AI_workflow_기획_v2.0.md   #     기획 Workflow 정본 (8단계)
+│   │   ├── AI_workflow_기획_v2.0.md   #     기획 Workflow 정본 (Stage 0~8)
 │   │   └── AI_workflow_통합_구조.md   #     두 Workflow 구별/연결/진화
 │   └── reviews/                       #   리뷰 및 히스토리
-│       ├── AI_workflow_개발_원본.txt  #     코드 Workflow 원본 텍스트 (보존)
-│       ├── AI_workflow_기획_v1.0.md   #     기획 Workflow v1.0 (대체됨)
-│       └── AI_workflow_기획_*리뷰.md  #     리뷰 문서 (3건)
 │
 ├── History/                           # 프로젝트별 KPI 및 히스토리
 │   ├── KPI_Template.md
 │   └── {ProjectName}/
-│       ├── KPI.md
-│       └── Project_History.md
 │
 └── Feedback/                          # 워크플로우 개선 피드백
 ```
@@ -1041,4 +1044,4 @@ This project is proprietary software. All rights reserved.
 
 ---
 
-*GameForge v2.2 — 2026.03 (Agent 9종 영어 재작성, Lead Agent 신설, LLM 모델 업데이트, Quality Gates 소유권 일원화, Validator Build Verification 추가)*
+*GameForge v2.3 — 2026.03 (Agent 9종 영어 재작성, Lead Agent 신설, LLM 모델 업데이트, Quality Gates 소유권 일원화, Validator Build Verification 추가, Repository 정리 — 불필요 파일 1,700+ 삭제)*
