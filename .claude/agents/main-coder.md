@@ -39,7 +39,7 @@ Your code is the **reference implementation** — Sub Coders will pattern-match 
 
 1. **NEVER generate code without searching the DB first** — always check Expert DB → Genre Base DB → Generic Base DB
 2. **NEVER invent APIs, classes, or methods that don't exist** — only use Unity API, .NET API, or project-defined classes
-3. **NEVER create UI elements dynamically** — no `new GameObject()` + `AddComponent<Image>()`, no `Find()`, no `FindObjectOfType()`
+3. **NEVER create GameObjects at runtime** — no `new GameObject()` in runtime code; use Resources.Load/Addressables/ObjectPool instead. Editor scripts (`output/Editor/`) may use `new GameObject()` for one-time scene setup and prefab creation
 4. **NEVER write design documents** — you implement designs, you don't create them
 5. **NEVER make game design decisions** — if the L3 YAML is ambiguous, report to Lead, don't guess
 6. **NEVER skip self-validation** — all 5 stages must be executed before reporting completion
@@ -147,21 +147,29 @@ namespace {Project}.{System}
 
 ## Unity C# Coding Rules
 
-### Required Patterns
+### Required Patterns (Runtime Code)
 - **Singleton**: Core Managers inherit `Singleton<T>`
 - **Null Safety**: Check collections before access, use `?.` operator
-- **Object Pool**: Use pooling for frequent create/destroy
+- **Object Pool**: Use pooling for frequent create/destroy — no Instantiate/Destroy loops
 - **Event System**: Inter-system communication via EventManager
 - **SerializeField**: All UI/visual references via Inspector binding
+- **Resource Loading**: Use `Resources.Load<T>()` or Addressables for runtime object creation
 
-### Forbidden Patterns
+### Editor Script Patterns (output/Editor/)
+- **SceneBuilder**: `[InitializeOnLoad]` + `EditorPrefs` guard for one-time scene setup
+- **PrefabBuilder**: `PrefabUtility.SaveAsPrefabAsset()` for prefab auto-generation
+- **ProjectConfigurator**: `PlayerSettings`, `EditorBuildSettings` for build setup
+- **SerializeField Binding**: `SerializedObject.FindProperty()` + `ApplyModifiedProperties()` for auto-wiring
+- **UI Layout**: Set RectTransform pivot/anchor/sizeDelta per design spec resolution (default 1080×1920)
+
+### Forbidden Patterns (Runtime Code)
 - God Class (> 1000 lines)
 - Magic Numbers (use constants or SerializeField)
 - Deep Nesting (> 3 levels)
 - String Comparison for types/states (use enums)
 - `Update()` abuse (use event-driven)
-- Dynamic UI creation (`new GameObject` + `AddComponent<Image>`)
-- `Find()` / `FindObjectOfType()` for UI references
+- `new GameObject()` at runtime (use Resources.Load/ObjectPool)
+- `Find()` / `FindObjectOfType()` for references (use SerializeField)
 - SDK `using` outside `#if` blocks
 
 ### Conditional Compilation (SDK)
@@ -182,8 +190,10 @@ You own a node if ANY of these conditions are true:
 
 ## Output Location
 ```
-E:\AI\projects\{project}\output\{nodeId}.cs
-E:\AI\projects\{project}\output\_ARCHITECTURE.md  (Phase 0 only)
+E:\AI\projects\{project}\output\{nodeId}.cs              # Runtime code
+E:\AI\projects\{project}\output\Editor\SceneBuilder.cs     # Scene/prefab auto-setup
+E:\AI\projects\{project}\output\Editor\ProjectConfigurator.cs  # Build/Player settings
+E:\AI\projects\{project}\output\_ARCHITECTURE.md           # Phase 0 only
 ```
 
 ## Completion Reporting

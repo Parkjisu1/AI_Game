@@ -43,11 +43,36 @@ Unity C# 게임 코드 및 HTML5 플레이어블 광고를 지원합니다.
 [메카닉] 플레이어블 광고를 만들어줘. [설명]. Agent Team으로 진행해줘.
 ```
 
-### UI/UX 분업 원칙
-- **AI**: 로직 코드만 생성 (MonoBehaviour, 이벤트, 상태 관리)
-- **사용자**: Unity Editor에서 비주얼 배치/디자인, 프리팹 구성
-- **연결**: `[SerializeField]`로 Inspector 연결 (코드에서 UI 동적 생성 금지)
-- **금지**: `new GameObject()` + `AddComponent<Image>()`, `Find()`, `FindObjectOfType()`로 UI 참조
+### 런타임 코드 규칙 (게임 실행 중)
+- **금지**: `new GameObject()` + `AddComponent<T>()` — CPU 부담, 런타임에 즉석 생성 지양
+- **금지**: `Find()`, `FindObjectOfType()`, `GameObject.FindWithTag()` — 매 프레임 탐색 비용
+- **필수**: 오브젝트는 Resources.Load / Addressables / AssetBundle로 미리 로드하여 사용
+- **필수**: 반복 생성·파괴 오브젝트는 ObjectPool 패턴 사용 (Instantiate/Destroy 루프 금지)
+- **필수**: UI 참조는 `[SerializeField]`로 Inspector 연결, 코드에서 동적 생성하지 않음
+- **참조**: DB에 ObjectPool, ObjectPoolManager 패턴 존재 (generic/core, rpg/core, puzzle/core)
+
+### 에디터 코드 규칙 (씬 세팅·프리팹 제작용)
+- **허용**: `new GameObject()`, `AddComponent<T>()`, `PrefabUtility`, `AssetDatabase` — 1회성 셋업에 사용
+- **목적**: 씬 자동 구성, 프리팹 자동 생성, SerializeField 자동 연결, Build Settings 자동 설정
+- **조건**: `[InitializeOnLoad]` + `EditorPrefs` 체크로 **1회만 실행** (매번 재실행 금지)
+- **조건**: 에디터 스크립트는 반드시 `output/Editor/` → `Assets/Editor/`에 배치
+- **UI 세팅**: Canvas, RectTransform의 pivot/anchor/해상도 관련 값은 기획서 입력 정보에 맞춰 설정
+  - 기본: CanvasScaler Scale With Screen Size, Reference Resolution은 기획서 지정값 (기본 1080×1920)
+  - pivot/anchor는 UI 요소 용도에 맞게 설정 (상단 고정 = top-center, 전체 채움 = stretch 등)
+- **에셋**: 머티리얼, 고퀄리티 이미지, 아트 리소스는 생성하지 않음 — 사용자가 별도 제공
+
+### 분업 요약
+```
+AI가 생성하는 것:
+  ├── Runtime 코드     — MonoBehaviour, 이벤트, 상태 관리, ObjectPool
+  ├── Editor 스크립트   — 씬 구성, 프리팹 생성, SerializeField 연결, Build Settings
+  └── ScriptableObject — 게임 데이터 에셋 (레벨, 아이템 테이블 등)
+
+사용자가 하는 것:
+  ├── 아트 에셋        — 스프라이트, 3D 모델, 이펙트, 사운드
+  ├── Placeholder 교체  — AI가 만든 기본 구조에 최종 에셋 교체
+  └── 최종 검수        — 레이아웃 미세 조정, 빌드 테스트
+```
 
 ---
 
@@ -387,8 +412,35 @@ minSdkVersion 22 cannot be smaller than version 24
 ### 각 씬 기본 구성
 모든 씬에 반드시 포함:
 - Main Camera
-- Canvas (Screen Space - Overlay, CanvasScaler: Scale With Screen Size, 1080x1920)
+- Canvas (Screen Space - Overlay, CanvasScaler: Scale With Screen Size, 기획서 지정 해상도)
 - EventSystem
+
+### 에디터 자동화 범위 (SceneBuilder가 수행)
+
+SceneBuilder.cs는 `[InitializeOnLoad]`로 1회 실행되며 아래를 자동 수행:
+
+```
+1. 씬 생성        — EditorSceneManager.NewScene()로 3씬 생성 + 저장
+2. 기본 오브젝트   — Camera, Canvas, EventSystem, Managers 오브젝트 배치
+3. Canvas 설정    — CanvasScaler: Scale With Screen Size, referenceResolution = 기획서 값
+4. UI 계층구조    — Panel, Button, Text 등 기본 UI 오브젝트 생성 (pivot/anchor 기획서 기준)
+5. Manager 배치   — "Managers" 빈 오브젝트에 Manager 싱글톤 컴포넌트 부착 + DontDestroyOnLoad
+6. 프리팹 생성    — PrefabUtility.SaveAsPrefabAsset()로 프리팹 자동 생성
+7. SerializeField — SerializedObject.FindProperty()로 Inspector 참조 자동 연결
+8. Build Settings — EditorBuildSettings.scenes에 3씬 등록
+9. Player Settings — companyName, minSdkVersion, targetArchitectures 등 자동 설정
+```
+
+### UI pivot/anchor 규칙
+| UI 용도 | Anchor | Pivot | 예시 |
+|---------|--------|-------|------|
+| 상단 HUD (체력, 재화) | top-stretch | (0.5, 1) | HP 바, 골드 표시 |
+| 하단 메뉴 | bottom-stretch | (0.5, 0) | 네비게이션 바 |
+| 센터 팝업 | center | (0.5, 0.5) | 결과 팝업, 설정 |
+| 전체 채움 배경 | stretch-stretch | (0.5, 0.5) | 배경 이미지, 오버레이 |
+| 좌측 사이드바 | left-stretch | (0, 0.5) | 스킬 슬롯 |
+
+기획서에 해상도/pivot 정보가 명시되면 해당 값을 우선 사용. 미명시 시 위 기본값 적용.
 
 ### 씬 빌더 패턴
 ```csharp
@@ -413,6 +465,22 @@ public class SceneBuilder
 - GameScene에 "Managers" 빈 게임오브젝트 생성
 - 모든 Manager 싱글톤 컴포넌트를 해당 오브젝트에 부착
 - DontDestroyOnLoad 설정
+
+### 런타임 오브젝트 로딩 규칙
+런타임에 오브젝트가 필요할 때는 반드시 아래 방식 사용 (new GameObject 금지):
+```csharp
+// 1순위: Resources.Load (소규모 프로젝트)
+var prefab = Resources.Load<GameObject>("Prefabs/Enemy");
+var instance = Instantiate(prefab, spawnPoint, Quaternion.identity);
+
+// 2순위: Addressables (대규모 프로젝트, 에셋 번들 관리)
+var handle = Addressables.InstantiateAsync("Enemy", spawnPoint, Quaternion.identity);
+
+// 3순위: ObjectPool (반복 생성·파괴 오브젝트)
+var bullet = ObjectPool.Instance.Get("Bullet");
+// ... 사용 후
+ObjectPool.Instance.Return("Bullet", bullet);
+```
 
 ---
 
@@ -459,14 +527,16 @@ E:\AI_WORK_FLOW_TEST\{project}\   # Unity 프로젝트 루트
 ### Unity (platform: unity)
 ```
 E:\AI\projects\{project}\output\
-├── *.cs            # 게임 소스코드
+├── *.cs            # 게임 소스코드 (런타임)
+├── Data\           # ScriptableObject 에셋 정의 (런타임 데이터)
 ├── SDK\            # SDK 매니저 (조건부 컴파일)
 │   ├── FirebaseManager.cs
 │   ├── AdMobManager.cs
 │   └── IAPManager.cs
 └── Editor\         # 에디터 스크립트 (Assets/Editor/에 복사)
-    ├── SceneSetup.cs
-    └── SceneBuilder.cs
+    ├── SceneBuilder.cs       # 씬 자동 구성 + 프리팹 생성 + SerializeField 연결
+    ├── ProjectConfigurator.cs # Build Settings + Player Settings 자동 설정
+    └── PrefabBuilder.cs      # 프리팹 자동 생성 (필요 시 분리)
 ```
 
 ### Playable (platform: playable)
@@ -489,6 +559,9 @@ E:\AI\projects\{project}\assets\     # (선택) 사용자 제공 이미지
 12. [InitializeOnLoad]에서 EditorApplication.delayCall 없이 직접 실행
 13. 씬 빌더에서 EditorPrefs 체크 누락 (매번 재실행됨)
 14. SDK using 문을 #if 블록 밖에 배치 → 빌드 에러
+15. 런타임 코드에서 new GameObject() 사용 → Resources.Load/ObjectPool 사용해야 함
+16. Editor 스크립트에서 pivot/anchor 미설정 → 기획서 해상도 기준으로 설정 필수
+17. SerializedObject.ApplyModifiedProperties() 호출 누락 → Inspector 값 반영 안 됨
 
 ---
 

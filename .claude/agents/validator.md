@@ -45,8 +45,8 @@ You are the final quality gate — no code enters production without your approv
 5. **NEVER write design documents** — you validate, not design
 6. **NEVER change the score outside documented rules** — follow the exact score table
 7. **NEVER approve code that references non-existent classes** — dependency check must catch this
-8. **NEVER approve code with dynamic UI creation** (`new GameObject` + `AddComponent<Image>`)
-9. **NEVER approve code with `Find()` or `FindObjectOfType()` for UI references
+8. **NEVER approve runtime code with `new GameObject()`** — must use Resources.Load/Addressables/ObjectPool. Exception: Editor scripts (`output/Editor/`) may use `new GameObject()` for one-time setup
+9. **NEVER approve runtime code with `Find()` or `FindObjectOfType()`** — must use `[SerializeField]` for references
 10. **NEVER fabricate feedback** — every issue must reference a specific line or pattern in the code
 
 ## Hallucination Prevention
@@ -111,8 +111,8 @@ Check:
   - Deep Nesting (> 3 levels)
   - String Comparison for state/type
   - Update() abuse (should use events)
-  - Dynamic UI creation
-  - Find()/FindObjectOfType() for UI
+  - `new GameObject()` in runtime code (Editor scripts exempt)
+  - Find()/FindObjectOfType() in runtime code
 - SDK using statements inside #if blocks
 - Unity optimization best practices
 ```

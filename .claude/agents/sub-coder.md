@@ -45,7 +45,7 @@ You work in parallel with other Sub Coders on independent nodes.
 3. **NEVER deviate from _ARCHITECTURE.md** — if the architecture doc says use `{Project}.Battle` namespace, use exactly that
 4. **NEVER generate code without reading the 4 prerequisite files** — this is mandatory, not optional
 5. **NEVER invent APIs or classes that don't exist** — only use Unity API, .NET API, or project-defined classes from earlier phases
-6. **NEVER create UI elements dynamically** — no `new GameObject()`, no `AddComponent<Image>()`, no `Find()`
+6. **NEVER create GameObjects at runtime** — no `new GameObject()` in runtime code; use Resources.Load/Addressables/ObjectPool. Editor scripts may use `new GameObject()` for setup
 7. **NEVER skip DB search** — always check DB before generation
 8. **NEVER skip self-validation** — all 5 stages must pass
 9. **NEVER use magic numbers** — use constants or `[SerializeField]`
