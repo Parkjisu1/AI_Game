@@ -149,7 +149,9 @@ def create_carmatch_playbook() -> Playbook:
             Action("tap", 900, 500, 1.5, "X close (decline Play On 900)"),
         ]),
         "fail_result": ScreenHandler("fail_result", [
-            Action("tap", 540, 1100, 2.0, "Try Again button"),
+            Action("tap", 540, 1100, 1.0, "Try Again button (center)"),
+            Action("tap", 540, 1200, 1.0, "Try Again button (lower)"),
+            Action("tap", 540, 1000, 1.0, "Try Again button (upper)"),
         ]),
         "ingame_setting": ScreenHandler("ingame_setting", [
             Action("tap", 310, 1070, 1.5, "Resume button"),
@@ -157,11 +159,8 @@ def create_carmatch_playbook() -> Playbook:
         "ingame_quit_confirm": ScreenHandler("ingame_quit_confirm", [
             Action("tap", 880, 550, 1.5, "X close (cancel quit)"),
         ]),
-        "ad": ScreenHandler("ad", [
-            Action("tap", 1050, 30, 1.0, "Close ad top-right"),
-            Action("tap", 30, 30, 1.0, "Close ad top-left"),
-            Action("back", wait=1.0, reason="Android back"),
-        ]),
+        # ad는 decision.py의 _handle_ad()에서 동적 처리
+        # (X 위치 가변 + 지연 표시 대응)
         "ad_install": ScreenHandler("ad_install", [
             Action("back", wait=1.5, reason="Back from install page"),
         ]),

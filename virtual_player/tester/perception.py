@@ -92,10 +92,58 @@ class Perception:
     나머지: JSON 파싱 + 검증 (규칙 기반)
     """
 
-    # 허용된 색상 목록 (이 외는 "unknown"으로 강제 변환)
+    # 허용된 색상 목록 (이 외는 COLOR_MAP으로 정규화)
     VALID_COLORS = {
         "red", "blue", "green", "yellow", "orange",
         "purple", "pink", "cyan", "white", "brown", "unknown"
+    }
+
+    # VLM이 사용하는 다양한 색상명 → 시스템 색상으로 정규화
+    # VLM은 사람처럼 세밀한 색명을 사용하므로 여기서 통일
+    COLOR_MAP = {
+        # 직접 매칭
+        "red": "red", "blue": "blue", "green": "green",
+        "yellow": "yellow", "orange": "orange", "purple": "purple",
+        "pink": "pink", "cyan": "cyan", "white": "white",
+        "brown": "brown", "unknown": "unknown",
+        # VLM이 자주 쓰는 변형 → 정규화
+        "tan": "orange",        # 연한 갈색/황갈색 → 게임에서는 주황계열
+        "gold": "yellow",       # 금색 → 노란색
+        "golden": "yellow",
+        "beige": "orange",      # 베이지 → 주황계열
+        "khaki": "orange",
+        "cream": "yellow",
+        "amber": "orange",
+        "coral": "red",         # 코랄 → 빨강계열
+        "crimson": "red",
+        "scarlet": "red",
+        "maroon": "brown",      # 적갈색 → 갈색
+        "burgundy": "brown",
+        "wine": "brown",
+        "violet": "purple",     # 보라색 변형
+        "lavender": "purple",
+        "indigo": "purple",
+        "magenta": "pink",      # 마젠타 → 핑크
+        "salmon": "pink",
+        "rose": "pink",
+        "fuchsia": "pink",
+        "lime": "green",        # 라임 → 초록
+        "olive": "green",
+        "teal": "cyan",         # 틸 → 시안
+        "turquoise": "cyan",
+        "aqua": "cyan",
+        "navy": "blue",         # 네이비 → 파랑
+        "sky": "blue",
+        "gray": "white",        # 회색 → 흰색 (게임에 회색 차가 없으므로)
+        "grey": "white",
+        "silver": "white",
+        "charcoal": "brown",
+        "dark_brown": "brown",
+        "light_blue": "cyan",
+        "light_green": "green",
+        "dark_green": "green",
+        "dark_red": "red",
+        "dark_blue": "blue",
     }
 
     # 허용된 화면 유형 목록
@@ -152,19 +200,32 @@ class Perception:
             return BoardState(screen_type="unknown", holder=[None]*7)
         return self._parse_response(raw)
 
+    # 압축 비율 추적 (좌표 복원용)
+    _compress_scale = 1  # 1 = 원본, 2 = 절반 축소
+
     def _compress_if_needed(self, img_path: Path) -> Path:
-        """CLI 모드에서 이미지를 540x960 JPEG로 압축."""
+        """CLI 모드에서 이미지를 540x960 JPEG로 압축.
+
+        좌표 복원은 _parse_response에서 _compress_scale을 사용하여 수행.
+        VLM에게 좌표 변환을 맡기지 않음 (비결정적이므로).
+        """
         if self._use_sdk or not _HAS_PIL:
+            self._compress_scale = 1
             return img_path
         try:
             compressed = img_path.parent / f"{img_path.stem}_sm.jpg"
             img = Image.open(img_path)
-            img = img.resize((540, 960), Image.LANCZOS)
+            orig_w, orig_h = img.size
+            target_w, target_h = 540, 960
+            img = img.resize((target_w, target_h), Image.LANCZOS)
             if img.mode in ("RGBA", "P"):
                 img = img.convert("RGB")
             img.save(compressed, "JPEG", quality=70)
+            # 축소 비율 저장 (나중에 좌표에 곱할 값)
+            self._compress_scale = round(orig_w / target_w)  # 1080/540 = 2
             return compressed
         except Exception:
+            self._compress_scale = 1
             return img_path
 
     # YOLO 7클래스 → Perception screen_type 매핑
@@ -268,11 +329,12 @@ class Perception:
 RULES:
 - screen: identify the screen type. "gameplay" = parking lot with cars and holder.
 - holder: read the 7 bottom slots left-to-right. Use color name or null.
-- active_cars: ONLY list cars whose EYES/FACE are visible (not hidden behind other cars).
-  Each car has cartoon eyes. If eyes are blocked by another car in front, do NOT list it.
-- Valid colors: red, blue, green, yellow, orange, purple, pink, cyan, white, brown, unknown
+- active_cars: List ALL cars whose cartoon EYES are visible (not hidden behind other cars).
+  Include cars in the exit lane (moving toward the holder).
+- color: Use ONLY one of: red, blue, green, yellow, orange, purple, pink, cyan, white, brown, unknown.
+  Map similar colors: tan/beige/gold → orange or yellow. Do NOT use colors outside this list.
 - For mystery cars (?), use "unknown" as color.
-- x,y = CENTER of the car body (not edge).
+- x,y = CENTER of the car body in pixels, as seen in the image.
 - stacked: if a number (2,3,4,5) is shown on the spot, use that number. Otherwise 1.
 - If screen is NOT "gameplay", set holder to [null,null,null,null,null,null,null] and active_cars to [].
 - Output ONLY the JSON. No explanation, no markdown, no text."""
@@ -293,18 +355,22 @@ Hints:
 Reply with ONLY the one word. No JSON, no explanation."""
 
     # CLI Phase 2: gameplay 상세 (holder + cars)
-    # 주의: 압축 이미지(540x960)로 인식하므로 좌표는 원본(1080x1920) 기준으로 2배 해서 보고하도록 지시
-    _PROMPT_PHASE2 = """This is a "gameplay" screen from a car-matching puzzle game (original resolution 1080x1920, this image is scaled down).
+    # 좌표는 이미지 그대로 보고 → 코드에서 _compress_scale 곱해서 복원
+    _PROMPT_PHASE2 = """This is a car-matching puzzle game screenshot.
 Return ONLY this JSON:
-{"holder":[<7 slots: color or null>],"active_cars":[{"color":"<color>","x":<int>,"y":<int>,"stacked":<1-5>}]}
+{"holder":[<7 slots>],"active_cars":[{"color":"<color>","x":<int>,"y":<int>,"stacked":<1-5>}]}
 
 RULES:
-- holder: 7 bottom slots left-to-right. Colors: red,blue,green,yellow,orange,purple,pink,cyan,white,brown,unknown. null if empty.
-- active_cars: ONLY cars with visible EYES/FACE (not hidden). Max 8 cars.
-- IMPORTANT: x,y coordinates must be for the ORIGINAL 1080x1920 resolution. Since this image is 540x960, multiply your pixel readings by 2.
-- Mystery cars (?) = "unknown" color.
-- stacked: number shown on spot (2-5), or 1 if none.
-- ONLY output the JSON object."""
+- holder: Read the 7 bottom slots left-to-right. Each slot has a colored car or is empty.
+  Use one of: red, blue, green, yellow, orange, purple, pink, cyan, white, brown. Use null if empty.
+- active_cars: List ALL cars whose cartoon EYES are visible (not blocked by other cars in front).
+  Include cars in the exit lane approaching the holder.
+- color: Use the CLOSEST match from: red, blue, green, yellow, orange, purple, pink, cyan, white, brown.
+  Tan/beige/gold cars → orange or yellow. Do NOT invent colors outside this list.
+- x,y: The pixel coordinates of the CENTER of each car, as seen in THIS image. Do NOT scale or transform.
+- stacked: If a number (2,3,4,5) is shown on the parking spot, use that number. Otherwise 1.
+- Mystery boxes with "?" → color "unknown".
+- ONLY output the JSON. No markdown, no explanation, no notes."""
 
     def _call_vision(self, img_path: Path) -> str:
         """Vision API 호출. SDK 직접 또는 CLI 폴백."""
@@ -415,9 +481,42 @@ RULES:
                 return valid
         return "unknown"
 
+    def _normalize_color(self, raw_color: str) -> str:
+        """VLM이 보고한 색상명을 시스템 색상으로 정규화.
+
+        1. COLOR_MAP에서 직접 매칭
+        2. 부분 문자열 매칭 (dark_green → green)
+        3. 모든 것 실패 → "unknown"
+        """
+        c = raw_color.lower().strip().replace("-", "_").replace(" ", "_")
+
+        # 빈 값
+        if c in ("none", "null", "empty", ""):
+            return "unknown"
+
+        # 직접 매칭
+        if c in self.COLOR_MAP:
+            return self.COLOR_MAP[c]
+
+        # VALID_COLORS에 직접 있으면
+        if c in self.VALID_COLORS:
+            return c
+
+        # 부분 문자열: "light_blue" → "blue", "dark_red" → "red" 등
+        for valid in self.VALID_COLORS:
+            if valid in c:
+                return valid
+
+        return "unknown"
+
     def _parse_response(self, raw: str) -> BoardState:
-        """원본 텍스트 → BoardState. 파싱 실패 시 unknown 반환."""
+        """원본 텍스트 → BoardState. 파싱 실패 시 unknown 반환.
+
+        좌표 변환: VLM은 압축 이미지(540x960) 기준으로 보고 →
+        _compress_scale을 곱해서 원본(1080x1920)으로 복원.
+        """
         text = str(raw).strip()
+        scale = getattr(self, '_compress_scale', 1)
 
         # JSON 추출
         start = text.find("{")
@@ -433,7 +532,6 @@ RULES:
         # screen_type 검증
         screen = str(data.get("screen", "unknown")).lower().strip()
         if screen not in self.VALID_SCREENS:
-            # 부분 매칭 시도
             for valid in self.VALID_SCREENS:
                 if valid in screen:
                     screen = valid
@@ -441,7 +539,7 @@ RULES:
             else:
                 screen = "unknown"
 
-        # holder 검증 (정확히 7칸)
+        # holder 검증 (정확히 7칸) — 색상 정규화 적용
         raw_holder = data.get("holder", [None]*7)
         if not isinstance(raw_holder, list):
             raw_holder = [None]*7
@@ -449,19 +547,17 @@ RULES:
         for i in range(7):
             if i < len(raw_holder) and raw_holder[i]:
                 color = str(raw_holder[i]).lower().strip()
-                if color in self.VALID_COLORS:
-                    holder.append(color)
-                elif color in ("none", "null", "empty", ""):
+                if color in ("none", "null", "empty", ""):
                     holder.append(None)
                 else:
-                    holder.append("unknown")
+                    holder.append(self._normalize_color(color))
             else:
                 holder.append(None)
 
         holder_count = sum(1 for h in holder if h is not None)
 
-        # active_cars 검증
-        raw_cars = data.get("active_cars", [])
+        # active_cars 검증 — 색상 정규화 + 좌표 스케일링 적용
+        raw_cars = data.get("active_cars", data.get("cars", []))
         if not isinstance(raw_cars, list):
             raw_cars = []
 
@@ -469,14 +565,31 @@ RULES:
         for car in raw_cars:
             if not isinstance(car, dict):
                 continue
-            color = str(car.get("color", "unknown")).lower().strip()
-            if color not in self.VALID_COLORS:
-                color = "unknown"
-            x = int(car.get("x", 0))
-            y = int(car.get("y", 0))
-            stacked = int(car.get("stacked", 1))
+            raw_color = str(car.get("color", "unknown")).lower().strip()
+            color = self._normalize_color(raw_color)
 
-            # 좌표 범위 검증 (보드+출구 영역)
+            try:
+                x = int(car.get("x", 0))
+                y = int(car.get("y", 0))
+                stacked = int(car.get("stacked", 1))
+            except (ValueError, TypeError):
+                continue
+
+            # 좌표 스케일링: 압축 이미지 좌표 → 원본 해상도
+            x = x * scale
+            y = y * scale
+
+            # 좌표가 원본 해상도 범위 내인지 검증
+            max_x = 1080 * max(1, scale // scale)  # 항상 1080
+            max_y = 1920 * max(1, scale // scale)  # 항상 1920
+
+            # 좌표가 여전히 압축 이미지 범위인지 감지
+            # (VLM이 이미 2배로 보고했을 수도 있으므로 이중 스케일 방지)
+            if scale > 1 and x > 1080:
+                # 이미 원본 스케일로 보고된 것 → 스케일 취소
+                x = x // scale
+                y = y // scale
+
             if 0 < x < 1080 and 100 < y < 1800:
                 x = max(0, min(1080, x))
                 y = max(0, min(1920, y))

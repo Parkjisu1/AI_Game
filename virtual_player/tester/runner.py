@@ -134,6 +134,11 @@ class TesterRunner:
         self._skip_next_perception = False  # 예측 스킵 플래그
         self._assumed_screen: Optional[str] = None  # 스킵 시 가정할 화면
 
+        # Stuck 감지
+        self._same_screen_count = 0
+        self._last_screen_type: Optional[str] = None
+        self._ad_first_seen: Optional[float] = None  # 광고 최초 감지 시각
+
     def run(self, duration_minutes: int = 60):
         """메인 루프 실행."""
         target = datetime.now() + timedelta(minutes=duration_minutes)
@@ -158,11 +163,16 @@ class TesterRunner:
     # 예측 가능한 화면 전환 (action 후 예상 결과)
     # key: (현재 screen_type, action reason 키워드)
     # value: (예상 다음 screen, 대기 시간)
+    # NOTE: fail_result 제거 — Try Again 좌표가 불확실하여 무한루프 원인
     _PREDICTABLE_TRANSITIONS = {
         ("lobby", "Level N"):           ("gameplay", 4.0),
         ("win", "Continue"):            ("lobby", 3.0),
-        ("fail_result", "Try Again"):   ("gameplay", 4.0),
     }
+
+    # Stuck 감지: 같은 화면 연속 반복 카운터
+    _STUCK_WARN = 5       # 경고 로그
+    _STUCK_SWEEP = 10     # 다양한 좌표 시도
+    _STUCK_RELAUNCH = 20  # 게임 재시작
 
     def _game_loop(self, target: datetime):
         """핵심 루프: perceive → decide → execute → verify."""
@@ -205,6 +215,24 @@ class TesterRunner:
                               f"Vision: {elapsed:.1f}s")
 
                 prev_board = self._current_board or board
+
+                # Stuck 감지: 같은 화면 연속 반복 카운트
+                if board.screen_type == self._last_screen_type:
+                    self._same_screen_count += 1
+                else:
+                    self._same_screen_count = 0
+                    self._ad_first_seen = None
+                self._last_screen_type = board.screen_type
+
+                # Stuck 에스컬레이션
+                if self._same_screen_count >= self._STUCK_RELAUNCH:
+                    self._log(f"  >> STUCK RELAUNCH: {board.screen_type} x{self._same_screen_count}")
+                    adb_relaunch()
+                    self._same_screen_count = 0
+                    self._ad_first_seen = None
+                    continue
+                elif self._same_screen_count >= self._STUCK_WARN and self._same_screen_count % 5 == 0:
+                    self._log(f"  >> STUCK WARNING: {board.screen_type} x{self._same_screen_count}")
 
                 # Step 3: Layer 2 — Memory 업데이트 (첫 턴이 아니면)
                 if self._current_board is not None:

@@ -148,13 +148,18 @@ class Decision:
         if screen == "lobby":
             memory.on_game_start()
 
-        # popup 에스컬레이션
-        if screen in ("popup", "unknown"):
+        # 공통 에스컬레이션: popup, unknown, fail_result, ad 모두 적용
+        if screen in ("popup", "unknown", "fail_result", "ad"):
             memory.on_popup()
-            if memory.popup_escape_attempts >= 10:
-                # 10회 이상 시도 → 게임 재시작
+            if memory.popup_escape_attempts >= 15:
+                stuck_count = memory.popup_escape_attempts
+                memory.popup_escape_attempts = 0
                 return [Action("relaunch", wait=5.0,
-                               reason=f"Popup stuck ({memory.popup_escape_attempts} attempts)")]
+                               reason=f"Screen stuck: {screen} ({stuck_count} attempts)")]
+
+        # ad 전용: 스마트 핸들링 (시도 횟수에 따라 다른 전략)
+        if screen == "ad":
+            return self._handle_ad(memory)
 
         # Playbook에 등록된 핸들러 사용
         handler = self.pb.screen_handlers.get(screen)
@@ -163,6 +168,63 @@ class Decision:
 
         # 미등록 화면 → back 버튼
         return [Action("back", wait=1.0, reason=f"Unregistered screen: {screen}")]
+
+    def _handle_ad(self, memory: GameMemory) -> List[Action]:
+        """광고 스마트 핸들링.
+
+        광고 특성:
+        - X 버튼이 5~30초 후에야 표시됨
+        - X 위치가 광고 네트워크마다 다름 (우상, 좌상, 좌하 등)
+        - 너무 빨리 탭하면 광고 인터랙션으로 인식 → X 타이머 리셋
+        - BACK 버튼이 작동하는 광고도 있고 안 되는 것도 있음
+
+        전략:
+        Phase 1 (1~3회): 대기 후 BACK — 광고 재생 시간 확보
+        Phase 2 (4~8회): X 위치 12곳 순차 스캔
+        Phase 3 (9회+): relaunch
+        """
+        attempts = memory.popup_escape_attempts
+
+        if attempts <= 3:
+            # Phase 1: 광고가 끝나길 기다림. 급하게 탭하면 역효과.
+            return [
+                Action("wait", wait=5.0, reason=f"Ad wait (attempt {attempts}, let ad play)"),
+                Action("back", wait=1.0, reason="Ad: try BACK after wait"),
+            ]
+
+        elif attempts <= 8:
+            # Phase 2: X 버튼 위치 순차 스캔 (광고 네트워크별 공통 위치)
+            # 한 번에 2곳씩 시도
+            x_positions = [
+                # (x, y, 설명)
+                (1050, 30, "top-right corner"),
+                (1040, 60, "top-right offset"),
+                (1050, 100, "top-right low"),
+                (30, 30, "top-left corner"),
+                (50, 60, "top-left offset"),
+                (1020, 150, "right side high"),
+                (30, 100, "left side high"),
+                (540, 1850, "bottom center"),
+                (980, 1850, "bottom right"),
+                (100, 1850, "bottom left"),
+            ]
+            # 시도 횟수에 따라 다른 위치 선택
+            idx = ((attempts - 4) * 2) % len(x_positions)
+            pos1 = x_positions[idx]
+            pos2 = x_positions[(idx + 1) % len(x_positions)]
+
+            return [
+                Action("wait", wait=3.0, reason=f"Ad wait before X scan (attempt {attempts})"),
+                Action("tap", pos1[0], pos1[1], 0.5, f"Ad X: {pos1[2]}"),
+                Action("tap", pos2[0], pos2[1], 0.5, f"Ad X: {pos2[2]}"),
+                Action("back", wait=1.0, reason="Ad: BACK fallback"),
+            ]
+
+        else:
+            # Phase 3: 포기 → relaunch
+            memory.popup_escape_attempts = 0
+            return [Action("relaunch", wait=5.0,
+                           reason=f"Ad stuck after {attempts} attempts")]
 
     def _find_active_car(
         self, board: BoardState, memory: GameMemory, color: str
