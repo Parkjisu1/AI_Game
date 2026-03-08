@@ -185,7 +185,10 @@ class Perception:
         if not screenshot_path.exists():
             return BoardState(screen_type="unknown", holder=[None]*7)
 
-        # CLI 모드일 때 이미지 압축 (1.7MB → ~200KB)
+        # 원본 경로 보존 (YOLO OD / OpenCV는 원본 사용)
+        self._original_path = screenshot_path
+
+        # CLI 모드일 때 이미지 압축 (VLM 폴백용)
         actual_path = self._compress_if_needed(screenshot_path)
 
         self._call_count += 1
@@ -258,19 +261,19 @@ class Perception:
             return None
 
     def _perceive_two_phase(self, img_path: Path) -> BoardState:
-        """2단계 인식: Phase 1(YOLO or CLI) → Phase 2(상세).
+        """2단계 인식: Phase 1(화면 분류) → Phase 2(차량+홀더 감지).
 
-        우선순위: YOLO(5ms) → gameplay 캐시 → CLI Phase 1(8초)
+        Phase 1: YOLO classify (5ms) → 캐시 → CLI 폴백
+        Phase 2: YOLO OD (10ms) → OpenCV (50ms) → VLM CLI (100s)
+        홀더:    OpenCV 색상 분석 (항상, 10ms)
         """
         # Phase 1: YOLO 로컬 분류 시도
         yolo_screen = self._classify_with_yolo(img_path)
         if yolo_screen is not None:
             screen = yolo_screen
         elif self._last_screen == "gameplay":
-            # YOLO 없으면 이전 턴 캐시 사용
             screen = "gameplay"
         else:
-            # YOLO도 없고 캐시도 없으면 CLI 폴백
             raw1 = self._call_vision_cli(img_path, prompt=self._PROMPT_PHASE1)
             screen = self._parse_screen_type(raw1)
 
@@ -286,10 +289,15 @@ class Perception:
                 raw_response="",
             )
 
-        # Phase 2: gameplay → holder + active_cars 상세 분석
+        # Phase 2: gameplay → 로컬 감지 시도 (YOLO OD / OpenCV)
+        original = getattr(self, '_original_path', img_path)
+        board = self._detect_local(original)
+        if board is not None:
+            return board
+
+        # 로컬 감지 실패 → VLM CLI 폴백
         raw2 = self._call_vision_cli(img_path, prompt=self._PROMPT_PHASE2)
         if not raw2:
-            # Phase 2 실패 → 화면이 바뀌었을 가능성 → Phase 1 재시도
             self._last_screen = None
             self._call_count += 1
             raw1_retry = self._call_vision_cli(img_path, prompt=self._PROMPT_PHASE1)
@@ -299,9 +307,7 @@ class Perception:
 
         board = self._parse_response(raw2)
 
-        # Phase 2 응답에 차가 0대이고 홀더도 비어있으면 → 화면 전환 의심
         if not board.active_cars and board.holder_count == 0:
-            # Phase 1으로 재확인
             self._last_screen = None
             self._call_count += 1
             raw1_check = self._call_vision_cli(img_path, prompt=self._PROMPT_PHASE1)
@@ -312,6 +318,68 @@ class Perception:
 
         board.screen_type = "gameplay"
         return board
+
+    # 로컬 감지 최소 차량 수 (이 이하면 VLM 폴백)
+    _LOCAL_MIN_CARS = 3
+
+    def _detect_local(self, img_path: Path) -> Optional[BoardState]:
+        """YOLO OD / OpenCV로 로컬 감지. 실패 시 None → VLM 폴백.
+
+        성공 조건: 차량 3대 이상 감지 (그 이하면 신뢰 불가)
+        """
+        try:
+            from .yolo_detector import HolderDetector, CarDetectorYOLO, CarDetectorCV
+        except ImportError:
+            return None
+
+        # 홀더: 항상 OpenCV (빠르고 확정적)
+        holder_det = getattr(self, '_holder_detector', None)
+        if holder_det is None:
+            holder_det = HolderDetector()
+            self._holder_detector = holder_det
+
+        holder = holder_det.detect(img_path)
+        holder_count = sum(1 for h in holder if h is not None)
+
+        # 차량: YOLO OD → OpenCV 체인
+        cars_raw = []
+        detection_mode = "none"
+
+        if CarDetectorYOLO.is_available():
+            cars_raw = CarDetectorYOLO.detect(img_path)
+            detection_mode = "yolo_od"
+
+        if len(cars_raw) < self._LOCAL_MIN_CARS:
+            cv_det = getattr(self, '_cv_detector', None)
+            if cv_det is None:
+                cv_det = CarDetectorCV()
+                self._cv_detector = cv_det
+            cars_raw = cv_det.detect(img_path)
+            detection_mode = "opencv"
+
+        if len(cars_raw) < self._LOCAL_MIN_CARS:
+            return None  # 로컬 감지 실패 → VLM 폴백
+
+        # dict → CarInfo 변환
+        active_cars = []
+        for c in cars_raw:
+            color = self._normalize_color(c["color"])
+            x, y = c["x"], c["y"]
+            if 0 < x < 1080 and 100 < y < 1800:
+                active_cars.append(CarInfo(
+                    color=color, x=x, y=y,
+                    stacked=1,
+                    is_mystery=(color == "unknown"),
+                ))
+
+        return BoardState(
+            screen_type="gameplay",
+            holder=holder,
+            holder_count=holder_count,
+            active_cars=active_cars,
+            confidence=0.8 if detection_mode == "yolo_od" else 0.6,
+            raw_response=f"local:{detection_mode}:{len(active_cars)}cars",
+        )
 
     # --- 프롬프트 ---
 

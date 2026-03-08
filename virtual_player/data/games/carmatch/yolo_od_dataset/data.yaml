@@ -1,0 +1,6 @@
+path: E:/AI/virtual_player/data/games/carmatch/yolo_od_dataset
+train: images/train
+val: images/val
+
+nc: 11
+names: ['red', 'blue', 'green', 'yellow', 'orange', 'purple', 'pink', 'cyan', 'white', 'brown', 'mystery']
