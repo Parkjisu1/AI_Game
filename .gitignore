@@ -61,3 +61,14 @@ desktop.ini
 .idea/
 *.swp
 *.swo
+
+# ======================
+# Environment / Secrets
+# ======================
+.env
+node_modules/
+
+# ======================
+# DB (migrated to MongoDB Atlas)
+# ======================
+db/

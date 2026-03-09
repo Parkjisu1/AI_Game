@@ -1,6 +1,0 @@
-
-export enum GridEvents {
-    ITEM_POINTER_DOWN = 'ITEM_POINTER_DOWN',
-    ITEM_POINTER_UP = ' ITEM_POINTER_UP',
-    MERGE = 'MERGE'
-}

@@ -25,6 +25,7 @@ const path = require('path');
 const { parseYaml } = require('./lib/yaml-utils');
 const { ensureDir, upsertIndex } = require('./lib/safe-io');
 const { normalizeDomain, displayDomain, displayGenre } = require('./lib/domain-utils');
+const dbClient = require('./lib/db-client');
 
 // ============================================================
 // Configuration
@@ -96,6 +97,7 @@ function parseArgs(argv) {
         genre: 'generic',
         project: null,
         output: DESIGN_DB_ROOT,
+        mongoOnly: false,
     };
 
     for (let i = 0; i < argv.length; i++) {
@@ -105,6 +107,7 @@ function parseArgs(argv) {
             case '--genre': args.genre = argv[++i]?.toLowerCase(); break;
             case '--project': args.project = argv[++i]; break;
             case '--output': args.output = argv[++i]; break;
+            case '--mongo-only': args.mongoOnly = true; break;
             case '--help': case '-h': printUsage(); process.exit(0);
         }
     }
@@ -127,6 +130,7 @@ Required:
 
 Optional:
   --output <db-path>   Design DB 경로 (기본: E:/AI/db/design)
+  --mongo-only         MongoDB에만 저장 (로컬 JSON 파일 쓰기 건너뜀)
   --help, -h           도움말
 
 Output:
@@ -608,7 +612,7 @@ function incrementSemver(version) {
     return `${major}.${minor}.${patch + 1}`;
 }
 
-function writeEntry(entry, genre, dbRoot) {
+function writeEntryLocal(entry, genre, dbRoot) {
     const { indexEntry, detailFile, domain } = entry;
     const genreDir = (genre || 'generic').toLowerCase();
     const domainDir = domain || 'ingame';
@@ -643,11 +647,34 @@ function writeEntry(entry, genre, dbRoot) {
     writeJsonAtomic(detailPath, detailFile);
 }
 
+/**
+ * Write a design entry to MongoDB
+ * The document contains all detail fields plus index fields merged together.
+ */
+async function writeEntryMongo(entry) {
+    const { indexEntry, detailFile } = entry;
+    // Merge index fields into the detail document for a single flat document
+    const doc = { ...detailFile, ...indexEntry };
+    await dbClient.upsertDesign(doc);
+    console.log(`[MONGO]  ${indexEntry.designId}`);
+}
+
+/**
+ * Write entry to both local files and MongoDB (dual-write).
+ * If mongoOnly is true, skip local file writes.
+ */
+async function writeEntry(entry, genre, dbRoot, mongoOnly) {
+    if (!mongoOnly) {
+        writeEntryLocal(entry, genre, dbRoot);
+    }
+    await writeEntryMongo(entry);
+}
+
 // ============================================================
 // Main
 // ============================================================
 
-function main() {
+async function main() {
     const args = parseArgs(process.argv.slice(2));
 
     // Validate required args
@@ -741,21 +768,30 @@ function main() {
         process.exit(0);
     }
 
-    // Write entries to DB
+    // Write entries to DB (dual-write: local + MongoDB, unless --mongo-only)
     let successCount = 0;
     for (const entry of entries) {
         try {
-            writeEntry(entry, args.genre, args.output);
+            await writeEntry(entry, args.genre, args.output, args.mongoOnly);
             successCount++;
         } catch (e) {
             console.error(`[ERROR] Failed to write ${entry.indexEntry?.designId}: ${e.message}`);
         }
     }
 
+    // Close MongoDB connection
+    await dbClient.close();
+
+    const modeLabel = args.mongoOnly ? 'MongoDB only' : 'Local + MongoDB';
     console.log(`\n${'='.repeat(60)}`);
-    console.log(`완료: ${successCount}/${entries.length}개 엔트리 저장됨`);
-    console.log(`DB 경로: ${args.output}/base/${args.genre.toLowerCase()}/`);
+    console.log(`완료: ${successCount}/${entries.length}개 엔트리 저장됨 (${modeLabel})`);
+    if (!args.mongoOnly) {
+        console.log(`Local DB 경로: ${args.output}/base/${args.genre.toLowerCase()}/`);
+    }
     console.log(`${'='.repeat(60)}\n`);
 }
 
-main();
+main().catch(err => {
+    console.error(`[FATAL] ${err.message}`);
+    dbClient.close().finally(() => process.exit(1));
+});

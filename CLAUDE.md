@@ -76,21 +76,18 @@ AI가 생성하는 것:
 
 ---
 
-## DB 위치
-```
-E:\AI\db\
-├── base\           # Base Code DB (파싱된 소스)
-│   ├── generic\    # 장르 무관 공통
-│   ├── rpg\
-│   ├── idle\
-│   ├── merge\
-│   ├── slg\
-│   ├── tycoon\
-│   ├── simulation\
-│   └── playable\   # 플레이어블 광고
-├── expert\         # 검증된 코드 (score >= 0.6)
-└── rules\          # 축적된 피드백 규칙
-```
+## DB (MongoDB Atlas)
+
+모든 DB는 MongoDB Atlas (`aigame` 데이터베이스)에 저장됩니다.
+접속 정보: `.env` 파일의 `MONGO_URI` / 클라이언트: `scripts/lib/db-client.js`
+
+| Collection | 내용 | 주요 필드 |
+|------------|------|-----------|
+| `code_base` | 파싱된 소스코드 (928건) | fileId, genre, layer, role, system, score |
+| `code_expert` | 검증된 코드 (score ≥ 0.6) | 상동 |
+| `design_base` | 기획 데이터 (108건) | designId, genre, domain, system, score |
+| `design_expert` | 검증된 기획 (score ≥ 0.6) | 상동 |
+| `rules` | 피드백 규칙 | ruleId, category, genre |
 
 ---
 
@@ -214,8 +211,8 @@ Compare, Calculate, Find, Validate, Assign, Notify, Delay, Spawn, Despawn, Itera
                → 데이터 스키마 정의(프로그래머 싱크) → 도메인별 우선순위 → DB 스키마
                + 디렉션 히스토리 자동 축적 시작
     ↓
-DB 구축 (1회)  Code DB: 소스 파싱 → db/base/
-               Design DB: 기획 문서 / AI Tester → db/design/base/ (0단계 스키마 참조)
+DB 구축 (1회)  Code DB: 소스 파싱 → MongoDB code_base
+               Design DB: 기획 문서 / AI Tester → MongoDB design_base (0단계 스키마 참조)
     ↓
 Design Stage 2~6: 기획 생성 → 통합 검증 → 디렉터 검수 → 재생성 → DB 축적
     ↓ (Stage 6 완료 = 기획 확정)
@@ -228,7 +225,7 @@ Design Stage 8:  라이브 동기화 (출시 후)
 ### Code Workflow (Phase 1~4)
 
 #### Phase 1: DB 구축 (1회)
-소스 폴더 → 파싱 → Layer/Genre/Role/Tag 분류 → DB 저장
+소스 폴더 → 파싱 → Layer/Genre/Role/Tag 분류 → MongoDB 저장
 
 #### Phase 2: 기획서 변환 (프로젝트마다)
 Design Stage 6 완료된 기획서 → 시스템 명세서 → AI_기획서 (YAML)
@@ -580,18 +577,9 @@ E:\AI\
 
 ## Design DB (기획 데이터베이스)
 
-### DB 위치
-```
-E:\AI\db\design\
-├── base\
-│   ├── generic\    # 장르 무관 공통
-│   │   ├── ingame\, outgame\, balance\, content\, bm\
-│   │   ├── liveops\, ux\, social\, meta\
-│   │   └── _projects\
-│   ├── rpg\, idle\, slg\, simulation\, tycoon\, merge\, puzzle\, casual\
-├── expert\         # 검증된 기획 (score >= 0.6)
-└── rules\          # 축적된 기획 피드백 규칙
-```
+### DB 저장소
+MongoDB Atlas (`aigame` DB) — `design_base`, `design_expert` 컬렉션 사용.
+접속: `scripts/lib/db-client.js` (`findDesign`, `upsertDesign`, `searchDesignByPriority`)
 
 ### Design 분류 체계 (Domain 9종)
 | Domain | 정의 |

@@ -86,12 +86,12 @@ E:\AI\
 [Stage 0: 설계 표준]    장르별 파라미터 + 디렉션 히스토리    (디렉터 + AI Tester)
                         구성요소 맵 → 파라미터 정의(상세도 기준 포함)
                         → 데이터 스키마 정의(프로그래머 싱크) → 도메인별 우선순위 → DB 스키마
-                        저장: db/design/standards/{genre}.yaml
+                        저장: MongoDB design_base
 
 ═══ DB 구축 (1회) ═══════════════════════════════════════════════════════
-[Code DB 구축]    소스 파싱 → /parse-source → db/base/      (DB Builder)
+[Code DB 구축]    소스 파싱 → /parse-source → MongoDB code_base      (DB Builder)
 [Design DB 구축]  기획 문서 / AI Tester 관찰 → /parse-design
-                  → 설계 의도 분석 + 품질 평가 → 디렉터 큐레이션 → db/design/base/
+                  → 설계 의도 분석 + 품질 평가 → 디렉터 큐레이션 → MongoDB design_base
                   (0단계 스키마에 맞춰 정규화)              (Design DB Builder + 디렉터)
 ═══ Design Workflow (프로젝트마다) ═══════════════════════════════════════
 [Stage 2: 기획 생성]     디렉션 + DB 참조 → 기획서/밸런스/콘텐츠/BM/LiveOps
@@ -116,7 +116,7 @@ E:\AI\
 ## Phase 1: DB 구축 (DB Builder)
 
 ### 목적
-자사 프로젝트 소스를 파싱하여 AI가 참조할 Base Code DB 구축
+자사 프로젝트 소스를 파싱하여 AI가 참조할 Code DB 구축 → MongoDB 저장
 
 ### 실행
 ```
@@ -137,13 +137,11 @@ Role: Manager / Controller / Calculator / ... / UX (21종)
 Tag: Major (7종) + Minor (11종)
 ```
 
-### 출력 구조
-```
-db/base/{genre}/{layer}/
-├── index.json        # 경량 인덱스
-└── files/
-    └── {fileId}.json # 상세 정보
-```
+### 저장소
+MongoDB Atlas (`aigame` DB)
+- `code_base` — 파싱된 소스코드
+- `code_expert` — 검증 통과 (score ≥ 0.6)
+- 클라이언트: `scripts/lib/db-client.js`
 
 ---
 
@@ -289,7 +287,7 @@ Expert 승격: score >= 0.6
 ```
 
 ### Rules 추출
-반복되는 피드백 → db/rules/ 에 저장
+반복되는 피드백 → MongoDB rules 컬렉션에 저장
 
 ---
 
@@ -489,7 +487,7 @@ DB Builder를 사용해서 병렬로 진행해줘.
 ### Code Workflow
 | 명령어 | 용도 | 담당 Agent |
 |--------|------|-----------|
-| `/parse-source` | 소스 파싱 → Code DB | DB Builder |
+| `/parse-source` | 소스 파싱 → MongoDB code_base | DB Builder |
 | `/generate-design` | 기획서 생성 | Designer |
 | `/generate-code` | 코드 생성 | Main/Sub Coder |
 | `/validate-code` | 코드 검증 | Validator |
@@ -497,7 +495,7 @@ DB Builder를 사용해서 병렬로 진행해줘.
 ### Design Workflow
 | 명령어 | 용도 | 담당 Agent |
 |--------|------|-----------|
-| `/parse-design` | 기획 문서 → Design DB 파싱 저장 | Design DB Builder |
+| `/parse-design` | 기획 문서 → MongoDB design_base 파싱 저장 | Design DB Builder |
 | `/generate-design-v2` | 8단계 기획 워크플로우 전체 실행 | Designer (design mode) |
 | `/validate-design` | 기획 교차 검증 + 밸런스 시뮬 | Design Validator |
 | `/sync-live` | 라이브 지표 → Design DB 동기화 | Design DB Builder |
@@ -629,11 +627,11 @@ Stage 0: 설계 표준 (디렉터 + AI Tester)
   장르별 설계 표준 정의 — 구성요소 맵 + 파라미터(상세도 기준 포함)
   + 데이터 스키마 정의(프로그래머 싱크) + 도메인별 우선순위 + DB 스키마
   디렉션 히스토리 자동 축적 시작
-  저장: db/design/standards/{genre}.yaml
+  저장: MongoDB design_base
               ↓
 Stage 1: DB 가공 (Design DB Builder + 디렉터)
   기획 문서 파싱 → 설계 의도 분석 → 품질 평가 → 디렉터 큐레이션 → DB 저장
-  기존 기획 문서 / AI Tester 관찰 자료 → /parse-design → db/design/base/
+  기존 기획 문서 / AI Tester 관찰 자료 → /parse-design → MongoDB design_base
               ↓
 Stage 2: 기획 생성 (Designer - design mode)
   2-1 컨셉 정의 → 2-2 시스템 기획 → 2-3 밸런스 기획 ─┐
@@ -782,7 +780,7 @@ Design Workflow **Stage 6 (DB 축적)** 완료 후 Code Workflow로 연결됩니
 
 ```
 [Design Stage 6 완료] — 기획 검증 + 디렉터 승인 + Expert DB 축적 완료
-  db/design/base/{genre}/{domain}/
+  MongoDB design_base / design_expert
   projects/{name}/designs/ (game_design, system_spec, nodes/)
     ↓
 [Code Phase 2: Designer] — 기획서를 코드 생성용 YAML로 변환
@@ -842,7 +840,7 @@ AI Tester는 Design Workflow와 두 가지 역할로 연계됩니다:
 
 | 명령어 | 용도 | 담당 Agent |
 |--------|------|-----------|
-| `/parse-design` | 기획 문서 → Design DB 파싱 저장 | Design DB Builder |
+| `/parse-design` | 기획 문서 → MongoDB design_base 파싱 저장 | Design DB Builder |
 | `/generate-design-v2` | 8단계 기획 워크플로우 전체 실행 | Designer (design mode) |
 | `/validate-design` | 기획 교차 검증 + 밸런스 시뮬 | Design Validator |
 | `/sync-live` | 라이브 지표 → Design DB 동기화 | Design DB Builder |

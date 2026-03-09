@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Design DB Search CLI - Base/Expert Design DB 검색 자동화
+ * Design DB Search CLI - MongoDB-backed Design DB 검색 자동화
  * 5단계 우선순위 검색 + 유사도 스코어링
  *
  * Usage:
@@ -10,22 +10,16 @@
  *   node design-db-search.js --genre rpg --min-score 0.6 --project MyGame
  */
 
-const fs = require('fs');
-const path = require('path');
-
 // Shared libraries
 const { normalizeDomain } = require('./lib/domain-utils');
 const { applyHybridScoring, getSearchModeInfo } = require('./lib/search-strategy');
+const dbClient = require('./lib/db-client');
 
 // ============================================================
 // Configuration
 // ============================================================
 
-const DESIGN_DB_ROOT = process.env.DESIGN_DB_ROOT || 'E:/AI/db/design';
 const DEFAULT_TOP_N = 5;
-
-const GENRES = ['generic', 'rpg', 'idle', 'merge', 'slg', 'tycoon', 'simulation', 'puzzle', 'casual'];
-const DOMAINS = ['ingame', 'outgame', 'balance', 'content', 'bm', 'liveops', 'ux', 'social', 'meta', 'projects'];
 
 // Source preference scores
 const SOURCE_SCORES = {
@@ -71,7 +65,7 @@ function parseArgs(argv) {
 
 function printUsage() {
     console.log(`
-Design DB Search CLI - Base/Expert Design DB 검색
+Design DB Search CLI - MongoDB-backed Design DB 검색
 
 Usage:
   node design-db-search.js --genre <genre> [options]
@@ -97,102 +91,83 @@ Examples:
 }
 
 // ============================================================
-// Index Loading
-// ============================================================
-
-function loadIndex(indexPath) {
-    try {
-        if (!fs.existsSync(indexPath)) return [];
-        const data = fs.readFileSync(indexPath, 'utf-8');
-        const parsed = JSON.parse(data);
-        return Array.isArray(parsed) ? parsed : [];
-    } catch (e) {
-        return [];
-    }
-}
-
-function loadFileDetail(filePath) {
-    try {
-        if (!fs.existsSync(filePath)) return null;
-        const data = fs.readFileSync(filePath, 'utf-8');
-        return JSON.parse(data);
-    } catch (e) {
-        return null;
-    }
-}
-
-// ============================================================
-// Search Functions
+// Search Functions (MongoDB-backed)
 // ============================================================
 
 /**
- * 5단계 우선순위 검색
+ * 5단계 우선순위 검색 (MongoDB)
  * 1. Expert DB (해당 장르)
  * 2. Expert DB (Generic)
  * 3. Genre Base DB
  * 4. Generic Base DB
  * 5. 없음
  */
-function searchAll(args) {
+async function searchAll(args) {
     const results = [];
     const genre = args.genre ? args.genre.toLowerCase() : null;
     const domainDir = args.domain ? normalizeDomain(args.domain) : null;
 
+    // Build shared filter options (excluding genre/domain/minScore which vary per step)
+    const baseFilter = {};
+    if (args.system) baseFilter.system = args.system;
+    if (args.data_type) baseFilter.data_type = args.data_type;
+    if (args.project) baseFilter.project = args.project;
+
     // Step 1: Expert DB (해당 장르)
-    const expertEntries = loadIndex(path.join(DESIGN_DB_ROOT, 'expert', 'index.json'));
-    const expertGenre = expertEntries.filter(e => {
-        if (!genre) return (e.score || 0) >= 0.6;
-        return e.genre && e.genre.toLowerCase() === genre && (e.score || 0) >= 0.6;
-    });
-    for (const entry of expertGenre) {
+    const expertGenreFilter = { ...baseFilter, minScore: 0.6 };
+    if (genre) expertGenreFilter.genre = genre;
+    if (domainDir) expertGenreFilter.domain = domainDir;
+
+    const expertGenreEntries = await dbClient.findDesign(expertGenreFilter, { expert: true });
+    for (const entry of expertGenreEntries) {
         results.push({ ...entry, _source: 'Expert', _priority: 1 });
     }
 
     // Step 2: Expert DB (Generic) - 장르가 지정된 경우에만 추가 검색
     if (genre && genre !== 'generic') {
-        const expertGeneric = expertEntries.filter(e =>
-            e.genre && e.genre.toLowerCase() === 'generic' && (e.score || 0) >= 0.6
-        );
-        for (const entry of expertGeneric) {
+        const expertGenericFilter = { ...baseFilter, genre: 'generic', minScore: 0.6 };
+        if (domainDir) expertGenericFilter.domain = domainDir;
+
+        const expertGenericEntries = await dbClient.findDesign(expertGenericFilter, { expert: true });
+        for (const entry of expertGenericEntries) {
             results.push({ ...entry, _source: 'Expert(Generic)', _priority: 2 });
         }
     }
 
     // Step 3: Genre Base DB
     if (genre) {
-        const domainsToSearch = domainDir ? [domainDir] : DOMAINS;
-        for (const dom of domainsToSearch) {
-            const indexPath = path.join(DESIGN_DB_ROOT, 'base', genre, dom, 'index.json');
-            const entries = loadIndex(indexPath);
-            for (const entry of entries) {
-                results.push({ ...entry, _source: `Base(${genre}/${dom})`, _priority: 3 });
-            }
+        const baseGenreFilter = { ...baseFilter, genre };
+        if (domainDir) baseGenreFilter.domain = domainDir;
+
+        const baseGenreEntries = await dbClient.findDesign(baseGenreFilter, { expert: false });
+        for (const entry of baseGenreEntries) {
+            const dom = normalizeDomain(entry.domain) || 'unknown';
+            results.push({ ...entry, _source: `Base(${genre}/${dom})`, _priority: 3 });
         }
     }
 
     // Step 4: Generic Base DB
     if (genre && genre !== 'generic') {
-        const domainsToSearch = domainDir ? [domainDir] : DOMAINS;
-        for (const dom of domainsToSearch) {
-            const indexPath = path.join(DESIGN_DB_ROOT, 'base', 'generic', dom, 'index.json');
-            const entries = loadIndex(indexPath);
-            for (const entry of entries) {
-                results.push({ ...entry, _source: `Base(generic/${dom})`, _priority: 4 });
-            }
+        const baseGenericFilter = { ...baseFilter, genre: 'generic' };
+        if (domainDir) baseGenericFilter.domain = domainDir;
+
+        const baseGenericEntries = await dbClient.findDesign(baseGenericFilter, { expert: false });
+        for (const entry of baseGenericEntries) {
+            const dom = normalizeDomain(entry.domain) || 'unknown';
+            results.push({ ...entry, _source: `Base(generic/${dom})`, _priority: 4 });
         }
     }
 
     // Step 5: 장르가 없는 경우 전체 Base DB 검색
     if (!genre) {
-        for (const g of GENRES) {
-            const domainsToSearch = domainDir ? [domainDir] : DOMAINS;
-            for (const dom of domainsToSearch) {
-                const indexPath = path.join(DESIGN_DB_ROOT, 'base', g, dom, 'index.json');
-                const entries = loadIndex(indexPath);
-                for (const entry of entries) {
-                    results.push({ ...entry, _source: `Base(${g}/${dom})`, _priority: 4 });
-                }
-            }
+        const allBaseFilter = { ...baseFilter };
+        if (domainDir) allBaseFilter.domain = domainDir;
+
+        const allBaseEntries = await dbClient.findDesign(allBaseFilter, { expert: false });
+        for (const entry of allBaseEntries) {
+            const g = entry.genre ? entry.genre.toLowerCase() : 'unknown';
+            const dom = normalizeDomain(entry.domain) || 'unknown';
+            results.push({ ...entry, _source: `Base(${g}/${dom})`, _priority: 4 });
         }
     }
 
@@ -320,33 +295,20 @@ function filterAndRank(results, args) {
 }
 
 // ============================================================
-// Detail Loading
+// Detail Loading (MongoDB-backed)
 // ============================================================
 
-function loadDetail(entry) {
-    const genre = entry.genre ? entry.genre.toLowerCase() : 'generic';
-    const domainDir = normalizeDomain(entry.domain) || 'ingame';
-
-    // Expert DB에서 먼저 시도
-    if (entry._source && entry._source.startsWith('Expert')) {
-        const expertPath = path.join(DESIGN_DB_ROOT, 'expert', 'files', `${entry.designId}.json`);
-        const detail = loadFileDetail(expertPath);
-        if (detail) return detail;
-    }
-
-    // Base DB에서 시도
-    const basePath = path.join(DESIGN_DB_ROOT, 'base', genre, domainDir, 'files', `${entry.designId}.json`);
-    const detail = loadFileDetail(basePath);
-    if (detail) return detail;
-
-    return null;
+async function loadDetail(entry) {
+    const isExpert = entry._source && entry._source.startsWith('Expert');
+    const detail = await dbClient.getDesign(entry.designId, isExpert);
+    return detail || null;
 }
 
 // ============================================================
 // Output Formatting
 // ============================================================
 
-function formatPretty(results, args) {
+async function formatPretty(results, args) {
     if (results.length === 0) {
         console.log('\n검색 결과 없음.');
         console.log(`조건: genre=${args.genre || 'any'}, domain=${args.domain || 'any'}, system=${args.system || 'any'}`);
@@ -384,7 +346,7 @@ function formatPretty(results, args) {
         }
 
         // 상세 정보 로드
-        const detail = loadDetail(r);
+        const detail = await loadDetail(r);
         if (detail && detail.content) {
             if (detail.content.summary) {
                 console.log(`    Summary: ${detail.content.summary.substring(0, 100)}${detail.content.summary.length > 100 ? '...' : ''}`);
@@ -395,37 +357,41 @@ function formatPretty(results, args) {
     }
 }
 
-function formatJson(results) {
+async function formatJson(results) {
     const modeInfo = getSearchModeInfo(results.length > 0 ? (results[0]._candidateCount || 0) : 0);
+
+    const resultEntries = [];
+    for (const r of results) {
+        const detail = await loadDetail(r);
+        resultEntries.push({
+            designId: r.designId,
+            source: r._source,
+            matchScore: parseFloat(r.matchScore.toFixed(3)),
+            dbScore: r.score || 0.4,
+            domain: r.domain,
+            genre: r.genre,
+            system: r.system || null,
+            data_type: r.data_type || null,
+            balance_area: r.balance_area || null,
+            version: r.version || null,
+            project: r.project || null,
+            provides: r.provides || [],
+            requires: r.requires || [],
+            tags: r.tags || [],
+            detail: detail ? {
+                summary: detail.content?.summary || null,
+                formula: detail.content?.formula || null,
+                parameters: detail.content?.parameters || null,
+                versions: (detail.versions || []).slice(0, 2),
+                code_mapping: detail.code_mapping || null,
+            } : null
+        });
+    }
+
     const output = {
         count: results.length,
         searchMode: modeInfo,
-        results: results.map(r => {
-            const detail = loadDetail(r);
-            return {
-                designId: r.designId,
-                source: r._source,
-                matchScore: parseFloat(r.matchScore.toFixed(3)),
-                dbScore: r.score || 0.4,
-                domain: r.domain,
-                genre: r.genre,
-                system: r.system || null,
-                data_type: r.data_type || null,
-                balance_area: r.balance_area || null,
-                version: r.version || null,
-                project: r.project || null,
-                provides: r.provides || [],
-                requires: r.requires || [],
-                tags: r.tags || [],
-                detail: detail ? {
-                    summary: detail.content?.summary || null,
-                    formula: detail.content?.formula || null,
-                    parameters: detail.content?.parameters || null,
-                    versions: (detail.versions || []).slice(0, 2),
-                    code_mapping: detail.code_mapping || null,
-                } : null
-            };
-        })
+        results: resultEntries,
     };
 
     console.log(JSON.stringify(output, null, 2));
@@ -435,7 +401,7 @@ function formatJson(results) {
 // Main
 // ============================================================
 
-function main() {
+async function main() {
     const args = parseArgs(process.argv.slice(2));
 
     if (!args.genre && !args.domain && !args.system && !args.data_type) {
@@ -443,17 +409,21 @@ function main() {
         process.exit(1);
     }
 
-    // 검색
-    const allResults = searchAll(args);
+    try {
+        // 검색
+        const allResults = await searchAll(args);
 
-    // 필터링 및 랭킹
-    const ranked = filterAndRank(allResults, args);
+        // 필터링 및 랭킹
+        const ranked = filterAndRank(allResults, args);
 
-    // 출력
-    if (args.json) {
-        formatJson(ranked);
-    } else {
-        formatPretty(ranked, args);
+        // 출력
+        if (args.json) {
+            await formatJson(ranked);
+        } else {
+            await formatPretty(ranked, args);
+        }
+    } finally {
+        await dbClient.close();
     }
 }
 

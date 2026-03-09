@@ -1,23 +1,22 @@
 /**
  * score-manager.js - Trust score lifecycle automation
  * Manages score updates, Expert DB promotion, and score event tracking.
+ * Uses MongoDB via db-client for persistence.
  *
  * Usage:
  *   const { updateScore, promoteToExpert, SCORE_EVENTS, EXPERT_THRESHOLD } = require('./lib/score-manager');
- *   updateScore('rpg', 'ingame', 'MyDesign_v1', 'FEEDBACK_PASS');
- *   promoteToExpert('rpg', 'ingame', 'MyDesign_v1');
+ *   await updateScore('rpg', 'ingame', 'MyDesign_v1', 'FEEDBACK_PASS');
+ *   await promoteToExpert('rpg', 'ingame', 'MyDesign_v1');
  */
 
 'use strict';
 
-const path = require('path');
 const { readJsonSafe, writeJsonAtomic, upsertIndex, ensureDir } = require('./safe-io');
+const { getDesign, upsertDesign, promoteDesignToExpert } = require('./db-client');
 
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
-
-const DESIGN_DB_ROOT = process.env.DESIGN_DB_ROOT || 'E:/AI/db/design';
 
 const SCORE_EVENTS = {
   INITIAL:          { delta: 0.4,   description: 'Initial save' },
@@ -36,29 +35,24 @@ const EXPERT_THRESHOLD = 0.6;
 
 /**
  * Update the trust score for a design entry.
- * Updates both the detail file and the index entry atomically.
+ * Reads from MongoDB, updates score, writes back, and auto-promotes if >= 0.6.
  *
  * @param {string} genre - Lowercase genre directory
  * @param {string} domain - Lowercase domain directory
  * @param {string} designId - Design entry ID
  * @param {string} eventName - Key from SCORE_EVENTS (e.g., 'FEEDBACK_PASS')
- * @returns {{ newScore: number, promoted: boolean, error: string|null }}
+ * @returns {Promise<{ newScore: number, promoted: boolean, error: string|null }>}
  */
-function updateScore(genre, domain, designId, eventName) {
+async function updateScore(genre, domain, designId, eventName) {
   const event = SCORE_EVENTS[eventName];
   if (!event) {
     return { newScore: 0, promoted: false, error: `Unknown score event: ${eventName}` };
   }
 
-  // Paths
-  const baseDir = path.join(DESIGN_DB_ROOT, 'base', genre, domain);
-  const detailPath = path.join(baseDir, 'files', `${designId}.json`);
-  const indexPath = path.join(baseDir, 'index.json');
-
-  // Read detail
-  const detail = readJsonSafe(detailPath);
+  // Read detail from MongoDB (base collection)
+  const detail = await getDesign(designId, false);
   if (!detail) {
-    return { newScore: 0, promoted: false, error: `Detail file not found: ${detailPath}` };
+    return { newScore: 0, promoted: false, error: `Design not found in DB: ${designId}` };
   }
 
   // Update score
@@ -79,23 +73,13 @@ function updateScore(genre, domain, designId, eventName) {
     });
   }
 
-  // Write detail atomically
-  writeJsonAtomic(detailPath, detail);
-
-  // Update index entry score
-  const index = readJsonSafe(indexPath);
-  if (Array.isArray(index)) {
-    const entry = index.find(e => e.designId === designId);
-    if (entry) {
-      entry.score = roundedScore;
-      writeJsonAtomic(indexPath, index);
-    }
-  }
+  // Write updated detail back to MongoDB (base collection)
+  await upsertDesign(detail, false);
 
   // Auto-promote to Expert if threshold reached
   let promoted = false;
   if (roundedScore >= EXPERT_THRESHOLD) {
-    const result = promoteToExpert(genre, domain, designId);
+    const result = await promoteToExpert(genre, domain, designId);
     promoted = !result.error;
   }
 
@@ -108,70 +92,26 @@ function updateScore(genre, domain, designId, eventName) {
 
 /**
  * Promote a design entry to Expert DB when score >= 0.6.
- * Copies detail file to expert/files/ and adds index entry to expert/index.json.
+ * Reads from base collection and copies to expert collection via db-client.
  *
  * @param {string} genre - Lowercase genre directory
  * @param {string} domain - Lowercase domain directory
  * @param {string} designId - Design entry ID
- * @returns {{ error: string|null }}
+ * @returns {Promise<{ error: string|null }>}
  */
-function promoteToExpert(genre, domain, designId) {
-  const baseDir = path.join(DESIGN_DB_ROOT, 'base', genre, domain);
-  const detailPath = path.join(baseDir, 'files', `${designId}.json`);
-  const indexPath = path.join(baseDir, 'index.json');
-
-  // Read source data
-  const detail = readJsonSafe(detailPath);
+async function promoteToExpert(genre, domain, designId) {
+  // Read source data from base collection
+  const detail = await getDesign(designId, false);
   if (!detail) {
-    return { error: `Detail file not found: ${detailPath}` };
+    return { error: `Design not found in DB: ${designId}` };
   }
 
   if ((detail.score || 0) < EXPERT_THRESHOLD) {
     return { error: `Score ${detail.score} below threshold ${EXPERT_THRESHOLD}` };
   }
 
-  // Expert paths
-  const expertDir = path.join(DESIGN_DB_ROOT, 'expert');
-  const expertFilesDir = path.join(expertDir, 'files');
-  const expertIndexPath = path.join(expertDir, 'index.json');
-  const expertDetailPath = path.join(expertFilesDir, `${designId}.json`);
-
-  ensureDir(expertFilesDir);
-
-  // Copy detail to expert
-  writeJsonAtomic(expertDetailPath, detail);
-
-  // Build index entry from detail or base index
-  const baseIndex = readJsonSafe(indexPath);
-  let indexEntry = null;
-  if (Array.isArray(baseIndex)) {
-    indexEntry = baseIndex.find(e => e.designId === designId);
-  }
-
-  if (!indexEntry) {
-    // Build from detail
-    indexEntry = {
-      designId: detail.designId || designId,
-      domain: detail.domain,
-      genre: detail.genre,
-      system: detail.system || '',
-      score: detail.score,
-      source: detail.source || detail.source_type || 'internal_produced',
-      data_type: detail.data_type || 'spec',
-      balance_area: detail.balance_area || null,
-      version: detail.version || '1.0.0',
-      project: detail.project || null,
-      provides: detail.provides || [],
-      requires: detail.requires || [],
-      tags: detail.tags || [],
-    };
-  } else {
-    // Ensure score is up to date
-    indexEntry = { ...indexEntry, score: detail.score };
-  }
-
-  // Upsert into expert index
-  upsertIndex(expertIndexPath, indexEntry, 'designId');
+  // Promote to expert collection via db-client
+  await promoteDesignToExpert(designId);
 
   return { error: null };
 }

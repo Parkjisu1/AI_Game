@@ -3,27 +3,23 @@
  * DB Search CLI - Base/Expert Code DB 검색 자동화
  * 5단계 우선순위 검색 + 유사도 스코어링
  *
+ * Uses MongoDB via db-client instead of local JSON files.
+ *
  * Usage:
  *   node db-search.js --genre Rpg --role Manager --system Battle
  *   node db-search.js --genre Rpg --role UX --provides "void PlayEffect" --json
  *   node db-search.js --genre Idle --role Manager --top 3
  */
 
-const fs = require('fs');
-const path = require('path');
-
 // Shared libraries
 const { applyHybridScoring, getSearchModeInfo } = require('./lib/search-strategy');
+const dbClient = require('./lib/db-client');
 
 // ============================================================
 // Configuration
 // ============================================================
 
-const DB_ROOT = process.env.DB_ROOT || 'E:/AI/db';
 const DEFAULT_TOP_N = 5;
-
-const GENRES = ['generic', 'rpg', 'idle', 'merge', 'slg', 'tycoon', 'simulation', 'puzzle', 'playable'];
-const LAYERS = ['core', 'domain', 'game'];
 
 // ============================================================
 // CLI Argument Parsing
@@ -81,58 +77,54 @@ Examples:
 }
 
 // ============================================================
-// Index Loading
+// Genre normalization (capitalize first letter for MongoDB)
 // ============================================================
 
-function loadIndex(indexPath) {
-    try {
-        if (!fs.existsSync(indexPath)) return [];
-        const data = fs.readFileSync(indexPath, 'utf-8');
-        return JSON.parse(data);
-    } catch (e) {
-        return [];
-    }
-}
-
-function loadFileDetail(filePath) {
-    try {
-        if (!fs.existsSync(filePath)) return null;
-        const data = fs.readFileSync(filePath, 'utf-8');
-        return JSON.parse(data);
-    } catch (e) {
-        return null;
-    }
+function normalizeGenre(genre) {
+    if (!genre) return 'Generic';
+    const lower = genre.toLowerCase();
+    // Special cases
+    if (lower === 'slg') return 'SLG';
+    return lower.charAt(0).toUpperCase() + lower.slice(1);
 }
 
 // ============================================================
-// Search Functions
+// Search Functions (MongoDB)
 // ============================================================
 
 /**
- * 5단계 우선순위 검색
- * 1. Expert DB (해당 장르)
- * 2. Expert DB (Generic)
+ * 5단계 우선순위 검색 via MongoDB
+ * 1. Expert DB (해당 장르, score >= 0.6)
+ * 2. Expert DB (Generic, score >= 0.6)
  * 3. Genre Base DB
  * 4. Generic Base DB
  * 5. 없음
  */
-function searchAll(args) {
+async function searchAll(args) {
     const results = [];
-    const genre = args.genre ? args.genre.toLowerCase() : 'generic';
+    const genre = normalizeGenre(args.genre);
+    const fetchLimit = 200; // fetch more than needed for scoring
+
+    // Build base filter from args (excluding genre, handled per-step)
+    const baseFilter = {};
+    if (args.role) baseFilter.role = args.role;
+    if (args.system) baseFilter.system = args.system;
+    if (args.layer) baseFilter.layer = args.layer;
 
     // Step 1: Expert DB (해당 장르)
-    const expertEntries = loadIndex(path.join(DB_ROOT, 'expert', 'index.json'));
-    const expertGenre = expertEntries.filter(e =>
-        e.genre && e.genre.toLowerCase() === genre && (e.score || 0) >= 0.6
+    const expertGenre = await dbClient.findCode(
+        { ...baseFilter, genre, minScore: 0.6 },
+        { expert: true, limit: fetchLimit }
     );
     for (const entry of expertGenre) {
         results.push({ ...entry, source: 'Expert', priority: 1 });
     }
 
     // Step 2: Expert DB (Generic)
-    if (genre !== 'generic') {
-        const expertGeneric = expertEntries.filter(e =>
-            e.genre && e.genre.toLowerCase() === 'generic' && (e.score || 0) >= 0.6
+    if (genre !== 'Generic') {
+        const expertGeneric = await dbClient.findCode(
+            { ...baseFilter, genre: 'Generic', minScore: 0.6 },
+            { expert: true, limit: fetchLimit }
         );
         for (const entry of expertGeneric) {
             results.push({ ...entry, source: 'Expert(Generic)', priority: 2 });
@@ -140,22 +132,22 @@ function searchAll(args) {
     }
 
     // Step 3: Genre Base DB
-    for (const layer of LAYERS) {
-        const indexPath = path.join(DB_ROOT, 'base', genre, layer, 'index.json');
-        const entries = loadIndex(indexPath);
-        for (const entry of entries) {
-            results.push({ ...entry, source: `Base(${genre}/${layer})`, priority: 3 });
-        }
+    const baseGenre = await dbClient.findCode(
+        { ...baseFilter, genre },
+        { limit: fetchLimit }
+    );
+    for (const entry of baseGenre) {
+        results.push({ ...entry, source: `Base(${genre})`, priority: 3 });
     }
 
     // Step 4: Generic Base DB
-    if (genre !== 'generic') {
-        for (const layer of LAYERS) {
-            const indexPath = path.join(DB_ROOT, 'base', 'generic', layer, 'index.json');
-            const entries = loadIndex(indexPath);
-            for (const entry of entries) {
-                results.push({ ...entry, source: `Base(generic/${layer})`, priority: 4 });
-            }
+    if (genre !== 'Generic') {
+        const baseGeneric = await dbClient.findCode(
+            { ...baseFilter, genre: 'Generic' },
+            { limit: fetchLimit }
+        );
+        for (const entry of baseGeneric) {
+            results.push({ ...entry, source: 'Base(Generic)', priority: 4 });
         }
     }
 
@@ -261,33 +253,28 @@ function filterAndRank(results, args) {
 }
 
 // ============================================================
-// Detail Loading
+// Detail Loading (MongoDB)
 // ============================================================
 
-function loadDetail(entry) {
-    const genre = entry.genre ? entry.genre.toLowerCase() : 'generic';
-    const layer = entry.layer ? entry.layer.toLowerCase() : 'domain';
+async function loadDetail(entry) {
+    const isExpert = entry.source && entry.source.startsWith('Expert');
 
-    // Expert DB에서 먼저 시도
-    if (entry.source && entry.source.startsWith('Expert')) {
-        const expertPath = path.join(DB_ROOT, 'expert', 'files', `${entry.fileId}.json`);
-        const detail = loadFileDetail(expertPath);
+    // Try expert first if source is Expert
+    if (isExpert) {
+        const detail = await dbClient.getCode(entry.fileId, true);
         if (detail) return detail;
     }
 
-    // Base DB에서 시도
-    const basePath = path.join(DB_ROOT, 'base', genre, layer, 'files', `${entry.fileId}.json`);
-    const detail = loadFileDetail(basePath);
-    if (detail) return detail;
-
-    return null;
+    // Fall back to base
+    const detail = await dbClient.getCode(entry.fileId, false);
+    return detail || null;
 }
 
 // ============================================================
 // Output Formatting
 // ============================================================
 
-function formatPretty(results, args) {
+async function formatPretty(results, args) {
     if (results.length === 0) {
         console.log('\n검색 결과 없음.');
         console.log(`조건: genre=${args.genre || 'any'}, role=${args.role || 'any'}, system=${args.system || 'any'}`);
@@ -319,7 +306,7 @@ function formatPretty(results, args) {
         }
 
         // 상세 정보 로드
-        const detail = loadDetail(r);
+        const detail = await loadDetail(r);
         if (detail) {
             if (detail.filePath) {
                 console.log(`    FilePath: ${detail.filePath}`);
@@ -338,37 +325,40 @@ function formatPretty(results, args) {
     }
 }
 
-function formatJson(results) {
+async function formatJson(results) {
     const modeInfo = getSearchModeInfo(results.length > 0 ? (results[0]._candidateCount || 0) : 0);
+
+    const resultsWithDetail = await Promise.all(results.map(async (r) => {
+        const detail = await loadDetail(r);
+        return {
+            fileId: r.fileId,
+            source: r.source,
+            matchScore: parseFloat(r.matchScore.toFixed(3)),
+            dbScore: r.score || 0.4,
+            layer: r.layer,
+            genre: r.genre,
+            role: r.role,
+            system: r.system || null,
+            provides: r.provides || [],
+            requires: r.requires || [],
+            detail: detail ? {
+                filePath: detail.filePath || null,
+                namespace: detail.namespace || null,
+                baseClass: detail.classes?.[0]?.baseClass || null,
+                publicMethods: (detail.classes?.[0]?.methods || [])
+                    .filter(m => m.accessModifier === 'public')
+                    .map(m => m.signature || m.methodName),
+                fields: (detail.classes?.[0]?.fields || [])
+                    .filter(f => f.hasSerializeField || f.accessModifier === 'public')
+                    .map(f => `${f.fieldType} ${f.fieldName}`),
+            } : null
+        };
+    }));
+
     const output = {
         count: results.length,
         searchMode: modeInfo,
-        results: results.map(r => {
-            const detail = loadDetail(r);
-            return {
-                fileId: r.fileId,
-                source: r.source,
-                matchScore: parseFloat(r.matchScore.toFixed(3)),
-                dbScore: r.score || 0.4,
-                layer: r.layer,
-                genre: r.genre,
-                role: r.role,
-                system: r.system || null,
-                provides: r.provides || [],
-                requires: r.requires || [],
-                detail: detail ? {
-                    filePath: detail.filePath || null,
-                    namespace: detail.namespace || null,
-                    baseClass: detail.classes?.[0]?.baseClass || null,
-                    publicMethods: (detail.classes?.[0]?.methods || [])
-                        .filter(m => m.accessModifier === 'public')
-                        .map(m => m.signature || m.methodName),
-                    fields: (detail.classes?.[0]?.fields || [])
-                        .filter(f => f.hasSerializeField || f.accessModifier === 'public')
-                        .map(f => `${f.fieldType} ${f.fieldName}`),
-                } : null
-            };
-        })
+        results: resultsWithDetail,
     };
 
     console.log(JSON.stringify(output, null, 2));
@@ -378,7 +368,7 @@ function formatJson(results) {
 // Main
 // ============================================================
 
-function main() {
+async function main() {
     const args = parseArgs(process.argv.slice(2));
 
     if (!args.genre && !args.role && !args.system) {
@@ -386,18 +376,25 @@ function main() {
         process.exit(1);
     }
 
-    // 검색
-    const allResults = searchAll(args);
+    try {
+        // 검색
+        const allResults = await searchAll(args);
 
-    // 필터링 및 랭킹
-    const ranked = filterAndRank(allResults, args);
+        // 필터링 및 랭킹
+        const ranked = filterAndRank(allResults, args);
 
-    // 출력
-    if (args.json) {
-        formatJson(ranked);
-    } else {
-        formatPretty(ranked, args);
+        // 출력
+        if (args.json) {
+            await formatJson(ranked);
+        } else {
+            await formatPretty(ranked, args);
+        }
+    } finally {
+        await dbClient.close();
     }
 }
 
-main();
+main().catch(err => {
+    console.error('Error:', err.message);
+    dbClient.close().finally(() => process.exit(1));
+});
