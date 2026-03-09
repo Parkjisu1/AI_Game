@@ -123,7 +123,7 @@ async function upsertCode(data, expert = false) {
  */
 async function promoteCodeToExpert(fileId) {
   const doc = await getCode(fileId, false);
-  if (!doc && doc.score < 0.6) return null;
+  if (!doc || doc.score < 0.6) return null;
   delete doc._id;
   return upsertCode(doc, true);
 }

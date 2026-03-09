@@ -12,11 +12,13 @@ import json
 import subprocess
 import time
 import re as _re
+import traceback
 from datetime import datetime
 from pathlib import Path
 
 import gradio as gr
 from pymongo import MongoClient
+from pymongo.errors import ConnectionFailure, ServerSelectionTimeoutError
 
 # ─── Config ───────────────────────────────────────────────────────────────────
 
@@ -91,12 +93,6 @@ footer { display: none !important; }
 .dark .nav-btn { color: #ccc !important; }
 .dark .nav-btn:hover { background: #252525 !important; }
 
-/* Active nav */
-.nav-btn-active {
-    background: #e8e8e8 !important; color: #111 !important; font-weight: 600 !important;
-}
-.dark .nav-btn-active { background: #2a2a2a !important; color: #fff !important; }
-
 /* Stat pills in sidebar */
 .stat-item {
     display: flex; justify-content: space-between; padding: 6px 16px;
@@ -167,15 +163,6 @@ input, textarea, select, .gr-input, .gr-dropdown {
     border-radius: 8px !important; font-weight: 600 !important;
 }
 
-/* === Result Cards === */
-.result-card {
-    border: 1px solid #eee !important; border-radius: 12px !important;
-    padding: 16px 20px !important; margin: 8px 0 !important;
-    background: #fff !important; transition: box-shadow 0.15s !important;
-}
-.result-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important; }
-.dark .result-card { border-color: #2a2a2a !important; background: #1f1f1f !important; }
-
 /* === Log Output === */
 .log-output textarea {
     font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace !important;
@@ -195,10 +182,6 @@ input, textarea, select, .gr-input, .gr-dropdown {
     font-weight: 600 !important; border-bottom: 2px solid #d97706 !important; color: #d97706 !important;
 }
 
-/* === Badge === */
-.badge-expert { color: #16a34a; font-weight: 600; }
-.badge-base { color: #888; }
-
 /* === Checkbox items === */
 .gr-check-group label { font-size: 0.82rem !important; }
 
@@ -212,16 +195,41 @@ _client = None
 _db = None
 
 def get_db():
+    """Get MongoDB connection with timeout and error handling."""
     global _client, _db
     if _db is None:
-        _client = MongoClient(MONGO_URI)
-        _db = _client[MONGO_DB]
+        try:
+            _client = MongoClient(
+                MONGO_URI,
+                serverSelectionTimeoutMS=5000,
+                connectTimeoutMS=5000,
+                socketTimeoutMS=10000,
+            )
+            # Test connection
+            _client.admin.command("ping")
+            _db = _client[MONGO_DB]
+        except (ConnectionFailure, ServerSelectionTimeoutError) as e:
+            _client = None
+            _db = None
+            raise ConnectionError(f"MongoDB connection failed: {e}")
     return _db
 
+def safe_get_db():
+    """Non-throwing version for UI display."""
+    try:
+        return get_db()
+    except ConnectionError:
+        return None
+
 def get_stats():
-    db = get_db()
-    return {col: db[col].count_documents({})
-            for col in ["code_base", "code_expert", "design_base", "design_expert", "rules", "pending"]}
+    db = safe_get_db()
+    if db is None:
+        return {col: "?" for col in ["code_base", "code_expert", "design_base", "design_expert", "rules", "pending"]}
+    try:
+        return {col: db[col].count_documents({})
+                for col in ["code_base", "code_expert", "design_base", "design_expert", "rules", "pending"]}
+    except Exception:
+        return {col: "?" for col in ["code_base", "code_expert", "design_base", "design_expert", "rules", "pending"]}
 
 def ci(val):
     return {"$regex": f"^{_re.escape(val)}$", "$options": "i"}
@@ -229,7 +237,9 @@ def ci(val):
 # ─── Direct MongoDB Queries ──────────────────────────────────────────────────
 
 def query_design_db(genre=None, domain=None, system=None, data_type=None, limit=30, min_score=0):
-    db = get_db()
+    db = safe_get_db()
+    if db is None:
+        return []
     q = {}
     if genre: q["genre"] = ci(genre)
     if domain: q["domain"] = ci(domain)
@@ -238,17 +248,22 @@ def query_design_db(genre=None, domain=None, system=None, data_type=None, limit=
     if min_score > 0: q["score"] = {"$gte": min_score}
 
     results = []
-    for col in ["design_expert", "design_base"]:
-        for doc in db[col].find(q).sort("score", -1).limit(limit - len(results)):
-            doc["_id"] = str(doc["_id"])
-            doc["_source"] = col
-            results.append(doc)
-        if len(results) >= limit:
-            break
+    try:
+        for col in ["design_expert", "design_base"]:
+            for doc in db[col].find(q).sort("score", -1).limit(limit - len(results)):
+                doc["_id"] = str(doc["_id"])
+                doc["_source"] = col
+                results.append(doc)
+            if len(results) >= limit:
+                break
+    except Exception as e:
+        print(f"[query_design_db] Error: {e}")
     return results
 
 def query_code_db(genre=None, role=None, system=None, layer=None, limit=30, min_score=0):
-    db = get_db()
+    db = safe_get_db()
+    if db is None:
+        return []
     q = {}
     if genre: q["genre"] = ci(genre)
     if role: q["role"] = ci(role)
@@ -257,22 +272,31 @@ def query_code_db(genre=None, role=None, system=None, layer=None, limit=30, min_
     if min_score > 0: q["score"] = {"$gte": min_score}
 
     results = []
-    for col in ["code_expert", "code_base"]:
-        for doc in db[col].find(q).sort("score", -1).limit(limit - len(results)):
-            doc["_id"] = str(doc["_id"])
-            doc["_source"] = col
-            results.append(doc)
-        if len(results) >= limit:
-            break
+    try:
+        for col in ["code_expert", "code_base"]:
+            for doc in db[col].find(q).sort("score", -1).limit(limit - len(results)):
+                doc["_id"] = str(doc["_id"])
+                doc["_source"] = col
+                results.append(doc)
+            if len(results) >= limit:
+                break
+    except Exception as e:
+        print(f"[query_code_db] Error: {e}")
     return results
 
 def get_doc_detail(collection, doc_id):
     from bson import ObjectId
-    db = get_db()
-    doc = db[collection].find_one({"_id": ObjectId(doc_id)})
-    if doc:
-        doc["_id"] = str(doc["_id"])
-    return doc
+    db = safe_get_db()
+    if db is None:
+        return None
+    try:
+        doc = db[collection].find_one({"_id": ObjectId(doc_id)})
+        if doc:
+            doc["_id"] = str(doc["_id"])
+        return doc
+    except Exception as e:
+        print(f"[get_doc_detail] Error: {e}")
+        return None
 
 # ─── Pending Queue ────────────────────────────────────────────────────────────
 
@@ -287,7 +311,13 @@ def add_to_pending(item_type, genre, project, data):
     return str(result.inserted_id)
 
 def get_pending_list():
-    return list(get_db()["pending"].find({"status": "pending"}).sort("created_at", -1))
+    db = safe_get_db()
+    if db is None:
+        return []
+    try:
+        return list(db["pending"].find({"status": "pending"}).sort("created_at", -1))
+    except Exception:
+        return []
 
 def approve_pending(item_id, note=""):
     from bson import ObjectId
@@ -355,6 +385,22 @@ def fmt_score(s):
 def fmt_src(source):
     return "Expert" if "expert" in (source or "") else "Base"
 
+def fmt_stats_md():
+    """Format stats as markdown for sidebar refresh."""
+    stats = get_stats()
+    labels = [
+        ("Code Base", stats.get("code_base", "?")),
+        ("Code Expert", stats.get("code_expert", "?")),
+        ("Design Base", stats.get("design_base", "?")),
+        ("Design Expert", stats.get("design_expert", "?")),
+        ("Rules", stats.get("rules", "?")),
+        ("Pending", stats.get("pending", "?")),
+    ]
+    lines = []
+    for label, count in labels:
+        lines.append(f"{label}: **{count}**")
+    return "\n\n".join(lines)
+
 # ═══ TAB HANDLERS ═════════════════════════════════════════════════════════════
 
 # ─── Design ───────────────────────────────────────────────────────────────────
@@ -399,7 +445,10 @@ def run_design_wf(genre, project, concept, stage, refs, progress=gr.Progress()):
     result = f"**{project}** | `{genre}` | {stage}\n\nDesign generated. Submit to Review Queue for approval."
     return "\n".join(logs), result
 
-def submit_design_q(genre, project, concept):
+def submit_design_q(genre, project, concept, design_log):
+    """Submit only if Generate was run (design_log is not empty)."""
+    if not design_log or not design_log.strip():
+        return "Run Generate first before submitting."
     if not concept.strip():
         return "No concept."
     data = {
@@ -470,7 +519,10 @@ def run_code_wf(genre, project, input_mode, yaml_input, selected, phase, progres
     result = f"**{project}** | `{genre}` | {phase}\n\nCode generated. Submit to Review Queue for approval."
     return "\n".join(logs), result
 
-def submit_code_q(genre, project, input_mode, yaml_input, selected):
+def submit_code_q(genre, project, input_mode, yaml_input, selected, code_log):
+    """Submit only if Generate was run (code_log is not empty)."""
+    if not code_log or not code_log.strip():
+        return "Run Generate first before submitting."
     if input_mode == "Manual YAML" and (not yaml_input or not yaml_input.strip()):
         return "No YAML."
     if input_mode == "From Design DB" and not selected:
@@ -539,8 +591,9 @@ def show_detail(selected, results_json, db_type):
         try:
             for r in json.loads(results_json):
                 if r.get("_id") == doc_id:
-                    doc = r; break
-        except:
+                    doc = r
+                    break
+        except (json.JSONDecodeError, TypeError):
             pass
     if not doc:
         return "Not found."
@@ -609,23 +662,31 @@ def preview_item(selected, items_state):
 
 def do_approve(selected, note, items_state):
     if not selected or not items_state:
-        return "No item selected."
+        return "No item selected.", "No pending items.", gr.update(choices=[], value=None), [], ""
     for item in items_state:
         iid = str(item["_id"])
         label = f"[{item['type'].upper()}] {item.get('project','?')} / {item.get('genre','?')} ({iid[:8]})"
         if label == selected:
-            return approve_pending(iid, note)
-    return "Not found."
+            msg = approve_pending(iid, note)
+            # Refresh queue + stats
+            q_md, q_dd, q_items = load_queue()
+            stats_md = fmt_stats_md()
+            return msg, q_md, q_dd, q_items, stats_md
+    return "Not found.", "No pending items.", gr.update(choices=[], value=None), [], ""
 
 def do_reject(selected, feedback, items_state):
     if not selected or not items_state:
-        return "No item selected."
+        return "No item selected.", "No pending items.", gr.update(choices=[], value=None), [], ""
     for item in items_state:
         iid = str(item["_id"])
         label = f"[{item['type'].upper()}] {item.get('project','?')} / {item.get('genre','?')} ({iid[:8]})"
         if label == selected:
-            return reject_pending(iid, feedback)
-    return "Not found."
+            msg = reject_pending(iid, feedback)
+            # Refresh queue + stats
+            q_md, q_dd, q_items = load_queue()
+            stats_md = fmt_stats_md()
+            return msg, q_md, q_dd, q_items, stats_md
+    return "Not found.", "No pending items.", gr.update(choices=[], value=None), [], ""
 
 # ═══ BUILD APP ════════════════════════════════════════════════════════════════
 
@@ -642,33 +703,16 @@ def create_app():
 
                 gr.Markdown("", elem_classes=["form-label"])  # spacer
 
-                # Navigation (tabs hidden, sidebar controls visibility)
-                nav_design = gr.Button("Design", elem_classes=["nav-btn", "nav-btn-active"], size="sm")
+                nav_design = gr.Button("Design", elem_classes=["nav-btn"], size="sm")
                 nav_system = gr.Button("System", elem_classes=["nav-btn"], size="sm")
                 nav_explorer = gr.Button("DB Explorer", elem_classes=["nav-btn"], size="sm")
                 nav_review = gr.Button("Review Queue", elem_classes=["nav-btn"], size="sm")
 
                 gr.Markdown("", elem_classes=["form-label"])  # spacer
 
-                # DB Stats
+                # DB Stats (refreshable)
                 gr.Markdown("DATABASE", elem_classes=["form-label"])
-                try:
-                    stats = get_stats()
-                except:
-                    stats = {k: "?" for k in ["code_base", "code_expert", "design_base", "design_expert", "rules", "pending"]}
-
-                stat_labels = [
-                    ("Code Base", stats.get("code_base", 0)),
-                    ("Code Expert", stats.get("code_expert", 0)),
-                    ("Design Base", stats.get("design_base", 0)),
-                    ("Design Expert", stats.get("design_expert", 0)),
-                    ("Rules", stats.get("rules", 0)),
-                    ("Pending", stats.get("pending", 0)),
-                ]
-                for label, count in stat_labels:
-                    with gr.Row(elem_classes=["stat-item"]):
-                        gr.Markdown(f"{label}")
-                        gr.Markdown(f"**{count}**")
+                sidebar_stats = gr.Markdown(value=fmt_stats_md)
 
             # ── MAIN CONTENT ──
             with gr.Column(scale=4, elem_id="main-content"):
@@ -715,7 +759,7 @@ def create_app():
 
                         d_load_btn.click(load_ref_designs, [d_genre], [d_ref_select, d_refs_info])
                         d_run.click(run_design_wf, [d_genre, d_project, d_concept, d_stage, d_ref_select], [d_log, d_result])
-                        d_queue.click(submit_design_q, [d_genre, d_project, d_concept], [d_qmsg])
+                        d_queue.click(submit_design_q, [d_genre, d_project, d_concept, d_log], [d_qmsg])
 
                     # ════════════════════════════════════
                     # PAGE 2: SYSTEM (CODE)
@@ -770,7 +814,7 @@ def create_app():
                         c_mode.change(toggle_code_input, [c_mode], [c_yaml_section, c_db_section])
                         c_load_btn.click(load_code_designs, [c_genre], [c_design_select, c_designs_info])
                         c_run.click(run_code_wf, [c_genre, c_project, c_mode, c_yaml, c_design_select, c_phase], [c_log, c_result])
-                        c_qbtn.click(submit_code_q, [c_genre, c_project, c_mode, c_yaml, c_design_select], [c_qmsg])
+                        c_qbtn.click(submit_code_q, [c_genre, c_project, c_mode, c_yaml, c_design_select, c_log], [c_qmsg])
 
                     # ════════════════════════════════════
                     # PAGE 3: DB EXPLORER
@@ -801,14 +845,13 @@ def create_app():
                                             sc_json = gr.State("[]")
                                             with gr.Group(elem_classes=["form-section"]):
                                                 gr.Markdown("DETAIL VIEW", elem_classes=["form-label"])
-                                                with gr.Row():
-                                                    sc_select = gr.Dropdown(choices=[], label="Select", interactive=True, scale=3)
-                                                    sc_detail_btn = gr.Button("View", size="sm", elem_classes=["btn-secondary"], scale=1)
+                                                sc_select = gr.Dropdown(choices=[], label="Select", interactive=True)
                                                 sc_detail = gr.Markdown("Select an item above.")
 
                                     sc_btn.click(search_code, [sc_genre, sc_role, sc_system, sc_layer, sc_score, sc_top],
                                                  [sc_results, sc_json, sc_select])
-                                    sc_detail_btn.click(lambda s, j: show_detail(s, j, "code"), [sc_select, sc_json], [sc_detail])
+                                    # Auto-detail on select change (fix #8)
+                                    sc_select.change(lambda s, j: show_detail(s, j, "code"), [sc_select, sc_json], [sc_detail])
 
                                 # Design DB
                                 with gr.Tab("Design DB"):
@@ -829,14 +872,13 @@ def create_app():
                                             sd_json = gr.State("[]")
                                             with gr.Group(elem_classes=["form-section"]):
                                                 gr.Markdown("DETAIL VIEW", elem_classes=["form-label"])
-                                                with gr.Row():
-                                                    sd_select = gr.Dropdown(choices=[], label="Select", interactive=True, scale=3)
-                                                    sd_detail_btn = gr.Button("View", size="sm", elem_classes=["btn-secondary"], scale=1)
+                                                sd_select = gr.Dropdown(choices=[], label="Select", interactive=True)
                                                 sd_detail = gr.Markdown("Select an item above.")
 
                                     sd_btn.click(search_design, [sd_genre, sd_domain, sd_system, sd_type, sd_score, sd_top],
                                                  [sd_results, sd_json, sd_select])
-                                    sd_detail_btn.click(lambda s, j: show_detail(s, j, "design"), [sd_select, sd_json], [sd_detail])
+                                    # Auto-detail on select change (fix #8)
+                                    sd_select.change(lambda s, j: show_detail(s, j, "design"), [sd_select, sd_json], [sd_detail])
 
                     # ════════════════════════════════════
                     # PAGE 4: REVIEW QUEUE
@@ -871,8 +913,15 @@ def create_app():
 
                         r_refresh.click(load_queue, outputs=[r_list, r_select, items_state])
                         r_select.change(preview_item, [r_select, items_state], [r_detail])
-                        r_approve.click(do_approve, [r_select, r_note, items_state], [r_msg])
-                        r_reject.click(do_reject, [r_select, r_note, items_state], [r_msg])
+                        # Approve/Reject auto-refresh queue + stats (fix #7, #10)
+                        r_approve.click(
+                            do_approve, [r_select, r_note, items_state],
+                            [r_msg, r_list, r_select, items_state, sidebar_stats]
+                        )
+                        r_reject.click(
+                            do_reject, [r_select, r_note, items_state],
+                            [r_msg, r_list, r_select, items_state, sidebar_stats]
+                        )
 
                 # ── Sidebar nav → tab switching ──
                 nav_design.click(lambda: gr.update(selected=0), outputs=[tabs])
