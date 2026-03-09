@@ -57,6 +57,13 @@ class GameMemory:
     # 팝업 탈출 카운터
     popup_escape_attempts: int = 0
 
+    # 하트 관리 (R2)
+    hearts_empty: bool = False
+    lobby_fail_count: int = 0          # lobby에서 게임 시작 실패 연속 횟수
+    heart_wait_until: float = 0.0      # 하트 대기 종료 시각 (time.time())
+    LOBBY_FAIL_THRESHOLD: int = 6      # 이 횟수 이상 연속 실패 → 하트 없음 판정
+    HEART_REGEN_SECONDS: float = 600   # 하트 1개 재생 시간 (10분)
+
     MAX_FAILED_TAPS = 5
 
     def update_from_board(self, prev: BoardState, curr: BoardState) -> str:
@@ -68,7 +75,10 @@ class GameMemory:
 
         # 화면이 바뀌었으면
         if prev.screen_type != curr.screen_type:
-            self.popup_escape_attempts = 0
+            # popup_escape_attempts: "좋은" 화면으로 전환될 때만 리셋
+            # ad↔popup 순환에서 리셋되면 에스컬레이션 불가
+            if curr.screen_type in ("gameplay", "lobby", "win"):
+                self.popup_escape_attempts = 0
             self.consecutive_fails = 0
 
             if curr.screen_type == "win":
@@ -153,6 +163,35 @@ class GameMemory:
     def on_popup(self):
         """팝업 화면 진입 시."""
         self.popup_escape_attempts += 1
+
+    def on_lobby_fail(self):
+        """lobby에서 게임 시작 실패 (Level N 탭 후 여전히 lobby)."""
+        self.lobby_fail_count += 1
+        if self.lobby_fail_count >= self.LOBBY_FAIL_THRESHOLD:
+            self.hearts_empty = True
+
+    def on_lobby_success(self):
+        """lobby에서 게임 시작 성공 (gameplay 진입)."""
+        self.lobby_fail_count = 0
+        self.hearts_empty = False
+
+    def start_heart_wait(self):
+        """하트 대기 모드 시작 (30분)."""
+        import time
+        self.heart_wait_until = time.time() + self.HEART_REGEN_SECONDS
+
+    def is_heart_waiting(self) -> bool:
+        """현재 하트 대기 중인지."""
+        import time
+        if self.heart_wait_until <= 0:
+            return False
+        if time.time() >= self.heart_wait_until:
+            # 대기 완료 → 리셋
+            self.heart_wait_until = 0.0
+            self.hearts_empty = False
+            self.lobby_fail_count = 0
+            return False
+        return True
 
     def get_color_counts(self) -> Dict[str, int]:
         """홀더 내 색상별 개수."""

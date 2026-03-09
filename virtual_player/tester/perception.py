@@ -293,6 +293,16 @@ class Perception:
         original = getattr(self, '_original_path', img_path)
         board = self._detect_local(original)
         if board is not None:
+            # R1: gameplay인데 차량이 너무 적으면 → 오분류 의심
+            if len(board.active_cars) < self._GAMEPLAY_MIN_CARS:
+                self._last_screen = None  # 캐시 초기화
+                return BoardState(
+                    screen_type="not_gameplay",
+                    holder=[None] * 7,
+                    holder_count=0,
+                    confidence=0.3,
+                    raw_response=f"R1: cars={len(board.active_cars)}<{self._GAMEPLAY_MIN_CARS}",
+                )
             return board
 
         # 로컬 감지 실패 → VLM CLI 폴백
@@ -321,6 +331,8 @@ class Perception:
 
     # 로컬 감지 최소 차량 수 (이 이하면 VLM 폴백)
     _LOCAL_MIN_CARS = 3
+    # gameplay 신뢰 최소 차량 수 (이 이하면 gameplay가 아님)
+    _GAMEPLAY_MIN_CARS = 10
 
     def _detect_local(self, img_path: Path) -> Optional[BoardState]:
         """YOLO OD / OpenCV로 로컬 감지. 실패 시 None → VLM 폴백.

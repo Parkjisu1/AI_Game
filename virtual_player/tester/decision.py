@@ -144,6 +144,21 @@ class Decision:
 
         screen = board.screen_type
 
+        # R2: 하트 대기 중이면 아무것도 하지 않고 대기
+        if memory.is_heart_waiting():
+            import time
+            remaining = int(memory.heart_wait_until - time.time())
+            return [Action("wait", wait=30.0,
+                           reason=f"Hearts empty, waiting {remaining}s remaining")]
+
+        # R1: not_gameplay (차량 <10 오분류) → popup처럼 처리
+        if screen == "not_gameplay":
+            memory.on_popup()
+            return [
+                Action("back", wait=1.0, reason="R1: not_gameplay, try back"),
+                Action("tap", 540, 960, 1.0, "R1: center tap fallback"),
+            ]
+
         # 게임 시작 감지
         if screen == "lobby":
             memory.on_game_start()

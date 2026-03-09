@@ -148,10 +148,13 @@ def create_carmatch_playbook() -> Playbook:
         "fail_continue": ScreenHandler("fail_continue", [
             Action("tap", 900, 500, 1.5, "X close (decline Play On 900)"),
         ]),
+        # YOLO "fail" → "fail_result" for all fail variants; cover all buttons
         "fail_result": ScreenHandler("fail_result", [
-            Action("tap", 540, 1100, 1.0, "Try Again button (center)"),
-            Action("tap", 540, 1200, 1.0, "Try Again button (lower)"),
-            Action("tap", 540, 1000, 1.0, "Try Again button (upper)"),
+            Action("tap", 540, 1650, 0.5, "Try Again / big button (bottom)"),
+            Action("tap", 540, 1100, 0.5, "Try Again (center)"),
+            Action("tap", 970, 180, 0.5, "X close (fail_outofspace)"),
+            Action("tap", 900, 500, 0.5, "X close (fail_continue)"),
+            Action("back", wait=1.0, reason="Android back fallback"),
         ]),
         "ingame_setting": ScreenHandler("ingame_setting", [
             Action("tap", 310, 1070, 1.5, "Resume button"),
@@ -222,10 +225,13 @@ def create_carmatch_playbook() -> Playbook:
         Action("tap", 540, 960, 1.0, "Center tap fallback"),
     ])
     pb.screen_handlers["popup"] = ScreenHandler("popup", [
-        Action("tap", 970, 180, 0.5, "X close attempt 1 (top-right)"),
-        Action("tap", 900, 500, 0.5, "X close attempt 2 (mid-right)"),
-        Action("tap", 880, 400, 0.5, "X close attempt 3"),
+        Action("tap", 650, 330, 0.5, "X close (More Lives / center-right)"),
+        Action("tap", 455, 55, 0.5, "X close (top-right circle)"),
+        Action("tap", 910, 65, 0.5, "X close (event popup style)"),
+        Action("tap", 970, 180, 0.5, "X close (top-right offset)"),
+        Action("tap", 900, 500, 0.5, "X close (mid-right)"),
         Action("back", wait=1.0, reason="Android back"),
+        Action("tap", 540, 1800, 0.5, "Continue/OK button (bottom, last resort)"),
     ])
 
     return pb

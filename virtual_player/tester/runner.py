@@ -225,11 +225,13 @@ class TesterRunner:
                 self._last_screen_type = board.screen_type
 
                 # Stuck 에스컬레이션
-                if self._same_screen_count >= self._STUCK_RELAUNCH:
+                if self._same_screen_count >= self._STUCK_RELAUNCH and board.screen_type != "gameplay":
                     self._log(f"  >> STUCK RELAUNCH: {board.screen_type} x{self._same_screen_count}")
                     adb_relaunch()
                     self._same_screen_count = 0
                     self._ad_first_seen = None
+                    self.memory.lobby_fail_count = 0
+                    self.memory.hearts_empty = False
                     continue
                 elif self._same_screen_count >= self._STUCK_WARN and self._same_screen_count % 5 == 0:
                     self._log(f"  >> STUCK WARNING: {board.screen_type} x{self._same_screen_count}")
@@ -238,6 +240,27 @@ class TesterRunner:
                 if self._current_board is not None:
                     # 이미 executor에서 업데이트되므로 여기선 스킵
                     pass
+
+                # R2: 하트 대기 중이면 30초 sleep 후 다시 확인
+                if self.memory.is_heart_waiting():
+                    remaining = int(self.memory.heart_wait_until - time.time())
+                    self._log(f"  >> HEARTS WAIT: {remaining}s remaining")
+                    self._same_screen_count = 0  # stuck 카운터 리셋 (대기 중 relaunch 방지)
+                    time.sleep(30)
+                    continue
+
+                # R2: lobby 반복 감지 → 하트 고갈 판정
+                if board.screen_type == "lobby" and self._current_board is not None:
+                    prev_screen = self._current_board.screen_type
+                    if prev_screen == "lobby":
+                        self.memory.on_lobby_fail()
+                        if self.memory.hearts_empty:
+                            self.memory.start_heart_wait()
+                            self._log(f"  >> HEARTS EMPTY: lobby failed {self.memory.lobby_fail_count}x, "
+                                      f"waiting {int(self.memory.HEART_REGEN_SECONDS)}s")
+                            continue
+                    elif prev_screen == "gameplay":
+                        self.memory.on_lobby_success()
 
                 # Step 4: Layer 3 — Decision
                 actions = self.decision.decide(board, self.memory)
