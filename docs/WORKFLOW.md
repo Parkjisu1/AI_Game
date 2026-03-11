@@ -95,7 +95,7 @@ E:\AI\
                   (0단계 스키마에 맞춰 정규화)              (Design DB Builder + 디렉터)
 ═══ Design Workflow (프로젝트마다) ═══════════════════════════════════════
 [Stage 2: 기획 생성]     디렉션 + DB 참조 → 기획서/밸런스/콘텐츠/BM/LiveOps
-                                                              (Designer)
+                         생성 순서: 0단계 도메인 Tier 우선순위 따름   (Designer)
 [Stage 3: 통합 검증]     교차 일관성 + 유저 여정 + 누락 검출  (Design Validator)
 [Stage 4: 디렉터 검수]   사람이 검수 → 피드백 또는 승인       (디렉터)
 [Stage 5: 재생성 평가]   피드백 반영 확인 (4↔5 반복 가능)     (Design Validator)

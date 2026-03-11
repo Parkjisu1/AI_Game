@@ -1,9 +1,10 @@
 # 게임 기획 AI Workflow
 
-> **Version**: 2.2
-> **Last Updated**: 2026-03-05
+> **Version**: 2.3
+> **Last Updated**: 2026-03-11
 > **Purpose**: AI를 활용한 게임 기획 자동화 파이프라인. 기획자를 디렉터로 포지셔닝하고, AI가 실행/양산/검증을 담당하는 구조.
-> **Changes**: v2.1 → v2.2: 0단계 산출물에 도메인별 우선순위(Tier) + 파라미터 상세도 기준 + 데이터 스키마 정의 추가, 작업 순서에 프로그래머 싱크 단계 추가, 2-4 콘텐츠 기획에 스키마 참조 반영
+> **Changes**: v2.2 → v2.3: Stage 2 생성 순서를 0단계 Tier 연동으로 변경, 2-1 컨셉 정의에 Core Fun/디자인 필러 상세 가이드 추가, 7단계 플레이 검증에 metadata 지표 기반 판단 기준 추가, DB 물리 구조를 MongoDB Atlas 기반으로 전면 업데이트, 퍼즐 설계 표준 파일 구조 생성
+> v2.1 → v2.2: 0단계 산출물에 도메인별 우선순위(Tier) + 파라미터 상세도 기준 + 데이터 스키마 정의 추가, 작업 순서에 프로그래머 싱크 단계 추가, 2-4 콘텐츠 기획에 스키마 참조 반영
 > v2.0 → v2.1: [0단계] 장르별 설계 표준 + 디렉션 히스토리 추가, 감점 메커니즘 상세화
 > v1.1 → v2.0: 30개 리뷰 이슈 해결, Quality Gates 추가, 점수 체계 통합, 복합 장르/역방향 피드백 경로 신설, IdleMoney 실전 교훈 반영
 
@@ -204,8 +205,14 @@ AI Tester (관찰 전문):
 #### 저장 경로 및 1단계 연결
 
 ```
-저장 경로: db/design/standards/{genre}.yaml
+저장 경로: E:\AI\design_standard\{genre}\  (파일 시스템)
+  ├── component_map.yaml
+  ├── parameters\{domain}.md
+  ├── schema\*.sql, *.md
+  └── domain_priority.yaml
+
 1단계 Step 2(정규화)에서 해당 장르 설계 표준을 참조하여 분류
+기획 데이터는 MongoDB design_base 컬렉션에 저장 (db-client.js 또는 pymongo)
 ```
 
 #### 버전 관리
@@ -310,9 +317,10 @@ L3 (자동): 전량 캡처 + 노이즈 필터
 #### 저장 경로
 
 ```
-db/design/directions/{director_id}/
+MongoDB directions 컬렉션 (향후 추가) 또는 파일:
+E:\AI\design_standard\directions\{director_id}\
 ├── index.json            # 디렉션 인덱스 (검색용, 경량)
-└── entries/
+└── entries\
     └── {direction_id}.yaml  # 개별 디렉션 상세
 ```
 
@@ -600,9 +608,13 @@ AI가 기획서, 밸런스 시트, 콘텐츠 데이터를 생성합니다.
 
 ### 기획 도메인별 생성 프로세스
 
-기획은 실제 현업에서 순차적으로 진행됩니다:
+기획 도메인의 생성 순서는 장르마다 다르며, **0단계 설계 표준에서 정의한 도메인별 우선순위(Tier)에 따라** 진행됩니다.
+
 ```
-시스템 기획 → 콘텐츠 기획 → 밸런스 기획 → BM 기획 → 통합 검증
+장르별 생성 순서 예시:
+  RPG:    시스템(InGame) → 밸런스 → 콘텐츠 → BM → 통합 검증
+  Puzzle: 코어 메커닉(InGame) → 레벨디자인(Content) → 난이도곡선(Balance) → BM → 통합 검증
+  Idle:   코어루프(InGame) → 성장밸런스(Balance) → 콘텐츠 → BM → 통합 검증
 ```
 
 #### 기획 생성 병렬화 규칙
@@ -635,24 +647,43 @@ AI가 기획서, 밸런스 시트, 콘텐츠 데이터를 생성합니다.
 
 ### 2-1. 컨셉 정의
 
+> **2-1은 전체 기획의 최상위 기준을 확정하는 단계입니다.**
+> 여기서 정의한 핵심 재미와 디자인 필러가 2-2~2-5 생성, 3단계 통합검증, 4단계 피드백(designPillarCheck, DIRECTION.OFF_TARGET)까지 관통합니다.
+
 디렉터 디렉션:
-- 장르, 타겟 유저, 핵심 경험(디자인 필러), 레퍼런스 게임
+- 장르, 타겟 유저, 레퍼런스 게임
+- **핵심 재미 (Core Fun)**: 유저가 느껴야 하는 감정적 보상의 본질을 한 문장으로 정의
+  - 예 (분류 퍼즐): "무질서가 질서로 변할 때 한 번에 쏟아지는 연쇄 정리의 쾌감"
+  - 예 (Idle RPG): "방치 후 돌아왔을 때 쌓인 보상을 한꺼번에 수확하는 성취감"
+- **디자인 필러 (Design Pillars)**: 핵심 재미를 현실화하기 위한 타협 없는 설계 원칙 (3~5개)
+  - 예 (분류 퍼즐):
+    1. 직관적 조작 — 정돈의 쾌감을 방해하지 않는 1초 만의 이해
+    2. 시각적 명확성 — 정리 과정을 극대화하는 명확한 색상/모양 구분
+    3. 긴장감과 성취감 — 하드 레벨에서 최종 정리 전까지 화면이 꽉 차는 긴장감 유지
 
 AI 실행:
 - 레퍼런스 게임 분석 보고서 생성 (AI Tester 관찰 결과 기반 또는 DB에서 검색)
-- 디자인 필러와 핵심 루프의 일관성 체크
+- 핵심 재미와 디자인 필러의 일관성 체크 (필러가 핵심 재미를 실현하는가?)
+- 핵심 루프가 디자인 필러를 위반하지 않는지 검증
 - 컨셉 문서 초안 작성
 
 출력물:
 ```
 컨셉 문서
-├── 디자인 필러 (3~5개)
+├── 핵심 재미 (Core Fun) — 한 문장 정의
+├── 디자인 필러 (3~5개) — 각각 한 줄 원칙 + 근거
 ├── 핵심 루프 다이어그램
 ├── 타겟 유저 프로파일
 ├── 세션 구조 (1회 플레이 목표 시간, 일일 목표 시간)
 ├── 레퍼런스 분석 요약
 └── 차별화 포인트
 ```
+
+> **이후 단계에서의 필러 활용:**
+> - 2-2~2-5: AI가 기획 생성 시 디자인 필러를 참조하여 일관성 유지
+> - 3단계: 통합검증에서 필러 위반 항목 자동 검출
+> - 4단계: 디렉터 피드백의 `designPillarCheck` 필드로 필러 위반 여부 판정
+> - 7단계: 수치화 가능한 필러는 플레이 검증 기준에 반영 (clear_rate, 세션 시간 등)
 
 ---
 
@@ -907,32 +938,44 @@ DIRECTION.OFF_TARGET       디자인 필러/컨셉과 불일치
 검증 완료된 기획 자료를 Expert Design DB에 축적하여,
 AI가 참조할 품질 높은 DB를 구축합니다.
 
-### DB 물리 구조
+### DB 물리 구조 (MongoDB Atlas)
+
+모든 Design DB는 MongoDB Atlas (`aigame` 데이터베이스)에 저장됩니다.
+접속: `.env`의 `MONGO_URI` / Python 클라이언트: `pymongo` / Node 클라이언트: `scripts/lib/db-client.js`
 
 ```
-E:\AI\db\design\
-├── base\
-│   ├── {genre}\                  # 장르별 디렉토리 (generic, rpg, idle, ...)
-│   │   ├── _projects\            # ← Layer 1: 프로젝트 통짜 저장
-│   │   │   └── {project}.json    #    프로젝트 전체 기획 구조 1파일
-│   │   ├── {domain}\             # ← Layer 2: 세부 요소 단위
-│   │   │   ├── index.json        #    검색용 인덱스 (경량)
-│   │   │   └── files\
-│   │   │       └── {designId}.json  # 상세 데이터
-│   │   └── ...
-│   └── ...
-├── expert\                       # 검증 완료 (score >= 0.6)
-│   ├── index.json
-│   └── files\
-│       └── {designId}.json
-└── rules\                        # 축적된 피드백 규칙
-    ├── generic_design_rules.json  # 장르 무관
-    ├── genre_design_rules.json    # 장르별
-    └── domain_design_rules.json   # 도메인별
+MongoDB Collections:
+├── design_base                   # Base Design DB (Layer 2: 세부 요소 단위)
+│   필드: designId, genre, domain, system, score, source, data_type,
+│         balance_area, version, project, provides, requires, tags,
+│         design_analysis, content, updatedAt
+│   인덱스: designId(unique), genre+domain, score
+│
+├── design_expert                 # Expert Design DB (score >= 0.6)
+│   필드: design_base와 동일
+│   인덱스: designId(unique), genre+domain, score
+│
+├── rules                         # 축적된 피드백 규칙
+│   필드: ruleId, category, genre, type, content
+│
+└── pending                       # 리뷰 대기열 (webapp 연동)
+    필드: type, genre, domain, content, status, createdAt
+
+파일 시스템 (보조):
+├── E:\AI\design_standard\{genre}\   # 장르별 설계 표준 (Stage 0 산출물)
+│   ├── component_map.yaml
+│   ├── parameters\
+│   ├── schema\                       # SQL 스키마, 데이터 포맷 등
+│   └── domain_priority.yaml
+│
+└── E:\AI\projects\{project}\         # Layer 1: 프로젝트 단위 기획서 보존
+    └── design_workflow\              # 3-Layer 기획서 (game_design, system_spec, nodes)
 ```
 
-- Layer 1(`_projects/`): 프로젝트 전체 기획 구조를 1파일에 보존. 프로젝트 간 비교, 전체 구조 참조 시 사용
-- Layer 2(`{domain}/files/`): 세부 요소별 태깅. AI가 특정 기획 요소를 빠르게 검색/참조할 때 사용
+- **Layer 1** (프로젝트 단위): `projects/{project}/design_workflow/`에 파일로 보존. 프로젝트 간 비교, 전체 구조 참조
+- **Layer 2** (세부 요소): MongoDB `design_base` 컬렉션. AI가 특정 기획 요소를 빠르게 검색/참조
+- **설계 표준**: `design_standard/{genre}/`에 파일로 관리. 장르 인프라이므로 버전 관리 필요
+- **DB 접근**: `db-client.js`의 `findDesign()`, `searchDesignByPriority()` 또는 pymongo 직접 쿼리
 
 ### 기획 신뢰도 점수 체계
 
@@ -1079,10 +1122,24 @@ AI Tester 인프라(BlueStacks + ADB)를 그대로 활용합니다.
   서버 통신 끊고 10~20배속 가속 환경에서 AI Tester가 플레이
   30일치 플레이를 반나절에 완료
 
-검증 항목:
+검증 항목 (0단계 설계 표준의 밸런스 지표 기준):
   밸런스 시트 예측값 vs 실제 플레이 수치 비교
   기획 의도 vs 실제 유저 경험 괴리 확인
   병목 구간 발견 (진행 막히는 지점, 재화 부족 구간)
+
+  퍼즐 장르 판단 기준 (metadata level_balance_daily 기반):
+    clear_rate: Normal 목표 70~85%, Hard 40~60%
+    first_try_clear_rate: 너무 높으면 쉬움, 너무 낮으면 벽
+    churn_rate: 급등 레벨 = 밸런스 또는 디자인 문제
+    near_miss_rate: 높을수록 좋음 (재도전 욕구)
+    hopeless_fail_rate: 낮을수록 좋음 (높으면 이탈 위험)
+    avg_attempts_to_clear: Normal 기대치 1~3회, 10+이면 심각한 병목
+    payer_churn_count: 결제 유저 이탈은 매출 직결, 최우선 대응
+
+  범용 판단 기준:
+    재화 net_coin_flow 추세 (인플레이션 감지)
+    아이템 clear_rate_with vs clear_rate_without (아이템 효과 검증)
+    continue_use_rate (아쉬운 실패 비율, 높으면 좋은 설계)
 
 결과:
   차이가 큰 부분 → 기획 Workflow 2단계로 되돌아가 밸런스 수정

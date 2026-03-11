@@ -240,13 +240,13 @@ AI_기획서 → DB 검색 → 코드 생성 → 자가 검증 → 피드백 반
 ```
 Stage 0: 설계 표준       — 구성요소 맵 + 파라미터(상세도 기준) + 데이터 스키마(프로그래머 싱크) + 도메인별 우선순위 + DB 스키마 + 디렉션 히스토리 (장르 최초 1회)
 Stage 1: DB 가공          — 기획 문서 / AI Tester 관찰 → Design DB (0단계 스키마 참조)
-Stage 2: 기획 생성        — 2-1 컨셉 → 2-2 시스템 → 2-3 밸런스 / 2-4 콘텐츠 (병렬) → 2-5 BM/LiveOps
+Stage 2: 기획 생성        — 2-1 컨셉(Core Fun+필러) → 0단계 Tier 순서로 도메인별 생성 (2-3/2-4 병렬 가능) → 2-5 BM
 Stage 3: 통합 검증        — 교차 일관성 + 유저 여정 시뮬 + 누락 검출
 Stage 4: 디렉터 검수      — 사람이 검수, 피드백 없으면 Stage 6으로
 Stage 5: 재생성 평가      — 피드백 반영 확인 + 히스토리 분석
 Stage 6: DB 축적          — score 산출 → Expert DB 승격 (>= 0.6) → Rules 추출
     ↓ Code Workflow Phase 2~4 실행 ↓
-Stage 7: 플레이 검증      — AI Tester (7-1 가속 / 7-2 장기 / 7-3 대규모 시뮬)
+Stage 7: 플레이 검증      — AI Tester (7-1 가속 / 7-2 장기 / 7-3 대규모 시뮬) + metadata 지표 기반 판단
 Stage 8: 라이브 동기화    — 밸런스 패치 → 버전 추가 → KPI 기록
 ```
 
@@ -578,8 +578,12 @@ E:\AI\
 ## Design DB (기획 데이터베이스)
 
 ### DB 저장소
-MongoDB Atlas (`aigame` DB) — `design_base`, `design_expert` 컬렉션 사용.
-접속: `scripts/lib/db-client.js` (`findDesign`, `upsertDesign`, `searchDesignByPriority`)
+MongoDB Atlas (`aigame` DB) — `design_base`, `design_expert`, `pending` 컬렉션 사용.
+접속: `scripts/lib/db-client.js` (`findDesign`, `upsertDesign`, `searchDesignByPriority`) 또는 `pymongo`
+
+### 설계 표준 저장소 (Stage 0)
+파일 시스템: `E:\AI\design_standard\{genre}\` (component_map, parameters, schema, domain_priority)
+예: `E:\AI\design_standard\puzzle\schema\` — SQL 스키마, 레벨 데이터 포맷, BM 파라미터 등
 
 ### Design 분류 체계 (Domain 9종)
 | Domain | 정의 |
