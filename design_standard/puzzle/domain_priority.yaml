@@ -1,0 +1,64 @@
+# Puzzle Genre - Domain Priority (도메인별 기획 착수 우선순위)
+# Stage 0 산출물 | Version 1.1 | 2026-03-11
+# Stage 2 기획 생성의 진행 순서를 결정
+
+genre: Puzzle
+
+# 착수 순서: InGame → Content + Balance (병행) → OutGame → BM → UX → Meta → Social → LiveOps
+
+tiers:
+  tier_1:
+    name: "코어 (게임이 성립하려면 반드시 필요)"
+    domains:
+      - domain: InGame
+        reason: "코어 메커닉이 없으면 게임 자체가 없음. 가장 먼저 정의"
+      - domain: Content
+        reason: "레벨이 없으면 유저가 플레이할 것이 없음. 코어 메커닉 확정 직후 착수"
+      - domain: Balance
+        reason: "난이도 곡선이 없으면 레벨이 너무 쉽거나 너무 어려움. Content와 병행"
+
+  tier_2:
+    name: "수익화/편의 (소프트런칭 전 반드시 필요)"
+    domains:
+      - domain: OutGame
+        reason: "라이프/부스터/재화는 수익화와 직결. BM보다 먼저 잡아야 BM이 설계 가능"
+      - domain: BM
+        reason: "OutGame 구조가 확정되어야 '뭘 팔 것인가'가 정해짐"
+      - domain: UX
+        reason: "튜토리얼과 동선은 리텐션에 직접 영향. 코어 확정 후 병행 가능"
+
+  tier_3:
+    name: "장기/확장 (소프트런칭 후 데이터 기반 도입)"
+    domains:
+      - domain: Meta
+        reason: "컬렉션/꾸미기는 D30+ 리텐션에 영향. 리텐션 데이터 확인 후 도입 검토"
+      - domain: Social
+        reason: "랭킹/클랜은 유저 규모가 확보된 후 의미 있음"
+      - domain: LiveOps
+        reason: "라이브 운영 구조는 런칭 직전에 확정해도 됨"
+
+execution_order:
+  - step: 1
+    domains: [InGame]
+    note: "코어 메커닉 정의"
+  - step: 2
+    domains: [Content, Balance]
+    note: "병행 진행"
+  - step: 3
+    domains: [OutGame]
+    note: "코어 루프 지원"
+  - step: 4
+    domains: [BM]
+    note: "OutGame 확정 후"
+  - step: 5
+    domains: [UX]
+    note: "코어 확정 후 병행 가능"
+  - step: 6
+    domains: [Meta]
+    note: "데이터 기반 도입"
+  - step: 7
+    domains: [Social]
+    note: "유저 규모 확보 후"
+  - step: 8
+    domains: [LiveOps]
+    note: "런칭 직전 확정"

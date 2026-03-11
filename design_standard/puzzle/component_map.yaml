@@ -1,0 +1,52 @@
+# Puzzle Genre - Component Map (구성요소 맵)
+# Stage 0 산출물 | Version 1.1 | 2026-03-11
+# 기획 도메인 9종을 퍼즐 장르 맥락으로 구체화
+
+genre: Puzzle
+sub_genres: [queue_sort, block_slide, screw_remove, match3, merge]
+
+domains:
+  InGame:
+    tier: 1
+    meaning: "코어 메커닉 — 유저가 반복하는 핵심 행위"
+    scope: "Sort: 큐 매니지먼트, 색상 매칭, 컨베이어/레일 / Block: 블록 배치, 줄 제거 / Screw: 나사 풀기, 물리 시뮬레이션 / Match: 3매칭, 스와이프"
+
+  Content:
+    tier: 1
+    meaning: "레벨 디자인 — 유저가 소비하는 콘텐츠 단위"
+    scope: "스테이지 구성, 레벨 수, 챕터/월드 구조, 특수 레벨(보스/이벤트), 레벨 배치 규칙(색상 수, 오브젝트 수 증감)"
+
+  Balance:
+    tier: 1
+    meaning: "난이도 곡선 — 유저가 체감하는 어려움의 흐름"
+    scope: "목표 클리어율, 무브/시간 제한, 난이도 스파이크 주기, 실패 후 재도전 비용, 부스터 기대값"
+
+  OutGame:
+    tier: 2
+    meaning: "코어 루프 지원 시스템"
+    scope: "라이프(하트) 시스템, 부스터 종류/획득/사용, 재화 구조(코인/젬), 인벤토리"
+
+  BM:
+    tier: 2
+    meaning: "수익화 구조"
+    scope: "IAP 패키지, 보상형 광고 배치, 시즌패스, 피기뱅크, 스타터팩, 가격대, 과금 포인트 타이밍"
+
+  UX:
+    tier: 2
+    meaning: "유저 동선과 정보 전달"
+    scope: "튜토리얼 흐름, HUD 구성, 팝업 정책, 화면 전환, FTUE(First Time User Experience)"
+
+  Meta:
+    tier: 3
+    meaning: "장기 동기 시스템"
+    scope: "컬렉션, 꾸미기(데코), 진행감 보상, 도전과제, 프레스티지, 스타 시스템"
+
+  Social:
+    tier: 3
+    meaning: "유저 간 상호작용"
+    scope: "랭킹(리더보드), 팀/클랜, 친구 시스템, 협동 이벤트, 선물 보내기"
+
+  LiveOps:
+    tier: 3
+    meaning: "라이브 운영 프로세스"
+    scope: "이벤트 캘린더, 시즌 주기, 업데이트 주기, 공지, 보상 정책, AB 테스트 계획"

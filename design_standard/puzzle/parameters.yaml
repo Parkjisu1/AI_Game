@@ -1,0 +1,518 @@
+# Puzzle Genre - Parameter Definitions (파라미터 정의)
+# Stage 0 산출물 | Version 1.1 | 2026-03-11
+# 각 도메인별 핵심 파라미터. 필수/선택, 공통/커스텀 구분 포함.
+# 공통: 서브장르가 달라도 구조가 동일하여 이식 가능
+# 커스텀: 서브장르/프로젝트마다 다르게 설계
+
+genre: Puzzle
+
+# ──────────────────────────────────────
+# 4-1. InGame (코어 메커닉) — 10 params
+# ──────────────────────────────────────
+InGame:
+  - name: core_mechanic_type
+    description: "코어 메커닉 유형 (queue_sort, block_slide, screw_remove, match3, merge 등)"
+    type: enum
+    required: true
+    common: false
+
+  - name: input_method
+    description: "유저 입력 방식 (tap, swipe, drag, tap+hold 등)"
+    type: enum
+    required: true
+    common: false
+
+  - name: board_structure
+    description: "보드 형태 (grid, free_form, conveyor, rail 등)"
+    type: enum
+    required: true
+    common: false
+
+  - name: color_count_range
+    description: "사용 색상 수 범위 (예: 4~8)"
+    type: range
+    required: true
+    common: true
+
+  - name: matching_rule
+    description: "매칭/제거 규칙 (같은 색 접촉, 3개 이상 연결 등)"
+    type: string
+    required: true
+    common: false
+
+  - name: fail_condition
+    description: "실패 조건 (레일 초과, 홀더 초과, 무브 소진, 시간 초과 등)"
+    type: enum
+    required: true
+    common: false
+
+  - name: clear_condition
+    description: "클리어 조건 (보드 비우기, 목표 수량, 점수 달성 등)"
+    type: enum
+    required: true
+    common: false
+
+  - name: queue_system
+    description: "큐/홀더/컨베이어 구조 유무 및 형태"
+    type: string
+    required: false
+    common: false
+
+  - name: physics_sim
+    description: "물리 시뮬레이션 사용 여부"
+    type: boolean
+    required: false
+    common: false
+
+  - name: combo_system
+    description: "연쇄/콤보 메커닉 유무 및 규칙"
+    type: string
+    required: false
+    common: false
+
+# ──────────────────────────────────────
+# 4-2. Content (레벨 디자인) — 12 params
+# ──────────────────────────────────────
+Content:
+  - name: total_level_count
+    description: "출시 시 총 레벨 수"
+    type: integer
+    required: true
+    common: true
+
+  - name: chapter_structure
+    description: "챕터/월드 구조 (10레벨×10챕터 등)"
+    type: string
+    required: true
+    common: true
+
+  - name: level_duration_avg
+    description: "레벨 평균 플레이 시간 (초)"
+    type: range
+    required: true
+    common: true
+
+  - name: new_mechanic_intro_cycle
+    description: "신규 메커닉/오브젝트 도입 주기 (레벨 단위)"
+    type: integer
+    required: true
+    common: true
+
+  - name: difficulty_spike_cycle
+    description: "하드 레벨 등장 주기 (예: 매 5레벨)"
+    type: integer
+    required: true
+    common: true
+
+  - name: level_purpose_type
+    description: "레벨 목적 분류 (학습/도전/과금유도/휴식)"
+    type: enum
+    required: true
+    common: true
+
+  - name: object_count_curve
+    description: "레벨별 오브젝트(풍선/블록 등) 수 증가 곡선"
+    type: curve
+    required: true
+    common: false
+
+  - name: color_intro_schedule
+    description: "색상 추가 도입 스케줄 (Lv.1=3색, Lv.10=5색 등)"
+    type: schedule
+    required: true
+    common: false
+
+  - name: special_level_types
+    description: "특수 레벨 유형 (보스, 타임어택, 제한조건 등)"
+    type: enum[]
+    required: false
+    common: false
+
+  - name: tutorial_level_count
+    description: "튜토리얼 레벨 수"
+    type: integer
+    required: true
+    common: true
+
+  - name: gimmick_intro_schedule
+    description: "특수 기믹 도입 스케줄 (예: Lv.15 잠금 블록, Lv.25 얼음 등)"
+    type: schedule
+    required: true
+    common: false
+
+  - name: level_composition_params
+    description: "레벨별 맵 구성 요소 (컨테이너 수, 빈 슬롯 수, 보드 크기 등 서브장르별 정의)"
+    type: object
+    required: true
+    common: false
+
+# ──────────────────────────────────────
+# 4-3. Balance (난이도 곡선) — 12 params
+# ──────────────────────────────────────
+Balance:
+  - name: target_clear_rate
+    description: "레벨별 목표 클리어율 (레벨 목적에 따라 개별 설정)"
+    type: range
+    required: true
+    common: true
+
+  - name: move_limit_formula
+    description: "무브 제한 산출 공식 또는 기준"
+    type: formula
+    required: false
+    common: false
+
+  - name: time_limit
+    description: "시간 제한 유무 및 기준"
+    type: integer|null
+    required: false
+    common: false
+
+  - name: retry_cost
+    description: "재도전 비용 (하트, 광고 등)"
+    type: string
+    required: true
+    common: true
+
+  - name: booster_expected_usage
+    description: "레벨당 부스터 기대 사용 횟수"
+    type: float
+    required: true
+    common: true
+
+  - name: difficulty_curve_type
+    description: "난이도 곡선 형태 (선형, 계단식, 톱니 등)"
+    type: enum
+    required: true
+    common: true
+
+  - name: fail_rate_threshold
+    description: "경고 실패율 임계치 (이 이상이면 밸런스 수정)"
+    type: float
+    required: true
+    common: true
+
+  - name: first_fail_expected_level
+    description: "유저가 처음 실패할 것으로 예상되는 레벨"
+    type: integer
+    required: true
+    common: true
+
+  - name: paywall_pressure_points
+    description: "과금 압박 발생 시점 (Day N 또는 Level N)"
+    type: schedule
+    required: true
+    common: true
+
+  - name: target_near_miss_rate
+    description: "목표 아깝게 실패 비율 (목표 80%+ 달성 후 실패). 높을수록 재도전 욕구 자극"
+    type: float
+    required: true
+    common: true
+
+  - name: max_hopeless_fail_rate
+    description: "허용 희망 없는 실패 비율 상한 (목표 30% 미만 달성 후 실패). 이 이상이면 밸런스 수정"
+    type: float
+    required: true
+    common: true
+
+  - name: optimal_moves_policy
+    description: "레벨별 최소 풀이 무브 산출 방식 (시뮬레이션, 수동 측정, AI 자동 산출 등). level_meta와 매핑"
+    type: enum
+    required: true
+    common: true
+
+# ──────────────────────────────────────
+# 4-4. OutGame (라이프/부스터/재화) — 11 params
+# ──────────────────────────────────────
+OutGame:
+  - name: life_system_type
+    description: "라이프 시스템 유형 (하트, 에너지, 없음)"
+    type: enum
+    required: true
+    common: true
+
+  - name: max_lives
+    description: "최대 라이프 수"
+    type: integer
+    required: true
+    common: true
+
+  - name: life_regen_time
+    description: "라이프 1개 자동 충전 시간 (분)"
+    type: integer
+    required: true
+    common: true
+
+  - name: life_refill_cost
+    description: "라이프 전체 충전 비용 (젬/광고)"
+    type: string
+    required: true
+    common: true
+
+  - name: booster_types
+    description: "부스터 종류 목록. pre_play(판 시작 전), in_play(판 진행 중), continue(이어하기) 카테고리로 분류"
+    type: enum[]
+    required: true
+    common: false
+
+  - name: booster_acquire_sources
+    description: "부스터 획득 경로 (레벨보상, 구매, 광고, 이벤트)"
+    type: enum[]
+    required: true
+    common: true
+
+  - name: booster_use_timing
+    description: "부스터 사용 시점 (레벨 시작 전, 플레이 중, 실패 후)"
+    type: enum[]
+    required: true
+    common: false
+
+  - name: currency_types
+    description: "재화 종류 (코인, 젬 등)"
+    type: enum[]
+    required: true
+    common: true
+
+  - name: currency_sources
+    description: "재화 획득 경로 (레벨 클리어, 광고, IAP, 이벤트)"
+    type: string
+    required: true
+    common: true
+
+  - name: currency_sinks
+    description: "재화 소비처 (부스터 구매, 라이프 충전, 컨티뉴, 스킨 등)"
+    type: string
+    required: true
+    common: true
+
+  - name: continue_system
+    description: "실패 후 이어하기 유무 및 비용"
+    type: string
+    required: false
+    common: true
+
+# ──────────────────────────────────────
+# 4-5. BM (수익화) — 10 params
+# ──────────────────────────────────────
+BM:
+  - name: monetization_model
+    description: "수익 모델 유형 (F2P+IAP, F2P+IAP+Ad, Premium 등)"
+    type: enum
+    required: true
+    common: true
+
+  - name: ad_free_period
+    description: "최초 광고 프리 시간"
+    type: integer
+    required: true
+    common: true
+
+  - name: rewarded_ad_placements
+    description: "보상형 광고 노출 위치 목록"
+    type: enum[]
+    required: true
+    common: true
+
+  - name: interstitial_frequency
+    description: "전면 광고 노출 주기 (레벨 N회당 1회 등)"
+    type: string
+    required: true
+    common: true
+
+  - name: iap_price_range
+    description: "IAP 가격대 범위 ($)"
+    type: range
+    required: true
+    common: true
+
+  - name: starter_pack
+    description: "스타터팩 유무, 가격, 구성"
+    type: string
+    required: false
+    common: true
+
+  - name: piggy_bank
+    description: "피기뱅크 유무, 가격, 해금 조건"
+    type: string
+    required: false
+    common: true
+
+  - name: season_pass
+    description: "시즌패스 유무, 가격, 보상 구조"
+    type: string
+    required: false
+    common: true
+
+  - name: first_purchase_timing
+    description: "첫 구매 유도 시점 (Day N 또는 Level N)"
+    type: string
+    required: true
+    common: true
+
+  - name: vip_system
+    description: "VIP/구독 시스템 유무"
+    type: string
+    required: false
+    common: true
+
+# ──────────────────────────────────────
+# 4-6. UX (유저 동선) — 7 params
+# ──────────────────────────────────────
+UX:
+  - name: ftue_steps
+    description: "FTUE(첫 경험) 단계 수와 흐름"
+    type: integer
+    required: true
+    common: true
+
+  - name: tutorial_type
+    description: "튜토리얼 방식 (강제 가이드, 힌트, 자유 탐색 등)"
+    type: enum
+    required: true
+    common: true
+
+  - name: session_target_time
+    description: "1세션 목표 플레이 시간 (분)"
+    type: range
+    required: true
+    common: true
+
+  - name: daily_target_time
+    description: "일일 목표 플레이 시간 (분)"
+    type: range
+    required: true
+    common: true
+
+  - name: hud_elements
+    description: "HUD 필수 구성요소 목록"
+    type: enum[]
+    required: true
+    common: false
+
+  - name: popup_policy
+    description: "팝업 노출 정책 (빈도, 우선순위)"
+    type: string
+    required: true
+    common: true
+
+  - name: feedback_channels
+    description: "피드백 채널 (시각, 청각, 촉각/진동)"
+    type: enum[]
+    required: true
+    common: false
+
+# ──────────────────────────────────────
+# 4-7. Meta (장기 동기) — 5 params
+# ──────────────────────────────────────
+Meta:
+  - name: collection_system
+    description: "컬렉션 시스템 유무 및 유형"
+    type: string
+    required: false
+    common: true
+
+  - name: decoration_system
+    description: "꾸미기/데코 시스템 유무 및 유형"
+    type: string
+    required: false
+    common: true
+
+  - name: star_system
+    description: "스타 시스템 유무 (레벨당 1~3스타 등)"
+    type: string
+    required: false
+    common: true
+
+  - name: achievement_system
+    description: "도전과제 시스템 유무"
+    type: string
+    required: false
+    common: true
+
+  - name: prestige_system
+    description: "프레스티지/뉴게임+ 시스템 유무"
+    type: string
+    required: false
+    common: false
+
+# ──────────────────────────────────────
+# 4-8. Social (소셜) — 4 params
+# ──────────────────────────────────────
+Social:
+  - name: leaderboard
+    description: "리더보드 유무 및 유형 (글로벌, 친구, 주간 등)"
+    type: string
+    required: false
+    common: true
+
+  - name: team_system
+    description: "팀/클랜 시스템 유무"
+    type: string
+    required: false
+    common: true
+
+  - name: gift_system
+    description: "선물 보내기 유무 (라이프 등)"
+    type: string
+    required: false
+    common: true
+
+  - name: coop_event
+    description: "협동 이벤트 유무"
+    type: string
+    required: false
+    common: true
+
+# ──────────────────────────────────────
+# 4-9. LiveOps (라이브 운영) — 4 params
+# ──────────────────────────────────────
+LiveOps:
+  - name: season_cycle
+    description: "시즌 주기 (주 단위)"
+    type: integer
+    required: false
+    common: true
+
+  - name: event_calendar
+    description: "이벤트 유형 및 주기"
+    type: string
+    required: false
+    common: true
+
+  - name: update_cycle
+    description: "콘텐츠 업데이트 주기"
+    type: string
+    required: false
+    common: true
+
+  - name: ab_test_plan
+    description: "AB 테스트 계획 (소프트런칭 시)"
+    type: string
+    required: false
+    common: true
+
+# ──────────────────────────────────────
+# 공통/커스텀 구분 요약
+# ──────────────────────────────────────
+common_custom_summary:
+  common:
+    description: "서브장르가 달라도 구조가 동일하여 그대로 이식 가능"
+    examples: "라이프 시스템, 재화 구조, BM 패키지 구조, 시즌패스 구조, 광고 배치, 난이도 곡선 형태, 클리어율 목표"
+  custom:
+    description: "서브장르/프로젝트마다 다르게 설계해야 함"
+    examples: "코어 메커닉, 입력 방식, 보드 구조, 매칭 규칙, 실패/클리어 조건, 부스터 종류, 오브젝트 증가 곡선"
+  principle: "InGame 도메인은 거의 전부 커스텀, OutGame/BM/UX 도메인은 대부분 공통. 공통 파라미터가 많을수록 피어 분석 데이터를 바로 재사용할 수 있어 기획 속도가 빨라짐."
+
+# ──────────────────────────────────────
+# 태깅 규칙
+# ──────────────────────────────────────
+tagging_rules:
+  genre: Puzzle  # 고정
+  sub_genre: [queue_sort, block_slide, screw_remove, match3, merge]
+  note: "필요시 like 레퍼런스 병기 — 예: block_slide (like Block Jam)"
+  search_priority:
+    - "Expert DB (Puzzle, 해당 sub_genre)"
+    - "Expert DB (Puzzle, Generic)"
+    - "Base DB"
+    - "AI 자체 생성"
