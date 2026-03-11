@@ -16,9 +16,17 @@ def _register_builtins():
     """내장 장르 등록."""
     from .puzzle_match import create_puzzle_match_profile
     from .idle_rpg import create_idle_rpg_profile
+    from .runner_platformer import create_runner_platformer_profile
+    from .tower_defense import create_tower_defense_profile
+    from .card_battle import create_card_battle_profile
+    from .simulation import create_simulation_profile
 
     _REGISTRY["puzzle_match"] = create_puzzle_match_profile
     _REGISTRY["idle_rpg"] = create_idle_rpg_profile
+    _REGISTRY["runner_platformer"] = create_runner_platformer_profile
+    _REGISTRY["tower_defense"] = create_tower_defense_profile
+    _REGISTRY["card_battle"] = create_card_battle_profile
+    _REGISTRY["simulation"] = create_simulation_profile
 
 
 def load_genre(genre_id: str) -> GenreProfile:
