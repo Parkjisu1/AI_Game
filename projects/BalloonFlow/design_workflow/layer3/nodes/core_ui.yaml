@@ -1,0 +1,71 @@
+# ═══════════════════════════════════════════
+# BalloonFlow — L3 Node: Core UI
+# ═══════════════════════════════════════════
+# Phase 0 | Owner: Main Coder
+# Systems: UIManager, PopupManager
+
+node_id: core_ui
+phase: 0
+layer: Core
+domain: UX
+owner: MainCoder
+
+systems:
+  UIManager:
+    description: "전체 UI 상태 관리. Canvas 설정, 화면 전환 기반."
+    contract:
+      provides:
+        - "ShowScreen(string screenId)"
+        - "HideScreen(string screenId)"
+        - "GetCurrentScreen() -> string"
+        - "ShowLoading()"
+        - "HideLoading()"
+      events_published:
+        - "OnScreenChanged(string from, string to)"
+      requires: []
+    implementation:
+      canvas_setup:
+        render_mode: "Screen Space - Overlay"
+        scaler: "Scale With Screen Size"
+        reference_resolution: [1080, 1920]
+        match_mode: 0.5
+      screens:
+        - TitleScreen
+        - MainScreen
+        - LevelScreen
+        - ResultScreen
+        - ShopScreen
+        - SettingsScreen
+      transition: "Fade (0.3s) or Slide"
+
+  PopupManager:
+    description: "팝업 큐잉, 우선순위 관리. 동시 최대 1개."
+    contract:
+      provides:
+        - "ShowPopup(string popupId, int priority, object data)"
+        - "ClosePopup(string popupId)"
+        - "GetActivePopup() -> string"
+        - "HasPendingPopups() -> bool"
+        - "ClearQueue()"
+      requires:
+        - "UIManager"
+    implementation:
+      max_concurrent: 1
+      queue_structure: "PriorityQueue<PopupRequest>"
+      priority_order:
+        1: "LevelClearResult"
+        2: "LevelFailContinue"
+        3: "HeartEmpty"
+        4: "SpecialOffer"
+        5: "SeasonPassProgress"
+        6: "PiggyBankFull"
+        7: "DailyReward"
+        8: "UpdateNotice"
+      rules:
+        - "같은 팝업 세션당 1회"
+        - "광고 직후 60초 간격"
+        - "연속 실패 3회 → 부스터 제안 우선"
+
+output_files:
+  - "UIManager.cs"
+  - "PopupManager.cs"

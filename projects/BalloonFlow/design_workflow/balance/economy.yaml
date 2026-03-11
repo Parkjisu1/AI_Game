@@ -1,0 +1,142 @@
+# BalloonFlow — Stage 2-3: Balance — Economy
+# Currency flow, sink/source balance, LTV projections
+
+domain: Balance
+sub_doc: economy
+
+# ─────────────────────────────────────
+# 1. Coin Economy
+# ─────────────────────────────────────
+coin_economy:
+  daily_sources:
+    level_clear:
+      formula: "coin_per_level(L) = 100 + L * 5"
+      avg_levels_per_day: 12
+      daily_estimate: "12 * (100 + avg_level * 5) ~ 1800 (early) ~ 3000 (mid)"
+    star_bonus:
+      formula: "avg_stars * 50 per level"
+      daily_estimate: "12 * 1.5 * 50 = 900"
+    daily_reward:
+      formula: "day_streak * 100, max 700"
+      avg_daily: 400
+    ad_reward:
+      amount: 200
+      daily_cap: 5
+      daily_estimate: "200 * 2.5 (avg views) = 500"
+    chapter_bonus:
+      amount: 2000
+      frequency: "~1 per 5 days"
+      daily_estimate: 400
+
+  daily_total_source: "~3500 (D1~7), ~4500 (D8~30)"
+
+  daily_sinks:
+    booster_purchase:
+      avg_uses_per_day: 1.5
+      avg_cost: 650
+      daily_estimate: 975
+    skin_purchase:
+      avg_per_week: 1
+      avg_cost: 3000
+      daily_estimate: 430
+    other:
+      daily_estimate: 100
+
+  daily_total_sink: "~1500 (D1~7), ~2500 (D8~30)"
+
+  net_flow: "+2000/day (early), +2000/day (mid) — 의도적 약간의 인플레이션으로 성장감 제공"
+  target_coin_balance:
+    D7: 12000
+    D30: 40000
+
+# ─────────────────────────────────────
+# 2. Gem Economy
+# ─────────────────────────────────────
+gem_economy:
+  daily_sources_free:
+    chapter_clear:
+      amount: 30
+      frequency: "~1 per 5 days"
+      daily_estimate: 6
+    achievements:
+      avg_per_day: 2
+      daily_estimate: 2
+    daily_reward_d7:
+      amount: 20
+      frequency: "weekly"
+      daily_estimate: 3
+
+  daily_total_source_free: "~8~11 gems/day"
+
+  daily_sinks:
+    heart_refill:
+      cost: 50
+      frequency: "~0.3x/day"
+      daily_estimate: 15
+    continue:
+      cost: 30
+      frequency: "~0.2x/day"
+      daily_estimate: 6
+    premium_booster:
+      cost: 18
+      frequency: "~0.1x/day"
+      daily_estimate: 2
+    skin_purchase:
+      avg_per_month: 1
+      avg_cost: 200
+      daily_estimate: 7
+
+  daily_total_sink: "~20~30 gems/day (active)"
+  deficit: "~12~20 gems/day → IAP 또는 piggy bank로 충당"
+
+  target_gem_balance:
+    D7_free: 60
+    D30_free: 30   # 자연 소진 후 구매 유도
+
+# ─────────────────────────────────────
+# 3. Heart Economy
+# ─────────────────────────────────────
+heart_economy:
+  max: 5
+  regen_minutes: 30
+  full_regen_hours: 2.5
+  daily_natural_regen: "약 48개 (24h / 0.5h)"
+  daily_consumption:
+    avg_levels_per_day: 12
+    fail_rate: 0.30
+    avg_attempts_per_level: 1.6
+    daily_hearts_used: "12 * 1.6 = ~19"
+  surplus: "자연 충전 > 소비. 하트 부족은 연속 실패 구간에서만 발생."
+  pressure_trigger: "3회 연속 실패 시 하트 부족 → 광고 또는 젬 충전 유도"
+
+# ─────────────────────────────────────
+# 4. Booster Economy
+# ─────────────────────────────────────
+booster_economy:
+  free_acquisition:
+    level_reward: "매 10레벨 클리어 시 랜덤 부스터 1개"
+    daily_reward: "D3, D5에 부스터 포함"
+    event: "이벤트 보상"
+    ad: "일 3회 광고로 랜덤 부스터"
+  estimated_free_per_week: 10
+  estimated_use_per_week: 8
+  net: "+2/week (약간의 재고 축적 → 하드 레벨에서 소진)"
+
+# ─────────────────────────────────────
+# 5. LTV Projection (Rough)
+# ─────────────────────────────────────
+ltv_projection:
+  assumptions:
+    D1_retention: 0.45
+    D7_retention: 0.20
+    D30_retention: 0.08
+    payer_rate: 0.03
+    ARPPU: 15.00   # USD
+    ad_ARPDAU: 0.08
+
+  formulas:
+    LTV_iap: "DAU * payer_rate * ARPPU = $0.45/install"
+    LTV_ad: "DAU_weighted * ad_ARPDAU * 30 = $0.38/install"
+    LTV_total: "$0.83/install (D30)"
+
+  note: "소프트런칭 데이터로 보정 필요. 목표 CPI < $0.50 기준 ROAS > 1.6"

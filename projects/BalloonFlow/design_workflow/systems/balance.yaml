@@ -1,0 +1,118 @@
+# BalloonFlow — Stage 2-2: Balance System
+# Domain: Balance | Tier: 1
+
+domain: Balance
+tier: 1
+
+# ─────────────────────────────────────
+# Required Parameters (12/12)
+# ─────────────────────────────────────
+parameters:
+  target_clear_rate:
+    overall: [0.65, 0.75]
+    by_purpose:
+      learning: [0.90, 0.98]
+      rest: [0.75, 0.85]
+      challenge: [0.45, 0.60]
+      monetization: [0.35, 0.50]
+
+  move_limit_formula:
+    description: "다트 수 = 최적 풀이 다트 수 * 여유 계수"
+    formula: "dart_count = ceil(optimal_darts * buffer_multiplier)"
+    buffer_multiplier_by_purpose:
+      learning: 2.0
+      rest: 1.5
+      challenge: 1.15
+      monetization: 1.05
+
+  time_limit: null   # 기본 시간제한 없음. 타임어택 특수 레벨에서만 60초
+
+  retry_cost:
+    type: "heart"
+    cost_per_retry: 1
+    free_retry_ad: true
+    description: "재도전 시 하트 1개 소모. 광고 시청으로 무료 재도전 가능."
+
+  booster_expected_usage:
+    overall: 0.15
+    description: "전체 레벨의 15% 에서 부스터 1회 사용 기대"
+    by_purpose:
+      learning: 0.0
+      rest: 0.05
+      challenge: 0.25
+      monetization: 0.40
+
+  difficulty_curve_type: sawtooth
+  # 톱니형: 일정 주기로 쉬운→어려운 반복, 하드 스파이크 후 휴식
+
+  fail_rate_threshold: 0.60
+  # 실패율 60% 초과 시 밸런스 수정 트리거
+
+  first_fail_expected_level: 8
+  # 유저 첫 실패 예상 레벨 (튜토리얼 5레벨 직후 + 3레벨)
+
+  paywall_pressure_points:
+    - { trigger: "Level 30", pressure: "low", mechanism: "하트 소진 시작" }
+    - { trigger: "Level 50", pressure: "medium", mechanism: "하드 레벨 + 부스터 필요" }
+    - { trigger: "Level 80", pressure: "high", mechanism: "연속 실패 + 컨티뉴 유도" }
+    - { trigger: "Level 120", pressure: "peak", mechanism: "다중 기믹 + 다트 부족" }
+
+  target_near_miss_rate: 0.35
+  # 실패 판의 35%가 "아깝게 실패" (목표 80%+ 달성 후 실패)
+
+  max_hopeless_fail_rate: 0.10
+  # "희망 없는 실패" (목표 30% 미만) 비율 10% 이하 유지
+
+  optimal_moves_policy: simulation
+  # AI 시뮬레이션으로 최소 풀이 다트 수 자동 산출.
+  # 시뮬레이터가 없는 경우 수동 측정 + 공식 보정.
+
+# ─────────────────────────────────────
+# Optional Parameters
+# ─────────────────────────────────────
+  time_limit_special:
+    time_attack: 60   # 타임어택 레벨 60초
+
+# ─────────────────────────────────────
+# Difficulty Formula Detail
+# ─────────────────────────────────────
+difficulty_formulas:
+  # CANONICAL FORMULA: 정본은 balance/difficulty_curve.yaml 참조
+  difficulty_score:
+    description: "레벨 난이도 점수 (0~100). 정본: balance/difficulty_curve.yaml"
+    formula: >
+      D(L) = W_color * (num_colors - 3) / 5
+           + W_count * balloon_count / 80
+           + W_special * special_ratio
+           + W_buffer * (1 - (buffer_mult - 1.0))
+           + W_rail * rail_complexity
+    weights: { W_color: 25, W_count: 25, W_special: 20, W_buffer: 15, W_rail: 15 }
+    variables:
+      num_colors: "사용 색상 수 (3~8)"
+      balloon_count: "풍선 총 수 (8~80)"
+      special_ratio: "특수 풍선 비율 (0.0~0.3)"
+      buffer_mult: "다트 여유 계수 (1.05~2.0)"
+      rail_complexity: "레일 복잡도 (0.0=직선, 1.0=포탈+분기)"
+
+  sawtooth_pattern:
+    description: "5레벨 주기 톱니 패턴. 정본: balance/difficulty_curve.yaml"
+    formula: >
+      position = (level_number - 1) % 5
+      cycle_mod = modifiers[position]
+      final_difficulty = D(L) * cycle_mod
+    modifiers: [0.7, 0.85, 0.95, 1.0, 0.6]
+    note: "5번째 레벨(0.6)은 의도적 휴식 레벨"
+
+  balloon_speed_curve:
+    description: "레벨별 풍선 이동 속도"
+    formula: "speed = 1.0 + (level_number / 200) * 0.8"
+    range: [1.0, 1.8]
+    unit: "units/sec"
+
+# ─────────────────────────────────────
+# Systems List
+# ─────────────────────────────────────
+systems:
+  - DifficultyCalculator   # 난이도 점수 산출
+  - BalanceProcessor       # 밸런스 지표 집계 및 자동 조정
+  - ClearRateValidator     # 클리어율 모니터링

@@ -1,0 +1,241 @@
+{
+  "targetId": "BalloonFlow_full_design",
+  "domain": "All",
+  "genre": "Puzzle",
+  "sub_genre": "queue_sort",
+  "platform": "unity",
+  "validationResult": "pass",
+  "previousResult": "fail",
+  "previousFeedbackRef": "balloonflow_validation.json",
+  "iteration": 2,
+  "score": 0.4,
+  "score_calculation": {
+    "logical_completeness": 0.80,
+    "balance_stability": 0.55,
+    "implementation_feasibility": 0.70,
+    "average": 0.683,
+    "initial_reliability": 0.4,
+    "score_events": [
+      { "event": "initial_save (avg >= 0.5)", "delta": 0.4, "running": 0.4 }
+    ],
+    "pending_events": [
+      { "event": "director_approval_no_feedback", "delta": "+0.2", "condition": "Director approves without further feedback" },
+      { "event": "feedback_applied_approved", "delta": "+0.1", "condition": "Director approves with feedback applied (current state)" }
+    ],
+    "note": "Score remains 0.4 until Director review (Stage 4). If Director approves this feedback-applied version: 0.4 + 0.1 = 0.5. Expert DB threshold is 0.6."
+  },
+  "stages": {
+    "crossConsistency": "pass",
+    "userJourney": "pass",
+    "gapDetection": "pass",
+    "selfVerification": "pass",
+    "qualityGates": "pass",
+    "buildVerification": "pass"
+  },
+  "qualityGates": {
+    "gate1_naming": "pass",
+    "gate2_completeness": "pass",
+    "gate3_dependency": "pass",
+    "gate4_logicFlow": "pass",
+    "gate5_copyPaste": "pass",
+    "gate6_crossDoc": "pass"
+  },
+
+  "fix_verification": {
+    "CC-001_QG6-003_difficulty_formula": {
+      "status": "verified_fixed",
+      "detail": "Difficulty formula now identical across all 3 documents. balance/difficulty_curve.yaml is canonical source. systems/balance.yaml (line 80) and layer2/system_spec.yaml (line 266) both reference canonical with 'CANONICAL FORMULA' / 'canonical_ref' labels. Weights [25,25,20,15,15] consistent. Sawtooth modifiers [0.7,0.85,0.95,1.0,0.6] unified. Example values recalculated and verified: L1=2.5 (correct), L30=29.9 (formula gives 29.94, rounded OK), L100=59.8 (formula gives 59.81, rounded OK), L200=83.1 (formula gives 83.13, rounded OK)."
+    },
+    "CC-002_example_values": {
+      "status": "verified_fixed",
+      "detail": "Level 30 example changed from 28.7 to 29.9. Manual substitution: 25*(5-3)/5 + 25*19/80 + 20*0.1 + 15*(1-(1.4-1.0)) + 15*0.2 = 10 + 5.9375 + 2 + 9 + 3 = 29.9375. Rounded to 29.9. Correct."
+    },
+    "CC-003_sawtooth_modifiers": {
+      "status": "verified_fixed",
+      "detail": "systems/balance.yaml sawtooth_pattern.modifiers now [0.7, 0.85, 0.95, 1.0, 0.6] matching difficulty_curve.yaml exactly. Previously was [0.7, 0.8, 0.9, 1.0, 0.6]."
+    },
+    "QG3-001_dependency_notation": {
+      "status": "verified_fixed",
+      "detail": "L2 system_spec.yaml requires fields now use SystemName.Method() format. Specific fixes verified: BalloonController.requires changed from 'ObjectPool (Core)' to 'ObjectPool.Get()' + 'ObjectPool.Return()' (line 45-46). BoardStateManager.requires changed from 'BalloonController (all balloon data)' to 'BalloonController.GetAllBalloons()' (line 152). TutorialController.requires changed from 'UIManager (highlight, arrows)' to 'UIManager.ShowScreen()' (line 245). All now match L3 node references exactly."
+    },
+    "QG6-001_base_score_definition": {
+      "status": "verified_fixed",
+      "detail": "systems/ingame.yaml now contains canonical definition at scoring.base_score_formula (line 107): 'base_score(L) = balloon_count(L) * base_pop = balloon_count(L) * 100'. Includes explicit note (lines 108-111) explaining it excludes chain_bonus, clear_bonus, dart_bonus. balance/difficulty_curve.yaml star_thresholds section (line 98) now references 'systems/ingame.yaml scoring.base_score_formula' and uses consistent 'base_score(L) = balloon_count(L) * 100' without chain_bonus_estimate conflation."
+    },
+    "CC-005_chapter7_boss": {
+      "status": "verified_fixed",
+      "detail": "content/progression.yaml now includes Level 140 entry (line 129-133): 'Chapter 7 boss' with unlocks=['chapter_8'], boss=true. Progression chain is now complete: L100=Ch5/Ch6, L120=Ch6/Ch7, L140=Ch7/Ch8, L160=Ch8/Ch9, L180=Ch9/Ch10, L200=Ch10. All 10 chapters have boss levels at every 20th level."
+    },
+    "GD-002_gimmick_tutorials": {
+      "status": "verified_fixed",
+      "detail": "content/level_design.yaml now includes 'gimmick_tutorial_hints' section (lines 126-141) with 7 popup guides at levels 15, 25, 35, 40, 50, 70, 90. Each entry specifies guide_type (popup/highlight), display text, and tutorial_level flag. Implementation note specifies buffer_multiplier=1.8 and low gimmick ratio (10-15%) for intro levels. Uses TutorialManager.ShowHighlight() integration."
+    }
+  },
+
+  "gate_revalidation_detail": {
+    "gate1_naming": {
+      "status": "pass",
+      "detail": "No changes to system names. All 45 system names still match exactly across L1/L2/L3. Previously passed; still passes."
+    },
+    "gate2_completeness": {
+      "status": "pass",
+      "detail": "No changes to L3 node count or system coverage. 45/45 = 100%. Phase 0+1: 25/25 = 100%. Previously passed; still passes."
+    },
+    "gate3_dependency": {
+      "status": "pass",
+      "detail": "Previously FAILED due to L2 informal notation. Re-verified all 45 systems in L2 against L3 nodes. Key fixes confirmed: BalloonController (ObjectPool.Get/Return), BoardStateManager (BalloonController.GetAllBalloons), TutorialController (UIManager.ShowScreen). Remaining bare 'UIManager' references in PopupManager and TutorialManager L2 requires match L3 exactly (full-system dependency, acceptable). No structural mismatches remain. All method-level references now use SystemName.Method() format consistently."
+    },
+    "gate4_logicFlow": {
+      "status": "pass",
+      "detail": "No changes to L3 logicFlow structure. Error paths exist implicitly in implementation blocks (ClearRateValidator warning/critical rules, DartManager misfire handling, ContinueHandler max limits). Conditional pass carried forward."
+    },
+    "gate5_copyPaste": {
+      "status": "pass",
+      "detail": "No changes to codeHints/patterns. No identical patterns across 3+ nodes. Previously passed; still passes."
+    },
+    "gate6_crossDoc": {
+      "status": "pass",
+      "detail": "Previously FAILED on: (a) difficulty formula inconsistency, (b) ambiguous base_score. Both fixed and verified. (a) All 3 documents now reference canonical formula in balance/difficulty_curve.yaml with identical weights and sawtooth modifiers. (b) base_score canonically defined as balloon_count*100 in systems/ingame.yaml with explicit note; all references updated. Currency names (coin/gem), balloon colors (8 colors), system names all remain consistent."
+    }
+  },
+
+  "cross_consistency_spotcheck": {
+    "difficulty_formula_3way": {
+      "status": "pass",
+      "files_checked": [
+        "balance/difficulty_curve.yaml (canonical, lines 11-22)",
+        "systems/balance.yaml (reference, lines 80-95)",
+        "layer2/system_spec.yaml (reference, lines 265-268)"
+      ],
+      "weights": "[25, 25, 20, 15, 15] in all 3 files",
+      "buffer_term": "(1 - (buffer_mult - 1.0)) in all 3 files",
+      "sawtooth": "[0.7, 0.85, 0.95, 1.0, 0.6] in all 3 files",
+      "examples_verified": "L1=2.5, L30=29.9, L100=59.8, L200=83.1 all match formula to within rounding"
+    },
+    "base_score_consistency": {
+      "status": "pass",
+      "canonical_source": "systems/ingame.yaml:scoring.base_score_formula (line 107)",
+      "definition": "base_score(L) = balloon_count(L) * 100",
+      "references_checked": [
+        "balance/difficulty_curve.yaml:star_thresholds (line 98-108) - references canonical, uses balloon_count*100",
+        "layer3/nodes/core_input.yaml:ScoreManager star_thresholds - uses base_score consistently",
+        "systems/ingame.yaml:star_thresholds (lines 112-115) - star_1=base_score, star_2=ceil(base_score*1.5), star_3=ceil(base_score*2.2)"
+      ]
+    },
+    "progression_timeline": {
+      "status": "pass",
+      "detail": "All 10 boss levels present at levels 20,40,60,80,100,120,140,160,180,200. Chapter unlock chain complete: Ch1(L1)→Ch2(L20)→Ch3(L40)→Ch4(L60)→Ch5(L80)→Ch6(L100)→Ch7(L120)→Ch8(L140)→Ch9(L160)→Ch10(L180). No gaps."
+    }
+  },
+
+  "remaining_items_from_v1": {
+    "carried_forward_warnings": [
+      {
+        "id": "CC-006",
+        "category": "BALANCE.ECONOMY_IMBALANCE",
+        "location": "balance/economy.yaml:gem_economy",
+        "severity": "warning",
+        "status": "open",
+        "description": "Gem daily free source 8-11/day vs sink 20-30/day deficit. Not fixed in this iteration. Intentional design choice for IAP pressure, but flagged for Director awareness.",
+        "note": "Designer did not claim this was fixed. Remains as design-intent warning for Director review."
+      },
+      {
+        "id": "CC-007",
+        "category": "SYSTEM.RULE_CONFLICT",
+        "location": "systems/outgame.yaml vs layer3/nodes/outgame_life_booster.yaml",
+        "severity": "info",
+        "status": "open",
+        "description": "Single-heart gem refill (50 gems) vs full refill (200 gems) availability in L3 not fully specified.",
+        "note": "Info-level. Not blocking."
+      },
+      {
+        "id": "GD-003",
+        "category": "UX.FLOW_BROKEN",
+        "location": "layer3/nodes/ux_pages_tutorial.yaml:TutorialController Level 4",
+        "severity": "info",
+        "status": "open",
+        "description": "Tutorial Level 4 failure recovery flow not fully specified (is continue cost waived?).",
+        "note": "Info-level. Not blocking."
+      },
+      {
+        "id": "BV-001",
+        "category": "BALANCE.ECONOMY_IMBALANCE",
+        "location": "balance/economy.yaml",
+        "severity": "warning",
+        "status": "open",
+        "description": "Economy YAML needs structured format for balance-simulator.js automated parsing. Current descriptive format returns all-zero simulation.",
+        "note": "Not blocking validation but limits automated monitoring capability."
+      },
+      {
+        "id": "QG4-001",
+        "category": "SYSTEM.MISSING_FEATURE",
+        "location": "L3 nodes logicFlow",
+        "severity": "info",
+        "status": "accepted",
+        "description": "L3 nodes use implementation blocks instead of formal logicFlow YAML. Error paths exist implicitly.",
+        "note": "Accepted for this project. Recommended for future projects."
+      }
+    ],
+    "carried_forward_orphan_events": [
+      { "event": "OnBalloonSpawned", "publisher": "BalloonController", "severity": "info" },
+      { "event": "OnBonusDartAwarded", "publisher": "DartManager", "severity": "info" },
+      { "event": "OnBoardStateChanged", "publisher": "BoardStateManager", "severity": "info" }
+    ]
+  },
+
+  "new_findings": [
+    {
+      "id": "RV-001",
+      "category": "SYSTEM.RULE_CONFLICT",
+      "location": "layer2/system_spec.yaml:OutGame.LifeManager.requires (line 314)",
+      "severity": "info",
+      "description": "LifeManager.requires has parenthetical annotation: 'CurrencyManager.SpendCurrency() (for gem refill)'. While not technically wrong, the annotation style is inconsistent with the pure SystemName.Method() format used elsewhere after the fix. L3 outgame_life_booster.yaml uses 'CurrencyManager.SpendCurrency() (gem refill)' which is a close but not identical string.",
+      "suggestion": "Minor. Strip parenthetical from L2 to match strict format, or accept as acceptable clarification comment."
+    },
+    {
+      "id": "RV-002",
+      "category": "SYSTEM.RULE_CONFLICT",
+      "location": "layer2/system_spec.yaml:UX.PopupManager.requires (line 538), TutorialManager.requires (line 555)",
+      "severity": "info",
+      "description": "PopupManager and TutorialManager still list bare 'UIManager' without method suffix in L2 requires. This matches L3 exactly (both L2 and L3 use bare reference). This is acceptable for full-system architectural dependencies where no single method captures the relationship.",
+      "suggestion": "No action needed. Document convention: bare system name = full architectural dependency."
+    }
+  ],
+
+  "summary": {
+    "total_feedbacks_remaining": 7,
+    "by_severity": {
+      "error": 0,
+      "warning": 2,
+      "info": 5
+    },
+    "blocking_issues": [],
+    "resolved_from_v1": [
+      "CC-001: Difficulty formula unified (VERIFIED - 3 docs match, 4 examples verified by manual calculation)",
+      "CC-002: Example values recalculated (VERIFIED - L30=29.9 matches 29.94 rounded)",
+      "CC-003: Sawtooth modifiers unified (VERIFIED - [0.7,0.85,0.95,1.0,0.6] in all docs)",
+      "CC-005: Chapter 7 boss added at Level 140 (VERIFIED - complete 10-chapter chain)",
+      "GD-002: Gimmick tutorial hints added (VERIFIED - 7 hints at L15,25,35,40,50,70,90)",
+      "QG3-001: L2 dependency notation standardized (VERIFIED - ObjectPool.Get/Return, BalloonController.GetAllBalloons, UIManager.ShowScreen)",
+      "QG6-001: base_score canonically defined (VERIFIED - balloon_count*100, explicit note, all refs updated)",
+      "QG6-003: Cross-doc formula consistency (VERIFIED - same root fix as CC-001)"
+    ],
+    "verdict": "PASS. All 4 error-severity blocking issues from v1 are verified fixed. All 6 Quality Gates pass. Design is ready for Director review (Stage 4).",
+    "strengths": [
+      "All 53 required puzzle standard parameters covered",
+      "45/45 system L3 coverage (100%)",
+      "Perfect cross-layer naming consistency",
+      "Unified canonical formula with clear source-of-truth references",
+      "Well-designed user journey with gimmick introduction tutorials",
+      "Comprehensive BM strategy",
+      "Complete 10-chapter progression with no gaps",
+      "No circular dependencies"
+    ],
+    "recommendations_for_director": [
+      "CC-006: Gem economy deficit is aggressive for casual audience. Director should confirm this is intentional.",
+      "BV-001: Economy YAML should be restructured for simulator compatibility before Stage 7 (Play Verification).",
+      "3 orphan events (OnBalloonSpawned, OnBonusDartAwarded, OnBoardStateChanged) should be connected to subscribers or documented as analytics-only."
+    ]
+  },
+  "timestamp": "2026-03-11T04:15:00.000Z"
+}

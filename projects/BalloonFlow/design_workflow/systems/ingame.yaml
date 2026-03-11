@@ -1,0 +1,128 @@
+# BalloonFlow — Stage 2-2: InGame System
+# Domain: InGame | Tier: 1
+
+domain: InGame
+tier: 1
+
+# ─────────────────────────────────────
+# Required Parameters (7/7)
+# ─────────────────────────────────────
+parameters:
+  core_mechanic_type: queue_sort
+  input_method: tap
+  board_structure: rail_conveyor
+  color_count_range: [4, 8]
+  matching_rule: same_color_dart_to_balloon
+  fail_condition: rail_overflow
+  clear_condition: board_clear
+
+# ─────────────────────────────────────
+# Optional Parameters (3/3)
+# ─────────────────────────────────────
+  queue_system:
+    type: dual_queue
+    description: >
+      두 개의 큐가 존재: (1) 레일 큐 — 풍선이 흘러가는 컨베이어,
+      (2) 다트 큐 — 플레이어가 발사할 다트 대기열.
+      다트 큐는 하단에 3~5개 표시, 다음 다트 미리보기 제공.
+    dart_queue_visible: 5
+    dart_queue_next_preview: 3
+
+  physics_sim: false   # 물리 시뮬레이션 불필요 — 레일 기반 이동
+
+  combo_system:
+    enabled: true
+    description: >
+      같은 색 풍선이 인접해 있으면 하나를 터뜨릴 때 연쇄 팝 발생.
+      연쇄 길이에 따라 보너스 점수 및 시각 이펙트 증폭.
+    chain_rules:
+      - "1 pop: 기본 점수 (100)"
+      - "2 chain: 1.5x 점수"
+      - "3 chain: 2.0x 점수 + 화면 흔들림"
+      - "4+ chain: 3.0x 점수 + 스페셜 이펙트 + 보너스 다트 1개"
+    max_chain_bonus_darts: 1
+
+# ─────────────────────────────────────
+# Core Mechanic Detail
+# ─────────────────────────────────────
+mechanic_detail:
+  rail_system:
+    description: >
+      풍선은 화면 상단에서 레일을 따라 좌→우 또는 지그재그로 이동한다.
+      레일은 레벨마다 형태가 다르며 (직선, S자, 나선형 등),
+      풍선이 레일 끝(출구)에 도달하면 사라지지 않고 대기 영역에 쌓인다.
+      대기 영역이 가득 차면 (overflow_limit 초과) 실패.
+    rail_shapes: [straight, s_curve, spiral, zigzag, loop]
+    overflow_limit: 10   # 대기 영역 최대 풍선 수
+    balloon_speed_base: 1.0   # 초당 이동 단위 (레벨별 조절)
+
+  dart_system:
+    description: >
+      화면 하단 중앙에 다트 발사대가 위치한다. 다트는 큐(대기열) 형태로
+      제공되며, 현재 다트의 색상이 표시된다. 플레이어가 레일 위의 풍선을
+      탭하면 해당 위치로 다트가 발사된다.
+    aim_method: tap_on_balloon   # 풍선 직접 탭 (조준 불필요)
+    dart_per_level: "레벨별 설정 (level_meta.moves_limit)"
+    misfire_rule: >
+      다트 색상과 풍선 색상이 다르면 발사 불가 (탭 무시 + 안내 피드백).
+      같은 색 풍선이 레일에 없을 경우, 다트를 버리기(discard) 가능 (1무브 소모).
+
+  balloon_types:
+    normal:
+      description: "기본 풍선. 같은 색 다트로 1회 명중 시 팝."
+      hp: 1
+    double:
+      description: "이중 풍선. 2회 명중 필요. 첫 타에 외피 제거, 두 번째에 팝."
+      hp: 2
+      intro_level: 15
+    frozen:
+      description: "얼음 풍선. 먼저 인접 풍선 팝으로 해동 후 일반 타격 가능."
+      hp: 1
+      requires_thaw: true
+      intro_level: 25
+    bomb:
+      description: "폭탄 풍선. 아무 색 다트로 명중 시 반경 2칸 내 모든 풍선 팝."
+      hp: 1
+      special: area_pop
+      radius: 2
+      intro_level: 35
+    rainbow:
+      description: "무지개 풍선. 아무 색 다트로 명중 가능. 해당 색 전체 팝 (레일 내)."
+      hp: 1
+      special: color_clear
+      intro_level: 50
+    lock:
+      description: "자물쇠 풍선. 키 아이템 사용 또는 특정 조건 달성 후 일반 풍선으로 전환."
+      hp: 1
+      requires_key: true
+      intro_level: 40
+
+  scoring:
+    base_pop: 100
+    chain_multiplier: [1.0, 1.5, 2.0, 3.0]   # 1pop, 2chain, 3chain, 4+chain
+    clear_bonus: 500
+    remaining_dart_bonus: 50   # 남은 다트 1개당 보너스
+
+    # CANONICAL DEFINITION: base_score (이 정의가 프로젝트 전체의 정본)
+    base_score_formula: "base_score(L) = balloon_count(L) * base_pop = balloon_count(L) * 100"
+    base_score_note: >
+      base_score는 해당 레벨의 모든 풍선을 1-chain으로 터뜨렸을 때의 최소 점수.
+      실제 플레이에서는 chain bonus, clear_bonus, remaining_dart_bonus가 추가되어
+      base_score보다 높은 점수를 획득하게 된다. 스타 임계값은 이 base_score 기준.
+    star_thresholds:
+      star_1: "base_score (= balloon_count * 100)"
+      star_2: "ceil(base_score * 1.5)"
+      star_3: "ceil(base_score * 2.2)"
+
+# ─────────────────────────────────────
+# Systems List (for cross-layer naming)
+# ─────────────────────────────────────
+systems:
+  - RailManager          # 레일 생성, 풍선 이동 관리
+  - BalloonController    # 풍선 상태, 타입, 색상 관리
+  - DartManager          # 다트 큐 관리, 발사 로직
+  - PopProcessor         # 팝 판정, 연쇄 팝 계산
+  - ComboCalculator      # 콤보 점수 계산
+  - ScoreManager         # 점수 집계, 스타 판정
+  - InputHandler         # 탭 입력 처리
+  - BoardStateManager    # 보드(레일+대기영역) 전체 상태 관리

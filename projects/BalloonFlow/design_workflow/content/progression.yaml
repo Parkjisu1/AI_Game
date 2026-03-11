@@ -1,0 +1,187 @@
+# BalloonFlow — Stage 2-4: Content — Progression Schedule
+# Complete progression timeline: gimmicks, chapters, unlocks
+
+domain: Content
+sub_doc: progression
+
+# ─────────────────────────────────────
+# 1. Full Progression Timeline
+# ─────────────────────────────────────
+timeline:
+  - level: 1
+    event: "게임 시작. 튜토리얼 Level 1-5."
+    unlocks: ["basic_balloon", "dart_launcher"]
+    colors: 3
+    gimmicks: []
+
+  - level: 6
+    event: "4번째 색상 (Yellow) 도입"
+    unlocks: ["color_4"]
+    colors: 4
+    gimmicks: []
+
+  - level: 10
+    event: "스타터팩 해금 (24시간 제한 오퍼)"
+    unlocks: ["starter_pack", "shop"]
+    colors: 4
+    gimmicks: []
+
+  - level: 15
+    event: "이중 풍선 도입"
+    unlocks: ["double_balloon"]
+    colors: 4
+    gimmicks: [double_balloon]
+
+  - level: 16
+    event: "5번째 색상 (Pink) 도입"
+    unlocks: ["color_5"]
+    colors: 5
+    gimmicks: [double_balloon]
+
+  - level: 20
+    event: "챕터 1 보스. 피기뱅크 해금."
+    unlocks: ["piggy_bank", "chapter_2"]
+    colors: 5
+    gimmicks: [double_balloon]
+    boss: true
+
+  - level: 25
+    event: "얼음 풍선 도입"
+    unlocks: ["frozen_balloon"]
+    colors: 5
+    gimmicks: [double_balloon, frozen_balloon]
+
+  - level: 30
+    event: "시즌패스 해금. 첫 번째 과금 압박점."
+    unlocks: ["season_pass"]
+    colors: 5
+    gimmicks: [double_balloon, frozen_balloon]
+
+  - level: 31
+    event: "6번째 색상 (Orange) 도입"
+    unlocks: ["color_6"]
+    colors: 6
+    gimmicks: [double_balloon, frozen_balloon]
+
+  - level: 35
+    event: "폭탄 풍선 도입"
+    unlocks: ["bomb_balloon"]
+    colors: 6
+    gimmicks: [double_balloon, frozen_balloon, bomb_balloon]
+
+  - level: 40
+    event: "자물쇠 풍선 도입. 챕터 2 보스."
+    unlocks: ["lock_balloon", "chapter_3"]
+    colors: 6
+    gimmicks: [double_balloon, frozen_balloon, bomb_balloon, lock_balloon]
+    boss: true
+
+  - level: 50
+    event: "무지개 풍선 도입. 중간 과금 압박점."
+    unlocks: ["rainbow_balloon"]
+    colors: 6
+    gimmicks: [double_balloon, frozen_balloon, bomb_balloon, lock_balloon, rainbow_balloon]
+
+  - level: 60
+    event: "챕터 3 보스."
+    unlocks: ["chapter_4"]
+    colors: 6
+    boss: true
+
+  - level: 61
+    event: "7번째 색상 (Purple) 도입"
+    unlocks: ["color_7"]
+    colors: 7
+
+  - level: 70
+    event: "빠른 레일 기믹 도입"
+    unlocks: ["speed_rail"]
+    colors: 7
+
+  - level: 80
+    event: "챕터 4 보스. 높은 과금 압박점."
+    unlocks: ["chapter_5"]
+    colors: 7
+    boss: true
+
+  - level: 90
+    event: "분기 레일 기믹 도입"
+    unlocks: ["branching_rail"]
+    colors: 7
+
+  - level: 100
+    event: "챕터 5 보스. 주간 랭킹 해금."
+    unlocks: ["chapter_6", "weekly_leaderboard"]
+    colors: 7
+    boss: true
+
+  - level: 120
+    event: "역방향 레일 기믹 도입. 챕터 6 보스. 최고 과금 압박점."
+    unlocks: ["reverse_rail", "chapter_7"]
+    colors: 7
+    boss: true
+
+  - level: 121
+    event: "8번째 색상 (Sky) 도입 — 최대 색상"
+    unlocks: ["color_8"]
+    colors: 8
+
+  - level: 140
+    event: "챕터 7 보스."
+    unlocks: ["chapter_8"]
+    colors: 8
+    boss: true
+
+  - level: 150
+    event: "포탈 기믹 도입"
+    unlocks: ["portal"]
+    colors: 8
+
+  - level: 160
+    event: "챕터 8 보스"
+    unlocks: ["chapter_9"]
+    colors: 8
+    boss: true
+
+  - level: 180
+    event: "어둠 기믹 도입. 챕터 9 보스."
+    unlocks: ["darkness", "chapter_10"]
+    colors: 8
+    boss: true
+
+  - level: 200
+    event: "챕터 10 보스. 엔딩 크레딧. 무한 모드 해금 검토."
+    unlocks: ["ending"]
+    colors: 8
+    boss: true
+
+# ─────────────────────────────────────
+# 2. Day-based Progression Estimate
+# ─────────────────────────────────────
+day_progression:
+  assumptions:
+    levels_per_day_casual: 8
+    levels_per_day_core: 15
+  estimates:
+    casual:
+      D1: "Level 8"
+      D7: "Level 50"
+      D14: "Level 100"
+      D30: "Level 180"
+    core:
+      D1: "Level 15"
+      D7: "Level 90"
+      D14: "Level 170"
+      D30: "Level 200 (완료)"
+
+# ─────────────────────────────────────
+# 3. Content Longevity
+# ─────────────────────────────────────
+longevity:
+  launch_content: "200 levels (10 chapters)"
+  update_plan: "4주마다 +20 levels (1 chapter)"
+  target_runway: "소프트런칭 후 6개월간 콘텐츠 고갈 방지"
+  post_200_plan:
+    - "하드 모드 (기존 레벨 고난도 변형)"
+    - "무한 모드 (랜덤 생성 레벨)"
+    - "시즌 한정 레벨 (이벤트 테마)"

@@ -1,0 +1,121 @@
+# BalloonFlow — Stage 2-3: Balance — Difficulty Curve
+# Detailed formulas for difficulty calculation
+
+domain: Balance
+sub_doc: difficulty_curve
+
+# ─────────────────────────────────────
+# 1. Difficulty Score Formula
+# ─────────────────────────────────────
+difficulty_score:
+  formula: >
+    D(L) = W_color * (num_colors(L) - 3) / 5
+         + W_count * balloon_count(L) / 80
+         + W_special * special_ratio(L)
+         + W_buffer * (1 - (buffer_mult(L) - 1.0))
+         + W_rail * rail_complexity(L)
+  weights:
+    W_color: 25
+    W_count: 25
+    W_special: 20
+    W_buffer: 15
+    W_rail: 15
+  range: [0, 100]
+  examples:
+    - { level: 1, num_colors: 3, balloon_count: 8, special_ratio: 0.0, buffer_mult: 2.0, rail_complexity: 0.0, score: 2.5 }
+    - { level: 30, num_colors: 5, balloon_count: 19, special_ratio: 0.1, buffer_mult: 1.4, rail_complexity: 0.2, score: 29.9 }
+    - { level: 100, num_colors: 7, balloon_count: 45, special_ratio: 0.2, buffer_mult: 1.15, rail_complexity: 0.6, score: 59.8 }
+    - { level: 200, num_colors: 8, balloon_count: 78, special_ratio: 0.3, buffer_mult: 1.05, rail_complexity: 0.9, score: 83.1 }
+
+# ─────────────────────────────────────
+# 2. Sawtooth Modulation
+# ─────────────────────────────────────
+sawtooth:
+  cycle_length: 5
+  modifiers: [0.7, 0.85, 0.95, 1.0, 0.6]
+  description: >
+    5레벨 주기. Position 0(쉬움)→3(하드 스파이크)→4(휴식).
+    매 챕터 마지막 레벨(20, 40, 60...)은 보스 레벨로 별도 설정.
+  formula: >
+    position = (level_number - 1) % 5
+    cycle_mod = modifiers[position]
+    final_difficulty = D(L) * cycle_mod
+
+# ─────────────────────────────────────
+# 3. Base Difficulty Progression
+# ─────────────────────────────────────
+base_progression:
+  formula: >
+    base_difficulty(L) = 5 + (L - 1) * 0.45
+  description: "선형 증가. Level 1 = 5, Level 200 = 94.55"
+  clamp: [0, 100]
+
+# ─────────────────────────────────────
+# 4. Dart Count (Move Limit) Formula
+# ─────────────────────────────────────
+dart_count:
+  formula: >
+    optimal_darts = simulate(level_data) OR ceil(balloon_count * 0.7)
+    buffer_mult = purpose_buffer[level_purpose]
+    dart_count = ceil(optimal_darts * buffer_mult)
+  purpose_buffer:
+    learning: 2.0
+    rest: 1.5
+    challenge: 1.15
+    monetization: 1.05
+  examples:
+    - { level: 1, balloons: 8, optimal: 6, purpose: learning, buffer: 2.0, darts: 12 }
+    - { level: 50, balloons: 28, optimal: 20, purpose: rest, buffer: 1.5, darts: 30 }
+    - { level: 100, balloons: 45, optimal: 32, purpose: challenge, buffer: 1.15, darts: 37 }
+    - { level: 150, balloons: 60, optimal: 42, purpose: monetization, buffer: 1.05, darts: 45 }
+
+# ─────────────────────────────────────
+# 5. Balloon Speed Formula
+# ─────────────────────────────────────
+balloon_speed:
+  formula: "speed(L) = 1.0 + (L / 200) * 0.8"
+  unit: "units/sec"
+  range: [1.0, 1.8]
+  speed_rail_multiplier: 1.5   # 빠른 레일 기믹 적용 시
+
+# ─────────────────────────────────────
+# 6. Overflow Limit Formula
+# ─────────────────────────────────────
+overflow_limit:
+  formula: "overflow(L) = max(5, 15 - floor(L / 25))"
+  range: [5, 15]
+  description: "초반 여유 → 후반 타이트"
+  examples:
+    - { level: 1, overflow: 15 }
+    - { level: 50, overflow: 13 }
+    - { level: 100, overflow: 11 }
+    - { level: 200, overflow: 7 }
+
+# ─────────────────────────────────────
+# 7. Star Score Thresholds
+# ─────────────────────────────────────
+star_thresholds:
+  # 정본: systems/ingame.yaml scoring.base_score_formula
+  formula: >
+    base_score(L) = balloon_count(L) * 100
+    star_1 = base_score
+    star_2 = ceil(base_score * 1.5)
+    star_3 = ceil(base_score * 2.2)
+  note: >
+    base_score는 모든 풍선을 1-chain으로 터뜨렸을 때의 최소 점수.
+    실제 플레이에서 chain bonus, clear_bonus, dart_bonus가 추가되므로
+    일반적인 플레이에서 star_2~3 달성이 가능하다.
+    예상 평균 점수 = base_score * 1.3~1.5 (chain 보너스 포함).
+
+# ─────────────────────────────────────
+# 8. Clear Rate Prediction
+# ─────────────────────────────────────
+clear_rate_model:
+  formula: >
+    predicted_clear_rate(L) = sigmoid(k * (buffer_mult - threshold))
+    k = 5.0
+    threshold = 1.1
+  description: >
+    buffer_multiplier가 1.1 근처일 때 클리어율 50%,
+    1.5 이상이면 85%+, 1.05 이하이면 35% 이하.
+  calibration_note: "소프트런칭 데이터로 k, threshold 보정"

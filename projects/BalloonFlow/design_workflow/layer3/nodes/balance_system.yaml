@@ -1,0 +1,82 @@
+# ═══════════════════════════════════════════
+# BalloonFlow — L3 Node: Balance System
+# ═══════════════════════════════════════════
+# Phase 1 | Owner: Sub Coder B
+# Systems: DifficultyCalculator, BalanceProcessor, ClearRateValidator
+
+node_id: balance_system
+phase: 1
+layer: Domain
+domain: Balance
+owner: SubCoderB
+
+systems:
+  DifficultyCalculator:
+    description: "레벨 난이도 점수 산출."
+    contract:
+      provides:
+        - "CalculateDifficulty(LevelData levelData) -> float"
+        - "GetSawtoothModifier(int levelNumber) -> float"
+        - "GetFinalDifficulty(int levelNumber) -> float"
+      requires:
+        - "LevelDataProvider.LoadLevelData()"
+    implementation:
+      formula: >
+        D(L) = 25 * (num_colors - 3) / 5
+             + 25 * balloon_count / 80
+             + 20 * special_ratio
+             + 15 * (1 - (buffer_mult - 1.0))
+             + 15 * rail_complexity
+      sawtooth_modifiers: [0.7, 0.85, 0.95, 1.0, 0.6]
+      sawtooth_formula: "modifiers[(level_number - 1) % 5]"
+      final: "D(L) * sawtooth_modifier"
+      range: [0, 100]
+
+  BalanceProcessor:
+    description: "밸런스 지표 수집 및 집계."
+    contract:
+      provides:
+        - "RecordPlayResult(string levelId, string result, PlayResultData data)"
+        - "GetLevelStats(string levelId) -> LevelBalanceStats"
+        - "GetDailyReport() -> BalanceReport"
+      requires:
+        - "LevelManager.OnLevelCompleted"
+        - "LevelManager.OnLevelFailed"
+    implementation:
+      tracked_metrics:
+        - clear_rate
+        - first_try_clear_rate
+        - avg_attempts_to_clear
+        - near_miss_rate
+        - hopeless_fail_rate
+        - avg_moves_used
+        - avg_play_time_sec
+        - booster_use_rate
+        - continue_use_rate
+      storage: "SaveManager (로컬 집계) + 서버 전송 (출시 후)"
+      schema: "level_balance_daily 테이블 매핑"
+
+  ClearRateValidator:
+    description: "클리어율 모니터링, 이상 감지."
+    contract:
+      provides:
+        - "ValidateClearRate(string levelId) -> ValidationResult"
+        - "GetOutOfRangeLevels() -> string[]"
+      requires:
+        - "BalanceProcessor.GetLevelStats()"
+    implementation:
+      thresholds:
+        fail_rate_max: 0.60
+        near_miss_target: 0.35
+        hopeless_fail_max: 0.10
+      validation_rules:
+        - "fail_rate > 0.60 → WARNING: 레벨이 너무 어려움"
+        - "near_miss_rate < 0.20 → WARNING: 아깝게 실패 감소 (동기 부여 부족)"
+        - "hopeless_fail_rate > 0.10 → CRITICAL: 희망 없는 실패 과다"
+        - "clear_rate > 0.95 → INFO: 레벨이 너무 쉬움"
+      result: "ValidationResult { status: PASS|WARNING|CRITICAL, messages: string[] }"
+
+output_files:
+  - "DifficultyCalculator.cs"
+  - "BalanceProcessor.cs"
+  - "ClearRateValidator.cs"

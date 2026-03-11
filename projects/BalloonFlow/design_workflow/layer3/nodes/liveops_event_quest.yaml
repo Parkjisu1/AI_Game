@@ -1,0 +1,81 @@
+# ═══════════════════════════════════════════
+# BalloonFlow — L3 Node: LiveOps Systems
+# ═══════════════════════════════════════════
+# Phase 2 | Owner: Sub Coder B
+
+node_id: liveops_event_quest
+phase: 2
+layer: Domain
+domain: LiveOps
+owner: SubCoderB
+
+systems:
+  EventManager:
+    description: "이벤트 스케줄, 활성화/비활성화."
+    contract:
+      provides:
+        - "GetActiveEvents() -> EventData[]"
+        - "IsEventActive(string eventId) -> bool"
+        - "GetEventProgress(string eventId) -> float"
+        - "ClaimEventReward(string eventId) -> RewardData"
+      events_published:
+        - "OnEventStarted(string eventId)"
+        - "OnEventEnded(string eventId)"
+      requires:
+        - "RemoteConfigService.GetConfig()"
+        - "CurrencyManager.AddCurrency()"
+    implementation:
+      event_types:
+        collection: "한정 풍선 수집 이벤트 (2주)"
+        challenge: "특수 조건 레벨 도전"
+        holiday: "명절 테마 (10일)"
+      schedule_source: "RemoteConfig"
+      local_fallback: "기본 이벤트 캘린더 JSON"
+
+  QuestManager:
+    description: "일일/주간 퀘스트 관리."
+    contract:
+      provides:
+        - "GetDailyQuests() -> QuestData[]"
+        - "UpdateQuestProgress(string questType, int amount)"
+        - "ClaimQuestReward(string questId) -> RewardData"
+        - "AreAllDailyQuestsComplete() -> bool"
+      events_published:
+        - "OnQuestCompleted(string questId)"
+        - "OnAllDailyQuestsComplete()"
+      requires:
+        - "LevelManager.OnLevelCompleted"
+        - "PopProcessor.OnChainPopComplete"
+        - "CurrencyManager.AddCurrency()"
+    implementation:
+      daily_count: 3
+      refresh: "00:00 UTC"
+      quest_pool:
+        - { type: "clear_levels", target: 5, reward: { coin: 500 } }
+        - { type: "chain_pops", target: 10, reward: { booster: "BF_IN_01" } }
+        - { type: "earn_stars", target: 10, reward: { gem: 5 } }
+        - { type: "use_boosters", target: 3, reward: { coin: 300 } }
+        - { type: "pop_balloons", target: 50, reward: { coin: 400 } }
+      all_complete_bonus: { gem: 10, booster: "random" }
+
+  SeasonManager:
+    description: "시즌 진행, 리셋."
+    contract:
+      provides:
+        - "GetCurrentSeason() -> SeasonData"
+        - "GetSeasonTimeRemaining() -> float"
+        - "ResetSeason()"
+      events_published:
+        - "OnSeasonStarted(string seasonId)"
+        - "OnSeasonEnded(string seasonId)"
+      requires:
+        - "RemoteConfigService.GetConfig()"
+    implementation:
+      duration_weeks: 4
+      data: "SeasonData { id, theme, startDate, endDate }"
+      on_end: "랭킹 보상 지급, 시즌패스 리셋, 새 시즌 시작"
+
+output_files:
+  - "EventManager.cs"
+  - "QuestManager.cs"
+  - "SeasonManager.cs"

@@ -1,0 +1,43 @@
+# BalloonFlow — Stage 2-2: Social System
+# Domain: Social | Tier: 3
+
+domain: Social
+tier: 3
+
+# ─────────────────────────────────────
+# Optional Parameters (all Social params are optional)
+# ─────────────────────────────────────
+parameters:
+  leaderboard:
+    enabled: true
+    types:
+      - { name: "주간 랭킹", scope: "global", metric: "주간 획득 스타 수", reset: "매주 월요일" }
+      - { name: "친구 랭킹", scope: "friends", metric: "현재 최고 레벨", reset: "없음" }
+    rewards:
+      weekly_top_100: "젬 50 + 한정 프로필 뱃지"
+      weekly_top_10: "젬 200 + 한정 다트 스킨"
+    note: "소프트런칭 후 유저 규모 확인 후 활성화 여부 결정"
+
+  team_system:
+    enabled: false
+    note: "소프트런칭 후 D30 리텐션 데이터 기반 도입 검토"
+
+  gift_system:
+    enabled: true
+    type: "하트 선물"
+    description: >
+      친구에게 하트 1개 보내기. 하루 20회 제한.
+      받은 하트는 max_lives 초과 가능 (최대 max_lives + 10).
+    daily_send_limit: 20
+    daily_receive_limit: 20
+
+  coop_event:
+    enabled: false
+    note: "런칭 3개월 후 협동 이벤트 기획 검토. 팀 시스템 도입과 연계."
+
+# ─────────────────────────────────────
+# Systems List
+# ─────────────────────────────────────
+systems:
+  - LeaderboardManager   # 랭킹 집계, 시즌 리셋
+  - FriendManager        # 친구 목록, 선물 관리

@@ -1,0 +1,439 @@
+# ═══════════════════════════════════════════
+# BalloonFlow — Layer 2: Build Order
+# ═══════════════════════════════════════════
+# Phase 0~3 build order with dependency graph
+# Generated: 2026-03-11
+
+project: BalloonFlow
+total_systems: 45
+
+# ═══════════════════════════════════════════
+# Phase 0: Core Layer (Main Coder only)
+# ═══════════════════════════════════════════
+phase_0:
+  name: "Core Foundation"
+  owner: "Main Coder"
+  description: "장르 무관 핵심 시스템. _ARCHITECTURE.md 생성."
+  systems:
+    - name: InputHandler
+      layer: Core
+      domain: InGame
+      complexity: low
+      requires: []
+      provides: [OnBalloonTapped, EnableInput, DisableInput]
+
+    - name: CurrencyManager
+      layer: Core
+      domain: OutGame
+      complexity: medium
+      requires: []
+      provides: [GetBalance, AddCurrency, SpendCurrency, CanAfford]
+
+    - name: ScoreManager
+      layer: Core
+      domain: InGame
+      complexity: medium
+      requires: []
+      provides: [AddScore, GetCurrentScore, GetStarCount, CheckClearCondition]
+
+    - name: UIManager
+      layer: Core
+      domain: UX
+      complexity: medium
+      requires: []
+      provides: [ShowScreen, HideScreen, ShowLoading]
+
+    - name: PopupManager
+      layer: Core
+      domain: UX
+      complexity: medium
+      requires: [UIManager]
+      provides: [ShowPopup, ClosePopup, HasPendingPopups]
+
+    - name: NotificationManager
+      layer: Core
+      domain: LiveOps
+      complexity: low
+      requires: []
+      provides: [ScheduleNotification, CancelNotification]
+
+    - name: ABTestManager
+      layer: Core
+      domain: LiveOps
+      complexity: low
+      requires: [RemoteConfigService]
+      provides: [GetVariant, IsInTest]
+
+    - name: RemoteConfigService
+      layer: Core
+      domain: LiveOps
+      complexity: medium
+      requires: []
+      provides: [GetConfig, FetchConfig]
+      sdk: FIREBASE_ANALYTICS
+
+    - name: IAPManager
+      layer: Core
+      domain: BM
+      complexity: medium
+      requires: [CurrencyManager]
+      provides: [ProcessIAP, GetProducts, RestorePurchases]
+      sdk: UNITY_IAP
+
+    - name: AdManager
+      layer: Core
+      domain: BM
+      complexity: medium
+      requires: []
+      provides: [ShowRewardedAd, ShowInterstitial, IsRewardedAdReady]
+      sdk: GOOGLE_MOBILE_ADS
+
+  count: 10
+  deliverables:
+    - "_ARCHITECTURE.md"
+    - "Singleton base class"
+    - "EventBus / event system"
+    - "ObjectPool base"
+    - "SaveManager (PlayerPrefs wrapper)"
+    - "All 10 Core systems"
+
+# ═══════════════════════════════════════════
+# Phase 1: Base Domain (Main + Sub x2)
+# ═══════════════════════════════════════════
+phase_1:
+  name: "Base Domain Systems"
+  description: "코어 메커닉 + 기본 도메인 시스템"
+  systems:
+    # Main Coder (complex, high dependency)
+    - name: RailManager
+      owner: Main
+      layer: Domain
+      domain: InGame
+      complexity: high
+      requires: [LevelDataProvider]
+      provides: [CreateRail, GetRailPath, GetBalloonPositions]
+
+    - name: BalloonController
+      owner: Main
+      layer: Domain
+      domain: InGame
+      complexity: high
+      requires: [RailManager, ObjectPool]
+      provides: [SpawnBalloon, PopBalloon, GetAdjacentBalloons]
+
+    - name: DartManager
+      owner: Main
+      layer: Domain
+      domain: InGame
+      complexity: high
+      requires: [LevelDataProvider, BalloonController, InputHandler]
+      provides: [GetCurrentDart, FireDart, GetRemainingDarts]
+
+    - name: PopProcessor
+      owner: Main
+      layer: Domain
+      domain: InGame
+      complexity: high
+      requires: [BalloonController, ComboCalculator]
+      provides: [ProcessPop, GetChainLength]
+
+    - name: LevelManager
+      owner: Main
+      layer: Domain
+      domain: Content
+      complexity: high
+      requires: [LevelDataProvider, ScoreManager, LifeManager, CurrencyManager]
+      provides: [LoadLevel, StartLevel, CompleteLevel, FailLevel]
+
+    # Sub Coder A
+    - name: ComboCalculator
+      owner: SubA
+      layer: Domain
+      domain: InGame
+      complexity: low
+      requires: []
+      provides: [CalculateComboScore, GetComboMultiplier]
+
+    - name: BoardStateManager
+      owner: SubA
+      layer: Domain
+      domain: InGame
+      complexity: medium
+      requires: [RailManager, BalloonController]
+      provides: [GetBoardState, GetOverflowCount, IsBoardClear]
+
+    - name: LevelDataProvider
+      owner: SubA
+      layer: Domain
+      domain: Content
+      complexity: medium
+      requires: []
+      provides: [LoadLevelData, GetRailLayout, GetDartQueue]
+
+    - name: LifeManager
+      owner: SubA
+      layer: Domain
+      domain: OutGame
+      complexity: medium
+      requires: [CurrencyManager]
+      provides: [GetCurrentLives, ConsumeLife, RefillLives]
+
+    - name: DailyRewardManager
+      owner: SubA
+      layer: Domain
+      domain: OutGame
+      complexity: low
+      requires: [CurrencyManager, BoosterManager]
+      provides: [GetDailyRewardStatus, ClaimDailyReward]
+
+    # Sub Coder B
+    - name: DifficultyCalculator
+      owner: SubB
+      layer: Domain
+      domain: Balance
+      complexity: medium
+      requires: [LevelDataProvider]
+      provides: [CalculateDifficulty, GetFinalDifficulty]
+
+    - name: BalanceProcessor
+      owner: SubB
+      layer: Domain
+      domain: Balance
+      complexity: medium
+      requires: [LevelManager]
+      provides: [RecordPlayResult, GetLevelStats]
+
+    - name: ClearRateValidator
+      owner: SubB
+      layer: Domain
+      domain: Balance
+      complexity: low
+      requires: [BalanceProcessor]
+      provides: [ValidateClearRate, GetOutOfRangeLevels]
+
+    - name: BoosterManager
+      owner: SubB
+      layer: Domain
+      domain: OutGame
+      complexity: medium
+      requires: [CurrencyManager]
+      provides: [UseBooster, AddBooster, GetBoosterInventory]
+
+    - name: ContinueHandler
+      owner: SubB
+      layer: Domain
+      domain: OutGame
+      complexity: medium
+      requires: [CurrencyManager, AdManager, DartManager]
+      provides: [GetContinueCost, UseContinue]
+
+  count: 15
+
+# ═══════════════════════════════════════════
+# Phase 2: Upper Domain (Main + Sub x2)
+# ═══════════════════════════════════════════
+phase_2:
+  name: "Upper Domain Systems"
+  description: "상위 도메인 + 메타/소셜/BM 시스템"
+  systems:
+    # Main Coder
+    - name: ChapterManager
+      owner: Main
+      layer: Domain
+      domain: Content
+      complexity: medium
+      requires: [StarManager, LevelManager]
+      provides: [GetCurrentChapter, IsChapterUnlocked]
+
+    - name: GimmickManager
+      owner: Main
+      layer: Domain
+      domain: Content
+      complexity: medium
+      requires: [LevelDataProvider, LevelManager]
+      provides: [IsGimmickUnlocked, GetActiveGimmicks]
+
+    - name: OfferManager
+      owner: Main
+      layer: Domain
+      domain: BM
+      complexity: high
+      requires: [LevelManager, IAPManager]
+      provides: [CheckOfferTrigger, GetActiveOffers]
+
+    # Sub Coder A
+    - name: StarManager
+      owner: SubA
+      layer: Domain
+      domain: Meta
+      complexity: low
+      requires: [ScoreManager]
+      provides: [GetTotalStars, MeetsStarGate]
+
+    - name: CollectionManager
+      owner: SubA
+      layer: Domain
+      domain: Meta
+      complexity: medium
+      requires: [LevelManager, CurrencyManager]
+      provides: [UnlockCollectible, GetCollectionProgress]
+
+    - name: AchievementManager
+      owner: SubA
+      layer: Domain
+      domain: Meta
+      complexity: medium
+      requires: [PopProcessor, LevelManager, CurrencyManager]
+      provides: [CheckAchievement, ClaimAchievementReward]
+
+    - name: PiggyBankManager
+      owner: SubA
+      layer: Domain
+      domain: BM
+      complexity: medium
+      requires: [LevelManager, IAPManager, CurrencyManager]
+      provides: [GetPiggyBankStatus, PurchasePiggyBank]
+
+    # Sub Coder B
+    - name: SkinManager
+      owner: SubB
+      layer: Domain
+      domain: Meta
+      complexity: low
+      requires: [CurrencyManager]
+      provides: [GetOwnedSkins, EquipSkin]
+
+    - name: SeasonPassManager
+      owner: SubB
+      layer: Domain
+      domain: BM
+      complexity: medium
+      requires: [LevelManager, IAPManager, CurrencyManager, BoosterManager]
+      provides: [GetSeasonPassStatus, AddXP, ClaimReward]
+
+    - name: LeaderboardManager
+      owner: SubB
+      layer: Domain
+      domain: Social
+      complexity: medium
+      requires: [StarManager, CurrencyManager]
+      provides: [SubmitScore, GetLeaderboard]
+
+    - name: FriendManager
+      owner: SubB
+      layer: Domain
+      domain: Social
+      complexity: medium
+      requires: [LifeManager]
+      provides: [GetFriendList, SendGift, ReceiveGifts]
+
+    - name: EventManager
+      owner: SubB
+      layer: Domain
+      domain: LiveOps
+      complexity: medium
+      requires: [RemoteConfigService, CurrencyManager]
+      provides: [GetActiveEvents, IsEventActive]
+
+    - name: QuestManager
+      owner: SubB
+      layer: Domain
+      domain: LiveOps
+      complexity: medium
+      requires: [LevelManager, PopProcessor, CurrencyManager]
+      provides: [GetDailyQuests, UpdateQuestProgress]
+
+    - name: SeasonManager
+      owner: SubB
+      layer: Domain
+      domain: LiveOps
+      complexity: low
+      requires: [RemoteConfigService]
+      provides: [GetCurrentSeason, GetSeasonTimeRemaining]
+
+  count: 14
+
+# ═══════════════════════════════════════════
+# Phase 3: Game Layer (Main + Sub x2)
+# ═══════════════════════════════════════════
+phase_3:
+  name: "Game Layer — UI, Pages, Controllers"
+  description: "게임 특화 UI, 화면 전환, 튜토리얼, 에디터 스크립트"
+  systems:
+    # Main Coder
+    - name: TutorialController
+      owner: Main
+      layer: Game
+      domain: Content
+      complexity: high
+      requires: [LevelManager, InputHandler, UIManager]
+      provides: [StartTutorial, NextTutorialStep, CompleteTutorial]
+
+    - name: ShopManager
+      owner: Main
+      layer: Game
+      domain: OutGame
+      complexity: medium
+      requires: [CurrencyManager, BoosterManager, IAPManager]
+      provides: [GetShopItems, PurchaseItem]
+
+    # Sub Coder A
+    - name: PageController
+      owner: SubA
+      layer: Game
+      domain: UX
+      complexity: medium
+      requires: [UIManager]
+      provides: [NavigateTo, GoBack]
+
+    - name: TutorialManager
+      owner: SubA
+      layer: Game
+      domain: UX
+      complexity: medium
+      requires: [TutorialController, UIManager]
+      provides: [IsTutorialComplete, ShowHighlight, ShowArrow]
+
+    - name: FeedbackController
+      owner: SubA
+      layer: Game
+      domain: UX
+      complexity: medium
+      requires: [PopProcessor, ScoreManager]
+      provides: [PlayPopEffect, PlaySound, PlayHaptic]
+
+    # Sub Coder B
+    - name: HUDController
+      owner: SubB
+      layer: Game
+      domain: UX
+      complexity: medium
+      requires: [ScoreManager, DartManager, PopProcessor]
+      provides: [UpdateScore, UpdateDartCount, ShowComboText]
+
+  count: 6
+  editor_scripts:
+    - "Editor/SceneBuilder.cs — 3씬 자동 구성"
+    - "Editor/ProjectConfigurator.cs — 빌드/플레이어 설정"
+    - "Editor/PrefabBuilder.cs — 프리팹 생성"
+
+# ═══════════════════════════════════════════
+# Summary
+# ═══════════════════════════════════════════
+summary:
+  phase_0: { count: 10, owner: "Main Coder only", layer: Core }
+  phase_1: { count: 15, owners: "Main(5) + SubA(5) + SubB(5)", layer: Domain }
+  phase_2: { count: 14, owners: "Main(3) + SubA(4) + SubB(7)", layer: Domain }
+  phase_3: { count: 6, owners: "Main(2) + SubA(3) + SubB(1)", layer: Game }
+  total: 45
+
+# ═══════════════════════════════════════════
+# Dependency Graph (Critical Path)
+# ═══════════════════════════════════════════
+critical_path:
+  - "InputHandler → DartManager → PopProcessor → ScoreManager → LevelManager"
+  - "LevelDataProvider → RailManager → BalloonController → PopProcessor"
+  - "CurrencyManager → LifeManager → LevelManager"
+  - "CurrencyManager → BoosterManager → ContinueHandler"
+  - "LevelManager → ChapterManager, OfferManager, PiggyBankManager"
+  - "ScoreManager → StarManager → ChapterManager"

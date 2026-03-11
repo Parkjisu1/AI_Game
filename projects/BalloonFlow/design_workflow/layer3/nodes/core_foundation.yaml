@@ -1,0 +1,85 @@
+# ═══════════════════════════════════════════
+# BalloonFlow — L3 Node: Core Foundation
+# ═══════════════════════════════════════════
+# Phase 0 | Owner: Main Coder
+# Systems: Singleton, EventBus, ObjectPool, SaveManager
+
+node_id: core_foundation
+phase: 0
+layer: Core
+domain: InGame
+owner: MainCoder
+
+systems:
+  Singleton:
+    description: "제네릭 싱글톤 베이스 클래스. MonoBehaviour 기반, DontDestroyOnLoad."
+    contract:
+      provides:
+        - "Singleton<T>.Instance"
+      requires: []
+    implementation:
+      pattern: "Generic Singleton MonoBehaviour"
+      thread_safe: false
+      lazy_init: true
+      destroy_on_load: false
+
+  EventBus:
+    description: "이벤트 발행/구독 시스템. 타입 기반 이벤트 라우팅."
+    contract:
+      provides:
+        - "EventBus.Subscribe<T>(Action<T>)"
+        - "EventBus.Unsubscribe<T>(Action<T>)"
+        - "EventBus.Publish<T>(T eventData)"
+      requires: []
+    implementation:
+      pattern: "Dictionary<Type, Delegate> 기반"
+      note: "static class or Singleton. 구독 해제 누락 방지 위해 OnDestroy에서 자동 해제 권장."
+
+  ObjectPool:
+    description: "범용 오브젝트 풀. 풍선, 다트, 이펙트 파티클 풀링."
+    contract:
+      provides:
+        - "ObjectPool.Get(prefabId) -> GameObject"
+        - "ObjectPool.Return(prefabId, gameObject)"
+        - "ObjectPool.Preload(prefabId, count)"
+        - "ObjectPool.GetPoolSize(prefabId) -> int"
+      requires:
+        - "Resources.Load (프리팹 로드)"
+    implementation:
+      pattern: "Dictionary<string, Queue<GameObject>> 기반"
+      preload_targets:
+        - { prefab: "Balloon", count: 80 }
+        - { prefab: "Dart", count: 20 }
+        - { prefab: "PopEffect", count: 30 }
+
+  SaveManager:
+    description: "로컬 저장 관리. PlayerPrefs 래핑 + JSON 직렬화."
+    contract:
+      provides:
+        - "SaveManager.Save<T>(key, data)"
+        - "SaveManager.Load<T>(key) -> T"
+        - "SaveManager.Delete(key)"
+        - "SaveManager.HasKey(key) -> bool"
+      requires: []
+    implementation:
+      pattern: "PlayerPrefs + JsonUtility"
+      save_keys:
+        - "bf_player_level"
+        - "bf_currency_coin"
+        - "bf_currency_gem"
+        - "bf_lives"
+        - "bf_stars"
+        - "bf_tutorial_complete"
+        - "bf_daily_streak"
+        - "bf_booster_inventory"
+        - "bf_collection_progress"
+        - "bf_skin_equipped"
+        - "bf_season_pass"
+        - "bf_piggy_bank"
+
+output_files:
+  - "Singleton.cs"
+  - "EventBus.cs"
+  - "ObjectPool.cs"
+  - "SaveManager.cs"
+  - "_ARCHITECTURE.md"

@@ -1,0 +1,57 @@
+# ═══════════════════════════════════════════
+# BalloonFlow — L3 Node: Social Systems
+# ═══════════════════════════════════════════
+# Phase 2 | Owner: Sub Coder B
+
+node_id: social_leaderboard_friend
+phase: 2
+layer: Domain
+domain: Social
+owner: SubCoderB
+
+systems:
+  LeaderboardManager:
+    description: "주간 랭킹 관리."
+    contract:
+      provides:
+        - "SubmitScore(string metric, int value)"
+        - "GetLeaderboard(string type) -> LeaderboardEntry[]"
+        - "GetPlayerRank(string type) -> int"
+        - "ClaimRankReward() -> RewardData"
+      events_published:
+        - "OnLeaderboardUpdated()"
+        - "OnRankChanged(int newRank)"
+      requires:
+        - "StarManager.GetTotalStars()"
+        - "CurrencyManager.AddCurrency()"
+    implementation:
+      types:
+        weekly: { metric: "weekly_stars", reset: "Monday 00:00 UTC" }
+        friends: { metric: "current_level", reset: "none" }
+      rewards:
+        top_100: { gem: 50, badge: "weekly_top100" }
+        top_10: { gem: 200, skin: "champion_dart" }
+      unlock_level: 100
+      note: "소프트런칭 후 유저 규모 확인 후 활성화"
+
+  FriendManager:
+    description: "친구 목록, 하트 선물."
+    contract:
+      provides:
+        - "GetFriendList() -> FriendData[]"
+        - "SendGift(string friendId, string giftType) -> bool"
+        - "ReceiveGifts() -> GiftData[]"
+        - "GetDailySendCount() -> int"
+      requires:
+        - "LifeManager.AddLife()"
+    implementation:
+      gift_type: "heart"
+      daily_send_limit: 20
+      daily_receive_limit: 20
+      overflow_rule: "받은 하트는 max_lives 초과 가능 (max_lives + 10)"
+      friend_source: "소셜 로그인 (Google Play, Apple Game Center)"
+      note: "소프트런칭 초기에는 비활성화. D30 리텐션 데이터 확인 후 활성화."
+
+output_files:
+  - "LeaderboardManager.cs"
+  - "FriendManager.cs"

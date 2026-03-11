@@ -1,0 +1,97 @@
+# BalloonFlow — Stage 2-2: Content System
+# Domain: Content | Tier: 1
+
+domain: Content
+tier: 1
+
+# ─────────────────────────────────────
+# Required Parameters (11/11)
+# ─────────────────────────────────────
+parameters:
+  total_level_count: 200
+  chapter_structure: "10 챕터 x 20 레벨 = 200 레벨 (출시 시)"
+  level_duration_avg: [30, 90]   # 초. 평균 목표 60초
+  new_mechanic_intro_cycle: 15   # 15레벨마다 신규 메커닉/기믹 도입
+  difficulty_spike_cycle: 5      # 매 5레벨마다 하드 레벨
+  level_purpose_type:
+    - learning       # 신규 메커닉 학습 (10%)
+    - challenge      # 도전 레벨 (20%)
+    - monetization   # 과금 유도 (10%)
+    - rest           # 휴식/쉬운 레벨 (60%)
+  object_count_curve:
+    description: "레벨별 풍선 수 증가 곡선"
+    formula: "balloon_count = floor(8 + level_number * 0.35 + sin(level_number/5) * 3)"
+    range: [8, 80]
+    curve_type: "linear_with_oscillation"
+    samples:
+      level_1: 8
+      level_10: 12
+      level_50: 28
+      level_100: 45
+      level_200: 78
+  color_intro_schedule:
+    - { level_range: [1, 5], colors: 3, note: "튜토리얼 — Red, Blue, Green" }
+    - { level_range: [6, 15], colors: 4, note: "Yellow 추가" }
+    - { level_range: [16, 30], colors: 5, note: "Pink 추가" }
+    - { level_range: [31, 60], colors: 6, note: "Orange 추가" }
+    - { level_range: [61, 120], colors: 7, note: "Purple 추가" }
+    - { level_range: [121, 200], colors: 8, note: "Sky 추가 (최대)" }
+  tutorial_level_count: 5
+  gimmick_intro_schedule:
+    - { level: 1, gimmick: "normal_balloon", description: "기본 풍선만" }
+    - { level: 15, gimmick: "double_balloon", description: "이중 풍선 — 2회 명중 필요" }
+    - { level: 25, gimmick: "frozen_balloon", description: "얼음 풍선 — 해동 필요" }
+    - { level: 35, gimmick: "bomb_balloon", description: "폭탄 풍선 — 범위 팝" }
+    - { level: 40, gimmick: "lock_balloon", description: "자물쇠 풍선 — 키 필요" }
+    - { level: 50, gimmick: "rainbow_balloon", description: "무지개 풍선 — 색 전체 제거" }
+    - { level: 70, gimmick: "speed_rail", description: "빠른 레일 — 풍선 이동 속도 1.5x" }
+    - { level: 90, gimmick: "branching_rail", description: "분기 레일 — 2방향 분기" }
+    - { level: 120, gimmick: "reverse_rail", description: "역방향 레일 구간" }
+    - { level: 150, gimmick: "portal", description: "포탈 — 풍선이 다른 레일로 이동" }
+    - { level: 180, gimmick: "darkness", description: "어둠 — 일부 풍선 색상 가려짐" }
+  level_composition_params:
+    balloon_count: "8~80 (레벨별)"
+    rail_segment_count: "1~4 (레벨별)"
+    overflow_limit: "5~15 (레벨별)"
+    dart_count: "balloon_count * 1.2 + buffer (레벨별 설정)"
+    empty_rail_start: "0~3칸 빈 시작 슬롯"
+    special_balloon_ratio: "0%~30% (레벨별)"
+
+# ─────────────────────────────────────
+# Optional Parameters
+# ─────────────────────────────────────
+  special_level_types:
+    - boss:
+        description: "챕터 마지막 레벨. 거대 풍선 보스 + 제한 시간"
+        frequency: "매 20레벨 (챕터 종료)"
+    - time_attack:
+        description: "시간 제한 60초. 최대한 많은 풍선 터뜨리기"
+        frequency: "매 10레벨 (챕터 중간)"
+    - dart_limit:
+        description: "극소 다트로 보드 클리어. 전략 극대화"
+        frequency: "매 15레벨"
+
+# ─────────────────────────────────────
+# Chapter Themes
+# ─────────────────────────────────────
+chapters:
+  - { chapter: 1, name: "Sky Party", levels: [1, 20], theme: "하늘 파티", rail_type: straight }
+  - { chapter: 2, name: "Ocean Breeze", levels: [21, 40], theme: "바다 바람", rail_type: s_curve }
+  - { chapter: 3, name: "Forest Trail", levels: [41, 60], theme: "숲길", rail_type: zigzag }
+  - { chapter: 4, name: "Carnival Night", levels: [61, 80], theme: "카니발 밤", rail_type: loop }
+  - { chapter: 5, name: "Candy Land", levels: [81, 100], theme: "캔디 나라", rail_type: spiral }
+  - { chapter: 6, name: "Space Voyage", levels: [101, 120], theme: "우주 여행", rail_type: branching }
+  - { chapter: 7, name: "Garden Bloom", levels: [121, 140], theme: "정원", rail_type: mixed }
+  - { chapter: 8, name: "Ice Kingdom", levels: [141, 160], theme: "얼음 왕국", rail_type: mixed }
+  - { chapter: 9, name: "Volcano Peak", levels: [161, 180], theme: "화산", rail_type: mixed }
+  - { chapter: 10, name: "Rainbow Finale", levels: [181, 200], theme: "무지개 피날레", rail_type: mixed }
+
+# ─────────────────────────────────────
+# Systems List
+# ─────────────────────────────────────
+systems:
+  - LevelManager         # 레벨 로드, 진행, 완료 처리
+  - LevelDataProvider    # 레벨 데이터(JSON) 로드 및 파싱
+  - ChapterManager       # 챕터 진행, 해금 관리
+  - GimmickManager       # 특수 기믹 활성화/비활성화
+  - TutorialController   # 튜토리얼 레벨 진행 제어

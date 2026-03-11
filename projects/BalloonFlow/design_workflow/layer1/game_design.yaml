@@ -1,0 +1,173 @@
+# ═══════════════════════════════════════════
+# BalloonFlow — Layer 1: Game Design Document
+# ═══════════════════════════════════════════
+# Genre: Puzzle | Sub-genre: queue_sort | Platform: Unity
+# Generated: 2026-03-11
+
+project: BalloonFlow
+title: "Balloon Flow! — Dart x Balloon — Oddly Satisfying Queue Puzzle"
+genre: Puzzle
+sub_genre: queue_sort
+platform: unity
+resolution: [1080, 1920]
+orientation: portrait
+
+# ─────────────────────────────────────
+# 1. Vision
+# ─────────────────────────────────────
+vision:
+  one_liner: "다트를 쏘아 같은 색 풍선을 터뜨리는 큐 정리의 쾌감"
+  core_fun: >
+    레일 위를 흘러가는 형형색색 풍선들에 같은 색 다트를 명중시켜 터뜨리는
+    Oddly Satisfying 큐 정리 퍼즐. 연쇄 팝의 시청각 쾌감과 전략적 큐 관리의
+    깊이가 결합된 모바일 캐주얼 퍼즐 게임.
+
+# ─────────────────────────────────────
+# 2. Design Pillars
+# ─────────────────────────────────────
+design_pillars:
+  - name: "Satisfying Pop"
+    priority: 1
+    description: "풍선 팝의 ASMR급 시청각 피드백. 연쇄 팝 시 이펙트 증폭."
+  - name: "Strategic Queue"
+    priority: 2
+    description: "어떤 색 다트를 먼저 쏠지 전략적 판단. 큐 관리의 퍼즐 깊이."
+  - name: "Bite-Sized Flow"
+    priority: 3
+    description: "한 판 30~90초. 자투리 시간에 딱 맞는 세션 단위."
+
+# ─────────────────────────────────────
+# 3. Target Audience
+# ─────────────────────────────────────
+target_audience:
+  primary: "25-45세, 여성 60%. 출퇴근 캐주얼 퍼즐러."
+  secondary: "18-24세, ASMR/Satisfying 숏폼 세대."
+
+# ─────────────────────────────────────
+# 4. Core Loop
+# ─────────────────────────────────────
+core_loop:
+  inner: "[레벨진입] → [풍선관찰] → [다트발사(탭)] → [매칭팝+연쇄] → [클리어/실패] → [보상]"
+  outer: "[레벨진행] → [챕터완료] → [기믹해금] → [부스터활용] → [컬렉션수집] → [시즌이벤트]"
+
+# ─────────────────────────────────────
+# 5. Systems Overview (9 Domains)
+# ─────────────────────────────────────
+systems:
+  InGame:
+    description: "코어 메커닉 — 레일, 풍선, 다트, 팝, 콤보, 점수"
+    systems:
+      - RailManager
+      - BalloonController
+      - DartManager
+      - PopProcessor
+      - ComboCalculator
+      - ScoreManager
+      - InputHandler
+      - BoardStateManager
+
+  Content:
+    description: "레벨 디자인 — 200레벨, 10챕터, 기믹 스케줄"
+    systems:
+      - LevelManager
+      - LevelDataProvider
+      - ChapterManager
+      - GimmickManager
+      - TutorialController
+
+  Balance:
+    description: "난이도 곡선 — 톱니형, 공식 기반 밸런스"
+    systems:
+      - DifficultyCalculator
+      - BalanceProcessor
+      - ClearRateValidator
+
+  OutGame:
+    description: "라이프, 부스터, 재화 관리"
+    systems:
+      - LifeManager
+      - BoosterManager
+      - CurrencyManager
+      - ShopManager
+      - DailyRewardManager
+      - ContinueHandler
+
+  BM:
+    description: "수익화 — IAP, 광고, 시즌패스, 피기뱅크"
+    systems:
+      - IAPManager
+      - AdManager
+      - OfferManager
+      - PiggyBankManager
+      - SeasonPassManager
+
+  UX:
+    description: "유저 동선 — FTUE, HUD, 팝업, 피드백"
+    systems:
+      - UIManager
+      - PageController
+      - PopupManager
+      - TutorialManager
+      - FeedbackController
+      - HUDController
+
+  Meta:
+    description: "장기 동기 — 도감, 스킨, 스타, 도전과제"
+    systems:
+      - CollectionManager
+      - SkinManager
+      - StarManager
+      - AchievementManager
+
+  Social:
+    description: "소셜 — 리더보드, 친구/선물"
+    systems:
+      - LeaderboardManager
+      - FriendManager
+
+  LiveOps:
+    description: "라이브 운영 — 이벤트, 퀘스트, 시즌, AB테스트"
+    systems:
+      - EventManager
+      - QuestManager
+      - SeasonManager
+      - NotificationManager
+      - ABTestManager
+      - RemoteConfigService
+
+# ─────────────────────────────────────
+# 6. Total System Count
+# ─────────────────────────────────────
+system_count:
+  InGame: 8
+  Content: 5
+  Balance: 3
+  OutGame: 6
+  BM: 5
+  UX: 6
+  Meta: 4
+  Social: 2
+  LiveOps: 6
+  total: 45
+
+# ─────────────────────────────────────
+# 7. Art Direction
+# ─────────────────────────────────────
+art_direction:
+  style: "Flat 2D + 파스텔 톤"
+  balloon: "둥글고 광택, 약간 투명"
+  dart: "귀여운 미니 다트"
+  pop_effect: "색종이 파티클 + 화면 흔들림"
+  background: "챕터별 테마 (하늘, 바다, 숲, 놀이공원 등)"
+
+# ─────────────────────────────────────
+# 8. Technical Requirements
+# ─────────────────────────────────────
+technical:
+  min_android_sdk: 24
+  min_ios: "14.0"
+  target_fps: 60
+  max_draw_calls: 50
+  max_balloon_on_screen: 80
+  object_pool_required: true
+  screen_orientation: portrait

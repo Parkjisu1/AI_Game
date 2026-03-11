@@ -1,0 +1,133 @@
+# ═══════════════════════════════════════════
+# BalloonFlow — L3 Node: InGame Rail & Balloon
+# ═══════════════════════════════════════════
+# Phase 1 | Owner: Main Coder
+# Systems: RailManager, BalloonController, DartManager, PopProcessor
+
+node_id: ingame_rail_balloon
+phase: 1
+layer: Domain
+domain: InGame
+owner: MainCoder
+
+systems:
+  RailManager:
+    description: "레일 생성 및 풍선 이동 경로 관리."
+    contract:
+      provides:
+        - "CreateRail(RailData railData)"
+        - "GetRailPath(int railId) -> Vector3[]"
+        - "GetBalloonPositions() -> BalloonPosition[]"
+        - "SetRailSpeed(float speed)"
+        - "ResetRail()"
+        - "GetOverflowZoneCount() -> int"
+      events_published:
+        - "OnRailOverflow(int overflowCount)"
+        - "OnBalloonReachedEnd(int balloonId)"
+      requires:
+        - "LevelDataProvider.GetRailLayout()"
+    implementation:
+      rail_types:
+        straight: "직선 레일. waypoints 2개."
+        s_curve: "S자 곡선. BezierCurve 4~6 waypoints."
+        zigzag: "지그재그. 꺾이는 점 6~10개."
+        loop: "원형 루프. CircularPath."
+        spiral: "나선형. 안쪽→바깥 또는 바깥→안쪽."
+        branching: "분기 레일. 2방향 분기점 1~2개."
+      balloon_movement:
+        method: "waypoint 따라 lerp 이동"
+        speed_formula: "speed(L) = 1.0 + (L/200) * 0.8"
+        overflow_zone: "레일 끝 + 대기 영역 (N칸)"
+      rail_data: "RailLayout { segments: RailSegment[], speed: float, overflowLimit: int }"
+
+  BalloonController:
+    description: "풍선 오브젝트 생성/파괴/상태 관리."
+    contract:
+      provides:
+        - "SpawnBalloon(ColorEnum color, BalloonType type, Vector3 position) -> int"
+        - "PopBalloon(int balloonId) -> PopResult"
+        - "GetBalloonColor(int balloonId) -> ColorEnum"
+        - "GetBalloonType(int balloonId) -> BalloonType"
+        - "GetAdjacentBalloons(int balloonId) -> int[]"
+        - "ThawBalloon(int balloonId)"
+        - "GetAllBalloons() -> BalloonData[]"
+      events_published:
+        - "OnBalloonPopped(int balloonId, ColorEnum color, Vector3 position)"
+        - "OnBalloonSpawned(int balloonId)"
+      requires:
+        - "RailManager.GetBalloonPositions()"
+        - "ObjectPool.Get/Return"
+    implementation:
+      balloon_types:
+        Normal: { hp: 1, intro: 1 }
+        Double: { hp: 2, intro: 15 }
+        Frozen: { hp: 1, thaw_required: true, intro: 25 }
+        Bomb: { hp: 1, special: "area_pop", radius: 2, intro: 35 }
+        Lock: { hp: 1, key_required: true, intro: 40 }
+        Rainbow: { hp: 1, special: "color_clear", intro: 50 }
+      colors: [Red, Blue, Green, Yellow, Pink, Orange, Purple, Sky]
+      adjacency: "레일 상 index ±1 기준"
+      pooling: "ObjectPool 사용. 최대 동시 80개."
+
+  DartManager:
+    description: "다트 큐 관리, 발사 로직."
+    contract:
+      provides:
+        - "GetCurrentDart() -> DartData"
+        - "GetDartQueue() -> DartData[]"
+        - "FireDart(int targetBalloonId) -> FireResult"
+        - "DiscardDart() -> bool"
+        - "AddBonusDarts(int count)"
+        - "GetRemainingDarts() -> int"
+      events_published:
+        - "OnDartFired(ColorEnum dartColor, int targetId)"
+        - "OnDartQueueEmpty()"
+        - "OnBonusDartAwarded(int count)"
+      requires:
+        - "LevelDataProvider.GetDartQueue()"
+        - "BalloonController.GetBalloonColor()"
+        - "InputHandler.OnBalloonTapped"
+    implementation:
+      queue_visible: 5
+      next_preview: 3
+      fire_rules:
+        - "다트 색상 == 풍선 색상 → 발사 허용"
+        - "다트 색상 != 풍선 색상 → 거부 (UI 피드백)"
+        - "Rainbow 풍선 → 아무 색 다트 허용"
+        - "Bomb 풍선 → 아무 색 다트 허용"
+      discard_rule: "같은 색 풍선이 레일에 없을 때 다트 버리기 가능 (1무브 소모)"
+      dart_trajectory: "직선 발사 (다트 → 풍선 위치). 0.3초 비행 연출."
+
+  PopProcessor:
+    description: "팝 판정 + 연쇄 팝 로직."
+    contract:
+      provides:
+        - "ProcessPop(int balloonId, ColorEnum dartColor) -> PopChainResult"
+        - "GetChainLength() -> int"
+      events_published:
+        - "OnChainPopComplete(int chainLength, int totalScore)"
+      requires:
+        - "BalloonController.PopBalloon()"
+        - "BalloonController.GetAdjacentBalloons()"
+        - "BalloonController.GetBalloonColor()"
+        - "ComboCalculator.CalculateComboScore()"
+    implementation:
+      chain_algorithm: >
+        1. 명중 풍선 팝
+        2. 인접 풍선 중 같은 색 찾기 (BFS)
+        3. 같은 색 인접 풍선 전부 팝 (연쇄)
+        4. 연쇄로 팝된 풍선의 인접에서 다시 검사 (재귀)
+        5. 더 이상 연쇄 없으면 종료
+      special_pop_rules:
+        Bomb: "반경 2칸 내 모든 풍선 팝 (색상 무관)"
+        Rainbow: "레일 내 명중한 다트 색상 전체 팝"
+        Frozen: "연쇄 팝으로 인접이 터지면 해동. 해동 후 일반 팝 가능."
+        Lock: "키 아이템 사용 또는 인접 Bomb 팝으로 해제"
+        Double: "첫 타 → 외피 제거 (HP 2→1). 두 번째 타 → 팝."
+      result: "PopChainResult { poppedIds: int[], chainLength: int, totalScore: int, bonusDarts: int }"
+
+output_files:
+  - "RailManager.cs"
+  - "BalloonController.cs"
+  - "DartManager.cs"
+  - "PopProcessor.cs"
