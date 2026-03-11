@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameForge - Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gf: { dark: '#0a0a0a', card: '#141414', border: '#1e1e1e', accent: '#d97706', accent2: '#f59e0b', surface: '#18181b', muted: '#71717a', danger: '#ef4444' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    @keyframes wave { 0%, 100% { height: 40%; } 50% { height: 100%; } }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    .tab-active { color: #d97706 !important; border-bottom-color: #d97706 !important; }
+  </style>
+</head>
+<body class="bg-gf-dark min-h-screen flex items-center justify-center p-4">
+  <div class="w-full max-w-sm">
+    <!-- Logo -->
+    <div class="text-center mb-8" style="animation: float 3s ease-in-out infinite">
+      <div class="flex items-end justify-center gap-[4px] h-10 mb-3">
+        <div class="w-[4px] rounded-full bg-gf-accent" style="height:40%;animation:wave 1.2s ease-in-out infinite"></div>
+        <div class="w-[4px] rounded-full bg-gf-accent" style="height:70%;animation:wave 1.2s ease-in-out 0.1s infinite"></div>
+        <div class="w-[4px] rounded-full bg-gf-accent2" style="height:100%;animation:wave 1.2s ease-in-out 0.2s infinite"></div>
+        <div class="w-[4px] rounded-full bg-gf-accent" style="height:55%;animation:wave 1.2s ease-in-out 0.3s infinite"></div>
+        <div class="w-[4px] rounded-full bg-gf-accent2" style="height:85%;animation:wave 1.2s ease-in-out 0.4s infinite"></div>
+      </div>
+      <h1 class="text-2xl font-bold text-white">GameForge</h1>
+      <p class="text-sm text-gf-muted mt-1">AI Game Development Platform</p>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-gf-card border border-gf-border rounded-xl overflow-hidden">
+      <!-- Tabs -->
+      <div class="flex border-b border-gf-border">
+        <button id="tabLogin" onclick="switchTab('login')"
+          class="flex-1 py-3 text-sm font-medium text-center border-b-2 transition-colors tab-active border-gf-accent">
+          <i class="fa-solid fa-right-to-bracket mr-1.5"></i>Sign In
+        </button>
+        <button id="tabSignup" onclick="switchTab('signup')"
+          class="flex-1 py-3 text-sm font-medium text-center border-b-2 border-transparent text-gf-muted hover:text-zinc-300 transition-colors">
+          <i class="fa-solid fa-user-plus mr-1.5"></i>Sign Up
+        </button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm" class="p-6 space-y-4">
+        <div>
+          <label class="block text-xs font-medium text-zinc-400 mb-1.5">Username</label>
+          <input type="text" name="username" required autofocus
+            class="w-full px-3 py-2.5 bg-gf-surface border border-gf-border rounded-lg text-sm text-white placeholder-gf-muted focus:border-gf-accent focus:outline-none transition-colors"
+            placeholder="Enter username">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-zinc-400 mb-1.5">Password</label>
+          <input type="password" name="password" required
+            class="w-full px-3 py-2.5 bg-gf-surface border border-gf-border rounded-lg text-sm text-white placeholder-gf-muted focus:border-gf-accent focus:outline-none transition-colors"
+            placeholder="Enter password">
+        </div>
+        <div id="loginError" class="hidden text-sm text-red-400 bg-red-400/10 px-3 py-2 rounded-lg"></div>
+        <button type="submit"
+          class="w-full py-2.5 bg-gf-accent hover:bg-gf-accent2 text-white font-semibold rounded-lg transition-colors text-sm">
+          <i class="fa-solid fa-right-to-bracket mr-2"></i>Sign In
+        </button>
+      </form>
+
+      <!-- Sign Up Form -->
+      <form id="signupForm" class="p-6 space-y-4 hidden">
+        <div>
+          <label class="block text-xs font-medium text-zinc-400 mb-1.5">Username</label>
+          <input type="text" name="username" required
+            class="w-full px-3 py-2.5 bg-gf-surface border border-gf-border rounded-lg text-sm text-white placeholder-gf-muted focus:border-gf-accent focus:outline-none transition-colors"
+            placeholder="Choose a username">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-zinc-400 mb-1.5">Display Name</label>
+          <input type="text" name="displayName"
+            class="w-full px-3 py-2.5 bg-gf-surface border border-gf-border rounded-lg text-sm text-white placeholder-gf-muted focus:border-gf-accent focus:outline-none transition-colors"
+            placeholder="Display name (optional)">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-zinc-400 mb-1.5">Password</label>
+          <input type="password" name="password" required minlength="4"
+            class="w-full px-3 py-2.5 bg-gf-surface border border-gf-border rounded-lg text-sm text-white placeholder-gf-muted focus:border-gf-accent focus:outline-none transition-colors"
+            placeholder="Create a password (min 4 chars)">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-zinc-400 mb-1.5">Confirm Password</label>
+          <input type="password" name="confirmPassword" required
+            class="w-full px-3 py-2.5 bg-gf-surface border border-gf-border rounded-lg text-sm text-white placeholder-gf-muted focus:border-gf-accent focus:outline-none transition-colors"
+            placeholder="Confirm password">
+        </div>
+        <div id="signupError" class="hidden text-sm text-red-400 bg-red-400/10 px-3 py-2 rounded-lg"></div>
+        <div id="signupSuccess" class="hidden text-sm text-emerald-400 bg-emerald-400/10 px-3 py-2 rounded-lg"></div>
+        <button type="submit"
+          class="w-full py-2.5 bg-gf-accent hover:bg-gf-accent2 text-white font-semibold rounded-lg transition-colors text-sm">
+          <i class="fa-solid fa-user-plus mr-2"></i>Create Account
+        </button>
+      </form>
+    </div>
+
+    <p class="text-center text-xs text-gf-muted mt-4">Default admin: admin / gameforge2026</p>
+  </div>
+
+  <script>
+    function switchTab(tab) {
+      const loginForm = document.getElementById('loginForm');
+      const signupForm = document.getElementById('signupForm');
+      const tabLogin = document.getElementById('tabLogin');
+      const tabSignup = document.getElementById('tabSignup');
+
+      if (tab === 'login') {
+        loginForm.classList.remove('hidden');
+        signupForm.classList.add('hidden');
+        tabLogin.classList.add('tab-active', 'border-gf-accent');
+        tabLogin.classList.remove('text-gf-muted', 'border-transparent');
+        tabSignup.classList.remove('tab-active', 'border-gf-accent');
+        tabSignup.classList.add('text-gf-muted', 'border-transparent');
+      } else {
+        loginForm.classList.add('hidden');
+        signupForm.classList.remove('hidden');
+        tabSignup.classList.add('tab-active', 'border-gf-accent');
+        tabSignup.classList.remove('text-gf-muted', 'border-transparent');
+        tabLogin.classList.remove('tab-active', 'border-gf-accent');
+        tabLogin.classList.add('text-gf-muted', 'border-transparent');
+      }
+    }
+
+    // Login
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = new FormData(e.target);
+      const errEl = document.getElementById('loginError');
+      errEl.classList.add('hidden');
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: form.get('username'),
+            password: form.get('password')
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          window.location.href = data.redirect || '/';
+        } else {
+          errEl.textContent = data.error || 'Login failed';
+          errEl.classList.remove('hidden');
+        }
+      } catch (err) {
+        errEl.textContent = 'Connection error';
+        errEl.classList.remove('hidden');
+      }
+    });
+
+    // Sign Up
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = new FormData(e.target);
+      const errEl = document.getElementById('signupError');
+      const successEl = document.getElementById('signupSuccess');
+      errEl.classList.add('hidden');
+      successEl.classList.add('hidden');
+
+      const password = form.get('password');
+      const confirmPassword = form.get('confirmPassword');
+
+      if (password !== confirmPassword) {
+        errEl.textContent = 'Passwords do not match';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      if (password.length < 4) {
+        errEl.textContent = 'Password must be at least 4 characters';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: form.get('username'),
+            password,
+            displayName: form.get('displayName') || form.get('username')
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          successEl.textContent = 'Account created! You can now sign in.';
+          successEl.classList.remove('hidden');
+          e.target.reset();
+          setTimeout(() => switchTab('login'), 1500);
+        } else {
+          errEl.textContent = data.error || 'Registration failed';
+          errEl.classList.remove('hidden');
+        }
+      } catch (err) {
+        errEl.textContent = 'Connection error';
+        errEl.classList.remove('hidden');
+      }
+    });
+  </script>
+</body>
+</html>

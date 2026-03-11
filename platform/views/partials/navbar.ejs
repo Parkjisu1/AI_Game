@@ -1,0 +1,145 @@
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 nav-blur bg-gf-dark/90 border-b border-gf-border">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between h-14">
+        <!-- Logo -->
+        <a href="/" class="flex items-center gap-2.5 group">
+          <div class="flex items-end gap-[3px] h-6">
+            <div class="w-[3px] rounded-full bg-gf-accent" style="height:40%;animation:wave 1.2s ease-in-out infinite"></div>
+            <div class="w-[3px] rounded-full bg-gf-accent" style="height:70%;animation:wave 1.2s ease-in-out 0.1s infinite"></div>
+            <div class="w-[3px] rounded-full bg-gf-accent2" style="height:100%;animation:wave 1.2s ease-in-out 0.2s infinite"></div>
+            <div class="w-[3px] rounded-full bg-gf-accent" style="height:55%;animation:wave 1.2s ease-in-out 0.3s infinite"></div>
+            <div class="w-[3px] rounded-full bg-gf-accent2" style="height:85%;animation:wave 1.2s ease-in-out 0.4s infinite"></div>
+          </div>
+          <span class="text-base font-bold text-white group-hover:text-gf-accent transition-colors">GameForge</span>
+          <span class="text-[10px] font-medium text-gf-muted bg-gf-surface px-1.5 py-0.5 rounded">Platform</span>
+        </a>
+
+        <!-- Desktop Nav Links -->
+        <div class="hidden lg:flex items-center gap-1">
+          <a href="/" class="nav-link px-3 py-1.5 rounded-lg text-sm font-medium transition-colors
+            <%= currentPath === '/' ? 'text-gf-accent bg-gf-accent/10' : 'text-zinc-400 hover:text-white hover:bg-gf-surface' %>">
+            <i class="fa-solid fa-gauge-high mr-1.5"></i>Dashboard
+          </a>
+          <a href="/design" class="nav-link px-3 py-1.5 rounded-lg text-sm font-medium transition-colors
+            <%= currentPath === '/design' ? 'text-gf-accent bg-gf-accent/10' : 'text-zinc-400 hover:text-white hover:bg-gf-surface' %>">
+            <i class="fa-solid fa-pencil-ruler mr-1.5"></i>Design
+          </a>
+          <a href="/system" class="nav-link px-3 py-1.5 rounded-lg text-sm font-medium transition-colors
+            <%= currentPath === '/system' ? 'text-gf-accent bg-gf-accent/10' : 'text-zinc-400 hover:text-white hover:bg-gf-surface' %>">
+            <i class="fa-solid fa-code mr-1.5"></i>System
+          </a>
+          <a href="/embedding" class="nav-link px-3 py-1.5 rounded-lg text-sm font-medium transition-colors
+            <%= currentPath === '/embedding' ? 'text-gf-accent bg-gf-accent/10' : 'text-zinc-400 hover:text-white hover:bg-gf-surface' %>">
+            <i class="fa-solid fa-database mr-1.5"></i>Embedding
+          </a>
+          <% if (user && user.isAdmin) { %>
+          <a href="/users" class="nav-link px-3 py-1.5 rounded-lg text-sm font-medium transition-colors
+            <%= currentPath === '/users' ? 'text-gf-accent bg-gf-accent/10' : 'text-zinc-400 hover:text-white hover:bg-gf-surface' %>">
+            <i class="fa-solid fa-users-gear mr-1.5"></i>Users
+          </a>
+          <% } %>
+          <a href="/review" class="nav-link px-3 py-1.5 rounded-lg text-sm font-medium transition-colors relative
+            <%= currentPath === '/review' ? 'text-gf-accent bg-gf-accent/10' : 'text-zinc-400 hover:text-white hover:bg-gf-surface' %>">
+            <i class="fa-solid fa-check-double mr-1.5"></i>Review
+            <span id="pendingBadge" class="hidden absolute -top-1 -right-1 bg-gf-danger text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center badge-pulse"></span>
+          </a>
+          <a href="/log" class="nav-link px-3 py-1.5 rounded-lg text-sm font-medium transition-colors
+            <%= currentPath === '/log' ? 'text-gf-accent bg-gf-accent/10' : 'text-zinc-400 hover:text-white hover:bg-gf-surface' %>">
+            <i class="fa-solid fa-clock-rotate-left mr-1.5"></i>Log
+          </a>
+        </div>
+
+        <!-- Right Side -->
+        <div class="flex items-center gap-3">
+          <% if (user) { %>
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-full bg-gradient-to-br from-gf-accent to-gf-accent2 flex items-center justify-center text-white text-xs font-bold">
+              <%= user.displayName ? user.displayName[0].toUpperCase() : 'U' %>
+            </div>
+            <span class="hidden sm:block text-sm text-zinc-300"><%= user.displayName %></span>
+            <% if (user.isAdmin) { %>
+            <span class="text-[10px] font-bold text-gf-accent bg-gf-accent/10 px-1.5 py-0.5 rounded">ADMIN</span>
+            <% } %>
+          </div>
+          <button onclick="logout()" class="text-zinc-500 hover:text-gf-danger transition-colors text-sm" title="Logout">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+          <% } %>
+
+          <!-- Mobile menu button -->
+          <button id="mobileMenuBtn" class="lg:hidden text-zinc-400 hover:text-white transition-colors">
+            <i class="fa-solid fa-bars text-lg"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="lg:hidden hidden border-t border-gf-border bg-gf-dark/95">
+      <div class="px-4 py-3 space-y-1">
+        <a href="/" class="block px-3 py-2 rounded-lg text-sm <%= currentPath === '/' ? 'text-gf-accent bg-gf-accent/10' : 'text-zinc-400' %>">
+          <i class="fa-solid fa-gauge-high mr-2 w-5"></i>Dashboard
+        </a>
+        <a href="/design" class="block px-3 py-2 rounded-lg text-sm <%= currentPath === '/design' ? 'text-gf-accent bg-gf-accent/10' : 'text-zinc-400' %>">
+          <i class="fa-solid fa-pencil-ruler mr-2 w-5"></i>Design
+        </a>
+        <a href="/system" class="block px-3 py-2 rounded-lg text-sm <%= currentPath === '/system' ? 'text-gf-accent bg-gf-accent/10' : 'text-zinc-400' %>">
+          <i class="fa-solid fa-code mr-2 w-5"></i>System
+        </a>
+        <a href="/embedding" class="block px-3 py-2 rounded-lg text-sm <%= currentPath === '/embedding' ? 'text-gf-accent bg-gf-accent/10' : 'text-zinc-400' %>">
+          <i class="fa-solid fa-database mr-2 w-5"></i>Embedding
+        </a>
+        <% if (user && user.isAdmin) { %>
+        <a href="/users" class="block px-3 py-2 rounded-lg text-sm <%= currentPath === '/users' ? 'text-gf-accent bg-gf-accent/10' : 'text-zinc-400' %>">
+          <i class="fa-solid fa-users-gear mr-2 w-5"></i>Users
+        </a>
+        <% } %>
+        <a href="/review" class="block px-3 py-2 rounded-lg text-sm <%= currentPath === '/review' ? 'text-gf-accent bg-gf-accent/10' : 'text-zinc-400' %>">
+          <i class="fa-solid fa-check-double mr-2 w-5"></i>Review
+        </a>
+        <a href="/log" class="block px-3 py-2 rounded-lg text-sm <%= currentPath === '/log' ? 'text-gf-accent bg-gf-accent/10' : 'text-zinc-400' %>">
+          <i class="fa-solid fa-clock-rotate-left mr-2 w-5"></i>Log
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Spacer for fixed nav -->
+  <div class="h-14"></div>
+
+  <style>
+    @keyframes wave {
+      0%, 100% { height: 40%; }
+      50% { height: 100%; }
+    }
+  </style>
+
+  <script>
+    // Mobile menu toggle
+    document.getElementById('mobileMenuBtn')?.addEventListener('click', () => {
+      document.getElementById('mobileMenu').classList.toggle('hidden');
+    });
+
+    // Logout
+    async function logout() {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      window.location.href = '/login';
+    }
+
+    // Load pending count for badge
+    async function loadPendingBadge() {
+      try {
+        const res = await fetch('/api/stats');
+        const data = await res.json();
+        const badge = document.getElementById('pendingBadge');
+        if (badge && data.pending > 0) {
+          badge.textContent = data.pending > 9 ? '9+' : data.pending;
+          badge.classList.remove('hidden');
+        }
+      } catch (e) { /* ignore */ }
+    }
+    if (document.querySelector('[data-auth="true"]') || document.querySelector('.nav-link')) {
+      loadPendingBadge();
+    }
+  </script>

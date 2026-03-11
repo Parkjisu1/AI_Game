@@ -1,0 +1,191 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-lg font-bold text-white"><i class="fa-solid fa-clock-rotate-left text-cyan-400 mr-2"></i>Activity Log</h1>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="bg-gf-card border border-gf-border rounded-xl p-4 mb-5">
+    <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 items-end">
+      <div>
+        <label class="text-[11px] text-gf-muted mb-1 block">Start Date</label>
+        <input type="date" id="logStartDate"
+          class="w-full px-3 py-2 bg-gf-surface border border-gf-border rounded-lg text-xs text-white focus:border-gf-accent focus:outline-none">
+      </div>
+      <div>
+        <label class="text-[11px] text-gf-muted mb-1 block">End Date</label>
+        <input type="date" id="logEndDate"
+          class="w-full px-3 py-2 bg-gf-surface border border-gf-border rounded-lg text-xs text-white focus:border-gf-accent focus:outline-none">
+      </div>
+      <div>
+        <label class="text-[11px] text-gf-muted mb-1 block">User</label>
+        <select id="logUserFilter" class="w-full px-3 py-2 rounded-lg text-xs">
+          <option value="all">All Users</option>
+        </select>
+      </div>
+      <div>
+        <label class="text-[11px] text-gf-muted mb-1 block">Type</label>
+        <div class="flex flex-wrap gap-1" id="logTypeFilters">
+          <button class="filter-btn active text-[10px]" data-type="all">All</button>
+          <button class="filter-btn text-[10px]" data-type="design">Design</button>
+          <button class="filter-btn text-[10px]" data-type="system">System</button>
+          <button class="filter-btn text-[10px]" data-type="embedding">Embed</button>
+          <button class="filter-btn text-[10px]" data-type="review">Review</button>
+        </div>
+      </div>
+      <div>
+        <button onclick="loadLogs()" class="w-full py-2 bg-gf-accent hover:bg-gf-accent2 text-white font-semibold rounded-lg transition-colors text-xs">
+          <i class="fa-solid fa-search mr-1"></i>Search
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Log Table -->
+  <div class="bg-gf-card border border-gf-border rounded-xl overflow-hidden">
+    <!-- Header -->
+    <div class="grid grid-cols-12 gap-2 px-4 py-3 bg-gf-surface/50 border-b border-gf-border text-[11px] font-medium text-gf-muted uppercase tracking-wider">
+      <div class="col-span-2">Time</div>
+      <div class="col-span-1">User</div>
+      <div class="col-span-1">Type</div>
+      <div class="col-span-7">Action</div>
+      <div class="col-span-1 text-center">Detail</div>
+    </div>
+
+    <!-- Log Rows -->
+    <div id="logList" class="divide-y divide-gf-border">
+      <div class="text-center py-12 text-gf-muted text-sm">
+        <i class="fa-solid fa-filter text-2xl mb-2"></i>
+        <p>Set filters and click Search</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load More -->
+  <div id="logLoadMore" class="hidden text-center mt-4">
+    <button onclick="loadMoreLogs()" class="px-4 py-2 bg-gf-surface hover:bg-gf-hover border border-gf-border text-zinc-300 rounded-lg text-xs transition-colors">
+      Load More
+    </button>
+  </div>
+</main>
+
+<%- include('partials/footer') %>
+
+<script>
+  let logOffset = 0;
+  let currentType = 'all';
+
+  // Type filter buttons
+  document.querySelectorAll('#logTypeFilters .filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#logTypeFilters .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentType = btn.dataset.type;
+    });
+  });
+
+  // Set default dates (last 7 days)
+  const today = new Date();
+  const weekAgo = new Date(today);
+  weekAgo.setDate(weekAgo.getDate() - 7);
+  document.getElementById('logEndDate').value = today.toISOString().split('T')[0];
+  document.getElementById('logStartDate').value = weekAgo.toISOString().split('T')[0];
+
+  async function loadLogs(append = false) {
+    try {
+      const params = new URLSearchParams({
+        startDate: document.getElementById('logStartDate').value,
+        endDate: document.getElementById('logEndDate').value,
+        type: currentType,
+        userId: document.getElementById('logUserFilter').value,
+        limit: 50
+      });
+
+      const res = await fetch(`/api/logs?${params}`);
+      const data = await res.json();
+
+      // Populate user filter
+      const userSelect = document.getElementById('logUserFilter');
+      if (data.users && userSelect.options.length <= 1) {
+        data.users.forEach(u => {
+          const opt = document.createElement('option');
+          opt.value = u;
+          opt.textContent = u;
+          userSelect.appendChild(opt);
+        });
+      }
+
+      renderLogs(data.logs || [], append);
+    } catch (err) {
+      showToast('Failed to load logs', 'error');
+    }
+  }
+
+  function renderLogs(logs, append) {
+    const container = document.getElementById('logList');
+
+    if (logs.length === 0 && !append) {
+      container.innerHTML = '<div class="text-center py-12 text-gf-muted text-sm"><i class="fa-solid fa-inbox text-2xl mb-2"></i><p>No logs found</p></div>';
+      return;
+    }
+
+    const html = logs.map(log => {
+      const typeColors = {
+        design: 'bg-purple-500/10 text-purple-400',
+        system: 'bg-blue-500/10 text-blue-400',
+        embedding: 'bg-emerald-500/10 text-emerald-400',
+        review: 'bg-amber-500/10 text-amber-400',
+        auth: 'bg-zinc-500/10 text-zinc-400'
+      };
+      const dotColors = {
+        design: 'bg-purple-400',
+        system: 'bg-blue-400',
+        embedding: 'bg-emerald-400',
+        review: 'bg-amber-400',
+        auth: 'bg-zinc-500'
+      };
+
+      return `
+        <div class="grid grid-cols-12 gap-2 px-4 py-3 hover:bg-gf-surface/30 transition-colors items-center cursor-pointer log-row" data-id="${log._id}">
+          <div class="col-span-2 text-[11px] text-gf-muted">${new Date(log.timestamp).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })}</div>
+          <div class="col-span-1 text-xs font-medium text-zinc-300">${log.username || '-'}</div>
+          <div class="col-span-1"><span class="text-[10px] px-1.5 py-0.5 rounded font-medium ${typeColors[log.type] || typeColors.auth}">${log.type}</span></div>
+          <div class="col-span-7 text-xs text-zinc-400 truncate">${log.action || ''}</div>
+          <div class="col-span-1 text-center">
+            <button class="text-gf-muted hover:text-gf-accent transition-colors text-xs toggle-detail">
+              <i class="fa-solid fa-chevron-down"></i>
+            </button>
+          </div>
+        </div>
+        <div class="log-detail px-4 bg-gf-dark/50" data-detail="${log._id}">
+          <div class="py-3 pl-4 border-l-2 border-gf-border">
+            <pre class="text-[11px] text-zinc-500 font-mono whitespace-pre-wrap">${JSON.stringify(log.details || {}, null, 2)}</pre>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    if (append) {
+      container.insertAdjacentHTML('beforeend', html);
+    } else {
+      container.innerHTML = html;
+    }
+
+    // Bind expand/collapse
+    container.querySelectorAll('.log-row').forEach(row => {
+      row.addEventListener('click', () => {
+        const id = row.dataset.id;
+        const detail = container.querySelector(`.log-detail[data-detail="${id}"]`);
+        detail.classList.toggle('expanded');
+        const icon = row.querySelector('.toggle-detail i');
+        icon.classList.toggle('fa-chevron-down');
+        icon.classList.toggle('fa-chevron-up');
+      });
+    });
+  }
+
+  // Init
+  loadLogs();
+</script>

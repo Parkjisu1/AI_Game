@@ -1,0 +1,289 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-lg font-bold text-white">
+      <i class="fa-solid fa-check-double text-amber-400 mr-2"></i>
+      <%= user.isAdmin ? 'Review Queue' : 'My Submissions' %>
+    </h1>
+    <button onclick="loadItems()" class="text-xs text-gf-accent hover:text-gf-accent2 transition-colors">
+      <i class="fa-solid fa-sync mr-1"></i>Refresh
+    </button>
+  </div>
+
+  <!-- Status Filter -->
+  <div class="bg-gf-card border border-gf-border rounded-xl p-4 mb-5">
+    <div class="flex items-center gap-3">
+      <span class="text-xs text-gf-muted">Status:</span>
+      <div class="flex gap-1.5" id="statusFilters">
+        <button class="filter-btn active" data-status="all">All</button>
+        <button class="filter-btn" data-status="pending">
+          <i class="fa-solid fa-clock text-amber-400 mr-1"></i>Pending
+        </button>
+        <button class="filter-btn" data-status="approved">
+          <i class="fa-solid fa-check text-emerald-400 mr-1"></i>Approved
+        </button>
+        <button class="filter-btn" data-status="rejected">
+          <i class="fa-solid fa-xmark text-red-400 mr-1"></i>Rejected
+        </button>
+      </div>
+      <div class="ml-auto flex items-center gap-2">
+        <span id="itemCountBadge" class="text-[11px] text-gf-muted"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Items List -->
+  <div id="itemsContainer" class="space-y-3">
+    <div class="text-center py-16 text-gf-muted">
+      <div class="w-6 h-6 border-2 border-gf-accent border-t-transparent rounded-full spinner mx-auto mb-3"></div>
+      <p class="text-sm">Loading...</p>
+    </div>
+  </div>
+</main>
+
+<%- include('partials/footer') %>
+
+<script>
+  const IS_ADMIN = <%= user.isAdmin ? 'true' : 'false' %>;
+  let allItems = [];
+  let currentStatus = 'all';
+
+  // Status filter buttons
+  document.querySelectorAll('#statusFilters .filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#statusFilters .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentStatus = btn.dataset.status;
+      renderItems();
+    });
+  });
+
+  async function loadItems() {
+    try {
+      const res = await fetch('/api/pending?status=all');
+      const data = await res.json();
+      allItems = data.items || [];
+      renderItems();
+    } catch (err) {
+      showToast('Failed to load items', 'error');
+    }
+  }
+
+  function renderItems() {
+    const container = document.getElementById('itemsContainer');
+    let filtered = allItems;
+    if (currentStatus !== 'all') {
+      filtered = allItems.filter(item => item.status === currentStatus);
+    }
+
+    // Update count
+    const pendingCount = allItems.filter(i => i.status === 'pending').length;
+    const approvedCount = allItems.filter(i => i.status === 'approved').length;
+    const rejectedCount = allItems.filter(i => i.status === 'rejected').length;
+    document.getElementById('itemCountBadge').textContent =
+      `Total: ${allItems.length} | Pending: ${pendingCount} | Approved: ${approvedCount} | Rejected: ${rejectedCount}`;
+
+    if (filtered.length === 0) {
+      container.innerHTML = `
+        <div class="text-center py-16 text-gf-muted bg-gf-card border border-gf-border rounded-xl">
+          <i class="fa-solid fa-inbox text-3xl mb-3"></i>
+          <p class="text-sm">${currentStatus === 'all' ? 'No submissions yet' : 'No ' + currentStatus + ' items'}</p>
+        </div>`;
+      return;
+    }
+
+    container.innerHTML = filtered.map(item => renderItem(item)).join('');
+  }
+
+  function renderItem(item) {
+    const title = item.data?.designId || item.data?.fileId || item.data?.filename || item.data?.prompt?.substring(0, 50) || 'Untitled';
+    const typeColor = item.type === 'code' ? 'bg-blue-500/10 text-blue-400' : 'bg-purple-500/10 text-purple-400';
+    const catLabel = item.category === 'embedding' ? 'Embedding' : item.category === 'generation' ? 'Generation' : 'Upload';
+    const catColor = item.category === 'embedding' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-cyan-500/10 text-cyan-400';
+
+    const statusBadge = item.status === 'pending'
+      ? '<span class="text-[10px] px-2 py-0.5 rounded-full font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20"><i class="fa-solid fa-clock mr-1"></i>Pending</span>'
+      : item.status === 'approved'
+      ? '<span class="text-[10px] px-2 py-0.5 rounded-full font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"><i class="fa-solid fa-check mr-1"></i>Approved</span>'
+      : '<span class="text-[10px] px-2 py-0.5 rounded-full font-medium bg-red-500/10 text-red-400 border border-red-500/20"><i class="fa-solid fa-xmark mr-1"></i>Rejected</span>';
+
+    const borderColor = item.status === 'approved' ? 'border-emerald-500/20' : item.status === 'rejected' ? 'border-red-500/20' : 'border-gf-border';
+
+    return `
+      <div class="bg-gf-card border ${borderColor} rounded-xl overflow-hidden transition-all" id="item-${item._id}">
+        <!-- Item Header -->
+        <div class="p-4">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-1.5 flex-wrap">
+                ${statusBadge}
+                <span class="text-[10px] px-1.5 py-0.5 rounded font-medium ${typeColor}">${item.type || 'unknown'}</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded font-medium ${catColor}">${catLabel}</span>
+                <span class="text-[10px] text-gf-muted">${item.data?.genre || ''}</span>
+              </div>
+              <h3 class="text-sm font-medium text-white truncate">${escapeHtml(title)}</h3>
+              <div class="flex items-center gap-3 mt-1.5 text-[11px] text-gf-muted">
+                <span><i class="fa-solid fa-user mr-1"></i>${item.submittedBy || 'unknown'}</span>
+                <span><i class="fa-solid fa-calendar mr-1"></i>${new Date(item.createdAt).toLocaleString('ko-KR')}</span>
+                ${item.reviewedBy ? `<span><i class="fa-solid fa-user-check mr-1"></i>Reviewed by ${item.reviewedBy}</span>` : ''}
+              </div>
+            </div>
+
+            <!-- Action buttons / Preview toggle -->
+            <div class="flex items-center gap-1.5 flex-shrink-0">
+              <button onclick="togglePreview('${item._id}')" class="px-2.5 py-1.5 rounded-lg bg-gf-surface hover:bg-gf-hover border border-gf-border text-zinc-400 hover:text-white text-[11px] transition-colors" title="Preview">
+                <i class="fa-solid fa-eye mr-1"></i>Preview
+              </button>
+              ${IS_ADMIN && item.status === 'pending' ? `
+                <button onclick="approveItem('${item._id}')" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-medium transition-colors">
+                  <i class="fa-solid fa-check mr-1"></i>Accept
+                </button>
+                <button onclick="toggleRejectForm('${item._id}')" class="px-2.5 py-1.5 rounded-lg bg-gf-surface hover:bg-red-500/10 border border-gf-border text-zinc-400 hover:text-red-400 text-[11px] font-medium transition-colors">
+                  <i class="fa-solid fa-xmark mr-1"></i>Reject
+                </button>
+              ` : ''}
+            </div>
+          </div>
+        </div>
+
+        <!-- Content Preview (hidden by default) -->
+        <div id="preview-${item._id}" class="hidden border-t border-gf-border">
+          <div class="p-4 bg-gf-dark/50 max-h-[300px] overflow-y-auto">
+            <pre class="text-xs text-zinc-400 whitespace-pre-wrap font-mono">${escapeHtml(JSON.stringify(item.data, null, 2))}</pre>
+          </div>
+        </div>
+
+        <!-- Reject Form (admin, pending only) -->
+        ${IS_ADMIN && item.status === 'pending' ? `
+        <div id="reject-form-${item._id}" class="hidden border-t border-gf-border p-4 bg-red-500/5">
+          <label class="text-[11px] text-red-400 font-medium mb-1.5 block">Reject Reason</label>
+          <textarea id="reject-reason-${item._id}" rows="3"
+            class="w-full px-3 py-2 bg-gf-surface border border-red-500/30 rounded-lg text-xs text-white placeholder-gf-muted focus:border-red-400 focus:outline-none resize-none"
+            placeholder="Why is this being rejected? (visible to the submitter)"></textarea>
+          <div class="flex justify-end gap-2 mt-2">
+            <button onclick="toggleRejectForm('${item._id}')" class="px-3 py-1.5 text-xs text-gf-muted hover:text-white transition-colors">Cancel</button>
+            <button onclick="rejectItem('${item._id}')" class="px-4 py-1.5 bg-red-600 hover:bg-red-500 text-white rounded-lg text-xs font-medium transition-colors">
+              <i class="fa-solid fa-xmark mr-1"></i>Confirm Reject
+            </button>
+          </div>
+        </div>
+        ` : ''}
+
+        <!-- Reject Reason Display (for rejected items) -->
+        ${item.status === 'rejected' ? `
+        <div class="border-t border-red-500/20">
+          <button onclick="toggleReason('${item._id}')" class="w-full px-4 py-2.5 flex items-center justify-between hover:bg-red-500/5 transition-colors group">
+            <span class="text-[11px] font-medium text-red-400">
+              <i class="fa-solid fa-triangle-exclamation mr-1.5"></i>Reject Reason
+            </span>
+            <i id="reason-icon-${item._id}" class="fa-solid fa-chevron-down text-[10px] text-red-400/50 group-hover:text-red-400 transition-all"></i>
+          </button>
+          <div id="reason-${item._id}" class="hidden border-t border-red-500/10">
+            <div class="p-4 bg-red-500/5">
+              ${IS_ADMIN ? `
+                <textarea id="reason-text-${item._id}" rows="3"
+                  class="w-full px-3 py-2 bg-gf-surface border border-red-500/20 rounded-lg text-xs text-zinc-300 focus:border-red-400 focus:outline-none resize-none"
+                >${escapeHtml(item.rejectReason || '')}</textarea>
+                <div class="flex items-center justify-between mt-2">
+                  ${item.reasonUpdatedAt ? `<span class="text-[10px] text-gf-muted">Updated: ${new Date(item.reasonUpdatedAt).toLocaleString('ko-KR')} by ${item.reasonUpdatedBy}</span>` : '<span></span>'}
+                  <button onclick="saveReason('${item._id}')" class="px-3 py-1 bg-gf-surface hover:bg-gf-hover border border-gf-border text-zinc-300 rounded-lg text-[11px] transition-colors">
+                    <i class="fa-solid fa-floppy-disk mr-1"></i>Save
+                  </button>
+                </div>
+              ` : `
+                <p class="text-xs text-zinc-400 leading-relaxed">${escapeHtml(item.rejectReason || 'No reason provided')}</p>
+                ${item.reviewedBy ? `<p class="text-[10px] text-gf-muted mt-2">Reviewed by ${item.reviewedBy} - ${new Date(item.reviewedAt).toLocaleString('ko-KR')}</p>` : ''}
+              `}
+            </div>
+          </div>
+        </div>
+        ` : ''}
+
+        <!-- Approved info -->
+        ${item.status === 'approved' ? `
+        <div class="border-t border-emerald-500/20 px-4 py-2.5 bg-emerald-500/5">
+          <span class="text-[11px] text-emerald-400">
+            <i class="fa-solid fa-circle-check mr-1.5"></i>
+            Approved by ${item.reviewedBy || 'admin'} - ${item.reviewedAt ? new Date(item.reviewedAt).toLocaleString('ko-KR') : ''}
+          </span>
+        </div>
+        ` : ''}
+      </div>
+    `;
+  }
+
+  function togglePreview(id) {
+    document.getElementById('preview-' + id)?.classList.toggle('hidden');
+  }
+
+  function toggleRejectForm(id) {
+    document.getElementById('reject-form-' + id)?.classList.toggle('hidden');
+  }
+
+  function toggleReason(id) {
+    const el = document.getElementById('reason-' + id);
+    const icon = document.getElementById('reason-icon-' + id);
+    if (el) {
+      el.classList.toggle('hidden');
+      icon?.classList.toggle('fa-chevron-down');
+      icon?.classList.toggle('fa-chevron-up');
+    }
+  }
+
+  async function approveItem(id) {
+    try {
+      const res = await fetch(`/api/pending/${id}/approve`, { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        showToast('Approved and saved to DB', 'success');
+        await loadItems();
+      } else {
+        showToast(data.error || 'Approve failed', 'error');
+      }
+    } catch (err) {
+      showToast('Error: ' + err.message, 'error');
+    }
+  }
+
+  async function rejectItem(id) {
+    const reason = document.getElementById('reject-reason-' + id)?.value || '';
+    try {
+      const res = await fetch(`/api/pending/${id}/reject`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast('Rejected', 'info');
+        await loadItems();
+      } else {
+        showToast(data.error || 'Reject failed', 'error');
+      }
+    } catch (err) {
+      showToast('Error: ' + err.message, 'error');
+    }
+  }
+
+  async function saveReason(id) {
+    const reason = document.getElementById('reason-text-' + id)?.value || '';
+    try {
+      const res = await fetch(`/api/pending/${id}/reason`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast('Reason saved', 'success');
+      }
+    } catch (err) {
+      showToast('Error: ' + err.message, 'error');
+    }
+  }
+
+  // Init
+  loadItems();
+</script>

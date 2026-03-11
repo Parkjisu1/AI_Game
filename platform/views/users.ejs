@@ -1,0 +1,274 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-lg font-bold text-white"><i class="fa-solid fa-users-gear text-gf-accent mr-2"></i>User Management</h1>
+    <span class="text-[10px] font-bold text-gf-accent bg-gf-accent/10 px-2 py-1 rounded">ADMIN ONLY</span>
+  </div>
+
+  <!-- Stats -->
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+    <div class="bg-gf-card border border-gf-border rounded-xl p-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
+          <i class="fa-solid fa-users text-blue-400"></i>
+        </div>
+        <div>
+          <div id="statTotal" class="text-xl font-bold text-white">-</div>
+          <div class="text-[11px] text-gf-muted">Total Users</div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-gf-card border border-gf-border rounded-xl p-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+          <i class="fa-solid fa-user-check text-emerald-400"></i>
+        </div>
+        <div>
+          <div id="statActive" class="text-xl font-bold text-white">-</div>
+          <div class="text-[11px] text-gf-muted">Active</div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-gf-card border border-gf-border rounded-xl p-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center">
+          <i class="fa-solid fa-user-slash text-red-400"></i>
+        </div>
+        <div>
+          <div id="statBlocked" class="text-xl font-bold text-white">-</div>
+          <div class="text-[11px] text-gf-muted">Blocked</div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-gf-card border border-gf-border rounded-xl p-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center">
+          <i class="fa-solid fa-user-shield text-amber-400"></i>
+        </div>
+        <div>
+          <div id="statAdmin" class="text-xl font-bold text-white">-</div>
+          <div class="text-[11px] text-gf-muted">Admins</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter & Search -->
+  <div class="bg-gf-card border border-gf-border rounded-xl p-4 mb-5">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="flex gap-1.5" id="userStatusFilters">
+        <button class="filter-btn active" data-status="all">All</button>
+        <button class="filter-btn" data-status="active">Active</button>
+        <button class="filter-btn" data-status="blocked">Blocked</button>
+        <button class="filter-btn" data-status="admin">Admin</button>
+      </div>
+      <input type="text" id="userSearchInput" placeholder="Search username or display name..."
+        class="flex-1 min-w-[200px] px-3 py-2 bg-gf-surface border border-gf-border rounded-lg text-xs text-white placeholder-gf-muted focus:border-gf-accent focus:outline-none">
+      <button onclick="loadUsers()" class="px-3 py-2 bg-gf-accent hover:bg-gf-accent2 text-white rounded-lg text-xs font-medium transition-colors">
+        <i class="fa-solid fa-search mr-1"></i>Search
+      </button>
+    </div>
+  </div>
+
+  <!-- User Table -->
+  <div class="bg-gf-card border border-gf-border rounded-xl overflow-hidden">
+    <!-- Header -->
+    <div class="grid grid-cols-12 gap-2 px-4 py-3 bg-gf-surface/50 border-b border-gf-border text-[11px] font-medium text-gf-muted uppercase tracking-wider">
+      <div class="col-span-1 text-center">#</div>
+      <div class="col-span-2">Username</div>
+      <div class="col-span-2">Display Name</div>
+      <div class="col-span-1 text-center">Role</div>
+      <div class="col-span-1 text-center">Status</div>
+      <div class="col-span-2">Created</div>
+      <div class="col-span-3 text-center">Actions</div>
+    </div>
+
+    <!-- User Rows -->
+    <div id="userList" class="divide-y divide-gf-border">
+      <div class="text-center py-12 text-gf-muted text-sm">Loading...</div>
+    </div>
+  </div>
+</main>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+  <div class="bg-gf-card border border-gf-border rounded-xl p-6 w-full max-w-sm mx-4">
+    <div class="text-center mb-4">
+      <div class="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-3">
+        <i class="fa-solid fa-triangle-exclamation text-red-400 text-xl"></i>
+      </div>
+      <h3 class="text-sm font-semibold text-white">Delete User</h3>
+      <p class="text-xs text-gf-muted mt-1">Are you sure you want to delete <strong id="deleteUsername" class="text-white"></strong>?</p>
+      <p class="text-[11px] text-red-400 mt-1">This action cannot be undone.</p>
+    </div>
+    <div class="flex gap-2">
+      <button onclick="closeDeleteModal()" class="flex-1 py-2 bg-gf-surface hover:bg-gf-hover border border-gf-border text-zinc-300 rounded-lg text-sm transition-colors">Cancel</button>
+      <button onclick="confirmDelete()" class="flex-1 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg text-sm font-medium transition-colors">Delete</button>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
+
+<script>
+  let allUsers = [];
+  let currentFilter = 'all';
+  let deleteTargetId = null;
+
+  // Filter buttons
+  document.querySelectorAll('#userStatusFilters .filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#userStatusFilters .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.status;
+      renderUsers();
+    });
+  });
+
+  // Search on Enter
+  document.getElementById('userSearchInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') loadUsers();
+  });
+
+  async function loadUsers() {
+    try {
+      const search = document.getElementById('userSearchInput').value;
+      const params = new URLSearchParams({ search });
+      const res = await fetch(`/api/users?${params}`);
+      const data = await res.json();
+      allUsers = data.users || [];
+      updateStats();
+      renderUsers();
+    } catch (err) {
+      showToast('Failed to load users', 'error');
+    }
+  }
+
+  function updateStats() {
+    document.getElementById('statTotal').textContent = allUsers.length;
+    document.getElementById('statActive').textContent = allUsers.filter(u => !u.isBlocked).length;
+    document.getElementById('statBlocked').textContent = allUsers.filter(u => u.isBlocked).length;
+    document.getElementById('statAdmin').textContent = allUsers.filter(u => u.isAdmin).length;
+  }
+
+  function renderUsers() {
+    const container = document.getElementById('userList');
+    let filtered = allUsers;
+
+    if (currentFilter === 'active') filtered = allUsers.filter(u => !u.isBlocked);
+    else if (currentFilter === 'blocked') filtered = allUsers.filter(u => u.isBlocked);
+    else if (currentFilter === 'admin') filtered = allUsers.filter(u => u.isAdmin);
+
+    if (filtered.length === 0) {
+      container.innerHTML = '<div class="text-center py-12 text-gf-muted text-sm"><i class="fa-solid fa-users text-2xl mb-2"></i><p>No users found</p></div>';
+      return;
+    }
+
+    container.innerHTML = filtered.map((user, i) => `
+      <div class="grid grid-cols-12 gap-2 px-4 py-3 hover:bg-gf-surface/30 transition-colors items-center ${user.isBlocked ? 'opacity-50' : ''}">
+        <div class="col-span-1 text-center text-xs text-gf-muted">${i + 1}</div>
+        <div class="col-span-2">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-full bg-gradient-to-br from-gf-accent to-gf-accent2 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
+              ${(user.displayName || user.username || 'U')[0].toUpperCase()}
+            </div>
+            <span class="text-xs font-medium text-white truncate">${user.username}</span>
+          </div>
+        </div>
+        <div class="col-span-2 text-xs text-zinc-300 truncate">${user.displayName || '-'}</div>
+        <div class="col-span-1 text-center">
+          ${user.isAdmin
+            ? '<span class="text-[10px] px-1.5 py-0.5 rounded font-medium bg-amber-500/10 text-amber-400">Admin</span>'
+            : '<span class="text-[10px] px-1.5 py-0.5 rounded font-medium bg-zinc-500/10 text-zinc-400">User</span>'}
+        </div>
+        <div class="col-span-1 text-center">
+          ${user.isBlocked
+            ? '<span class="text-[10px] px-1.5 py-0.5 rounded font-medium bg-red-500/10 text-red-400">Blocked</span>'
+            : '<span class="text-[10px] px-1.5 py-0.5 rounded font-medium bg-emerald-500/10 text-emerald-400">Active</span>'}
+        </div>
+        <div class="col-span-2 text-[11px] text-gf-muted">${new Date(user.createdAt).toLocaleDateString('ko-KR')}</div>
+        <div class="col-span-3 flex items-center justify-center gap-1.5">
+          ${user.username === 'admin' ? '<span class="text-[10px] text-gf-muted">Protected</span>' : `
+            <button onclick="toggleAdmin('${user._id}', ${!user.isAdmin})" title="${user.isAdmin ? 'Remove Admin' : 'Make Admin'}"
+              class="px-2 py-1 rounded text-[10px] font-medium transition-colors ${user.isAdmin ? 'bg-amber-500/10 text-amber-400 hover:bg-amber-500/20' : 'bg-gf-surface text-gf-muted hover:text-amber-400'}">
+              <i class="fa-solid fa-shield-halved mr-0.5"></i>${user.isAdmin ? 'Demote' : 'Promote'}
+            </button>
+            <button onclick="toggleBlock('${user._id}', ${!user.isBlocked})" title="${user.isBlocked ? 'Unblock' : 'Block'}"
+              class="px-2 py-1 rounded text-[10px] font-medium transition-colors ${user.isBlocked ? 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20' : 'bg-gf-surface text-gf-muted hover:text-red-400'}">
+              <i class="fa-solid ${user.isBlocked ? 'fa-user-check' : 'fa-user-slash'} mr-0.5"></i>${user.isBlocked ? 'Unblock' : 'Block'}
+            </button>
+            <button onclick="showDeleteModal('${user._id}', '${user.username}')" title="Delete"
+              class="px-2 py-1 rounded text-[10px] font-medium bg-gf-surface text-gf-muted hover:text-red-400 hover:bg-red-500/10 transition-colors">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          `}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  async function toggleAdmin(userId, makeAdmin) {
+    try {
+      const res = await fetch(`/api/users/${userId}/role`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isAdmin: makeAdmin })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast(makeAdmin ? 'Promoted to Admin' : 'Demoted to User', 'success');
+        await loadUsers();
+      } else {
+        showToast(data.error || 'Failed', 'error');
+      }
+    } catch (err) { showToast('Error: ' + err.message, 'error'); }
+  }
+
+  async function toggleBlock(userId, block) {
+    try {
+      const res = await fetch(`/api/users/${userId}/block`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isBlocked: block })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast(block ? 'User blocked' : 'User unblocked', block ? 'warning' : 'success');
+        await loadUsers();
+      } else {
+        showToast(data.error || 'Failed', 'error');
+      }
+    } catch (err) { showToast('Error: ' + err.message, 'error'); }
+  }
+
+  function showDeleteModal(userId, username) {
+    deleteTargetId = userId;
+    document.getElementById('deleteUsername').textContent = username;
+    document.getElementById('deleteModal').classList.remove('hidden');
+  }
+
+  function closeDeleteModal() {
+    deleteTargetId = null;
+    document.getElementById('deleteModal').classList.add('hidden');
+  }
+
+  async function confirmDelete() {
+    if (!deleteTargetId) return;
+    try {
+      const res = await fetch(`/api/users/${deleteTargetId}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        showToast('User deleted', 'success');
+        closeDeleteModal();
+        await loadUsers();
+      } else {
+        showToast(data.error || 'Failed', 'error');
+      }
+    } catch (err) { showToast('Error: ' + err.message, 'error'); }
+  }
+
+  // Init
+  loadUsers();
+</script>

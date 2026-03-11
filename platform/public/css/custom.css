@@ -1,0 +1,62 @@
+/* ============================================================
+   GameForge Platform - Custom Styles
+   ============================================================ */
+
+/* Smooth page transitions */
+main {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Input autofill dark styling */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #e4e4e7;
+  -webkit-box-shadow: 0 0 0px 1000px #18181b inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Textarea resize handle */
+textarea {
+  resize: vertical;
+}
+
+/* Code highlighting override for dark theme */
+.hljs {
+  background: #0a0a0a !important;
+  padding: 1rem !important;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus ring for accessibility */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #d97706;
+  outline-offset: 2px;
+}
+
+/* Mobile touch improvements */
+@media (max-width: 1024px) {
+  .filter-btn {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Print styling */
+@media print {
+  nav, footer, .drop-zone, button { display: none !important; }
+  body { background: white !important; color: black !important; }
+  .bg-gf-card { background: white !important; border: 1px solid #ccc !important; }
+}

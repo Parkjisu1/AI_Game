@@ -1,0 +1,170 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-lg font-bold text-white"><i class="fa-solid fa-pencil-ruler text-gf-accent mr-2"></i>Design</h1>
+  </div>
+
+  <div class="grid lg:grid-cols-12 gap-5">
+    <!-- Left Panel: DB Browser -->
+    <div class="lg:col-span-4">
+      <div class="bg-gf-card border border-gf-border rounded-xl p-4 sticky top-20">
+        <h3 class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">Design DB Browser</h3>
+
+        <!-- Genre Filter -->
+        <div class="mb-3">
+          <label class="text-[11px] text-gf-muted mb-1.5 block">Genre</label>
+          <div class="flex flex-wrap gap-1.5" id="designGenreFilters">
+            <button class="filter-btn active" data-genre="all">All</button>
+            <button class="filter-btn" data-genre="Generic">Generic</button>
+            <button class="filter-btn" data-genre="RPG">RPG</button>
+            <button class="filter-btn" data-genre="Idle">Idle</button>
+            <button class="filter-btn" data-genre="Merge">Merge</button>
+            <button class="filter-btn" data-genre="SLG">SLG</button>
+            <button class="filter-btn" data-genre="Tycoon">Tycoon</button>
+            <button class="filter-btn" data-genre="Simulation">Simulation</button>
+            <button class="filter-btn" data-genre="Puzzle">Puzzle</button>
+            <button class="filter-btn" data-genre="Casual">Casual</button>
+          </div>
+        </div>
+
+        <!-- Domain Filter -->
+        <div class="mb-3">
+          <label class="text-[11px] text-gf-muted mb-1.5 block">Domain</label>
+          <div class="flex flex-wrap gap-1.5" id="designDomainFilters">
+            <button class="filter-btn active" data-domain="all">All</button>
+            <button class="filter-btn" data-domain="InGame">InGame</button>
+            <button class="filter-btn" data-domain="OutGame">OutGame</button>
+            <button class="filter-btn" data-domain="Balance">Balance</button>
+            <button class="filter-btn" data-domain="Content">Content</button>
+            <button class="filter-btn" data-domain="BM">BM</button>
+            <button class="filter-btn" data-domain="LiveOps">LiveOps</button>
+            <button class="filter-btn" data-domain="UX">UX</button>
+            <button class="filter-btn" data-domain="Social">Social</button>
+            <button class="filter-btn" data-domain="Meta">Meta</button>
+          </div>
+        </div>
+
+        <!-- Search -->
+        <div class="mb-3">
+          <input type="text" id="designSearchInput" placeholder="Search system name..."
+            class="w-full px-3 py-2 bg-gf-surface border border-gf-border rounded-lg text-xs text-white placeholder-gf-muted focus:border-gf-accent focus:outline-none">
+        </div>
+
+        <!-- Results List -->
+        <div id="designDbList" class="space-y-2 max-h-[500px] overflow-y-auto pr-1">
+          <div class="text-center py-8 text-gf-muted text-xs">Click filters or search to load DB</div>
+        </div>
+
+        <div class="mt-3 text-center">
+          <button onclick="loadDesignDb()" class="text-xs text-gf-accent hover:text-gf-accent2 transition-colors">
+            <i class="fa-solid fa-sync mr-1"></i>Refresh
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Panel: Prompt & Results -->
+    <div class="lg:col-span-8 space-y-5">
+      <!-- Prompt Input -->
+      <div class="bg-gf-card border border-gf-border rounded-xl p-5">
+        <h3 class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">Design Prompt</h3>
+        <div class="space-y-3">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="text-[11px] text-gf-muted mb-1 block">Genre</label>
+              <select id="designGenreSelect" class="w-full px-3 py-2 rounded-lg text-xs">
+                <option value="RPG">RPG</option>
+                <option value="Idle">Idle</option>
+                <option value="Merge">Merge</option>
+                <option value="SLG">SLG</option>
+                <option value="Tycoon">Tycoon</option>
+                <option value="Simulation">Simulation</option>
+                <option value="Puzzle">Puzzle</option>
+                <option value="Casual">Casual</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-[11px] text-gf-muted mb-1 block">작업 범위</label>
+              <select id="designStageSelect" class="w-full px-3 py-2 rounded-lg text-xs">
+                <option value="2">기획 생성</option>
+                <option value="2-3">생성 + 검증</option>
+                <option value="2-6" selected>전체 파이프라인 (생성 → DB)</option>
+              </select>
+            </div>
+          </div>
+          <textarea id="designPrompt" rows="5"
+            class="w-full px-3 py-2.5 bg-gf-surface border border-gf-border rounded-lg text-sm text-white placeholder-gf-muted focus:border-gf-accent focus:outline-none resize-none"
+            placeholder="Describe your game concept...&#10;&#10;Example: A medieval fantasy idle RPG with turn-based combat, 5 character classes, prestige system..."></textarea>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <button onclick="loadTemplate('rpg')" class="text-[11px] text-gf-muted hover:text-gf-accent transition-colors">RPG template</button>
+              <span class="text-gf-border">|</span>
+              <button onclick="loadTemplate('idle')" class="text-[11px] text-gf-muted hover:text-gf-accent transition-colors">Idle template</button>
+              <span class="text-gf-border">|</span>
+              <button onclick="loadTemplate('puzzle')" class="text-[11px] text-gf-muted hover:text-gf-accent transition-colors">Puzzle template</button>
+            </div>
+            <button onclick="generateDesign()" id="designGenerateBtn"
+              class="px-5 py-2 bg-gf-accent hover:bg-gf-accent2 text-white font-semibold rounded-lg transition-colors text-sm">
+              <i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i>Generate
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div id="designProgress" class="hidden bg-gf-card border border-gf-border rounded-xl p-5">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-5 h-5 border-2 border-gf-accent border-t-transparent rounded-full spinner"></div>
+          <span class="text-sm text-white font-medium">Generating design...</span>
+        </div>
+        <div class="w-full bg-gf-surface rounded-full h-1.5">
+          <div id="designProgressBar" class="progress-animated h-1.5 rounded-full" style="width: 30%"></div>
+        </div>
+        <div id="designProgressLog" class="mt-3 bg-gf-dark rounded-lg p-3 max-h-32 overflow-y-auto text-xs font-mono text-zinc-500"></div>
+      </div>
+
+      <!-- Results Preview -->
+      <div id="designResults" class="hidden bg-gf-card border border-gf-border rounded-xl p-5">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Results</h3>
+          <div class="flex items-center gap-3">
+            <button onclick="prevDesignResult()" class="w-8 h-8 rounded-lg bg-gf-surface hover:bg-gf-hover border border-gf-border flex items-center justify-center text-zinc-400 hover:text-white transition-colors">
+              <i class="fa-solid fa-chevron-left text-xs"></i>
+            </button>
+            <span id="designResultIndex" class="text-xs text-zinc-400">1 / 1</span>
+            <button onclick="nextDesignResult()" class="w-8 h-8 rounded-lg bg-gf-surface hover:bg-gf-hover border border-gf-border flex items-center justify-center text-zinc-400 hover:text-white transition-colors">
+              <i class="fa-solid fa-chevron-right text-xs"></i>
+            </button>
+          </div>
+        </div>
+        <div id="designResultTitle" class="text-sm font-medium text-white mb-2"></div>
+        <div id="designResultContent" class="bg-gf-dark rounded-lg p-4 max-h-[500px] overflow-y-auto">
+          <pre class="text-xs text-zinc-300 whitespace-pre-wrap font-mono"></pre>
+        </div>
+        <div class="mt-4 flex justify-end">
+          <button onclick="downloadDesignZip()" class="px-4 py-2 bg-gf-surface hover:bg-gf-hover border border-gf-border text-zinc-300 rounded-lg text-sm transition-colors">
+            <i class="fa-solid fa-file-zipper mr-1.5 text-gf-accent"></i>ZIP Download
+          </button>
+        </div>
+      </div>
+
+      <!-- DB Item Detail Modal -->
+      <div id="designDetailModal" class="hidden bg-gf-card border border-gf-border rounded-xl p-5">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-semibold text-white" id="designDetailTitle"></h3>
+          <button onclick="closeDesignDetail()" class="text-zinc-500 hover:text-white transition-colors">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div id="designDetailContent" class="bg-gf-dark rounded-lg p-4 max-h-[500px] overflow-y-auto">
+          <pre class="text-xs text-zinc-300 whitespace-pre-wrap font-mono"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('partials/footer') %>
+<script src="/js/design.js"></script>
