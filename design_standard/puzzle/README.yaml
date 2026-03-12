@@ -52,20 +52,3 @@ changelog:
     date: "2026-03-11"
     changes: "스키마 대조 반영: Balance에 target_near_miss_rate, max_hopeless_fail_rate, optimal_moves_policy 추가. Content에 gimmick_intro_schedule, level_composition_params 추가. OutGame booster_types 카테고리 분류 구체화."
 
-# Layer 2 단위 저장 예시 (BalloonFlow 프로젝트)
-layer2_example:
-  domain: InGame
-  genre: Puzzle
-  sub_genre: queue_sort
-  project: balloon_flow
-  system: core_mechanic
-  core_mechanic_type: queue_sort
-  input_method: tap
-  board_structure: rail_conveyor
-  color_count_range: [4, 8]
-  matching_rule: same_color_dart_to_balloon
-  fail_condition: TBD  # prototype_validation
-  clear_condition: board_clear
-  source: internal_produced
-  version: "1.0.0"
-  performance_grade: TBD
