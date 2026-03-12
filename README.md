@@ -1,316 +1,309 @@
-# GameForge: AI Game Development Pipeline
+# GameForge: AI 게임 개발 파이프라인 | AI Game Development Pipeline
 
-> AI Agent Team that auto-generates complete game design documents and Unity C# source code from a single concept sentence.
+> AI 에이전트 팀이 한 문장의 게임 컨셉으로부터 게임 설계 문서와 Unity C# 소스 코드를 자동 생성합니다.
+>
+> AI Agent Team that auto-generates game design documents and Unity C# source code from a single concept sentence.
 
 ```
-Input:  "Make an Idle RPG with AFK income + character collection."
-Output: 3-Layer Design Docs + 54 Unity C# Systems + Validation Reports
+입력(Input):  "방치형 RPG, AFK 수입 + 캐릭터 수집 시스템"
+출력(Output): 3계층 설계 문서 + 54개 Unity C# 시스템 + 검증 리포트
 ```
 
 ---
 
-## Overview
+## 개요 | Overview
+
+GameForge는 게임 개발을 자동화하는 **자기 강화형 AI 파이프라인**입니다. 설계 문서 작성부터 코드 생성까지 전 과정을 처리합니다.
 
 GameForge is a **self-reinforcing AI pipeline** that automates game development — from design documentation to production-ready code generation.
 
+하나의 게임 컨셉이 **3계층 설계 문서**(게임 설계 → 시스템 스펙 → AI YAML)로 변환된 후, 병렬 AI 에이전트 팀을 통해 Unity C# 소스 코드로 컴파일됩니다. 모든 결과물은 다단계 품질 검증을 거치며, 지식 DB에 축적되어 **프로젝트가 진행될수록 품질이 자동으로 향상**됩니다.
+
 A single game concept is transformed into **3-Layer design documents** (Game Design → System Spec → AI YAML), then compiled into Unity C# source code via parallel AI agent teams. Every output is validated through multi-stage quality gates and accumulated into a knowledge database that **improves quality with each project**.
 
-### Supported Platforms
+### 지원 플랫폼 | Supported Platforms
 
-| Platform | Output | Use Case |
-|----------|--------|----------|
-| **Unity** | C# MonoBehaviour source code | Mobile / PC games |
-| **Playable** | Single HTML5 file | Playable ads (Meta, Google, IronSource, AppLovin) |
+| 플랫폼 | 출력물 | 용도 |
+|---------|--------|------|
+| **Unity** | C# MonoBehaviour 소스 코드 | 모바일 / PC 게임 |
+| **Playable** | 단일 HTML5 파일 | 플레이어블 광고 (Meta, Google, IronSource, AppLovin) |
 
-### Supported Genres
+### 지원 장르 | Supported Genres
 
-Generic, RPG, Idle, SLG, Simulation, Tycoon, Merge, Puzzle, Casual — **9 genres**.
+Generic, RPG, Idle, SLG, Simulation, Tycoon, Merge, Puzzle, Casual — **9개 장르**
 
-### Key Metrics
+### 핵심 지표 | Key Metrics
 
-| Metric | Scale |
-|--------|-------|
-| Code Knowledge Base | 958+ reference files across 8 genres |
-| Expert Knowledge Base | 20+ verified high-quality files |
-| Design Knowledge Base | 97+ design documents |
-| Automation Scripts | 18 scripts + 4 shared libraries |
-| AI Agents | 9 specialized roles |
-| Verified Projects | 6+ (Puzzle, RPG, Idle, Match3, Playable Ads) |
+| 항목 | 규모 |
+|------|------|
+| 코드 지식 DB | 958+ 레퍼런스 파일 (8개 장르) |
+| 전문가 지식 DB | 20+ 검증된 고품질 파일 |
+| 설계 지식 DB | 97+ 설계 문서 |
+| 자동화 스크립트 | 18개 스크립트 + 4개 공유 라이브러리 |
+| AI 에이전트 | 9개 전문 역할 |
+| 검증된 프로젝트 | 6+ (Puzzle, RPG, Idle, Match3, Playable Ads) |
 
 ---
 
-## Core Architecture
+## 핵심 아키텍처 | Core Architecture
 
-### 3-AI Role Separation (Anti-Hallucination)
+### 3-AI 역할 분리 (환각 방지) | 3-AI Role Separation (Anti-Hallucination)
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   AI Stage 1    │    │   AI Stage 2    │    │   AI Stage 3    │
-│   DB Processing │ →  │   Generation    │ →  │   Validation    │
+│   DB 처리       │ →  │   생성          │ →  │   검증          │
+│   DB Processing │    │   Generation    │    │   Validation    │
 │                 │    │                 │    │                 │
-│ • Source parse  │    │ • Design docs   │    │ • Consistency   │
-│ • Classify/tag  │    │ • Code gen      │    │ • Balance sim   │
-│ • DB store      │    │ • DB reference  │    │ • Feedback gen  │
+│ • 소스 파싱     │    │ • 설계 문서     │    │ • 일관성 검증   │
+│ • 분류/태깅     │    │ • 코드 생성     │    │ • 밸런스 시뮬   │
+│ • DB 저장       │    │ • DB 참조       │    │ • 피드백 생성   │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
+각 AI는 **단일 역할**에 집중하여 컨텍스트 오염과 환각을 방지합니다.
+
 Each AI focuses on a **single role** to prevent context contamination and hallucination.
 
-### Dual Pipeline
+### 이중 파이프라인 | Dual Pipeline
 
 ```
-Design Workflow (8 Stages)              Code Workflow (4 Phases)
-──────────────────────────             ────────────────────────
-Stage 0: Design Standards               Phase 0: Core Architecture (Lead Coder)
-Stage 1: Knowledge Processing           Phase 1: Domain Systems (Lead + Sub ×2)
-Stage 2: Design Generation              Phase 2: Upper Domain (Parallel)
-Stage 3: Cross-Validation               Phase 3: Game Layer & UI (Parallel)
-Stage 4: Director Review                    + Multi-stage Validation
-Stage 5: Regeneration Evaluation            + Knowledge Accumulation
-Stage 6: Expert DB Accumulation
-Stage 7: AI Play Verification
-Stage 8: Live Sync
+설계 워크플로우 (8단계)                코드 워크플로우 (4단계)
+Design Workflow (8 Stages)            Code Workflow (4 Phases)
+──────────────────────────           ────────────────────────
+Stage 0: 설계 표준 정의               Phase 0: 코어 아키텍처 (리드 코더)
+Stage 1: 지식 DB 처리                 Phase 1: 도메인 시스템 (리드 + 서브 ×2)
+Stage 2: 설계 문서 생성               Phase 2: 상위 도메인 (병렬)
+Stage 3: 교차 검증                    Phase 3: 게임 레이어 & UI (병렬)
+Stage 4: 디렉터 리뷰                      + 다단계 검증
+Stage 5: 재생성 평가                      + 지식 축적
+Stage 6: 전문가 DB 축적
+Stage 7: AI 플레이 검증
+Stage 8: 라이브 동기화
 ```
 
-### Self-Reinforcing Knowledge Loop
+### 자기 강화 학습 루프 | Self-Reinforcing Knowledge Loop
 
 ```
-Project A → Generate → Validate → Expert DB
-                                      ↓
-Project B → Generate ← Expert DB Reference (quality ↑)
-         → Validate → Expert DB (scale ↑)
-                           ↓
-Project C → Generate ← Expert DB Reference (quality ↑↑)
+프로젝트 A → 생성 → 검증 → Expert DB
+                                ↓
+프로젝트 B → 생성 ← Expert DB 참조 (품질 ↑)
+          → 검증 → Expert DB (규모 ↑)
+                        ↓
+프로젝트 C → 생성 ← Expert DB 참조 (품질 ↑↑)
 ```
 
-Quality improves naturally as the knowledge base grows across projects.
+프로젝트가 누적될수록 지식 DB가 성장하며 품질이 자연스럽게 향상됩니다.
 
 ---
 
-## Agent Team
+## 에이전트 팀 | Agent Team
 
 ```
                     ┌──────────────────────────┐
                     │   Lead (Opus)             │
-                    │   PM — task distribution   │
+                    │   PM — 태스크 분배         │
                     └─────────┬────────────────┘
          ┌──────────┬────────┼────────┬──────────┐
     ┌────┴─────┐ ┌──┴───┐   │   ┌────┴────┐ ┌───┴────────┐
     │ Designer │ │ Main │   │   │ Sub     │ │ Playable   │
-    │          │ │Coder │   │   │Coder ×2 │ │ Coder      │
-    │ Design   │ │ Core │   │   │ Parallel│ │ HTML5 ads  │
-    └──────────┘ │ Arch │   │   └─────────┘ └────────────┘
+    │ 설계자   │ │Coder │   │   │Coder ×2 │ │ Coder      │
+    │ 3계층    │ │ 코어 │   │   │ 병렬    │ │ HTML5 광고 │
+    └──────────┘ │ 설계 │   │   └─────────┘ └────────────┘
                  └──────┘   │
          ┌──────────┐  ┌────┴─────┐  ┌──────────────┐
          │ Design   │  │Validator │  │ DB Builder   │
-         │Validator │  │ Code QA  │  │ On-demand    │
-         │ Quality  │  └──────────┘  └──────────────┘
-         │ Gates    │
+         │Validator │  │ 코드 QA  │  │ 온디맨드     │
+         │ 품질 게  │  └──────────┘  └──────────────┘
+         │ 이트     │
          └──────────┘
 ```
 
-| Agent | Role |
-|-------|------|
-| **Lead** | PM — task distribution, output evaluation, phase gate management |
-| **Designer** | 3-Layer design docs (Game Design → System Spec → AI YAML) |
-| **Main Coder** | Core architecture + complex systems |
-| **Sub Coder ×2** | Follow Main Coder patterns, parallel implementation |
-| **Playable Coder** | HTML5 single-file playable ads |
-| **Validator** | 5+1 stage code validation |
-| **Design Validator** | 6-stage design validation, Quality Gates owner |
-| **DB Builder** | Source parsing → Knowledge DB (on-demand) |
+| 에이전트 | 역할 |
+|----------|------|
+| **Lead** | PM — 태스크 분배, 결과 평가, 단계 게이트 관리 |
+| **Designer** | 3계층 설계 문서 (게임 설계 → 시스템 스펙 → AI YAML) |
+| **Main Coder** | 코어 아키텍처 + 복잡 시스템 설계 |
+| **Sub Coder ×2** | Main Coder 패턴을 따라 병렬 구현 |
+| **Playable Coder** | HTML5 단일 파일 플레이어블 광고 |
+| **Validator** | 5+1단계 코드 검증 |
+| **Design Validator** | 6단계 설계 검증, 품질 게이트 관리 |
+| **DB Builder** | 소스 코드 파싱 → 지식 DB (온디맨드) |
 
 ---
 
-## Classification System
+## 분류 체계 | Classification System
 
-### Code Taxonomy
+### 코드 분류 | Code Taxonomy
 
-| Axis | Categories |
-|------|-----------|
+| 축 | 카테고리 |
+|----|----------|
 | **Layer** (3) | Core / Domain / Game |
 | **Genre** (9) | Generic / RPG / Idle / SLG / Simulation / Tycoon / Merge / Puzzle / Casual |
-| **Role** (21) | Manager, Controller, Calculator, Processor, Handler, Factory, Service, Validator, etc. |
-| **Behavior Tags** | 7 macro tags + 11 micro tags |
+| **Role** (21) | Manager, Controller, Calculator, Processor, Handler, Factory, Service, Validator 등 |
+| **행위 태그** | 7 매크로 + 11 마이크로 태그 |
 
-### Design Taxonomy
+### 설계 분류 | Design Taxonomy
 
-| Axis | Categories |
-|------|-----------|
+| 축 | 카테고리 |
+|----|----------|
 | **Domain** (9) | InGame / OutGame / Balance / Content / BM / LiveOps / UX / Social / Meta |
 | **Data Type** | formula / table / rule / flow / config / content_data |
 | **Source** (6) | original / produced / live / observed / community / generated |
 
 ---
 
-## Knowledge Database
+## 지식 데이터베이스 | Knowledge Database
 
-### 5-Level Search Priority
+### 5단계 검색 우선순위 | 5-Level Search Priority
 
-| Priority | Source | Condition |
-|----------|--------|-----------|
-| 1 | Expert DB (matching genre) | genre match AND score >= 0.6 |
-| 2 | Expert DB (Generic) | genre = Generic AND score >= 0.6 |
-| 3 | Base DB (matching genre) | genre match |
-| 4 | Base DB (Generic) | genre = Generic |
-| 5 | AI generation | No reference found (last resort) |
+| 우선순위 | 소스 | 조건 |
+|----------|------|------|
+| 1 | Expert DB (장르 매칭) | 장르 일치 AND 점수 >= 0.6 |
+| 2 | Expert DB (Generic) | 장르 = Generic AND 점수 >= 0.6 |
+| 3 | Base DB (장르 매칭) | 장르 일치 |
+| 4 | Base DB (Generic) | 장르 = Generic |
+| 5 | AI 생성 | 레퍼런스 없음 (최후 수단) |
 
-### Trust Score System
+### 신뢰 점수 시스템 | Trust Score System
 
-| Event | Score Change |
-|-------|-------------|
-| Initial save | +0.3 ~ 0.4 |
-| Feedback applied | +0.1 ~ 0.2 |
-| Director approval | +0.2 |
-| Reuse success | +0.1 |
-| Reuse failure | -0.1 ~ -0.15 |
-| **Expert promotion** | **>= 0.6** |
+| 이벤트 | 점수 변동 |
+|--------|-----------|
+| 최초 저장 | +0.3 ~ 0.4 |
+| 피드백 반영 | +0.1 ~ 0.2 |
+| 디렉터 승인 | +0.2 |
+| 재사용 성공 | +0.1 |
+| 재사용 실패 | -0.1 ~ -0.15 |
+| **Expert 승격 기준** | **>= 0.6** |
 
 ---
 
-## AI Tester (Virtual Player)
+## AI 테스터 (가상 플레이어) | AI Tester (Virtual Player)
+
+AI 기반 자율 게임 테스트 시스템.
 
 AI-powered autonomous game testing system.
 
-### 4-Layer Intelligence
+### 4계층 지능 구조 | 4-Layer Intelligence
 
 ```
-Layer 4: Genre Schema       — RPG / Idle / Merge / SLG / Puzzle strategies
-Layer 3: Adaptive Learning  — failure memory, loop detection, spatial memory
-Layer 2: Reasoning          — GOAP Planner, goal library, utility scoring
-Layer 1: Perception         — OCR, gauge reading, state detection, screen analysis
+Layer 4: 장르 스키마     — RPG / Idle / Merge / SLG / Puzzle 전략
+Layer 3: 적응 학습       — 실패 기억, 루프 감지, 공간 기억
+Layer 2: 추론            — GOAP 플래너, 목표 라이브러리, 유틸리티 스코어링
+Layer 1: 인지            — OCR, 게이지 판독, 상태 감지, 화면 분석
 ```
 
-### Capabilities
+### 주요 기능 | Capabilities
 
-- **10 AI observers** estimating 32 game parameters (~85-89.5% accuracy)
-- **Genre-specific strategies** for 5 game genres
-- **Adaptive learning** with failure memory and loop detection
-- **GOAP (Goal-Oriented Action Planning)** for decision making
-- **Computer vision** based screen analysis (YOLOv11)
-- Autonomous play testing from Level 1 to Level 30+
-
----
-
-## Quality Assurance
-
-### Code Validation (5+1 Stages)
-
-1. **Syntax** — Compile errors, grammar
-2. **Dependency** — Missing references, circular dependencies
-3. **Contract** — provides/requires interface matching
-4. **Null Safety** — Null reference protection
-5. **Pattern** — Architecture pattern compliance
-6. **Build** (Optional) — Unity batchmode verification
-
-### Design Validation (6 Stages)
-
-1. **Cross-Consistency** — System↔Balance, Content↔System, BM↔Balance
-2. **User Journey Simulation** — Day 1~30 persona tracking
-3. **Gap Detection** — Missing references, undefined items
-4. **Self-Verification** — Internal contradictions, completeness
-5. **Quality Gates** (6 types) — Naming / Completeness / Dependency / Logic Flow / Copy-Paste / Cross-Doc
-6. **Build Verification** (Optional) — Full balance simulator run
+- **10개 AI 옵저버**가 32개 게임 파라미터 추정 (~85-89.5% 정확도)
+- **5개 게임 장르**에 대한 전용 전략
+- **적응형 학습** — 실패 기억 및 루프 감지
+- **GOAP** (목표 지향 행동 계획) 기반 의사결정
+- **컴퓨터 비전** 기반 화면 분석 (YOLOv11)
+- 레벨 1 → 30+ 자율 플레이 테스트
 
 ---
 
-## Automation
+## 품질 보증 | Quality Assurance
 
-### Commands
+### 코드 검증 (5+1단계) | Code Validation
 
-| Command | Purpose |
-|---------|---------|
-| `/parse-source` | C# source → Code Knowledge DB |
-| `/parse-design` | Design docs → Design Knowledge DB |
-| `/generate-design` | Generate 3-layer design documents |
-| `/generate-design-v2` | Full 8-stage design workflow |
-| `/generate-code` | YAML spec → Unity C# code generation |
-| `/validate-code` | 5-stage code validation |
-| `/validate-design` | 6-stage design validation |
-| `/sync-live` | Live data synchronization |
+1. **Syntax** — 컴파일 오류, 문법 검사
+2. **Dependency** — 누락 참조, 순환 의존성
+3. **Contract** — provides/requires 인터페이스 매칭
+4. **Null Safety** — Null 참조 보호
+5. **Pattern** — 아키텍처 패턴 준수
+6. **Build** (선택) — Unity 배치모드 검증
 
-### Scripts
+### 설계 검증 (6단계) | Design Validation
 
-| Category | Purpose |
-|----------|---------|
-| **DB Parsing** | C# source code & design document parsing into knowledge DB |
-| **DB Search** | Multi-genre, multi-domain search with priority ranking |
-| **Simulation** | Economy balance simulation, play verification |
-| **Quality** | KPI report generation, quality metrics, versioning |
-| **Shared Libraries** | YAML utils, safe I/O, domain classification, score management |
+1. **Cross-Consistency** — 시스템↔밸런스, 콘텐츠↔시스템, BM↔밸런스
+2. **User Journey** — Day 1~30 페르소나 시뮬레이션
+3. **Gap Detection** — 누락 참조, 미정의 항목 탐지
+4. **Self-Verification** — 내부 모순, 완전성 검사
+5. **Quality Gates** (6종) — 네이밍 / 완전성 / 의존성 / 로직 흐름 / 중복 / 교차 문서
+6. **Build Verification** (선택) — 풀 밸런스 시뮬레이터 실행
 
 ---
 
-## Verified Projects
+## 자동화 | Automation
 
-| Project | Genre | Scale | Result |
-|---------|-------|-------|--------|
-| Puzzle Game A | Puzzle | 50 C# files | 26 systems, full pipeline |
-| Puzzle Game B | Puzzle | 37 C# files | Sort puzzle complete system |
-| RPG Game | RPG (Idle) | 51 C# files | 41 systems, battle/character/equipment |
-| Match3 Game | Match3 | 34 modified files | Large-scale modification, 83 issues resolved |
-| Idle Game | Idle | Reverse-engineered | 54 systems, 89 design entries, B+ grade |
-| Playable Ads | Various | 8+ HTML5 files | Multiple ad formats for major networks |
+### 명령어 | Commands
+
+| 명령어 | 용도 |
+|--------|------|
+| `/parse-source` | C# 소스 → 코드 지식 DB |
+| `/parse-design` | 설계 문서 → 설계 지식 DB |
+| `/generate-design` | 3계층 설계 문서 생성 |
+| `/generate-design-v2` | 풀 8단계 설계 워크플로우 |
+| `/generate-code` | YAML 스펙 → Unity C# 코드 생성 |
+| `/validate-code` | 5단계 코드 검증 |
+| `/validate-design` | 6단계 설계 검증 |
+| `/sync-live` | 라이브 데이터 동기화 |
+
+### 스크립트 | Scripts
+
+| 카테고리 | 용도 |
+|----------|------|
+| **DB 파싱** | C# 소스 코드 및 설계 문서를 지식 DB로 파싱 |
+| **DB 검색** | 다중 장르, 다중 도메인 우선순위 기반 검색 |
+| **시뮬레이션** | 경제 밸런스 시뮬레이션, 플레이 검증 |
+| **품질** | KPI 리포트 생성, 품질 지표, 버전 관리 |
+| **공유 라이브러리** | YAML 유틸, 안전 I/O, 도메인 분류, 점수 관리 |
 
 ---
 
-## Technical Decisions
+## 검증된 프로젝트 | Verified Projects
 
-| Decision | Reason |
-|----------|--------|
-| **YAML** for design docs | Human-readable + AI-parseable, supports comments |
-| **3-Layer design docs** | Gradual transformation from human intent → code-ready structure |
-| **Dual model strategy** | High-reasoning model for architecture; fast model for parallel implementation |
-| **JavaScript for balance sim** | LLMs accumulate errors in iterative math; JS gives exact results |
-| **Index-file separation** | Lightweight search via index; detail loaded on-demand |
-| **Mandatory deduction reasoning** | Prevents false pattern learning from unexplained failures |
+| 프로젝트 | 장르 | 규모 | 결과 |
+|----------|------|------|------|
+| 퍼즐 게임 A | Puzzle | 50 C# 파일 | 26개 시스템, 풀 파이프라인 |
+| 퍼즐 게임 B | Puzzle | 37 C# 파일 | 정렬 퍼즐 전체 시스템 |
+| RPG 게임 | RPG (Idle) | 51 C# 파일 | 41개 시스템, 전투/캐릭터/장비 |
+| Match3 게임 | Match3 | 34 수정 파일 | 대규모 코드 수정, 83개 이슈 해결 |
+| Idle 게임 | Idle | 역공학 분석 | 54개 시스템, 89개 설계 엔트리, B+ 등급 |
+| 플레이어블 광고 | 다양 | 8+ HTML5 | 주요 광고 네트워크용 다중 포맷 |
 
 ---
 
-## Getting Started
+## 기술 결정 | Technical Decisions
 
-### Prerequisites
+| 결정 | 이유 |
+|------|------|
+| **YAML** 설계 문서 포맷 | 사람이 읽기 쉽고 AI가 파싱하기 용이, 주석 지원 |
+| **3계층 설계 문서** | 사람의 의도 → 코드 구조로 점진적 변환 |
+| **이중 모델 전략** | 아키텍처에는 고추론 모델, 병렬 구현에는 고속 모델 |
+| **JS 밸런스 시뮬** | LLM은 반복 계산에서 오차 누적, JS는 정확한 결과 제공 |
+| **인덱스 파일 분리** | 인덱스로 경량 검색, 상세 정보는 온디맨드 로딩 |
+| **필수 연역 추론** | 설명 없는 실패에서 잘못된 패턴 학습 방지 |
+
+---
+
+## 시작하기 | Getting Started
+
+### 필수 요구사항 | Prerequisites
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI
 - Node.js 18+
-- Python 3.13+ (for AI Tester)
-- Android emulator + ADB (for play verification)
+- Python 3.13+ (AI 테스터용)
+- Android 에뮬레이터 + ADB (플레이 검증용)
 
-### Quick Start
+### 빠른 시작 | Quick Start
 
 ```bash
-# Generate a game from concept
-/generate-design "Idle RPG with AFK income + character collection" --genre idle
+# 컨셉으로부터 게임 생성
+/generate-design "방치형 RPG, AFK 수입 + 캐릭터 수집" --genre idle
 
-# Generate with full agent team (parallel)
+# 에이전트 팀 병렬 생성
 Make a game. Idle RPG with AFK income. Use Agent Team with 3 Coders.
 
-# Generate playable ad
+# 플레이어블 광고 생성
 Match3 playable ad, candy theme. Use Agent Team.
-```
-
-### Parse & Search
-
-```bash
-# Parse existing C# into knowledge DB
-/parse-source path/to/scripts --genre rpg
-
-# Search code knowledge
-node scripts/db-search.js --genre idle --layer Domain --role Manager --top 10
-
-# Search design knowledge
-node scripts/design-db-search.js --genre idle --domain balance --top 20
-```
-
-### Balance Simulation
-
-```bash
-node scripts/balance-simulator.js --input balance.yaml --mode economy --seed 42
 ```
 
 ---
 
-## License
+## 라이선스 | License
 
 MIT License
 
