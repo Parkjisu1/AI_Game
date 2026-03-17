@@ -1,4 +1,5 @@
-require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') });
+const dotenvPath = require('path').join(__dirname, '..', '.env');
+require('dotenv').config({ path: dotenvPath });
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
@@ -6,7 +7,11 @@ const { connectDb, getDb } = require('./lib/db');
 const { requireAuth, requireAdmin } = require('./lib/auth');
 
 const app = express();
-const PORT = process.env.PLATFORM_PORT || 3000;
+const PORT = process.env.PORT || process.env.PLATFORM_PORT || 3000;
+
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
 
 // View engine
 app.set('view engine', 'ejs');
@@ -22,7 +27,12 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'gameforge-secret-2026',
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 24 * 60 * 60 * 1000 }
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+  },
+  proxy: process.env.NODE_ENV === 'production'
 }));
 
 // Make user available in all views

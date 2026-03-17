@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: gameforge-platform
+    runtime: node
+    rootDir: platform
+    buildCommand: npm install
+    startCommand: node server.js
+    plan: free
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: MONGO_DB_NAME
+        value: aigame
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: NODE_ENV
+        value: production
