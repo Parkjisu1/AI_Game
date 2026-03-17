@@ -36,6 +36,8 @@ Beyond simple file-to-DB conversion, you analyze **why** each design was made an
 7. **Curation Report**: Generate director-facing summary with store/skip/needs_context recommendations
 8. **DB Storage**: Save only director-approved entries with proper index + detail file separation
 9. **Stage 0 Reference**: When processing for a genre, reference `db/design/standards/{genre}.yaml` for schema compliance
+10. **Stage 6 Expert Promotion**: When Design Validator reports `promotion_eligible: true`, execute MongoDB promotion (normalize → score update → copy to `design_expert`)
+11. **Respond to Commands**: Execute when invoked via `/parse-design` or `/sync-live`
 
 ## Constraints (MUST NOT)
 
@@ -237,9 +239,89 @@ node E:/AI/scripts/design-parser.js --file <path> --genre RPG --domain Balance
 node E:/AI/scripts/design-db-search.js --genre RPG --domain Balance --system Battle --json
 ```
 
+---
+
+## Stage 6: Expert DB Promotion (Design Workflow)
+
+When Lead assigns Stage 6 task after Design Validator approval:
+
+### Input
+- Design Validator's `stage{N}_report.json` with `promotion_eligible: true` and `score`
+- YAML files in `projects/{project}/design_workflow/`
+
+### Execution Flow
+```
+1. Read stage report → confirm promotion_eligible and score >= 0.6
+2. Run embed script: python projects/{project}/docs/embed_to_mongodb.py
+   → Stores/updates all YAML documents in MongoDB design_base
+3. Run normalize + promote: python projects/{project}/docs/normalize_and_promote.py
+   → Normalizes domains, tags, roles
+   → Applies score from stage report (or director approval +0.2)
+   → Promotes score >= 0.6 entries to design_expert collection
+4. Report promotion results to Lead
+```
+
+### MongoDB Collections
+| Collection | Purpose |
+|------------|---------|
+| `design_base` | All parsed design entries (score 0.4 initial) |
+| `design_expert` | Validated entries (score >= 0.6) — used by Designer for future reference |
+
+### Score Application
+| Source | Score Change |
+|--------|-------------|
+| Initial embed | 0.4 |
+| Design Validator PASS + Director approval (no feedback) | +0.2 → 0.6 |
+| Design Validator PASS after feedback applied | +0.1 |
+| Cross-project reference success | +0.1 |
+
+---
+
+## Curation Report Format
+
+### File Location
+```
+E:\AI\projects\{project}\feedback\design\curation_report.md
+```
+
+### Template
+```markdown
+# Curation Report — {project}
+Date: {YYYY-MM-DD}
+
+## Summary
+- Total parsed: {N} entries
+- Store recommended: {X}
+- Store with caveat: {Y}
+- Skip recommended: {Z}
+- Needs context: {W}
+
+## Entries
+
+### {designId}
+- Domain: {domain} | Genre: {genre} | Type: {data_type}
+- Design Intent: {one-line summary}
+- Strengths: {list}
+- Concerns: {list}
+- **Recommendation**: store | store_with_caveat | skip | needs_context
+- Reasoning: {why}
+
+---
+(repeat per entry)
+
+## Director Actions Required
+- [ ] Approve entries: {list of store-recommended designIds}
+- [ ] Review caveats: {list}
+- [ ] Provide context: {list of needs_context designIds}
+- [ ] Confirm rejections: {list of skip-recommended designIds}
+```
+
+---
+
 ## Completion Reporting
 
 1. SendMessage to Lead with: parsed count, domain/genre distribution, curation summary
 2. Include `human_review_needed` items list
 3. Include `conflict_flag` items list
-4. Update task to `completed`
+4. For Stage 6: include promotion count, Expert DB total, score summary
+5. Update task to `completed`

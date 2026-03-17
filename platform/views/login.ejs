@@ -20,7 +20,6 @@
   </script>
   <style>
     * { font-family: 'Inter', sans-serif; }
-    @keyframes wave { 0%, 100% { height: 40%; } 50% { height: 100%; } }
     @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
     .tab-active { color: #d97706 !important; border-bottom-color: #d97706 !important; }
   </style>
@@ -29,12 +28,12 @@
   <div class="w-full max-w-sm">
     <!-- Logo -->
     <div class="text-center mb-8" style="animation: float 3s ease-in-out infinite">
-      <div class="flex items-end justify-center gap-[4px] h-10 mb-3">
-        <div class="w-[4px] rounded-full bg-gf-accent" style="height:40%;animation:wave 1.2s ease-in-out infinite"></div>
-        <div class="w-[4px] rounded-full bg-gf-accent" style="height:70%;animation:wave 1.2s ease-in-out 0.1s infinite"></div>
-        <div class="w-[4px] rounded-full bg-gf-accent2" style="height:100%;animation:wave 1.2s ease-in-out 0.2s infinite"></div>
-        <div class="w-[4px] rounded-full bg-gf-accent" style="height:55%;animation:wave 1.2s ease-in-out 0.3s infinite"></div>
-        <div class="w-[4px] rounded-full bg-gf-accent2" style="height:85%;animation:wave 1.2s ease-in-out 0.4s infinite"></div>
+      <div class="flex items-center justify-center mb-1">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L22 8L12 14L2 8L12 2Z" fill="#d97706"/>
+          <path d="M12 14L22 8V16L12 22V14Z" fill="#f59e0b" opacity="0.75"/>
+          <path d="M12 14L2 8V16L12 22V14Z" fill="#d97706" opacity="0.45"/>
+        </svg>
       </div>
       <h1 class="text-2xl font-bold text-white">GameForge</h1>
       <p class="text-sm text-gf-muted mt-1">AI Game Development Platform</p>

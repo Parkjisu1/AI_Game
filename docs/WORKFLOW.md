@@ -102,9 +102,11 @@ E:\AI\
 [Stage 6: DB 축적]       Expert Design DB 승격 + Rules 추출   (Design DB Builder)
 
 ═══ Code Workflow (프로젝트마다) ═════════════════════════════════════════
-[Phase 2: 기획서 변환]   design YAML → system_spec → AI_기획서 (Designer)
-[Phase 3: 코드 생성]     AI_기획서 → DB 참조 → C# 코드 생성   (Coder x N 병렬)
-[Phase 4: 검증 & 축적]   5단계 검증 → Expert Code DB 승격      (Validator)
+[Phase 0: Core + ICS]    Core 시스템 → _ARCHITECTURE.md → _CONTRACTS.yaml → _ASSET_MANIFEST.yaml  (Main Coder)
+[Phase 1+: 코드 생성]    AI_기획서 → DB 참조 → C# 코드 생성 → _CONTRACTS 갱신  (Coder x N 병렬)
+[Phase N Gate]           5단계 + Stage 5.5 Integration 검증 → 계약 충족 확인  (Validator)
+[Phase 4: 축적]          Expert Code DB 승격 + Error Fix Protocol 준수 확인   (Validator)
+[에러 수정]              Error Fix Protocol: L3 YAML + _CONTRACTS + callers 로드 → 기획 의도 보존  (Coder)
 
 ═══ 플레이 검증 + 라이브 (출시 전후) ═══════════════════════════════════
 [Stage 7: 플레이 검증]   빌드 → AI Tester 가속/장기/대규모 검증

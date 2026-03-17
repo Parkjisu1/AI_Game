@@ -28,11 +28,12 @@ Unity C# 게임 코드 및 HTML5 플레이어블 광고를 지원합니다.
 | **Design DB Builder** | claude-sonnet-4-6 | Design DB 구축 - 사용자 호출 시에만 | `.claude/agents/design-db-builder.md` | 공통 |
 
 ### 병렬 실행 규칙
-- **Phase 0**: Main Coder가 Core 전담 → _ARCHITECTURE.md 생성
+- **Phase 0**: Main Coder가 Core 전담 → _ARCHITECTURE.md → _CONTRACTS.yaml → _ASSET_MANIFEST.yaml 생성
 - **Phase 1+**: Main Coder(복잡한 시스템) + Sub Coder x2(일반 노드) 병렬
 - Phase 간 의존성 → 이전 Phase 완료(Validator 검증 통과) 후 진행
-- Validator는 코드 완료 순서대로 즉시 검증
+- Validator는 코드 완료 순서대로 즉시 검증 (Stage 5.5 Integration Validation 포함)
 - 검증 실패 → 해당 Coder에게 피드백 전달 → 재생성
+- 에러 수정 시 → Error Fix Protocol 필수 적용 (기획 의도 이탈 방지)
 
 ### 실행 방법
 ```
@@ -73,6 +74,159 @@ AI가 생성하는 것:
   ├── Placeholder 교체  — AI가 만든 기본 구조에 최종 에셋 교체
   └── 최종 검수        — 레이아웃 미세 조정, 빌드 테스트
 ```
+
+---
+
+## Integration Contract System (ICS)
+
+코드 생성 시 **파일 간 연결 계약**을 명시적으로 추적·검증하는 시스템.
+"코드 조각"이 아닌 "작동하는 시스템"을 보장하기 위한 핵심 메커니즘.
+
+### 3대 산출물
+
+| 산출물 | 생성 시점 | 생성 주체 | 소비 주체 |
+|--------|-----------|-----------|-----------|
+| `_ARCHITECTURE.md` | Phase 0 완료 후 | Main Coder | Sub Coder, Validator |
+| `_CONTRACTS.yaml` | Phase 0 완료 후, Phase마다 갱신 | Main Coder | 모든 Coder, Validator |
+| `_ASSET_MANIFEST.yaml` | Phase 0 완료 후, Phase마다 갱신 | Main Coder | Validator, Editor 스크립트 |
+
+### _CONTRACTS.yaml 구조
+```yaml
+project: "{ProjectName}"
+version: 1
+last_updated: "2026-03-12"
+
+# 이벤트 계약: 누가 발행하고 누가 구독하는지
+events:
+  - name: OnBalloonPopped
+    struct_file: GameEvents.cs
+    fields:
+      balloonId: int
+      color: int
+      position: Vector3
+    publishers: [BalloonController]
+    subscribers: [PopProcessor, ScoreManager, BoardStateManager]
+
+# ObjectPool 키 계약: 어떤 키가 어떤 프리팹을 필요로 하는지
+pool_keys:
+  - key: "Balloon"
+    prefab_path: "Resources/Prefabs/Balloon"
+    consumers: [BalloonController]
+    required_components: [BalloonIdentifier, SpriteRenderer, CircleCollider2D]
+    initial_size: 30
+
+# SerializeField 와이어링 계약: 어떤 필드가 씬의 어떤 오브젝트에 연결되는지
+serialized_fields:
+  - class: GameBootstrap
+    field: _titlePage
+    type: CanvasGroup
+    wired_by: SceneBuilder
+    scene_object_name: "TitlePage"
+
+# 크로스 클래스 메서드 호출 계약: 누가 누구의 메서드를 호출하는지
+method_calls:
+  - caller: "GameBootstrap.OnPlayClicked"
+    target: "LevelManager.LoadLevel(int)"
+    requires: "LevelDataProvider must be initialized"
+
+# 에셋 요구사항: 런타임에 필요한 에셋 목록
+asset_requirements:
+  - path: "Resources/Prefabs/Balloon"
+    type: GameObject
+    created_by: "Editor/PrefabBuilder.cs"
+    required_for: [ObjectPoolManager]
+```
+
+### _ASSET_MANIFEST.yaml 구조
+```yaml
+project: "{ProjectName}"
+version: 1
+
+prefabs:
+  - name: Balloon
+    path: "Assets/Resources/Prefabs/Balloon.prefab"
+    components: [SpriteRenderer, CircleCollider2D, BalloonIdentifier]
+    pool_key: "Balloon"
+    created_by: "Editor/PrefabBuilder.cs"
+
+scenes:
+  - name: GameScene
+    path: "Assets/Scenes/GameScene.unity"
+    created_by: "Editor/SceneBuilder.cs"
+    manager_objects:
+      - name: Mgr_ObjectPool
+        component: ObjectPoolManager
+      - name: GameBootstrap
+        component: GameBootstrap
+    serialized_field_wiring:
+      - target: GameBootstrap._titlePage
+        source_object: "TitlePage"
+        source_component: CanvasGroup
+
+editor_scripts:
+  - name: SceneBuilder
+    path: "Editor/SceneBuilder.cs"
+    creates: [scenes, manager_objects, ui_hierarchy, serialized_field_wiring]
+    version_key: "BalloonFlow_SceneBuilt_v4"
+  - name: PrefabBuilder
+    path: "Editor/PrefabBuilder.cs"
+    creates: [prefabs, sprites]
+    version_key: "BalloonFlow_PrefabsBuilt_v1"
+
+resources:
+  - path: "Resources/Sprites/BalloonSprite.png"
+    type: Sprite
+    created_by: "Editor/PrefabBuilder.cs"
+```
+
+### Error Fix Protocol (에러 수정 시 필수)
+
+컴파일 에러 수정 시 기획 의도 이탈을 방지하기 위한 필수 프로토콜.
+
+**1단계: 컨텍스트 로드 (수정 전 필수)**
+```
+- 깨진 파일 자체
+- 해당 L3 YAML 노드 (design_workflow/layer3/nodes/)
+- _CONTRACTS.yaml 중 해당 파일 관련 항목
+- 해당 파일을 참조하는 모든 파일 (callers)
+- 해당 파일이 참조하는 모든 파일 (dependencies)
+```
+
+**2단계: 수정 제약 (절대 규칙)**
+```
+- contract.provides에 있는 public 메서드/프로퍼티 삭제 금지
+- [SerializeField] 속성 제거 금지 (SceneBuilder 와이어링 깨짐)
+- 메서드 시그니처 변경 시 모든 caller 동시 수정 필수
+- 로직 우회형 null 체크 금지 (if(x==null) return; 으로 필수 로직 건너뛰기)
+- public API 변경 필요 시 → Lead에 보고, 독단 결정 금지
+```
+
+**3단계: 수정 후 검증**
+```
+- _CONTRACTS.yaml 모든 계약 여전히 충족되는가?
+- L3 YAML 기획 의도가 보존되었는가?
+- 5단계 자가 검증 재실행
+```
+
+### Integration Validation (Validator Stage 5.5)
+
+기존 5단계 검증 후 추가 실행되는 **파일 간 통합 검증**.
+
+| 체크 항목 | 검증 방법 | 실패 시 |
+|-----------|-----------|---------|
+| 이벤트 계약 | events 항목별 publisher/subscriber 파일에 실제 Publish/Subscribe 코드 존재 확인 | error |
+| Pool 키 계약 | pool_keys 항목별 prefab 파일 + consumer 파일의 Get/Return 코드 확인 | error |
+| SerializeField 계약 | serialized_fields 항목별 해당 클래스에 [SerializeField] 존재 + SceneBuilder에 WireField 호출 존재 확인 | error |
+| 메서드 호출 계약 | method_calls 항목별 caller에 실제 호출 코드 + target에 해당 메서드 존재 확인 | error |
+| 에셋 요구사항 | asset_requirements 항목별 PrefabBuilder 또는 SceneBuilder에 생성 코드 존재 확인 | error |
+| 양방향 일관성 | 코드에서 발견된 EventBus.Publish/Subscribe가 _CONTRACTS.yaml에 등록되어 있는지 역방향 확인 | warning |
+
+### 계약 갱신 규칙
+
+- Phase 0 완료 시: Main Coder가 초기 _CONTRACTS.yaml + _ASSET_MANIFEST.yaml 생성
+- Phase N 완료 시: 해당 Phase에서 추가된 이벤트/pool key/SerializeField를 Main Coder가 갱신
+- 에러 수정으로 public API 변경 시: _CONTRACTS.yaml 동시 갱신 필수
+- Lead는 Phase Gate 검증 시 _CONTRACTS.yaml 갱신 여부 확인
 
 ---
 
@@ -536,6 +690,35 @@ E:\AI\projects\{project}\output\
     └── PrefabBuilder.cs      # 프리팹 자동 생성 (필요 시 분리)
 ```
 
+### Design Workflow (platform: design)
+```
+E:\AI\projects\{project}\
+├── design_workflow\         # YAML (AI-readable)
+│   ├── concept.yaml
+│   ├── layer1\game_design.yaml
+│   ├── layer2\system_spec.yaml, build_order.yaml
+│   ├── systems\*.yaml       # Domain system specs
+│   ├── balance\*.yaml       # Difficulty curve, economy
+│   ├── content\*.yaml       # Beat chart, level design, progression
+│   ├── bm\*.yaml            # Monetization
+│   ├── liveops\*.yaml       # Operations
+│   ├── layer3\nodes\*.yaml  # AI spec nodes
+│   └── standards\*.yaml     # Stage 0 design standards
+├── docs\                    # Docx (Human-readable) + generation scripts
+│   ├── generate_docs.py     # YAML → Docx converter
+│   ├── embed_to_mongodb.py  # YAML → MongoDB design_base
+│   ├── normalize_and_promote.py  # Normalize + Expert DB promotion
+│   ├── {Project}_게임기획서.docx
+│   ├── {Project}_시스템설계서.docx
+│   ├── {Project}_밸런스설계서.docx
+│   ├── {Project}_콘텐츠설계서.docx
+│   ├── {Project}_BM_LiveOps설계서.docx
+│   └── {Project}_빌드오더.docx
+└── feedback\design\         # Validation reports + feedback
+```
+
+**듀얼 출력 규칙**: YAML 변경 시 반드시 Docx도 재생성. YAML은 AI 에이전트가, Docx는 디렉터/기획자가 사용.
+
 ### Playable (platform: playable)
 ```
 E:\AI\projects\{project}\output\
@@ -559,6 +742,16 @@ E:\AI\projects\{project}\assets\     # (선택) 사용자 제공 이미지
 15. 런타임 코드에서 new GameObject() 사용 → Resources.Load/ObjectPool 사용해야 함
 16. Editor 스크립트에서 pivot/anchor 미설정 → 기획서 해상도 기준으로 설정 필수
 17. SerializedObject.ApplyModifiedProperties() 호출 누락 → Inspector 값 반영 안 됨
+
+## 자주 하는 실수 (추가 3 — Integration Contract System)
+18. ObjectPool 키를 코드에 사용하면서 프리팹 미생성 → _ASSET_MANIFEST.yaml에 등록 + PrefabBuilder에서 생성 필수
+19. [SerializeField] 제거하여 에러 수정 → SceneBuilder WireField 깨짐 → Error Fix Protocol 위반
+20. EventBus.Publish만 하고 Subscribe 없음 → _CONTRACTS.yaml에서 양방향 검증
+21. 에러 수정 시 L3 YAML 참조 안 함 → 기획 의도 이탈 (로직 우회형 null 체크)
+22. Phase 완료 후 _CONTRACTS.yaml 미갱신 → 다음 Phase Coder가 잘못된 계약 참조
+23. SceneBuilder에 WireField 추가하면서 대응하는 [SerializeField] 누락 (또는 반대)
+24. Resources.Load 경로와 실제 파일 경로 불일치 → _ASSET_MANIFEST.yaml로 크로스 체크
+25. 40개 파일 동시 생성 시 파일 간 메서드 시그니처 불일치 → _CONTRACTS.yaml method_calls로 사전 정의
 
 ---
 
@@ -640,16 +833,31 @@ internal_original, internal_produced, internal_live, observed, community, genera
 | 명령어 | 용도 | 담당 Agent |
 |--------|------|-----------|
 | /parse-design | 기획 문서 → Design DB | Design DB Builder |
-| /generate-design-v2 | 8단계 기획 워크플로우 | Designer (design mode) |
+| /generate-design-v2 | 8단계 기획 워크플로우 | Designer (design mode) → Lead 오케스트레이션 |
 | /validate-design | 기획 통합 검증 | Design Validator |
 | /sync-live | 라이브 데이터 동기화 | Design DB Builder |
 
 ### Design Workflow Agent
 | Agent | Model | 역할 |
 |-------|-------|------|
-| Design DB Builder | Sonnet | 기획 문서 파싱 → Design DB 저장 |
-| Design Validator | Sonnet | 기획 교차 검증, 밸런스 시뮬, 점수 관리 |
-| Designer (design mode) | Sonnet | 8단계 기획 워크플로우 실행 |
+| Lead | Opus | Design Workflow 오케스트레이션 (Stage 2→3→4→5→6 흐름 관리, 피드백 라우팅) |
+| Designer | Sonnet | Stage 2 기획 생성 (YAML + Docx 듀얼 출력), Expert DB 참조 |
+| Design Validator | Sonnet | Stage 3/5 검증, 점수 산출, Expert 승격 판단 |
+| Design DB Builder | Sonnet | Stage 1/6 DB 저장, 정규화, Expert DB 실행 |
+
+### Design Workflow 에이전트 간 흐름
+```
+Designer → (YAML + integration check) → Lead → Design Validator
+Design Validator → (stage_report.json + score) → Lead → [User for Stage 4]
+[User feedback] → Lead → Designer (수정) → Design Validator (Stage 5)
+Design Validator → (promotion_eligible) → Lead → Design DB Builder (Stage 6)
+```
+
+### 듀얼 출력 표준 (2026-03-12 확립)
+- **YAML** (`design_workflow/`): AI 에이전트가 검증/코드생성/DB 저장에 사용
+- **Docx** (`docs/`): 디렉터/기획자가 검수에 사용 (`generate_docs.py`로 자동 생성)
+- YAML 변경 시 Docx 반드시 재생성
+- BalloonFlow (Puzzle, Expert DB) 구조가 기준 템플릿
 
 ### Play Verification (Stage 7)
 | 모드 | 설명 | 스크립트 |

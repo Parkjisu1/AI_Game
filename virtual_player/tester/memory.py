@@ -61,8 +61,8 @@ class GameMemory:
     hearts_empty: bool = False
     lobby_fail_count: int = 0          # lobby에서 게임 시작 실패 연속 횟수
     heart_wait_until: float = 0.0      # 하트 대기 종료 시각 (time.time())
-    LOBBY_FAIL_THRESHOLD: int = 6      # 이 횟수 이상 연속 실패 → 하트 없음 판정
-    HEART_REGEN_SECONDS: float = 600   # 하트 1개 재생 시간 (10분)
+    LOBBY_FAIL_THRESHOLD: int = 3      # 이 횟수 이상 연속 실패 → 하트 없음 판정
+    HEART_REGEN_SECONDS: float = 600  # 하트 대기 폴링 간격 (10분마다 재시도, 실제 재생 ~25분)
 
     MAX_FAILED_TAPS = 5
 

@@ -72,3 +72,28 @@ node_modules/
 # DB (migrated to MongoDB Atlas)
 # ======================
 db/
+
+# ======================
+# Model weights / ML artifacts
+# ======================
+*.pt
+*.onnx
+virtual_player/data/games/*/yolo_*/models/
+virtual_player/data/games/*/yolo_*/*.cache
+virtual_player/data/games/*/yolo_*/images/
+
+# ======================
+# Test logs (ephemeral)
+# ======================
+virtual_player/data/games/*/tester_*.log
+virtual_player/data/games/*/tester_*_log.txt
+
+# ======================
+# Java/Android build artifacts
+# ======================
+*.class
+*.dex
+virtual_player/tools/build/
+virtual_player/tools/dist/
+virtual_player/tools/apk_work/
+virtual_player/tools/classes_b64.txt

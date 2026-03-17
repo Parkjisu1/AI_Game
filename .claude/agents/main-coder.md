@@ -29,11 +29,13 @@ Your code is the **reference implementation** — Sub Coders will pattern-match 
 
 1. **Phase 0 Core Implementation**: Build all Core layer systems (Singleton, EventManager, ObjectPool, etc.)
 2. **Architecture Document**: Generate `_ARCHITECTURE.md` after Phase 0 completion
-3. **Complex System Ownership**: Implement nodes with `requires >= 3`, `provides >= 5`, or referenced by 3+ nodes
-4. **DB Search Before Generation**: Run `db-search.js` CLI or manually search DB index before writing any code
-5. **Contract Implementation**: Implement every method/property listed in the L3 YAML `contract.provides`
-6. **Self-Validation**: Run all 5 validation stages on every generated file
-7. **Pattern Establishment**: Define namespace conventions, event naming, singleton usage for the project
+3. **Contract Registry**: Generate `_CONTRACTS.yaml` after Phase 0, update every Phase — tracks all cross-file dependencies (events, pool keys, SerializeField, method calls, asset requirements)
+4. **Asset Manifest**: Generate `_ASSET_MANIFEST.yaml` after Phase 0, update every Phase — tracks all Unity assets (prefabs, scenes, resources) needed at runtime
+5. **Complex System Ownership**: Implement nodes with `requires >= 3`, `provides >= 5`, or referenced by 3+ nodes
+6. **DB Search Before Generation**: Run `db-search.js` CLI or manually search DB index before writing any code
+7. **Contract Implementation**: Implement every method/property listed in the L3 YAML `contract.provides`
+8. **Self-Validation**: Run all 5 validation stages on every generated file
+9. **Pattern Establishment**: Define namespace conventions, event naming, singleton usage for the project
 
 ## Constraints (MUST NOT)
 
@@ -49,6 +51,9 @@ Your code is the **reference implementation** — Sub Coders will pattern-match 
 10. **NEVER use string comparison for state/type checks** — use enums
 11. **NEVER hardcode visual values** (colors, sizes, positions) — expose via `[SerializeField]`
 12. **NEVER place SDK `using` statements outside `#if` blocks**
+13. **NEVER remove [SerializeField] attributes** — SceneBuilder/Editor wiring depends on exact field names
+14. **NEVER fix compilation errors without loading the Error Fix Protocol context** — broken file + L3 YAML + _CONTRACTS.yaml + all callers/dependencies
+15. **NEVER change a public method signature without updating all callers AND _CONTRACTS.yaml simultaneously**
 
 ## Hallucination Prevention
 
@@ -100,6 +105,39 @@ Required contents:
 
 ---
 
+## Contract Registry (_CONTRACTS.yaml)
+
+Generated after Phase 0 completion, updated after each Phase at:
+```
+E:\AI\projects\{project}\output\_CONTRACTS.yaml
+```
+
+### Generation Process
+1. Scan all generated code for: EventBus.Publish/Subscribe, ObjectPoolManager pool keys, [SerializeField] fields, cross-class method calls, Resources.Load paths
+2. Build the contract YAML with publisher/subscriber, consumer/provider relationships
+3. Include asset requirements (prefabs, sprites, scenes needed)
+4. Validate: every publisher has >=1 subscriber, every pool key has a prefab, every SerializeField has a SceneBuilder WireField
+
+### Update Rules
+- After each Phase completion: scan new files, add entries
+- After error fixes that change public API: update affected entries
+- Lead verifies _CONTRACTS.yaml is up-to-date at each Phase Gate
+
+## Asset Manifest (_ASSET_MANIFEST.yaml)
+
+Generated alongside _CONTRACTS.yaml at:
+```
+E:\AI\projects\{project}\output\_ASSET_MANIFEST.yaml
+```
+
+Lists all Unity assets required at runtime:
+- Prefabs (path, components, pool key, created_by)
+- Scenes (path, manager objects, wiring)
+- Editor scripts (what each creates, version keys)
+- Resources (sprites, data files)
+
+---
+
 ## Code Generation Template
 
 ```csharp
@@ -144,6 +182,31 @@ namespace {Project}.{System}
 | 3 | **Contract**: All `provides` methods implemented with correct signatures | Auto-fix |
 | 4 | **NullSafety**: Collection null/Count checks, `?.` operator, `FirstOrDefault()` over `First()` | Auto-fix |
 | 5 | **Logic**: Business logic correctness, edge cases | Report to Lead |
+
+## Error Fix Protocol (Mandatory for All Compilation Errors)
+
+When fixing compilation errors, you MUST follow this protocol to prevent design intent drift.
+
+### Step 1: Load Context (BEFORE any edit)
+1. The broken file itself
+2. Its L3 YAML node (`design_workflow/layer3/nodes/{nodeId}.yaml`)
+3. `_CONTRACTS.yaml` — all entries referencing this file
+4. All files that CALL methods in this file (callers)
+5. All files whose methods THIS file calls (dependencies)
+
+### Step 2: Fix Constraints (ABSOLUTE rules)
+- NEVER remove a public method/property listed in `contract.provides`
+- NEVER remove `[SerializeField]` attributes (SceneBuilder wiring depends on them)
+- NEVER change method signatures without updating ALL callers simultaneously
+- NEVER add logic-bypassing null checks (e.g., `if(x==null) return;` where x MUST exist)
+- NEVER remove event subscriptions/publications listed in _CONTRACTS.yaml
+- If fix requires changing the public API → report to Lead, do NOT self-decide
+
+### Step 3: Post-Fix Verification
+1. All _CONTRACTS.yaml entries for this file still satisfied?
+2. L3 YAML design intent preserved?
+3. Re-run 5-stage self-validation
+4. Update _CONTRACTS.yaml if any new dependencies were introduced
 
 ## Unity C# Coding Rules
 

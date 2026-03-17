@@ -33,27 +33,42 @@ except ImportError:
     _HAS_PIL = False
 
 # YOLO 로컬 분류 모델 (Phase 1 대체: 8초 → 5ms)
-_YOLO_MODEL = None
-_YOLO_CLASSES = None  # {0: "ad", 1: "fail", ...}
+# 게임별 모델 캐시: {"carmatch": model, "pixelflow": model}
+_YOLO_MODELS: Dict[str, Any] = {}
+_YOLO_CLASSES: Optional[Dict] = None  # {0: "ad", 1: "fail", ...}
 
-def _load_yolo():
+# 게임별 YOLO 모델 경로
+_YOLO_PATHS = {
+    "carmatch": [
+        Path("E:/AI/virtual_player/data/games/carmatch/yolo_dataset/models/screen_classifier_best.pt"),
+        Path("E:/AI/virtual_player/data/games/carmatch/yolo_dataset/models/screen_classifier/weights/best.pt"),
+    ],
+    "pixelflow": [
+        Path("E:/AI/virtual_player/data/games/pixelflow/yolo_dataset/models/pixelflow_classifier_best.pt"),
+        Path("E:/AI/virtual_player/data/games/pixelflow/yolo_dataset/models/train/weights/best.pt"),
+    ],
+}
+
+def _load_yolo(game: str = "carmatch"):
     """YOLO 모델 lazy load. 없으면 None 반환."""
-    global _YOLO_MODEL, _YOLO_CLASSES
-    if _YOLO_MODEL is not None:
-        return _YOLO_MODEL
-    model_path = Path("E:/AI/virtual_player/data/games/carmatch/yolo_dataset/models/screen_classifier_best.pt")
-    if not model_path.exists():
-        # 학습 산출물에서 찾기
-        alt = Path("E:/AI/virtual_player/data/games/carmatch/yolo_dataset/models/screen_classifier/weights/best.pt")
-        if alt.exists():
-            model_path = alt
-        else:
-            return None
+    global _YOLO_MODELS, _YOLO_CLASSES
+    if game in _YOLO_MODELS:
+        return _YOLO_MODELS[game]
+
+    paths = _YOLO_PATHS.get(game, _YOLO_PATHS["carmatch"])
+    model_path = None
+    for p in paths:
+        if p.exists():
+            model_path = p
+            break
+    if model_path is None:
+        return None
+
     try:
         from ultralytics import YOLO
-        _YOLO_MODEL = YOLO(str(model_path))
-        _YOLO_CLASSES = _YOLO_MODEL.names  # {0: "ad", 1: "fail", ...}
-        return _YOLO_MODEL
+        _YOLO_MODELS[game] = YOLO(str(model_path))
+        _YOLO_CLASSES = _YOLO_MODELS[game].names
+        return _YOLO_MODELS[game]
     except Exception:
         return None
 
@@ -150,24 +165,31 @@ class Perception:
     VALID_SCREENS = {
         "gameplay", "lobby", "win",
         "fail_outofspace", "fail_continue", "fail_result",
+        "fail_holdfull",  # Pixel Flow: 홀더 가득 참
         "ingame_setting", "ingame_quit_confirm",
         "ad", "ad_install",
         "shop", "leaderboard", "journey", "setting",
-        "profile", "popup", "unknown",
-        # 이벤트 팝업
+        "profile", "popup", "loading", "unknown",
+        # CarMatch 이벤트 팝업
         "lobby_keyblaze", "lobby_streakrace", "lobby_dailytask",
         "lobby_skylift", "lobby_missiongarage", "lobby_skyrally",
         "lobby_endlesscoast", "lobby_punchout", "lobby_citydeal",
     }
+
+    # 게임별 홀더 슬롯 수
+    _HOLDER_SLOTS = {"carmatch": 7, "pixelflow": 5}
 
     def __init__(
         self,
         model: str = "claude-haiku-4-5-20251001",
         timeout: int = 300,
         api_key: Optional[str] = None,
+        game: str = "carmatch",
     ):
         self.model = model
         self.timeout = timeout
+        self.game = game
+        self._holder_slots = self._HOLDER_SLOTS.get(game, 7)
         self._call_count = 0
         self._last_screen: Optional[str] = None  # 이전 턴 screen_type 캐시
 
@@ -183,7 +205,7 @@ class Perception:
     def perceive(self, screenshot_path: Path) -> BoardState:
         """스크린샷 → BoardState. 실패 시 unknown 화면 반환."""
         if not screenshot_path.exists():
-            return BoardState(screen_type="unknown", holder=[None]*7)
+            return BoardState(screen_type="unknown", holder=[None]*self._holder_slots)
 
         # 원본 경로 보존 (YOLO OD / OpenCV는 원본 사용)
         self._original_path = screenshot_path
@@ -200,7 +222,7 @@ class Perception:
         # SDK 모드: 기존 1단계 전체 인식
         raw = self._call_vision(actual_path)
         if not raw:
-            return BoardState(screen_type="unknown", holder=[None]*7)
+            return BoardState(screen_type="unknown", holder=[None]*self._holder_slots)
         return self._parse_response(raw)
 
     # 압축 비율 추적 (좌표 복원용)
@@ -231,7 +253,7 @@ class Perception:
             self._compress_scale = 1
             return img_path
 
-    # YOLO 7클래스 → Perception screen_type 매핑
+    # YOLO 클래스 → Perception screen_type 매핑
     _YOLO_TO_SCREEN = {
         "gameplay": "gameplay",
         "lobby": "lobby",
@@ -239,12 +261,13 @@ class Perception:
         "fail": "fail_result",
         "popup": "popup",
         "ad": "ad",
+        "loading": "loading",
         "other": "unknown",
     }
 
     def _classify_with_yolo(self, img_path: Path) -> Optional[str]:
         """YOLO로 screen_type 분류. 실패 시 None 반환."""
-        model = _load_yolo()
+        model = _load_yolo(self.game)
         if model is None:
             return None
         try:
@@ -283,10 +306,21 @@ class Perception:
         if screen != "gameplay":
             return BoardState(
                 screen_type=screen,
-                holder=[None] * 7,
+                holder=[None] * self._holder_slots,
                 holder_count=0,
                 confidence=0.5,
                 raw_response="",
+            )
+
+        # Pixel Flow: gameplay은 Phase 1만으로 충분
+        # (돼지는 고정 좌표로 탭, 차량 감지 불필요)
+        if self.game == "pixelflow":
+            return BoardState(
+                screen_type="gameplay",
+                holder=[None] * self._holder_slots,
+                holder_count=0,
+                confidence=0.7,
+                raw_response="pixelflow:yolo_classify",
             )
 
         # Phase 2: gameplay → 로컬 감지 시도 (YOLO OD / OpenCV)
@@ -313,7 +347,7 @@ class Perception:
             raw1_retry = self._call_vision_cli(img_path, prompt=self._PROMPT_PHASE1)
             retry_screen = self._parse_screen_type(raw1_retry)
             self._last_screen = retry_screen
-            return BoardState(screen_type=retry_screen, holder=[None]*7)
+            return BoardState(screen_type=retry_screen, holder=[None]*self._holder_slots)
 
         board = self._parse_response(raw2)
 
@@ -324,7 +358,7 @@ class Perception:
             check_screen = self._parse_screen_type(raw1_check)
             if check_screen != "gameplay":
                 self._last_screen = check_screen
-                return BoardState(screen_type=check_screen, holder=[None]*7)
+                return BoardState(screen_type=check_screen, holder=[None]*self._holder_slots)
 
         board.screen_type = "gameplay"
         return board
@@ -602,12 +636,12 @@ RULES:
         start = text.find("{")
         end = text.rfind("}")
         if start < 0 or end <= start:
-            return BoardState(screen_type="unknown", holder=[None]*7, raw_response=text[:200])
+            return BoardState(screen_type="unknown", holder=[None]*self._holder_slots, raw_response=text[:200])
 
         try:
             data = json.loads(text[start:end+1])
         except json.JSONDecodeError:
-            return BoardState(screen_type="unknown", holder=[None]*7, raw_response=text[:200])
+            return BoardState(screen_type="unknown", holder=[None]*self._holder_slots, raw_response=text[:200])
 
         # screen_type 검증
         screen = str(data.get("screen", "unknown")).lower().strip()
@@ -620,11 +654,11 @@ RULES:
                 screen = "unknown"
 
         # holder 검증 (정확히 7칸) — 색상 정규화 적용
-        raw_holder = data.get("holder", [None]*7)
+        raw_holder = data.get("holder", [None]*self._holder_slots)
         if not isinstance(raw_holder, list):
-            raw_holder = [None]*7
+            raw_holder = [None]*self._holder_slots
         holder = []
-        for i in range(7):
+        for i in range(self._holder_slots):
             if i < len(raw_holder) and raw_holder[i]:
                 color = str(raw_holder[i]).lower().strip()
                 if color in ("none", "null", "empty", ""):

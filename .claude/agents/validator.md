@@ -28,6 +28,7 @@ You are the final quality gate — no code enters production without your approv
 ## Responsibilities (MUST DO)
 
 1. **5-Stage Validation**: Execute all 5 validation stages on every Unity code file (no skipping)
+1b. **Stage 5.5 Integration Validation**: After the 5 code stages, execute cross-file integration checks against _CONTRACTS.yaml and _ASSET_MANIFEST.yaml
 2. **4-Stage Playable Validation**: Execute all 4 stages on every playable HTML file
 3. **Feedback Generation**: Produce structured JSON feedback with line numbers, categories, and actionable suggestions
 4. **Score Management**: Calculate and update reliability scores according to the documented score table
@@ -48,6 +49,9 @@ You are the final quality gate — no code enters production without your approv
 8. **NEVER approve runtime code with `new GameObject()`** — must use Resources.Load/Addressables/ObjectPool. Exception: Editor scripts (`output/Editor/`) may use `new GameObject()` for one-time setup
 9. **NEVER approve runtime code with `Find()` or `FindObjectOfType()`** — must use `[SerializeField]` for references
 10. **NEVER fabricate feedback** — every issue must reference a specific line or pattern in the code
+11. **NEVER skip Stage 5.5 Integration Validation** when _CONTRACTS.yaml exists — this catches the most critical class of bugs (cross-file wiring failures)
+12. **NEVER pass code where a pool key has no corresponding prefab in _ASSET_MANIFEST.yaml** — this guarantees runtime NullReferenceException
+13. **NEVER pass code where a [SerializeField] has no SceneBuilder WireField** — this guarantees null Inspector references
 
 ## Hallucination Prevention
 
@@ -115,6 +119,41 @@ Check:
   - Find()/FindObjectOfType() in runtime code
 - SDK using statements inside #if blocks
 - Unity optimization best practices
+```
+
+### Stage 5.5: Integration Validation (Cross-File Contracts)
+```
+Check against _CONTRACTS.yaml and _ASSET_MANIFEST.yaml:
+
+EVENT CONTRACTS:
+- Every EventBus.Publish<T>() in this file → T must be listed in _CONTRACTS.yaml events
+- Every EventBus.Subscribe<T>() in this file → T must be listed in _CONTRACTS.yaml events
+- If this file is listed as publisher for an event → verify Publish call exists
+- If this file is listed as subscriber for an event → verify Subscribe + handler method exists
+
+POOL KEY CONTRACTS:
+- Every ObjectPoolManager.Instance.Get("key") → key must exist in _CONTRACTS.yaml pool_keys
+- Every ObjectPoolManager.Instance.Return("key") → key must match a pool_keys entry
+- For each pool_key that lists this file as consumer → verify Get/Return calls exist
+- Each pool_key must have a corresponding prefab in _ASSET_MANIFEST.yaml
+
+SERIALIZED FIELD CONTRACTS:
+- Every [SerializeField] in this file → must have a matching entry in _CONTRACTS.yaml serialized_fields
+- For each serialized_fields entry listing this class → verify [SerializeField] with correct name and type exists
+- Each serialized_field entry must have a corresponding WireField() call in SceneBuilder
+
+METHOD CALL CONTRACTS:
+- For each method_calls entry where this file is the caller → verify the call exists in code
+- For each method_calls entry where this file is the target → verify the method exists with correct signature
+
+ASSET REQUIREMENTS:
+- Every Resources.Load<T>("path") → path must exist in _ASSET_MANIFEST.yaml resources or prefabs
+- Each asset_requirement must have a creating editor script listed
+
+REVERSE CHECK (warning level):
+- Any EventBus.Publish/Subscribe NOT in _CONTRACTS.yaml → warning: "Unregistered event contract"
+- Any pool key NOT in _CONTRACTS.yaml → warning: "Unregistered pool key"
+- Any [SerializeField] NOT in _CONTRACTS.yaml → warning: "Unregistered serialized field"
 ```
 
 ### Stage 6: Build Verification (Optional)
@@ -198,7 +237,8 @@ E:\AI\projects\{project}\feedback\{nodeId}_feedback.json
     "contract": "pass|fail",
     "nullSafety": "pass|fail",
     "pattern": "pass|fail",
-    "build": "pass|fail|skipped"
+    "build": "pass|fail|skipped",
+    "integration": "pass|fail|skipped"
   },
   "feedbacks": [
     {
@@ -225,6 +265,7 @@ E:\AI\projects\{project}\feedback\{nodeId}_feedback.json
 | SECURITY | INPUT_VALID, DATA_LEAK, INJECTION |
 | CONTRACT | SIGNATURE_MISMATCH, MISSING_METHOD |
 | ROLE | WRONG_ROLE, ROLE_VIOLATION |
+| INTEGRATION | UNREGISTERED_EVENT, MISSING_PUBLISHER, MISSING_SUBSCRIBER, ORPHAN_POOL_KEY, MISSING_PREFAB, BROKEN_WIRE, MISSING_ASSET, CONTRACT_MISMATCH |
 
 ### Playable Feedback Categories
 

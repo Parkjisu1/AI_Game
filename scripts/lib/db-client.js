@@ -111,8 +111,11 @@ async function getCode(fileId, expert = false) {
 async function upsertCode(data, expert = false) {
   const collName = expert ? 'code_expert' : 'code_base';
   const col = await getCollection(collName);
+  const filter = data.project
+    ? { fileId: data.fileId, project: data.project }
+    : { fileId: data.fileId };
   return col.updateOne(
-    { fileId: data.fileId },
+    filter,
     { $set: { ...data, updatedAt: new Date() } },
     { upsert: true }
   );
@@ -173,8 +176,11 @@ async function getDesign(designId, expert = false) {
 async function upsertDesign(data, expert = false) {
   const collName = expert ? 'design_expert' : 'design_base';
   const col = await getCollection(collName);
+  const filter = data.project
+    ? { designId: data.designId, project: data.project }
+    : { designId: data.designId };
   return col.updateOne(
-    { designId: data.designId },
+    filter,
     { $set: { ...data, updatedAt: new Date() } },
     { upsert: true }
   );
