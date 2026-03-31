@@ -1,0 +1,88 @@
+{
+  "_comment": "게임별 보드 크롭 프로필. 새 게임 추가 시 여기에 프로필 추가.",
+  "balloonflow": {
+    "name": "BalloonFlow",
+    "board_detection": {
+      "method": "hsv_contour",
+      "hsv_lower": [100, 20, 120],
+      "hsv_upper": [160, 100, 230],
+      "morph_kernel": 15,
+      "min_area_ratio": 0.1,
+      "aspect_range": [0.7, 1.4],
+      "border_ratio": 0.04,
+      "grid_variance_percentile": 40
+    },
+    "level_number_ocr": {
+      "region_ratio": [0.25, 0.02, 0.75, 0.08],
+      "preprocess": "threshold_inv",
+      "digit_min_area": 50
+    },
+    "color_palette_28": [
+      {"id": 1, "name": "Pink", "rgb": [252, 106, 175]},
+      {"id": 2, "name": "Cyan", "rgb": [80, 232, 246]},
+      {"id": 3, "name": "Purple", "rgb": [137, 80, 248]},
+      {"id": 4, "name": "Yellow", "rgb": [254, 213, 85]},
+      {"id": 5, "name": "Green", "rgb": [115, 254, 102]},
+      {"id": 6, "name": "Orange", "rgb": [253, 161, 76]},
+      {"id": 7, "name": "White", "rgb": [255, 255, 255]},
+      {"id": 8, "name": "Dark", "rgb": [65, 65, 65]},
+      {"id": 9, "name": "LightBlue", "rgb": [110, 168, 250]},
+      {"id": 10, "name": "DarkGreen", "rgb": [57, 174, 46]},
+      {"id": 11, "name": "Red", "rgb": [252, 94, 94]},
+      {"id": 12, "name": "Blue", "rgb": [50, 107, 248]},
+      {"id": 13, "name": "Teal", "rgb": [58, 165, 139]},
+      {"id": 14, "name": "Lavender", "rgb": [231, 167, 250]},
+      {"id": 15, "name": "Periwinkle", "rgb": [183, 199, 251]},
+      {"id": 16, "name": "Brown", "rgb": [106, 74, 48]},
+      {"id": 17, "name": "Peach", "rgb": [254, 227, 169]},
+      {"id": 18, "name": "LightPink", "rgb": [253, 183, 193]},
+      {"id": 19, "name": "Maroon", "rgb": [158, 61, 94]},
+      {"id": 20, "name": "MintGreen", "rgb": [167, 221, 148]},
+      {"id": 21, "name": "DarkPurple", "rgb": [89, 46, 126]},
+      {"id": 22, "name": "DustyRose", "rgb": [220, 120, 129]},
+      {"id": 23, "name": "Silver", "rgb": [217, 217, 231]},
+      {"id": 24, "name": "Gray", "rgb": [111, 114, 127]},
+      {"id": 25, "name": "HotPink", "rgb": [252, 56, 165]},
+      {"id": 26, "name": "Amber", "rgb": [253, 180, 88]},
+      {"id": 27, "name": "DarkRed", "rgb": [137, 10, 8]},
+      {"id": 28, "name": "SageTeal", "rgb": [111, 175, 177]}
+    ],
+    "screen_layout": {
+      "board_center_y_ratio": 0.38,
+      "board_height_ratio": 0.45,
+      "holder_area_y_ratio": [0.78, 0.95],
+      "level_text_y_ratio": [0.02, 0.08]
+    },
+    "fallback_crop": {
+      "center_x_ratio": [0.05, 0.95],
+      "center_y_ratio": [0.15, 0.65]
+    }
+  },
+  "carmatch": {
+    "name": "CarMatch",
+    "board_detection": {
+      "method": "hsv_contour",
+      "hsv_lower": [0, 0, 80],
+      "hsv_upper": [180, 40, 200],
+      "morph_kernel": 10,
+      "min_area_ratio": 0.15,
+      "aspect_range": [0.6, 1.5],
+      "border_ratio": 0.03,
+      "grid_variance_percentile": 35
+    },
+    "level_number_ocr": {
+      "region_ratio": [0.3, 0.01, 0.7, 0.06],
+      "preprocess": "threshold_inv",
+      "digit_min_area": 40
+    },
+    "color_palette_28": [],
+    "screen_layout": {
+      "board_center_y_ratio": 0.4,
+      "board_height_ratio": 0.5
+    },
+    "fallback_crop": {
+      "center_x_ratio": [0.1, 0.9],
+      "center_y_ratio": [0.15, 0.65]
+    }
+  }
+}
