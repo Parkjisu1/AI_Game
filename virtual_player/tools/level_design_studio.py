@@ -837,17 +837,44 @@ class LevelDesignStudio:
         self.sd_prompt_var = tk.StringVar(value="change the style to pixel art, same composition, bright colors")
         ttk.Entry(info, textvariable=self.sd_prompt_var, width=70).pack(fill="x", padx=5, pady=3)
 
+        # 모델 선택
+        model_frame = ttk.Frame(info)
+        model_frame.pack(fill="x", padx=5, pady=3)
+        ttk.Label(model_frame, text="모델:").pack(side="left")
+        self.sd_model_var = tk.StringVar(value="stabilityai/stable-diffusion-2-1")
+        ttk.Combobox(model_frame, textvariable=self.sd_model_var, width=40,
+                     values=[
+                         "stabilityai/stable-diffusion-2-1",
+                         "stabilityai/sdxl-turbo",
+                         "runwayml/stable-diffusion-v1-5",
+                     ]).pack(side="left", padx=5)
+
         # 옵션
         opt_frame = ttk.Frame(info)
         opt_frame.pack(fill="x", padx=5, pady=3)
         ttk.Label(opt_frame, text="변형 강도:").pack(side="left")
-        self.sd_strength_var = tk.DoubleVar(value=0.5)
-        ttk.Scale(opt_frame, from_=0.1, to=0.9, variable=self.sd_strength_var,
-                  orient="horizontal", length=150).pack(side="left", padx=5)
+        self.sd_strength_var = tk.DoubleVar(value=0.6)
+        ttk.Scale(opt_frame, from_=0.1, to=0.95, variable=self.sd_strength_var,
+                  orient="horizontal", length=120).pack(side="left", padx=5)
         ttk.Label(opt_frame, textvariable=self.sd_strength_var).pack(side="left")
 
+        ttk.Label(opt_frame, text="스텝:").pack(side="left", padx=(10, 0))
+        self.sd_steps_var = tk.IntVar(value=25)
+        ttk.Spinbox(opt_frame, from_=4, to=50, textvariable=self.sd_steps_var, width=4).pack(side="left", padx=3)
+
+        ttk.Label(opt_frame, text="가이던스:").pack(side="left", padx=(10, 0))
+        self.sd_guidance_var = tk.DoubleVar(value=7.5)
+        ttk.Spinbox(opt_frame, from_=0, to=20, increment=0.5, textvariable=self.sd_guidance_var, width=5).pack(side="left", padx=3)
+
+        # 네거티브 프롬프트
+        neg_frame = ttk.Frame(info)
+        neg_frame.pack(fill="x", padx=5, pady=2)
+        ttk.Label(neg_frame, text="네거티브:").pack(side="left")
+        self.sd_neg_var = tk.StringVar(value="blurry, low quality, watermark, text, 3d render, photo")
+        ttk.Entry(neg_frame, textvariable=self.sd_neg_var, width=60).pack(side="left", padx=5, fill="x", expand=True)
+
         self.sd_to_json_var = tk.BooleanVar(value=True)
-        ttk.Checkbutton(opt_frame, text="결과 → JSON 자동 변환", variable=self.sd_to_json_var).pack(side="left", padx=15)
+        ttk.Checkbutton(opt_frame, text="→JSON", variable=self.sd_to_json_var).pack(side="left", padx=10)
 
         # 버튼
         btn = ttk.Frame(info)
@@ -939,33 +966,60 @@ class LevelDesignStudio:
             os.environ["HF_HOME"] = cache_dir
             os.environ["HUGGINGFACE_HUB_CACHE"] = str(Path(cache_dir) / "hub")
 
-            self._log_safe(self.sd_log, f"SD 모델 로드 중... ({mode}, 저장: {cache_dir or '기본'})")
+            model_id = self.sd_model_var.get().strip()
+            steps = self.sd_steps_var.get()
+            guidance = self.sd_guidance_var.get()
+            neg_prompt = self.sd_neg_var.get().strip()
+            is_turbo = "turbo" in model_id.lower()
+
+            # Turbo 모델은 특수 설정
+            if is_turbo:
+                steps = min(steps, 4)
+                guidance = 0.0
+
             import torch
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+            dtype = torch.float16 if device == "cuda" else torch.float32
+
+            self._log_safe(self.sd_log, f"SD 모델 로드: {model_id}")
+            self._log_safe(self.sd_log, f"  device={device}, mode={mode}, steps={steps}, guidance={guidance}")
 
             if mode == "img2img":
                 from diffusers import AutoPipelineForImage2Image
                 pipe = AutoPipelineForImage2Image.from_pretrained(
-                    "stabilityai/sdxl-turbo", torch_dtype=torch.float32,
+                    model_id, torch_dtype=dtype,
                     cache_dir=cache_dir if cache_dir else None)
 
                 ref_img = Image.open(self.sd_ref_var.get()).convert("RGB").resize((512, 512))
-                self._log_safe(self.sd_log, f"변형 중... (strength={self.sd_strength_var.get():.2f})")
+                self._log_safe(self.sd_log, f"변형 중... (strength={self.sd_strength_var.get():.2f}, steps={steps})")
 
-                result = pipe(
-                    prompt=self.sd_prompt_var.get(),
-                    image=ref_img,
-                    strength=self.sd_strength_var.get(),
-                    num_inference_steps=4,
-                    guidance_scale=0.0,
-                )
+                kwargs = {
+                    "prompt": self.sd_prompt_var.get(),
+                    "image": ref_img,
+                    "strength": self.sd_strength_var.get(),
+                    "num_inference_steps": steps,
+                    "guidance_scale": guidance,
+                }
+                if neg_prompt and not is_turbo:
+                    kwargs["negative_prompt"] = neg_prompt
+                pipe = pipe.to(device)
+                result = pipe(**kwargs)
             else:
                 from diffusers import AutoPipelineForText2Image
                 pipe = AutoPipelineForText2Image.from_pretrained(
-                    "stabilityai/sdxl-turbo", torch_dtype=torch.float32,
+                    model_id, torch_dtype=dtype,
                     cache_dir=cache_dir if cache_dir else None)
 
-                self._log_safe(self.sd_log, "생성 중...")
-                result = pipe(self.sd_prompt_var.get(), num_inference_steps=4, guidance_scale=0.0)
+                self._log_safe(self.sd_log, f"생성 중... (steps={steps})")
+                kwargs = {
+                    "prompt": self.sd_prompt_var.get(),
+                    "num_inference_steps": steps,
+                    "guidance_scale": guidance,
+                }
+                if neg_prompt and not is_turbo:
+                    kwargs["negative_prompt"] = neg_prompt
+                pipe = pipe.to(device)
+                result = pipe(**kwargs)
 
             img = result.images[0].resize((400, 400))
             DATA_DIR.mkdir(parents=True, exist_ok=True)
