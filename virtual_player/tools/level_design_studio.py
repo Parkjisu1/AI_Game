@@ -45,7 +45,20 @@ except ImportError:
     SKLEARN = False
 
 SCRIPT_DIR = Path(getattr(sys, '_MEIPASS', Path(__file__).resolve().parent))
-DATA_DIR = SCRIPT_DIR / "studio_data"
+
+# C드라이브 공간 부족 대비: exe 옆에 studio_data 폴더 사용
+# exe가 E:\에 있으면 E:\studio_data에 저장
+_exe_dir = Path(sys.executable).parent if getattr(sys, 'frozen', False) else Path(__file__).resolve().parent
+DATA_DIR = _exe_dir / "studio_data"
+
+# 환경변수: 모든 캐시를 exe 옆 폴더로 (C드라이브 사용 안 함)
+os.environ["TMPDIR"] = str(DATA_DIR / "temp")
+os.environ["TEMP"] = str(DATA_DIR / "temp")
+os.environ["TMP"] = str(DATA_DIR / "temp")
+os.environ["HF_HOME"] = str(DATA_DIR / "huggingface")
+os.environ["HUGGINGFACE_HUB_CACHE"] = str(DATA_DIR / "huggingface" / "hub")
+os.environ["TORCH_HOME"] = str(DATA_DIR / "torch")
+os.environ["XDG_CACHE_HOME"] = str(DATA_DIR / "cache")
 
 
 def load_palette(game_id="balloonflow"):
@@ -893,11 +906,10 @@ class LevelDesignStudio:
 
     def _do_sd(self, mode="txt2img"):
         try:
-            cache_dir = self.sd_cache_var.get().strip()
-            if cache_dir:
-                os.makedirs(cache_dir, exist_ok=True)
-                os.environ["HF_HOME"] = cache_dir
-                os.environ["HUGGINGFACE_HUB_CACHE"] = str(Path(cache_dir) / "hub")
+            cache_dir = self.sd_cache_var.get().strip() or str(DATA_DIR / "huggingface")
+            os.makedirs(cache_dir, exist_ok=True)
+            os.environ["HF_HOME"] = cache_dir
+            os.environ["HUGGINGFACE_HUB_CACHE"] = str(Path(cache_dir) / "hub")
 
             self._log_safe(self.sd_log, f"SD 모델 로드 중... ({mode}, 저장: {cache_dir or '기본'})")
             import torch
@@ -1027,7 +1039,9 @@ class LevelDesignStudio:
 
 
 def main():
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    for d in [DATA_DIR, DATA_DIR / "temp", DATA_DIR / "huggingface",
+              DATA_DIR / "torch", DATA_DIR / "cache", DATA_DIR / "games"]:
+        d.mkdir(parents=True, exist_ok=True)
     root = tk.Tk()
     app = LevelDesignStudio(root)
     root.mainloop()
