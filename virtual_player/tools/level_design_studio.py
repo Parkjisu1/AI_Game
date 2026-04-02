@@ -448,7 +448,7 @@ class LevelDesignStudio:
         self.crop_start_var = tk.IntVar(value=51)
         ttk.Spinbox(opt, from_=1, to=9999, textvariable=self.crop_start_var, width=5).pack(side="left", padx=2)
 
-        self.crop_flip_var = tk.BooleanVar(value=True)
+        self.crop_flip_var = tk.BooleanVar(value=False)
         ttk.Checkbutton(opt, text="상하반전", variable=self.crop_flip_var).pack(side="left", padx=10)
 
         inp.columnconfigure(1, weight=1)
@@ -565,23 +565,51 @@ class LevelDesignStudio:
                 Image.fromarray(board).save(str(board_dir / entry["file"]))
 
                 pixels = board.reshape(-1, 3).astype(np.float32)
-                if SKLEARN and range_means:
+
+                # 팔레트 매칭 함수 (렌더링 범위 있으면 사용, 없으면 직접 매칭)
+                pal_arr_local = np.array([p["rgb"] for p in palette], dtype=np.float32) if palette else None
+                pal_ids_local = [p["id"] for p in palette] if palette else []
+
+                def match_to_palette(rgb):
+                    if range_means:
+                        return match_center(rgb)
+                    elif pal_arr_local is not None:
+                        bi = int(np.argmin(np.sqrt(np.sum((pal_arr_local - rgb) ** 2, axis=1))))
+                        return pal_ids_local[bi]
+                    return 8
+
+                if SKLEARN:
+                    # 색상 수 추정
                     sample = pixels[::50]
-                    pid_counts = Counter(match_center(px) for px in sample)
+                    pid_counts = Counter(match_to_palette(px) for px in sample)
                     sig = {k for k, v in pid_counts.items() if v > len(sample) * 0.02}
                     k = max(2, min(len(sig), 8))
+
                     km = KMeans(n_clusters=k, random_state=42, n_init=5, max_iter=30)
                     km.fit(pixels)
+
+                    # 클러스터 → 팔레트 (중복 허용 안 함)
                     color_map = {}
                     used = set()
-                    for ci in range(k):
-                        pid = match_center(km.cluster_centers_[ci])
-                        if pid in used:
-                            for alt in sorted(range_means.keys(),
-                                              key=lambda p: np.sqrt(np.sum((km.cluster_centers_[ci] - range_means[p]) ** 2))):
-                                if alt not in used: pid = alt; break
-                        color_map[ci] = pid; used.add(pid)
+                    # 클러스터 크기 순으로 매칭 (큰 클러스터 우선)
+                    cluster_sizes = [(ci, (km.labels_ == ci).sum()) for ci in range(k)]
+                    cluster_sizes.sort(key=lambda x: -x[1])
 
+                    for ci, _ in cluster_sizes:
+                        pid = match_to_palette(km.cluster_centers_[ci])
+                        if pid in used:
+                            # 차선책: 모든 팔레트에서 가장 가까운 미사용 색
+                            all_pids = list(range_means.keys()) if range_means else pal_ids_local
+                            for alt in sorted(all_pids,
+                                              key=lambda p: np.sqrt(np.sum((
+                                                  km.cluster_centers_[ci] - (range_means[p] if range_means else pal_arr_local[pal_ids_local.index(p)])
+                                              ) ** 2)) if p not in used else float("inf")):
+                                if alt not in used:
+                                    pid = alt; break
+                        color_map[ci] = pid
+                        used.add(pid)
+
+                    # 셀 다수결
                     labels_2d = km.labels_.reshape(board.shape[0], board.shape[1])
                     fm_rows, counts = [], Counter()
                     for r in range(GRID):
