@@ -766,7 +766,7 @@ class LevelDesignStudio:
         tab = ttk.Frame(self.notebook)
         self.notebook.add(tab, text="5. AI 변형 (SD)")
 
-        info = ttk.LabelFrame(tab, text="Stable Diffusion", padding=10)
+        info = ttk.LabelFrame(tab, text="Stable Diffusion — Image-to-Image", padding=10)
         info.pack(fill="x", padx=10, pady=10)
 
         self.sd_status_var = tk.StringVar(value="미설치 — '설치' 버튼을 눌러주세요")
@@ -780,19 +780,58 @@ class LevelDesignStudio:
         ttk.Entry(path_frame, textvariable=self.sd_cache_var, width=45).pack(side="left", padx=5)
         ttk.Button(path_frame, text="찾기", command=lambda: self._browse_dir(self.sd_cache_var)).pack(side="left")
 
-        btn = ttk.Frame(info)
-        btn.pack(pady=10)
-        ttk.Button(btn, text="SD 설치/확인", command=self._check_sd).pack(side="left", padx=5)
-        ttk.Button(btn, text="이미지 생성", command=self._run_sd).pack(side="left", padx=5)
+        # 참조 이미지 (보드 크롭 또는 모티프 PNG)
+        ref_frame = ttk.Frame(info)
+        ref_frame.pack(fill="x", padx=5, pady=3)
+        ttk.Label(ref_frame, text="참조 이미지:").pack(side="left")
+        self.sd_ref_var = tk.StringVar()
+        ttk.Entry(ref_frame, textvariable=self.sd_ref_var, width=45).pack(side="left", padx=5)
+        ttk.Button(ref_frame, text="찾기",
+                   command=lambda: self._browse_file(self.sd_ref_var, [("Images", "*.png *.jpg")])).pack(side="left")
+        ttk.Button(ref_frame, text="JSON에서",
+                   command=self._load_ref_from_json).pack(side="left", padx=3)
 
-        ttk.Label(info, text="프롬프트:").pack(anchor="w", padx=5)
-        self.sd_prompt_var = tk.StringVar(value="a cute cat pixel art, 50x50 grid")
+        # 프롬프트
+        ttk.Label(info, text="변형 프롬프트:").pack(anchor="w", padx=5, pady=(5, 0))
+        self.sd_prompt_var = tk.StringVar(value="change the style to pixel art, same composition, bright colors")
         ttk.Entry(info, textvariable=self.sd_prompt_var, width=70).pack(fill="x", padx=5, pady=3)
 
-        self.sd_canvas = tk.Canvas(tab, bg="#0a0a0e")
-        self.sd_canvas.pack(fill="both", expand=True, padx=10, pady=5)
+        # 옵션
+        opt_frame = ttk.Frame(info)
+        opt_frame.pack(fill="x", padx=5, pady=3)
+        ttk.Label(opt_frame, text="변형 강도:").pack(side="left")
+        self.sd_strength_var = tk.DoubleVar(value=0.5)
+        ttk.Scale(opt_frame, from_=0.1, to=0.9, variable=self.sd_strength_var,
+                  orient="horizontal", length=150).pack(side="left", padx=5)
+        ttk.Label(opt_frame, textvariable=self.sd_strength_var).pack(side="left")
+
+        self.sd_to_json_var = tk.BooleanVar(value=True)
+        ttk.Checkbutton(opt_frame, text="결과 → JSON 자동 변환", variable=self.sd_to_json_var).pack(side="left", padx=15)
+
+        # 버튼
+        btn = ttk.Frame(info)
+        btn.pack(pady=5)
+        ttk.Button(btn, text="SD 설치/확인", command=self._check_sd).pack(side="left", padx=5)
+        ttk.Button(btn, text="텍스트→이미지", command=lambda: self._run_sd("txt2img")).pack(side="left", padx=5)
+        ttk.Button(btn, text="이미지 변형", command=lambda: self._run_sd("img2img")).pack(side="left", padx=5)
+        ttk.Button(btn, text="결과 JSON 저장", command=self._save_sd_json).pack(side="left", padx=5)
+
+        # 미리보기 (좌: 참조, 우: 결과)
+        preview = ttk.Frame(tab)
+        preview.pack(fill="both", expand=True, padx=10, pady=5)
+
+        left = ttk.LabelFrame(preview, text="참조 이미지", padding=3)
+        left.pack(side="left", fill="both", expand=True, padx=(0, 3))
+        self.sd_ref_canvas = tk.Canvas(left, bg="#0a0a0e")
+        self.sd_ref_canvas.pack(fill="both", expand=True)
+
+        right = ttk.LabelFrame(preview, text="변형 결과", padding=3)
+        right.pack(side="left", fill="both", expand=True, padx=(3, 0))
+        self.sd_canvas = tk.Canvas(right, bg="#0a0a0e")
+        self.sd_canvas.pack(fill="both", expand=True)
 
         self.sd_log = self._make_log(tab)
+        self._sd_result_img = None
 
     def _check_sd(self):
         try:
@@ -810,12 +849,49 @@ class LevelDesignStudio:
         self.root.after(0, lambda: self.sd_status_var.set("설치 완료 — 모델 다운로드는 첫 생성시"))
         self._log_safe(self.sd_log, "설치 완료")
 
-    def _run_sd(self):
-        if self._running: return
-        self._running = True
-        threading.Thread(target=self._do_sd, daemon=True).start()
+    def _load_ref_from_json(self):
+        """JSON에서 FieldMap → PNG로 변환하여 참조 이미지 설정."""
+        path = filedialog.askopenfilename(filetypes=[("JSON", "*.json")])
+        if not path: return
+        try:
+            palette = load_palette()
+            colors = {p["id"]: tuple(p["rgb"]) for p in palette}
+            with open(path, encoding="utf-8") as f:
+                data = json.load(f)
+            rows = [line.split() for line in data["designer_note"].split("[FieldMap]\n")[1].strip().split("\n")]
+            h, w = len(rows), len(rows[0])
+            img = Image.new("RGB", (w * 10, h * 10), (10, 10, 16))
+            draw = ImageDraw.Draw(img)
+            for y, row in enumerate(rows):
+                for x, token in enumerate(row):
+                    c = int(token) if token != ".." else 0
+                    draw.rectangle([x*10, y*10, (x+1)*10-1, (y+1)*10-1], fill=colors.get(c, (10,10,16)))
+            ref_path = DATA_DIR / "sd_ref_from_json.png"
+            img.save(str(ref_path))
+            self.sd_ref_var.set(str(ref_path))
+            self._show_ref_preview(ref_path)
+        except Exception as e:
+            messagebox.showerror("오류", str(e))
 
-    def _do_sd(self):
+    def _show_ref_preview(self, path):
+        img = Image.open(path)
+        cw = self.sd_ref_canvas.winfo_width() or 300
+        ch = self.sd_ref_canvas.winfo_height() or 300
+        ratio = min(cw / img.width, ch / img.height, 1)
+        img = img.resize((max(1, int(img.width * ratio)), max(1, int(img.height * ratio))))
+        self._sd_ref_photo = ImageTk.PhotoImage(img)
+        self.sd_ref_canvas.delete("all")
+        self.sd_ref_canvas.create_image(cw // 2, ch // 2, image=self._sd_ref_photo, anchor="center")
+
+    def _run_sd(self, mode="txt2img"):
+        if self._running: return
+        if mode == "img2img" and not self.sd_ref_var.get():
+            messagebox.showwarning("경고", "참조 이미지를 선택해주세요")
+            return
+        self._running = True
+        threading.Thread(target=self._do_sd, args=(mode,), daemon=True).start()
+
+    def _do_sd(self, mode="txt2img"):
         try:
             cache_dir = self.sd_cache_var.get().strip()
             if cache_dir:
@@ -823,30 +899,131 @@ class LevelDesignStudio:
                 os.environ["HF_HOME"] = cache_dir
                 os.environ["HUGGINGFACE_HUB_CACHE"] = str(Path(cache_dir) / "hub")
 
-            self._log_safe(self.sd_log, f"SD 모델 로드 중... (저장: {cache_dir or '기본'})")
-            from diffusers import AutoPipelineForText2Image
+            self._log_safe(self.sd_log, f"SD 모델 로드 중... ({mode}, 저장: {cache_dir or '기본'})")
             import torch
-            pipe = AutoPipelineForText2Image.from_pretrained(
-                "stabilityai/sdxl-turbo", torch_dtype=torch.float32,
-                cache_dir=cache_dir if cache_dir else None)
-            self._log_safe(self.sd_log, "생성 중...")
-            result = pipe(self.sd_prompt_var.get(), num_inference_steps=4, guidance_scale=0.0)
+
+            if mode == "img2img":
+                from diffusers import AutoPipelineForImage2Image
+                pipe = AutoPipelineForImage2Image.from_pretrained(
+                    "stabilityai/sdxl-turbo", torch_dtype=torch.float32,
+                    cache_dir=cache_dir if cache_dir else None)
+
+                ref_img = Image.open(self.sd_ref_var.get()).convert("RGB").resize((512, 512))
+                self._log_safe(self.sd_log, f"변형 중... (strength={self.sd_strength_var.get():.2f})")
+
+                result = pipe(
+                    prompt=self.sd_prompt_var.get(),
+                    image=ref_img,
+                    strength=self.sd_strength_var.get(),
+                    num_inference_steps=4,
+                    guidance_scale=0.0,
+                )
+            else:
+                from diffusers import AutoPipelineForText2Image
+                pipe = AutoPipelineForText2Image.from_pretrained(
+                    "stabilityai/sdxl-turbo", torch_dtype=torch.float32,
+                    cache_dir=cache_dir if cache_dir else None)
+
+                self._log_safe(self.sd_log, "생성 중...")
+                result = pipe(self.sd_prompt_var.get(), num_inference_steps=4, guidance_scale=0.0)
+
             img = result.images[0].resize((400, 400))
+            DATA_DIR.mkdir(parents=True, exist_ok=True)
             img.save(str(DATA_DIR / "sd_output.png"))
+            self._sd_result_img = img
 
             self._sd_photo = ImageTk.PhotoImage(img)
-            cw = self.sd_canvas.winfo_width() or 500
+            cw = self.sd_canvas.winfo_width() or 400
             ch = self.sd_canvas.winfo_height() or 400
             self.root.after(0, lambda: (
                 self.sd_canvas.delete("all"),
                 self.sd_canvas.create_image(cw // 2, ch // 2, image=self._sd_photo, anchor="center")
             ))
-            self._log_safe(self.sd_log, "완료! 이미지를 PNG→JSON 탭에서 변환하세요")
+
+            # 참조 이미지도 표시
+            if mode == "img2img":
+                self.root.after(0, lambda: self._show_ref_preview(self.sd_ref_var.get()))
+
+            # 자동 JSON 변환
+            if self.sd_to_json_var.get():
+                self._log_safe(self.sd_log, "JSON 변환 중...")
+                self._convert_sd_to_json(img)
+
+            self._log_safe(self.sd_log, "완료!")
 
         except Exception as e:
             self._log_safe(self.sd_log, f"ERROR: {e}")
         finally:
             self._running = False
+
+    def _convert_sd_to_json(self, img):
+        """SD 결과 이미지 → 팔레트 매칭 → FieldMap."""
+        palette = load_palette()
+        if not palette: return
+
+        pal_arr = np.array([p["rgb"] for p in palette], dtype=np.float32)
+        pal_ids = [p["id"] for p in palette]
+
+        img_resized = img.resize((50, 50), Image.LANCZOS)
+        pixels = np.array(img_resized).reshape(-1, 3).astype(np.float32)
+
+        if SKLEARN:
+            km = KMeans(n_clusters=min(8, len(set(map(tuple, pixels.tolist())))), random_state=42, n_init=5)
+            km.fit(pixels)
+            color_map = {}
+            used = set()
+            for ci, center in enumerate(km.cluster_centers_):
+                bi = int(np.argmin(np.sqrt(np.sum((pal_arr - center) ** 2, axis=1))))
+                pid = pal_ids[bi]
+                if pid in used:
+                    for alt in sorted(range(len(pal_ids)),
+                                      key=lambda i: np.sqrt(np.sum((pal_arr[i] - center) ** 2))):
+                        if pal_ids[alt] not in used:
+                            pid = pal_ids[alt]; break
+                color_map[ci] = pid; used.add(pid)
+
+            labels = km.labels_.reshape(50, 50)
+            fm_rows = []
+            for y in range(49, -1, -1):  # 상하반전
+                fm_rows.append(" ".join(f"{color_map[labels[y][x]]:02d}" for x in range(50)))
+
+            self._sd_fieldmap = fm_rows
+            self._log_safe(self.sd_log, f"  FieldMap 생성 완료 (50x50, {len(used)}색)")
+
+    def _save_sd_json(self):
+        if not hasattr(self, '_sd_fieldmap') or not self._sd_fieldmap:
+            messagebox.showwarning("경고", "먼저 이미지를 생성하세요")
+            return
+        path = filedialog.asksaveasfilename(defaultextension=".json", filetypes=[("JSON", "*.json")])
+        if not path: return
+
+        fm = "\n".join(self._sd_fieldmap)
+        counts = Counter()
+        for row in self._sd_fieldmap:
+            for token in row.split():
+                if token != "..": counts[int(token)] += 1
+
+        nc = len(counts); tot = sum(counts.values())
+        cd = " ".join(f"c{cid}:{cnt}" for cid, cnt in sorted(counts.items(), key=lambda x: -x[1]))
+
+        lj = {"level_number": 1, "level_id": "L0001", "pkg": 1, "pos": 1, "chapter": 1,
+              "purpose_type": "Normal", "target_cr": 0, "target_attempts": 0.0,
+              "num_colors": nc, "color_distribution": cd,
+              "field_rows": 50, "field_columns": 50, "total_cells": tot,
+              "rail_capacity": 5, "rail_capacity_tier": "S",
+              "queue_columns": min(nc, 5), "queue_rows": 3,
+              "gimmick_hidden": 0, "gimmick_chain": 0, "gimmick_pinata": 0,
+              "gimmick_spawner_t": 0, "gimmick_pin": 0, "gimmick_lock_key": 0,
+              "gimmick_surprise": 0, "gimmick_wall": 0, "gimmick_spawner_o": 0,
+              "gimmick_pinata_box": 0, "gimmick_ice": 0, "gimmick_frozen_dart": 0,
+              "gimmick_curtain": 0, "total_darts": tot,
+              "dart_capacity_range": ",".join([str(tot // max(nc, 1))] * min(nc, 5)),
+              "emotion_curve": "", "designer_note": f"[FieldMap]\n{fm}",
+              "pixel_art_source": "sd_generated"}
+
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(lj, f, indent=2, ensure_ascii=False)
+        self._log_safe(self.sd_log, f"JSON 저장: {path}")
 
 
 def main():
