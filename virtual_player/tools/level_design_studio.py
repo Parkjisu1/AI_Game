@@ -772,6 +772,14 @@ class LevelDesignStudio:
         self.sd_status_var = tk.StringVar(value="미설치 — '설치' 버튼을 눌러주세요")
         ttk.Label(info, textvariable=self.sd_status_var, font=("", 11)).pack()
 
+        # 모델 저장 경로
+        path_frame = ttk.Frame(info)
+        path_frame.pack(fill="x", padx=5, pady=5)
+        ttk.Label(path_frame, text="모델 저장 경로:").pack(side="left")
+        self.sd_cache_var = tk.StringVar(value="E:/AI/sd_models")
+        ttk.Entry(path_frame, textvariable=self.sd_cache_var, width=45).pack(side="left", padx=5)
+        ttk.Button(path_frame, text="찾기", command=lambda: self._browse_dir(self.sd_cache_var)).pack(side="left")
+
         btn = ttk.Frame(info)
         btn.pack(pady=10)
         ttk.Button(btn, text="SD 설치/확인", command=self._check_sd).pack(side="left", padx=5)
@@ -809,11 +817,18 @@ class LevelDesignStudio:
 
     def _do_sd(self):
         try:
-            self._log_safe(self.sd_log, "SD 모델 로드 중...")
+            cache_dir = self.sd_cache_var.get().strip()
+            if cache_dir:
+                os.makedirs(cache_dir, exist_ok=True)
+                os.environ["HF_HOME"] = cache_dir
+                os.environ["HUGGINGFACE_HUB_CACHE"] = str(Path(cache_dir) / "hub")
+
+            self._log_safe(self.sd_log, f"SD 모델 로드 중... (저장: {cache_dir or '기본'})")
             from diffusers import AutoPipelineForText2Image
             import torch
             pipe = AutoPipelineForText2Image.from_pretrained(
-                "stabilityai/sdxl-turbo", torch_dtype=torch.float32)
+                "stabilityai/sdxl-turbo", torch_dtype=torch.float32,
+                cache_dir=cache_dir if cache_dir else None)
             self._log_safe(self.sd_log, "생성 중...")
             result = pipe(self.sd_prompt_var.get(), num_inference_steps=4, guidance_scale=0.0)
             img = result.images[0].resize((400, 400))
