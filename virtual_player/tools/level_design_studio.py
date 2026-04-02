@@ -65,6 +65,56 @@ def img_hash(path, size=16):
 #  Main App
 # ══════════════════════════════════════════════════════════════
 
+def apply_dark_theme(root):
+    """SUNO 스타일 다크 테마 적용."""
+    BG = "#1a1a2e"
+    PANEL = "#16213e"
+    BORDER = "#333333"
+    TEXT = "#e0e0e0"
+    TEXT_DIM = "#aaaaaa"
+    ACCENT = "#6c63ff"
+    ENTRY_BG = "#0f1528"
+    SELECT = "#3f3d9e"
+
+    root.configure(bg=BG)
+
+    style = ttk.Style()
+    style.theme_use("clam")
+
+    style.configure(".", background=BG, foreground=TEXT, bordercolor=BORDER,
+                    focuscolor=ACCENT, font=("Segoe UI", 9))
+    style.configure("TFrame", background=BG)
+    style.configure("TLabel", background=BG, foreground=TEXT)
+    style.configure("TLabelframe", background=BG, foreground=ACCENT,
+                    bordercolor=BORDER)
+    style.configure("TLabelframe.Label", background=BG, foreground=ACCENT,
+                    font=("Segoe UI", 10, "bold"))
+    style.configure("TNotebook", background=BG, bordercolor=BORDER)
+    style.configure("TNotebook.Tab", background=PANEL, foreground=TEXT_DIM,
+                    padding=[14, 6], font=("Segoe UI", 9, "bold"))
+    style.map("TNotebook.Tab",
+              background=[("selected", ACCENT)],
+              foreground=[("selected", "#ffffff")])
+    style.configure("TButton", background=ACCENT, foreground="#ffffff",
+                    padding=[12, 5], font=("Segoe UI", 9, "bold"),
+                    borderwidth=0)
+    style.map("TButton",
+              background=[("active", SELECT), ("pressed", "#2d2b7f")])
+    style.configure("TEntry", fieldbackground=ENTRY_BG, foreground=TEXT,
+                    bordercolor=BORDER, insertcolor=TEXT)
+    style.configure("TSpinbox", fieldbackground=ENTRY_BG, foreground=TEXT,
+                    bordercolor=BORDER, arrowcolor=TEXT)
+    style.configure("TCheckbutton", background=BG, foreground=TEXT)
+    style.configure("TProgressbar", background=ACCENT, troughcolor=PANEL,
+                    bordercolor=BORDER)
+    style.configure("TScrollbar", background=PANEL, troughcolor=BG,
+                    bordercolor=BORDER, arrowcolor=TEXT)
+    style.configure("TPanedwindow", background=BG)
+    style.configure("TSeparator", background=BORDER)
+
+    return {"bg": BG, "panel": PANEL, "text": TEXT, "accent": ACCENT, "entry_bg": ENTRY_BG}
+
+
 class LevelDesignStudio:
     def __init__(self, root):
         self.root = root
@@ -73,8 +123,21 @@ class LevelDesignStudio:
         self.root.minsize(900, 650)
         self._running = False
 
+        self.colors = apply_dark_theme(root)
+
+        # 타이틀 바
+        title_frame = tk.Frame(root, bg=self.colors["panel"], height=40)
+        title_frame.pack(fill="x")
+        title_frame.pack_propagate(False)
+        tk.Label(title_frame, text="  Level Design Studio",
+                 bg=self.colors["panel"], fg="#ffffff",
+                 font=("Segoe UI", 13, "bold")).pack(side="left", padx=10, pady=5)
+        tk.Label(title_frame, text="v1.0",
+                 bg=self.colors["panel"], fg=self.colors["accent"],
+                 font=("Segoe UI", 9)).pack(side="left")
+
         self.notebook = ttk.Notebook(root)
-        self.notebook.pack(fill="both", expand=True, padx=5, pady=5)
+        self.notebook.pack(fill="both", expand=True, padx=8, pady=(0, 8))
 
         self._build_tab_yolo()
         self._build_tab_extract()
@@ -94,7 +157,10 @@ class LevelDesignStudio:
     def _make_log(self, parent):
         f = ttk.LabelFrame(parent, text="로그", padding=3)
         f.pack(fill="both", expand=True, padx=5, pady=5)
-        t = tk.Text(f, font=("Consolas", 9), state="disabled", bg="#1e1e1e", fg="#cccccc", height=12)
+        t = tk.Text(f, font=("Consolas", 9), state="disabled",
+                    bg="#0f1528", fg="#cccccc", insertbackground="#cccccc",
+                    selectbackground="#3f3d9e", selectforeground="#ffffff",
+                    relief="flat", padx=8, pady=5, height=12)
         t.pack(fill="both", expand=True)
         return t
 
@@ -573,7 +639,7 @@ class LevelDesignStudio:
         ttk.Button(btn, text="JSON 저장", command=self._style_save).pack(side="left", padx=3)
 
         # 미리보기
-        self.style_canvas = tk.Canvas(tab, bg="#2d2d2d", height=400)
+        self.style_canvas = tk.Canvas(tab, bg="#0f1528", height=400)
         self.style_canvas.pack(fill="both", expand=True, padx=10, pady=5)
 
         self._style_result = None
@@ -699,7 +765,7 @@ class LevelDesignStudio:
         self.sd_prompt_var = tk.StringVar(value="a cute cat pixel art, 50x50 grid")
         ttk.Entry(info, textvariable=self.sd_prompt_var, width=70).pack(fill="x", padx=5, pady=3)
 
-        self.sd_canvas = tk.Canvas(tab, bg="#2d2d2d")
+        self.sd_canvas = tk.Canvas(tab, bg="#0f1528")
         self.sd_canvas.pack(fill="both", expand=True, padx=10, pady=5)
 
         self.sd_log = self._make_log(tab)
