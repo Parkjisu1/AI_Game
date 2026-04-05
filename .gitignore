@@ -78,6 +78,12 @@ db/
 # ======================
 *.pt
 *.onnx
+*.safetensors
+sd_models/
+tools/pixelforge/output/
+tools/pixelforge/train_data/
+tools/pixelforge/loras/
+virtual_player/tools/studio_data/
 virtual_player/data/games/*/yolo_*/models/
 virtual_player/data/games/*/yolo_*/*.cache
 virtual_player/data/games/*/yolo_*/images/

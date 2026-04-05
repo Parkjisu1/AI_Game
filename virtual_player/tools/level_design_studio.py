@@ -69,6 +69,46 @@ def load_palette(game_id="balloonflow"):
     return []
 
 
+# ══════════════════════════════════════════════════════════════
+#  29-Color Palette (from level-transformer skill)
+# ══════════════════════════════════════════════════════════════
+PALETTE_29 = {
+    1:  (252, 106, 175), 2:  (80, 232, 246),  3:  (137, 80, 248),
+    4:  (254, 213, 85),  5:  (115, 254, 102), 6:  (253, 161, 76),
+    7:  (255, 255, 255), 8:  (65, 65, 65),    9:  (110, 168, 250),
+    10: (57, 174, 46),   11: (252, 94, 94),   12: (50, 107, 248),
+    13: (58, 165, 139),  14: (231, 167, 250), 15: (183, 199, 251),
+    16: (106, 74, 48),   17: (254, 227, 169), 18: (253, 183, 193),
+    19: (158, 61, 94),   20: (167, 221, 148), 21: (89, 46, 126),
+    22: (220, 120, 129), 23: (217, 217, 231), 24: (111, 114, 127),
+    25: (252, 56, 165),  26: (253, 180, 88),  27: (137, 10, 8),
+    28: (111, 175, 177), 29: (100, 80, 60),
+}
+_PAL_KEYS = sorted(PALETTE_29.keys())
+_PAL_ARRAY = np.array([PALETTE_29[k] for k in _PAL_KEYS], dtype=np.float64)
+
+
+def nearest_palette_color(r, g, b):
+    """RGB → 가장 가까운 29색 팔레트 인덱스 (1-indexed)."""
+    pixel = np.array([r, g, b], dtype=np.float64)
+    dists = np.sqrt(np.sum((_PAL_ARRAY - pixel) ** 2, axis=1))
+    return _PAL_KEYS[int(np.argmin(dists))]
+
+
+def image_to_fieldmap_29(img, grid_w=50, grid_h=50):
+    """PIL Image → 29색 팔레트 기반 FieldMap grid (정밀 매핑)."""
+    img_resized = img.convert("RGB").resize((grid_w, grid_h), Image.LANCZOS)
+    pixels = np.array(img_resized)
+    grid = []
+    for y in range(grid_h):
+        row = []
+        for x in range(grid_w):
+            r, g, b = pixels[y, x]
+            row.append(nearest_palette_color(int(r), int(g), int(b)))
+        grid.append(row)
+    return grid
+
+
 def img_hash(path, size=16):
     arr = np.array(Image.open(path).convert("L").resize((size, size)))
     return "".join("1" if b else "0" for b in (arr > arr.mean()).flatten())
@@ -169,8 +209,7 @@ class LevelDesignStudio:
         self._build_tab_yolo()
         self._build_tab_extract()
         self._build_tab_crop()
-        self._build_tab_style()
-        self._build_tab_ai()
+        self._build_tab_pixelforge()
 
     # ── 공통 ──
     def _browse_dir(self, var):
@@ -451,16 +490,73 @@ class LevelDesignStudio:
         self.crop_flip_var = tk.BooleanVar(value=False)
         ttk.Checkbutton(opt, text="상하반전", variable=self.crop_flip_var).pack(side="left", padx=10)
 
+        # Cell Profile 옵션
+        prof_frame = ttk.Frame(inp)
+        prof_frame.grid(row=3, column=0, columnspan=3, sticky="w", pady=3)
+        self.crop_cellaware_var = tk.BooleanVar(value=True)
+        ttk.Checkbutton(prof_frame, text="Cell-Aware", variable=self.crop_cellaware_var).pack(side="left")
+        ttk.Label(prof_frame, text="프로파일:").pack(side="left", padx=(10, 0))
+        self.crop_profile_var = tk.StringVar(
+            value=str(Path("E:/AI/virtual_player/data/journal/games/pixelflow/cell_profile.json")))
+        ttk.Entry(prof_frame, textvariable=self.crop_profile_var, width=40).pack(side="left", padx=5)
+        ttk.Button(prof_frame, text="찾기",
+                   command=lambda: self._browse_file(self.crop_profile_var, [("JSON", "*.json")])).pack(side="left")
+
         inp.columnconfigure(1, weight=1)
 
         btn = ttk.Frame(tab)
         btn.pack(fill="x", padx=10, pady=3)
         ttk.Button(btn, text="Crop + JSON 변환", command=self._run_crop).pack(side="left")
+        ttk.Button(btn, text="Cell-Aware 변환", command=self._run_cellaware_crop).pack(side="left", padx=5)
+        ttk.Button(btn, text="모티프 추출", command=self._run_motif_extract).pack(side="left", padx=5)
         ttk.Button(btn, text="렌더링 범위 측정", command=self._run_measure_ranges).pack(side="left", padx=5)
         self.crop_progress = ttk.Progressbar(btn, length=250, maximum=100)
         self.crop_progress.pack(side="right", padx=5)
 
         self.crop_log = self._make_log(tab)
+
+    def _run_motif_extract(self):
+        """출력 폴더의 JSON들에서 모티프 추출 (배경색 제거)."""
+        out_dir = self.crop_out_var.get()
+        if not out_dir:
+            messagebox.showwarning("경고", "출력 폴더를 지정하세요")
+            return
+        out = Path(out_dir)
+        jsons = sorted(out.glob("*.json"))
+        jsons = [j for j in jsons if "_analysis" not in j.name]
+        if not jsons:
+            self._log_safe(self.crop_log, "JSON 없음")
+            return
+
+        motif_dir = out / "motifs"
+        motif_dir.mkdir(exist_ok=True)
+        count = 0
+
+        for jf in jsons:
+            try:
+                grid, data = self._load_grid(str(jf))
+                motif, bg = self._extract_motif(grid)
+                # 모티프 JSON 저장
+                fm = "\n".join(" ".join(f"{c:02d}" for c in row) for row in motif)
+                data["designer_note"] = f"[FieldMap]\n{fm}"
+                content_counts = Counter(c for row in motif for c in row if c > 0)
+                data["num_colors"] = len(content_counts)
+                data["color_distribution"] = " ".join(
+                    f"c{cid}:{cnt}" for cid, cnt in sorted(content_counts.items(), key=lambda x: -x[1]))
+                data["total_cells"] = sum(content_counts.values())
+                data["motif_bg_removed"] = bg
+
+                with open(motif_dir / jf.name, "w", encoding="utf-8") as f:
+                    json.dump(data, f, indent=2, ensure_ascii=False)
+
+                # 모티프 시각화
+                img = self._render_grid(motif, cell=8)
+                img.save(str(motif_dir / jf.name.replace(".json", ".png")))
+                count += 1
+            except Exception as e:
+                self._log_safe(self.crop_log, f"  {jf.name}: {e}")
+
+        self._log_safe(self.crop_log, f"모티프 추출 완료: {count}/{len(jsons)} → {motif_dir}")
 
     def _run_measure_ranges(self):
         if self._running: return
@@ -510,6 +606,76 @@ class LevelDesignStudio:
 
         except Exception as e:
             self._log_safe(self.crop_log, f"ERROR: {e}")
+        finally:
+            self._running = False
+
+    def _run_cellaware_crop(self):
+        """Cell-Aware 모드로 Crop + JSON 변환."""
+        if self._running: return
+        self._running = True
+        threading.Thread(target=self._do_cellaware_crop, daemon=True).start()
+
+    def _do_cellaware_crop(self):
+        try:
+            from cell_aware_analyzer import analyze, analyze_batch, load_profile
+
+            profile_path = self.crop_profile_var.get().strip()
+            if not profile_path or not Path(profile_path).exists():
+                self._log_safe(self.crop_log, "ERROR: cell_profile.json 경로를 지정해주세요")
+                return
+
+            profile = load_profile(profile_path)
+            in_dir = Path(self.crop_in_var.get())
+            out_dir = Path(self.crop_out_var.get() or str(in_dir / "cell_aware_output"))
+            out_dir.mkdir(parents=True, exist_ok=True)
+            start_level = self.crop_start_var.get()
+
+            # 보드 크롭 먼저 (고정 영역)
+            BOARD = tuple(int(x) for x in self.crop_board_var.get().split(","))
+            images = sorted(in_dir.glob("stage_*.png"))
+            if not images:
+                images = sorted(in_dir.glob("*.png"))
+
+            self._log_safe(self.crop_log, f"Cell-Aware 변환: {len(images)}장, profile={Path(profile_path).name}")
+            self._log_safe(self.crop_log, f"  grid: {profile['grid']['rows']}x{profile['grid']['cols']}, "
+                          f"frame_colors: {profile['colors'].get('frame_color_names', [])}")
+
+            for i, img_path in enumerate(images):
+                level_num = start_level + i
+                name = img_path.stem
+
+                # 보드 크롭
+                img = np.array(Image.open(img_path).convert("RGB"))
+                bx, by, bw, bh = BOARD
+                if by + bh <= img.shape[0] and bx + bw <= img.shape[1]:
+                    board_crop = img[by:by+bh, bx:bx+bw]
+                else:
+                    board_crop = img
+
+                # 크롭 이미지 임시 저장
+                board_path = out_dir / f"{name}_board.png"
+                Image.fromarray(board_crop).save(str(board_path))
+
+                # Cell-Aware 분석
+                result = analyze(str(board_path), profile, output_dir=str(out_dir), level_num=level_num)
+
+                if "error" in result:
+                    self._log_safe(self.crop_log, f"  [{i+1}] {name}: FAIL - {result['error']}")
+                else:
+                    self._log_safe(self.crop_log,
+                        f"  [{i+1}] Lv{level_num}: {result['num_colors']}색, "
+                        f"content={result['elements']['content']}, "
+                        f"floor={result['elements']['floor']}")
+
+                pct = (i + 1) / len(images) * 100
+                self.root.after(0, lambda p=pct: self.crop_progress.configure(value=p))
+
+            self._log_safe(self.crop_log, f"완료: {out_dir}")
+
+        except Exception as e:
+            self._log_safe(self.crop_log, f"ERROR: {e}")
+            import traceback
+            self._log_safe(self.crop_log, traceback.format_exc())
         finally:
             self._running = False
 
@@ -671,35 +837,7 @@ class LevelDesignStudio:
     #  Tab 4: 스타일 편집
     # ══════════════════════════════════════════════════════════
 
-    def _build_tab_style(self):
-        tab = ttk.Frame(self.notebook)
-        self.notebook.add(tab, text="4. 스타일 편집")
-
-        top = ttk.Frame(tab)
-        top.pack(fill="x", padx=10, pady=5)
-
-        ttk.Label(top, text="JSON A:").pack(side="left")
-        self.style_a_var = tk.StringVar()
-        ttk.Entry(top, textvariable=self.style_a_var, width=30).pack(side="left", padx=3)
-        ttk.Button(top, text="찾기", command=lambda: self._browse_file(self.style_a_var, [("JSON", "*.json")])).pack(side="left")
-
-        ttk.Label(top, text="JSON B:").pack(side="left", padx=(10, 0))
-        self.style_b_var = tk.StringVar()
-        ttk.Entry(top, textvariable=self.style_b_var, width=30).pack(side="left", padx=3)
-        ttk.Button(top, text="찾기", command=lambda: self._browse_file(self.style_b_var, [("JSON", "*.json")])).pack(side="left")
-
-        btn = ttk.Frame(tab)
-        btn.pack(fill="x", padx=10, pady=3)
-        ttk.Button(btn, text="모티프 추출", command=lambda: self._style_op("motif")).pack(side="left")
-        ttk.Button(btn, text="A→B 스타일 적용", command=lambda: self._style_op("restyle")).pack(side="left", padx=3)
-        ttk.Button(btn, text="A+B 합성", command=lambda: self._style_op("combine")).pack(side="left", padx=3)
-        ttk.Button(btn, text="JSON 저장", command=self._style_save).pack(side="left", padx=3)
-
-        # 미리보기
-        self.style_canvas = tk.Canvas(tab, bg="#0a0a0e", height=400)
-        self.style_canvas.pack(fill="both", expand=True, padx=10, pady=5)
-
-        self._style_result = None
+    # Tab 4 제거됨 — 모티프 추출은 Tab 3 "모티프 추출" 버튼으로 이동
 
     def _load_grid(self, json_path):
         with open(json_path, encoding="utf-8") as f:
@@ -726,398 +864,399 @@ class LevelDesignStudio:
         bg = Counter(border).most_common(1)[0][0]
         return [[0 if c == bg else c for c in row] for row in grid], bg
 
-    def _style_op(self, op):
-        try:
-            palette = load_palette()
-            if op == "motif":
-                grid_a, _ = self._load_grid(self.style_a_var.get())
-                motif, bg = self._extract_motif(grid_a)
-                self._style_result = motif
-            elif op == "restyle":
-                grid_a, _ = self._load_grid(self.style_a_var.get())
-                grid_b, _ = self._load_grid(self.style_b_var.get())
-                motif_b, bg_b = self._extract_motif(grid_b)
-                colors_a = sorted(set(c for row in grid_a for c in row if c != 0))
-                colors_b = sorted(set(c for row in motif_b for c in row if c != 0))
-                remap = {c_b: colors_a[i % len(colors_a)] for i, c_b in enumerate(colors_b)}
-                remap[0] = 0
-                bg_a = Counter(c for row in grid_a for c in row).most_common(1)[0][0]
-                self._style_result = [[bg_a if c == 0 else remap.get(c, c) for c in row] for row in motif_b]
-            elif op == "combine":
-                grid_a, _ = self._load_grid(self.style_a_var.get())
-                grid_b, _ = self._load_grid(self.style_b_var.get())
-                motif_a, _ = self._extract_motif(grid_a)
-                motif_b, _ = self._extract_motif(grid_b)
-                h, w = len(grid_a), len(grid_a[0])
-                bg = Counter(c for row in grid_a for c in row).most_common(1)[0][0]
-                combined = [[0] * w for _ in range(h)]
-                for y in range(h):
-                    for x in range(w):
-                        a = motif_a[y][x] if y < len(motif_a) and x < len(motif_a[0]) else 0
-                        b = motif_b[y][x] if y < len(motif_b) and x < len(motif_b[0]) else 0
-                        combined[y][x] = a if x < w // 2 and a != 0 else (b if b != 0 else (a if a != 0 else bg))
-                self._style_result = combined
-
-            if self._style_result:
-                img = self._render_grid(self._style_result, cell=8)
-                self._photo = ImageTk.PhotoImage(img)
-                cw = self.style_canvas.winfo_width() or 500
-                ch = self.style_canvas.winfo_height() or 400
-                self.style_canvas.delete("all")
-                self.style_canvas.create_image(cw // 2, ch // 2, image=self._photo, anchor="center")
-
-        except Exception as e:
-            messagebox.showerror("오류", str(e))
-
-    def _style_save(self):
-        if not self._style_result:
-            messagebox.showwarning("경고", "먼저 스타일 작업을 실행하세요")
-            return
-        path = filedialog.asksaveasfilename(defaultextension=".json", filetypes=[("JSON", "*.json")])
-        if not path: return
-
-        grid = self._style_result
-        fm = "\n".join(" ".join(f"{c:02d}" for c in row) for row in grid)
-        counts = Counter(c for row in grid for c in row if c != 0)
-        nc = len(counts); tot = sum(counts.values())
-        cd = " ".join(f"c{cid}:{cnt}" for cid, cnt in sorted(counts.items(), key=lambda x: -x[1]))
-
-        lj = {"level_number": 1, "level_id": "L0001", "pkg": 1, "pos": 1, "chapter": 1,
-              "purpose_type": "Normal", "target_cr": 0, "target_attempts": 0.0,
-              "num_colors": nc, "color_distribution": cd,
-              "field_rows": len(grid), "field_columns": len(grid[0]), "total_cells": tot,
-              "rail_capacity": 5, "rail_capacity_tier": "S", "queue_columns": min(nc, 5), "queue_rows": 3,
-              "gimmick_hidden": 0, "gimmick_chain": 0, "gimmick_pinata": 0, "gimmick_spawner_t": 0,
-              "gimmick_pin": 0, "gimmick_lock_key": 0, "gimmick_surprise": 0, "gimmick_wall": 0,
-              "gimmick_spawner_o": 0, "gimmick_pinata_box": 0, "gimmick_ice": 0,
-              "gimmick_frozen_dart": 0, "gimmick_curtain": 0, "total_darts": tot,
-              "dart_capacity_range": ",".join([str(tot // max(nc, 1))] * min(nc, 5)),
-              "emotion_curve": "", "designer_note": f"[FieldMap]\n{fm}",
-              "pixel_art_source": "style_editor"}
-
-        with open(path, "w", encoding="utf-8") as f:
-            json.dump(lj, f, indent=2, ensure_ascii=False)
-        messagebox.showinfo("저장", f"저장 완료: {path}")
+    # _style_op, _style_save 제거됨 — 모티프 추출은 Tab 3의 _run_motif_extract로 이동
 
     # ══════════════════════════════════════════════════════════
-    #  Tab 5: AI 변형 (SD)
+    #  Tab 4: PixelForge — AI 레벨 보드 생성
     # ══════════════════════════════════════════════════════════
 
-    def _build_tab_ai(self):
-        tab = ttk.Frame(self.notebook)
-        self.notebook.add(tab, text="5. AI 변형 (SD)")
+    def _pf_analyze_ref(self, path):
+        """레퍼런스 이미지 분석 → 셀 크기 + 형태 인식 + 색상."""
+        import cv2
+        from scipy.signal import find_peaks
 
-        info = ttk.LabelFrame(tab, text="Stable Diffusion — Image-to-Image", padding=10)
-        info.pack(fill="x", padx=10, pady=10)
-
-        self.sd_status_var = tk.StringVar(value="미설치 — '설치' 버튼을 눌러주세요")
-        ttk.Label(info, textvariable=self.sd_status_var, font=("", 11)).pack()
-
-        # 모델 저장 경로
-        path_frame = ttk.Frame(info)
-        path_frame.pack(fill="x", padx=5, pady=5)
-        ttk.Label(path_frame, text="모델 저장 경로:").pack(side="left")
-        self.sd_cache_var = tk.StringVar(value="E:/AI/sd_models")
-        ttk.Entry(path_frame, textvariable=self.sd_cache_var, width=45).pack(side="left", padx=5)
-        ttk.Button(path_frame, text="찾기", command=lambda: self._browse_dir(self.sd_cache_var)).pack(side="left")
-
-        # 참조 이미지 (보드 크롭 또는 모티프 PNG)
-        ref_frame = ttk.Frame(info)
-        ref_frame.pack(fill="x", padx=5, pady=3)
-        ttk.Label(ref_frame, text="참조 이미지:").pack(side="left")
-        self.sd_ref_var = tk.StringVar()
-        ttk.Entry(ref_frame, textvariable=self.sd_ref_var, width=45).pack(side="left", padx=5)
-        ttk.Button(ref_frame, text="찾기",
-                   command=lambda: self._browse_file(self.sd_ref_var, [("Images", "*.png *.jpg")])).pack(side="left")
-        ttk.Button(ref_frame, text="JSON에서",
-                   command=self._load_ref_from_json).pack(side="left", padx=3)
-
-        # 프롬프트
-        ttk.Label(info, text="변형 프롬프트:").pack(anchor="w", padx=5, pady=(5, 0))
-        self.sd_prompt_var = tk.StringVar(value="change the style to pixel art, same composition, bright colors")
-        ttk.Entry(info, textvariable=self.sd_prompt_var, width=70).pack(fill="x", padx=5, pady=3)
-
-        # 모델 선택
-        model_frame = ttk.Frame(info)
-        model_frame.pack(fill="x", padx=5, pady=3)
-        ttk.Label(model_frame, text="모델:").pack(side="left")
-        self.sd_model_var = tk.StringVar(value="stabilityai/stable-diffusion-2-1")
-        ttk.Combobox(model_frame, textvariable=self.sd_model_var, width=40,
-                     values=[
-                         "stabilityai/stable-diffusion-2-1",
-                         "stabilityai/sdxl-turbo",
-                         "runwayml/stable-diffusion-v1-5",
-                     ]).pack(side="left", padx=5)
-
-        # 옵션
-        opt_frame = ttk.Frame(info)
-        opt_frame.pack(fill="x", padx=5, pady=3)
-        ttk.Label(opt_frame, text="변형 강도:").pack(side="left")
-        self.sd_strength_var = tk.DoubleVar(value=0.6)
-        ttk.Scale(opt_frame, from_=0.1, to=0.95, variable=self.sd_strength_var,
-                  orient="horizontal", length=120).pack(side="left", padx=5)
-        ttk.Label(opt_frame, textvariable=self.sd_strength_var).pack(side="left")
-
-        ttk.Label(opt_frame, text="스텝:").pack(side="left", padx=(10, 0))
-        self.sd_steps_var = tk.IntVar(value=25)
-        ttk.Spinbox(opt_frame, from_=4, to=50, textvariable=self.sd_steps_var, width=4).pack(side="left", padx=3)
-
-        ttk.Label(opt_frame, text="가이던스:").pack(side="left", padx=(10, 0))
-        self.sd_guidance_var = tk.DoubleVar(value=7.5)
-        ttk.Spinbox(opt_frame, from_=0, to=20, increment=0.5, textvariable=self.sd_guidance_var, width=5).pack(side="left", padx=3)
-
-        # 네거티브 프롬프트
-        neg_frame = ttk.Frame(info)
-        neg_frame.pack(fill="x", padx=5, pady=2)
-        ttk.Label(neg_frame, text="네거티브:").pack(side="left")
-        self.sd_neg_var = tk.StringVar(value="blurry, low quality, watermark, text, 3d render, photo")
-        ttk.Entry(neg_frame, textvariable=self.sd_neg_var, width=60).pack(side="left", padx=5, fill="x", expand=True)
-
-        self.sd_to_json_var = tk.BooleanVar(value=True)
-        ttk.Checkbutton(opt_frame, text="→JSON", variable=self.sd_to_json_var).pack(side="left", padx=10)
-
-        # 버튼
-        btn = ttk.Frame(info)
-        btn.pack(pady=5)
-        ttk.Button(btn, text="SD 설치/확인", command=self._check_sd).pack(side="left", padx=5)
-        ttk.Button(btn, text="텍스트→이미지", command=lambda: self._run_sd("txt2img")).pack(side="left", padx=5)
-        ttk.Button(btn, text="이미지 변형", command=lambda: self._run_sd("img2img")).pack(side="left", padx=5)
-        ttk.Button(btn, text="결과 JSON 저장", command=self._save_sd_json).pack(side="left", padx=5)
-
-        # 미리보기 (좌: 참조, 우: 결과)
-        preview = ttk.Frame(tab)
-        preview.pack(fill="both", expand=True, padx=10, pady=5)
-
-        left = ttk.LabelFrame(preview, text="참조 이미지", padding=3)
-        left.pack(side="left", fill="both", expand=True, padx=(0, 3))
-        self.sd_ref_canvas = tk.Canvas(left, bg="#0a0a0e")
-        self.sd_ref_canvas.pack(fill="both", expand=True)
-
-        right = ttk.LabelFrame(preview, text="변형 결과", padding=3)
-        right.pack(side="left", fill="both", expand=True, padx=(3, 0))
-        self.sd_canvas = tk.Canvas(right, bg="#0a0a0e")
-        self.sd_canvas.pack(fill="both", expand=True)
-
-        self.sd_log = self._make_log(tab)
-        self._sd_result_img = None
-
-    def _check_sd(self):
-        try:
-            import diffusers
-            self.sd_status_var.set(f"설치됨: diffusers {diffusers.__version__}")
-        except ImportError:
-            self.sd_status_var.set("설치 중...")
-            threading.Thread(target=self._install_sd, daemon=True).start()
-
-    def _install_sd(self):
-        import subprocess
-        self._log_safe(self.sd_log, "diffusers 설치 중... (첫 실행시 1회)")
-        subprocess.run([sys.executable, "-m", "pip", "install", "diffusers", "transformers", "accelerate"],
-                       capture_output=True)
-        self.root.after(0, lambda: self.sd_status_var.set("설치 완료 — 모델 다운로드는 첫 생성시"))
-        self._log_safe(self.sd_log, "설치 완료")
-
-    def _load_ref_from_json(self):
-        """JSON에서 FieldMap → PNG로 변환하여 참조 이미지 설정."""
-        path = filedialog.askopenfilename(filetypes=[("JSON", "*.json")])
-        if not path: return
-        try:
-            palette = load_palette()
-            colors = {p["id"]: tuple(p["rgb"]) for p in palette}
-            with open(path, encoding="utf-8") as f:
-                data = json.load(f)
-            rows = [line.split() for line in data["designer_note"].split("[FieldMap]\n")[1].strip().split("\n")]
-            h, w = len(rows), len(rows[0])
-            img = Image.new("RGB", (w * 10, h * 10), (10, 10, 16))
-            draw = ImageDraw.Draw(img)
-            for y, row in enumerate(rows):
-                for x, token in enumerate(row):
-                    c = int(token) if token != ".." else 0
-                    draw.rectangle([x*10, y*10, (x+1)*10-1, (y+1)*10-1], fill=colors.get(c, (10,10,16)))
-            ref_path = DATA_DIR / "sd_ref_from_json.png"
-            img.save(str(ref_path))
-            self.sd_ref_var.set(str(ref_path))
-            self._show_ref_preview(ref_path)
-        except Exception as e:
-            messagebox.showerror("오류", str(e))
-
-    def _show_ref_preview(self, path):
         img = Image.open(path)
-        cw = self.sd_ref_canvas.winfo_width() or 300
-        ch = self.sd_ref_canvas.winfo_height() or 300
-        ratio = min(cw / img.width, ch / img.height, 1)
-        img = img.resize((max(1, int(img.width * ratio)), max(1, int(img.height * ratio))))
-        self._sd_ref_photo = ImageTk.PhotoImage(img)
-        self.sd_ref_canvas.delete("all")
-        self.sd_ref_canvas.create_image(cw // 2, ch // 2, image=self._sd_ref_photo, anchor="center")
+        arr = np.array(img.convert("RGB"))
+        h, w, _ = arr.shape
+        gray = cv2.cvtColor(arr, cv2.COLOR_RGB2GRAY)
 
-    def _run_sd(self, mode="txt2img"):
-        if self._running: return
-        if mode == "img2img" and not self.sd_ref_var.get():
-            messagebox.showwarning("경고", "참조 이미지를 선택해주세요")
+        # 셀 피치 감지 (autocorrelation)
+        cell_w, cell_h = 30, 30
+        for axis, size in [(1, h), (0, w)]:
+            edges = cv2.Sobel(gray, cv2.CV_64F, 1 - axis, axis, ksize=3)
+            profile = np.mean(np.abs(edges), axis=1 if axis == 1 else 0)
+            corr = np.correlate(profile, profile, mode="full")
+            corr = corr[len(corr) // 2:]
+            peaks, _ = find_peaks(corr, distance=10, prominence=corr.max() * 0.1)
+            pitch = int(np.median(np.diff(peaks))) if len(peaks) > 1 else 30
+            if axis == 1:
+                cell_h = pitch
+            else:
+                cell_w = pitch
+
+        cols = w // cell_w
+        rows = h // cell_h
+
+        # BLIP 이미지 캡셔닝 — 형태 인식
+        subject = "unknown"
+        try:
+            from transformers import BlipProcessor, BlipForConditionalGeneration
+            bp = BlipProcessor.from_pretrained(
+                "Salesforce/blip-image-captioning-base", cache_dir=str(DATA_DIR / "huggingface"))
+            bm = BlipForConditionalGeneration.from_pretrained(
+                "Salesforce/blip-image-captioning-base", cache_dir=str(DATA_DIR / "huggingface"))
+            inputs = bp(img, return_tensors="pt")
+            out = bm.generate(**inputs, max_new_tokens=30)
+            subject = bp.decode(out[0], skip_special_tokens=True)
+            del bp, bm  # 메모리 해제
+        except Exception:
+            subject = "pixel art board"
+
+        # 주요 색상 분석
+        from sklearn.cluster import KMeans
+        pixels = arr.reshape(-1, 3).astype(np.float32)
+        idx = np.random.default_rng(42).choice(len(pixels), min(5000, len(pixels)), replace=False)
+        km = KMeans(n_clusters=6, n_init=3, random_state=42).fit(pixels[idx])
+        colors = km.cluster_centers_.astype(int)
+        counts = np.bincount(km.predict(pixels[idx]), minlength=6)
+        top_idx = np.argsort(-counts)[:4]
+
+        def cn(rgb):
+            r, g, b = int(rgb[0]), int(rgb[1]), int(rgb[2])
+            if max(r, g, b) - min(r, g, b) < 30:
+                return "white" if (r + g + b) / 3 > 200 else "gray"
+            if r > g and r > b: return "red"
+            if g > r and g > b: return "green"
+            if b > r and b > g: return "blue"
+            if r > 200 and g > 150: return "orange" if g < 200 else "yellow"
+            if r > 150 and b > 150: return "purple"
+            return "colorful"
+
+        color_names = list(set(cn(colors[i]) for i in top_idx))
+
+        return cols, rows, subject, color_names
+
+    def _build_tab_pixelforge(self):
+        tab = ttk.Frame(self.notebook)
+        self.notebook.add(tab, text="  PixelForge  ")
+        C = self.colors
+
+        # ── 상단: 설정 영역 ──
+        settings = ttk.LabelFrame(tab, text="생성 설정", padding=8)
+        settings.pack(fill="x", padx=8, pady=(8, 4))
+
+        # Row 0: 레퍼런스 이미지 + 자동 분석
+        r0 = tk.Frame(settings, bg=C["card"])
+        r0.pack(fill="x", pady=2)
+        tk.Label(r0, text="레퍼런스:", bg=C["card"], fg=C["text"],
+                 font=("Segoe UI", 9)).pack(side="left")
+        self.pf_ref_path = tk.StringVar(value="")
+        tk.Entry(r0, textvariable=self.pf_ref_path, width=50,
+                 bg=C["input"], fg=C["text"], insertbackground=C["text"],
+                 relief="flat").pack(side="left", padx=4)
+        ttk.Button(r0, text="찾기", command=lambda: self._browse_file(
+            self.pf_ref_path, [("Images", "*.png *.jpg")])).pack(side="left", padx=2)
+        ttk.Button(r0, text="🔍 분석", command=self._pf_analyze).pack(side="left", padx=4)
+
+        # Row 1: API Key
+        r1 = tk.Frame(settings, bg=C["card"])
+        r1.pack(fill="x", pady=2)
+        tk.Label(r1, text="API Key:", bg=C["card"], fg=C["text"],
+                 font=("Segoe UI", 9)).pack(side="left")
+        self.pf_api_key = tk.StringVar(value=os.environ.get("PIXELLAB_API_KEY", ""))
+        tk.Entry(r1, textvariable=self.pf_api_key, width=40, show="*",
+                 bg=C["input"], fg=C["text"], insertbackground=C["text"],
+                 relief="flat").pack(side="left", padx=(4, 12))
+        tk.Label(r1, text="잔여:", bg=C["card"], fg=C["text_dim"],
+                 font=("Segoe UI", 9)).pack(side="left")
+        self.pf_balance = tk.StringVar(value="--")
+        tk.Label(r1, textvariable=self.pf_balance, bg=C["card"], fg=C["accent"],
+                 font=("Segoe UI", 9, "bold")).pack(side="left", padx=4)
+        ttk.Button(r1, text="잔액 확인", command=self._pf_check_balance).pack(side="left", padx=4)
+
+        # Row 2: 프롬프트 (자동 입력됨)
+        r2 = tk.Frame(settings, bg=C["card"])
+        r2.pack(fill="x", pady=2)
+        tk.Label(r2, text="프롬프트:", bg=C["card"], fg=C["text"],
+                 font=("Segoe UI", 9)).pack(side="left")
+        self.pf_prompt = tk.StringVar(value="cute penguin standing, front view")
+        tk.Entry(r2, textvariable=self.pf_prompt, width=60,
+                 bg=C["input"], fg=C["text"], insertbackground=C["text"],
+                 relief="flat", font=("Segoe UI", 10)).pack(side="left", padx=4, fill="x", expand=True)
+
+        # Row 3: 그리드 설정 (자동 입력됨)
+        r3 = tk.Frame(settings, bg=C["card"])
+        r3.pack(fill="x", pady=2)
+        for label, var_name, default in [
+            ("Cols:", "pf_cols", 50), ("Rows:", "pf_rows", 50),
+            ("Cell Size:", "pf_cell_size", 24), ("API Size:", "pf_api_size", 128),
+        ]:
+            tk.Label(r3, text=label, bg=C["card"], fg=C["text"],
+                     font=("Segoe UI", 9)).pack(side="left", padx=(8, 0))
+            var = tk.IntVar(value=default)
+            setattr(self, var_name, var)
+            tk.Spinbox(r3, from_=8, to=200, textvariable=var, width=5,
+                       bg=C["input"], fg=C["text"], relief="flat").pack(side="left", padx=2)
+
+        self.pf_transparent = tk.BooleanVar(value=True)
+        ttk.Checkbutton(r3, text="투명 배경", variable=self.pf_transparent).pack(side="left", padx=12)
+
+        # Row 4: 출력 폴더 + 버튼
+        r4 = tk.Frame(settings, bg=C["card"])
+        r4.pack(fill="x", pady=(4, 0))
+        tk.Label(r4, text="출력:", bg=C["card"], fg=C["text"],
+                 font=("Segoe UI", 9)).pack(side="left")
+        self.pf_output_dir = tk.StringVar(value=str(DATA_DIR))
+        tk.Entry(r4, textvariable=self.pf_output_dir, width=40,
+                 bg=C["input"], fg=C["text"], insertbackground=C["text"],
+                 relief="flat").pack(side="left", padx=4)
+        ttk.Button(r4, text="폴더", command=lambda: self._browse_dir(
+            self.pf_output_dir)).pack(side="left", padx=2)
+        ttk.Button(r4, text="🎨 생성", command=self._pf_generate).pack(side="left", padx=8)
+        ttk.Button(r4, text="📂 열기", command=self._pf_open_output).pack(side="left", padx=2)
+
+        # ── 중앙: 미리보기 ──
+        preview_frame = ttk.LabelFrame(tab, text="미리보기", padding=4)
+        preview_frame.pack(fill="both", expand=True, padx=8, pady=4)
+
+        self.pf_canvas = tk.Canvas(preview_frame, bg=C["surface"],
+                                   highlightthickness=0)
+        self.pf_canvas.pack(fill="both", expand=True)
+        self._pf_photo = None  # keep reference
+
+        # ── 하단: 로그 ──
+        self.pf_log = self._make_log(tab)
+
+    def _pf_analyze(self):
+        """레퍼런스 이미지 분석 → Cols/Rows/프롬프트 자동 입력."""
+        ref = self.pf_ref_path.get().strip()
+        if not ref or not Path(ref).exists():
+            self._log(self.pf_log, "레퍼런스 이미지를 선택하세요")
+            return
+        self._log(self.pf_log, "분석 중... (BLIP 로딩)")
+        self._running = True
+
+        def _do():
+            try:
+                cols, rows, subject, colors = self._pf_analyze_ref(ref)
+                self.root.after(0, lambda: self.pf_cols.set(cols))
+                self.root.after(0, lambda: self.pf_rows.set(rows))
+                self.root.after(0, lambda: self.pf_prompt.set(subject))
+                self._log_safe(self.pf_log, f"분석 완료:")
+                self._log_safe(self.pf_log, f"  셀: {cols}x{rows}")
+                self._log_safe(self.pf_log, f"  형태: {subject}")
+                self._log_safe(self.pf_log, f"  색상: {', '.join(colors)}")
+            except Exception as e:
+                self._log_safe(self.pf_log, f"분석 실패: {e}")
+            finally:
+                self._running = False
+
+        threading.Thread(target=_do, daemon=True).start()
+
+    def _pf_check_balance(self):
+        key = self.pf_api_key.get().strip()
+        if not key:
+            self._log(self.pf_log, "API Key를 입력하세요")
+            return
+        try:
+            import requests
+            r = requests.get("https://api.pixellab.ai/v2/balance",
+                             headers={"Authorization": f"Bearer {key}"}, timeout=10)
+            data = r.json()
+            gens = data.get("subscription", {}).get("generations", 0)
+            total = data.get("subscription", {}).get("total", 0)
+            credits = data.get("credits", {}).get("usd", 0)
+            self.pf_balance.set(f"{gens}/{total} + ${credits:.2f}")
+            self._log(self.pf_log, f"잔액: {gens}/{total} 생성 + ${credits:.2f} 크레딧")
+        except Exception as e:
+            self._log(self.pf_log, f"잔액 확인 실패: {e}")
+
+    def _pf_generate(self):
+        if self._running:
             return
         self._running = True
-        threading.Thread(target=self._do_sd, args=(mode,), daemon=True).start()
+        threading.Thread(target=self._pf_generate_thread, daemon=True).start()
 
-    def _do_sd(self, mode="txt2img"):
+    def _pf_generate_thread(self):
         try:
-            cache_dir = self.sd_cache_var.get().strip() or str(DATA_DIR / "huggingface")
-            os.makedirs(cache_dir, exist_ok=True)
-            os.environ["HF_HOME"] = cache_dir
-            os.environ["HUGGINGFACE_HUB_CACHE"] = str(Path(cache_dir) / "hub")
+            import requests
+            import base64
+            from io import BytesIO
 
-            model_id = self.sd_model_var.get().strip()
-            steps = self.sd_steps_var.get()
-            guidance = self.sd_guidance_var.get()
-            neg_prompt = self.sd_neg_var.get().strip()
-            is_turbo = "turbo" in model_id.lower()
+            key = self.pf_api_key.get().strip()
+            prompt = self.pf_prompt.get().strip()
+            cols = self.pf_cols.get()
+            rows = self.pf_rows.get()
+            cell_size = self.pf_cell_size.get()
+            api_size = self.pf_api_size.get()
+            transparent = self.pf_transparent.get()
 
-            # Turbo 모델은 특수 설정
-            if is_turbo:
-                steps = min(steps, 4)
-                guidance = 0.0
+            if not key:
+                self._log_safe(self.pf_log, "API Key를 입력하세요")
+                return
+            if not prompt:
+                self._log_safe(self.pf_log, "프롬프트를 입력하세요")
+                return
 
-            import torch
-            device = "cuda" if torch.cuda.is_available() else "cpu"
-            dtype = torch.float16 if device == "cuda" else torch.float32
+            # 1. PixelLab API 호출
+            ref_path = self.pf_ref_path.get().strip()
+            has_ref = ref_path and Path(ref_path).exists()
+            headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
 
-            self._log_safe(self.sd_log, f"SD 모델 로드: {model_id}")
-            self._log_safe(self.sd_log, f"  device={device}, mode={mode}, steps={steps}, guidance={guidance}")
+            if has_ref:
+                # Bitforge: 레퍼런스 스타일 참조 생성
+                self._log_safe(self.pf_log, f"[1/4] PixelLab Bitforge (스타일 참조): '{prompt}'...")
+                ref_img_raw = Image.open(ref_path).convert("RGB").resize(
+                    (min(128, api_size), min(128, api_size)), Image.LANCZOS)
+                buf = BytesIO()
+                ref_img_raw.save(buf, format="PNG")
+                ref_b64 = base64.b64encode(buf.getvalue()).decode("ascii")
 
-            if mode == "img2img":
-                from diffusers import AutoPipelineForImage2Image
-                pipe = AutoPipelineForImage2Image.from_pretrained(
-                    model_id, torch_dtype=dtype,
-                    cache_dir=cache_dir if cache_dir else None)
-
-                ref_img = Image.open(self.sd_ref_var.get()).convert("RGB").resize((512, 512))
-                self._log_safe(self.sd_log, f"변형 중... (strength={self.sd_strength_var.get():.2f}, steps={steps})")
-
-                kwargs = {
-                    "prompt": self.sd_prompt_var.get(),
-                    "image": ref_img,
-                    "strength": self.sd_strength_var.get(),
-                    "num_inference_steps": steps,
-                    "guidance_scale": guidance,
+                payload = {
+                    "description": f"{prompt}, pixel art",
+                    "image_size": {"width": api_size, "height": api_size},
+                    "init_image": {"type": "base64", "base64": ref_b64},
+                    "init_image_strength": 300,
                 }
-                if neg_prompt and not is_turbo:
-                    kwargs["negative_prompt"] = neg_prompt
-                pipe = pipe.to(device)
-                result = pipe(**kwargs)
+                endpoint = "https://api.pixellab.ai/v2/create-image-bitforge"
             else:
-                from diffusers import AutoPipelineForText2Image
-                pipe = AutoPipelineForText2Image.from_pretrained(
-                    model_id, torch_dtype=dtype,
-                    cache_dir=cache_dir if cache_dir else None)
-
-                self._log_safe(self.sd_log, f"생성 중... (steps={steps})")
-                kwargs = {
-                    "prompt": self.sd_prompt_var.get(),
-                    "num_inference_steps": steps,
-                    "guidance_scale": guidance,
+                # Pixflux: 텍스트만으로 생성
+                self._log_safe(self.pf_log, f"[1/4] PixelLab Pixflux: '{prompt}' ({api_size}x{api_size})...")
+                payload = {
+                    "description": f"{prompt}, pixel art",
+                    "image_size": {"width": api_size, "height": api_size},
+                    "no_background": transparent,
                 }
-                if neg_prompt and not is_turbo:
-                    kwargs["negative_prompt"] = neg_prompt
-                pipe = pipe.to(device)
-                result = pipe(**kwargs)
+                endpoint = "https://api.pixellab.ai/v2/create-image-pixflux"
 
-            img = result.images[0].resize((400, 400))
-            DATA_DIR.mkdir(parents=True, exist_ok=True)
-            img.save(str(DATA_DIR / "sd_output.png"))
-            self._sd_result_img = img
+            r = requests.post(endpoint, headers=headers, json=payload, timeout=30)
+            r.raise_for_status()
+            data = r.json()
+            img_b64 = data["image"]["base64"].split(",")[-1]
+            api_img = Image.open(BytesIO(base64.b64decode(img_b64)))
+            self._log_safe(self.pf_log, f"  API 완료: {api_img.size}, mode={api_img.mode}")
 
-            self._sd_photo = ImageTk.PhotoImage(img)
-            cw = self.sd_canvas.winfo_width() or 400
-            ch = self.sd_canvas.winfo_height() or 400
+            # API 이미지 저장
+            tag = prompt.replace(" ", "_")[:30]
+            out_dir = Path(self.pf_output_dir.get())
+            out_dir.mkdir(parents=True, exist_ok=True)
+            api_img.save(out_dir / f"pf_{tag}_api.png")
+
+            # 2. RGB 변환
+            rgb_img = Image.new("RGB", api_img.size, (255, 255, 255))
+            if api_img.mode == "RGBA":
+                rgb_img.paste(api_img, mask=api_img.split()[3])
+            else:
+                rgb_img = api_img.convert("RGB")
+
+            # 3. 인게임 팔레트 + 그리드 변환
+            self._log_safe(self.pf_log, f"[2/4] 인게임 15색 팔레트 매핑 ({cols}x{rows})...")
+            PAL = np.array([
+                [252,94,94],[253,161,76],[254,213,85],[115,254,102],[57,174,46],
+                [80,232,246],[50,107,248],[137,80,248],[252,106,175],[252,56,165],
+                [255,255,255],[65,65,65],[111,114,127],[106,74,48],[254,227,169],
+            ], dtype=np.float32)
+
+            small = rgb_img.resize((cols, rows), Image.NEAREST)
+            arr = np.array(small).astype(np.float32)
+            grid = np.zeros((rows, cols, 3), dtype=np.uint8)
+            for ry in range(rows):
+                for cx in range(cols):
+                    dists = np.sum((PAL - arr[ry, cx]) ** 2, axis=1)
+                    grid[ry, cx] = PAL[np.argmin(dists)].astype(np.uint8)
+
+            # 고립 셀 제거 (2회)
+            from collections import Counter
+            for _ in range(2):
+                tmp = grid.copy()
+                for ry in range(rows):
+                    for cx in range(cols):
+                        color = tuple(grid[ry, cx])
+                        nb = []
+                        for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)]:
+                            nr, nc = ry+dr, cx+dc
+                            if 0 <= nr < rows and 0 <= nc < cols:
+                                nb.append(tuple(grid[nr, nc]))
+                        if nb and color not in nb:
+                            tmp[ry, cx] = Counter(nb).most_common(1)[0][0]
+                grid = tmp
+
+            self._log_safe(self.pf_log, f"  그리드 생성 완료: {grid.shape}")
+
+            # 4. 셀 보드 렌더링
+            self._log_safe(self.pf_log, f"[3/4] 셀 보드 렌더링 (cell={cell_size}px)...")
+            from PIL import ImageDraw
+            gap, corner = 2, 3
+            bw = cols * (cell_size + gap) + gap
+            bh = rows * (cell_size + gap) + gap
+
+            # 배경색 판별
+            pixels = grid.reshape(-1, 3)
+            keys = pixels[:,0].astype(np.uint32)*65536 + pixels[:,1].astype(np.uint32)*256 + pixels[:,2].astype(np.uint32)
+            bg_key = int(np.bincount(keys).argmax())
+            bg_c = ((bg_key>>16)&0xFF, (bg_key>>8)&0xFF, bg_key&0xFF)
+
+            if transparent:
+                board = Image.new("RGBA", (bw, bh), (0,0,0,0))
+            else:
+                board = Image.new("RGBA", (bw, bh), (42,42,80,255))
+            draw = ImageDraw.Draw(board)
+
+            for ry in range(rows):
+                for cx in range(cols):
+                    color = tuple(int(v) for v in grid[ry, cx])
+                    x = gap + cx * (cell_size + gap)
+                    y = gap + ry * (cell_size + gap)
+                    if transparent and sum(abs(a-b) for a,b in zip(color, bg_c)) < 60:
+                        continue
+                    shadow = tuple(max(0, v-50) for v in color) + (255,)
+                    draw.rounded_rectangle([x+1,y+1,x+cell_size,y+cell_size], radius=corner, fill=shadow)
+                    draw.rounded_rectangle([x,y,x+cell_size-1,y+cell_size-1], radius=corner, fill=color+(255,))
+                    hl = tuple(min(255,v+45) for v in color) + (150,)
+                    hl_s = max(3, cell_size//4)
+                    draw.rounded_rectangle([x+2,y+2,x+hl_s+2,y+hl_s+2], radius=max(1,corner//2), fill=hl)
+
+            # 저장
+            board_path = out_dir / f"pf_{tag}_board.png"
+            board.save(board_path)
+
+            grid_path = out_dir / f"pf_{tag}_grid.json"
+            with open(grid_path, "w", encoding="utf-8") as f:
+                json.dump({"cols": cols, "rows": rows, "prompt": prompt,
+                           "grid": grid.tolist()}, f, indent=2)
+
+            self._log_safe(self.pf_log, f"[4/4] 저장 완료:")
+            self._log_safe(self.pf_log, f"  보드: {board_path}")
+            self._log_safe(self.pf_log, f"  JSON: {grid_path}")
+            self._log_safe(self.pf_log, f"  크기: {board.size} ({cols}x{rows} 셀)")
+
+            # 미리보기 표시
+            preview = board.copy()
+            pw, ph = preview.size
+            max_dim = 600
+            if max(pw, ph) > max_dim:
+                ratio = max_dim / max(pw, ph)
+                preview = preview.resize((int(pw*ratio), int(ph*ratio)), Image.NEAREST)
+
+            self._pf_photo = ImageTk.PhotoImage(preview)
             self.root.after(0, lambda: (
-                self.sd_canvas.delete("all"),
-                self.sd_canvas.create_image(cw // 2, ch // 2, image=self._sd_photo, anchor="center")
-            ))
-
-            # 참조 이미지도 표시
-            if mode == "img2img":
-                self.root.after(0, lambda: self._show_ref_preview(self.sd_ref_var.get()))
-
-            # 자동 JSON 변환
-            if self.sd_to_json_var.get():
-                self._log_safe(self.sd_log, "JSON 변환 중...")
-                self._convert_sd_to_json(img)
-
-            self._log_safe(self.sd_log, "완료!")
+                self.pf_canvas.delete("all"),
+                self.pf_canvas.create_image(
+                    self.pf_canvas.winfo_width()//2,
+                    self.pf_canvas.winfo_height()//2,
+                    image=self._pf_photo, anchor="center")))
 
         except Exception as e:
-            self._log_safe(self.sd_log, f"ERROR: {e}")
+            self._log_safe(self.pf_log, f"에러: {e}")
+            import traceback
+            self._log_safe(self.pf_log, traceback.format_exc())
         finally:
             self._running = False
 
-    def _convert_sd_to_json(self, img):
-        """SD 결과 이미지 → 팔레트 매칭 → FieldMap."""
-        palette = load_palette()
-        if not palette: return
-
-        pal_arr = np.array([p["rgb"] for p in palette], dtype=np.float32)
-        pal_ids = [p["id"] for p in palette]
-
-        img_resized = img.resize((50, 50), Image.LANCZOS)
-        pixels = np.array(img_resized).reshape(-1, 3).astype(np.float32)
-
-        if SKLEARN:
-            km = KMeans(n_clusters=min(8, len(set(map(tuple, pixels.tolist())))), random_state=42, n_init=5)
-            km.fit(pixels)
-            color_map = {}
-            used = set()
-            for ci, center in enumerate(km.cluster_centers_):
-                bi = int(np.argmin(np.sqrt(np.sum((pal_arr - center) ** 2, axis=1))))
-                pid = pal_ids[bi]
-                if pid in used:
-                    for alt in sorted(range(len(pal_ids)),
-                                      key=lambda i: np.sqrt(np.sum((pal_arr[i] - center) ** 2))):
-                        if pal_ids[alt] not in used:
-                            pid = pal_ids[alt]; break
-                color_map[ci] = pid; used.add(pid)
-
-            labels = km.labels_.reshape(50, 50)
-            fm_rows = []
-            for y in range(49, -1, -1):  # 상하반전
-                fm_rows.append(" ".join(f"{color_map[labels[y][x]]:02d}" for x in range(50)))
-
-            self._sd_fieldmap = fm_rows
-            self._log_safe(self.sd_log, f"  FieldMap 생성 완료 (50x50, {len(used)}색)")
-
-    def _save_sd_json(self):
-        if not hasattr(self, '_sd_fieldmap') or not self._sd_fieldmap:
-            messagebox.showwarning("경고", "먼저 이미지를 생성하세요")
-            return
-        path = filedialog.asksaveasfilename(defaultextension=".json", filetypes=[("JSON", "*.json")])
-        if not path: return
-
-        fm = "\n".join(self._sd_fieldmap)
-        counts = Counter()
-        for row in self._sd_fieldmap:
-            for token in row.split():
-                if token != "..": counts[int(token)] += 1
-
-        nc = len(counts); tot = sum(counts.values())
-        cd = " ".join(f"c{cid}:{cnt}" for cid, cnt in sorted(counts.items(), key=lambda x: -x[1]))
-
-        lj = {"level_number": 1, "level_id": "L0001", "pkg": 1, "pos": 1, "chapter": 1,
-              "purpose_type": "Normal", "target_cr": 0, "target_attempts": 0.0,
-              "num_colors": nc, "color_distribution": cd,
-              "field_rows": 50, "field_columns": 50, "total_cells": tot,
-              "rail_capacity": 5, "rail_capacity_tier": "S",
-              "queue_columns": min(nc, 5), "queue_rows": 3,
-              "gimmick_hidden": 0, "gimmick_chain": 0, "gimmick_pinata": 0,
-              "gimmick_spawner_t": 0, "gimmick_pin": 0, "gimmick_lock_key": 0,
-              "gimmick_surprise": 0, "gimmick_wall": 0, "gimmick_spawner_o": 0,
-              "gimmick_pinata_box": 0, "gimmick_ice": 0, "gimmick_frozen_dart": 0,
-              "gimmick_curtain": 0, "total_darts": tot,
-              "dart_capacity_range": ",".join([str(tot // max(nc, 1))] * min(nc, 5)),
-              "emotion_curve": "", "designer_note": f"[FieldMap]\n{fm}",
-              "pixel_art_source": "sd_generated"}
-
-        with open(path, "w", encoding="utf-8") as f:
-            json.dump(lj, f, indent=2, ensure_ascii=False)
-        self._log_safe(self.sd_log, f"JSON 저장: {path}")
+    def _pf_open_output(self):
+        out = self.pf_output_dir.get()
+        Path(out).mkdir(parents=True, exist_ok=True)
+        os.startfile(out)
 
 
 def main():
