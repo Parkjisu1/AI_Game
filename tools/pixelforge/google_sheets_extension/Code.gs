@@ -280,6 +280,33 @@ function pixelsToFieldMap(pixels, cols, rows, allowedIds) {
   return lines.join("\n");
 }
 
+// 좌우 대칭 적용: 왼쪽 절반을 오른쪽에 미러링
+function applySymmetry(fieldMapText, cols) {
+  var lines = fieldMapText.split("\n");
+  var result = [];
+  var mid = Math.floor(cols / 2);
+
+  for (var y = 0; y < lines.length; y++) {
+    var tokens = lines[y].split(" ");
+    // 왼쪽 절반(0~mid)을 오른쪽(cols-1~mid)에 복사
+    for (var x = 0; x < mid; x++) {
+      var mirrorX = cols - 1 - x;
+      if (mirrorX < tokens.length && x < tokens.length) {
+        tokens[mirrorX] = tokens[x];
+      }
+    }
+    result.push(tokens.join(" "));
+  }
+  return result.join("\n");
+}
+
+// designer_note에서 대칭 여부 판별
+function needsSymmetry(note) {
+  if (!note) return false;
+  var n = String(note);
+  return n.indexOf("대칭") >= 0 || n.indexOf("symmetr") >= 0;
+}
+
 // ═══════════════════════════════════════
 //  FieldMap → 게임 팔레트 이미지 (BMP)
 // ═══════════════════════════════════════
@@ -545,13 +572,19 @@ function generateFromSidebar(rowIndex, customPrompt, folderName) {
   var apiH = Math.max(32, fieldRows);
   var imgB64 = callPixelLab(prompt, apiW, apiH);
 
-  // 2. 원본 이미지 → 픽셀 분석 → FieldMap
+  // 2. 원본 이미지 → 픽셀 분석 → FieldMap (allowed colors만 사용)
   var fieldMap = "";
-  var pixels = pngToPixels(imgB64, fieldCols, fieldRows);
-  if (pixels) {
-    fieldMap = pixelsToFieldMap(pixels, fieldCols, fieldRows, colorIds);
-  } else {
-    // fallback
+  try {
+    var pixels = pngToPixels(imgB64, fieldCols, fieldRows);
+    if (pixels) {
+      fieldMap = pixelsToFieldMap(pixels, fieldCols, fieldRows, colorIds);
+    }
+  } catch (e) {
+    Logger.log("PNG parse error: " + e.message);
+  }
+
+  // fallback: PNG 파싱 실패 시 패턴 기반
+  if (!fieldMap) {
     var lines = [];
     for (var y = 0; y < fieldRows; y++) {
       var line = [];
@@ -563,33 +596,31 @@ function generateFromSidebar(rowIndex, customPrompt, folderName) {
     fieldMap = lines.join("\n");
   }
 
-  // 3. 게임 팔레트 색상 이미지 생성 (FieldMap 기반 — 유니티와 동일한 색상)
-  var paletteBmpBlob = fieldMapToImage(fieldMap, fieldCols, fieldRows, 8);
+  // 3. 좌우 대칭 적용 (designer_note에 "대칭" 포함 시)
+  var designerNote = gs("designer_note", "");
+  if (needsSymmetry(designerNote)) {
+    fieldMap = applySymmetry(fieldMap, fieldCols);
+  }
 
-  // 4. 팔레트 이미지를 메인 이미지로 저장 (유니티에서 보이는 색상 그대로)
+  // 4. 팔레트 이미지 생성 + 저장 (유니티 색상 그대로)
+  var paletteUrl = "";
   var paletteFilename = filename.replace(".png", "_palette.bmp");
-  var paletteFolder = getOutputFolder(folderName);
-  var existPal = paletteFolder.getFilesByName(paletteFilename);
-  if (existPal.hasNext()) existPal.next().setTrashed(true);
-  var palFile = paletteFolder.createFile(paletteBmpBlob.setName(paletteFilename));
-  palFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-  var paletteUrl = "https://drive.google.com/uc?export=download&id=" + palFile.getId();
+  try {
+    var paletteBmpBlob = fieldMapToImage(fieldMap, fieldCols, fieldRows, 8);
+    var paletteFolder = getOutputFolder(folderName);
+    var existPal = paletteFolder.getFilesByName(paletteFilename);
+    if (existPal.hasNext()) existPal.next().setTrashed(true);
+    var palFile = paletteFolder.createFile(paletteBmpBlob.setName(paletteFilename));
+    palFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+    paletteUrl = "https://drive.google.com/uc?export=download&id=" + palFile.getId();
+  } catch (e) {
+    Logger.log("Palette BMP error: " + e.message);
+  }
 
-  // PixelLab 원본도 참고용으로 저장
+  // 5. PixelLab 원본 이미지 저장
   var imgResult = saveToDrive(imgB64, filename, folderName);
 
-  // 5. designer_note에 [FieldMap] 추가
-  var paletteFilename = filename.replace(".png", "_palette.bmp");
-  var paletteBmp = fieldMapToImage(fieldMap, fieldCols, fieldRows, 4);
-  var paletteFolder = getOutputFolder(folderName);
-  var existPal = paletteFolder.getFilesByName(paletteFilename);
-  if (existPal.hasNext()) existPal.next().setTrashed(true);
-  var palFile = paletteFolder.createFile(paletteBmp.setName(paletteFilename));
-  palFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-  var paletteUrl = "https://drive.google.com/uc?export=download&id=" + palFile.getId();
-
-  // 5. designer_note에 [FieldMap] 추가
-  var designerNote = gs("designer_note", "");
+  // 7. designer_note에 [FieldMap] 추가
   var fmIdx = designerNote.indexOf("[FieldMap]");
   if (fmIdx >= 0) designerNote = designerNote.substring(0, fmIdx).trim();
   designerNote += "\n[FieldMap]\n" + fieldMap;
