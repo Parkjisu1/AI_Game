@@ -46,6 +46,10 @@ function saveApiKey(key) {
   PropertiesService.getUserProperties().setProperty("PIXELLAB_API_KEY", key);
 }
 
+function getSavedApiKey() {
+  return PropertiesService.getUserProperties().getProperty("PIXELLAB_API_KEY") || "";
+}
+
 function debugSheet() {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var lastCol = sheet.getLastColumn();

@@ -80,6 +80,22 @@
   var selectedRows = [];
   var isGenerating = false;
 
+  // 사이드바 열릴 때 자동 실행
+  window.onload = function() {
+    // 저장된 API Key 로드
+    google.script.run
+      .withSuccessHandler(function(key) {
+        if (key) {
+          document.getElementById('apiKey').value = key;
+          log('API Key 로드됨 (' + key.substring(0,8) + '...)');
+          // 잔액도 자동 확인
+          checkBalance();
+        }
+      })
+      .withFailureHandler(function() {})
+      .getSavedApiKey();
+  };
+
   function log(msg) {
     var el = document.getElementById('log');
     el.textContent += msg + '\n';
@@ -90,7 +106,10 @@
     var key = document.getElementById('apiKey').value.trim();
     if (!key) return;
     google.script.run
-      .withSuccessHandler(function() { log('API Key 저장됨'); })
+      .withSuccessHandler(function() {
+        log('API Key 영구 저장됨');
+        checkBalance();
+      })
       .withFailureHandler(function(e) { log('에러: ' + e.message); })
       .saveApiKey(key);
   }
