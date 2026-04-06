@@ -463,13 +463,8 @@ function callPixelLab(prompt, w, h, colorIds) {
     no_background: false,
   };
 
-  // color_image: 팔레트 이미지로 색상 강제
-  if (colorIds && colorIds.length > 0) {
-    var palB64 = buildPaletteImageBase64(colorIds);
-    if (palB64) {
-      payload.color_image = {type: "base64", base64: palB64};
-    }
-  }
+  // 색상 제한은 Unity importer에서 처리 (API에서 제한하면 형태가 망가짐)
+  // color_image 비활성화
 
   var resp = UrlFetchApp.fetch(PIXELLAB_API + "/create-image-pixflux", {
     method: "post", contentType: "application/json",
