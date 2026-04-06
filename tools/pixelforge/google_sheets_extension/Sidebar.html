@@ -23,12 +23,15 @@
     .status { font-size: 11px; color: #888; margin-top: 4px; }
     .status.success { color: #16a34a; }
     .status.error { color: #dc2626; }
-    .balance { display: inline-block; background: #f0f0f0; color: #1a1a1a; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; border: 1px solid #d0d0d0; }
+    .balance-box { display: flex; align-items: center; gap: 8px; margin-top: 6px; padding: 8px; background: #e8e8e8; border-radius: 8px; }
+    .balance-num { font-size: 20px; font-weight: 700; color: #1a1a1a; }
+    .balance-label { font-size: 11px; color: #666; }
+    .key-status { font-size: 11px; padding: 3px 8px; border-radius: 12px; display: inline-block; }
+    .key-saved { background: #dcfce7; color: #16a34a; }
+    .key-none { background: #fee2e2; color: #dc2626; }
     .dl-link { font-size: 11px; color: #2563eb; text-decoration: underline; cursor: pointer; display: block; margin: 2px 0; }
-    .sel-info { font-size: 11px; color: #333; background: #e8e8e8; padding: 4px 8px; border-radius: 6px; margin-bottom: 8px; }
+    .sel-info { font-size: 10px; color: #666; padding: 1px 0; }
     .progress { font-size: 11px; color: #333; background: #e8e8e8; padding: 6px 10px; border-radius: 6px; margin: 6px 0; }
-    .progress-bar { height: 4px; background: #d0d0d0; border-radius: 2px; margin-top: 4px; }
-    .progress-fill { height: 100%; background: #1a1a1a; border-radius: 2px; transition: width 0.3s; }
     #log { font-family: 'Consolas', monospace; font-size: 10px; background: #1a1a1a; color: #ccc; padding: 8px; border-radius: 6px; max-height: 150px; overflow-y: auto; white-space: pre-wrap; }
   </style>
 </head>
@@ -38,13 +41,19 @@
 
   <div class="card">
     <h3>API 설정</h3>
+    <div id="keyStatus"></div>
     <label>PixelLab API Key</label>
     <input type="password" id="apiKey" placeholder="API Key 입력...">
-    <div class="row">
-      <div><button class="btn btn-secondary" onclick="saveKey()">저장</button></div>
-      <div><button class="btn btn-secondary" onclick="checkBalance()">잔액</button></div>
+    <button class="btn btn-secondary" onclick="saveKey()">API Key 저장</button>
+    <div class="balance-box">
+      <div>
+        <div class="balance-num" id="balanceNum">--</div>
+        <div class="balance-label">남은 생성 횟수</div>
+      </div>
+      <div style="margin-left:auto">
+        <button class="btn btn-secondary" style="width:auto;padding:6px 12px;margin:0" onclick="checkBalance()">새로고침</button>
+      </div>
     </div>
-    <div class="status">잔액: <span class="balance" id="balance">--</span></div>
   </div>
 
   <div class="card">
@@ -57,7 +66,7 @@
     <h3>선택 행 정보</h3>
     <button class="btn btn-secondary" onclick="loadRows()">선택 행 불러오기</button>
     <div id="selectionInfo"></div>
-    <label>프롬프트 (1행 선택 시 수정 가능, 다중 선택 시 자동)</label>
+    <label>프롬프트 (자동 생성, 수정 가능)</label>
     <textarea id="prompt" placeholder="행을 선택 후 불러오기 클릭"></textarea>
     <div class="status" id="noteStatus"></div>
   </div>
@@ -80,21 +89,30 @@
   var selectedRows = [];
   var isGenerating = false;
 
-  // 사이드바 열릴 때 자동 실행
+  // ── 사이드바 열릴 때 자동 실행 ──
   window.onload = function() {
-    // 저장된 API Key 로드
     google.script.run
       .withSuccessHandler(function(key) {
         if (key) {
           document.getElementById('apiKey').value = key;
-          log('API Key 로드됨 (' + key.substring(0,8) + '...)');
-          // 잔액도 자동 확인
+          showKeyStatus(true, key);
           checkBalance();
+        } else {
+          showKeyStatus(false);
         }
       })
-      .withFailureHandler(function() {})
+      .withFailureHandler(function() { showKeyStatus(false); })
       .getSavedApiKey();
   };
+
+  function showKeyStatus(saved, key) {
+    var el = document.getElementById('keyStatus');
+    if (saved && key) {
+      el.innerHTML = '<span class="key-status key-saved">저장됨: ' + key.substring(0,8) + '...</span>';
+    } else {
+      el.innerHTML = '<span class="key-status key-none">API Key를 입력하세요</span>';
+    }
+  }
 
   function log(msg) {
     var el = document.getElementById('log');
@@ -104,25 +122,34 @@
 
   function saveKey() {
     var key = document.getElementById('apiKey').value.trim();
-    if (!key) return;
+    if (!key) { log('API Key를 입력하세요'); return; }
     google.script.run
       .withSuccessHandler(function() {
-        log('API Key 영구 저장됨');
+        log('API Key 영구 저장 완료');
+        showKeyStatus(true, key);
         checkBalance();
       })
-      .withFailureHandler(function(e) { log('에러: ' + e.message); })
+      .withFailureHandler(function(e) { log('저장 실패: ' + e.message); })
       .saveApiKey(key);
   }
 
   function checkBalance() {
+    document.getElementById('balanceNum').textContent = '...';
     google.script.run
       .withSuccessHandler(function(data) {
         var gens = data.subscription ? data.subscription.generations : 0;
         var total = data.subscription ? data.subscription.total : 0;
-        document.getElementById('balance').textContent = gens + '/' + total;
-        log('잔액: ' + gens + '/' + total);
+        var credits = data.credits ? data.credits.usd : 0;
+        document.getElementById('balanceNum').textContent = gens + ' / ' + total;
+        if (credits > 0) {
+          document.getElementById('balanceNum').textContent += ' + $' + credits.toFixed(2);
+        }
+        log('잔액: ' + gens + '/' + total + (credits > 0 ? ' + $' + credits.toFixed(2) : ''));
       })
-      .withFailureHandler(function(e) { log('에러: ' + e.message); })
+      .withFailureHandler(function(e) {
+        document.getElementById('balanceNum').textContent = '에러';
+        log('잔액 확인 실패: ' + e.message);
+      })
       .getBalance();
   }
 
@@ -136,26 +163,23 @@
         }
         selectedRows = data;
         var info = document.getElementById('selectionInfo');
-
         if (data.length === 1) {
           var d = data[0];
-          info.innerHTML = '<div class="sel-info">Level ' + d.level + ' (' + d.cols + 'x' + d.rows + ') - 1행 선택</div>';
+          info.innerHTML = '<div class="sel-info" style="font-size:12px;color:#333;padding:4px 0;">Level ' + d.level + ' (' + d.cols + 'x' + d.rows + ')</div>';
           document.getElementById('prompt').value = d.prompt;
           document.getElementById('prompt').disabled = false;
           log('Level ' + d.level + ': ' + d.cols + 'x' + d.rows);
-          log('prompt: ' + d.prompt);
         } else {
-          var html = '<div class="sel-info">' + data.length + '행 선택됨 (다중 생성 모드)</div>';
-          for (var i = 0; i < data.length; i++) {
-            html += '<div style="font-size:10px;color:#666;padding:1px 0;">Level ' + data[i].level + ': ' + data[i].cols + 'x' + data[i].rows + ' - ' + data[i].prompt.substring(0,40) + '...</div>';
+          var html = '<div style="font-size:12px;font-weight:600;margin:4px 0;">' + data.length + '행 선택 (다중 생성)</div>';
+          for (var i = 0; i < Math.min(data.length, 5); i++) {
+            html += '<div class="sel-info">Level ' + data[i].level + ': ' + data[i].cols + 'x' + data[i].rows + '</div>';
           }
+          if (data.length > 5) html += '<div class="sel-info">... 외 ' + (data.length-5) + '개</div>';
           info.innerHTML = html;
-          document.getElementById('prompt').value = '(다중 선택: 각 행의 designer_note 사용)';
+          document.getElementById('prompt').value = '(각 행의 designer_note 자동 사용)';
           document.getElementById('prompt').disabled = true;
           log(data.length + '행 선택됨');
         }
-        document.getElementById('noteStatus').textContent = data.length + '행 로드 완료';
-        document.getElementById('noteStatus').className = 'status success';
       })
       .withFailureHandler(function(e) { log('에러: ' + e.message); })
       .getSelectedRowsData();
@@ -173,9 +197,8 @@
     dlDiv.innerHTML = '';
 
     if (selectedRows.length === 1) {
-      // 단일 행: 사이드바 프롬프트 사용
       var prompt = document.getElementById('prompt').value;
-      btn.textContent = '생성 중... (1/1)';
+      btn.textContent = '생성 중...';
       log('Level ' + selectedRows[0].level + ' 생성 중...');
 
       google.script.run
@@ -184,6 +207,7 @@
           document.getElementById('genStatus').textContent = '생성 완료!';
           document.getElementById('genStatus').className = 'status success';
           showDownload(dlDiv, result);
+          checkBalance(); // 생성 후 잔액 갱신
         })
         .withFailureHandler(function(e) {
           btn.disabled = false; btn.textContent = '선택 행 생성'; isGenerating = false;
@@ -193,7 +217,6 @@
         })
         .generateFromSidebar(selectedRows[0].row, prompt, folderName);
     } else {
-      // 다중 행: 순차 생성
       var total = selectedRows.length;
       var current = 0;
       var progArea = document.getElementById('progressArea');
@@ -201,16 +224,17 @@
       function next() {
         if (current >= total) {
           btn.disabled = false; btn.textContent = '선택 행 생성'; isGenerating = false;
-          document.getElementById('genStatus').textContent = total + '개 전부 완료!';
+          document.getElementById('genStatus').textContent = total + '개 완료!';
           document.getElementById('genStatus').className = 'status success';
           progArea.innerHTML = '';
           log('=== ' + total + '개 완료 ===');
+          checkBalance(); // 전체 완료 후 잔액 갱신
           return;
         }
         var r = selectedRows[current];
-        var pct = Math.round((current / total) * 100);
+        var pct = Math.round(((current+1) / total) * 100);
         btn.textContent = '생성 중... (' + (current+1) + '/' + total + ')';
-        progArea.innerHTML = '<div class="progress">Level ' + r.level + ' 생성 중... ' + (current+1) + '/' + total + '<div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%"></div></div></div>';
+        progArea.innerHTML = '<div class="progress">Level ' + r.level + ' (' + (current+1) + '/' + total + ')</div>';
         log('Level ' + r.level + ' 생성 중... (' + (current+1) + '/' + total + ')');
 
         google.script.run
@@ -234,13 +258,13 @@
     if (result.imgDownloadUrl) {
       var a = document.createElement('a');
       a.className = 'dl-link'; a.href = result.imgDownloadUrl; a.target = '_blank';
-      a.textContent = '📥 원본 ' + result.filename;
+      a.textContent = '이미지: ' + result.filename;
       container.appendChild(a);
     }
     if (result.paletteUrl) {
       var ap = document.createElement('a');
       ap.className = 'dl-link'; ap.href = result.paletteUrl; ap.target = '_blank';
-      ap.textContent = '🎨 팔레트 ' + result.paletteFilename;
+      ap.textContent = '팔레트: ' + result.paletteFilename;
       container.appendChild(ap);
     }
     if (result.jsonContent) {
@@ -249,13 +273,8 @@
       var blob = new Blob([result.jsonContent], {type: 'application/json'});
       a2.href = URL.createObjectURL(blob);
       a2.download = result.jsonFilename;
-      a2.textContent = '📥 JSON ' + result.jsonFilename;
+      a2.textContent = 'JSON: ' + result.jsonFilename;
       container.appendChild(a2);
-    } else if (result.jsonDownloadUrl) {
-      var a3 = document.createElement('a');
-      a3.className = 'dl-link'; a3.href = result.jsonDownloadUrl; a3.target = '_blank';
-      a3.textContent = '📥 JSON ' + result.jsonFilename;
-      container.appendChild(a3);
     }
   }
 
@@ -264,7 +283,10 @@
     var folderName = document.getElementById('driveFolderName').value.trim() || 'PixelForge_Output';
     log('전체 생성 시작...');
     google.script.run
-      .withSuccessHandler(function() { log('완료!'); })
+      .withSuccessHandler(function() {
+        log('완료!');
+        checkBalance();
+      })
       .withFailureHandler(function(e) { log('에러: ' + e.message); })
       .generateAllEmpty(folderName);
   }
