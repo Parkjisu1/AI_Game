@@ -456,19 +456,113 @@ function getBalance() {
   return JSON.parse(resp.getContentText());
 }
 
-function callPixelLab(prompt, w, h) {
+function callPixelLab(prompt, w, h, colorIds) {
+  var payload = {
+    description: prompt,
+    image_size: {width: Math.min(Math.max(w,32),400), height: Math.min(Math.max(h,32),400)},
+    no_background: false,
+  };
+
+  // color_image: 팔레트 이미지로 색상 강제
+  if (colorIds && colorIds.length > 0) {
+    var palB64 = buildPaletteImageBase64(colorIds);
+    if (palB64) {
+      payload.color_image = {type: "base64", base64: palB64};
+    }
+  }
+
   var resp = UrlFetchApp.fetch(PIXELLAB_API + "/create-image-pixflux", {
     method: "post", contentType: "application/json",
     headers: {"Authorization": "Bearer " + getApiKey()},
-    payload: JSON.stringify({
-      description: prompt,
-      image_size: {width: Math.min(Math.max(w,32),400), height: Math.min(Math.max(h,32),400)},
-      no_background: false,
-    }),
+    payload: JSON.stringify(payload),
     muteHttpExceptions: true,
   });
   if (resp.getResponseCode() !== 200) throw new Error("API " + resp.getResponseCode() + ": " + resp.getContentText().substring(0,100));
   return JSON.parse(resp.getContentText()).image.base64;
+}
+
+// 색상 ID 배열 → 1xN PNG 팔레트 이미지 (base64)
+function buildPaletteImageBase64(colorIds) {
+  // 최소 PNG: 1xN 픽셀, 24비트 RGB
+  var w = colorIds.length;
+  var h = 1;
+
+  // PNG 수동 생성 (비압축)
+  var raw = []; // filter byte(0) + RGB * w
+  raw.push(0); // filter: None
+  for (var i = 0; i < w; i++) {
+    var rgb = GAME_PALETTE[colorIds[i]] || [128,128,128];
+    raw.push(rgb[0], rgb[1], rgb[2]);
+  }
+
+  // zlib: 압축 없이 (stored block)
+  var zlibData = deflateStored(raw);
+
+  // PNG 파일 구성
+  var png = [];
+  // Signature
+  png.push(0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A);
+  // IHDR
+  var ihdr = [];
+  push32BE(ihdr, w); push32BE(ihdr, h);
+  ihdr.push(8); // bit depth
+  ihdr.push(2); // color type: RGB
+  ihdr.push(0, 0, 0); // compression, filter, interlace
+  writeChunk(png, "IHDR", ihdr);
+  // IDAT
+  writeChunk(png, "IDAT", zlibData);
+  // IEND
+  writeChunk(png, "IEND", []);
+
+  return Utilities.base64Encode(png);
+}
+
+function deflateStored(data) {
+  // zlib header + stored deflate block + adler32
+  var result = [0x78, 0x01]; // zlib header (CM=8, CINFO=7, no dict, FLEVEL=0)
+  // stored block: BFINAL=1, BTYPE=00
+  result.push(0x01);
+  var len = data.length;
+  result.push(len & 0xFF, (len >> 8) & 0xFF);
+  result.push((~len) & 0xFF, ((~len) >> 8) & 0xFF);
+  for (var i = 0; i < data.length; i++) result.push(data[i]);
+  // Adler-32
+  var a = 1, b = 0;
+  for (var i = 0; i < data.length; i++) {
+    a = (a + data[i]) % 65521;
+    b = (b + a) % 65521;
+  }
+  push32BE(result, (b << 16) | a);
+  return result;
+}
+
+function push32BE(arr, val) {
+  arr.push((val >> 24) & 0xFF, (val >> 16) & 0xFF, (val >> 8) & 0xFF, val & 0xFF);
+}
+
+function writeChunk(png, type, data) {
+  // length
+  push32BE(png, data.length);
+  // type
+  for (var i = 0; i < 4; i++) png.push(type.charCodeAt(i));
+  // data
+  for (var i = 0; i < data.length; i++) png.push(data[i]);
+  // CRC32 (type + data)
+  var crcData = [];
+  for (var i = 0; i < 4; i++) crcData.push(type.charCodeAt(i));
+  for (var i = 0; i < data.length; i++) crcData.push(data[i]);
+  push32BE(png, crc32(crcData));
+}
+
+function crc32(data) {
+  var c = 0xFFFFFFFF;
+  for (var i = 0; i < data.length; i++) {
+    c ^= data[i];
+    for (var j = 0; j < 8; j++) {
+      c = (c >>> 1) ^ (c & 1 ? 0xEDB88320 : 0);
+    }
+  }
+  return (c ^ 0xFFFFFFFF) >>> 0;
 }
 
 // ═══════════════════════════════════════
@@ -570,7 +664,7 @@ function generateFromSidebar(rowIndex, customPrompt, folderName) {
   //    최소 32px 제한 → 작은 쪽을 32로 맞추고 비율 유지
   var apiW = Math.max(32, fieldCols);
   var apiH = Math.max(32, fieldRows);
-  var imgB64 = callPixelLab(prompt, apiW, apiH);
+  var imgB64 = callPixelLab(prompt, apiW, apiH, colorIds);
 
   // 2. 원본 이미지 → 픽셀 분석 → FieldMap (allowed colors만 사용)
   var fieldMap = "";
