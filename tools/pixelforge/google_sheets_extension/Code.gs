@@ -463,8 +463,18 @@ function callPixelLab(prompt, w, h, colorIds) {
     no_background: false,
   };
 
-  // 색상 제한은 Unity importer에서 처리 (API에서 제한하면 형태가 망가짐)
-  // color_image 비활성화
+  // 색상 제한: 지정색 + 보조색(흰/검/회) 추가하여 형태 유지
+  if (colorIds && colorIds.length > 0) {
+    // 보조색 추가 (윤곽/그림자/하이라이트용)
+    var extendedIds = colorIds.slice();
+    if (extendedIds.indexOf(7) < 0) extendedIds.push(7);   // 흰
+    if (extendedIds.indexOf(8) < 0) extendedIds.push(8);   // 검
+    if (extendedIds.indexOf(24) < 0) extendedIds.push(24);  // 회
+    var palB64 = buildPaletteImageBase64(extendedIds);
+    if (palB64) {
+      payload.color_image = {type: "base64", base64: palB64};
+    }
+  }
 
   var resp = UrlFetchApp.fetch(PIXELLAB_API + "/create-image-pixflux", {
     method: "post", contentType: "application/json",
