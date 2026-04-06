@@ -4,161 +4,244 @@
   <base target="_top">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Google Sans', Arial, sans-serif; background: #1a1a2e; color: #e0e0e0; padding: 16px; }
-    h2 { color: #7c4dff; margin-bottom: 12px; font-size: 18px; }
-    .card { background: #16213e; border-radius: 10px; padding: 14px; margin-bottom: 12px; border: 1px solid #2a2a4a; }
-    .card h3 { color: #a78bfa; font-size: 13px; margin-bottom: 8px; }
-    label { display: block; font-size: 11px; color: #9ca3af; margin-bottom: 3px; }
-    input, textarea { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #2a2a4a; background: #0f0f23; color: #e0e0e0; font-size: 12px; margin-bottom: 8px; }
+    body { font-family: 'Google Sans', Arial, sans-serif; background: #ffffff; color: #1a1a1a; padding: 16px; }
+    h2 { color: #1a1a1a; margin-bottom: 12px; font-size: 18px; font-weight: 700; }
+    .card { background: #f5f5f5; border-radius: 10px; padding: 14px; margin-bottom: 12px; border: 1px solid #e0e0e0; }
+    .card h3 { color: #333; font-size: 13px; margin-bottom: 8px; font-weight: 600; }
+    label { display: block; font-size: 11px; color: #666; margin-bottom: 3px; }
+    input, textarea { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #d0d0d0; background: #fff; color: #1a1a1a; font-size: 12px; margin-bottom: 8px; }
     textarea { height: 60px; resize: vertical; }
-    input:focus, textarea:focus { border-color: #7c4dff; outline: none; }
+    input:focus, textarea:focus { border-color: #333; outline: none; }
     .row { display: flex; gap: 8px; }
     .row > div { flex: 1; }
     .btn { width: 100%; padding: 10px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; margin-bottom: 6px; }
-    .btn-primary { background: #7c4dff; color: white; }
-    .btn-primary:hover { background: #6a3de8; }
-    .btn-secondary { background: #2a2a4a; color: #a78bfa; }
-    .btn-secondary:hover { background: #3a3a5a; }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .status { font-size: 11px; color: #6b7280; margin-top: 4px; }
-    .status.success { color: #34d399; }
-    .status.error { color: #f87171; }
-    .balance { display: inline-block; background: #7c4dff22; color: #a78bfa; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
-    .preview { width: 100%; border-radius: 8px; margin-top: 8px; display: none; }
-    #log { font-family: 'Consolas', monospace; font-size: 10px; background: #0a0a0e; color: #9ca3af; padding: 8px; border-radius: 6px; max-height: 120px; overflow-y: auto; white-space: pre-wrap; }
+    .btn-primary { background: #1a1a1a; color: #ffffff; }
+    .btn-primary:hover { background: #333; }
+    .btn-secondary { background: #e8e8e8; color: #1a1a1a; }
+    .btn-secondary:hover { background: #d5d5d5; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .status { font-size: 11px; color: #888; margin-top: 4px; }
+    .status.success { color: #16a34a; }
+    .status.error { color: #dc2626; }
+    .balance { display: inline-block; background: #f0f0f0; color: #1a1a1a; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; border: 1px solid #d0d0d0; }
+    .dl-link { font-size: 11px; color: #2563eb; text-decoration: underline; cursor: pointer; display: block; margin: 2px 0; }
+    .sel-info { font-size: 11px; color: #333; background: #e8e8e8; padding: 4px 8px; border-radius: 6px; margin-bottom: 8px; }
+    .progress { font-size: 11px; color: #333; background: #e8e8e8; padding: 6px 10px; border-radius: 6px; margin: 6px 0; }
+    .progress-bar { height: 4px; background: #d0d0d0; border-radius: 2px; margin-top: 4px; }
+    .progress-fill { height: 100%; background: #1a1a1a; border-radius: 2px; transition: width 0.3s; }
+    #log { font-family: 'Consolas', monospace; font-size: 10px; background: #1a1a1a; color: #ccc; padding: 8px; border-radius: 6px; max-height: 150px; overflow-y: auto; white-space: pre-wrap; }
   </style>
 </head>
 <body>
 
-  <h2>🎨 PixelForge</h2>
+  <h2>PixelForge</h2>
 
-  <!-- API 설정 -->
   <div class="card">
-    <h3>⚙️ API 설정</h3>
+    <h3>API 설정</h3>
     <label>PixelLab API Key</label>
     <input type="password" id="apiKey" placeholder="API Key 입력...">
     <div class="row">
       <div><button class="btn btn-secondary" onclick="saveKey()">저장</button></div>
-      <div><button class="btn btn-secondary" onclick="checkBalance()">잔액 확인</button></div>
+      <div><button class="btn btn-secondary" onclick="checkBalance()">잔액</button></div>
     </div>
-    <div class="status" id="balanceStatus">잔액: <span class="balance" id="balance">--</span></div>
+    <div class="status">잔액: <span class="balance" id="balance">--</span></div>
   </div>
 
-  <!-- 선택 행 정보 -->
   <div class="card">
-    <h3>📋 선택 행 정보</h3>
-    <button class="btn btn-secondary" onclick="loadRow()">🔄 선택 행 불러오기</button>
-    <div class="row" style="margin-top: 8px;">
-      <div><label>Level</label><input id="level" readonly></div>
-      <div><label>Cols</label><input id="cols" readonly></div>
-      <div><label>Rows</label><input id="rows" readonly></div>
-    </div>
-    <label>프롬프트 (자동 생성, 수정 가능)</label>
-    <textarea id="prompt" placeholder="선택 행을 불러오면 자동 입력됩니다"></textarea>
+    <h3>저장 설정</h3>
+    <label>Google Drive 폴더명</label>
+    <input id="driveFolderName" value="PixelForge_Output" placeholder="Drive 폴더명">
+  </div>
+
+  <div class="card">
+    <h3>선택 행 정보</h3>
+    <button class="btn btn-secondary" onclick="loadRows()">선택 행 불러오기</button>
+    <div id="selectionInfo"></div>
+    <label>프롬프트 (1행 선택 시 수정 가능, 다중 선택 시 자동)</label>
+    <textarea id="prompt" placeholder="행을 선택 후 불러오기 클릭"></textarea>
     <div class="status" id="noteStatus"></div>
   </div>
 
-  <!-- 생성 -->
   <div class="card">
-    <h3>🎨 생성</h3>
+    <h3>생성</h3>
     <button class="btn btn-primary" id="genBtn" onclick="generate()">선택 행 생성</button>
     <button class="btn btn-secondary" onclick="generateAll()">빈 행 전체 생성</button>
-    <img id="preview" class="preview" alt="미리보기">
+    <div id="progressArea"></div>
     <div class="status" id="genStatus"></div>
+    <div id="downloadLinks"></div>
   </div>
 
-  <!-- 로그 -->
   <div class="card">
-    <h3>📝 로그</h3>
+    <h3>로그</h3>
     <div id="log"></div>
   </div>
 
 <script>
-  let currentRow = null;
+  var selectedRows = [];
+  var isGenerating = false;
 
   function log(msg) {
-    const el = document.getElementById('log');
+    var el = document.getElementById('log');
     el.textContent += msg + '\n';
     el.scrollTop = el.scrollHeight;
   }
 
   function saveKey() {
-    const key = document.getElementById('apiKey').value.trim();
+    var key = document.getElementById('apiKey').value.trim();
     if (!key) return;
     google.script.run
-      .withSuccessHandler(() => { log('API Key 저장됨'); })
-      .withFailureHandler(e => { log('에러: ' + e.message); })
+      .withSuccessHandler(function() { log('API Key 저장됨'); })
+      .withFailureHandler(function(e) { log('에러: ' + e.message); })
       .saveApiKey(key);
   }
 
   function checkBalance() {
-    log('잔액 확인 중...');
     google.script.run
-      .withSuccessHandler(data => {
-        const gens = data.subscription ? data.subscription.generations : 0;
-        const total = data.subscription ? data.subscription.total : 0;
+      .withSuccessHandler(function(data) {
+        var gens = data.subscription ? data.subscription.generations : 0;
+        var total = data.subscription ? data.subscription.total : 0;
         document.getElementById('balance').textContent = gens + '/' + total;
         log('잔액: ' + gens + '/' + total);
       })
-      .withFailureHandler(e => { log('에러: ' + e.message); })
+      .withFailureHandler(function(e) { log('에러: ' + e.message); })
       .getBalance();
   }
 
-  function loadRow() {
-    log('행 정보 불러오는 중...');
+  function loadRows() {
+    log('선택 행 불러오는 중...');
     google.script.run
-      .withSuccessHandler(data => {
-        if (!data) { log('헤더 행은 선택할 수 없습니다'); return; }
-        currentRow = data.row;
-        document.getElementById('level').value = data.level || '';
-        document.getElementById('cols').value = data.cols;
-        document.getElementById('rows').value = data.rows;
-        document.getElementById('prompt').value = data.prompt;
-        document.getElementById('noteStatus').textContent =
-          'designer_note → 프롬프트 자동 변환됨';
+      .withSuccessHandler(function(data) {
+        if (!data || data.length === 0) {
+          log('5행 이상 선택하세요');
+          return;
+        }
+        selectedRows = data;
+        var info = document.getElementById('selectionInfo');
+
+        if (data.length === 1) {
+          var d = data[0];
+          info.innerHTML = '<div class="sel-info">Level ' + d.level + ' (' + d.cols + 'x' + d.rows + ') - 1행 선택</div>';
+          document.getElementById('prompt').value = d.prompt;
+          document.getElementById('prompt').disabled = false;
+          log('Level ' + d.level + ': ' + d.cols + 'x' + d.rows);
+          log('prompt: ' + d.prompt);
+        } else {
+          var html = '<div class="sel-info">' + data.length + '행 선택됨 (다중 생성 모드)</div>';
+          for (var i = 0; i < data.length; i++) {
+            html += '<div style="font-size:10px;color:#666;padding:1px 0;">Level ' + data[i].level + ': ' + data[i].cols + 'x' + data[i].rows + ' - ' + data[i].prompt.substring(0,40) + '...</div>';
+          }
+          info.innerHTML = html;
+          document.getElementById('prompt').value = '(다중 선택: 각 행의 designer_note 사용)';
+          document.getElementById('prompt').disabled = true;
+          log(data.length + '행 선택됨');
+        }
+        document.getElementById('noteStatus').textContent = data.length + '행 로드 완료';
         document.getElementById('noteStatus').className = 'status success';
-        log('Level ' + data.level + ': ' + data.cols + 'x' + data.rows + ', prompt="' + data.prompt.substring(0,50) + '..."');
       })
-      .withFailureHandler(e => { log('에러: ' + e.message); })
-      .getSelectedRowData();
+      .withFailureHandler(function(e) { log('에러: ' + e.message); })
+      .getSelectedRowsData();
   }
 
   function generate() {
-    if (!currentRow) { log('먼저 행을 선택하세요'); return; }
-    const btn = document.getElementById('genBtn');
-    btn.disabled = true;
-    btn.textContent = '생성 중...';
-    const prompt = document.getElementById('prompt').value;
-    log('Level ' + document.getElementById('level').value + ' 생성 중...');
+    if (selectedRows.length === 0) { log('먼저 행 선택 후 불러오기'); return; }
+    if (isGenerating) return;
+    isGenerating = true;
 
-    google.script.run
-      .withSuccessHandler(result => {
-        btn.disabled = false;
-        btn.textContent = '선택 행 생성';
-        document.getElementById('genStatus').textContent = '✅ 생성 완료!';
-        document.getElementById('genStatus').className = 'status success';
-        if (result.imgUrl) {
-          log('이미지: ' + result.imgUrl);
-          log('JSON: ' + result.jsonUrl);
+    var btn = document.getElementById('genBtn');
+    btn.disabled = true;
+    var folderName = document.getElementById('driveFolderName').value.trim() || 'PixelForge_Output';
+    var dlDiv = document.getElementById('downloadLinks');
+    dlDiv.innerHTML = '';
+
+    if (selectedRows.length === 1) {
+      // 단일 행: 사이드바 프롬프트 사용
+      var prompt = document.getElementById('prompt').value;
+      btn.textContent = '생성 중... (1/1)';
+      log('Level ' + selectedRows[0].level + ' 생성 중...');
+
+      google.script.run
+        .withSuccessHandler(function(result) {
+          btn.disabled = false; btn.textContent = '선택 행 생성'; isGenerating = false;
+          document.getElementById('genStatus').textContent = '생성 완료!';
+          document.getElementById('genStatus').className = 'status success';
+          showDownload(dlDiv, result);
+        })
+        .withFailureHandler(function(e) {
+          btn.disabled = false; btn.textContent = '선택 행 생성'; isGenerating = false;
+          document.getElementById('genStatus').textContent = e.message;
+          document.getElementById('genStatus').className = 'status error';
+          log('에러: ' + e.message);
+        })
+        .generateFromSidebar(selectedRows[0].row, prompt, folderName);
+    } else {
+      // 다중 행: 순차 생성
+      var total = selectedRows.length;
+      var current = 0;
+      var progArea = document.getElementById('progressArea');
+
+      function next() {
+        if (current >= total) {
+          btn.disabled = false; btn.textContent = '선택 행 생성'; isGenerating = false;
+          document.getElementById('genStatus').textContent = total + '개 전부 완료!';
+          document.getElementById('genStatus').className = 'status success';
+          progArea.innerHTML = '';
+          log('=== ' + total + '개 완료 ===');
+          return;
         }
-      })
-      .withFailureHandler(e => {
-        btn.disabled = false;
-        btn.textContent = '선택 행 생성';
-        document.getElementById('genStatus').textContent = '❌ ' + e.message;
-        document.getElementById('genStatus').className = 'status error';
-        log('에러: ' + e.message);
-      })
-      .generateFromSidebar(currentRow, prompt);
+        var r = selectedRows[current];
+        var pct = Math.round((current / total) * 100);
+        btn.textContent = '생성 중... (' + (current+1) + '/' + total + ')';
+        progArea.innerHTML = '<div class="progress">Level ' + r.level + ' 생성 중... ' + (current+1) + '/' + total + '<div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%"></div></div></div>';
+        log('Level ' + r.level + ' 생성 중... (' + (current+1) + '/' + total + ')');
+
+        google.script.run
+          .withSuccessHandler(function(result) {
+            showDownload(dlDiv, result);
+            current++;
+            next();
+          })
+          .withFailureHandler(function(e) {
+            log('Level ' + r.level + ' 실패: ' + e.message);
+            current++;
+            next();
+          })
+          .generateFromSidebar(r.row, r.prompt, folderName);
+      }
+      next();
+    }
+  }
+
+  function showDownload(container, result) {
+    if (result.imgDownloadUrl) {
+      var a = document.createElement('a');
+      a.className = 'dl-link'; a.href = result.imgDownloadUrl; a.target = '_blank';
+      a.textContent = '📥 ' + result.filename;
+      container.appendChild(a);
+    }
+    if (result.jsonContent) {
+      var a2 = document.createElement('a');
+      a2.className = 'dl-link';
+      var blob = new Blob([result.jsonContent], {type: 'application/json'});
+      a2.href = URL.createObjectURL(blob);
+      a2.download = result.jsonFilename;
+      a2.textContent = '📥 ' + result.jsonFilename;
+      container.appendChild(a2);
+    } else if (result.jsonDownloadUrl) {
+      var a3 = document.createElement('a');
+      a3.className = 'dl-link'; a3.href = result.jsonDownloadUrl; a3.target = '_blank';
+      a3.textContent = '📥 ' + result.jsonFilename;
+      container.appendChild(a3);
+    }
   }
 
   function generateAll() {
-    if (!confirm('빈 행 전체를 생성합니다. 진행할까요?')) return;
+    if (!confirm('빈 행 전체 생성?')) return;
+    var folderName = document.getElementById('driveFolderName').value.trim() || 'PixelForge_Output';
     log('전체 생성 시작...');
     google.script.run
-      .withSuccessHandler(() => { log('전체 생성 완료!'); })
-      .withFailureHandler(e => { log('에러: ' + e.message); })
-      .generateAllEmpty();
+      .withSuccessHandler(function() { log('완료!'); })
+      .withFailureHandler(function(e) { log('에러: ' + e.message); })
+      .generateAllEmpty(folderName);
   }
 </script>
 
