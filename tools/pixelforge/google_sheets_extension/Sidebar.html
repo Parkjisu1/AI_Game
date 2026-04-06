@@ -215,8 +215,14 @@
     if (result.imgDownloadUrl) {
       var a = document.createElement('a');
       a.className = 'dl-link'; a.href = result.imgDownloadUrl; a.target = '_blank';
-      a.textContent = '📥 ' + result.filename;
+      a.textContent = '📥 원본 ' + result.filename;
       container.appendChild(a);
+    }
+    if (result.paletteUrl) {
+      var ap = document.createElement('a');
+      ap.className = 'dl-link'; ap.href = result.paletteUrl; ap.target = '_blank';
+      ap.textContent = '🎨 팔레트 ' + result.paletteFilename;
+      container.appendChild(ap);
     }
     if (result.jsonContent) {
       var a2 = document.createElement('a');
@@ -224,12 +230,12 @@
       var blob = new Blob([result.jsonContent], {type: 'application/json'});
       a2.href = URL.createObjectURL(blob);
       a2.download = result.jsonFilename;
-      a2.textContent = '📥 ' + result.jsonFilename;
+      a2.textContent = '📥 JSON ' + result.jsonFilename;
       container.appendChild(a2);
     } else if (result.jsonDownloadUrl) {
       var a3 = document.createElement('a');
       a3.className = 'dl-link'; a3.href = result.jsonDownloadUrl; a3.target = '_blank';
-      a3.textContent = '📥 ' + result.jsonFilename;
+      a3.textContent = '📥 JSON ' + result.jsonFilename;
       container.appendChild(a3);
     }
   }
