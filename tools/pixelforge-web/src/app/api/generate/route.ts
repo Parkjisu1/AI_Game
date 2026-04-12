@@ -155,8 +155,8 @@ export async function POST(req: NextRequest) {
       }
     );
 
-    // 2. snap-to-grid 후처리 (28색 quantize + 목표 색상 수 축소)
-    let snappedBase64 = result.base64;
+    // 2. snap-to-grid — fieldMap(게임 데이터)만 추출, 표시용 이미지는 PixelLab 원본 사용
+    const displayBase64 = result.base64; // PixelLab 원본 (고퀄리티)
     let fieldMap = "";
     let finalColorIds: number[] = colorIds;
     try {
@@ -167,7 +167,6 @@ export async function POST(req: NextRequest) {
         transparentBg: no_background === true,
         targetColorCount: targetColorCount > 0 ? targetColorCount : undefined,
       });
-      snappedBase64 = snapped.base64;
       fieldMap = matrixToFieldMap(snapped.matrix);
       finalColorIds = snapped.stats.dominantColors;
       console.log(`[Generate] snap: ${snapped.stats.uniqueColorsBefore}→${snapped.stats.uniqueColorsAfter} colors`);
@@ -175,11 +174,11 @@ export async function POST(req: NextRequest) {
       console.error("[Generate] snap error:", e);
     }
 
-    // 3. DB 저장 — snapped 이미지가 최종 (PixelLab 원본 base64 대신)
+    // 3. DB 저장 — 표시 이미지는 PixelLab 원본, fieldMap은 snap 결과
     if (level_number) {
       const saveData: Record<string, unknown> = {
         level_number,
-        image_base64: snappedBase64,
+        image_base64: displayBase64,
         field_map: fieldMap,
         status: "generated",
         updated_at: new Date().toISOString(),
@@ -227,7 +226,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       ok: true,
-      base64: snappedBase64,
+      base64: displayBase64,
       usage: result.usage,
       translated_prompt: translatedPrompt,
       field_map: fieldMap ? "generated" : "failed",
