@@ -15,6 +15,7 @@ import { snapImageToGridAndPalette } from "@/lib/snapToGrid";
 import { matrixToFieldMap } from "@/lib/matrixRenderer";
 
 export const maxDuration = 60;
+const BUILD_VERSION = "v4-highres-raw"; // 배포 확인용
 
 // 패턴/모티프 자동 분류
 function detectMode(prompt: string): "pattern" | "motif" {
@@ -230,6 +231,9 @@ export async function POST(req: NextRequest) {
       usage: result.usage,
       translated_prompt: translatedPrompt,
       field_map: fieldMap ? "generated" : "failed",
+      _v: BUILD_VERSION,
+      _gen_size: `${genW}x${genH}`,
+      _display_len: displayBase64.length,
     });
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : String(e);
