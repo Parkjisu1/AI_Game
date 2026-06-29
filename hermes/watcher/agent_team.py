@@ -594,8 +594,12 @@ def _invoke_claude_code(
         cmd = ["claude", "-p", prompt, "--model", model, *permission_args]
         if extra_args:
             cmd.extend(extra_args)
+        # stdin=DEVNULL 필수: 프롬프트는 -p 인자로 전달됨. stdin을 닫지 않으면 부모 stdin을
+        # 상속 → cron/수동/배치 컨텍스트에서 claude CLI가 "no stdin data received in 3s" 후
+        # exit 1. systemd(watcher)는 stdin=/dev/null이라 우연히 동작했을 뿐. 컨텍스트 독립 보장.
         proc = subprocess.run(
             cmd, cwd=env.cwd, capture_output=True, text=True,
+            stdin=subprocess.DEVNULL,
             timeout=env.timeout_sec, check=False,
         )
     elif env.mode == "remote_ssh":
