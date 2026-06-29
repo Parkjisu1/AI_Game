@@ -3605,16 +3605,36 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
     _comment("📦 Git commit + push 중...")
     commit_msg = title.replace('"', "'")[:72]
 
-    # commit
+    # commit (secret-leak hardened: gitignore 보장 + 시크릿 경로 unstage + 내용 스캔)
+    # Why: 과거 PR #92에서 git add -A 가 .env 토큰을 그대로 push/merge. 1차=대상 repo .gitignore,
+    #      2차=시크릿 경로 강제 unstage, 3차=staged 추가라인 시그니처 스캔 → 적중 시 commit/push 차단.
+    _gi_patterns = ".env .env.* *.pem *.key id_rsa id_rsa.* run_mcp.cmd mcp.log mcp.err"
+    _reset_specs = "'*.env' '.env' '.env.*' '*.pem' '*.key' 'id_rsa' 'id_rsa.*' 'run_mcp.cmd' 'mcp.log' 'mcp.err'"
+    _leak_re = ('BEGIN ([A-Z ]+ )?PRIVATE KEY|xox[baprs]-[0-9A-Za-z-]{10,}|'
+                'AKIA[0-9A-Z]{16}|sk-[A-Za-z0-9]{20,}|gh[pousr]_[A-Za-z0-9]{36,}')
     commit_cmd = (
-        f'cd "{repo_dir}" && '
-        f'git add -A && '
-        f'git commit -m "hermes: {commit_msg}" -m "Task: {task_id}" 2>&1'
+        'cd "' + repo_dir + '" || exit 9\n'
+        'for p in ' + _gi_patterns + '; do grep -qxF "$p" .gitignore 2>/dev/null || echo "$p" >> .gitignore; done\n'
+        'git add -A\n'
+        'git reset -q -- ' + _reset_specs + ' 2>/dev/null\n'
+        'LEAK=$(git diff --cached -U0 | grep -E "^\\+" | grep -Ein \'' + _leak_re + '\' | head -5)\n'
+        'if [ -n "$LEAK" ]; then echo HERMES_SECRET_LEAK_DETECTED; echo "$LEAK"; git reset -q; exit 42; fi\n'
+        'git commit -m "hermes: ' + commit_msg + '" -m "Task: ' + str(task_id) + '" 2>&1\n'
     )
     commit_result = subprocess.run(
         ["ssh", repo_host, commit_cmd],
         capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=60, check=False,
     )
+    if commit_result.returncode == 42 or "HERMES_SECRET_LEAK_DETECTED" in (commit_result.stdout or ""):
+        _leak_detail = (commit_result.stdout or "")[-400:]
+        _comment("🔒 시크릿 의심 패턴 감지 — commit/push 차단 (Error Fix Protocol 필요)\n"
+                 "```\n" + _leak_detail + "\n```")
+        return {
+            "success": False,
+            "error": _fmt_failure("secret_leak_blocked", _leak_detail),
+            "next_status": "review",
+            "failure_category": "secret_leak_blocked",
+        }
     if commit_result.returncode != 0:
         _comment(f"❌ git commit 실패:\n```\n{commit_result.stdout[-400:]}\n```")
         return {
