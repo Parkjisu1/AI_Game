@@ -1,0 +1,70 @@
+{
+  "genre": "action",
+  "description": "RPG/SLG - YOLO Screen Classification + State Machine",
+  "defaults": {
+    "classify_mode": "fingerprint",
+    "after_delay_ms": 800,
+    "yolo_model_path": null,
+    "fingerprint_db_path": null,
+    "learning_mode": true
+  },
+  "presets": {
+    "rpg": {
+      "description": "Action/Idle RPG (lobby, battle, shop, gacha)",
+      "screen_types": [
+        "lobby", "battle", "battle_result", "shop",
+        "hero_list", "hero_detail", "gacha", "gacha_result",
+        "quest", "settings", "loading", "popup", "ad"
+      ],
+      "roi_per_screen": {
+        "lobby": {
+          "resources": "600,10,460,80",
+          "notifications": "30,150,100,400"
+        },
+        "battle": {
+          "hp_bars": "30,100,500,60",
+          "skill_buttons": "30,1700,1020,200"
+        },
+        "battle_result": {
+          "rewards": "200,600,680,400"
+        },
+        "shop": {
+          "currency": "600,10,460,80"
+        }
+      },
+      "after_delay_ms": 1000,
+      "notes": "RPG has many screen types, longer transition delay"
+    },
+    "slg": {
+      "description": "Strategy/SLG (world map, city, battle)",
+      "screen_types": [
+        "world_map", "city", "city_build", "army",
+        "battle", "battle_report", "alliance", "shop",
+        "event", "mail", "settings", "loading", "popup", "ad"
+      ],
+      "roi_per_screen": {
+        "world_map": {
+          "resources": "200,10,680,60",
+          "minimap": "850,1700,230,230"
+        },
+        "city": {
+          "resources": "200,10,680,60",
+          "buildings": "100,200,880,1200"
+        },
+        "battle": {
+          "army_hp": "30,100,500,60",
+          "timer": "400,10,280,50"
+        }
+      },
+      "after_delay_ms": 800,
+      "notes": "SLG world map changes slowly, city view more static"
+    }
+  },
+  "characteristics": {
+    "screen_change_per_action": "medium-high (screen transitions)",
+    "animation_noise": "high (battle) / low (menus)",
+    "state_discreteness": "medium (screen types are discrete, within-screen is noisy)",
+    "causality_clarity": "medium (screen transitions clear, within-screen unclear)",
+    "recommended_delta_method": "screen_classification + state_transition + roi_per_screen"
+  }
+}

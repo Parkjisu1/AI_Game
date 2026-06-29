@@ -27,12 +27,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'gameforge-secret-2026',
   resave: false,
   saveUninitialized: false,
-  cookie: {
-    maxAge: 24 * 60 * 60 * 1000,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
-  },
-  proxy: process.env.NODE_ENV === 'production'
+  cookie: { maxAge: 24 * 60 * 60 * 1000 }
 }));
 
 // Make user available in all views

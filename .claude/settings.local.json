@@ -319,5 +319,49 @@
     ]
   },
   "teammateMode": "tmux",
-  "wslProjectPath": "/mnt/e/AI"
+  "wslProjectPath": "/mnt/e/AI",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash(git commit*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash E:/AI/.claude/hooks/pre-commit-validate.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Write(projects/*/output/**)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash E:/AI/.claude/hooks/asset-validate.sh $TOOL_INPUT_FILE_PATH"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash(git commit*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash E:/AI/.claude/hooks/post-commit-audit.sh"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "context_compression",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash E:/AI/.claude/hooks/context-preserve.sh E:/AI"
+          }
+        ]
+      }
+    ]
+  }
 }

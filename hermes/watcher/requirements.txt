@@ -1,0 +1,7 @@
+# ProjectHub Watcher 의존성
+# Mother에 설치: pip install -r requirements.txt
+
+pymongo>=4.6.0       # MongoDB 드라이버 (Change Streams 지원)
+PyYAML>=6.0          # user_registry.yaml 로딩
+python-dotenv>=1.0   # .env 자동 로드 (특수문자 안전)
+requests>=2.31       # LiteLLM 프록시 호출 (OpenAI 키 도착 후)

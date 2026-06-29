@@ -1,0 +1,31 @@
+1209,1220c1209
+< // §5.5 pickFrozenHealth — v1.2.23 PF picked 분포 (N=43, mode 6/16/24)
+< // 이전 ratio 기반 (×0.4~1.4) 폐기. PF 실측 mode 6(11.6%)/16(9.3%)/24(7%) + 6-30 구간 74.5%.
+< // 난이도별 weight 변동: easy → 낮은 값 (6-10), hard → 중상 (16-30+).
+< const FROZEN_HEALTH_DIST_V123: Record<Difficulty, { val: number; w: number }[]> = {
+<   tutorial: [{val:6,w:0.40},{val:8,w:0.25},{val:10,w:0.20},{val:16,w:0.10},{val:4,w:0.05}],
+<   rest:     [{val:6,w:0.40},{val:8,w:0.25},{val:10,w:0.20},{val:16,w:0.10},{val:4,w:0.05}],
+<   normal:   [{val:6,w:0.20},{val:8,w:0.15},{val:10,w:0.10},{val:16,w:0.20},{val:24,w:0.15},{val:18,w:0.10},{val:30,w:0.10}],
+<   hard:     [{val:6,w:0.08},{val:16,w:0.20},{val:18,w:0.10},{val:24,w:0.25},{val:26,w:0.10},{val:30,w:0.10},{val:32,w:0.10},{val:42,w:0.07}],
+<   super_hard:[{val:16,w:0.10},{val:24,w:0.15},{val:30,w:0.15},{val:42,w:0.15},{val:52,w:0.20},{val:61,w:0.15},{val:32,w:0.10}],
+<   intro:    [{val:6,w:0.40},{val:8,w:0.25},{val:10,w:0.20},{val:16,w:0.10},{val:4,w:0.05}],
+< };
+< 
+---
+> // §5.5 pickFrozenHealth — PF 정규화 비율 + ±60% 변동
+1222,1232c1211,1213
+<   const dist = FROZEN_HEALTH_DIST_V123[difficulty] ?? FROZEN_HEALTH_DIST_V123.normal;
+<   const totalW = dist.reduce((s, e) => s + e.w, 0);
+<   let r = rng() * totalW;
+<   for (const e of dist) {
+<     r -= e.w;
+<     if (r <= 0) {
+<       // totalSh 가 너무 적으면 (e.g., 4 슈터만) value 가 totalSh-1 초과 안 하도록
+<       return Math.max(2, Math.min(totalSh - 1, e.val));
+<     }
+<   }
+<   return Math.max(2, Math.min(totalSh - 1, dist[dist.length - 1].val));
+---
+>   const base = FROZEN_BASE_RATIO[difficulty] ?? 0.35;
+>   const actual = base * (0.4 + rng() * 1.0);              // ×0.4 ~ ×1.4
+>   return Math.max(2, Math.min(totalSh - 1, Math.round(totalSh * actual)));

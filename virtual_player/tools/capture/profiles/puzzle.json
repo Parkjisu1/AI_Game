@@ -1,0 +1,36 @@
+{
+  "genre": "puzzle",
+  "description": "Puzzle (Match3, Merge, Sort) - Before/After + Board Delta",
+  "defaults": {
+    "before_after": true,
+    "after_delay_ms": 500,
+    "board_roi": null
+  },
+  "presets": {
+    "match3": {
+      "description": "Match-3 puzzle (board center area)",
+      "board_roi": "100,300,880,900",
+      "after_delay_ms": 600,
+      "notes": "Board usually in center-bottom, adjust ROI per game"
+    },
+    "merge": {
+      "description": "Merge puzzle (grid area)",
+      "board_roi": "50,250,980,1000",
+      "after_delay_ms": 800,
+      "notes": "Merge animations take longer"
+    },
+    "sort_puzzle": {
+      "description": "Sort/Stack puzzle",
+      "board_roi": "100,400,880,800",
+      "after_delay_ms": 400,
+      "notes": "Fast state changes"
+    }
+  },
+  "characteristics": {
+    "screen_change_per_action": "low",
+    "animation_noise": "minimal",
+    "state_discreteness": "high",
+    "causality_clarity": "high",
+    "recommended_delta_method": "pixel_before_after + board_roi"
+  }
+}

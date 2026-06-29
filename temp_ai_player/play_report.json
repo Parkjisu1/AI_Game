@@ -1,0 +1,48 @@
+{
+  "results": [
+    {
+      "outcome": "stuck",
+      "turns": 15,
+      "stats": {
+        "total_turns": 15,
+        "pattern_hits": 4,
+        "pattern_misses": 11,
+        "exploration_turns": 11
+      }
+    },
+    {
+      "outcome": "max_turns",
+      "turns": 50,
+      "stats": {
+        "total_turns": 65,
+        "pattern_hits": 6,
+        "pattern_misses": 59,
+        "exploration_turns": 59
+      }
+    },
+    {
+      "outcome": "stuck",
+      "turns": 49,
+      "stats": {
+        "total_turns": 114,
+        "pattern_hits": 25,
+        "pattern_misses": 89,
+        "exploration_turns": 89
+      }
+    }
+  ],
+  "stats": {
+    "total_turns": 114,
+    "pattern_hits": 25,
+    "pattern_misses": 89,
+    "exploration_turns": 89,
+    "db": {
+      "sessions": 280,
+      "turns": 50632,
+      "patterns": 727,
+      "devices": 2,
+      "db_size_mb": 59.22
+    },
+    "pattern_hit_rate": 21.9
+  }
+}

@@ -64,6 +64,8 @@ You work in parallel with other Sub Coders on independent nodes.
 
 ## Hallucination Prevention
 
+> **Shared rule**: see `.claude/rules/hallucination-prevention.md` for the universal 6-check template. Items below are Sub Coder-specific.
+
 1. **Architecture-Grounded**: Every pattern decision must trace back to `_ARCHITECTURE.md` — if it's not documented there, don't invent it
 2. **Contract-First**: Read `contract.provides` from the L3 YAML BEFORE writing — implement exactly those methods, no extras
 3. **Dependency Verification**: Before referencing another class, verify it exists in `output/` via `Glob`
@@ -75,24 +77,18 @@ You work in parallel with other Sub Coders on independent nodes.
 
 ## DB Search (Mandatory Before Code Generation)
 
-### CLI Search (Preferred)
+> **Shared rule**: see `.claude/rules/db-search.md` for the unified 5-tier DB search protocol.
+
+### CLI Search
 ```bash
 node E:/AI/scripts/db-search.js --genre {genre} --role {role} --system {system} --json
 ```
 
-### Manual Search (Fallback)
-1. Read `E:\AI\db\base\{genre}\{layer}\index.json`
-2. Score: Role match (+0.3), System match (+0.2), majorFunctions match (+0.2), provides similarity (+0.3)
-3. Load top matches from `files/{fileId}.json`
-
-### Search Priority
-| Priority | Source | Condition |
-|----------|--------|-----------|
-| 1 | Expert DB (target genre) | genre match AND score >= 0.6 |
-| 2 | Expert DB (Generic) | genre = Generic AND score >= 0.6 |
-| 3 | Genre Base DB | genre match |
-| 4 | Generic Base DB | genre = Generic |
-| 5 | L3 YAML logicFlow | No DB match — generate from scratch |
+### Sub Coder Specifics
+- Follow Main Coder's patterns in `_ARCHITECTURE.md` — DB match is secondary to architecture alignment
+- Focus on Role + Tag matching (Calculator, Processor, Handler patterns)
+- Record `Source:` comment in generated code header when reusing a DB entry
+- On Tier 5 (no DB match): reference Main Coder's patterns instead of inventing new ones
 
 ---
 
@@ -143,26 +139,12 @@ namespace {Project}.{System}
 
 ## Error Fix Protocol (Mandatory)
 
-When fixing compilation errors, follow this protocol to prevent design intent drift:
+> **Shared rule**: see `.claude/rules/error-fix.md` for the full 3-step protocol.
 
-### Step 1: Load Context (BEFORE any edit)
-1. The broken file
-2. Its L3 YAML node
-3. `_CONTRACTS.yaml` entries referencing this file
-4. All files that call this file's methods
-5. All files this file depends on
-
-### Step 2: Fix Constraints
-- NEVER remove public methods listed in contract.provides
-- NEVER remove [SerializeField] (SceneBuilder depends on them)
-- NEVER change method signatures without updating all callers
-- NEVER add null-check bypasses for required dependencies
-- If public API change needed → report to Lead
-
-### Step 3: Post-Fix
-1. Verify _CONTRACTS.yaml compliance
-2. Verify L3 YAML intent preserved
-3. Re-run self-validation
+### Sub Coder Specifics
+- **Do NOT edit `_CONTRACTS.yaml` directly** — report new contracts or violations to Lead; Main Coder applies updates
+- Public API changes require Lead approval (Main Coder may need to update affected Core classes)
+- If an error requires deviating from Main Coder's `_ARCHITECTURE.md` pattern: STOP, notify Lead
 
 ## Unity C# Coding Rules
 

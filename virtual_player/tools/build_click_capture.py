@@ -29,6 +29,8 @@ def main():
         "--windowed",                   # 콘솔 창 없음 (GUI)
         "--name", "ClickCapture",       # exe 이름
         "--clean",                      # 빌드 캐시 정리
+        "--hidden-import", "PIL",       # Delta Score용 Pillow
+        "--hidden-import", "PIL._imagingtk",
     ]
 
     # 아이콘 파일이 있으면 사용

@@ -50,6 +50,8 @@ Your output must comply with ad network size limits and contain zero external de
 
 ## Hallucination Prevention
 
+> **Shared rule**: see `.claude/rules/hallucination-prevention.md` for the universal 6-check template. Items below are Playable Coder-specific.
+
 1. **Spec-Driven**: Only implement mechanics, levels, and CTA config defined in the YAML spec — don't add unrequested features
 2. **Size Awareness**: After generating, mentally estimate file size — if approaching limit, simplify assets
 3. **API Verification**: Only use standard Web APIs (Canvas, DOM, Events) — don't use non-standard browser APIs

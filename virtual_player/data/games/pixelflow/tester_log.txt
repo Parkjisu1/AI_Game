@@ -1,0 +1,39 @@
+[17:03:01] === Pixel Flow AI Tester START ===
+[17:03:01] Game: pixelflow
+[17:03:01] Target: 2026-04-03 17:06
+[17:03:01] Model: claude-sonnet-4-6 | Mode: CLI (optimized)
+[17:03:09] Screen: popup | Holder: 0/5 | Vision: 7.4s
+[17:03:09]   Plan: BACK [Android back (safest dismiss)]
+[17:03:09]   Plan: TAP(497,97) [Gold Pack X close (top-right)]
+[17:03:09]   Plan: TAP(540,1830) [Home/pig tab (escape shop)]
+[17:03:09]   Plan: BACK [Android back fallback]
+[17:03:56] Screen: popup | Holder: 0/5 | Vision: 10.3s
+[17:03:56]   Plan: BACK [Android back (safest dismiss)]
+[17:03:56]   Plan: TAP(497,97) [Gold Pack X close (top-right)]
+[17:03:56]   Plan: TAP(540,1830) [Home/pig tab (escape shop)]
+[17:03:56]   Plan: BACK [Android back fallback]
+[17:04:42] Screen: popup | Holder: 0/5 | Vision: 7.4s
+[17:04:42]   Plan: BACK [Android back (safest dismiss)]
+[17:04:42]   Plan: TAP(497,97) [Gold Pack X close (top-right)]
+[17:04:42]   Plan: TAP(540,1830) [Home/pig tab (escape shop)]
+[17:04:42]   Plan: BACK [Android back fallback]
+[17:05:25] Screen: journey | Holder: 0/5 | Vision: 6.7s
+[17:05:25]   Plan: BACK [Back from unknown]
+[17:05:25]   Plan: TAP(540,1830) [Home tab fallback]
+[17:05:50] Screen: journey | Holder: 0/5 | Vision: 7.1s
+[17:05:50]   Plan: BACK [Back from unknown]
+[17:05:50]   Plan: TAP(540,1830) [Home tab fallback]
+[17:06:06] Screen: journey | Holder: 0/5 | Vision: 6.6s
+[17:06:06]   Plan: BACK [Back from unknown]
+[17:06:06]   Plan: TAP(540,1830) [Home tab fallback]
+[17:06:24] 
+[17:06:24] ==================================================
+[17:06:24] SESSION COMPLETE
+[17:06:24] ==================================================
+[17:06:24] Games started:  0
+[17:06:24] Games won:      0
+[17:06:24] Games failed:   0
+[17:06:24] Total taps:     8
+[17:06:24] Total turns:    17
+[17:06:24] Vision calls:   23
+[17:06:24] Stats saved: E:\AI\virtual_player\data\games\pixelflow\temp\tester\stats.json

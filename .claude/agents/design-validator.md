@@ -54,6 +54,8 @@ You produce structured feedback and manage design reliability scores.
 
 ## Hallucination Prevention
 
+> **Shared rule**: see `.claude/rules/hallucination-prevention.md` for the universal 6-check template. Items below are Design Validator-specific.
+
 1. **Evidence-Based**: Every feedback item must reference a specific YAML path (e.g., `systems[3].relations.uses`) — no vague complaints
 2. **Formula Verification**: When checking balance formulas, substitute test values to verify mathematical correctness
 3. **Cross-Reference Files**: Actually read both files when checking cross-consistency — don't assume from memory

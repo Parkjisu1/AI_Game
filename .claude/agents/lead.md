@@ -58,6 +58,8 @@ You operate in **delegate mode** — you never write code or design documents yo
 
 ## Hallucination Prevention
 
+> **Shared rule**: see `.claude/rules/hallucination-prevention.md` for the universal 6-check template (file:line citation, cross-ref, defer if uncertain, ICS validation, re-read, no memory-alone). Items below are Lead-specific extensions.
+
 1. **File Verification**: Always use `Read` or `Glob` to confirm deliverables exist before accepting
 2. **Contract Cross-Check**: When agents report provides/requires, verify against actual YAML/code files
 3. **Score Verification**: When score changes are reported, verify against `scripts/lib/score-manager.js` rules

@@ -331,7 +331,7 @@ Compare, Calculate, Find, Validate, Assign, Notify, Delay, Spawn, Despawn, Itera
 
 ---
 
-## 명령어
+## 명령어 (20개)
 
 ### Code Workflow
 - `/parse-source [path]` - 소스코드 파싱 후 DB 저장
@@ -344,6 +344,62 @@ Compare, Calculate, Find, Validate, Assign, Notify, Delay, Spawn, Despawn, Itera
 - `/generate-design-v2 [input]` - 8단계 기획 워크플로우 실행
 - `/validate-design [path]` - 기획서 통합 검증 (교차 검증, 밸런스 시뮬)
 - `/sync-live [project]` - 라이브 데이터 동기화
+
+### Review & Analysis
+- `/code-review [path]` - 코드 리뷰 (경량 Validator, 규칙 기반)
+- `/balance-check [project]` - 밸런스/경제 수치 빠른 검증
+- `/scope-check [project]` - 범위 초과 탐지 (장르 기준선 대비)
+
+### Production
+- `/sprint-plan [project]` - Phase 단위 스프린트 계획 생성
+- `/retrospective [project] [phase]` - Phase/프로젝트 회고 분석
+- `/estimate [project|node]` - 노드별 복잡도/공수 추정
+
+### Project Management
+- `/gate-check [project] [phase]` - Phase Gate 통과 조건 검증
+- `/map-systems [project]` - 시스템 의존성 맵 (ASCII)
+- `/release-checklist [project] [platform]` - 빌드 전 체크리스트
+
+### Team Orchestration
+- `/team-code [project] [phase]` - Main+Sub Coder 병렬 코드 생성
+- `/team-design [project] [stage]` - Designer+Validator 기획 워크플로우
+- `/team-polish [project]` - 최종 폴리싱 (검증+자동수정 사이클)
+
+---
+
+## Automated Hooks (5개)
+
+커밋/파일 저장 시 자동 실행되는 검증 스크립트. `.claude/hooks/` 디렉토리에 위치.
+
+| Hook | 트리거 | 역할 |
+|------|--------|------|
+| `pre-commit-validate.sh` | git commit 전 | 하드코딩 감지, TODO 포맷, JSON 유효성, 기획서 필수 섹션, Unity 금지 패턴 |
+| `post-commit-audit.sh` | git commit 후 | 감사 로그 기록 (History/audit_log.jsonl) — 에이전트, 파일, 통계 |
+| `asset-validate.sh` | 에셋 파일 저장 시 | 네이밍 컨벤션, Editor 경로, Playable 크기, YAML 탭 검사, ICS 크로스체크 |
+| `gap-detect.sh` | Phase 완료 후 수동 | 누락 문서/계약 감지 (_ARCHITECTURE, _CONTRACTS, Editor 스크립트 등) |
+| `context-preserve.sh` | 컨텍스트 압축 시 | git 상태, 활성 프로젝트, ICS 계약 현황 스냅샷 저장 |
+
+### Hook 실행 규칙
+- pre-commit: ERROR 발생 시 커밋 차단 (exit 1), WARN은 표시만
+- asset-validate: Write 시 자동 실행, ERROR 시 파일 저장 차단
+- gap-detect: `bash .claude/hooks/gap-detect.sh <project_path>`로 수동 실행
+- audit log: JSONL 형식, agent/commit/files/stats 추적
+
+---
+
+## Path-scoped Coding Rules (6개)
+
+경로별 자동 적용되는 코딩 규칙. `.claude/rules/` 디렉토리에 위치.
+`globs` 패턴으로 해당 경로의 파일 편집 시 자동 로드.
+
+| Rule | Glob | 핵심 규칙 |
+|------|------|----------|
+| `output-runtime.md` | `projects/*/output/*.cs` | new GameObject 금지, ObjectPool 필수, [SerializeField] 참조, EventBus 통신 |
+| `output-editor.md` | `projects/*/output/Editor/*.cs` | [InitializeOnLoad]+delayCall, EditorPrefs 1회 가드, ApplyModifiedProperties 필수 |
+| `output-sdk.md` | `projects/*/output/SDK/*.cs` | #if 조건부 컴파일 필수, #else 시뮬레이션, Singleton 패턴 |
+| `output-data.md` | `projects/*/output/Data/*.cs` | ScriptableObject 상속, [CreateAssetMenu], OnValidate, 불변 공개 API |
+| `design-workflow.md` | `projects/*/design_workflow/**/*.yaml` | YAML 포맷, L1/L2/L3 필수 섹션, 교차참조 일관성, nodeId 중복 금지 |
+| `playable.md` | `projects/*/output/playable.html` | 단일 파일, 외부 요청 금지, CTA 필수, 네트워크별 크기 제한 |
 
 ---
 

@@ -66,6 +66,8 @@ class PlayDB:
         jsonl_path = Path(jsonl_path)
         if frames_dir is None:
             frames_dir = jsonl_path.parent
+        else:
+            frames_dir = Path(frames_dir)
 
         # 디바이스/게임 등록
         self._ensure_device(device_id)

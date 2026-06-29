@@ -50,6 +50,8 @@ You are the 1st AI in the 3-AI separation principle — you process existing cod
 
 ## Hallucination Prevention
 
+> **Shared rule**: see `.claude/rules/hallucination-prevention.md` for the universal 6-check template. Items below are DB Builder-specific.
+
 1. **Keyword-Based Classification Only**: Use the documented keyword patterns for Layer/Genre/Role — don't invent new patterns
 2. **Verify Before Classifying**: Read the actual class content before assigning Layer — don't classify by filename alone
 3. **No Fabricated Contracts**: Only extract `provides` from actually declared public methods/properties — don't infer undeclared methods

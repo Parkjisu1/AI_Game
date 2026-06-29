@@ -1,0 +1,62 @@
+{
+  "genre": "idle",
+  "description": "Idle/Clicker - OCR Value Delta + Animation Masking",
+  "defaults": {
+    "after_delay_ms": 1000,
+    "auto_snapshot_sec": 10,
+    "value_regions": {},
+    "mask_regions": []
+  },
+  "presets": {
+    "idle_clicker": {
+      "description": "Typical idle clicker (currency top, tap center)",
+      "value_regions": {
+        "money": "400,30,280,50",
+        "diamond": "400,80,280,50",
+        "level": "30,30,100,40"
+      },
+      "mask_regions": [
+        "200,300,680,800"
+      ],
+      "auto_snapshot_sec": 10,
+      "after_delay_ms": 1000,
+      "notes": "Mask the center production area (constant animation)"
+    },
+    "idle_rpg": {
+      "description": "Idle RPG (auto-battle, resource collection)",
+      "value_regions": {
+        "gold": "800,20,240,40",
+        "gems": "800,60,240,40",
+        "power": "30,20,200,40",
+        "stage": "400,20,280,40"
+      },
+      "mask_regions": [
+        "100,200,880,700"
+      ],
+      "auto_snapshot_sec": 15,
+      "after_delay_ms": 1500,
+      "notes": "Battle area is always animated, track resource counters only"
+    },
+    "idle_tycoon": {
+      "description": "Idle tycoon (money/production tracking)",
+      "value_regions": {
+        "money": "350,20,380,50",
+        "income_rate": "350,70,380,40",
+        "workers": "30,20,200,40"
+      },
+      "mask_regions": [
+        "50,200,980,900"
+      ],
+      "auto_snapshot_sec": 5,
+      "after_delay_ms": 800,
+      "notes": "Fast income ticking, short auto-snapshot interval"
+    }
+  },
+  "characteristics": {
+    "screen_change_per_action": "high (but from background, not user)",
+    "animation_noise": "very_high",
+    "state_discreteness": "low (continuous numbers)",
+    "causality_clarity": "low (pixel) / high (value OCR)",
+    "recommended_delta_method": "ocr_value_delta + animation_masking"
+  }
+}

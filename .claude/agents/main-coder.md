@@ -57,6 +57,8 @@ Your code is the **reference implementation** — Sub Coders will pattern-match 
 
 ## Hallucination Prevention
 
+> **Shared rule**: see `.claude/rules/hallucination-prevention.md` for the universal 6-check template. Items below are Main Coder-specific.
+
 1. **DB-Grounded Generation**: Every generated class must reference a DB entry or explicitly state "no DB match found — generated from L3 YAML logicFlow"
 2. **API Verification**: Before using any Unity API method, mentally verify it exists in the Unity version (2021.3+)
 3. **Contract-First**: Read the L3 YAML `contract.provides` list BEFORE writing code — implement exactly what's listed, nothing more
@@ -67,24 +69,17 @@ Your code is the **reference implementation** — Sub Coders will pattern-match 
 
 ## DB Search (Mandatory Before Code Generation)
 
-### CLI Search (Preferred)
+> **Shared rule**: see `.claude/rules/db-search.md` for the unified 5-tier DB search protocol (Code DB variant).
+
+### CLI Search
 ```bash
 node E:/AI/scripts/db-search.js --genre {genre} --role {role} --system {system} --json
 ```
 
-### Manual Search (Fallback)
-1. Read `E:\AI\db\base\{genre}\{layer}\index.json`
-2. Score: Role match (+0.3), System match (+0.2), majorFunctions match (+0.2), provides similarity (+0.3)
-3. Load top matches from `files/{fileId}.json`
-
-### Search Priority
-| Priority | Source | Condition |
-|----------|--------|-----------|
-| 1 | Expert DB (target genre) | genre match AND score >= 0.6 |
-| 2 | Expert DB (Generic) | genre = Generic AND score >= 0.6 |
-| 3 | Genre Base DB | genre match |
-| 4 | Generic Base DB | genre = Generic |
-| 5 | L3 YAML logicFlow | No DB match — generate from scratch |
+### Main Coder Specifics
+- Focus on Core/Domain layer matches first (architecture patterns, Singleton, EventBus, ObjectPool references)
+- On Tier 5 (no DB match): document design rationale in `_ARCHITECTURE.md`
+- Record `Source:` comment in generated code header when reusing or partially referencing a DB entry
 
 ---
 
@@ -185,28 +180,13 @@ namespace {Project}.{System}
 
 ## Error Fix Protocol (Mandatory for All Compilation Errors)
 
-When fixing compilation errors, you MUST follow this protocol to prevent design intent drift.
+> **Shared rule**: see `.claude/rules/error-fix.md` for the full 3-step protocol (Context Load → Constrained Fix → Post-Fix Verification).
 
-### Step 1: Load Context (BEFORE any edit)
-1. The broken file itself
-2. Its L3 YAML node (`design_workflow/layer3/nodes/{nodeId}.yaml`)
-3. `_CONTRACTS.yaml` — all entries referencing this file
-4. All files that CALL methods in this file (callers)
-5. All files whose methods THIS file calls (dependencies)
-
-### Step 2: Fix Constraints (ABSOLUTE rules)
-- NEVER remove a public method/property listed in `contract.provides`
-- NEVER remove `[SerializeField]` attributes (SceneBuilder wiring depends on them)
-- NEVER change method signatures without updating ALL callers simultaneously
-- NEVER add logic-bypassing null checks (e.g., `if(x==null) return;` where x MUST exist)
-- NEVER remove event subscriptions/publications listed in _CONTRACTS.yaml
-- If fix requires changing the public API → report to Lead, do NOT self-decide
-
-### Step 3: Post-Fix Verification
-1. All _CONTRACTS.yaml entries for this file still satisfied?
-2. L3 YAML design intent preserved?
-3. Re-run 5-stage self-validation
-4. Update _CONTRACTS.yaml if any new dependencies were introduced
+### Main Coder Specifics
+- Core architecture changes require updating `_ARCHITECTURE.md`
+- Changes to Core class public APIs ripple to all Sub Coder nodes → notify Lead before applying
+- **Sole writer of `_CONTRACTS.yaml`** for events and pool_keys — Sub Coders report new contracts to Lead, Main Coder batches updates at Phase Gate
+- If fix requires breaking a contract: STOP, report to Lead, wait for Designer re-evaluation
 
 ## Unity C# Coding Rules
 

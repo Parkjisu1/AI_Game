@@ -1,0 +1,139 @@
+[17:25:03] ============================================================
+[17:25:03] Smart PixelFlow Player START
+[17:25:03] Duration: 5 min | Target: 17:30:03
+[17:25:03] ADB: C:\Program Files\BlueStacks_nxt\HD-Adb.exe | Device: emulator-5554
+[17:25:03] YOLO: best.pt
+[17:25:03] Profile: cell_profile.json
+[17:25:03] Fingerprint DB: fingerprint.db (loaded)
+[17:25:03] FP threshold: 0.8, top_k: 5
+[17:25:03] ============================================================
+[17:25:17] T1: [loading] PlayDB: 3 patterns, trying top 2
+[17:25:22]   [SESSION] Started 9298f6d77ecf (start_cells=285)
+[17:25:22] T2: [gameplay] Board=285cells/6colors d=+0 [DarkGreen:204, Brown:38, Orange:25, Red:8, DarkRed:8] | Queue=[FP stall=0 fp_top=0.97] | Holder=[_/DarkGreen/DarkGreen/DarkGreen/DarkGreen] (4/5) | 0.6s
+[17:25:22]   -> TAP(696,1517) [[FP:0.97] Human pattern (delta=-40, id=6969)]
+[17:25:25] T3: [gameplay] Board=285cells/6colors d=+0 [DarkGreen:204, Brown:38, Orange:25, Red:8, DarkRed:8] | Queue=[FP stall=1 fp_top=0.97] | Holder=[_/DarkGreen/DarkGreen/DarkGreen/DarkGreen] (4/5) | 0.6s
+[17:25:25]   -> TAP(723,1537) [[FP:0.97] Human pattern (delta=-37, id=3699)]
+[17:25:29] T4: [gameplay] Board=285cells/6colors d=+0 [DarkGreen:204, Brown:38, Orange:25, Red:8, DarkRed:8] | Queue=[FP stall=2 fp_top=0.97] | Holder=[_/DarkGreen/DarkGreen/DarkGreen/DarkGreen] (4/5) | 0.5s
+[17:25:29]   -> TAP(524,1512) [[FP:0.97] Human pattern (delta=-9, id=3250)]
+[17:25:32] T5: [gameplay] Board=285cells/6colors d=+0 [DarkGreen:204, Brown:38, Orange:25, Red:8, DarkRed:8] | Queue=[FP stall=3 fp_top=0.97] | Holder=[_/DarkRed/SageTeal/SageTeal/SageTeal] (4/5) | 0.5s
+[17:25:32]   -> TAP(696,1517) [[FP:0.97] Human pattern (delta=-40, id=6969)]
+[17:25:35] T6: [gameplay] Board=285cells/6colors d=+0 [DarkGreen:204, Brown:38, Orange:25, Red:8, DarkRed:8] | Queue=[FP stall=4 fp_top=0.97] | Holder=[_/DarkRed/_/_/_] (1/5) | 0.5s
+[17:25:35]   -> TAP(723,1537) [[FP:0.97] Human pattern (delta=-37, id=3699)]
+[17:25:38] T7: [gameplay] Board=252cells/6colors d=-33 [DarkGreen:171, Brown:38, Orange:25, Red:8, DarkRed:8] | Queue=[FP stall=0 fp_top=0.97] | Holder=[_/DarkRed/_/_/_] (1/5) | 0.5s
+[17:25:38]   -> TAP(524,1512) [[FP:0.96] Human pattern (delta=-9, id=3250)]
+[17:25:41] T8: [gameplay] Board=248cells/6colors d=-4 [DarkGreen:167, Brown:38, Orange:25, Red:8, DarkRed:8] | Queue=[FP stall=0 fp_top=0.96] | Holder=[_/DarkRed/_/_/_] (1/5) | 0.4s
+[17:25:41]   -> TAP(696,1517) [[FP:0.96] Human pattern (delta=-40, id=6969)]
+[17:25:44] T9: [gameplay] Board=248cells/6colors d=+0 [DarkGreen:167, Brown:38, Orange:25, Red:8, DarkRed:8] | Queue=[FP stall=1 fp_top=0.96] | Holder=[_/DarkRed/_/_/_] (1/5) | 0.4s
+[17:25:44]   -> TAP(316,1516) [[FP:0.97] Human pattern (delta=-28, id=4177)]
+[17:25:48] T10: [gameplay] Board=248cells/6colors d=+0 [DarkGreen:167, Brown:38, Orange:25, Red:8, DarkRed:8] | Queue=[FP stall=2 fp_top=0.96] | Holder=[_/DarkRed/_/_/_] (1/5) | 0.4s
+[17:25:48]   -> TAP(732,1524) [[FP:0.96] Human pattern (delta=-20, id=3691)]
+[17:25:51] T11: [gameplay] Board=284cells/6colors d=+36 [DarkGreen:203, Brown:38, Orange:25, Red:8, DarkRed:8] | Queue=[FP stall=1 fp_top=0.99] | Holder=[_/DarkRed/_/_/_] (1/5) | 0.5s
+[17:25:51]   -> TAP(371,1475) [[FP:0.97] Human pattern (delta=-8, id=1389)]
+[17:25:54] T12: [gameplay] Board=157cells/6colors d=-127 [DarkGreen:74, Brown:40, Orange:25, Red:8, DarkRed:8] | Queue=[FP stall=0 fp_top=0.94] | Holder=[_/DarkRed/_/_/_] (1/5) | 0.4s
+[17:25:54]   -> TAP(316,1516) [[FP:0.95] Human pattern (delta=-15, id=4182)]
+[17:25:57] T13: [gameplay] Board=157cells/6colors d=+0 [DarkGreen:74, Brown:40, Orange:25, Red:8, DarkRed:8] | Queue=[FP stall=1 fp_top=0.94] | Holder=[_/DarkRed/_/_/_] (1/5) | 0.4s
+[17:25:57]   -> TAP(714,1495) [[FP:0.95] Human pattern (delta=-9, id=6853)]
+[17:26:00] T14: [gameplay] Board=157cells/6colors d=+0 [DarkGreen:74, Brown:40, Orange:25, Red:8, DarkRed:8] | Queue=[FP stall=2 fp_top=0.94] | Holder=[_/DarkRed/_/_/_] (1/5) | 0.6s
+[17:26:00]   -> TAP(371,1488) [[FP:0.95] Human pattern (delta=-59, id=4161)]
+[17:26:03] T15: [gameplay] Board=157cells/6colors d=+0 [DarkGreen:74, Brown:40, Orange:25, Red:8, DarkRed:8] | Queue=[FP stall=3 fp_top=0.94] | Holder=[_/_/_/_/_] (0/5) | 0.5s
+[17:26:03]   -> TAP(316,1516) [[FP:0.95] Human pattern (delta=-15, id=4182)]
+[17:26:07] T16: [gameplay] Board=157cells/6colors d=+0 [DarkGreen:74, Brown:40, Orange:25, Red:8, DarkRed:8] | Queue=[FP stall=4 fp_top=0.94] | Holder=[HotPink/_/_/_/_] (1/5) | 0.5s
+[17:26:07]   -> TAP(714,1495) [[FP:0.95] Human pattern (delta=-9, id=6853)]
+[17:26:10]   [EXPLORE] Entering exploration mode (stall x5)
+[17:26:10] T17: [gameplay] Board=157cells/6colors d=+0 [DarkGreen:74, Brown:40, Orange:25, Red:8, DarkRed:8] | Queue=[FP stall=5 fp_top=0.94] | Holder=[_/_/_/_/_] (0/5) | 0.5s
+[17:26:10]   -> TAP(371,1488) [[FP:0.95] Human pattern (delta=-59, id=4161)]
+[17:26:13] T18: [gameplay] Board=151cells/5colors d=-6 [DarkGreen:74, Brown:36, Orange:25, Red:8, DarkRed:8] | Queue=[FP stall=0 fp_top=0.94] | Holder=[_/_/_/_/_] (0/5) | 0.5s
+[17:26:13]   -> TAP(314,1495) [[FP:0.92] Human pattern (delta=-59, id=4165)]
+[17:26:17] T19: [gameplay] Board=141cells/5colors d=-10 [DarkGreen:74, Brown:28, Orange:23, Red:8, DarkRed:8] | Queue=[FP stall=0 fp_top=0.93] | Holder=[_/Periwinkle/_/_/_] (1/5) | 0.6s
+[17:26:17]   -> TAP(316,1516) [[FP:0.94] Human pattern (delta=-28, id=4177)]
+[17:26:19] T20: [popup] Multi-tap close/retry positions
+[17:26:24]   [SESSION] Ended 9298f6d77ecf: fail (18 turns, end_cells=141)
+[17:26:24] T21: [fail] Multi-tap close/retry positions
+[17:26:28] T22: [fail] Multi-tap close/retry positions
+[17:26:33] T23: [fail] Multi-tap close/retry positions
+[17:26:37] T24: [fail] Multi-tap close/retry positions
+[17:26:42] T25: [fail] Multi-tap close/retry positions
+[17:26:46] T26: [fail] Multi-tap close/retry positions
+[17:26:51] T27: POPUP LOOP (fail), relaunch
+[17:27:03] T28: [loading] PlayDB: 3 patterns, trying top 2
+[17:27:08] T29: [loading] PlayDB: 3 patterns, trying top 2
+[17:27:12] T30: [loading] PlayDB: 3 patterns, trying top 2
+[17:27:17]   [SESSION] Started ba63a533c9fa (start_cells=292)
+[17:27:17] T31: [gameplay] Board=292cells/6colors d=+0 [DarkGreen:203, Brown:36, Orange:28, Red:12, DarkRed:8] | Queue=[FP stall=0 fp_top=0.97] | Holder=[_/DarkGreen/DarkGreen/DarkGreen/DarkGreen] (4/5) | 0.5s
+[17:27:17]   -> TAP(717,1495) [[FP:0.97] Human pattern (delta=-43, id=6857)]
+[17:27:21] T32: [gameplay] Board=292cells/6colors d=+0 [DarkGreen:203, Brown:36, Orange:28, Red:12, DarkRed:8] | Queue=[FP stall=1 fp_top=0.97] | Holder=[_/DarkGreen/DarkGreen/DarkGreen/DarkGreen] (4/5) | 0.5s
+[17:27:21]   -> TAP(723,1537) [[FP:0.97] Human pattern (delta=-37, id=3699)]
+[17:27:24] T33: [gameplay] Board=292cells/6colors d=+0 [DarkGreen:203, Brown:36, Orange:28, Red:12, DarkRed:8] | Queue=[FP stall=2 fp_top=0.97] | Holder=[_/DarkGreen/DarkGreen/DarkGreen/DarkGreen] (4/5) | 0.5s
+[17:27:24]   -> TAP(371,1475) [[FP:0.97] Human pattern (delta=-8, id=1389)]
+[17:27:28] T34: [gameplay] Board=292cells/6colors d=+0 [DarkGreen:203, Brown:36, Orange:28, Red:12, DarkRed:8] | Queue=[FP stall=3 fp_top=0.97] | Holder=[_/DarkGreen/DarkGreen/DarkGreen/DarkGreen] (4/5) | 0.4s
+[17:27:28]   -> TAP(717,1495) [[FP:0.97] Human pattern (delta=-43, id=6857)]
+[17:27:31] T35: [gameplay] Board=292cells/6colors d=+0 [DarkGreen:203, Brown:36, Orange:28, Red:12, DarkRed:8] | Queue=[FP stall=4 fp_top=0.97] | Holder=[_/DarkGreen/DarkGreen/DarkGreen/DarkGreen] (4/5) | 0.4s
+[17:27:31]   -> TAP(723,1537) [[FP:0.97] Human pattern (delta=-37, id=3699)]
+[17:27:34]   [EXPLORE] Entering exploration mode (stall x5)
+[17:27:34] T36: [gameplay] Board=292cells/6colors d=+0 [DarkGreen:203, Brown:36, Orange:28, Red:12, DarkRed:8] | Queue=[FP stall=5 fp_top=0.97] | Holder=[_/DarkGreen/DarkGreen/DarkGreen/DarkGreen] (4/5) | 0.5s
+[17:27:34]   -> TAP(371,1475) [[FP:0.97] Human pattern (delta=-8, id=1389)]
+[17:27:37] T37: [gameplay] Board=292cells/6colors d=+0 [DarkGreen:203, Brown:36, Orange:28, Red:12, DarkRed:8] | Queue=[FP stall=6 fp_top=0.97] | Holder=[_/DarkGreen/DarkGreen/DarkGreen/DarkGreen] (4/5) | 0.5s
+[17:27:37]   -> TAP(717,1495) [[FP:0.97] Human pattern (delta=-43, id=6857)]
+[17:27:41] T38: [gameplay] Board=292cells/6colors d=+0 [DarkGreen:203, Brown:36, Orange:28, Red:12, DarkRed:8] | Queue=[FP stall=7 fp_top=0.97] | Holder=[_/DarkGreen/DarkGreen/DarkGreen/DarkGreen] (4/5) | 0.5s
+[17:27:41]   -> TAP(723,1537) [[FP:0.97] Human pattern (delta=-37, id=3699)]
+[17:27:44] T39: [gameplay] Board=292cells/6colors d=+0 [DarkGreen:203, Brown:36, Orange:28, Red:12, DarkRed:8] | Queue=[FP stall=8 fp_top=0.97] | Holder=[_/DarkGreen/DarkGreen/DarkGreen/DarkGreen] (4/5) | 0.7s
+[17:27:44]   -> TAP(371,1475) [[FP:0.97] Human pattern (delta=-8, id=1389)]
+[17:27:48] T40: [gameplay] Board=292cells/6colors d=+0 [DarkGreen:203, Brown:36, Orange:28, Red:12, DarkRed:8] | Queue=[FP stall=9 fp_top=0.97] | Holder=[_/DarkRed/SageTeal/SageTeal/SageTeal] (4/5) | 0.4s
+[17:27:48]   -> TAP(717,1495) [[FP:0.97] Human pattern (delta=-43, id=6857)]
+[17:27:52] T41: [gameplay] Board=292cells/6colors d=+0 [DarkGreen:203, Brown:36, Orange:28, Red:12, DarkRed:8] | Queue=[EXPLORE stall=10 fp_top=0.97] | Holder=[_/DarkRed/SageTeal/SageTeal/SageTeal] (4/5) | 0.9s
+[17:27:52]   -> TAP(876,1784) [[EXPLORE:AI_DB] Tap (876,1784) conf=0.50]
+[17:27:54]   [SESSION] Ended ba63a533c9fa: fail (11 turns, end_cells=292)
+[17:27:54] T42: [fail] Multi-tap close/retry positions
+[17:27:59] T43: [fail] Multi-tap close/retry positions
+[17:28:04] T44: [fail] Multi-tap close/retry positions
+[17:28:08] T45: [fail] Multi-tap close/retry positions
+[17:28:13] T46: [fail] Multi-tap close/retry positions
+[17:28:18] T47: [fail] Multi-tap close/retry positions
+[17:28:22] T48: [fail] Multi-tap close/retry positions
+[17:28:27] T49: POPUP LOOP (fail), relaunch
+[17:28:40] T50: [loading] PlayDB: 3 patterns, trying top 2
+[17:28:44] T51: [loading] PlayDB: 3 patterns, trying top 2
+[17:28:49] T52: [loading] PlayDB: 3 patterns, trying top 2
+[17:28:53]   [SESSION] Started b42f3287c2db (start_cells=284)
+[17:28:53] T53: [gameplay] Board=284cells/6colors d=+0 [DarkGreen:207, Brown:31, Orange:25, DarkRed:12, DustyRose:5] | Queue=[FP stall=0 fp_top=0.98] | Holder=[_/DarkGreen/DarkGreen/DarkGreen/DarkGreen] (4/5) | 0.5s
+[17:28:53]   -> TAP(717,1495) [[FP:0.98] Human pattern (delta=-43, id=6857)]
+[17:28:57] T54: [gameplay] Board=284cells/6colors d=+0 [DarkGreen:207, Brown:31, Orange:25, DarkRed:12, DustyRose:5] | Queue=[FP stall=1 fp_top=0.98] | Holder=[_/DarkGreen/DarkGreen/DarkGreen/DarkGreen] (4/5) | 0.6s
+[17:28:57]   -> TAP(696,1517) [[FP:0.98] Human pattern (delta=-40, id=6969)]
+[17:29:00] T55: [gameplay] Board=284cells/6colors d=+0 [DarkGreen:207, Brown:31, Orange:25, DarkRed:12, DustyRose:5] | Queue=[FP stall=2 fp_top=0.98] | Holder=[_/DarkGreen/DarkGreen/DarkGreen/DarkGreen] (4/5) | 0.5s
+[17:29:00]   -> TAP(524,1512) [[FP:0.98] Human pattern (delta=-9, id=3250)]
+[17:29:04] T56: [gameplay] Board=284cells/6colors d=+0 [DarkGreen:207, Brown:31, Orange:25, DarkRed:12, DustyRose:5] | Queue=[FP stall=3 fp_top=0.98] | Holder=[_/DarkRed/SageTeal/SageTeal/SageTeal] (4/5) | 0.5s
+[17:29:04]   -> TAP(371,1475) [[FP:0.98] Human pattern (delta=-8, id=1389)]
+[17:29:08] T57: [gameplay] Board=284cells/6colors d=+0 [DarkGreen:207, Brown:31, Orange:25, DarkRed:12, DustyRose:5] | Queue=[FP stall=4 fp_top=0.98] | Holder=[_/_/SageTeal/SageTeal/SageTeal] (3/5) | 0.6s
+[17:29:08]   -> TAP(717,1495) [[FP:0.98] Human pattern (delta=-43, id=6857)]
+[17:29:11] T58: [gameplay] Board=284cells/6colors d=+0 [DarkGreen:207, Brown:31, Orange:25, DarkRed:12, DustyRose:5] | Queue=[FP stall=5 fp_top=0.98] | Holder=[Red/_/_/_/_] (1/5) | 0.5s
+[17:29:11]   -> TAP(696,1517) [[FP:0.98] Human pattern (delta=-40, id=6969)]
+[17:29:14]   [LEARN] Explore tap (876,1784) WORKED! (d=-33)
+[17:29:14] T59: [gameplay] Board=251cells/6colors d=-33 [DarkGreen:174, Brown:31, Orange:25, DarkRed:12, DustyRose:5] | Queue=[FP stall=0 fp_top=0.97] | Holder=[SageTeal/_/_/_/_] (1/5) | 0.5s
+[17:29:14]   -> TAP(717,1495) [[FP:0.97] Human pattern (delta=-43, id=6857)]
+[17:29:17] T60: [gameplay] Board=247cells/6colors d=-4 [DarkGreen:170, Brown:31, Orange:25, DarkRed:12, DustyRose:5] | Queue=[FP stall=0 fp_top=0.97] | Holder=[_/_/_/_/_] (0/5) | 0.4s
+[17:29:17]   -> TAP(732,1524) [[FP:0.97] Human pattern (delta=-20, id=3691)]
+[17:29:21] T61: [gameplay] Board=247cells/6colors d=+0 [DarkGreen:170, Brown:31, Orange:25, DarkRed:12, DustyRose:5] | Queue=[FP stall=1 fp_top=0.97] | Holder=[_/_/_/_/_] (0/5) | 0.5s
+[17:29:21]   -> TAP(524,1512) [[FP:0.97] Human pattern (delta=-9, id=3250)]
+[17:29:24] T62: [gameplay] Board=247cells/6colors d=+0 [DarkGreen:170, Brown:31, Orange:25, DarkRed:12, DustyRose:5] | Queue=[FP stall=2 fp_top=0.97] | Holder=[_/_/_/_/_] (0/5) | 0.4s
+[17:29:24]   -> TAP(717,1495) [[FP:0.97] Human pattern (delta=-43, id=6857)]
+[17:29:27] T63: [gameplay] Board=247cells/6colors d=+0 [DarkGreen:170, Brown:31, Orange:25, DarkRed:12, DustyRose:5] | Queue=[FP stall=3 fp_top=0.97] | Holder=[LightBlue/_/_/_/_] (1/5) | 0.6s
+[17:29:27]   -> TAP(732,1524) [[FP:0.97] Human pattern (delta=-20, id=3691)]
+[17:29:31] T64: [gameplay] Board=247cells/6colors d=+0 [DarkGreen:170, Brown:31, Orange:25, DarkRed:12, DustyRose:5] | Queue=[FP stall=4 fp_top=0.97] | Holder=[_/_/_/_/_] (0/5) | 0.5s
+[17:29:31]   -> TAP(524,1512) [[FP:0.97] Human pattern (delta=-9, id=3250)]
+[17:29:34] T65: [popup] Multi-tap close/retry positions
+[17:29:38]   [SESSION] Ended b42f3287c2db: fail (12 turns, end_cells=247)
+[17:29:38] T66: [fail] Multi-tap close/retry positions
+[17:29:44] T67: [fail] Multi-tap close/retry positions
+[17:29:51] T68: [fail] Multi-tap close/retry positions
+[17:29:57] T69: [fail] Multi-tap close/retry positions
+[17:30:03] 
+[17:30:03] ============================================================
+[17:30:03] SESSION COMPLETE
+[17:30:03] ============================================================
+[17:30:03] Total turns:   70
+[17:30:03] Games started: 0
+[17:30:03] Games won:     0
+[17:30:03] Games failed:  17
+[17:30:03] AI Play DB: E:\AI\virtual_player\data\db\ai_play_pixelflow.db
+[17:30:03] Fingerprint DB: E:\AI\virtual_player\data\pixelflow\db\fingerprint.db (loaded)
+[17:30:03] Stats saved: E:\AI\virtual_player\data\games\pixelflow\temp\smart\smart_stats.json

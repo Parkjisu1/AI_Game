@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #000000;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
+
+body {
+  background: #f9fafb;
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+  /* 한국어 줄바꿈: 글자 단위(가나다라/마바사) 금지 → 단어 단위로 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* 기본 텍스트 검정 */
+body {
+  color: #000000;
+}
+
+/* ──────────────────────────────────────────────
+   다크 모드 (앱 전역) — 라이트 유틸리티를 다크로 오버라이드.
+   각 페이지를 안 고쳐도 dark 적용. SVG 캔버스(#141821)는 그대로.
+   ────────────────────────────────────────────── */
+body { background: #0f1115 !important; color: #e6e9ef !important; }
+.bg-white { background-color: #1a1d23 !important; }
+.bg-gray-50 { background-color: #13151a !important; }
+.bg-gray-100 { background-color: #20242c !important; }
+.bg-gray-200 { background-color: #262b34 !important; }
+.text-black { color: #e9ecf2 !important; }
+.text-gray-900 { color: #e6e9ef !important; }
+.text-gray-800 { color: #d7dce4 !important; }
+.text-gray-700 { color: #c4cad4 !important; }
+.text-gray-600 { color: #aab2bf !important; }
+.text-gray-500 { color: #8a92a0 !important; }
+.text-gray-400 { color: #6c7480 !important; }
+.text-gray-300 { color: #525a68 !important; }
+.border-gray-100 { border-color: #23272f !important; }
+.border-gray-200 { border-color: #2a2f3a !important; }
+.border-gray-300 { border-color: #333a47 !important; }
+.hover\:bg-gray-50:hover { background-color: #20242c !important; }
+.hover\:bg-gray-100:hover { background-color: #262b34 !important; }
+.bg-black { background-color: #2f3542 !important; }      /* 활성 탭/주요버튼 → 다크 강조 */
+.bg-white\/95 { background-color: rgba(20, 22, 28, 0.95) !important; }  /* 하단 탭바 */
+input, textarea, select { background-color: #1a1d23 !important; color: #e6e9ef !important; border-color: #2a2f3a !important; }
+input::placeholder, textarea::placeholder { color: #6c7480 !important; }
+
+/* 컬러 칩(연한 -50/-100 배경) → 다크 톤 (흰/검 텍스트 대비 깨짐 + 난잡함 해소) */
+.bg-blue-50, .bg-blue-100, .bg-sky-50, .bg-sky-100, .bg-indigo-50, .bg-indigo-100 { background-color: #182539 !important; }
+.bg-cyan-50, .bg-cyan-100, .bg-teal-50, .bg-teal-100 { background-color: #0f2a2e !important; }
+.bg-emerald-50, .bg-emerald-100, .bg-green-50, .bg-green-100, .bg-lime-50, .bg-lime-100 { background-color: #12281d !important; }
+.bg-amber-50, .bg-amber-100, .bg-yellow-50, .bg-yellow-100, .bg-orange-50, .bg-orange-100 { background-color: #2c2410 !important; }
+.bg-red-50, .bg-red-100, .bg-rose-50, .bg-rose-100, .bg-pink-50, .bg-pink-100, .bg-fuchsia-50, .bg-fuchsia-100 { background-color: #301722 !important; }
+.bg-purple-50, .bg-purple-100, .bg-violet-50, .bg-violet-100 { background-color: #241a33 !important; }
+.bg-slate-50, .bg-slate-100 { background-color: #1a1d23 !important; }
+
+/* 컬러 텍스트(짙은 -600~800) → 다크에서 밝게 */
+.text-blue-600, .text-blue-700, .text-blue-800, .text-sky-600, .text-sky-700, .text-indigo-600, .text-indigo-700 { color: #8ab4ff !important; }
+.text-cyan-600, .text-cyan-700, .text-teal-600, .text-teal-700 { color: #5fd0d6 !important; }
+.text-emerald-600, .text-emerald-700, .text-emerald-800, .text-green-600, .text-green-700 { color: #5fd08a !important; }
+.text-amber-600, .text-amber-700, .text-amber-800, .text-yellow-700, .text-orange-600, .text-orange-700 { color: #e0b25a !important; }
+.text-red-600, .text-red-700, .text-rose-600, .text-rose-700, .text-pink-600, .text-pink-700 { color: #ff8a9c !important; }
+.text-purple-600, .text-purple-700, .text-violet-600, .text-violet-700 { color: #c0a0ff !important; }
+.text-slate-600, .text-slate-700, .text-slate-800, .text-slate-900, .text-zinc-600, .text-zinc-700, .text-zinc-800, .text-zinc-900, .text-neutral-600, .text-neutral-700, .text-neutral-800, .text-stone-600, .text-stone-700, .text-gray-950 { color: #aab2bf !important; }
+
+/* 드롭다운/시트 스무스 슬라이드 (레이아웃 안 밀고 위로 떠오름) */
+@keyframes sheetUp { from { transform: translateY(110%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.sheet-in { animation: sheetUp .22s cubic-bezier(.2, .8, .2, 1); }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.fade-in { animation: fadeIn .18s ease-out; }
+
+/* 가로 스크롤 — 가늘고 깔끔한 스크롤바 (네이티브 조악함 제거) */
+.thin-scroll { scrollbar-width: thin; scrollbar-color: #3a4150 transparent; }
+.thin-scroll::-webkit-scrollbar { height: 8px; width: 8px; }
+.thin-scroll::-webkit-scrollbar-track { background: transparent; }
+.thin-scroll::-webkit-scrollbar-thumb { background: #333a47; border-radius: 9999px; }
+.thin-scroll::-webkit-scrollbar-thumb:hover { background: #475063; }
+
+/* 가로 스크롤 영역 스크롤바 숨김 (IG 스토리행 등) */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ──────────────────────────────────────────────
+   모바일 반응형 안전망 (md 미만, 767px 이하)
+   - 페이지 전체 가로 스크롤 방지
+   - 밀집 테이블은 자체 가로 스크롤 (페이지 레이아웃 안 깨짐)
+   - 터치 타겟 최소 크기 확보
+   데스크탑(md 이상)은 영향 없음. 기능 손실 없음.
+   ────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* 모든 table 을 가로 스크롤 가능한 블록으로 — 내부 table 레이아웃은 anonymous box 로 보존 */
+  table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+
+  /* 코드/긴 문자열 가로 스크롤 (overflow 방지) */
+  pre {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* 터치 타겟 — 너무 작은 버튼/링크 최소 높이 */
+  button, a[role="button"], [role="button"] {
+    min-height: 30px;
+  }
+}

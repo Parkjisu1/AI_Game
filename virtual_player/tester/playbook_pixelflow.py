@@ -47,73 +47,57 @@ def create_pixelflow_playbook() -> Playbook:
         max_total_fails=3,
     )
 
-    # 화면별 고정 핸들러
+    # 화면별 핸들러 — DB 패턴 기반: 사람은 back 안 쓰고 탭만 함
+    # 모든 화면에서 돼지 영역 탭이 가장 효과적 (PlayDB 분석 결과)
     pb.screen_handlers = {
-        # 로비: "플레이" 버튼 탭 — 2026-03-09 re-verified (502, 1450)
+        # 로비 → 플레이 버튼
         "lobby": ScreenHandler("lobby", [
-            Action("tap", 502, 1450, 3.0, "플레이 button → start level"),
+            Action("tap", 540, 1450, 3.0, "플레이 button"),
         ]),
 
-        # 승리: back 먼저 (Gold Pack 오분류 대비) → 계속하기
+        # 승리 → 계속하기 (하단 탭)
         "win": ScreenHandler("win", [
-            Action("back", wait=1.0, reason="Back first (Gold Pack safety)"),
-            Action("tap", 502, 1450, 1.0, "플레이/계속하기 button"),
-            Action("tap", 540, 1830, 1.0, "Home tab fallback"),
+            Action("tap", 540, 1500, 2.0, "Continue/next tap"),
+            Action("tap", 540, 1450, 1.0, "플레이 fallback"),
         ]),
 
-        # 공간 부족 (결제 유도) — X 닫기 — 2026-03-10 verified (826,495)
+        # 공간 부족 팝업 → X 닫기 (2026-04-05 verified)
         "fail_outofspace": ScreenHandler("fail_outofspace", [
-            Action("tap", 826, 495, 1.5, "X close (공간이 부족해요)"),
-            Action("back", wait=1.0, reason="Back from outofspace"),
+            Action("tap", 825, 340, 2.0, "X close popup"),
         ]),
 
-        # 슬롯 가득 참 — 홀더에서 돼지 희생 (첫 번째 슬롯)
-        "fail_holdfull": ScreenHandler("fail_holdfull", [
-            Action("tap", 185, 930, 1.5, "Sacrifice holder pig slot 1"),
-        ]),
-
-        # 실패 결과 — X close 먼저 (outofspace dialog), 그다음 다시 도전
+        # 실패 → X 닫기 + 화면 탭 (다시 도전/계속)
         "fail_result": ScreenHandler("fail_result", [
-            Action("tap", 826, 495, 1.0, "X close (outofspace safety)"),
-            Action("back", wait=1.0, reason="Back from fail dialog"),
-            Action("tap", 537, 1198, 2.0, "다시 도전! (Retry)"),
+            Action("tap", 825, 340, 1.5, "X close popup"),
+            Action("tap", 540, 1500, 2.0, "Retry/continue tap"),
         ]),
 
-        # 실패 결과 (YOLO가 fail로 분류하는 경우도 포함)
         "fail": ScreenHandler("fail", [
-            Action("tap", 826, 495, 1.0, "X close (outofspace)"),
-            Action("back", wait=1.0, reason="Back from fail"),
-            Action("tap", 537, 1198, 2.0, "다시 도전! (Retry)"),
+            Action("tap", 825, 340, 1.5, "X close popup"),
+            Action("tap", 540, 1500, 2.0, "Retry/continue tap"),
         ]),
 
-        # 로딩 화면 — 대기 (interactive ad / 새로운 기능 팝업이 loading으로 분류될 수 있음)
+        # 로딩 → 대기 + 탭
         "loading": ScreenHandler("loading", [
-            Action("wait", wait=3.0, reason="Loading / ad wait..."),
-            Action("tap", 539, 1577, 1.0, "계속하기 button (level-up screen)"),
-            Action("back", wait=2.0, reason="Back (dismiss ad if stuck)"),
+            Action("wait", wait=3.0, reason="Loading wait"),
+            Action("tap", 540, 1500, 1.0, "Continue tap"),
         ]),
 
-        # 인게임 설정
-        "ingame_setting": ScreenHandler("ingame_setting", [
-            Action("tap", 540, 960, 1.5, "Resume / center tap"),
-        ]),
-
-        # 알 수 없는 팝업 — 에스컬레이션
-        "unknown": ScreenHandler("unknown", [
-            Action("back", wait=1.0, reason="Back from unknown"),
-            Action("tap", 540, 1830, 1.0, "Home tab fallback"),
-        ]),
-
+        # 팝업 → 탭으로 닫기 (back 안 씀)
         "popup": ScreenHandler("popup", [
-            Action("back", wait=1.5, reason="Android back (safest dismiss)"),
-            Action("tap", 497, 97, 1.0, "Gold Pack X close (top-right)"),
-            Action("tap", 540, 1830, 1.0, "Home/pig tab (escape shop)"),
-            Action("back", wait=1.0, reason="Android back fallback"),
+            Action("tap", 825, 340, 1.5, "X close popup"),
+            Action("tap", 540, 1500, 1.0, "Center tap dismiss"),
         ]),
 
-        # 광고 관련
+        # 알 수 없는 화면 → 탭
+        "unknown": ScreenHandler("unknown", [
+            Action("tap", 540, 1500, 1.5, "Center tap"),
+        ]),
+
+        # 광고 → 탭으로 닫기 시도
         "ad": ScreenHandler("ad", [
-            Action("back", wait=1.5, reason="Back from ad"),
+            Action("tap", 1030, 50, 1.5, "X close ad (top-right)"),
+            Action("tap", 540, 1500, 1.0, "Center tap"),
         ]),
         "ad_install": ScreenHandler("ad_install", [
             Action("back", wait=1.5, reason="Back from install page"),

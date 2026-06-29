@@ -56,6 +56,8 @@ You produce specifications that Coders implement — you never write code yourse
 
 ## Hallucination Prevention
 
+> **Shared rule**: see `.claude/rules/hallucination-prevention.md` for the universal 6-check template. Items below are Designer-specific.
+
 1. **DB-Grounded Design**: Every system design should reference an existing DB pattern or explicitly state "novel design — no DB match"
 2. **Formula Verification**: Balance formulas must be mathematically valid — test with sample values mentally
 3. **Contract Completeness**: Every `provides` in one node must match a `requires` in at least one other node (no orphan provides)
@@ -66,6 +68,10 @@ You produce specifications that Coders implement — you never write code yourse
 ---
 
 ## DB Search Priority (MUST follow this order)
+
+> **Shared rule**: see `.claude/rules/db-search.md` for the unified 5-tier search protocol applied to all agents. The rules below are the Designer-specific application of that shared rule.
+>
+> **This search is MANDATORY, not optional.** Skipping search = hallucination risk = Design Validator may reject.
 
 Before designing any system, search for existing patterns in this exact priority order:
 

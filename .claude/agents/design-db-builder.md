@@ -54,6 +54,8 @@ Beyond simple file-to-DB conversion, you analyze **why** each design was made an
 
 ## Hallucination Prevention
 
+> **Shared rule**: see `.claude/rules/hallucination-prevention.md` for the universal 6-check template. Items below are Design DB Builder-specific.
+
 1. **Keyword-Based Classification**: Use documented keyword patterns for Domain classification — don't invent categories
 2. **Source Fidelity**: Extract formulas and values exactly as written in source — don't "improve" or "correct" them
 3. **Honest Confidence**: If domain classification confidence < 0.8, set `human_review_needed: true`

@@ -1,0 +1,297 @@
+[
+  {
+    "level": 1,
+    "metaphor": "나선",
+    "board_size": [
+      16,
+      16
+    ],
+    "num_colors": 2,
+    "has_life_gimmick": false,
+    "duration_sec": 0.03,
+    "final_candidates": [
+      {
+        "seed_idx": 0,
+        "x10_pass": true,
+        "colors": [
+          "#FC6AAF",
+          "#39AE2E"
+        ],
+        "num_colors": 2,
+        "has_border_coat": false,
+        "t_cells": 6,
+        "t_sym_score": 0.333,
+        "noise_score": 1.0,
+        "visual_quality": 0.921,
+        "total_score": 0.801,
+        "cluster_dist": {
+          "le3_pct": 0.0,
+          "f4to10_pct": 0.0,
+          "f11to30_pct": 20.0,
+          "gt30_pct": 80.0
+        }
+      },
+      {
+        "seed_idx": 2,
+        "x10_pass": true,
+        "colors": [
+          "#8950F8",
+          "#FED555"
+        ],
+        "num_colors": 2,
+        "has_border_coat": false,
+        "t_cells": 6,
+        "t_sym_score": 0.333,
+        "noise_score": 1.0,
+        "visual_quality": 0.921,
+        "total_score": 0.801,
+        "cluster_dist": {
+          "le3_pct": 0.0,
+          "f4to10_pct": 0.0,
+          "f11to30_pct": 20.0,
+          "gt30_pct": 80.0
+        }
+      }
+    ]
+  },
+  {
+    "level": 3,
+    "metaphor": "헤링본",
+    "board_size": [
+      24,
+      24
+    ],
+    "num_colors": 3,
+    "has_life_gimmick": false,
+    "duration_sec": 0.06,
+    "final_candidates": [
+      {
+        "seed_idx": 1,
+        "x10_pass": true,
+        "colors": [
+          "#50E8F6",
+          "#FC5E5E",
+          "#39AE2E"
+        ],
+        "num_colors": 3,
+        "has_border_coat": true,
+        "t_cells": 6,
+        "t_sym_score": 1.0,
+        "noise_score": 0.673,
+        "visual_quality": 0.805,
+        "total_score": 0.939,
+        "cluster_dist": {
+          "le3_pct": 8.1,
+          "f4to10_pct": 21.4,
+          "f11to30_pct": 27.4,
+          "gt30_pct": 43.2
+        }
+      },
+      {
+        "seed_idx": 2,
+        "x10_pass": true,
+        "colors": [
+          "#8950F8",
+          "#FED555",
+          "#39AE2E"
+        ],
+        "num_colors": 3,
+        "has_border_coat": true,
+        "t_cells": 6,
+        "t_sym_score": 1.0,
+        "noise_score": 0.439,
+        "visual_quality": 0.739,
+        "total_score": 0.923,
+        "cluster_dist": {
+          "le3_pct": 10.5,
+          "f4to10_pct": 35.8,
+          "f11to30_pct": 41.8,
+          "gt30_pct": 11.9
+        }
+      }
+    ]
+  },
+  {
+    "level": 5,
+    "metaphor": "도형 조합",
+    "board_size": [
+      28,
+      32
+    ],
+    "num_colors": 5,
+    "has_life_gimmick": false,
+    "duration_sec": 0.09,
+    "final_candidates": [
+      {
+        "seed_idx": 6,
+        "x10_pass": true,
+        "colors": [
+          "#FFFFFF",
+          "#414141",
+          "#FDA14C",
+          "#8950F8",
+          "#73FE66"
+        ],
+        "num_colors": 5,
+        "has_border_coat": true,
+        "t_cells": 6,
+        "t_sym_score": 0.5,
+        "noise_score": 1.0,
+        "visual_quality": 0.938,
+        "total_score": 0.848,
+        "cluster_dist": {
+          "le3_pct": 18.1,
+          "f4to10_pct": 64.2,
+          "f11to30_pct": 17.8,
+          "gt30_pct": 0.0
+        }
+      },
+      {
+        "seed_idx": 3,
+        "x10_pass": true,
+        "colors": [
+          "#FED555",
+          "#326BF8",
+          "#6A4A30",
+          "#FFFFFF",
+          "#73FE66"
+        ],
+        "num_colors": 5,
+        "has_border_coat": true,
+        "t_cells": 6,
+        "t_sym_score": 0.5,
+        "noise_score": 1.0,
+        "visual_quality": 0.905,
+        "total_score": 0.839,
+        "cluster_dist": {
+          "le3_pct": 18.1,
+          "f4to10_pct": 64.2,
+          "f11to30_pct": 17.8,
+          "gt30_pct": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "level": 7,
+    "metaphor": "물방울 무늬",
+    "board_size": [
+      24,
+      24
+    ],
+    "num_colors": 5,
+    "has_life_gimmick": false,
+    "duration_sec": 0.06,
+    "final_candidates": [
+      {
+        "seed_idx": 6,
+        "x10_pass": true,
+        "colors": [
+          "#FFFFFF",
+          "#414141",
+          "#FDA14C",
+          "#8950F8",
+          "#73FE66"
+        ],
+        "num_colors": 5,
+        "has_border_coat": false,
+        "t_cells": 6,
+        "t_sym_score": 0.5,
+        "noise_score": 0.977,
+        "visual_quality": 0.873,
+        "total_score": 0.831,
+        "cluster_dist": {
+          "le3_pct": 2.8,
+          "f4to10_pct": 2.1,
+          "f11to30_pct": 9.1,
+          "gt30_pct": 86.0
+        }
+      },
+      {
+        "seed_idx": 1,
+        "x10_pass": true,
+        "colors": [
+          "#50E8F6",
+          "#FC5E5E",
+          "#39AE2E",
+          "#FFFFFF",
+          "#8950F8"
+        ],
+        "num_colors": 5,
+        "has_border_coat": true,
+        "t_cells": 6,
+        "t_sym_score": 0.5,
+        "noise_score": 0.93,
+        "visual_quality": 0.864,
+        "total_score": 0.829,
+        "cluster_dist": {
+          "le3_pct": 1.8,
+          "f4to10_pct": 1.4,
+          "f11to30_pct": 34.0,
+          "gt30_pct": 62.8
+        }
+      }
+    ]
+  },
+  {
+    "level": 50,
+    "metaphor": "추상 형상",
+    "board_size": [
+      20,
+      20
+    ],
+    "num_colors": 5,
+    "has_life_gimmick": false,
+    "duration_sec": 0.3,
+    "final_candidates": [
+      {
+        "seed_idx": 4,
+        "x10_pass": true,
+        "colors": [
+          "#73FE66",
+          "#8950F8",
+          "#FFFFFF",
+          "#414141",
+          "#FC5E5E"
+        ],
+        "num_colors": 5,
+        "has_border_coat": false,
+        "t_cells": 0,
+        "t_sym_score": 1.0,
+        "noise_score": 0.967,
+        "visual_quality": 0.92,
+        "total_score": 0.98,
+        "cluster_dist": {
+          "le3_pct": 0.5,
+          "f4to10_pct": 28.5,
+          "f11to30_pct": 48.0,
+          "gt30_pct": 23.0
+        }
+      },
+      {
+        "seed_idx": 3,
+        "x10_pass": true,
+        "colors": [
+          "#FED555",
+          "#326BF8",
+          "#6A4A30",
+          "#FFFFFF",
+          "#73FE66"
+        ],
+        "num_colors": 5,
+        "has_border_coat": false,
+        "t_cells": 0,
+        "t_sym_score": 1.0,
+        "noise_score": 0.983,
+        "visual_quality": 0.866,
+        "total_score": 0.967,
+        "cluster_dist": {
+          "le3_pct": 0.2,
+          "f4to10_pct": 35.8,
+          "f11to30_pct": 43.2,
+          "gt30_pct": 20.8
+        }
+      }
+    ]
+  }
+]
