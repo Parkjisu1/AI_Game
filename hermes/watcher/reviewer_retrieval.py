@@ -114,6 +114,17 @@ def _last_user_comment(task_doc: dict) -> str:
     return " ".join(txt.split())[:MAX_USER_COMMENT_CHARS]
 
 
+def get_calibration(reviewer_role: str) -> "dict | None":
+    """hermes_reviewer_calibration에서 해당 리뷰어 신뢰도 doc 조회 (merge-gate 연동용)."""
+    db = _mongo_db()
+    if db is None or not reviewer_role:
+        return None
+    try:
+        return db.hermes_reviewer_calibration.find_one({"role": reviewer_role})
+    except Exception:
+        return None
+
+
 def build_calibration_block(reviewer_role: str) -> str:
     """리뷰어 자기 캘리브레이션 — 과거 'APPROVED 후 사용자가 뒤집은'(user_rejected_after_approval)
     비율을 산출해 hermes_reviewer_calibration에 적재(관측) + 오승인율이 높으면 리뷰어 프롬프트에

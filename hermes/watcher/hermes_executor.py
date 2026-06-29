@@ -3570,6 +3570,26 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
             _comment(f"⚠️ **Reviewer 경고** (차단 X — PR에 기록)\n{required}")
     else:
         reviewer_skipped_request = False
+        # 캘리브레이션 merge-gate 연동: APPROVED여도 이 리뷰어의 과거 오승인율이 높으면
+        # (신뢰도 낮음) 자동머지하지 않고 사람 검토로(soft-block). 전체 62% 오승인 데이터 기반 —
+        # 신뢰 못 할 APPROVED를 그대로 머지하던 문제 차단. HERMES_CALIB_GATE=off로 해제 가능.
+        if _MERGE_GATE == "block" and os.environ.get("HERMES_CALIB_GATE", "on").lower() != "off":
+            try:
+                from reviewer_retrieval import get_calibration as _get_calib
+                _cal = _get_calib(reviewer_role)
+                _cmin = int(os.environ.get("HERMES_CALIB_MIN_SAMPLES", "8"))
+                _rel_floor = float(os.environ.get("HERMES_CALIB_GATE_RELIABILITY", "0.5"))
+                if (_cal and _cal.get("approved", 0) >= _cmin
+                        and _cal.get("reliability", 1.0) < _rel_floor):
+                    _merge_blocked = True
+                    _block_reason = "low-reliability reviewer APPROVED (calibration)"
+                    _comment(
+                        f"⛔ **자동배포 보류** — Reviewer APPROVED이나 이 리뷰어 신뢰도 낮음 "
+                        f"(과거 오승인율 {_cal.get('false_approve_rate', 0) * 100:.0f}%, n={_cal.get('approved')}). "
+                        f"사람 확인 후 머지 권장. (해제: HERMES_CALIB_GATE=off)"
+                    )
+            except Exception:
+                log.exception("calibration merge-gate failed (non-fatal)")
     # 게이트 결정 기록(측정) + merge_state SSOT 영속화 (비차단)
     _record_gate_event(
         task_id=task_id, gate="reviewer",
