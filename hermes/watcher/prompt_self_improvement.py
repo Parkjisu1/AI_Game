@@ -39,6 +39,9 @@ PATCH_EVAL_MIN_SAMPLES = int(os.environ.get("HERMES_PATCH_EVAL_SAMPLES", "5"))
 PATCH_REVERT_THRESHOLD = float(os.environ.get("HERMES_PATCH_REVERT_THRESHOLD", "5.0"))
 # 같은 role에 active 패치는 최대 N개까지만 (프롬프트 비대화 방지)
 MAX_ACTIVE_PATCHES_PER_ROLE = int(os.environ.get("HERMES_MAX_PATCHES_PER_ROLE", "3"))
+# 진실성 게이트(D): 신규 패치는 'candidate'로 들어가 적용·측정되되, '객관적으로 수용된'
+# 작업을 이만큼 통과해야(+골든 통과 시) 'active'로 승격. 검증 안 된 패치 영구화 방지.
+PATCH_PROBATION_SAMPLES = int(os.environ.get("HERMES_PATCH_PROBATION_SAMPLES", "3"))
 
 
 # ──────────────────────────────────────────────────────────
@@ -70,9 +73,10 @@ def load_active_patches_text(role: str) -> str:
     if db is None:
         return ""
     try:
+        # active + candidate 모두 주입(candidate도 적용·측정 대상 — 단 영구화는 수용 게이트 후)
         rows = list(
             db[PATCHES_COLLECTION]
-            .find({"role": role, "status": "active"})
+            .find({"role": role, "status": {"$in": ["active", "candidate"]}})
             .sort("created_at", 1)
             .limit(MAX_ACTIVE_PATCHES_PER_ROLE)
         )
@@ -327,7 +331,8 @@ def reflect_and_propose(
             "role": role,
             "patch_text": text,
             "rationale": rationale,
-            "status": "active",
+            # 진실성 게이트(D): candidate로 시작 — 적용·측정되되 수용 게이트 통과 전엔 영구화 안 됨
+            "status": "candidate",
             "addresses_failures": fail_ids[:5],
             "addresses_category": failure_category,
             "created_at": now.isoformat(),
@@ -335,6 +340,7 @@ def reflect_and_propose(
             "score_before": score_before,
             "score_after": None,
             "samples_after": 0,
+            "accepted_samples": 0,   # 객관적으로 수용된 작업 통과 횟수 (promote 기준)
             "reverted_at": None,
             "revert_reason": None,
         })
@@ -356,7 +362,9 @@ def track_score_for_patches(role: str, score: int) -> None:
     if db is None:
         return
     try:
-        active = list(db[PATCHES_COLLECTION].find({"role": role, "status": "active"}))
+        # active + candidate 모두 효과 추적(악화 시 자동 revert — candidate도 즉시 폐기 가능)
+        active = list(db[PATCHES_COLLECTION].find(
+            {"role": role, "status": {"$in": ["active", "candidate"]}}))
     except Exception:
         log.exception("track_score: fetch active failed")
         return
@@ -387,6 +395,65 @@ def track_score_for_patches(role: str, score: int) -> None:
             db[PATCHES_COLLECTION].update_one({"_id": p["_id"]}, {"$set": update})
         except Exception:
             log.exception("track_score: update failed")
+
+
+# ──────────────────────────────────────────────────────────
+# 진실성 게이트(D) — 객관적 수용 시 candidate 패치 승격
+# ──────────────────────────────────────────────────────────
+def _golden_ok(role: str) -> bool:
+    """골든 회귀 테스트 게이트. 지원 역할이면 통과해야 True.
+    하네스 미가용/미지원 역할은 fail-open(True) — 표본 프로베이션만 적용.
+    (golden 커버리지 확대는 후속: 현재 design_level_designer만 지원)"""
+    try:
+        from harness import eval as _ev  # noqa: N813
+    except Exception:
+        return True
+    try:
+        supported = getattr(_ev, "SUPPORTED_ROLES", {"design_level_designer"})
+        if role not in supported:
+            return True
+        runner = getattr(_ev, "run_eval", None)
+        if runner is None:
+            return True
+        res = runner(role=role)
+        return bool(res and float(res.get("pass_rate", 0) or 0) >= 0.7)
+    except Exception:
+        log.exception("_golden_ok failed (fail-open)")
+        return True
+
+
+def promote_candidates_on_acceptance(role: str, score: int) -> None:
+    """객관적으로 수용된 작업(done으로 ship)에서만 호출.
+    해당 role의 candidate 패치 accepted 표본을 +1, 충분히 검증되고(+골든 통과 시)
+    악화가 없으면 active로 승격. 검증 안 된 패치가 영구 반영되는 걸 막는다."""
+    db = _get_db()
+    if db is None:
+        return
+    try:
+        cands = list(db[PATCHES_COLLECTION].find({"role": role, "status": "candidate"}))
+    except Exception:
+        log.exception("promote_candidates: fetch failed")
+        return
+    now = datetime.now(timezone.utc).isoformat()
+    for p in cands:
+        n = int(p.get("accepted_samples") or 0) + 1
+        update: dict[str, Any] = {"accepted_samples": n}
+        # 악화하지 않았는지(track_score_for_patches가 이미 score_after 갱신) + 표본 충분 + 골든 통과
+        sb = p.get("score_before")
+        sa = p.get("score_after")
+        regressed = (
+            isinstance(sb, (int, float)) and isinstance(sa, (int, float))
+            and (sb - sa) >= PATCH_REVERT_THRESHOLD
+        )
+        if n >= PATCH_PROBATION_SAMPLES and not regressed and _golden_ok(role):
+            update["status"] = "active"
+            update["promoted_at"] = now
+            log.info("[reflect] PROMOTE candidate→active role=%s (accepted=%d): %s",
+                     role, n, (p.get("patch_text") or "")[:60])
+        try:
+            db[PATCHES_COLLECTION].update_one({"_id": p["_id"]}, {"$set": update})
+        except Exception:
+            log.exception("promote_candidates: update failed")
 
 
 # ──────────────────────────────────────────────────────────

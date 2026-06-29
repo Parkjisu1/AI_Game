@@ -271,6 +271,14 @@ def _dispatch_event(change: dict[str, Any], writer: ProjectHubWriter) -> None:
             final_status = result.get("next_status", "review")
             writer.update_status(task_id, final_status)
             log.info("  ✓ Task completed: status=%s", final_status)
+            # 진실성 게이트: done으로 ship = 객관적 수용. 리뷰 시점에 보류해둔 학습을
+            # 이 시점에 grounded reflect + candidate 패치 승격으로 확정한다.
+            if final_status == "done":
+                try:
+                    from truth_gate import on_objective_acceptance
+                    on_objective_acceptance(task_id)
+                except Exception:
+                    log.exception("on_objective_acceptance failed")
         else:
             writer.add_comment(
                 task_id,

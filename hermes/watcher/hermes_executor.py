@@ -627,6 +627,13 @@ def _penalize_previous_reviewer(task_id: str) -> None:
         })
         log.info("⚖️ [reviewer-self-eval] %s 페널티 기록 — task=%s",
                  latest_approved.get("role"), task_id)
+        # 진실성 게이트: 사람이 거부 = 직전 학습이 거짓이었음. 이 task에서 파생된
+        # 시니어 원칙 회수 + RAG '우수예시' 강등 + 보류 학습 취소.
+        try:
+            from truth_gate import on_falsified
+            on_falsified(task_id, reason="user_rejected_after_approval")
+        except Exception:
+            log.exception("on_falsified failed")
         # Phase 5 패치 트래킹에도 페널티 반영 (악화 시 자동 revert 트리거)
         try:
             from prompt_self_improvement import track_score_for_patches
@@ -643,6 +650,8 @@ def _penalize_previous_reviewer(task_id: str) -> None:
 def _record_quality_score(
     *, task_id: str, team: str, sub_team: str, role: str,
     score: int, verdict: str, summary: str = "",
+    files_changed: "list[str] | None" = None, diff_summary: str = "",
+    title: str = "", description: str = "", coder_role: str = "",
 ) -> None:
     """
     Reviewer/검수 결과를 hermes_team_scores 컬렉션에 누적 — 보상 체계 데이터 적재.
@@ -674,21 +683,22 @@ def _record_quality_score(
     except Exception:
         log.exception("track_score_for_patches failed")
 
-    # Phase 6 시니어 진화: reviewer 결과면 senior reflection 트리거 (점수 ≥ 70 만)
+    # 진실성 게이트(B+C): 리뷰 시점엔 학습을 '즉시' 하지 않는다(= LLM이 LLM을 채점한 결과로
+    # 시니어 원칙/RAG-good을 만들면 검증 안 된 성공을 학습 → 환각 강화). 대신 근거(diff 등)와
+    # 함께 보류만 하고, 작업이 done으로 ship(객관적 수용)될 때 truth_gate가 grounded reflect로
+    # 확정한다. (기존엔 빈 diff·점수만으로 원칙을 만들던 '근거 없는 확신' 표면도 같이 제거)
     if role.endswith("reviewer") or role == "reviewer":
         try:
-            from senior_reflection import reflect_on_task
-            saved = reflect_on_task(
-                task_id=task_id, title="(reviewed task)", description="",
-                team=team, sub_team=sub_team or "general",
-                verdict=verdict, score=clamped,
-                files_changed=[], diff_summary="",
-                reviewer_notes=summary,
+            from truth_gate import defer_learning
+            defer_learning(
+                task_id=task_id, team=team, sub_team=sub_team or "general",
+                reviewer_role=role, coder_role=coder_role,
+                score=clamped, verdict=verdict, summary=summary,
+                files_changed=files_changed or [], diff_summary=diff_summary,
+                title=title, description=description,
             )
-            if saved > 0:
-                log.info("🎓 [reflect] role=%s saved %d new principles", role, saved)
         except Exception:
-            log.exception("senior_reflection trigger failed")
+            log.exception("defer_learning failed")
 
 
 def _record_gate_event(*, task_id: str, gate: str, result: str, reason: str = "",
@@ -3526,13 +3536,19 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
             role=reviewer_role, score=_q_score,
             verdict=str(reviewer_verdict.get("verdict") or ""),
             summary=str((reviewer_verdict.get("strengths") or [""])[0])[:500],
+            # 진실성 게이트(C): 실제 변경 파일 + diff를 근거로 전달 (수용 시 grounded reflect)
+            files_changed=changed_files, diff_summary=diff_stat,
+            title=title, description=description, coder_role=main_coder_role,
         )
 
     if reviewer_verdict.get("verdict") != "APPROVED":
+        # 진실성 게이트(A): 리뷰어가 거부한 건 'coder가 거부당할 결과물을 냈다'는 실패다.
+        # 이전엔 reviewer 역할에 패치를 학습시켜 리뷰어가 '덜 거부'하도록 길들여졌음(귀속 버그).
+        # → coder 역할에 귀속해 coder가 더 나은 코드를 내도록 학습.
         _log_and_maybe_learn(
             task_id=task_id, category="reviewer_rejected",
             details=str(reviewer_verdict.get("required_changes", [])),
-            agent_role=reviewer_role,
+            agent_role=main_coder_role,
         )
         required = "\n".join(f"- {c}" for c in reviewer_verdict.get("required_changes", [])[:5])
         warnings.append(f"**Reviewer:**\n{required}")
@@ -3597,6 +3613,28 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
                 "failure_category": "compile_error",
             }
         _comment("✅ Unity 컴파일 통과")
+
+    # ── 진실성 게이트(E): 컴파일 미검증 APPROVED는 자동 push 보류 (거짓 '완료' 방지)
+    # HERMES_REQUIRE_COMPILE=block(기본)|warn|off. Unity MCP로 컴파일을 확인했고 에러 없을 때만
+    # '검증되게 작동함'으로 본다. MCP 미응답(mcp_ok=False)이면 증명 불가 → block 모드에선 review로
+    # 보류(사람이 컴파일/플레이 확인). MCP가 자주 다운돼 백로그가 쌓이면 warn으로 완화 가능.
+    _REQ_COMPILE = os.environ.get("HERMES_REQUIRE_COMPILE", "block").lower()
+    _compile_verified = bool(mcp_ok and not mcp_compile_errors)
+    if (not _merge_blocked and not _compile_verified
+            and reviewer_verdict.get("verdict") == "APPROVED" and _REQ_COMPILE != "off"):
+        _record_gate_event(task_id=task_id, gate="compile_required",
+                           result=("block" if _REQ_COMPILE == "block" else "warn"),
+                           reason="compile unverified (MCP unavailable) on APPROVED")
+        if _REQ_COMPILE == "block":
+            _comment("⚠️ **컴파일 검증 불가**(Unity MCP 미응답) — Reviewer APPROVED이나 "
+                     "자동배포 보류. 수동 컴파일/플레이 확인 후 done 처리 필요. "
+                     "(해제: HERMES_REQUIRE_COMPILE=warn)")
+            return {
+                "success": True,
+                "summary": "Reviewer APPROVED이나 컴파일 미검증 — 수동 확인 위해 review 보류",
+                "next_status": "review",
+            }
+        _comment("⚠️ 컴파일 검증 불가(MCP 미응답) — warn 모드라 배포는 진행하되 수동 확인 권장.")
 
     # ── Step 7: commit + push (non-fast-forward 시 자동 rebase 재시도)
     # A7 취소 체크포인트: 되돌릴 수 없는 commit/push 직전 — 중단 시 여기서 멈춤(push 방지)
