@@ -44,14 +44,16 @@ function verifySlackSignature(
 export async function POST(req: NextRequest) {
   const rawBody = await req.text();
 
-  // 서명 검증 (optional — SLACK_SIGNING_SECRET 있을 때만)
+  // 서명 검증 — 이 라우트는 미들웨어 인증 제외(Slack이 직접 POST)라 서명이 유일한 인증.
+  // SLACK_SIGNING_SECRET 미설정 시 검증 불가 → 무인증 수락 금지(이전엔 그냥 통과하던 구멍).
   const signingSecret = process.env.SLACK_SIGNING_SECRET;
-  if (signingSecret) {
-    const ts = req.headers.get("x-slack-request-timestamp") || "";
-    const sig = req.headers.get("x-slack-signature") || "";
-    if (!verifySlackSignature(signingSecret, rawBody, ts, sig)) {
-      return NextResponse.json({ error: "invalid signature" }, { status: 401 });
-    }
+  if (!signingSecret) {
+    return NextResponse.json({ error: "slack signing secret not configured" }, { status: 401 });
+  }
+  const ts = req.headers.get("x-slack-request-timestamp") || "";
+  const sig = req.headers.get("x-slack-signature") || "";
+  if (!verifySlackSignature(signingSecret, rawBody, ts, sig)) {
+    return NextResponse.json({ error: "invalid signature" }, { status: 401 });
   }
 
   let body: Record<string, unknown>;

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSettings, saveSettings, type AssigneeWebhook } from "@/lib/slack";
+import { auth, isAdminEmail } from "@/auth";
 
 function maskSecret(s?: string): string {
   if (!s) return "";
@@ -37,6 +38,11 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
+    // 설정(Slack webhook/bot token)은 관리자만 변경 — 일반 5인은 GET(마스킹)만.
+    const session = await auth();
+    if (!isAdminEmail(session?.user?.email)) {
+      return NextResponse.json({ ok: false, error: "forbidden (admin only)" }, { status: 403 });
+    }
     const body = await req.json();
     const current = await getSettings();
     const next = { ...current };

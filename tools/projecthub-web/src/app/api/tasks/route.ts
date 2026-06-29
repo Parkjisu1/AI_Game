@@ -5,33 +5,38 @@ import { auth } from "@/auth";
 import { recordAudit, AuditActor } from "@/lib/audit";
 
 export async function GET() {
-  const db = await getDb();
-  // 목록은 슬림화: 무거운 필드 제외 + has_image flag, 댓글은 마지막 5개만(검색 보조용).
-  // image_base64/attachments/description full text는 상세 GET /api/tasks/[id]에서.
-  const tasks = await db.collection("pixelforge_tasks")
-    .aggregate([
-      { $sort: { created_at: -1 } },
-      {
-        $addFields: {
-          has_image: {
-            $cond: [
-              { $and: [{ $ne: ["$image_base64", null] }, { $ne: ["$image_base64", ""] }] },
-              true,
-              false,
-            ],
+  try {
+    const db = await getDb();
+    // 목록은 슬림화: 무거운 필드 제외 + has_image flag, 댓글은 마지막 5개만(검색 보조용).
+    // image_base64/attachments/description full text는 상세 GET /api/tasks/[id]에서.
+    const tasks = await db.collection("pixelforge_tasks")
+      .aggregate([
+        { $sort: { created_at: -1 } },
+        {
+          $addFields: {
+            has_image: {
+              $cond: [
+                { $and: [{ $ne: ["$image_base64", null] }, { $ne: ["$image_base64", ""] }] },
+                true,
+                false,
+              ],
+            },
+            comments: { $slice: [{ $ifNull: ["$comments", []] }, -5] },
           },
-          comments: { $slice: [{ $ifNull: ["$comments", []] }, -5] },
         },
-      },
-      {
-        $project: {
-          image_base64: 0,   // has_image 계산 후 제거
-          attachments: 0,
+        {
+          $project: {
+            image_base64: 0,   // has_image 계산 후 제거
+            attachments: 0,
+          },
         },
-      },
-    ])
-    .toArray();
-  return NextResponse.json(tasks);
+      ])
+      .toArray();
+    return NextResponse.json(tasks);
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : String(e);
+    return NextResponse.json({ error: msg }, { status: 500 });
+  }
 }
 
 export async function POST(req: NextRequest) {
