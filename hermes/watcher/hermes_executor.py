@@ -3511,6 +3511,15 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
             _reviewer_prompt += "\n\n" + _retr
     except Exception:
         log.exception("reviewer_retrieval injection failed (non-fatal)")
+    # 리뷰어 캘리브레이션 — 과거 오승인율(user_rejected_after_approval/APPROVED)이 높으면
+    # '더 보수적으로' 자기인식 경고 주입 + hermes_reviewer_calibration 적재(관측). 비치명적.
+    try:
+        from reviewer_retrieval import build_calibration_block as _calib_block
+        _cb = _calib_block(reviewer_role)
+        if _cb:
+            _reviewer_prompt += _cb
+    except Exception:
+        log.exception("reviewer calibration injection failed (non-fatal)")
     reviewer_resp = invoke_agent(reviewer_role, _reviewer_prompt, env)
     # Phase 0 배포 차단 게이트 — Reviewer 거부 시 자동 머지 차단(advisory→blocking).
     # HERMES_MERGE_GATE=block(기본)|warn. 회귀/환각/외과규칙 위반 Reviewer 판정을 실효화.

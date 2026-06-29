@@ -25,6 +25,10 @@ TASK_SIMILARITY_FLOOR = 0.62
 MAX_USER_COMMENT_CHARS = 220
 MAX_AI_SUMMARY_CHARS = 180
 
+# 리뷰어 캘리브레이션: APPROVED 표본이 이 이상이고 오승인율이 이 이상이면 경고 주입
+CALIB_MIN_SAMPLES = int(os.environ.get("HERMES_CALIB_MIN_SAMPLES", "8"))
+CALIB_WARN_RATE = float(os.environ.get("HERMES_CALIB_WARN_RATE", "0.40"))
+
 
 @lru_cache(maxsize=1)
 def _openai_client():
@@ -108,6 +112,46 @@ def _last_user_comment(task_doc: dict) -> str:
         return ""
     txt = (user[-1].get("text") or user[-1].get("content") or user[-1].get("body") or "")
     return " ".join(txt.split())[:MAX_USER_COMMENT_CHARS]
+
+
+def build_calibration_block(reviewer_role: str) -> str:
+    """리뷰어 자기 캘리브레이션 — 과거 'APPROVED 후 사용자가 뒤집은'(user_rejected_after_approval)
+    비율을 산출해 hermes_reviewer_calibration에 적재(관측) + 오승인율이 높으면 리뷰어 프롬프트에
+    '더 보수적으로' 경고를 주입(자기교정 루프). 데이터/표본 부족·실패 시 빈 문자열."""
+    db = _mongo_db()
+    if db is None or not reviewer_role:
+        return ""
+    try:
+        S = db.hermes_team_scores
+        approved = S.count_documents({"role": reviewer_role, "verdict": "APPROVED"})
+        overturned = S.count_documents({"role": reviewer_role, "verdict": "user_rejected_after_approval"})
+    except Exception:
+        log.exception("calibration count failed")
+        return ""
+    if approved <= 0:
+        return ""
+    rate = overturned / approved
+    reliability = max(0.0, 1.0 - rate)
+    try:
+        from datetime import datetime, timezone
+        db.hermes_reviewer_calibration.update_one(
+            {"role": reviewer_role},
+            {"$set": {"role": reviewer_role, "approved": approved, "overturned": overturned,
+                      "false_approve_rate": round(rate, 3), "reliability": round(reliability, 3),
+                      "updated_at": datetime.now(timezone.utc).isoformat()}},
+            upsert=True)
+    except Exception:
+        log.exception("calibration upsert failed")
+    # 표본 충분 + 오승인율 높을 때만 경고 주입
+    if approved < CALIB_MIN_SAMPLES or rate < CALIB_WARN_RATE:
+        return ""
+    return (
+        "\n\n## ⚖️ 리뷰어 캘리브레이션 경고 (자기인식)\n"
+        f"당신({reviewer_role})의 과거 APPROVED 중 **{overturned}/{approved} ({rate * 100:.0f}%)**가 "
+        "이후 사용자에게 거부됐습니다(user_rejected_after_approval) — **과승인 경향**이 큽니다.\n"
+        "→ 이번 리뷰는 **더 보수적으로**: 기획 의도 부합·회귀·계약 일치가 조금이라도 불확실하면 "
+        "APPROVED 대신 **REQUEST_CHANGES**. 컴파일/문법 통과만으로 승인하지 말 것."
+    )
 
 
 def build_retrieval_block(task_title: str, task_description: str, current_task_id: str = "") -> str:
