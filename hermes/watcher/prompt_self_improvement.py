@@ -42,6 +42,9 @@ MAX_ACTIVE_PATCHES_PER_ROLE = int(os.environ.get("HERMES_MAX_PATCHES_PER_ROLE", 
 # 진실성 게이트(D): 신규 패치는 'candidate'로 들어가 적용·측정되되, '객관적으로 수용된'
 # 작업을 이만큼 통과해야(+골든 통과 시) 'active'로 승격. 검증 안 된 패치 영구화 방지.
 PATCH_PROBATION_SAMPLES = int(os.environ.get("HERMES_PATCH_PROBATION_SAMPLES", "3"))
+# 측정 신호가 없는 패치(samples_after=0 — 주로 validator: 점수 신호 없음)는 자동 revert가
+# 영원히 안 걸린다 → 이 일수 지나면 archived로 정리(프롬프트 비대화 방지).
+PATCH_UNMEASURED_MAX_DAYS = int(os.environ.get("HERMES_PATCH_UNMEASURED_MAX_DAYS", "14"))
 
 
 # ──────────────────────────────────────────────────────────
@@ -401,25 +404,55 @@ def track_score_for_patches(role: str, score: int) -> None:
 # 진실성 게이트(D) — 객관적 수용 시 candidate 패치 승격
 # ──────────────────────────────────────────────────────────
 def _golden_ok(role: str) -> bool:
-    """골든 회귀 테스트 게이트. 지원 역할이면 통과해야 True.
-    하네스 미가용/미지원 역할은 fail-open(True) — 표본 프로베이션만 적용.
-    (golden 커버리지 확대는 후속: 현재 design_level_designer만 지원)"""
-    try:
-        from harness import eval as _ev  # noqa: N813
-    except Exception:
+    """골든 회귀 게이트 — 가장 최근 골든 실행(hermes_eval_runs)의 role별 pass-rate가
+    임계(0.7) 이상이면 True. 결과가 없으면 fail-open(True, 표본 프로베이션만 적용).
+
+    주의: 승격마다 골든을 '라이브 실행하지 않는다'(agent 재호출=느림/비용). 캐시된 결과만 읽음.
+    골든 갱신은 별도 주기 실행으로: `python harness/eval.py run --all` (cron 권장).
+    커버리지: 현재 design_level_designer만 추출 지원(harness/eval.py) — 그 외 역할은
+    결과가 없어 fail-open. 역할별 golden 추출기 추가가 후속 디벨롭."""
+    db = _get_db()
+    if db is None:
         return True
     try:
-        supported = getattr(_ev, "SUPPORTED_ROLES", {"design_level_designer"})
-        if role not in supported:
-            return True
-        runner = getattr(_ev, "run_eval", None)
-        if runner is None:
-            return True
-        res = runner(role=role)
-        return bool(res and float(res.get("pass_rate", 0) or 0) >= 0.7)
+        rows = list(db["hermes_eval_runs"].find({"role": role})
+                    .sort("created_at", -1).limit(20))
+        if not rows:
+            return True  # 골든 결과 없음 → 프로베이션 표본 게이트만
+        passed = sum(1 for r in rows if r.get("passed"))
+        ok = (passed / len(rows)) >= 0.7
+        if not ok:
+            log.info("[golden] role=%s recent pass-rate %d/%d < 0.7 — promote 보류",
+                     role, passed, len(rows))
+        return ok
     except Exception:
         log.exception("_golden_ok failed (fail-open)")
         return True
+
+
+def archive_stale_unmeasured() -> int:
+    """측정 신호가 없는 패치(samples_after=0, 주로 validator/coder)는 자동 revert가
+    영원히 안 걸린다 → 생성 후 N일 지나면 archived로 정리(프롬프트 비대화 방지). 멱등.
+    'archived'는 load_active_patches_text/track_score의 {active,candidate} 필터에서 제외됨."""
+    db = _get_db()
+    if db is None:
+        return 0
+    from datetime import timedelta
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=PATCH_UNMEASURED_MAX_DAYS)).isoformat()
+    try:
+        res = db[PATCHES_COLLECTION].update_many(
+            {"status": {"$in": ["active", "candidate"]},
+             "$or": [{"samples_after": 0}, {"samples_after": None}, {"samples_after": {"$exists": False}}],
+             "created_at": {"$lt": cutoff}},
+            {"$set": {"status": "archived",
+                      "archived_at": datetime.now(timezone.utc).isoformat(),
+                      "archive_reason": "unmeasured (no score signal) > %dd" % PATCH_UNMEASURED_MAX_DAYS}})
+        if res.modified_count:
+            log.info("[hygiene] archived %d stale unmeasured patches", res.modified_count)
+        return res.modified_count
+    except Exception:
+        log.exception("archive_stale_unmeasured failed")
+        return 0
 
 
 def promote_candidates_on_acceptance(role: str, score: int) -> None:
@@ -429,6 +462,7 @@ def promote_candidates_on_acceptance(role: str, score: int) -> None:
     db = _get_db()
     if db is None:
         return
+    archive_stale_unmeasured()  # 수용 시점에 위생 청소도 1회(멱등, 저빈도)
     try:
         cands = list(db[PATCHES_COLLECTION].find({"role": role, "status": "candidate"}))
     except Exception:
