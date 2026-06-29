@@ -185,6 +185,45 @@ def _default_template(category: str) -> dict[str, str]:
     }
 
 
+def _synthesize_guidance(category: str, samples: list[dict[str, Any]]) -> Optional[dict[str, str]]:
+    """실제 실패 샘플(activity_logs.details)에서 LLM으로 '사례 기반' 가이드를 합성.
+    하드코딩 템플릿(일반론)을 대체 — 이 카테고리의 구체적 실패에 특화된 재발 방지책 생성.
+    LLM 미가용/실패/빈약하면 None(→ 호출부가 템플릿 폴백)."""
+    detail_block = "\n".join(
+        f"- task {(s.get('task_id') or '?')[:8]}: {((s.get('details') or '')[:300])}"
+        for s in samples[:5] if (s.get("details") or "").strip()
+    )
+    if not detail_block:
+        return None
+    try:
+        from agent_team import ExecutionEnv, invoke_agent
+        from pathlib import Path as _P
+    except Exception:
+        return None
+    prompt = (
+        f"다음은 Hermes 파이프라인에서 카테고리 '{category}'로 반복된 실제 실패 사례들이다.\n\n"
+        f"{detail_block}\n\n"
+        "이 구체적 실패들의 공통 원인을 분석하고, 에이전트가 다음에 같은 실수를 피하도록 "
+        "4-6개의 실행 가능한 지침을 번호 목록으로 한국어로 작성하라. 규칙:\n"
+        "- 위 사례에 근거한 구체적 조치만 (추측·일반론 금지)\n"
+        "- 각 지침은 한 줄, 명령형\n"
+        "- 지침 번호 목록만 출력(서론/결론 없이)"
+    )
+    env = ExecutionEnv(
+        mode="local", cwd=str(_P.home()), timeout_sec=60,
+        task_id=f"skill_{category}", task_title=f"[skill] {category}",
+        team="dev", sub_team="general",
+    )
+    try:
+        resp = invoke_agent("sub_coder", prompt, env)
+        body = (resp.output or "").strip() if resp and resp.success else ""
+        if len(body) >= 40:
+            return {"title": f"{category} 반복 실패 방지 (사례 기반 자동합성)", "guidance": body[:1800]}
+    except Exception:
+        log.exception("skill guidance synthesis failed")
+    return None
+
+
 # ──────────────────────────────────────────────
 # 스킬 파일 생성
 # ──────────────────────────────────────────────
@@ -203,7 +242,9 @@ def generate_learned_skill(
             return None
 
         samples = get_recent_failure_samples(db, category, limit=5)
-        template = SKILL_TEMPLATES.get(category, _default_template(category))
+        # 사례 기반 LLM 합성 우선 — 실패 시 하드코딩 템플릿/기본 폴백 (P2-1: 정적 템플릿 탈피)
+        template = _synthesize_guidance(category, samples) \
+            or SKILL_TEMPLATES.get(category, _default_template(category))
 
         LEARNED_SKILLS_DIR.mkdir(parents=True, exist_ok=True)
         skill_path = LEARNED_SKILLS_DIR / f"auto_{category}.md"
