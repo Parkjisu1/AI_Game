@@ -404,27 +404,41 @@ def track_score_for_patches(role: str, score: int) -> None:
 # 진실성 게이트(D) — 객관적 수용 시 candidate 패치 승격
 # ──────────────────────────────────────────────────────────
 def _golden_ok(role: str) -> bool:
-    """골든 회귀 게이트 — 가장 최근 골든 실행(hermes_eval_runs)의 role별 pass-rate가
-    임계(0.7) 이상이면 True. 결과가 없으면 fail-open(True, 표본 프로베이션만 적용).
+    """골든 '회귀' 게이트 — 캐시된 hermes_eval_runs(주기 cron이 채움)를 batch별로 묶어,
+    최신 batch 평균이 직전 batch들의 중앙값보다 명확히(>0.10) 하락했으면 승격 보류(False).
 
-    주의: 승격마다 골든을 '라이브 실행하지 않는다'(agent 재호출=느림/비용). 캐시된 결과만 읽음.
-    골든 갱신은 별도 주기 실행으로: `python harness/eval.py run --all` (cron 권장).
-    커버리지: 현재 design_level_designer만 추출 지원(harness/eval.py) — 그 외 역할은
-    결과가 없어 fail-open. 역할별 golden 추출기 추가가 후속 디벨롭."""
+    왜 절대 임계가 아니라 회귀인가: 생성형 작업(레벨 디자인)은 LLM이 '유효하지만 다른'
+    spec을 내므로 저장된 정답과의 필드매칭 절대점수가 본질적으로 낮다(실측 ~0.21). 절대 0.7
+    게이트는 항상 차단 → 무의미. 따라서 '프롬프트 변경이 생성 품질을 떨어뜨렸는가'(회귀)만 본다.
+
+    - 결과 없음/배치 1개뿐(baseline만) → fail-open(True). 표본 프로베이션 게이트만 적용.
+    - 라이브 실행 안 함(캐시만). 갱신은 cron: `run_golden_eval.py` (주간).
+    - 커버리지: 현재 design_level_designer만 골든 추출 지원 — 그 외 역할은 결과 없어 fail-open."""
     db = _get_db()
     if db is None:
         return True
     try:
-        rows = list(db["hermes_eval_runs"].find({"role": role})
-                    .sort("created_at", -1).limit(20))
+        rows = list(db["hermes_eval_runs"].find(
+            {"role": role}, {"batch_id": 1, "score": 1, "created_at": 1}
+        ).sort("created_at", -1).limit(200))
         if not rows:
-            return True  # 골든 결과 없음 → 프로베이션 표본 게이트만
-        passed = sum(1 for r in rows if r.get("passed"))
-        ok = (passed / len(rows)) >= 0.7
-        if not ok:
-            log.info("[golden] role=%s recent pass-rate %d/%d < 0.7 — promote 보류",
-                     role, passed, len(rows))
-        return ok
+            return True
+        # batch별 평균 (최신 batch가 먼저)
+        from collections import OrderedDict
+        batches: "OrderedDict[str, list]" = OrderedDict()
+        for r in rows:
+            b = r.get("batch_id") or str(r.get("created_at", ""))[:19]
+            batches.setdefault(b, []).append(float(r.get("score") or 0))
+        avgs = [sum(v) / len(v) for v in batches.values()]  # 최신순
+        if len(avgs) < 2:
+            return True  # baseline만 → fail-open
+        latest, prior = avgs[0], sorted(avgs[1:])
+        prior_med = prior[len(prior) // 2]
+        if latest < prior_med - 0.10:
+            log.info("[golden] role=%s 회귀 감지: 최신 batch avg %.2f < 직전 중앙값 %.2f-0.10 — promote 보류",
+                     role, latest, prior_med)
+            return False
+        return True
     except Exception:
         log.exception("_golden_ok failed (fail-open)")
         return True
