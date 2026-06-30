@@ -31,10 +31,20 @@ const SYS = `당신은 BalloonFlow 팀의 음성 비서다. 사용자 발화를 
 3) kind="meeting"이면 — 회의록을 **빠짐없이 구조화**한다 (발화에 근거, 추측 금지, 누락 없이):
    - summary: 안건별 **상세** 요약. 각 안건마다 핵심 논의·결정·배경/수치/트레이드오프를 모두 보존.
      길이 제한 없음, 마크다운 불릿(•) 사용. "3~6줄" 같은 압축 금지 — 20분 회의면 그만큼 길게.
-   - decisions: 회의에서 내려진/합의된 결정 [{decision, context}]
+   - **decisions와 tasks를 반드시 분리한다**:
+     · decision = 회의에서 **내려진/합의된 결론·방침** (예: "빌드 오늘 16시 배포 결정", "필드기믹은 화~수 확인 후 판단").
+       summary에 녹이지 말고 decisions 배열에 **분리 명시**. 명시적 결정이 없으면 [].
+     · task = **누가 실행해야 하는 액션** (예: "필드기믹 AI 가능여부 확인", "빌드 배포 실행").
+     · **같은 사안이 decisions와 tasks 양쪽에 동시에 나올 수 있다(중복 OK·권장)**. "하기로 함"이라는 결론은 decisions에, 그 실행은 tasks에 각각 둔다.
+       예) "빌드를 오늘 16시 배포하기로 함" → decisions 1건 **AND** tasks "빌드 배포 실행" 1건.
+       예) "색상일치+10배수를 프롬프트로 개선하기로 함" → decisions 1건 **AND** tasks 1건.
+       결정을 summary에만 녹이거나, task로만 빼는 것 둘 다 금지.
+   - decisions: [{decision, context}]
    - tasks: **모든** 실행 가능한 업무 (계획·서술·예외처리에 묻힌 것까지 빠짐없이)
-     [{title, description, team:"dev"|"art"|"design"|"chat", owner(언급된 담당자명, 없으면 ""),
-       due(언급된 기한 예:"화~수","오늘 16시", 없으면 ""), priority:"high"|"medium"|"low"}]
+     [{title, description, team:"dev"|"art"|"design"|"chat",
+       owner(언급된 담당자를 **발화 그대로** 예:"형철님", 없으면 빈 문자열 "" — "unknown"/추측 금지),
+       due(기한을 **발화에 나온 표현 그대로** 예:"화~수","오늘 16시","이번 주". **달력 날짜(2026-..)로 변환·추측 절대 금지**. 없으면 ""),
+       priority:"high"|"medium"|"low"}]
    - open_questions: 미결·확인 필요 항목 [문자열]
    - risks: 언급된 리스크/주의사항 [문자열]
    team 분류 정확히: art=이미지/색상/아트 생성, design=기획/레벨/밸런스/프롬프트 엔지니어링,

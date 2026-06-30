@@ -6,9 +6,12 @@ import Icon from "@/components/Icon";
 // 음성 업무 — 회의/지시 녹음 → STT → 요약 + task 분해 → 검토/편집 → 선택 생성.
 // 안전: 잘못 인식돼도 이 화면에서 사람이 보고 고른 것만 task가 됨(human-in-loop).
 
-interface DraftTask { title: string; description: string; team?: string; sel: boolean; }
+interface DraftTask { title: string; description: string; team?: string; owner?: string; due?: string; priority?: string; sel: boolean; }
+interface Decision { decision: string; context?: string; }
 interface RecentCmd { title?: string; created_at?: string; status?: string; }
-interface Meeting { _id: string; summary: string; transcript: string; tasks: { title: string; description: string; team?: string }[]; created_at: string; }
+interface Meeting { _id: string; summary: string; transcript: string; tasks: { title: string; description: string; team?: string; owner?: string; due?: string; priority?: string }[]; decisions?: Decision[]; open_questions?: string[]; risks?: string[]; created_at: string; }
+
+const PRI_BADGE: Record<string, string> = { high: "bg-rose-50 text-rose-600", medium: "bg-blue-50 text-blue-600", low: "bg-gray-100 text-gray-500" };
 
 const TEAM_LABEL: Record<string, string> = { dev: "dev", art: "art", design: "design", chat: "chat" };
 const TEAM_ICON: Record<string, string> = { dev: "code", art: "palette", design: "ruler", chat: "chat" };
@@ -40,6 +43,9 @@ export default function VoicePage() {
   const [qstatus, setQstatus] = useState("");
   const [evidence, setEvidence] = useState<string[]>([]);
   const [meetings, setMeetings] = useState<Meeting[]>([]);
+  const [decisions, setDecisions] = useState<Decision[]>([]);
+  const [openQuestions, setOpenQuestions] = useState<string[]>([]);
+  const [risks, setRisks] = useState<string[]>([]);
   const mrRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -63,6 +69,7 @@ export default function VoicePage() {
     setKind("meeting"); setAnswer(""); setEvidence([]); setCreated(0); setErr("");
     setSummary(m.summary); setTranscript(m.transcript);
     setTasks((m.tasks || []).map((t) => ({ ...t, sel: true })));
+    setDecisions(m.decisions || []); setOpenQuestions(m.open_questions || []); setRisks(m.risks || []);
     if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const delMeeting = async (id: string) => {
@@ -72,6 +79,7 @@ export default function VoicePage() {
 
   const start = async () => {
     setErr(""); setTranscript(""); setSummary(""); setTasks([]); setCreated(0); setAnswer(""); setEvidence([]); setKind("");
+    setDecisions([]); setOpenQuestions([]); setRisks([]);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mr = new MediaRecorder(stream);
@@ -126,7 +134,10 @@ export default function VoicePage() {
         setTasks((j.suggestions || []).map((t: { title: string; description: string }) => ({ title: t.title, description: t.description, sel: false })));
       } else {
         setSummary(j.summary || "");
-        setTasks((j.tasks || []).map((t: { title: string; description: string; team?: string }) => ({ ...t, sel: true })));
+        setTasks((j.tasks || []).map((t: { title: string; description: string; team?: string; owner?: string; due?: string; priority?: string }) => ({ ...t, sel: true })));
+        setDecisions(Array.isArray(j.decisions) ? j.decisions : []);
+        setOpenQuestions(Array.isArray(j.open_questions) ? j.open_questions : []);
+        setRisks(Array.isArray(j.risks) ? j.risks : []);
         loadMeetings();
       }
     } catch (e) {
@@ -143,7 +154,9 @@ export default function VoicePage() {
       if (!t.sel || !t.title.trim()) continue;
       const body: Record<string, unknown> = {
         title: t.title.trim(), description: t.description.trim(),
-        assignee: "hermes", status: "todo", priority: "medium", created_via: "voice",
+        assignee: "hermes", status: "todo",
+        priority: t.priority && ["high", "medium", "low"].includes(t.priority) ? t.priority : "medium",
+        created_via: "voice",
       };
       if (t.team && ["dev", "art", "design"].includes(t.team)) { body.team = t.team; body.team_override = true; }
       try {
@@ -242,6 +255,20 @@ export default function VoicePage() {
         </div>
       )}
 
+      {decisions.length > 0 && (
+        <div className="rounded-2xl border border-gray-200 bg-white p-4">
+          <div className="font-semibold text-sm mb-2 flex items-center gap-1.5"><Icon name="check" size={15} /> 결정사항 <span className="text-gray-400 font-normal">({decisions.length})</span></div>
+          <ul className="space-y-1.5">
+            {decisions.map((d, i) => (
+              <li key={i} className="text-sm text-gray-700 flex gap-2">
+                <span className="text-emerald-500 mt-0.5 shrink-0"><Icon name="check" size={13} /></span>
+                <span><b>{d.decision}</b>{d.context ? <span className="text-gray-500"> — {d.context}</span> : null}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {tasks.length > 0 && (
         <div className="rounded-2xl border border-gray-200 bg-white p-4 space-y-2.5">
           <div className="flex items-center justify-between">
@@ -258,11 +285,38 @@ export default function VoicePage() {
                     className="w-full text-sm font-semibold border-b border-gray-200 focus:border-blue-400 outline-none py-0.5 bg-transparent" />
                   <textarea value={t.description} onChange={(e) => upd(i, { description: e.target.value })} rows={2}
                     className="w-full text-xs text-gray-600 border border-gray-100 rounded-lg p-2 outline-none focus:border-blue-300" />
-                  {t.team && <span className="inline-flex items-center gap-1 text-[11px] text-gray-400"><Icon name={TEAM_ICON[t.team] || "bot"} size={12} /> {TEAM_LABEL[t.team] || t.team}</span>}
+                  <div className="flex flex-wrap items-center gap-1.5 text-[11px]">
+                    {t.team && <span className="inline-flex items-center gap-1 text-gray-400"><Icon name={TEAM_ICON[t.team] || "bot"} size={12} /> {TEAM_LABEL[t.team] || t.team}</span>}
+                    {t.priority && <span className={`px-1.5 py-0.5 rounded-full font-medium ${PRI_BADGE[t.priority] || PRI_BADGE.medium}`}>{t.priority}</span>}
+                    {t.owner && <span className="text-gray-500">👤 {t.owner}</span>}
+                    {t.due && <span className="text-gray-500">🗓 {t.due}</span>}
+                  </div>
                 </div>
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {openQuestions.length > 0 && (
+        <div className="rounded-2xl border border-gray-200 bg-white p-4">
+          <div className="font-semibold text-sm mb-2 flex items-center gap-1.5"><Icon name="help" size={15} /> 미결 · 확인 필요 <span className="text-gray-400 font-normal">({openQuestions.length})</span></div>
+          <ul className="space-y-1">
+            {openQuestions.map((q, i) => (
+              <li key={i} className="text-sm text-gray-700 flex gap-2"><span className="text-amber-500 shrink-0">?</span><span>{q}</span></li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {risks.length > 0 && (
+        <div className="rounded-2xl border border-amber-200 bg-amber-50/50 p-4">
+          <div className="font-semibold text-sm mb-2 flex items-center gap-1.5 text-amber-700"><Icon name="ban" size={15} /> 리스크 · 주의 <span className="text-amber-500 font-normal">({risks.length})</span></div>
+          <ul className="space-y-1">
+            {risks.map((r, i) => (
+              <li key={i} className="text-sm text-amber-800 flex gap-2"><span className="shrink-0">⚠️</span><span>{r}</span></li>
+            ))}
+          </ul>
         </div>
       )}
 
