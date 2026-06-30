@@ -213,30 +213,42 @@ export function buildTaskCreatedPayload(task: {
 }
 
 // 회의 요약 DM (음성 회의 분석 결과 — 녹음자에게 발송)
-export function buildMeetingSummaryPayload(
-  summary: string,
-  tasks: Array<{ title: string; team?: string }>,
-): SlackPayload {
+export function buildMeetingSummaryPayload(m: {
+  summary?: string;
+  decisions?: Array<{ decision: string; context?: string }>;
+  tasks?: Array<{ title: string; team?: string; owner?: string; due?: string; priority?: string }>;
+  open_questions?: string[];
+  risks?: string[];
+}): SlackPayload {
   const teamEmoji: Record<string, string> = { dev: "💻", art: "🎨", design: "📐", chat: "💬" };
-  const n = tasks?.length || 0;
+  const priEmoji: Record<string, string> = { high: "🔴", medium: "🔵", low: "⚪" };
+  const tasks = m.tasks || [];
   const taskLines =
-    (tasks || [])
-      .slice(0, 20)
-      .map((t, i) => `${i + 1}. ${teamEmoji[t.team || ""] || "•"} ${t.title}`)
+    tasks
+      .slice(0, 25)
+      .map((t, i) => {
+        const meta = [t.owner ? `👤${t.owner}` : "", t.due ? `🗓${t.due}` : ""].filter(Boolean).join(" ");
+        return `${i + 1}. ${priEmoji[t.priority || "medium"] || "🔵"}${teamEmoji[t.team || ""] || "•"} ${t.title}${meta ? ` _(${meta})_` : ""}`;
+      })
       .join("\n") || "(추출된 작업 없음)";
-  return {
-    text: `🎙️ 회의 요약 (작업 ${n}개)`,
-    blocks: [
-      {
-        type: "section",
-        text: { type: "mrkdwn", text: `🎙️ *회의 요약*\n${(summary || "(요약 없음)").substring(0, 2900)}` },
-      },
-      {
-        type: "section",
-        text: { type: "mrkdwn", text: `📋 *추출된 작업 (${n}개)*\n${taskLines.substring(0, 2900)}` },
-      },
-    ],
-  };
+
+  const blocks: SlackBlock[] = [
+    { type: "section", text: { type: "mrkdwn", text: `🎙️ *회의 요약*\n${(m.summary || "(요약 없음)").substring(0, 2900)}` } },
+  ];
+  if (m.decisions?.length) {
+    const txt = m.decisions.slice(0, 10).map((d) => `• ${d.decision}`).join("\n");
+    blocks.push({ type: "section", text: { type: "mrkdwn", text: `✅ *결정사항 (${m.decisions.length})*\n${txt.substring(0, 2900)}` } });
+  }
+  blocks.push({ type: "section", text: { type: "mrkdwn", text: `📋 *작업 (${tasks.length})*\n${taskLines.substring(0, 2900)}` } });
+  if (m.open_questions?.length) {
+    const txt = m.open_questions.slice(0, 10).map((q) => `• ${q}`).join("\n");
+    blocks.push({ type: "section", text: { type: "mrkdwn", text: `❓ *미결/확인필요*\n${txt.substring(0, 2900)}` } });
+  }
+  if (m.risks?.length) {
+    const txt = m.risks.slice(0, 10).map((r) => `• ${r}`).join("\n");
+    blocks.push({ type: "section", text: { type: "mrkdwn", text: `⚠️ *리스크*\n${txt.substring(0, 2900)}` } });
+  }
+  return { text: `🎙️ 회의 요약 (작업 ${tasks.length}개)`, blocks };
 }
 
 // 작업 상태 변경 알림
