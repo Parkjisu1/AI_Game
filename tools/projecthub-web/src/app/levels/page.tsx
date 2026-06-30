@@ -434,11 +434,11 @@ export default function LevelsPage() {
                 <span className="truncate">{lv.pattern_chosen || lv.symmetry}</span>
               </div>
               <div className="flex flex-wrap gap-1">
-                {lv.palette.map((c) => (
+                {(lv.palette ?? []).map((c) => (
                   <ColorDot
                     key={c}
                     idx={c}
-                    count={lv.per_color_count[String(c)] ?? lv.per_color_count[c as unknown as string]}
+                    count={(lv.per_color_count ?? {})[String(c)] ?? (lv.per_color_count ?? {})[c as unknown as string]}
                   />
                 ))}
               </div>
@@ -555,14 +555,14 @@ export default function LevelsPage() {
 
                   <div>
                     <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                      Palette ({detail.palette.length}색)
+                      Palette ({(detail.palette ?? []).length}색)
                     </h3>
                     <div className="flex flex-wrap gap-1.5">
-                      {detail.palette.map((c) => (
+                      {(detail.palette ?? []).map((c) => (
                         <ColorDot
                           key={c}
                           idx={c}
-                          count={detail.per_color_count[String(c)] ?? detail.per_color_count[c as unknown as string]}
+                          count={(detail.per_color_count ?? {})[String(c)] ?? (detail.per_color_count ?? {})[c as unknown as string]}
                         />
                       ))}
                     </div>

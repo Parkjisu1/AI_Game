@@ -13,7 +13,7 @@ export default function RoadmapChart() {
     fetch("/api/roadmap")
       .then((r) => r.json())
       .then((j) => {
-        if (j.ok && j.data) setData(j.data);
+        if (j.ok && j.data && Array.isArray(j.data.tasks) && Array.isArray(j.data.sprints)) setData(j.data);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -116,25 +116,25 @@ export function RoadmapView({ data, onUpload, editable, onTaskClick, onSprintCli
 
   const maxWeek = useMemo(() => Math.max(
     12,
-    ...data.tasks.map((t) => t.weekEnd || 0),
-    ...data.sprints.map((s) => s.weekEnd || 0),
+    ...(data.tasks ?? []).map((t) => t.weekEnd || 0),
+    ...(data.sprints ?? []).map((s) => s.weekEnd || 0),
   ), [data]);
 
   const sortedTasks = useMemo(() => {
-    return [...data.tasks].sort((a, b) => {
+    return [...(data.tasks ?? [])].sort((a, b) => {
       if (a.sprintId !== b.sprintId) return a.sprintId - b.sprintId;
       if (a.role !== b.role) return a.role.localeCompare(b.role);
       return (a.weekStart || 0) - (b.weekStart || 0);
     });
   }, [data]);
 
-  const sprintCounts = useMemo(() => data.sprints.map((s) => ({
+  const sprintCounts = useMemo(() => (data.sprints ?? []).map((s) => ({
     ...s,
-    count: data.tasks.filter((t) => t.sprintId === s.id).length,
+    count: (data.tasks ?? []).filter((t) => t.sprintId === s.id).length,
   })), [data]);
 
   const allRoles = useMemo(
-    () => Array.from(new Set(data.tasks.map((t) => t.role))),
+    () => Array.from(new Set((data.tasks ?? []).map((t) => t.role))),
     [data]
   );
 
@@ -147,7 +147,7 @@ export function RoadmapView({ data, onUpload, editable, onTaskClick, onSprintCli
         <div>
           <h2 className="text-base font-bold flex items-center gap-2"><Icon name="map" size={16} /> 프로젝트 로드맵</h2>
           <p className="text-xs text-gray-500 mt-0.5">
-            전체 {data.tasks.length} task · {data.sprints.length} sprints
+            전체 {(data.tasks ?? []).length} task · {(data.sprints ?? []).length} sprints
             {today > 0 ? ` · 현재 W${today}` : ""}
             {data.startDate ? ` · 시작 ${data.startDate}` : ""}
           </p>
@@ -250,7 +250,7 @@ export function RoadmapView({ data, onUpload, editable, onTaskClick, onSprintCli
           </div>
 
           {/* Task rows grouped by sprint */}
-          {data.sprints.map((sprint) => {
+          {(data.sprints ?? []).map((sprint) => {
             const sprintTasks = sortedTasks.filter((t) => t.sprintId === sprint.id);
             if (sprintTasks.length === 0 && !editable) return null;
             return (
@@ -267,14 +267,14 @@ export function RoadmapView({ data, onUpload, editable, onTaskClick, onSprintCli
                     style={{ width: labelWidth + colWidth * maxWeek, color: "#e6e9ef" }}
                   >
                     <Icon name="flag" size={12} />
-                    <span>Sprint {sprint.id} · {sprint.label.replace(/^SPRINT\s+\d+:\s*/i, "")}</span>
+                    <span>Sprint {sprint.id} · {(sprint.label ?? "").replace(/^SPRINT\s+\d+:\s*/i, "")}</span>
                     {editable && <Icon name="edit" size={12} className="text-blue-600 ml-1" />}
                   </div>
                 </div>
                 {/* Task rows */}
                 {sprintTasks.map((task) => {
                   // 원본 data.tasks에서의 index 찾기 (편집/삭제 시 필요)
-                  const origIdx = data.tasks.indexOf(task);
+                  const origIdx = (data.tasks ?? []).indexOf(task);
                   const ws = task.weekStart || 0;
                   const we = task.weekEnd || 0;
                   const span = we - ws + 1;
@@ -319,7 +319,8 @@ export function RoadmapView({ data, onUpload, editable, onTaskClick, onSprintCli
                                 const d = JSON.parse(e.dataTransfer.getData("text/plain"));
                                 const newWs = w;
                                 const newWe = w + d.span - 1;
-                                onTaskDrop(data.tasks[d.origIdx], d.origIdx, newWs, newWe);
+                                const dropped = (data.tasks ?? [])[d.origIdx];
+                                if (dropped) onTaskDrop(dropped, d.origIdx, newWs, newWe);
                               } catch {}
                             } : undefined}
                           />

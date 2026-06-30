@@ -1673,7 +1673,7 @@ function GeneratedDesigns({ taskId, ids }: { taskId: string; ids: string[] }) {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={`/api/designs/image/${first.filename}`}
-                  alt={d.prompt.slice(0, 40)}
+                  alt={(d.prompt ?? "").slice(0, 40)}
                   className="w-full aspect-square object-cover group-hover:opacity-80 transition-opacity"
                   loading="lazy"
                 />

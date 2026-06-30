@@ -62,12 +62,19 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     // internal fetch — req.nextUrl.origin(HTTPS) 로 가면 SSL handshake 실패 (2026-05-27 발견).
     // 같은 Next.js 프로세스에 자기 자신을 localhost HTTP 로 호출.
     const baseUrl = `http://127.0.0.1:${process.env.PORT || 3000}`;
-    const r = await fetch(`${baseUrl}/api/agents/v43-batch/${artJobId}/curate`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "cookie": req.headers.get("cookie") || "" },
-      body: JSON.stringify({ selections }),
-    });
-    const j = await r.json();
+    interface CurateResp { results?: Array<{ level: number; ok?: boolean }>; [k: string]: unknown }
+    let r: Response;
+    let j: CurateResp;
+    try {
+      r = await fetch(`${baseUrl}/api/agents/v43-batch/${artJobId}/curate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "cookie": req.headers.get("cookie") || "" },
+        body: JSON.stringify({ selections }),
+      });
+      j = (await r.json()) as CurateResp;
+    } catch (e) {
+      return NextResponse.json({ error: "curate fetch 실패", detail: e instanceof Error ? e.message : String(e) }, { status: 502 });
+    }
     if (!r.ok) {
       return NextResponse.json({ error: "curate 실패", detail: j }, { status: r.status });
     }

@@ -35,7 +35,7 @@ export default function BalloonFlowPage() {
   const drag = useRef<{ x: number; y: number; vx: number; vy: number } | null>(null);
 
   useEffect(() => {
-    fetch("/balloonflow-graph.json").then((r) => r.json()).then(setGraph).catch(() => setGraph(null));
+    fetch("/balloonflow-graph.json").then((r) => r.json()).then((d: Graph) => setGraph(d && Array.isArray(d.nodes) ? d : null)).catch(() => setGraph(null));
   }, []);
 
   // ── force-directed 레이아웃 (graph 변경 시 1회 계산, 결정론적 init) ──

@@ -172,7 +172,7 @@ export default function CostPage() {
             <Table
               cols={["시각", "역할", "모델", "분과", "입/출", "비용", "Task"]}
               rows={data.recent.map((r) => [
-                <span key="t" className="font-mono text-xs text-zinc-400">{r.created_at.slice(11, 19)}</span>,
+                <span key="t" className="font-mono text-xs text-zinc-400">{(r.created_at ?? "").slice(11, 19)}</span>,
                 <span key="role" className="font-mono text-xs">{r.role}</span>,
                 <span key="m" className="font-mono text-xs text-zinc-500">{r.model}</span>,
                 `${r.team || "—"}/${r.sub_team || "general"}`,

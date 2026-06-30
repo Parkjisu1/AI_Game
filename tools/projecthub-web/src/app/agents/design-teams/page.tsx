@@ -48,7 +48,7 @@ function StarBar({ value }: { value: number }) {
       {[1, 2, 3, 4, 5].map((n) => (
         <span key={n} className={`text-base ${value >= n ? "text-yellow-400" : "text-gray-300"}`}>★</span>
       ))}
-      <span className="ml-1 text-xs text-gray-500 font-mono">{value.toFixed(2)}</span>
+      <span className="ml-1 text-xs text-gray-500 font-mono">{(value ?? 0).toFixed(2)}</span>
     </div>
   );
 }

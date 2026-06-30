@@ -405,8 +405,8 @@ export default function SettingsPage() {
                         <span className="bg-gray-100 px-1.5 py-0.5 rounded">{e.event}</span>
                       </td>
                       <td className="px-2 py-1.5 text-gray-700">
-                        <span className="text-[10px] text-gray-400 mr-1">[{e.actor.source}]</span>
-                        {e.actor.email || "-"}
+                        <span className="text-[10px] text-gray-400 mr-1">[{e.actor?.source}]</span>
+                        {e.actor?.email || "-"}
                       </td>
                       <td className="px-2 py-1.5 text-gray-600 truncate max-w-xs" title={JSON.stringify(e.data)}>
                         {JSON.stringify(e.data || {}).slice(0, 100)}

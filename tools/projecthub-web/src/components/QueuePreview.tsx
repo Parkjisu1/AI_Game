@@ -251,9 +251,10 @@ export default function QueuePreview({
   const grid = useMemo(() => {
     if (!queue) return null;
     const cols = queue.queue_columns;
+    const holders = queue.holders ?? [];
     const rows: QueueHolder[][] = [];
-    for (let i = 0; i < queue.holders.length; i += cols) {
-      rows.push(queue.holders.slice(i, i + cols));
+    for (let i = 0; i < holders.length; i += cols) {
+      rows.push(holders.slice(i, i + cols));
     }
     return { rows, cols };
   }, [queue]);
@@ -262,11 +263,11 @@ export default function QueuePreview({
   const gimmickMap = useMemo(() => {
     const m = new Map<number, { kind: "hidden" | "linked" | "frozen"; group?: number; health?: number; same_color?: boolean }>();
     if (!queue?.overlay) return m;
-    queue.overlay.hidden_ids.forEach(id => m.set(id, { kind: "hidden" }));
-    queue.overlay.linked_groups.forEach((g, gi) =>
-      g.ids.forEach(id => m.set(id, { kind: "linked", group: gi, same_color: g.same_color }))
+    queue.overlay.hidden_ids?.forEach(id => m.set(id, { kind: "hidden" }));
+    queue.overlay.linked_groups?.forEach((g, gi) =>
+      g.ids?.forEach(id => m.set(id, { kind: "linked", group: gi, same_color: g.same_color }))
     );
-    queue.overlay.frozen.forEach(f => m.set(f.id, { kind: "frozen", health: f.health }));
+    queue.overlay.frozen?.forEach(f => m.set(f.id, { kind: "frozen", health: f.health }));
     return m;
   }, [queue]);
 
@@ -325,17 +326,17 @@ export default function QueuePreview({
               <span className="text-slate-600 shrink-0">난이도 점수</span>
               <span
                 className="font-medium text-right truncate"
-                style={{ color: GRADE_COLOR[queue.difficulty_score.grade] }}
+                style={{ color: queue.difficulty_score?.grade ? GRADE_COLOR[queue.difficulty_score.grade] : undefined }}
               >
-                {queue.difficulty_score.relative_pct.toFixed(0)}% [{GRADE_LABEL[queue.difficulty_score.grade]}]
+                {queue.difficulty_score?.relative_pct?.toFixed(0) ?? "—"}% [{queue.difficulty_score?.grade ? GRADE_LABEL[queue.difficulty_score.grade] : "—"}]
               </span>
             </div>
             <div className="h-2 bg-slate-200 rounded overflow-hidden">
               <div
                 className="h-full transition-all"
                 style={{
-                  width: `${Math.min(100, queue.difficulty_score.relative_pct)}%`,
-                  background: GRADE_COLOR[queue.difficulty_score.grade],
+                  width: `${Math.min(100, queue.difficulty_score?.relative_pct ?? 0)}%`,
+                  background: queue.difficulty_score?.grade ? GRADE_COLOR[queue.difficulty_score.grade] : undefined,
                 }}
               />
             </div>
@@ -343,13 +344,13 @@ export default function QueuePreview({
 
           {/* 메타 요약 — 컴팩트, 표 줄바꿈 */}
           <div className="text-[11px] text-slate-600 mb-2 flex flex-wrap gap-x-3 gap-y-0.5">
-            <span>보관함 {queue.validation.holder_count}</span>
-            <span>다트 {queue.validation.decomposed_total ?? queue.field_analysis.total_darts}/{queue.field_analysis.total_darts}{queue.validation.color_dart_match ? " ✓" : " ✗"}</span>
-            <span>cap20 {(queue.validation.cap20_ratio * 100).toFixed(0)}%</span>
-            <span>caps {queue.validation.cap_kinds_count}</span>
-            <span>avg {queue.validation.avg_ammo_per_holder.toFixed(1)}</span>
+            <span>보관함 {queue.validation?.holder_count}</span>
+            <span>다트 {queue.validation?.decomposed_total ?? queue.field_analysis?.total_darts}/{queue.field_analysis?.total_darts}{queue.validation?.color_dart_match ? " ✓" : " ✗"}</span>
+            <span>cap20 {((queue.validation?.cap20_ratio ?? 0) * 100).toFixed(0)}%</span>
+            <span>caps {queue.validation?.cap_kinds_count}</span>
+            <span>avg {queue.validation?.avg_ammo_per_holder?.toFixed(1) ?? "—"}</span>
             <span>cols {queue.queue_columns}({queue.recommended_queue_columns})</span>
-            <span>retry {queue.validation.retries}</span>
+            <span>retry {queue.validation?.retries}</span>
           </div>
 
           {/* 큐 그리드 시각화 — 가로 스크롤 + 셀 일정 너비 */}
@@ -361,7 +362,7 @@ export default function QueuePreview({
                     <span className="text-[10px] text-slate-400 w-7 shrink-0 text-right pr-1 leading-6">R{ri + 1}</span>
                     {row.map((h, ci) => {
                       const idx = ri * queue.queue_columns + ci;
-                      const depth = queue.field_analysis.color_depth[h.color] ?? 0;
+                      const depth = queue.field_analysis?.color_depth?.[h.color] ?? 0;
                       const gm = gimmickMap.get(idx);
                       // 기믹 라벨 + 색상 라벨
                       let gimmickBadge = "";
@@ -411,13 +412,13 @@ export default function QueuePreview({
             <span className="flex items-center gap-1 shrink-0">
               <span className="w-3 h-3 inline-block border-2 border-black" /> d0=즉시발사
             </span>
-            {Object.keys(queue.field_analysis.color_depth).map(Number).sort((a, b) => a - b).map((c) => (
+            {Object.keys(queue.field_analysis?.color_depth ?? {}).map(Number).sort((a, b) => a - b).map((c) => (
               <span key={c} className="flex items-center gap-0.5 shrink-0">
                 <span
                   className="w-3 h-3 inline-block rounded-sm border border-slate-300"
                   style={{ background: colorHex(c) }}
                 />
-                C{c}d{queue.field_analysis.color_depth[c]}({queue.field_analysis.color_darts[c]})
+                C{c}d{queue.field_analysis?.color_depth?.[c]}({queue.field_analysis?.color_darts?.[c]})
               </span>
             ))}
           </div>
@@ -426,16 +427,16 @@ export default function QueuePreview({
           {queue.overlay && (
             <div className="text-[11px] text-slate-700 mb-1 flex flex-wrap gap-x-3 gap-y-0.5">
               <span className="font-semibold text-slate-600">큐 기믹:</span>
-              {queue.overlay.hidden_ids.length > 0 && (
+              {(queue.overlay.hidden_ids?.length ?? 0) > 0 && (
                 <span>❓ Hidden ×{queue.overlay.hidden_ids.length}</span>
               )}
-              {queue.overlay.linked_groups.length > 0 && (
-                <span>🔗 Linked {queue.overlay.linked_groups.length}묶음 [{queue.overlay.linked_groups.map(g => g.ids.length).join(",")}]</span>
+              {(queue.overlay.linked_groups?.length ?? 0) > 0 && (
+                <span>🔗 Linked {queue.overlay.linked_groups.length}묶음 [{queue.overlay.linked_groups.map(g => g.ids?.length).join(",")}]</span>
               )}
-              {queue.overlay.frozen.length > 0 && (
+              {(queue.overlay.frozen?.length ?? 0) > 0 && (
                 <span>❄ Frozen ×{queue.overlay.frozen.length} (HP {queue.overlay.frozen.map(f => f.health).join(",")})</span>
               )}
-              {queue.overlay.hidden_ids.length === 0 && queue.overlay.linked_groups.length === 0 && queue.overlay.frozen.length === 0 && (
+              {(queue.overlay.hidden_ids?.length ?? 0) === 0 && (queue.overlay.linked_groups?.length ?? 0) === 0 && (queue.overlay.frozen?.length ?? 0) === 0 && (
                 <span className="text-slate-400">없음</span>
               )}
               {queue.step_c_validation?.intro_lv_filter && (
@@ -451,49 +452,49 @@ export default function QueuePreview({
           {queue.field_overlay && (
             <div className="text-[11px] text-slate-700 mb-2 flex flex-wrap gap-x-3 gap-y-0.5 border-t border-slate-200 pt-1">
               <span className="font-semibold text-slate-600">필드 기믹:</span>
-              {queue.field_overlay.pinata_balloons.length > 0 && (
+              {(queue.field_overlay.pinata_balloons?.length ?? 0) > 0 && (
                 <span title={`life: ${queue.field_overlay.pinata_balloons.map(p => p.life).join(",")}`}>
                   🪵 Pinata ×{queue.field_overlay.pinata_balloons.length}
                 </span>
               )}
-              {queue.field_overlay.wall_cells.length > 0 && (
+              {(queue.field_overlay.wall_cells?.length ?? 0) > 0 && (
                 <span>🧱 Wall ×{queue.field_overlay.wall_cells.length}</span>
               )}
-              {queue.field_overlay.hidden_balloons.length > 0 && (
+              {(queue.field_overlay.hidden_balloons?.length ?? 0) > 0 && (
                 <span>👻 Hidden Balloon ×{queue.field_overlay.hidden_balloons.length}</span>
               )}
-              {queue.field_overlay.pinata_box_areas.length > 0 && (
-                <span title={queue.field_overlay.pinata_box_areas.map(b => `[${b.areaW}×${b.areaH}, ${b.eggs.length}색]`).join(" ")}>
+              {(queue.field_overlay.pinata_box_areas?.length ?? 0) > 0 && (
+                <span title={queue.field_overlay.pinata_box_areas.map(b => `[${b.areaW}×${b.areaH}, ${b.eggs?.length}색]`).join(" ")}>
                   📦 Target Box ×{queue.field_overlay.pinata_box_areas.length}
                 </span>
               )}
-              {queue.field_overlay.frozen_layer_areas.length > 0 && (
+              {(queue.field_overlay.frozen_layer_areas?.length ?? 0) > 0 && (
                 <span title={`life: ${queue.field_overlay.frozen_layer_areas.map(f => f.life).join(",")}`}>
                   ❄️ Layer ×{queue.field_overlay.frozen_layer_areas.length}
                 </span>
               )}
-              {queue.field_overlay.barricade_lines.length > 0 && (
+              {(queue.field_overlay.barricade_lines?.length ?? 0) > 0 && (
                 <span>🚧 Barricade ×{queue.field_overlay.barricade_lines.length}</span>
               )}
-              {queue.field_overlay.pinata_balloons.length === 0 &&
-               queue.field_overlay.wall_cells.length === 0 &&
-               queue.field_overlay.hidden_balloons.length === 0 &&
-               queue.field_overlay.pinata_box_areas.length === 0 &&
-               queue.field_overlay.frozen_layer_areas.length === 0 &&
-               queue.field_overlay.barricade_lines.length === 0 && (
+              {(queue.field_overlay.pinata_balloons?.length ?? 0) === 0 &&
+               (queue.field_overlay.wall_cells?.length ?? 0) === 0 &&
+               (queue.field_overlay.hidden_balloons?.length ?? 0) === 0 &&
+               (queue.field_overlay.pinata_box_areas?.length ?? 0) === 0 &&
+               (queue.field_overlay.frozen_layer_areas?.length ?? 0) === 0 &&
+               (queue.field_overlay.barricade_lines?.length ?? 0) === 0 && (
                 <span className="text-slate-400">없음</span>
               )}
             </div>
           )}
 
           {/* 검증 경고 */}
-          {!queue.validation.color_dart_match && (
+          {queue.validation && !queue.validation.color_dart_match && (
             <div className="text-[11px] text-red-600">⚠ Hard Rule: color_darts 1:1 mismatch</div>
           )}
-          {!queue.validation.cap20_backbone_pass && (
+          {queue.validation && !queue.validation.cap20_backbone_pass && (
             <div className="text-[11px] text-amber-600">⚠ cap20 백본 없음</div>
           )}
-          {queue.validation.hard_fail_reasons && queue.validation.hard_fail_reasons.length > 0 && (
+          {queue.validation?.hard_fail_reasons && queue.validation.hard_fail_reasons.length > 0 && (
             <div className="text-[11px] text-red-600 break-all">
               ⚠ Hard Rule {queue.validation.retries}회 fail — {queue.validation.hard_fail_reasons[queue.validation.hard_fail_reasons.length - 1]}
             </div>

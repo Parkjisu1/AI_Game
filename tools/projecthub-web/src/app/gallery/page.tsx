@@ -489,7 +489,7 @@ export default function GalleryPage() {
             }
             return true;
           }).map((d) => {
-            const thumb = d.images[0];
+            const thumb = d.images?.[0];
             if (!thumb) return null;
             const myKey = emailKey(me);
             const isStarred = !!(d.stars && d.stars[myKey]);
@@ -751,7 +751,7 @@ export default function GalleryPage() {
               </div>
             )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-              {detail.images.map((img) => (
+              {(detail.images ?? []).map((img) => (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   key={img.filename}
@@ -800,7 +800,7 @@ export default function GalleryPage() {
                 <p className="text-sm text-gray-700 whitespace-pre-wrap">{detail.prompt}</p>
               </div>
               <div className="flex flex-wrap gap-1">
-                {detail.tags.map((t) => (
+                {(detail.tags ?? []).map((t) => (
                   <span key={t} className="text-[11px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded">#{t}</span>
                 ))}
               </div>
@@ -904,7 +904,7 @@ export default function GalleryPage() {
                 onClick={() => {
                   setGPrompt(detail.prompt);
                   setGSize(detail.size);
-                  setGTags(detail.tags.filter((t) => !t.startsWith("task:")).join(", "));
+                  setGTags((detail.tags ?? []).filter((t) => !t.startsWith("task:")).join(", "));
                   setDetail(null);
                   setShowCreate(true);
                 }}

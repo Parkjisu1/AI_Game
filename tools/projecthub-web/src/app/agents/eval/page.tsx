@@ -139,7 +139,7 @@ function ScoreBar({ value }: { value: number }) {
       <div className="relative h-2 w-24 overflow-hidden rounded bg-gray-200">
         <div className={`absolute inset-y-0 left-0 ${color}`} style={{ width: `${pct}%` }} />
       </div>
-      <span className="font-mono text-xs">{value.toFixed(3)}</span>
+      <span className="font-mono text-xs">{(value ?? 0).toFixed(3)}</span>
     </div>
   );
 }

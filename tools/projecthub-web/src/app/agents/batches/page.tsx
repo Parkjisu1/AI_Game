@@ -1844,24 +1844,24 @@ export default function BatchesPage() {
       {/* 종합 통계 */}
       {data && (
         <section className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-4">
-          <Card title="총 레벨 수" value={data.stats.total_levels.toLocaleString()} hint="pixelforge_grid_levels" />
-          <Card title="누적 OK" value={data.stats.request_totals.ok.toLocaleString()} hint="batch 트리거 기준" />
-          <Card title="Dedup 차단" value={data.stats.request_totals.dedup_skip.toLocaleString()}
+          <Card title="총 레벨 수" value={data.stats?.total_levels?.toLocaleString() ?? "—"} hint="pixelforge_grid_levels" />
+          <Card title="누적 OK" value={data.stats?.request_totals?.ok?.toLocaleString() ?? "—"} hint="batch 트리거 기준" />
+          <Card title="Dedup 차단" value={data.stats?.request_totals?.dedup_skip?.toLocaleString() ?? "—"}
             hint="색상만 다른 중복" tone="amber" />
-          <Card title="실패" value={data.stats.request_totals.fail.toLocaleString()} tone="red" />
+          <Card title="실패" value={data.stats?.request_totals?.fail?.toLocaleString() ?? "—"} tone="red" />
         </section>
       )}
 
       {/* 분포 */}
       {data && (
         <section className="mb-8 grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <DistroBox title="📐 Size 분포" rows={data.stats.by_size.map((s) => ({
+          <DistroBox title="📐 Size 분포" rows={(data.stats?.by_size ?? []).map((s) => ({
             label: `${s.width}×${s.height}`, count: s.count,
           }))} />
-          <DistroBox title="🎨 Style 분포" rows={data.stats.by_style.map((s) => ({
+          <DistroBox title="🎨 Style 분포" rows={(data.stats?.by_style ?? []).map((s) => ({
             label: s.style || "(none)", count: s.count,
           }))} />
-          <DistroBox title="🌈 Mood 분포" rows={data.stats.by_mood.map((s) => ({
+          <DistroBox title="🌈 Mood 분포" rows={(data.stats?.by_mood ?? []).map((s) => ({
             label: s.mood || "(none)", count: s.count,
           }))} />
         </section>
@@ -1870,12 +1870,12 @@ export default function BatchesPage() {
       {/* 필드완성 통계 (mode=field-complete일 때) */}
       {fcData && mode === "field-complete" && (
         <section className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-4">
-          <Card title="필드완성 job 수" value={fcData.stats.jobs.toLocaleString()} hint="pixelforge_field_complete_jobs" tone="emerald" />
-          <Card title="누적 OK 레벨" value={fcData.stats.ok.toLocaleString()} tone="emerald" />
-          <Card title="Escalated" value={fcData.stats.escalated.toLocaleString()} hint="Claude LLM 보강" tone="amber" />
-          <Card title="평균 점수" value={(fcData.stats.avg_score || 0).toFixed(3)}
-            hint={fcData.stats.avg_score >= 0.85 ? "PASS" : "below 0.85"}
-            tone={fcData.stats.avg_score >= 0.85 ? "emerald" : "amber"} />
+          <Card title="필드완성 job 수" value={fcData.stats?.jobs?.toLocaleString() ?? "—"} hint="pixelforge_field_complete_jobs" tone="emerald" />
+          <Card title="누적 OK 레벨" value={fcData.stats?.ok?.toLocaleString() ?? "—"} tone="emerald" />
+          <Card title="Escalated" value={fcData.stats?.escalated?.toLocaleString() ?? "—"} hint="Claude LLM 보강" tone="amber" />
+          <Card title="평균 점수" value={(fcData.stats?.avg_score || 0).toFixed(3)}
+            hint={(fcData.stats?.avg_score ?? 0) >= 0.85 ? "PASS" : "below 0.85"}
+            tone={(fcData.stats?.avg_score ?? 0) >= 0.85 ? "emerald" : "amber"} />
         </section>
       )}
       </>
@@ -2004,7 +2004,7 @@ export default function BatchesPage() {
             🛠 Standalone Jobs (자동 갱신) — Art + Field 통합 history
           </h2>
           <span className="text-[10px] text-gray-500">
-            🎨 Art {v43JobsList.length} · 🧩 Field {fcData?.jobs.length ?? 0}
+            🎨 Art {v43JobsList.length} · 🧩 Field {fcData?.jobs?.length ?? 0}
           </span>
         </div>
         <p className="mb-3 text-[10px] text-gray-500">
@@ -2161,10 +2161,10 @@ export default function BatchesPage() {
       <section className="rounded-xl border bg-white p-5 shadow-sm">
         <h2 className="mb-4 text-base font-semibold">📋 최근 요청 (자동 갱신 8s)</h2>
         {loading && <p className="text-gray-400">로딩 중...</p>}
-        {data && data.requests.length === 0 && (
+        {data && (data.requests ?? []).length === 0 && (
           <p className="py-6 text-center text-sm text-gray-400">아직 요청 없음 — 위 폼에서 트리거</p>
         )}
-        {data && data.requests.length > 0 && (
+        {data && (data.requests ?? []).length > 0 && (
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
               <thead className="bg-gray-50 text-gray-600">
@@ -2184,7 +2184,7 @@ export default function BatchesPage() {
                 </tr>
               </thead>
               <tbody>
-                {data.requests.map((r) => (
+                {(data.requests ?? []).map((r) => (
                   <tr key={r._id} className="border-t hover:bg-gray-50">
                     <td className="px-3 py-2">
                       <span className={`rounded px-2 py-0.5 text-[10px] font-medium ${STATUS_STYLE[r.status] || "bg-gray-100"}`}>
@@ -3451,7 +3451,7 @@ function JobDetailModal({ jobId, detail, loading, onClose }:
             {queueStatusError && <p className="text-[11px] text-red-600">queue-status: {queueStatusError}</p>}
             {genResult && (
               <p className="mt-0.5 text-[11px] text-blue-700">
-                ✓ Queue 생성 완료 — 성공 {genResult.generated} / 실패 {genResult.failed} ({genResult.duration_sec.toFixed(1)}s)
+                ✓ Queue 생성 완료 — 성공 {genResult.generated} / 실패 {genResult.failed} ({genResult.duration_sec?.toFixed(1) ?? "—"}s)
               </p>
             )}
           </div>

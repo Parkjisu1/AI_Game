@@ -163,7 +163,7 @@ export default function AgentsPage() {
       const den = t.reduce((a: number, x: { count?: number }) => a + (x.count || 0), 0);
       if (den > 0) setTeamScore(num / den);
     }).catch(() => {});
-    fetch("/api/agents/gates").then((r) => r.json()).then((d) => setGateData({ gates: d.gates || [], mergeStates: d.mergeStates || [], blocked: d.blocked || [] })).catch(() => {});
+    fetch("/api/agents/gates").then((r) => r.json()).then((d) => setGateData({ gates: d?.gates || [], mergeStates: d?.mergeStates || [], blocked: d?.blocked || [] })).catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -863,7 +863,7 @@ function TaskGroupCard({
         {group.sessions.map((s, i) => (
           <span
             key={(s._id || "") + i}
-            title={`${s.role} · ${s.model} · ${s.duration_sec.toFixed(1)}s · ${s.success ? "성공" : "실패"} · ${formatTime(s.created_at)}`}
+            title={`${s.role} · ${s.model} · ${(s.duration_sec ?? 0).toFixed(1)}s · ${s.success ? "성공" : "실패"} · ${formatTime(s.created_at)}`}
             className={`inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded font-mono ${
               s.success
                 ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
@@ -872,7 +872,7 @@ function TaskGroupCard({
           >
             <span className="inline-flex items-center"><Icon name={ROLE_ICON[s.role] || "bot"} size={12} /></span>
             <span>{s.role}</span>
-            <span className="text-gray-400">{s.duration_sec.toFixed(1)}s</span>
+            <span className="text-gray-400">{(s.duration_sec ?? 0).toFixed(1)}s</span>
           </span>
         ))}
       </div>
