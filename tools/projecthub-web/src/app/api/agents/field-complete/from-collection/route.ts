@@ -25,6 +25,18 @@ const JOBS_COLLECTION = "pixelforge_field_complete_jobs";
 
 const ALLOWED_SOURCES = ["pixelforge_levels"];
 
+// 사용자 제공 filter 객체에 Mongo 연산자($로 시작하는 키)가 있는지 재귀 검사
+function hasOperatorKey(value: unknown): boolean {
+  if (Array.isArray(value)) return value.some(hasOperatorKey);
+  if (value && typeof value === "object") {
+    for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
+      if (k.startsWith("$")) return true;
+      if (hasOperatorKey(v)) return true;
+    }
+  }
+  return false;
+}
+
 export async function POST(req: NextRequest) {
   const session = await auth();
   const email = session?.user?.email || "";
@@ -63,6 +75,10 @@ export async function POST(req: NextRequest) {
   } else if (Array.isArray(body.level_numbers) && body.level_numbers.length > 0) {
     filter = { level_number: { $in: (body.level_numbers as unknown[]).map((n) => Number(n)).filter((n) => !isNaN(n)) } };
   } else if (body.filter && typeof body.filter === "object") {
+    // Mongo 연산자 주입 방지 — $로 시작하는 키(중첩 포함) 거부
+    if (hasOperatorKey(body.filter)) {
+      return NextResponse.json({ error: "invalid filter: operator keys ($) not allowed" }, { status: 400 });
+    }
     filter = body.filter as Record<string, unknown>;
   } else {
     return NextResponse.json({ error: "specify one of: ids, level_numbers, filter" }, { status: 400 });

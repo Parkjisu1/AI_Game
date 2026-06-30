@@ -33,7 +33,7 @@ const GROUPS: { title: string; items: { href: string; label: string; icon: strin
 
 export default function Sidebar({ isOwner = false }: { isOwner?: boolean }) {
   const pathname = usePathname();
-  const active = (h: string) => (h === "/" ? pathname === "/" : pathname.startsWith(h));
+  const active = (h: string) => (h === "/" ? pathname === "/" : pathname?.startsWith(h));
   return (
     <aside className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 w-60 border-r border-gray-200 bg-white z-30 overflow-y-auto">
       <Link href="/" className="px-5 py-4 text-lg font-bold flex items-center gap-2 shrink-0">

@@ -105,7 +105,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   // evaluation.json 에서 lv → metaphor 매핑
   let evalArr: Array<{ level: number; metaphor?: string }> = [];
   if (job.eval_path && existsSync(String(job.eval_path))) {
-    try { evalArr = JSON.parse(readFileSync(String(job.eval_path), "utf-8")); } catch { /* ignore */ }
+    try { const parsed = JSON.parse(readFileSync(String(job.eval_path), "utf-8")); if (Array.isArray(parsed)) evalArr = parsed; } catch { /* ignore */ }
   }
   const metaByLv = new Map<number, string>();
   for (const e of evalArr) metaByLv.set(Number(e.level), e.metaphor || "");

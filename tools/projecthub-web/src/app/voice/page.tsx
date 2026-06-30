@@ -65,6 +65,16 @@ export default function VoicePage() {
   };
   useEffect(() => { loadRecent(); loadMeetings(); }, []);
 
+  // 언마운트 시 녹음 자원 정리 — 마이크 해제 + 타이머 중단 (녹음 중 이탈해도 누수 없음)
+  useEffect(() => () => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    const mr = mrRef.current;
+    if (mr) {
+      try { if (mr.state !== "inactive") mr.stop(); } catch { /* ignore */ }
+      try { mr.stream?.getTracks().forEach((t) => t.stop()); } catch { /* ignore */ }
+    }
+  }, []);
+
   const openMeeting = (m: Meeting) => {
     setKind("meeting"); setAnswer(""); setEvidence([]); setCreated(0); setErr("");
     setSummary(m.summary); setTranscript(m.transcript);

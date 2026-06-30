@@ -177,15 +177,28 @@ export default function GalleryPage() {
 
   async function postComment() {
     if (!detail || !commentText.trim()) return;
-    const r = await fetch(`/api/designs/${detail._id}/comments`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: commentText.trim() }),
-    });
-    const j = await r.json();
-    if (j.ok && j.comment) {
-      setDetail({ ...detail, comments: [...(detail.comments || []), j.comment] });
-      setCommentText("");
+    try {
+      const r = await fetch(`/api/designs/${detail._id}/comments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: commentText.trim() }),
+      });
+      if (!r.ok) {
+        console.error("[gallery] postComment failed:", r.status);
+        alert("코멘트 등록에 실패했습니다.");
+        return;
+      }
+      const j = await r.json();
+      if (j.ok && j.comment) {
+        setDetail({ ...detail, comments: [...(detail.comments || []), j.comment] });
+        setCommentText("");
+      } else {
+        console.error("[gallery] postComment rejected:", j.error || j);
+        alert("코멘트 등록에 실패했습니다.");
+      }
+    } catch (e) {
+      console.error("[gallery] postComment error:", e);
+      alert("코멘트 등록 중 오류가 발생했습니다.");
     }
   }
 

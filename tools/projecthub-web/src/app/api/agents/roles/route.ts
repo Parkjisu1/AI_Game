@@ -348,8 +348,8 @@ export async function GET() {
         source: "db",
       });
     }
-  } catch {
-    /* fall through to defaults */
+  } catch (e) {
+    console.error("[roles] DB read failed, using defaults:", e);
   }
 
   return NextResponse.json({ roles: DEFAULT_ROLES, sub_teams: SUB_TEAMS, source: "default" });

@@ -423,9 +423,11 @@ export default function TasksPage() {
 
   async function fetchTasks() {
     try {
-      const data = await fetch("/api/tasks").then((r) => r.json());
+      const r = await fetch("/api/tasks");
+      if (!r.ok) { console.error("[tasks] fetch failed:", r.status); return; }
+      const data = await r.json();
       if (Array.isArray(data)) setTasks(data);
-    } catch { /* ignore */ }
+    } catch (e) { console.error("[tasks] fetch error:", e); }
     finally { setLoading(false); }
   }
 
@@ -438,13 +440,16 @@ export default function TasksPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
+      if (!res.ok) { console.error("[tasks] create failed:", res.status); return; }
       const data = await res.json();
       if (data.ok) {
         setTasks((prev) => [...prev, { ...form, _id: String(data.id) }]);
         setForm({ ...EMPTY_TASK });
         setShowModal(false);
+      } else {
+        console.error("[tasks] create rejected:", data.error || data);
       }
-    } catch { /* ignore */ }
+    } catch (e) { console.error("[tasks] create error:", e); }
     finally { setSaving(false); }
   }
 

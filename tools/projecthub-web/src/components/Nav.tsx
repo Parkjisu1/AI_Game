@@ -19,7 +19,7 @@ export default function Nav({ isOwner = false }: { isOwner?: boolean }) {
   // 설정 창은 소유자(본인)만
   const visible = links.filter((l) => l.href !== "/settings" || isOwner);
   // 현재 경로의 페이지 라벨 (모바일 미니헤더 표시용)
-  const current = visible.find((l) => (l.href === "/" ? pathname === "/" : pathname.startsWith(l.href)));
+  const current = visible.find((l) => (l.href === "/" ? pathname === "/" : pathname?.startsWith(l.href)));
 
   return (
     <nav className="md:hidden border-b border-gray-200 bg-white sticky top-0 z-30">

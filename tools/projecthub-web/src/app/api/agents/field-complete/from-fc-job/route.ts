@@ -163,7 +163,8 @@ export async function POST(req: NextRequest) {
 
   // csv_rows 변환: level_number 보존 우선 + CSV 디자이너 기믹 의도 보존 + preset 보완
   const csvRows: Record<string, unknown>[] = origRows.map((r, i) => {
-    const origLv = Number(r.level_number ?? (i + 1));
+    const rawLv = Number(r.level_number ?? (i + 1));
+    const origLv = Number.isFinite(rawLv) ? rawLv : (i + 1);
     // 사용자 룰 (2026-05-21): CSV 에 실제 lv (>1) 명시되어 있으면 절대 override 안 함.
     // lvBump 는 image-upload 케이스 (origLv=1 default) 에서만 적용.
     const hasExplicitLv = Number.isFinite(origLv) && origLv > 1;

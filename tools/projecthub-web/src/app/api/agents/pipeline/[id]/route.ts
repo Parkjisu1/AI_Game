@@ -125,7 +125,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
   const stage = sess?.stage as Stage | undefined;
   if (stage && ["art_done", "curated_pending", "curated_done", "field_running", "field_done", "download", "done"].includes(stage)) {
     const artJobId = (sess?.art_job as { job_id?: string } | undefined)?.job_id;
-    if (artJobId) {
+    if (artJobId && ObjectId.isValid(artJobId)) {
       const v = await db.collection("pixelforge_v43_jobs").findOne({ _id: new ObjectId(artJobId) });
       if (v?.out_dir && existsSync(String(v.out_dir))) {
         const outDir = String(v.out_dir);
@@ -177,7 +177,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
   // field_done 시 — FC sample
   if (stage === "field_done" || stage === "download" || stage === "done") {
     const fcJobId = (sess?.field_complete_job as { job_id?: string } | undefined)?.job_id;
-    if (fcJobId) {
+    if (fcJobId && ObjectId.isValid(fcJobId)) {
       const fc = await db.collection("pixelforge_field_complete_jobs").findOne({ _id: new ObjectId(fcJobId) });
       if (fc) {
         out.fc_totals = fc.totals;

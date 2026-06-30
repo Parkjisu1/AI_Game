@@ -13,7 +13,7 @@ export interface StoryItem {
 export default function StoryRow({ items }: { items: StoryItem[] }) {
   const pathname = usePathname();
   const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href);
+    href === "/" ? pathname === "/" : pathname?.startsWith(href);
 
   return (
     <div className="md:hidden no-scrollbar -mx-4 mb-4 flex gap-4 overflow-x-auto border-b border-gray-100 px-4 pb-3">

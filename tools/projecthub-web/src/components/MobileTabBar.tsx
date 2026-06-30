@@ -20,7 +20,7 @@ interface Props {
 export default function MobileTabBar({ tabs, moreLinks = [], fab }: Props) {
   const pathname = usePathname();
   const [moreOpen, setMoreOpen] = useState(false);
-  const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
+  const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname?.startsWith(href));
   const moreActive = moreLinks.some((l) => isActive(l.href));
 
   const half = Math.ceil(tabs.length / 2);

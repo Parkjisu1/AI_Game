@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
   if (!isAdminEmail(email)) return NextResponse.json({ error: "forbidden" }, { status: 403 });
 
   const url = new URL(req.url);
-  const limit = parseInt(url.searchParams.get("limit") || "100", 10);
+  const limit = parseInt(url.searchParams.get("limit") || "100", 10) || 100;
   const task_id = url.searchParams.get("task_id") || undefined;
   const entries = await listAudit({ limit, task_id });
   return NextResponse.json({ entries });
