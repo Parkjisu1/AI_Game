@@ -212,6 +212,33 @@ export function buildTaskCreatedPayload(task: {
   };
 }
 
+// 회의 요약 DM (음성 회의 분석 결과 — 녹음자에게 발송)
+export function buildMeetingSummaryPayload(
+  summary: string,
+  tasks: Array<{ title: string; team?: string }>,
+): SlackPayload {
+  const teamEmoji: Record<string, string> = { dev: "💻", art: "🎨", design: "📐", chat: "💬" };
+  const n = tasks?.length || 0;
+  const taskLines =
+    (tasks || [])
+      .slice(0, 20)
+      .map((t, i) => `${i + 1}. ${teamEmoji[t.team || ""] || "•"} ${t.title}`)
+      .join("\n") || "(추출된 작업 없음)";
+  return {
+    text: `🎙️ 회의 요약 (작업 ${n}개)`,
+    blocks: [
+      {
+        type: "section",
+        text: { type: "mrkdwn", text: `🎙️ *회의 요약*\n${(summary || "(요약 없음)").substring(0, 2900)}` },
+      },
+      {
+        type: "section",
+        text: { type: "mrkdwn", text: `📋 *추출된 작업 (${n}개)*\n${taskLines.substring(0, 2900)}` },
+      },
+    ],
+  };
+}
+
 // 작업 상태 변경 알림
 export function buildTaskStatusPayload(task: {
   title: string;

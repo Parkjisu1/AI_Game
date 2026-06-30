@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { getDb } from "@/lib/mongodb";
+import { sendDmToEmail, buildMeetingSummaryPayload } from "@/lib/slack";
 import fs from "fs";
 import path from "path";
 
@@ -96,8 +97,10 @@ export async function POST(req: NextRequest) {
     out.summary = "(분석 실패 — 전사만 반환)";
   }
 
-  // 4) meeting이면 영구 저장
+  // 4) meeting이면 영구 저장 + 녹음자(로그인 사용자)에게 Slack 요약 DM
+  //    (현재: 테스트로 본인에게. 추후 팀 채널 전송으로 바꾸려면 resolveRouteByEmail 대신 채널 webhook 사용)
   let meetingId: string | null = null;
+  let slackSent: { ok: boolean; error?: string } | null = null;
   if (out.kind === "meeting") {
     try {
       const db = await getDb();
@@ -108,7 +111,16 @@ export async function POST(req: NextRequest) {
       });
       meetingId = String(res.insertedId);
     } catch { /* 저장 실패해도 결과 반환 */ }
+
+    try {
+      slackSent = await sendDmToEmail(
+        session.user.email || "",
+        buildMeetingSummaryPayload(out.summary, out.tasks),
+      );
+    } catch (e) {
+      slackSent = { ok: false, error: e instanceof Error ? e.message : "send failed" };
+    }
   }
 
-  return NextResponse.json({ transcript, meetingId, ...out });
+  return NextResponse.json({ transcript, meetingId, slackSent, ...out });
 }
