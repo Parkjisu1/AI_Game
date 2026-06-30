@@ -342,7 +342,7 @@ export default function VoicePage() {
               <li key={m._id} className="py-2.5 flex items-start gap-2">
                 <div className="flex-1 min-w-0">
                   <div className="text-sm truncate">{m.summary ? m.summary.split("\n")[0] : "(요약 없음)"}</div>
-                  <div className="text-[11px] text-gray-400 mt-0.5">{timeAgo(m.created_at)} · 업무 {m.tasks.length}건</div>
+                  <div className="text-[11px] text-gray-400 mt-0.5">{timeAgo(m.created_at)} · 업무 {(m.tasks || []).length}건</div>
                 </div>
                 <button onClick={() => openMeeting(m)} className="text-xs px-2.5 py-1 rounded-lg border border-gray-200 hover:bg-gray-50 shrink-0">열기</button>
                 <button onClick={() => delMeeting(m._id)} aria-label="삭제" className="text-gray-300 hover:text-rose-500 shrink-0 mt-0.5"><Icon name="x" size={15} /></button>

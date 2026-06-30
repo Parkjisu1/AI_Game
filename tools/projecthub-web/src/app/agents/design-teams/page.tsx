@@ -173,10 +173,10 @@ export default function DesignTeamsPage() {
                   const team = data.teams.find((t) => t.team_id === r.team_id);
                   return (
                     <div key={r._id} className="flex items-center gap-3 text-xs py-1 border-b border-gray-50">
-                      <span className="font-mono text-gray-400 w-32 shrink-0">{r.created_at.slice(5, 16)}</span>
+                      <span className="font-mono text-gray-400 w-32 shrink-0">{(r.created_at || "").slice(5, 16)}</span>
                       <span className="w-32 shrink-0">{team?.icon} {team?.label || r.team_id}</span>
                       <span className="font-mono text-gray-500 w-32 shrink-0">{r.pattern}</span>
-                      <span className="text-yellow-500">{"★".repeat(r.score)}{"☆".repeat(5 - r.score)}</span>
+                      <span className="text-yellow-500">{(() => { const s = Math.max(0, Math.min(5, Math.round(Number(r.score) || 0))); return "★".repeat(s) + "☆".repeat(5 - s); })()}</span>
                       <span className="text-gray-400 ml-auto truncate">{r.scored_by || ""}</span>
                       {r.task_id && (
                         <a href={`/tasks?id=${r.task_id}`} className="text-indigo-600 hover:underline shrink-0">

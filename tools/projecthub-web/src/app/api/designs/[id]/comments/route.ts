@@ -47,6 +47,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
  */
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  if (!id || !/^[a-f0-9]{24}$/i.test(id)) {
+    return NextResponse.json({ error: "invalid id" }, { status: 400 });
+  }
   const cid = new URL(req.url).searchParams.get("cid") || "";
   const session = await auth();
   const email = (session?.user?.email || "").toLowerCase();

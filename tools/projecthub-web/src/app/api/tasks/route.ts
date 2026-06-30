@@ -41,7 +41,10 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const db = await getDb();
-  const body = await req.json();
+  const body = await req.json().catch(() => null);
+  if (!body || typeof body !== "object" || !String(body.title || "").trim()) {
+    return NextResponse.json({ error: "invalid json body or missing title" }, { status: 400 });
+  }
   body.created_at = new Date().toISOString();
   body.updated_at = new Date().toISOString();
 
@@ -89,7 +92,16 @@ export async function POST(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   const db = await getDb();
-  const { _id, add_comment, delete_comment_index, ...update } = await req.json();
+  const body = await req.json().catch(() => null);
+  if (!body || typeof body !== "object") {
+    return NextResponse.json({ error: "invalid json body" }, { status: 400 });
+  }
+  const { _id, add_comment, delete_comment_index, ...update } = body;
+  // _id 검증: 누락/비정상이면 new ObjectId(undefined)가 '랜덤 id'를 생성해 updateOne이
+  // 아무것도 못 맞춰 {ok:true}를 반환 = 조용한 데이터 손실. 24-hex 아니면 400으로 차단.
+  if (!_id || typeof _id !== "string" || !/^[a-f0-9]{24}$/i.test(_id)) {
+    return NextResponse.json({ error: "invalid or missing _id" }, { status: 400 });
+  }
   const { ObjectId } = await import("mongodb");
   update.updated_at = new Date().toISOString();
 

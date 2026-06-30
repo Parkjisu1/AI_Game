@@ -58,7 +58,12 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   }
 
   // multipart 파싱
-  const fd = await req.formData();
+  let fd: FormData;
+  try {
+    fd = await req.formData();
+  } catch (e) {
+    return NextResponse.json({ error: "form 파싱 실패", detail: e instanceof Error ? e.message : String(e) }, { status: 400 });
+  }
   const filename = String(fd.get("filename") || (orig.images?.[0]?.filename || ""));
   const prompt = String(fd.get("prompt") || "").trim().slice(0, 4000);
   const maskBlob = fd.get("mask") as Blob | null;

@@ -33,7 +33,7 @@ export async function DELETE(req: NextRequest) {
   const email = (session?.user?.email || "").toLowerCase();
   if (!email) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   const id = new URL(req.url).searchParams.get("id");
-  if (!id) return NextResponse.json({ error: "id 필요" }, { status: 400 });
+  if (!id || !/^[a-f0-9]{24}$/i.test(id)) return NextResponse.json({ error: "id 필요/형식 오류" }, { status: 400 });
   try {
     const db = await getDb();
     await db.collection("meeting_transcripts").deleteOne({ _id: new ObjectId(id), created_by_email: email });

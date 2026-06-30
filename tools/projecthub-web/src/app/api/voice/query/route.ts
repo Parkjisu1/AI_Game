@@ -39,8 +39,8 @@ export async function POST(req: NextRequest) {
     const form = await req.formData();
     audio = form.get("audio") as File | null;
     textQ = String(form.get("text") || "");
-  } catch {
-    return NextResponse.json({ error: "form 파싱 실패" }, { status: 400 });
+  } catch (e) {
+    return NextResponse.json({ error: "form 파싱 실패", detail: e instanceof Error ? e.message : String(e) }, { status: 400 });
   }
 
   // 1) STT (오디오가 있으면) 또는 텍스트 질의

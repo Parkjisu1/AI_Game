@@ -5,6 +5,10 @@ import { sendDmToEmail, buildMeetingSummaryPayload } from "@/lib/slack";
 import fs from "fs";
 import path from "path";
 
+// 파일 업로드(multipart) + 외부 STT/LLM 호출 → Node 런타임 + 충분한 타임아웃 필요.
+export const runtime = "nodejs";
+export const maxDuration = 60;
+
 // 통합 음성 처리 — STT 후 AI가 스스로 분류:
 //   kind="query"   → 코드/기능 상태 질문: DNA graph.json(실제코드) 근거로만 답 (거짓없음)
 //   kind="meeting" → 회의/업무 지시: 요약 + task 분해 + meeting_transcripts 영구저장
@@ -57,14 +61,18 @@ export async function POST(req: NextRequest) {
   if (!session?.user?.email) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   if (!OPENAI_API_KEY) return NextResponse.json({ error: "서버에 OPENAI_API_KEY 미설정" }, { status: 500 });
 
+  const ctype = req.headers.get("content-type") || "";
+  const clen = req.headers.get("content-length") || "?";
   let audio: File | null = null;
   try {
     const form = await req.formData();
     audio = form.get("audio") as File | null;
-  } catch {
-    return NextResponse.json({ error: "form 파싱 실패" }, { status: 400 });
+  } catch (e) {
+    const msg = e instanceof Error ? `${e.name}: ${e.message}` : String(e);
+    console.error("[voice] formData parse failed:", msg, "| content-type:", ctype, "| content-length:", clen);
+    return NextResponse.json({ error: "form 파싱 실패", detail: msg, ctype, clen }, { status: 400 });
   }
-  if (!audio) return NextResponse.json({ error: "오디오 없음" }, { status: 400 });
+  if (!audio) return NextResponse.json({ error: "오디오 없음 (audio 필드 비어있음)", ctype, clen }, { status: 400 });
 
   // 1) STT
   const sttForm = new FormData();
