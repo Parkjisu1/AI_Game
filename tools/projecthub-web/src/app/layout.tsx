@@ -51,7 +51,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="ko">
       <body className={`${inter.className} min-h-screen`}>
         {/* 데스크톱: 상단 가로 네비 + 하단 아이콘 독 */}
-        <TopNav isOwner={isOwner} userLabel={userLabel} role={role} />
+        <TopNav isOwner={isOwner} userLabel={userLabel} role={role} email={email} />
         <BottomDock isOwner={isOwner} />
         {/* 모바일: 상단 Nav + 하단 탭바 */}
         <Nav isOwner={isOwner} />
