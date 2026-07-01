@@ -379,45 +379,74 @@ export default function AgentsPage() {
         </div>
       </div>
 
-      {/* AI 워크플로우 (Pipeline) — 기능별 5-레이어, 실데이터(roles + 라이브 상태) */}
-      <div className="rounded-xl border border-gray-200 bg-white p-4 mb-4 overflow-x-auto thin-scroll">
-        <div className="text-sm font-bold mb-3 flex items-center gap-1.5"><Icon name="cpu" size={15} /> AI 워크플로우 (Pipeline)</div>
+      {/* AI 팀 파이프라인 — 기능별 레이어 노드그래프 (실데이터: roles + 라이브 상태) */}
+      <div className="glass hud p-4 sm:p-5 mb-4">
+        <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+          <div className="text-sm font-bold flex items-center gap-1.5 neon-text-soft tracking-hud"><Icon name="cpu" size={16} /> AI 팀 파이프라인</div>
+          <div className="flex items-center gap-3 text-[10px] mono text-gray-400">
+            <span className="flex items-center gap-1"><span className="dot dot-run" /> 실행 중</span>
+            <span className="flex items-center gap-1"><span className="dot dot-wait" /> 대기</span>
+            <span className="flex items-center gap-1"><span className="dot dot-ok" /> 완료</span>
+            <span className="flex items-center gap-1"><span className="dot dot-err" /> 오류</span>
+          </div>
+        </div>
         {(() => {
           const rs = (role: string): "running" | "error" | "done" | "idle" => {
             if (running.some((x) => x.role === role)) return "running";
             const r = sessions.find((s) => s.role === role);
             return r ? (r.success === false ? "error" : "done") : "idle";
           };
-          const stCls = (s: string) => s === "running" ? "bg-emerald-500 text-white" : s === "error" ? "bg-rose-500/15 text-rose-500" : s === "done" ? "bg-blue-500/15 text-blue-500" : "bg-gray-500/15 text-gray-400";
-          const stLabel = (s: string) => s === "running" ? "RUNNING" : s === "error" ? "ERROR" : s === "done" ? "DONE" : "WAITING";
-          const col = (title: string, sub: string, items: { role: string; st: string }[]) => (
-            <div key={title} className="flex-1 min-w-[150px]">
-              <div className="text-xs font-semibold text-gray-700">{title}</div>
-              <div className="text-[10px] text-gray-400 mb-2">{sub}</div>
-              <div className="space-y-1.5">
-                {items.length === 0 ? <div className="text-[11px] text-gray-300 py-1">—</div> : items.map((it) => (
-                  <div key={it.role} className="rounded-lg border border-gray-200 p-2 flex items-center gap-1.5">
-                    <Icon name={ROLE_ICON[it.role] || "bot"} size={13} />
-                    <span className="text-[11px] truncate flex-1" title={it.role}>{it.role}</span>
-                    <span className={`text-[8px] px-1 py-0.5 rounded font-semibold shrink-0 ${stCls(it.st)}`}>{stLabel(it.st)}</span>
-                  </div>
-                ))}
+          const STM: Record<string, { label: string; color: string }> = {
+            running: { label: "RUNNING", color: "var(--neon)" },
+            done: { label: "DONE", color: "var(--ok)" },
+            error: { label: "ERROR", color: "var(--err)" },
+            idle: { label: "WAITING", color: "var(--warn)" },
+          };
+          const Node = ({ role, st }: { role: string; st: string }) => {
+            const m = STM[st] || STM.idle;
+            return (
+              <div className="rounded-xl p-2.5 flex items-center gap-2 glass" title={role}
+                style={{ borderColor: m.color + "55", boxShadow: st === "running" ? `0 0 16px -4px ${m.color}` : undefined }}>
+                <span className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0" style={{ background: m.color + "22", color: m.color }}><Icon name={ROLE_ICON[role] || "bot"} size={13} /></span>
+                <span className="text-[11px] truncate flex-1">{role}</span>
+                <span className="text-[8px] mono px-1.5 py-0.5 rounded font-bold shrink-0" style={{ color: m.color, background: m.color + "1a" }}>{m.label}</span>
               </div>
+            );
+          };
+          const Layer = ({ title, sub, children }: { title: string; sub: string; children: React.ReactNode }) => (
+            <div className="flex-1 min-w-[172px]">
+              <div className="mb-2 pb-1.5" style={{ borderBottom: "1px solid var(--line)" }}>
+                <div className="text-[11px] font-bold tracking-hud text-gray-200">{title} <span className="text-gray-500 font-normal">Layer</span></div>
+                <div className="text-[9px] mono text-gray-500">{sub}</div>
+              </div>
+              <div className="space-y-2">{children}</div>
             </div>
           );
+          const Chevron = () => (
+            <div className="hidden lg:flex items-center pt-10 shrink-0" style={{ color: "var(--line-strong)" }}>
+              <svg width="12" height="16" viewBox="0 0 12 16" fill="none"><path d="M3 2l6 6-6 6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            </div>
+          );
+          const layerNodes = PIPE_LAYERS.map((_, i) => roles.filter((r) => pipeLayerOf(r.role) === i).map((r) => ({ role: r.role, st: rs(r.role) })));
           return (
-            <div className="flex gap-3 min-w-[760px]">
-              {PIPE_LAYERS.map((L, i) => col(L.name, L.sub, roles.filter((r) => pipeLayerOf(r.role) === i).map((r) => ({ role: r.role, st: rs(r.role) }))))}
-              <div className="flex-1 min-w-[150px]">
-                <div className="text-xs font-semibold text-gray-700">Deploy</div>
-                <div className="text-[10px] text-gray-400 mb-2">배포 · 완료</div>
-                <div className="space-y-1.5">
+            <div className="flex gap-2 overflow-x-auto thin-scroll pb-1">
+              {PIPE_LAYERS.map((L, i) => (
+                <div key={L.name} className="flex gap-2 shrink-0 lg:flex-1">
+                  <Layer title={L.name} sub={L.sub}>
+                    {layerNodes[i].length === 0 ? <div className="text-[11px] text-gray-600 py-2">—</div> : layerNodes[i].map((it) => <Node key={it.role} role={it.role} st={it.st} />)}
+                  </Layer>
+                  <Chevron />
+                </div>
+              ))}
+              <div className="shrink-0 lg:flex-1">
+                <Layer title="Deploy" sub="배포 · 완료">
                   {([["Git Commit", "check"], ["Build", "box"], ["Slack Notify", "chat"]] as [string, string][]).map(([l, ic]) => (
-                    <div key={l} className="rounded-lg border border-gray-200 p-2 flex items-center gap-1.5">
-                      <Icon name={ic} size={13} /><span className="text-[11px] truncate flex-1">{l}</span>
+                    <div key={l} className="rounded-xl p-2.5 flex items-center gap-2 glass" style={{ borderColor: "var(--line)" }}>
+                      <span className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0" style={{ background: "rgba(56,189,248,.12)", color: "var(--neon-soft)" }}><Icon name={ic} size={13} /></span>
+                      <span className="text-[11px] truncate flex-1">{l}</span>
                     </div>
                   ))}
-                </div>
+                </Layer>
               </div>
             </div>
           );
