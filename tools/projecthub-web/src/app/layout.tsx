@@ -2,7 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
-import Sidebar from "@/components/Sidebar";
+import TopNav from "@/components/TopNav";
+import BottomDock from "@/components/BottomDock";
 import MobileTabBar, { type TabItem } from "@/components/MobileTabBar";
 import { auth } from "@/auth";
 
@@ -41,15 +42,21 @@ const MOBILE_MORE: TabItem[] = [
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
-  const isOwner = OWNER_EMAILS.has((session?.user?.email || "").toLowerCase());
+  const email = (session?.user?.email || "").toLowerCase();
+  const isOwner = OWNER_EMAILS.has(email);
+  const userLabel = isOwner ? "Boss" : (email.split("@")[0] || "Member").replace(/^./, (c) => c.toUpperCase());
+  const role = isOwner ? "Owner" : "Member";
   const moreLinks = isOwner ? MOBILE_MORE : MOBILE_MORE.filter((l) => l.href !== "/settings");
   return (
     <html lang="ko">
       <body className={`${inter.className} min-h-screen`}>
-        <Sidebar isOwner={isOwner} />
+        {/* 데스크톱: 상단 가로 네비 + 하단 아이콘 독 */}
+        <TopNav isOwner={isOwner} userLabel={userLabel} role={role} />
+        <BottomDock isOwner={isOwner} />
+        {/* 모바일: 상단 Nav + 하단 탭바 */}
         <Nav isOwner={isOwner} />
-        <main className="md:pl-60">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6 pb-24 md:pb-6">{children}</div>
+        <main className="md:pt-14 md:pb-20">
+          <div className="max-w-[1680px] mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 pb-24 md:pb-6">{children}</div>
         </main>
         <MobileTabBar tabs={MOBILE_TABS} moreLinks={moreLinks} fab={{ href: "/tasks", icon: "plus" }} />
       </body>
