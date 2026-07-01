@@ -4,13 +4,21 @@ import { getSettings, sendByRoute, buildTaskCreatedPayload, buildTaskStatusPaylo
 import { auth } from "@/auth";
 import { recordAudit, AuditActor } from "@/lib/audit";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
     const db = await getDb();
+    // 프로젝트 스코프 필터 — ?project=X. balloonflow(기본)는 legacy(project 미지정) task 포함.
+    const project = new URL(req.url).searchParams.get("project");
+    const match = project
+      ? (project === "balloonflow"
+          ? { $or: [{ project: "balloonflow" }, { project: { $exists: false } }, { project: null }, { project: "" }] }
+          : { project })
+      : {};
     // 목록은 슬림화: 무거운 필드 제외 + has_image flag, 댓글은 마지막 5개만(검색 보조용).
     // image_base64/attachments/description full text는 상세 GET /api/tasks/[id]에서.
     const tasks = await db.collection("pixelforge_tasks")
       .aggregate([
+        { $match: match },
         { $sort: { created_at: -1 } },
         {
           $addFields: {

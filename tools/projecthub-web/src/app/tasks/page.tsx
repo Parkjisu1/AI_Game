@@ -1,5 +1,6 @@
 "use client";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Icon from "@/components/Icon";
 
 interface Comment {
@@ -48,6 +49,8 @@ interface Task {
   created_by_email?: string;
   /** true면 watcher가 이 task를 일절 처리하지 않음 (⛔ 중단). ▶️ 재개 시 false. */
   hermes_stopped?: boolean;
+  /** 소속 프로젝트 (미지정 legacy task는 balloonflow로 간주) */
+  project?: string;
 }
 
 const TEAM_META: Record<Team, { label: string; emoji: string; color: string; bg: string }> = {
@@ -158,7 +161,7 @@ const EMPTY_TASK: Omit<Task, "_id" | "created_at" | "updated_at"> = {
   attachments: [],
 };
 
-export default function TasksPage() {
+function TaskBoard({ project }: { project: string }) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -389,6 +392,8 @@ export default function TasksPage() {
     const applyUpsert = (raw: unknown) => {
       const incoming = raw as Task | undefined;
       if (!incoming || !incoming._id) return;
+      // 프로젝트 스코프 밖의 task는 이 보드에 반영하지 않음 (legacy 미지정 = balloonflow)
+      if ((incoming.project || "balloonflow") !== project) return;
       const id = String(incoming._id);
       setTasks((prev) => {
         const idx = prev.findIndex((t) => String(t._id) === id);
@@ -423,7 +428,7 @@ export default function TasksPage() {
 
   async function fetchTasks() {
     try {
-      const r = await fetch("/api/tasks");
+      const r = await fetch(`/api/tasks?project=${encodeURIComponent(project)}`);
       if (!r.ok) { console.error("[tasks] fetch failed:", r.status); return; }
       const data = await r.json();
       if (Array.isArray(data)) setTasks(data);
@@ -438,12 +443,12 @@ export default function TasksPage() {
       const res = await fetch("/api/tasks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, project }),
       });
       if (!res.ok) { console.error("[tasks] create failed:", res.status); return; }
       const data = await res.json();
       if (data.ok) {
-        setTasks((prev) => [...prev, { ...form, _id: String(data.id) }]);
+        setTasks((prev) => [...prev, { ...form, project, _id: String(data.id) }]);
         setForm({ ...EMPTY_TASK });
         setShowModal(false);
       } else {
@@ -1836,5 +1841,87 @@ function CompetitiveLevels({ taskId, levelIds }: { taskId: string; levelIds: str
         })}
       </div>
     </div>
+  );
+}
+
+// ── 프로젝트 목록 (확장성: 프로젝트별 보드 진입) ──
+interface ProjItem { id: string; name: string; subtitle?: string; icon?: string; href: string; progress: number; done: number; total: number; inProgress?: number; review?: number; }
+
+function ProjectBoard() {
+  const router = useRouter();
+  const [projects, setProjects] = useState<ProjItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    fetch("/api/projects").then((r) => r.json()).then((d) => setProjects(Array.isArray(d?.projects) ? d.projects : [])).catch(() => {}).finally(() => setLoading(false));
+  }, []);
+  return (
+    <div className="space-y-4">
+      <div>
+        <h1 className="text-xl sm:text-2xl font-bold flex items-center gap-2 neon-text-soft tracking-hud"><Icon name="tasks" size={22} /> 작업 보드</h1>
+        <p className="text-sm text-gray-500 mt-1">프로젝트를 선택해 작업 보드로 들어가세요.</p>
+      </div>
+      {loading ? (
+        <div className="py-16 text-center text-gray-500 mono">로딩…</div>
+      ) : projects.length === 0 ? (
+        <div className="py-16 text-center text-gray-500 mono">프로젝트 없음 — project_onboard.py로 온보딩하세요.</div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {projects.map((p) => (
+            <button key={p.id} onClick={() => router.push(p.href)} className="text-left glass glass-hover hud p-5 block w-full">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: "rgba(34,211,238,0.14)", border: "1px solid var(--line-strong)", color: "var(--neon)" }}><Icon name={p.icon || "box"} size={22} /></span>
+                <div className="min-w-0 flex-1">
+                  <div className="font-bold text-[15px] truncate">{p.name}</div>
+                  <div className="text-[11px] text-gray-500 truncate">{p.subtitle}</div>
+                </div>
+                <span className="text-[11px] neon-text-soft shrink-0">입장 →</span>
+              </div>
+              <div className="flex items-center justify-between text-[11px] mono text-gray-500 mb-1.5">
+                <span>진행률 · {p.done}/{p.total}</span>
+                <span className="neon-text-soft font-bold">{p.progress}%</span>
+              </div>
+              <div className="gauge-track h-1.5"><div className="gauge-fill h-full" style={{ width: `${p.progress}%` }} /></div>
+              <div className="flex items-center gap-3 mt-3 text-[11px] text-gray-400">
+                <span className="flex items-center gap-1"><span className="dot dot-run" /> 진행 {p.inProgress ?? 0}</span>
+                <span className="flex items-center gap-1"><span className="dot dot-wait" /> 리뷰 {p.review ?? 0}</span>
+                <span className="flex items-center gap-1"><span className="dot dot-ok" /> 완료 {p.done}</span>
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── 진입점: ?project 없으면 프로젝트 목록, 있으면 해당 프로젝트 보드 ──
+function TasksRouter() {
+  const sp = useSearchParams();
+  const router = useRouter();
+  const project = sp.get("project") || "";
+  const [projName, setProjName] = useState("");
+  useEffect(() => {
+    if (!project) return;
+    fetch("/api/projects").then((r) => r.json()).then((d) => {
+      const p = (d?.projects || []).find((x: ProjItem) => x.id === project);
+      setProjName(p?.name || project);
+    }).catch(() => setProjName(project));
+  }, [project]);
+  if (!project) return <ProjectBoard />;
+  return (
+    <div>
+      <button onClick={() => router.push("/tasks")} className="mb-3 inline-flex items-center gap-1.5 text-[13px] text-gray-400 hover:text-gray-200">
+        <span>←</span> 프로젝트 <span className="text-gray-600">/</span> <span className="neon-text-soft font-semibold">{projName || project}</span>
+      </button>
+      <TaskBoard key={project} project={project} />
+    </div>
+  );
+}
+
+export default function TasksPage() {
+  return (
+    <Suspense fallback={<div className="py-16 text-center text-gray-500 mono">로딩…</div>}>
+      <TasksRouter />
+    </Suspense>
   );
 }
