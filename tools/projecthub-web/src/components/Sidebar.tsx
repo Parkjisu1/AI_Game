@@ -87,7 +87,7 @@ export default function Sidebar({ isOwner = false }: { isOwner?: boolean }) {
       </nav>
 
       <div className="mt-auto px-5 py-4 text-[10px] mono text-gray-500 tracking-hud" style={{ borderTop: "1px solid var(--line)" }}>
-        GIRIGO · AI PROJECT ASSISTANT
+        JARVIS_AIMED · AI PROJECT ASSISTANT
       </div>
     </aside>
   );

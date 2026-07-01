@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Icon from "@/components/Icon";
 
-// GIRIGO 홀로그래픽 대시보드 — 실데이터(tasks·roles·sessions·node-runs)만 사용.
+// JARVIS_AIMED 홀로그래픽 대시보드 — 실데이터(tasks·roles·sessions·node-runs)만 사용.
 
 interface Task { _id?: string; title?: string; status?: string; priority?: string; assignee?: string; team?: string; progress?: number; updated_at?: string; }
 interface Role { role: string; team?: string; description?: string; }
@@ -55,7 +55,7 @@ function Waveform({ bars = 40, height = 40 }: { bars?: number; height?: number }
   );
 }
 
-// ── GIRIGO 오비탈 허브 ──
+// ── JARVIS_AIMED 오비탈 허브 ──
 function OrbitalHub({ running, live }: { running: number; live: boolean }) {
   const R = 40; // 노드 배치 반경 (%)
   return (
@@ -86,7 +86,7 @@ function OrbitalHub({ running, live }: { running: number; live: boolean }) {
 
       {/* 중심 코어 텍스트 */}
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
-        <div className="text-2xl sm:text-3xl font-bold tracking-hud neon-text">GIRIGO</div>
+        <div className="text-lg sm:text-2xl font-bold tracking-wide neon-text">JARVIS_AIMED</div>
         <div className="text-[9px] sm:text-[10px] mono tracking-hud text-gray-400 mt-1">AI PROJECT ASSISTANT</div>
         <div className="mt-2 flex items-center gap-1.5 text-[10px]">
           <span className={live ? "dot dot-run" : "dot dot-err"} />
@@ -173,7 +173,7 @@ export default function Dashboard() {
           <span className="px-2.5 py-1 rounded-full glass text-[10px] mono tracking-hud flex items-center gap-1.5" style={{ borderRadius: 9999 }}>
             <span className={live ? "dot dot-run" : "dot dot-err"} /> AI SYSTEM {live ? "ONLINE" : "OFFLINE"}
           </span>
-          <span className="text-[11px] mono text-gray-500 tracking-hud hidden sm:inline">GIRIGO · PROJECT ASSISTANT</span>
+          <span className="text-[11px] mono text-gray-500 tracking-hud hidden sm:inline">JARVIS_AIMED · PROJECT ASSISTANT</span>
         </div>
         <span className="text-[11px] mono text-gray-500">{live ? "LIVE" : "—"}</span>
       </div>
