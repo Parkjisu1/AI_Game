@@ -179,11 +179,43 @@ PROJECT_GENRE_MAP: dict[str, str] = {
 }
 
 
+_REGISTRY_CACHE: dict[str, Optional[str]] = {}
+
+
+def _genre_from_registry(project_lc: str) -> Optional[str]:
+    """온보딩된 프로젝트는 hermes_projects 레지스트리에서 genre 조회 (project_onboard.py가 생성).
+    실패/부재 시 None. 캐시됨 — 신규 온보딩 후엔 watcher 재시작으로 반영."""
+    if project_lc in _REGISTRY_CACHE:
+        return _REGISTRY_CACHE[project_lc]
+    g: Optional[str] = None
+    try:
+        import os as _os
+        from pymongo import MongoClient as _MC
+        uri = _os.environ.get("MONGODB_URI") or _os.environ.get("MONGO_URI")
+        if not uri:
+            try:
+                from dotenv import load_dotenv as _ld
+                _ld("/home/aimed/.hermes/watcher/.env")
+                uri = _os.environ.get("MONGODB_URI") or _os.environ.get("MONGO_URI")
+            except Exception:
+                uri = None
+        if uri:
+            db = _MC(uri, serverSelectionTimeoutMS=2000)[_os.environ.get("MONGODB_DB", "aigame")]
+            d = db.hermes_projects.find_one({"project": project_lc}, {"genre": 1})
+            if d and d.get("genre"):
+                g = str(d["genre"]).lower()
+    except Exception:
+        g = None
+    _REGISTRY_CACHE[project_lc] = g
+    return g
+
+
 def infer_genre_from_project(project: Optional[str]) -> Optional[str]:
-    """프로젝트 이름에서 장르를 추론. 매핑 없으면 None."""
+    """프로젝트 이름에서 장르 추론: hermes_projects 레지스트리(온보딩) 우선 → 하드코딩 맵 폴백."""
     if not project:
         return None
-    return PROJECT_GENRE_MAP.get(project.lower())
+    lc = project.lower()
+    return _genre_from_registry(lc) or PROJECT_GENRE_MAP.get(lc)
 
 
 # ──────────────────────────────────────────────
