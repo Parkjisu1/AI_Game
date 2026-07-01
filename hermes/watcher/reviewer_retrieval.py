@@ -114,6 +114,49 @@ def _last_user_comment(task_doc: dict) -> str:
     return " ".join(txt.split())[:MAX_USER_COMMENT_CHARS]
 
 
+REJECT_CLASSIFY_MODEL = os.environ.get("HERMES_REJECT_CLASSIFY_MODEL", "gpt-4o-mini")
+
+
+def classify_reject_type(task_title: str, user_comment: str) -> str:
+    """review 상태에서 사용자가 남긴 코멘트가 (직전 APPROVED 산출물에 대한) 진짜 결함 지적인지,
+    아니면 새 범위/후속 요청(iteration)인지 분류.
+
+    반환: 'defect' | 'new_scope' | 'unclear'
+      - defect    : 승인된 결과물이 틀렸다/안 된다/빠졌다/반대다 등 → 리뷰어 오승인 (페널티 대상)
+      - new_scope : "이것도 해줘/추가로/그 다음엔" 등 새 작업 지시 → 리뷰어 책임 아님
+      - unclear   : 실패/불명확 (페널티 제외 — 과승인 지표 재오염 방지)
+    """
+    cmt = (user_comment or "").strip()
+    if not cmt:
+        return "unclear"
+    cli = _openai_client()
+    if cli is None:
+        return "unclear"
+    try:
+        import json as _json
+        r = cli.chat.completions.create(
+            model=REJECT_CLASSIFY_MODEL,
+            messages=[
+                {"role": "system", "content": (
+                    "리뷰가 APPROVED된 작업의 'review' 상태에서 사용자가 남긴 코멘트를 분류한다. "
+                    "JSON만 반환: {\"t\":\"defect|new_scope|unclear\"}. "
+                    "defect=승인된 결과물이 잘못됐다는 지적(안 됨/틀림/누락/반대/다시/버그/깨짐/왜 안). "
+                    "new_scope=승인물은 괜찮고 추가·후속 작업을 새로 지시(이것도/추가로/그 다음/또 하나/새 리소스 매핑). "
+                    "불명확하면 unclear."
+                )},
+                {"role": "user", "content": f"작업: {task_title[:150]}\n코멘트: {cmt[:500]}"},
+            ],
+            temperature=0,
+            response_format={"type": "json_object"},
+            max_tokens=20,
+        )
+        t = (_json.loads(r.choices[0].message.content or "{}").get("t") or "").strip()
+        return t if t in ("defect", "new_scope", "unclear") else "unclear"
+    except Exception as e:
+        log.warning("classify_reject_type failed: %s", e)
+        return "unclear"
+
+
 def get_calibration(reviewer_role: str) -> "dict | None":
     """hermes_reviewer_calibration에서 해당 리뷰어 신뢰도 doc 조회 (merge-gate 연동용)."""
     db = _mongo_db()
@@ -135,7 +178,9 @@ def build_calibration_block(reviewer_role: str) -> str:
     try:
         S = db.hermes_team_scores
         approved = S.count_documents({"role": reviewer_role, "verdict": "APPROVED"})
-        overturned = S.count_documents({"role": reviewer_role, "verdict": "user_rejected_after_approval"})
+        # 오승인은 '진짜 결함(defect)'만 카운트 — 반복개선(new_scope)/불명확(unclear)은 리뷰어 책임이 아니므로 제외.
+        # (지표 정확화: 과거엔 review 상태의 모든 사용자 코멘트를 오승인으로 집계해 false_approve_rate가 부풀려짐)
+        overturned = S.count_documents({"role": reviewer_role, "verdict": "user_rejected_after_approval", "reject_type": "defect"})
     except Exception:
         log.exception("calibration count failed")
         return ""

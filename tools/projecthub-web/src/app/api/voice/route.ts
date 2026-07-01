@@ -14,6 +14,15 @@ export const maxDuration = 60;
 //   kind="meeting" → 회의/업무 지시: 요약 + task 분해 + meeting_transcripts 영구저장
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY || "";
 
+// STT 바이어스 힌트 — 팀원 이름·약어·도메인 용어를 미리 알려 전사 오인(상점→승점, 임우현→이모현,
+// 10배수→시배수, PR/tier 깨짐, hue게이팅→휴베이팅)을 줄인다. 팀/용어 변경 시 이 상수만 갱신.
+// gpt-4o-mini-transcribe의 prompt 파라미터로 전달.
+const STT_PROMPT =
+  "BalloonFlow 팀 회의. 팀원: 박지수(지수), 임우현(우현), 신다희(다희), 오동한(동한), 형철, 임형철. " +
+  "용어: 상점, 번들, 티어(tier), 상품, 스토어 빌드, 배포, 스모크 테스트, QA, 프리팹, PR, " +
+  "레일, 다트, 기믹, 큐, 10배수, 색상 일치, hue 게이팅, 양자화, 픽셀포지, 헤르메스, MCP, 유니티 에디터, " +
+  "레벨, 밸런스, 마일스톤, 모션, 리니어.";
+
 interface GNode { cls: string; system: string; refsIn: number; refsOut: number; }
 function loadGraph(): { nodes: GNode[]; systems?: { name: string; count: number }[] } | null {
   try { return JSON.parse(fs.readFileSync(path.join(process.cwd(), "public", "balloonflow-graph.json"), "utf-8")); }
@@ -54,6 +63,11 @@ const SYS = `당신은 BalloonFlow 팀의 음성 비서다. 사용자 발화를 
    team 분류 정확히: art=이미지/색상/아트 생성, design=기획/레벨/밸런스/프롬프트 엔지니어링,
    dev=엔지니어링/코드/빌드/광고SDK/기믹 처리, chat=단순 공유.
 
+**출력 전 최종 자가점검 (필수)**:
+   - 각 decision이 실행을 수반하면(배포/릴리즈/수정/생성/적용 등) 대응하는 task가 tasks에 반드시 있는가?
+     예: "16시 빌드 배포 확정" 결정 → "빌드 배포 실행" task가 있어야 함. 없으면 추가하라.
+   - 색상/스프라이트/아이콘/이미지 관련은 art, 레벨/밸런스/기획은 design으로 분류했는가(무조건 dev로 몰지 말 것)?
+
 반드시 JSON만: {"kind":"query|meeting","answer":"","status":"","evidence":[],"suggestions":[],"summary":"","decisions":[],"tasks":[],"open_questions":[],"risks":[]}`;
 
 export async function POST(req: NextRequest) {
@@ -79,6 +93,7 @@ export async function POST(req: NextRequest) {
   sttForm.append("file", audio, (audio as File).name || "audio.webm");
   sttForm.append("model", "gpt-4o-mini-transcribe");
   sttForm.append("language", "ko");
+  sttForm.append("prompt", STT_PROMPT);
   const sttRes = await fetch("https://api.openai.com/v1/audio/transcriptions", {
     method: "POST", headers: { Authorization: `Bearer ${OPENAI_API_KEY}` }, body: sttForm,
   });

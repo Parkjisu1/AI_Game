@@ -611,6 +611,34 @@ def _penalize_previous_reviewer(task_id: str) -> None:
         })
         if existing_penalty:
             return
+        # 반려 유형 분류: 승인된 산출물의 '결함 지적'(defect)인가, 새 범위/후속 요청(new_scope)인가.
+        # new_scope/unclear는 리뷰어 오승인이 아니므로 페널티·falsify에서 제외 → 캘리브레이션 지표 정확화.
+        # (과거엔 review 상태의 모든 사용자 코멘트를 오승인으로 학습해 false_approve_rate가 부풀려졌음)
+        reject_type = "unclear"
+        reject_comment = ""
+        try:
+            from bson import ObjectId as _OID
+            tcoll = _c[DB_NAME]["pixelforge_tasks"]
+            tdoc = None
+            try:
+                if len(str(task_id)) == 24:
+                    tdoc = tcoll.find_one({"_id": _OID(task_id)})
+            except Exception:
+                tdoc = None
+            if tdoc is None:
+                tdoc = tcoll.find_one({"_id": task_id})
+            if tdoc:
+                cs = [c for c in (tdoc.get("comments") or [])
+                      if isinstance(c, dict) and c.get("author") != "hermes"]
+                if cs:
+                    reject_comment = " ".join(
+                        (cs[-1].get("text") or cs[-1].get("content") or cs[-1].get("body") or "").split()
+                    )[:500]
+                from reviewer_retrieval import classify_reject_type
+                reject_type = classify_reject_type(tdoc.get("title", ""), reject_comment)
+        except Exception:
+            log.exception("reject_type classify failed")
+
         coll.insert_one({
             "task_id": task_id,
             "team": latest_approved.get("team"),
@@ -618,15 +646,24 @@ def _penalize_previous_reviewer(task_id: str) -> None:
             "role": latest_approved.get("role"),
             "score": REVIEWER_USER_REJECT_PENALTY,
             "verdict": "user_rejected_after_approval",
+            "reject_type": reject_type,
+            "reject_comment": reject_comment[:300],
             "summary": (
                 f"Reviewer가 APPROVED({latest_approved.get('score')}/100) 했지만 "
-                f"사용자가 review 상태에서 reject 코멘트로 재작업 트리거"
+                f"사용자가 review 상태에서 코멘트로 재작업 트리거 (reject_type={reject_type})"
             )[:500],
             "created_at": datetime.utcnow().isoformat(),
             "linked_approved_at": approved_at,
         })
-        log.info("⚖️ [reviewer-self-eval] %s 페널티 기록 — task=%s",
-                 latest_approved.get("role"), task_id)
+        log.info("⚖️ [reviewer-self-eval] %s reject_type=%s — task=%s",
+                 latest_approved.get("role"), reject_type, task_id)
+
+        # 페널티·falsify는 '진짜 결함(defect)'일 때만 — 반복개선(new_scope)/불명확(unclear)은
+        # 리뷰어 책임이 아니므로 학습 신호로 쓰지 않는다(환각 강화 방지, truth_gate 철학 일치).
+        if reject_type != "defect":
+            log.info("↳ reject_type=%s → 페널티/falsify 스킵 (리뷰어 책임 아님)", reject_type)
+            return
+
         # 진실성 게이트: 사람이 거부 = 직전 학습이 거짓이었음. 이 task에서 파생된
         # 시니어 원칙 회수 + RAG '우수예시' 강등 + 보류 학습 취소.
         try:
