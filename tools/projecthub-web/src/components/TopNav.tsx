@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Icon from "./Icon";
 
 // 데스크톱 상단 가로 네비 (md+). 모바일은 별도 상단 Nav + 하단 탭바.
@@ -35,52 +35,49 @@ export default function TopNav({ isOwner = false, userLabel = "Boss", role = "Ow
 
   const [notifs, setNotifs] = useState<Sess[]>([]);
   const [open, setOpen] = useState<null | "notif" | "user">(null);
-  const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetch("/api/agents/sessions?limit=8").then((r) => r.json()).then((d) => setNotifs(Array.isArray(d?.sessions) ? d.sessions : [])).catch(() => {});
   }, []);
 
-  // 바깥 클릭 시 닫기
-  useEffect(() => {
-    if (!open) return;
-    const onDoc = (e: MouseEvent) => { if (rootRef.current && !rootRef.current.contains(e.target as Node)) setOpen(null); };
-    document.addEventListener("mousedown", onDoc);
-    return () => document.removeEventListener("mousedown", onDoc);
-  }, [open]);
-
   const errCount = notifs.filter((n) => n.success === false).length;
-  const panel: React.CSSProperties = { background: "rgba(9,15,28,0.97)", border: "1px solid var(--line-strong)", backdropFilter: "blur(16px)", boxShadow: "0 20px 60px -20px rgba(0,0,0,.8), 0 0 30px -10px rgba(34,211,238,.3)" };
+  // fixed + 최상위 z-index로 어떤 페이지 콘텐츠 위에도 확실히 표시
+  const panel: React.CSSProperties = {
+    position: "fixed", top: "3.6rem", right: "1.5rem", zIndex: 60,
+    background: "rgba(9,15,28,0.98)", border: "1px solid var(--line-strong)",
+    backdropFilter: "blur(16px)", borderRadius: 14,
+    boxShadow: "0 24px 70px -18px rgba(0,0,0,.85), 0 0 34px -10px rgba(34,211,238,.35)",
+  };
 
   return (
-    <header
-      className="hidden md:flex fixed top-0 left-0 right-0 z-30 h-14 items-center gap-6 px-6"
-      style={{ background: "linear-gradient(180deg, rgba(6,11,22,0.92), rgba(6,11,22,0.7))", borderBottom: "1px solid var(--line)", backdropFilter: "blur(16px)" }}
-    >
-      <Link href="/" className="flex items-center gap-2.5 shrink-0">
-        <span className="w-7 h-7 rounded-lg flex items-center justify-center"
-          style={{ background: "linear-gradient(135deg, var(--neon-deep), var(--neon))", boxShadow: "0 0 14px -2px rgba(34,211,238,.7)", color: "#041018" }}>
-          <Icon name="cpu" size={15} />
-        </span>
-        <span className="text-[16px] font-bold tracking-hud neon-text-soft">ProjectHub</span>
-      </Link>
+    <>
+      <header
+        className="hidden md:flex fixed top-0 left-0 right-0 items-center gap-6 px-6"
+        style={{ height: "3.5rem", zIndex: 50, background: "linear-gradient(180deg, rgba(6,11,22,0.92), rgba(6,11,22,0.7))", borderBottom: "1px solid var(--line)", backdropFilter: "blur(16px)" }}
+      >
+        <Link href="/" className="flex items-center gap-2.5 shrink-0">
+          <span className="w-7 h-7 rounded-lg flex items-center justify-center"
+            style={{ background: "linear-gradient(135deg, var(--neon-deep), var(--neon))", boxShadow: "0 0 14px -2px rgba(34,211,238,.7)", color: "#041018" }}>
+            <Icon name="cpu" size={15} />
+          </span>
+          <span className="text-[16px] font-bold tracking-hud neon-text-soft">ProjectHub</span>
+        </Link>
 
-      <nav className="flex items-center gap-1 flex-1 min-w-0 overflow-x-auto no-scrollbar">
-        {links.map((l) => {
-          const on = active(l.href);
-          return (
-            <Link key={l.href} href={l.href}
-              className="px-3 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-all"
-              style={on ? { color: "var(--neon)", background: "rgba(34,211,238,0.1)", boxShadow: "inset 0 0 0 1px var(--line-strong)" } : { color: "var(--text-dim)" }}>
-              {l.label}
-            </Link>
-          );
-        })}
-      </nav>
+        <nav className="flex items-center gap-1 flex-1 min-w-0 overflow-x-auto no-scrollbar">
+          {links.map((l) => {
+            const on = active(l.href);
+            return (
+              <Link key={l.href} href={l.href}
+                className="px-3 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-all"
+                style={on ? { color: "var(--neon)", background: "rgba(34,211,238,0.1)", boxShadow: "inset 0 0 0 1px var(--line-strong)" } : { color: "var(--text-dim)" }}>
+                {l.label}
+              </Link>
+            );
+          })}
+        </nav>
 
-      <div ref={rootRef} className="flex items-center gap-3 shrink-0">
-        {/* 알림 벨 */}
-        <div className="relative">
+        <div className="flex items-center gap-3 shrink-0">
+          {/* 알림 벨 */}
           <button onClick={() => setOpen(open === "notif" ? null : "notif")}
             className="relative w-9 h-9 rounded-lg flex items-center justify-center glass glass-hover text-gray-300" title="알림">
             <Icon name="bell" size={16} />
@@ -89,8 +86,33 @@ export default function TopNav({ isOwner = false, userLabel = "Boss", role = "Ow
                 style={{ background: "var(--err)", color: "#fff", boxShadow: "0 0 8px var(--err)" }}>{errCount > 9 ? "9+" : errCount}</span>
             )}
           </button>
+
+          {/* 채팅 → AI팀 대화 로그 */}
+          <Link href="/agents" className="w-9 h-9 rounded-lg flex items-center justify-center glass glass-hover text-gray-300" title="AI팀 대화 로그">
+            <Icon name="chat" size={16} />
+          </Link>
+
+          {/* 아바타 → 사용자 메뉴 */}
+          <button onClick={() => setOpen(open === "user" ? null : "user")}
+            className="flex items-center gap-2 pl-2" style={{ borderLeft: "1px solid var(--line)" }}>
+            <div className="text-right leading-tight">
+              <div className="text-[13px] font-semibold text-gray-200">{userLabel}</div>
+              <div className="text-[10px] mono tracking-hud" style={{ color: "var(--neon)" }}>{role}</div>
+            </div>
+            <span className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+              style={{ background: "rgba(34,211,238,0.15)", border: "1px solid var(--line-strong)", color: "var(--neon)" }}>
+              <Icon name="users" size={16} />
+            </span>
+          </button>
+        </div>
+      </header>
+
+      {/* ── 드롭다운 (fixed, 최상위) — 백드롭으로 바깥 클릭 닫기 ── */}
+      {open && (
+        <>
+          <div className="hidden md:block fixed inset-0" style={{ zIndex: 55 }} onClick={() => setOpen(null)} />
           {open === "notif" && (
-            <div className="absolute right-0 top-11 w-80 rounded-xl p-2 fade-in" style={panel}>
+            <div className="hidden md:block w-80 p-2 fade-in" style={panel}>
               <div className="flex items-center justify-between px-2 py-1.5">
                 <span className="text-xs font-bold text-gray-200 tracking-hud">알림 · 최근 활동</span>
                 <Link href="/agents" onClick={() => setOpen(null)} className="text-[11px] neon-text-soft">전체 →</Link>
@@ -112,28 +134,8 @@ export default function TopNav({ isOwner = false, userLabel = "Boss", role = "Ow
               </div>
             </div>
           )}
-        </div>
-
-        {/* 채팅 → AI팀 대화 로그 */}
-        <Link href="/agents" className="w-9 h-9 rounded-lg flex items-center justify-center glass glass-hover text-gray-300" title="AI팀 대화 로그">
-          <Icon name="chat" size={16} />
-        </Link>
-
-        {/* 아바타 → 사용자 메뉴 */}
-        <div className="relative">
-          <button onClick={() => setOpen(open === "user" ? null : "user")}
-            className="flex items-center gap-2 pl-2" style={{ borderLeft: "1px solid var(--line)" }}>
-            <div className="text-right leading-tight">
-              <div className="text-[13px] font-semibold text-gray-200">{userLabel}</div>
-              <div className="text-[10px] mono tracking-hud" style={{ color: "var(--neon)" }}>{role}</div>
-            </div>
-            <span className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
-              style={{ background: "rgba(34,211,238,0.15)", border: "1px solid var(--line-strong)", color: "var(--neon)" }}>
-              <Icon name="users" size={16} />
-            </span>
-          </button>
           {open === "user" && (
-            <div className="absolute right-0 top-12 w-60 rounded-xl p-2 fade-in" style={panel}>
+            <div className="hidden md:block w-60 p-2 fade-in" style={panel}>
               <div className="px-3 py-2 border-b" style={{ borderColor: "var(--line)" }}>
                 <div className="text-sm font-semibold text-gray-200">{userLabel}</div>
                 <div className="text-[11px] text-gray-500 truncate mono">{email || role}</div>
@@ -153,8 +155,8 @@ export default function TopNav({ isOwner = false, userLabel = "Boss", role = "Ow
               </div>
             </div>
           )}
-        </div>
-      </div>
-    </header>
+        </>
+      )}
+    </>
   );
 }
