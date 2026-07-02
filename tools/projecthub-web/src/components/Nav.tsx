@@ -1,59 +1,46 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Icon from "./Icon";
 
+// 모바일 상단 바 (md 미만). 데스크톱은 TopNav + BottomDock.
 const links = [
   { href: "/", label: "대시보드" },
   { href: "/roadmap", label: "로드맵" },
   { href: "/tasks", label: "작업 보드" },
-  { href: "/voice", label: "🎤 음성" },
+  { href: "/voice", label: "음성 명령" },
   { href: "/agents", label: "AI 팀" },
-  { href: "/balloonflow", label: "🎈 BalloonFlow" },
-  { href: "/gallery", label: "🖼 갤러리" },
-  { href: "/pixelforge", label: "🎨 PixelForge" },
+  { href: "/balloonflow", label: "QA 검사" },
+  { href: "/gallery", label: "설계 갤러리" },
+  { href: "/pixelforge", label: "PixelForge" },
+  { href: "/levels", label: "레벨" },
   { href: "/settings", label: "설정" },
 ];
 
 export default function Nav({ isOwner = false }: { isOwner?: boolean }) {
   const pathname = usePathname();
-  // 설정 창은 소유자(본인)만
   const visible = links.filter((l) => l.href !== "/settings" || isOwner);
-  // 현재 경로의 페이지 라벨 (모바일 미니헤더 표시용)
+  // 현재 경로의 페이지 라벨 (하단 탭바가 네비게이션 담당)
   const current = visible.find((l) => (l.href === "/" ? pathname === "/" : pathname?.startsWith(l.href)));
 
   return (
-    <nav className="md:hidden border-b border-gray-200 bg-white sticky top-0 z-30">
-      <div className="px-4 sm:px-6 py-3 flex items-center gap-3 sm:gap-8">
-        <Link href="/" className="shrink-0">
-          {/* 정적 워드마크 (그라데이션/이탤릭 제거) */}
-          <span className="md:hidden text-xl font-bold tracking-tight text-gray-100">
-            ProjectHub
+    <nav
+      className="md:hidden sticky top-0 z-30"
+      style={{ background: "linear-gradient(180deg, rgba(6,11,22,0.94), rgba(6,11,22,0.75))", borderBottom: "1px solid var(--line)", backdropFilter: "blur(16px)" }}
+    >
+      <div className="px-4 py-3 flex items-center gap-2.5">
+        <Link href="/" className="shrink-0 flex items-center gap-2">
+          <span className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, var(--neon-deep), var(--neon))", boxShadow: "0 0 14px -2px rgba(34,211,238,.7)", color: "#041018" }}>
+            <Icon name="cpu" size={15} />
           </span>
-          <span className="hidden md:inline text-lg font-bold text-gray-100 tracking-tight">
-            ProjectHub
-          </span>
+          <span className="text-[15px] font-bold tracking-hud neon-text-soft">PROJECTHUB</span>
         </Link>
-
-        {/* 모바일: 현재 페이지 라벨 (하단 탭바가 네비게이션 담당) */}
         {current && current.href !== "/" && (
-          <span className="md:hidden text-sm font-medium text-gray-500 truncate">{current.label}</span>
+          <span className="text-sm font-medium text-gray-400 truncate">· {current.label}</span>
         )}
-
-        {/* Desktop links */}
-        <div className="hidden md:flex gap-1">
-          {visible.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              style={{ color: pathname === l.href ? "#ffffff" : "#cbd2dc" }}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                pathname === l.href ? "bg-black" : "hover:bg-gray-100"
-              }`}
-            >
-              {l.label}
-            </Link>
-          ))}
-        </div>
+        <span className="ml-auto flex items-center gap-1 text-[9px] mono tracking-hud text-gray-500 shrink-0">
+          <span className="dot dot-ok" /> ONLINE
+        </span>
       </div>
     </nav>
   );
