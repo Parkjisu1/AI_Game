@@ -3188,6 +3188,14 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
     main_prompt_base = MAIN_CODER_PROMPT_TEMPLATE.format(
         lead_plan=plan_summary, main_task=main_task,
     ) + code_design_section  # RAG: 유사 검증 코드 + 관련 기획 디렉션 직접 주입
+    # 실패패턴 가드레일 — 이 도메인 과거 반려 함정을 구현 전 선주입(첫 시도 정확성 ↑, 재작업 감소)
+    try:
+        from reviewer_retrieval import build_coder_guardrails_block as _guard_block
+        _gb = _guard_block(main_coder_role)
+        if _gb:
+            main_prompt_base += _gb
+    except Exception:
+        log.exception("coder guardrails injection failed (non-fatal)")
 
     main_resp = None
     main_files = []

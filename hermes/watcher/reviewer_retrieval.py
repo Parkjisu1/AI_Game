@@ -288,41 +288,72 @@ def _distill_patterns(reviewer_role: str, comments: list[str]) -> list[str]:
         return []
 
 
-def build_failure_pattern_block(reviewer_role: str) -> str:
-    """리뷰어 도메인에서 '실제로 사용자가 거부한' 결함 패턴을 유형화해 프롬프트에 주입(그라운딩).
-    캐시(hermes_reviewer_failure_patterns)로 표본 수 변동 시에만 LLM 재증류. 실패 시 빈 문자열."""
+def get_failure_patterns(reviewer_role: str) -> list[str]:
+    """리뷰어 도메인의 '실제 결함(defect) 거부 사유'를 유형화한 체크 리스트 반환.
+    캐시(hermes_reviewer_failure_patterns), 표본 수 변동 시에만 LLM 재증류. 리뷰어/코더 공용."""
     db = _mongo_db()
     if db is None or not reviewer_role:
-        return ""
+        return []
     try:
         comments = _gather_defect_comments(db, reviewer_role)
         if not comments:
-            return ""
+            return []
         sig = len(comments)
         cache = db.hermes_reviewer_failure_patterns.find_one({"role": reviewer_role})
         if cache and cache.get("sig") == sig and cache.get("patterns"):
-            patterns = cache["patterns"]
-        else:
-            patterns = _distill_patterns(reviewer_role, comments)
-            if patterns:
-                from datetime import datetime, timezone
-                db.hermes_reviewer_failure_patterns.update_one(
-                    {"role": reviewer_role},
-                    {"$set": {"role": reviewer_role, "sig": sig, "patterns": patterns,
-                              "updated_at": datetime.now(timezone.utc).isoformat()}},
-                    upsert=True)
-        if not patterns:
-            return ""
-        lines = [
-            "\n\n## 🎯 이 도메인에서 실제로 반려된 실패 패턴 (과거 사용자 거부 근거)",
-            "리뷰 통과 후 사용자가 실제 거부한 사유를 유형화한 것이다. **이번 변경이 같은 함정에 빠지지 않는지 하나씩 대조**하고, 하나라도 불확실하면 APPROVED 대신 REQUEST_CHANGES.",
-        ]
-        for i, p in enumerate(patterns, 1):
-            lines.append(f"{i}. {p}")
-        return "\n".join(lines)
+            return cache["patterns"]
+        patterns = _distill_patterns(reviewer_role, comments)
+        if patterns:
+            from datetime import datetime, timezone
+            db.hermes_reviewer_failure_patterns.update_one(
+                {"role": reviewer_role},
+                {"$set": {"role": reviewer_role, "sig": sig, "patterns": patterns,
+                          "updated_at": datetime.now(timezone.utc).isoformat()}},
+                upsert=True)
+        return patterns
     except Exception:
-        log.exception("build_failure_pattern_block failed")
+        log.exception("get_failure_patterns failed")
+        return []
+
+
+def build_failure_pattern_block(reviewer_role: str) -> str:
+    """리뷰어용: 과거 거부된 결함 유형을 대조 체크로 주입."""
+    patterns = get_failure_patterns(reviewer_role)
+    if not patterns:
         return ""
+    lines = [
+        "\n\n## 🎯 이 도메인에서 실제로 반려된 실패 패턴 (과거 사용자 거부 근거)",
+        "리뷰 통과 후 사용자가 실제 거부한 사유를 유형화한 것이다. **이번 변경이 같은 함정에 빠지지 않는지 하나씩 대조**하고, 하나라도 불확실하면 APPROVED 대신 REQUEST_CHANGES.",
+    ]
+    for i, p in enumerate(patterns, 1):
+        lines.append(f"{i}. {p}")
+    return "\n".join(lines)
+
+
+def _coder_to_reviewer_role(coder_role: str) -> str:
+    """코더 역할 → 대응 리뷰어 역할 (도메인 실패패턴 조회용)."""
+    r = (coder_role or "").strip()
+    if not r or r in ("main_coder", "sub_coder", "optimizer", "lead"):
+        return "reviewer"
+    if r.endswith("_coder"):
+        return r[:-6] + "_reviewer"
+    if r.endswith("_lead"):
+        return r[:-5] + "_reviewer"
+    return "reviewer"
+
+
+def build_coder_guardrails_block(coder_role: str) -> str:
+    """코더용: 이 도메인 과거 결함 유형을 '구현 전 회피' 가드레일로 선주입 → 첫 시도 정확성 ↑."""
+    patterns = get_failure_patterns(_coder_to_reviewer_role(coder_role))
+    if not patterns:
+        return ""
+    lines = [
+        "\n\n## ⚠️ 이 도메인 과거 반려 함정 — 구현 전 필수 회피",
+        "아래는 이 영역에서 과거 리뷰 통과 후에도 사용자가 실제 거부한 유형이다. **처음부터 이 조건들을 만족시켜 구현**하라(재작업 방지):",
+    ]
+    for i, p in enumerate(patterns, 1):
+        lines.append(f"{i}. {p}")
+    return "\n".join(lines)
 
 
 def build_retrieval_block(task_title: str, task_description: str, current_task_id: str = "") -> str:
