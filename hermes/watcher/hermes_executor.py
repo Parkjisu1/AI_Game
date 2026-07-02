@@ -3545,8 +3545,23 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
 
     # ── Step 6: Reviewer — 최종 품질 게이트
     _comment("👀 **Reviewer** (Claude Max Opus) 최종 리뷰 중...")
+    # 실제 코드 diff(patch) — 리뷰어가 stat만이 아니라 '무엇이 바뀌었는지' 직접 검토(정확성 그라운딩)
+    _diff_patch = ""
+    try:
+        _dp = subprocess.run(
+            ["ssh", repo_host, f'cd "{repo_dir}" && git diff HEAD --unified=3'],
+            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=30, check=False,
+        )
+        if _dp.returncode == 0 and (_dp.stdout or "").strip():
+            _diff_patch = _dp.stdout[:9000]
+    except Exception:
+        log.exception("reviewer diff patch fetch failed (non-fatal)")
+    _changes = f"Files: {', '.join(changed_files)}\n\nDiff stat:\n{diff_stat}"
+    if _diff_patch:
+        _trunc = "\n…(이하 생략, 큰 변경)" if len(_dp.stdout) > 9000 else ""
+        _changes += f"\n\n## 실제 코드 변경 (git diff — stat 아닌 실제 내용, 이걸로 판정하라)\n```diff\n{_diff_patch}{_trunc}\n```"
     _reviewer_prompt = REVIEWER_PROMPT_TEMPLATE.format(
-        changes_summary=f"Files: {', '.join(changed_files)}\n\nDiff stat:\n{diff_stat}",
+        changes_summary=_changes,
         validator_verdict=json.dumps(validator_verdict, indent=2, ensure_ascii=False),
     )
     try:
