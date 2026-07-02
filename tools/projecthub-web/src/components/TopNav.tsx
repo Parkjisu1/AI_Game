@@ -12,6 +12,7 @@ const LINKS: { href: string; label: string; owner?: boolean }[] = [
   { href: "/voice", label: "음성 명령" },
   { href: "/gallery", label: "설계 갤러리" },
   { href: "/balloonflow", label: "QA 검사" },
+  { href: "/simulator", label: "시뮬레이터" },
   { href: "/roadmap", label: "로드맵" },
   { href: "/settings", label: "설정", owner: true },
 ];

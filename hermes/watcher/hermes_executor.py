@@ -223,56 +223,170 @@ def _format_design_results(results: list[dict[str, Any]]) -> str:
 
 
 # ──────────────────────────────────────────────
-# Handler: simulation (Stage 2)
+# Handler: simulation (Stage 2) — BalloonFlowSim (머신 B SSH)
 # ──────────────────────────────────────────────
+# 헤드리스 클리어율 시뮬레이터 (E:\AI_Simualator 포팅본).
+# 머신 B 배치 경로/에피소드 경로는 env 로 오버라이드 가능.
+BF_SIM_EXE_B = os.environ.get("BF_SIM_EXE_B", "C:/tools/BalloonFlowSim/BalloonFlowSim.exe")
+BF_SIM_OUT_DIR_B = os.environ.get("BF_SIM_OUT_DIR_B", "C:/tools/BalloonFlowSim/out")
+BF_EPISODES_DIR_B = os.environ.get(
+    "BF_EPISODES_DIR_B",
+    f"{MACHINE_B_UNITY_DIR}/Assets/EditorData/Episodes",
+)
+
+
+def _bf_sim_params(task: dict[str, Any], route: dict[str, Any]) -> dict[str, Any]:
+    """sim_params(웹 구조체) 우선, 없으면 제목/설명에서 레벨범위·횟수·정책 추출."""
+    sp = task.get("sim_params") or {}
+    text = f"{task.get('title', '')} {task.get('description', '')}"
+
+    levels = str(sp.get("levels") or route.get("params", {}).get("level_range") or "").strip()
+    if not levels:
+        m = re.search(r"레벨\s*(\d+(?:\s*[-~]\s*\d+)?)", text)
+        levels = m.group(1).replace("~", "-").replace(" ", "") if m else "1-20"
+
+    runs = int(sp.get("runs") or 0)
+    if not runs:
+        m = re.search(r"(\d+)\s*회", text)
+        runs = int(m.group(1)) if m else 50
+    runs = max(1, min(200, runs))
+
+    policy = str(sp.get("policy") or "").strip().lower()
+    if policy not in ("smart", "greedy", "random"):
+        policy = "random" if "random" in text.lower() else "smart"
+
+    seed = int(sp.get("seed") or 12345)
+    replay = bool(sp.get("replay", True))          # 기본: 최난 레벨 리플레이 자동 생성
+    replay_level = int(sp.get("replay_level") or 0)  # 0 = 자동(최난)
+    return {"levels": levels, "runs": runs, "policy": policy, "seed": seed,
+            "replay": replay, "replay_level": replay_level}
+
+
+def _bf_run_on_machine_b(args: list[str], remote_out: str, local_out: str, timeout: int) -> str | None:
+    """머신 B 에서 exe 실행 후 결과 파일 scp 회수. 에러 문자열 반환 (성공 시 None)."""
+    remote_cmd = (
+        f'if not exist "{BF_SIM_OUT_DIR_B}" mkdir "{BF_SIM_OUT_DIR_B}" & '
+        f'"{BF_SIM_EXE_B}" ' + " ".join(args)
+    )
+    try:
+        proc = subprocess.run(["ssh", MACHINE_B_HOST, remote_cmd],
+                              capture_output=True, text=True, timeout=timeout, check=False)
+    except subprocess.TimeoutExpired:
+        return f"시뮬레이션 타임아웃 ({timeout}s 초과)"
+    if proc.returncode != 0:
+        return f"시뮬 실행 실패 (exit={proc.returncode}): {(proc.stderr or proc.stdout)[-600:]}"
+
+    scp = subprocess.run(["scp", f"{MACHINE_B_HOST}:{remote_out}", local_out],
+                         capture_output=True, text=True, timeout=120, check=False)
+    if scp.returncode != 0:
+        return f"결과 회수(scp) 실패: {scp.stderr[-300:]}"
+    subprocess.run(["ssh", MACHINE_B_HOST, f'del /Q "{remote_out.replace("/", chr(92))}"'],
+                   capture_output=True, text=True, timeout=30, check=False)
+    return None
+
+
 def _handle_simulation(task: dict[str, Any], context: dict[str, Any], route: dict[str, Any]) -> dict[str, Any]:
     """
-    GameForge scripts/balance-simulator.js 호출.
+    BalloonFlowSim 배치 실행 (머신 B) → bf_sim_results/bf_sim_replays 저장 →
+    요약 코멘트. ProjectHub /simulator 페이지가 결과를 시각화.
     """
-    params = route.get("params", {})
-    level_range = params.get("level_range", "")
+    import time as _time
+    p = _bf_sim_params(task, route)
+    task_id = str(task.get("_id", ""))
+    stamp = int(_time.time())
 
-    script_path = GAMEFORGE_ROOT / "scripts" / "balance-simulator.js"
-    if not script_path.is_file():
-        return {
-            "success": False,
-            "error": f"balance-simulator.js not found at {script_path}. GameForge 미동기화?",
-            "next_status": "review",
-        }
+    # 레벨 데이터 최신화 (apk_build 와 동일하게 pull)
+    subprocess.run(["ssh", MACHINE_B_HOST, f'cd /D "{MACHINE_B_PROJECT_DIR}" && git pull'],
+                   capture_output=True, text=True, timeout=120, check=False)
 
-    cmd = ["node", str(script_path)]
-    if level_range:
-        cmd += ["--levels", level_range]
+    # ── 배치 실행 ──
+    remote_json = f"{BF_SIM_OUT_DIR_B}/batch_{stamp}.json"
+    local_json = f"/tmp/bf_batch_{stamp}.json"
+    err = _bf_run_on_machine_b(
+        ["--levels", p["levels"], "--runs", str(p["runs"]), "--policy", p["policy"],
+         "--seed", str(p["seed"]), "--episodes", f'"{BF_EPISODES_DIR_B}"',
+         "--json", f'"{remote_json}"'],
+        remote_json, local_json, timeout=900)
+    if err:
+        return {"success": False, "error": err, "next_status": "review"}
 
-    log.info("Running simulation: %s", " ".join(shlex.quote(c) for c in cmd))
     try:
-        proc = subprocess.run(
-            cmd,
-            cwd=str(GAMEFORGE_ROOT),
-            capture_output=True,
-            text=True,
-            timeout=300,
-            check=False,
-        )
-    except subprocess.TimeoutExpired:
-        return {
-            "success": False,
-            "error": "시뮬레이션 타임아웃 (5분 초과)",
-            "next_status": "review",
-        }
+        with open(local_json, "r", encoding="utf-8") as f:
+            results = json.load(f)
+        os.remove(local_json)
+    except Exception as e:  # noqa: BLE001
+        return {"success": False, "error": f"결과 파싱 실패: {e}", "next_status": "review"}
 
-    if proc.returncode != 0:
-        return {
-            "success": False,
-            "error": f"시뮬레이션 실패 (exit={proc.returncode}): {proc.stderr[:500]}",
-            "next_status": "review",
-        }
+    if not results:
+        return {"success": False, "error": "결과가 비어 있음 (레벨 범위 확인)", "next_status": "review"}
 
+    # ── 리플레이 (최난 레벨 또는 지정 레벨) ──
+    replay_doc_id = None
+    replay_level = None
+    if p["replay"]:
+        worst = min(results, key=lambda r: r["clearRate"])
+        replay_level = p["replay_level"] or worst["levelId"]
+        remote_rep = f"{BF_SIM_OUT_DIR_B}/replay_{stamp}.json"
+        local_rep = f"/tmp/bf_replay_{stamp}.json"
+        rerr = _bf_run_on_machine_b(
+            ["--levels", str(replay_level), "--seed", str(p["seed"]), "--policy", p["policy"],
+             "--episodes", f'"{BF_EPISODES_DIR_B}"', "--replay", f'"{remote_rep}"'],
+            remote_rep, local_rep, timeout=300)
+        from datetime import datetime, timezone
+        if not rerr:
+            try:
+                with open(local_rep, "r", encoding="utf-8") as f:
+                    replay_data = json.load(f)
+                os.remove(local_rep)
+                client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
+                rep_ins = client[DB_NAME]["bf_sim_replays"].insert_one({
+                    "task_id": task_id, "level": replay_level, "seed": p["seed"],
+                    "policy": p["policy"], "data": replay_data,
+                    "created_at": datetime.now(timezone.utc).isoformat(),
+                })
+                replay_doc_id = str(rep_ins.inserted_id)
+            except Exception as e:  # noqa: BLE001
+                log.warning("리플레이 저장 실패 (무시): %s", e)
+
+    # ── 결과 저장 ──
+    from datetime import datetime, timezone
+    now_iso = datetime.now(timezone.utc).isoformat()
+    avg_clear = sum(r["clearRate"] for r in results) / len(results)
+    below50 = [r for r in results if r["clearRate"] < 0.5]
+    client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
+    res_ins = client[DB_NAME]["bf_sim_results"].insert_one({
+        "task_id": task_id,
+        "params": {k: p[k] for k in ("levels", "runs", "policy", "seed")},
+        "results": results,
+        "summary": {
+            "levelCount": len(results),
+            "avgClearRate": round(avg_clear, 4),
+            "below50Count": len(below50),
+            "worstLevels": [{"levelId": r["levelId"], "clearRate": r["clearRate"]}
+                            for r in sorted(results, key=lambda r: r["clearRate"])[:5]],
+        },
+        "replay_id": replay_doc_id,
+        "replay_level": replay_level,
+        "created_at": now_iso,
+    })
+
+    # ── 요약 코멘트 (마크다운) ──
+    worst_rows = "\n".join(
+        f"| L{r['levelId']} | {r['clearRate'] * 100:.0f}% | {r['failRailOverflow']}/{r['failNoMoves']}/{r['failTimeout']} | {r['difficultyScore']} |"
+        for r in sorted(results, key=lambda r: r["clearRate"])[:8])
+    summary = (
+        f"🎯 **클리어율 시뮬레이션 완료** — 레벨 {p['levels']} × {p['runs']}회 ({p['policy']})\n\n"
+        f"- 평균 클리어율 **{avg_clear * 100:.1f}%** · 분석 {len(results)}레벨 · "
+        f"50% 미만 **{len(below50)}개**\n"
+        f"{f'- 리플레이: L{replay_level} 자동 생성' if replay_doc_id else ''}\n\n"
+        f"| 레벨 | 클리어율 | 실패(만석/소진/교착) | 난이도 |\n|---|---|---|---|\n{worst_rows}\n\n"
+        f"📊 상세 테이블·리플레이 → ProjectHub **시뮬레이터** 탭 (결과 ID `{res_ins.inserted_id}`)"
+    )
     return {
         "success": True,
-        "summary": f"📈 **밸런스 시뮬 결과**\n\n```\n{proc.stdout[:1500]}\n```",
-        "next_status": "review",  # 사람이 결과 보고 적용 여부 결정
-        "metadata": {"stdout_length": len(proc.stdout)},
+        "summary": summary,
+        "next_status": "review",
+        "metadata": {"result_id": str(res_ins.inserted_id), "avg_clear_rate": round(avg_clear, 4)},
     }
 
 

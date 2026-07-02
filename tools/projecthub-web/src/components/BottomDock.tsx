@@ -11,6 +11,7 @@ const DOCK: { href: string; icon: string; label: string; owner?: boolean }[] = [
   { href: "/voice", icon: "mic", label: "음성 명령" },
   { href: "/gallery", icon: "image", label: "설계 갤러리" },
   { href: "/balloonflow", icon: "flask", label: "QA 검사" },
+  { href: "/simulator", icon: "target", label: "시뮬레이터" },
   { href: "/settings", icon: "gear", label: "설정", owner: true },
 ];
 

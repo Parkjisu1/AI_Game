@@ -34,6 +34,7 @@ const MOBILE_MORE: TabItem[] = [
   { href: "/voice", label: "음성 명령", icon: "mic" },
   { href: "/gallery", label: "디자인 갤러리", icon: "image" },
   { href: "/balloonflow", label: "BalloonFlow", icon: "balloon" },
+  { href: "/simulator", label: "시뮬레이터", icon: "target" },
   { href: "/roadmap", label: "로드맵", icon: "map" },
   { href: "/levels", label: "레벨", icon: "flag" },
   { href: "/pixelforge", label: "PixelForge", icon: "palette" },
