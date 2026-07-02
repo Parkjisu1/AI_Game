@@ -185,14 +185,17 @@ export default function VoicePage() {
 
   return (
     <div className="space-y-4 max-w-2xl mx-auto">
-      {/* 헤더 */}
-      <div className="flex items-start justify-between gap-2">
-        <div>
-          <h1 className="text-xl font-bold flex items-center gap-2"><Icon name="mic" size={22} /> 음성 명령</h1>
-          <p className="text-sm text-gray-500 mt-1">말하면 AI가 <b>업무 지시</b>인지 <b>코드 상태 질문</b>인지 스스로 구분해 처리합니다. 결과를 검토·선택해 Hermes에 보냅니다.</p>
+      {/* 헤더 — JARVIS 음성 비서 */}
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2.5">
+          <span className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: "linear-gradient(135deg, var(--neon-deep), var(--neon))", boxShadow: "0 0 16px -2px rgba(34,211,238,.7)", color: "#041018" }}><Icon name="mic" size={17} /></span>
+          <div>
+            <div className="text-lg font-bold tracking-hud neon-text-soft leading-none">JARVIS</div>
+            <div className="text-[10px] mono tracking-hud text-gray-500 mt-1 flex items-center gap-1"><span className="dot dot-ok" /> AI SYSTEM ONLINE</div>
+          </div>
         </div>
         <button onClick={() => setShowHelp(true)} aria-label="안내" title="안내"
-          className="shrink-0 w-7 h-7 rounded-full border border-gray-300 text-gray-400 hover:text-gray-200 hover:border-gray-400 flex items-center justify-center"><Icon name="help" size={15} /></button>
+          className="shrink-0 w-8 h-8 rounded-lg glass glass-hover text-gray-400 flex items-center justify-center"><Icon name="help" size={15} /></button>
       </div>
 
       {showHelp && (
@@ -207,36 +210,61 @@ export default function VoicePage() {
         </div>
       )}
 
-      {/* 녹음 패널 — 글로우 마이크 */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-8 flex flex-col items-center gap-4 relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 60% 50% at 50% 20%, rgba(59,130,246,0.10), transparent 70%)" }} />
-        <div className="relative">
-          {recording && <span className="absolute inset-0 rounded-full bg-rose-500/30 animate-ping" />}
+      {/* 음성 비서 — 중앙 글로우 오브 */}
+      <div className="glass hud p-8 flex flex-col items-center gap-4 relative overflow-hidden">
+        <div className="absolute top-4 px-3 py-1 rounded-full text-[10px] mono tracking-hud" style={{ background: "rgba(34,211,238,0.1)", border: "1px solid var(--line-strong)", color: "var(--neon)" }}>◇ AI SYSTEM ONLINE ◇</div>
+        <div className="relative w-44 h-44 flex items-center justify-center mt-4">
+          <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full">
+            <circle cx="50" cy="50" r="47" fill="none" stroke="rgba(56,189,248,0.16)" strokeWidth="0.5" strokeDasharray="2 4" className="orbit-spin" style={{ transformOrigin: "50px 50px" }} />
+            <circle cx="50" cy="50" r="39" fill="none" stroke="rgba(34,211,238,0.25)" strokeWidth="0.6" strokeDasharray="10 6" className="orbit-spin-rev" style={{ transformOrigin: "50px 50px" }} />
+          </svg>
+          {recording && <span className="absolute inset-5 rounded-full animate-ping" style={{ background: "rgba(251,90,107,0.22)" }} />}
           {!recording ? (
             <button onClick={start} disabled={busy} aria-label="녹음 시작"
-              className="relative w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-xl ring-4 ring-blue-500/20 active:scale-95 disabled:opacity-50 flex items-center justify-center transition-transform">
-              <Icon name="mic" size={52} />
+              className="relative w-28 h-28 rounded-full flex items-center justify-center active:scale-95 disabled:opacity-50 core-pulse"
+              style={{ background: "radial-gradient(circle at 40% 35%, #67e8f9, var(--neon-deep))", color: "#041018", boxShadow: "0 0 44px -6px rgba(34,211,238,.85)" }}>
+              <Icon name="mic" size={46} />
             </button>
           ) : (
             <button onClick={stop} aria-label="정지"
-              className="relative w-32 h-32 rounded-full bg-rose-500 text-white shadow-xl ring-4 ring-rose-500/30 flex items-center justify-center">
-              <span className="w-8 h-8 rounded-md bg-white" />
+              className="relative w-28 h-28 rounded-full flex items-center justify-center"
+              style={{ background: "radial-gradient(circle at 40% 35%, #fda4af, var(--err))", color: "#180406", boxShadow: "0 0 44px -6px rgba(251,90,107,.8)" }}>
+              <span className="w-8 h-8 rounded-md bg-white/90" />
             </button>
           )}
         </div>
-        <div className="relative text-sm text-gray-500 inline-flex items-center gap-1.5 min-h-[20px]">
-          {recording ? (<><span className="text-rose-500"><Icon name="dot" size={9} /></span> 녹음 중 {mmss} · 다시 누르면 정지</>)
-            : busy ? (<><Icon name="clock" size={14} /> 전사·분석 중…</>)
-            : "버튼을 눌러 말하면 명령을 인식합니다"}
+        {/* 웨이브폼 */}
+        <div className="wave" style={{ height: 26, opacity: recording ? 1 : 0.4 }}>
+          {Array.from({ length: 32 }).map((_, i) => <i key={i} style={{ animationDelay: `${(i % 10) * 0.08}s`, height: `${30 + ((i * 41) % 70)}%` }} />)}
+        </div>
+        <div className="text-center">
+          <div className="text-base font-semibold">명령을 말씀해주세요, <span className="neon-text-soft">Boss</span></div>
+          <div className="text-sm text-gray-500 mt-1 inline-flex items-center gap-1.5 min-h-[20px]">
+            {recording ? (<><span className="dot dot-err" /> 녹음 중 {mmss} · 다시 누르면 정지</>)
+              : busy ? (<><Icon name="clock" size={14} /> 전사·분석 중…</>)
+              : "버튼을 눌러 말하면 명령을 인식합니다"}
+          </div>
         </div>
         {!recording && !busy && (
-          <label className="relative text-xs px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 cursor-pointer inline-flex items-center gap-1.5">
+          <label className="text-xs px-3 py-1.5 rounded-lg glass glass-hover text-gray-400 cursor-pointer inline-flex items-center gap-1.5">
             <Icon name="music" size={14} /> 오디오 파일 업로드
             <input type="file" accept="audio/*" className="hidden" disabled={busy}
               onChange={(e) => { const f = e.target.files?.[0]; if (f) upload(f, f.name); }} />
           </label>
         )}
       </div>
+
+      {/* 빠른 명령 */}
+      {!recording && !busy && (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          {([["프로젝트 현황", "home", "/"], ["작업 생성", "tasks", "/tasks"], ["회의 요약", "doc", "/tasks"], ["코드 분석", "code", "/balloonflow"]] as [string, string, string][]).map(([label, icon, href]) => (
+            <a key={label} href={href} className="glass glass-hover p-3 flex flex-col items-center gap-1.5 text-center">
+              <span className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: "rgba(34,211,238,0.14)", color: "var(--neon)" }}><Icon name={icon} size={17} /></span>
+              <span className="text-[11px] font-medium text-gray-300">{label}</span>
+            </a>
+          ))}
+        </div>
+      )}
 
       {err && <div className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700">{err}</div>}
 
