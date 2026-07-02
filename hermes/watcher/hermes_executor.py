@@ -3557,6 +3557,14 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
             _reviewer_prompt += _cb
     except Exception:
         log.exception("reviewer calibration injection failed (non-fatal)")
+    # 실패패턴 그라운딩 — 이 도메인에서 실제 사용자에게 거부된 결함 유형을 대조 체크로 주입(정확성)
+    try:
+        from reviewer_retrieval import build_failure_pattern_block as _fail_block
+        _fb = _fail_block(reviewer_role)
+        if _fb:
+            _reviewer_prompt += _fb
+    except Exception:
+        log.exception("reviewer failure-pattern injection failed (non-fatal)")
     reviewer_resp = invoke_agent(reviewer_role, _reviewer_prompt, env)
     # Phase 0 배포 차단 게이트 — Reviewer 거부 시 자동 머지 차단(advisory→blocking).
     # HERMES_MERGE_GATE=block(기본)|warn. 회귀/환각/외과규칙 위반 Reviewer 판정을 실효화.

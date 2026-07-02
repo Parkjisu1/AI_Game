@@ -49,6 +49,13 @@ def _mongo_db():
         from pymongo import MongoClient
         uri = os.environ.get("MONGODB_URI") or os.environ.get("MONGO_URI")
         if not uri:
+            try:
+                from dotenv import load_dotenv as _ld
+                _ld("/home/aimed/.hermes/watcher/.env")
+                uri = os.environ.get("MONGODB_URI") or os.environ.get("MONGO_URI")
+            except Exception:
+                uri = None
+        if not uri:
             return None
         return MongoClient(uri, serverSelectionTimeoutMS=3000)[os.environ.get("MONGODB_DB", "aigame")]
     except Exception:
@@ -208,6 +215,114 @@ def build_calibration_block(reviewer_role: str) -> str:
         "→ 이번 리뷰는 **더 보수적으로**: 기획 의도 부합·회귀·계약 일치가 조금이라도 불확실하면 "
         "APPROVED 대신 **REQUEST_CHANGES**. 컴파일/문법 통과만으로 승인하지 말 것."
     )
+
+
+FAILPAT_MODEL = os.environ.get("HERMES_FAILPAT_MODEL", "gpt-4o-mini")
+
+
+def _related_role(base: str, other_role: str) -> bool:
+    """같은 도메인 계열 리뷰어인지 (dev_ingame_fx ↔ dev_ingame* 처럼 sub_team 토큰 공유)."""
+    stop = {"dev", "art", "design", "reviewer", "general"}
+    a = {t for t in base.split("_") if t and t not in stop}
+    b = {t for t in other_role.replace("_reviewer", "").split("_") if t and t not in stop}
+    return bool(a & b)
+
+
+def _gather_defect_comments(db, reviewer_role: str) -> list[str]:
+    """해당 리뷰어의 '진짜 결함(defect)' 거부 사유 수집. thin이면 같은 도메인 계열로 broaden."""
+    def _pull(role):
+        out = []
+        for r in db.hermes_team_scores.find(
+            {"role": role, "verdict": "user_rejected_after_approval", "reject_type": "defect"},
+            {"reject_comment": 1},
+        ):
+            c = (r.get("reject_comment") or "").strip()
+            if c:
+                out.append(c)
+        return out
+    comments: list[str] = []
+    for c in _pull(reviewer_role):
+        if c not in comments:
+            comments.append(c)
+    if len(comments) < 3:
+        base = reviewer_role.replace("_reviewer", "")
+        for r in db.hermes_team_scores.find(
+            {"verdict": "user_rejected_after_approval", "reject_type": "defect", "role": {"$regex": "reviewer$"}},
+            {"reject_comment": 1, "role": 1},
+        ):
+            rr = r.get("role", "")
+            if rr == reviewer_role or not _related_role(base, rr):
+                continue
+            c = (r.get("reject_comment") or "").strip()
+            if c and c not in comments:
+                comments.append(c)
+    return comments[:12]
+
+
+def _distill_patterns(reviewer_role: str, comments: list[str]) -> list[str]:
+    cli = _openai_client()
+    if cli is None or not comments:
+        return []
+    try:
+        import json as _json
+        joined = "\n".join(f"- {c[:220]}" for c in comments)
+        r = cli.chat.completions.create(
+            model=FAILPAT_MODEL,
+            messages=[
+                {"role": "system", "content": (
+                    "아래는 리뷰가 APPROVED된 뒤 사용자가 실제로 거부한 결함 사유들이다. "
+                    "미래 리뷰어가 변경 내용과 하나씩 대조할 수 있는 **구체적·검증가능한 체크 항목** 3~6개로 유형화하라. "
+                    "각 항목은 '어떤 조건/시점/대상을 확인'하는 형태(예: '사운드/BGM 재생·정지 시점이 지정된 트리거와 정확히 일치하는가'). "
+                    "JSON만: {\"p\":[\"...\",\"...\"]}"
+                )},
+                {"role": "user", "content": f"리뷰어: {reviewer_role}\n거부 사유:\n{joined}"},
+            ],
+            temperature=0.2,
+            response_format={"type": "json_object"},
+            max_tokens=400,
+        )
+        arr = _json.loads(r.choices[0].message.content or "{}").get("p") or []
+        return [str(x).strip() for x in arr if str(x).strip()][:6]
+    except Exception as e:
+        log.warning("distill_patterns failed: %s", e)
+        return []
+
+
+def build_failure_pattern_block(reviewer_role: str) -> str:
+    """리뷰어 도메인에서 '실제로 사용자가 거부한' 결함 패턴을 유형화해 프롬프트에 주입(그라운딩).
+    캐시(hermes_reviewer_failure_patterns)로 표본 수 변동 시에만 LLM 재증류. 실패 시 빈 문자열."""
+    db = _mongo_db()
+    if db is None or not reviewer_role:
+        return ""
+    try:
+        comments = _gather_defect_comments(db, reviewer_role)
+        if not comments:
+            return ""
+        sig = len(comments)
+        cache = db.hermes_reviewer_failure_patterns.find_one({"role": reviewer_role})
+        if cache and cache.get("sig") == sig and cache.get("patterns"):
+            patterns = cache["patterns"]
+        else:
+            patterns = _distill_patterns(reviewer_role, comments)
+            if patterns:
+                from datetime import datetime, timezone
+                db.hermes_reviewer_failure_patterns.update_one(
+                    {"role": reviewer_role},
+                    {"$set": {"role": reviewer_role, "sig": sig, "patterns": patterns,
+                              "updated_at": datetime.now(timezone.utc).isoformat()}},
+                    upsert=True)
+        if not patterns:
+            return ""
+        lines = [
+            "\n\n## 🎯 이 도메인에서 실제로 반려된 실패 패턴 (과거 사용자 거부 근거)",
+            "리뷰 통과 후 사용자가 실제 거부한 사유를 유형화한 것이다. **이번 변경이 같은 함정에 빠지지 않는지 하나씩 대조**하고, 하나라도 불확실하면 APPROVED 대신 REQUEST_CHANGES.",
+        ]
+        for i, p in enumerate(patterns, 1):
+            lines.append(f"{i}. {p}")
+        return "\n".join(lines)
+    except Exception:
+        log.exception("build_failure_pattern_block failed")
+        return ""
 
 
 def build_retrieval_block(task_title: str, task_description: str, current_task_id: str = "") -> str:
