@@ -1251,44 +1251,55 @@ function DetailModal({
     }
   }
 
+  const _prog = task.hermes_stopped ? 0 : task.status === "done" ? 100 : task.status === "review" ? 90 : task.status === "in_progress" ? 55 : 5;
+  const _sm = task.status === "done" ? { l: "완료", c: "var(--ok)" } : task.status === "review" ? { l: "리뷰", c: "var(--warn)" } : task.status === "in_progress" ? { l: "진행 중", c: "var(--neon)" } : { l: "대기", c: "var(--warn)" };
+  const _stColor = task.hermes_stopped ? "var(--err)" : _sm.c;
+
   return (
     <div
-      className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-3 overflow-y-auto"
+      className="fixed inset-0 flex items-center justify-center z-50 p-3 overflow-y-auto"
+      style={{ background: "rgba(3,6,14,0.72)" }}
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl w-full max-w-[560px] shadow-xl my-4 max-h-[90vh] overflow-y-auto"
+        className="glass w-full max-w-[600px] my-4 max-h-[92vh] overflow-y-auto"
+        style={{ borderColor: "var(--line-strong)" }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="sticky top-0 bg-white z-10 px-6 py-4 border-b border-gray-100">
-          <div className="flex items-start justify-between">
+        <div className="sticky top-0 z-10 px-5 py-4" style={{ background: "rgba(9,15,28,0.97)", borderBottom: "1px solid var(--line)", backdropFilter: "blur(12px)" }}>
+          <div className="flex items-start justify-between gap-2">
             <div className="flex items-center gap-2 flex-1 min-w-0">
-              <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${(priorityStyles[task.priority] || priorityStyles.medium).dot}`} />
+              <span className="dot shrink-0" style={{ background: _stColor, boxShadow: `0 0 8px ${_stColor}` }} />
               {editing ? (
                 <input
                   value={editForm.title}
                   onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
-                  className="text-lg font-bold w-full border-b border-blue-300 focus:outline-none"
-                  style={{ color: "#e6e9ef" }}
+                  className="text-lg font-bold w-full bg-transparent border-b focus:outline-none"
+                  style={{ color: "var(--text)", borderColor: "var(--line-strong)" }}
                 />
               ) : (
                 <h2 className="text-lg font-bold leading-snug truncate">{task.title}</h2>
               )}
             </div>
-            <div className="flex items-center gap-2 shrink-0 ml-2">
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="text-[9px] mono px-1.5 py-0.5 rounded font-bold shrink-0" style={{ color: _stColor, background: _stColor + "1a" }}>{task.hermes_stopped ? "STOPPED" : _sm.l.toUpperCase()}</span>
               <button
                 onClick={() => setEditing(!editing)}
-                className={`text-xs px-2.5 py-1 rounded-lg border transition-colors ${
-                  editing ? "bg-blue-50 border-blue-300 text-blue-600" : "border-gray-200 hover:bg-gray-50"
-                }`}
-                style={{ color: editing ? undefined : "#e6e9ef" }}
+                className="text-xs px-2.5 py-1 rounded-lg glass glass-hover"
+                style={{ color: editing ? "var(--neon)" : "var(--text-dim)" }}
               >
                 {editing ? "취소" : <span className="inline-flex items-center gap-1"><Icon name="edit" size={13} /> 편집</span>}
               </button>
-              <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl leading-none">×</button>
+              <button onClick={onClose} className="text-gray-400 hover:text-gray-200 text-xl leading-none">×</button>
             </div>
           </div>
+          {/* 담당자 + 진행률 */}
+          <div className="flex items-center gap-1.5 mt-2.5 text-[11px] text-gray-400">
+            <Icon name="users" size={12} /><span className="truncate">{task.assignee || "미지정"}</span>
+            <span className="ml-auto mono neon-text-soft font-bold">{_prog}%</span>
+          </div>
+          <div className="gauge-track h-1.5 mt-1.5"><div className="gauge-fill h-full" style={{ width: `${_prog}%` }} /></div>
         </div>
 
         <div className="px-6 py-4 space-y-4">
@@ -1551,6 +1562,25 @@ function DetailModal({
               ))}
             </div>
           </div>
+
+          {/* 실시간 로그 (Hermes 활동 — 실데이터) */}
+          {(() => {
+            const logs = (task.comments || []).filter((c) => /hermes|헤르메스/i.test(c.author || "")).slice(-6);
+            if (logs.length === 0) return null;
+            return (
+              <div className="pt-3" style={{ borderTop: "1px solid var(--line)" }}>
+                <p className="text-xs text-gray-400 mb-2 flex items-center gap-1.5"><Icon name="signal" size={13} /> 실시간 로그</p>
+                <div className="rounded-lg p-2.5 space-y-1 mono text-[11px]" style={{ background: "rgba(3,6,14,0.5)", border: "1px solid var(--line)" }}>
+                  {logs.map((c, i) => (
+                    <div key={i} className="flex gap-2">
+                      <span className="text-gray-600 shrink-0" style={{ color: "var(--neon-soft)" }}>{new Date(c.created_at).toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" })}</span>
+                      <span className="text-gray-300 truncate" title={c.text}>{c.text}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
 
           {/* Comments */}
           <div className="pt-3 border-t border-gray-100">
