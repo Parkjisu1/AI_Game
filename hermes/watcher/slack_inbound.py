@@ -4,11 +4,11 @@ Slack Inbound — bot 토큰 폴링 기반 양방향 DM (JARVIS 대화 레이어
 왜 폴링인가:
   - ProjectHub 웹은 Tailscale 전용 → Slack Events API(공개 URL 필요) 불가
   - Socket Mode는 xapp 앱레벨 토큰 필요 (미보유)
-  - 기존 xoxb bot 토큰 + im:read/im:history 스코프만 추가하면 폴링 가능
+  - 기존 xoxb bot 토큰의 im:write/im:history만으로 폴링 가능
 
-필요 스코프 (Slack 앱 관리 콘솔에서 추가 후 Reinstall):
-  im:read, im:history  (기존: chat:write, im:write)
-  스코프 없으면 데몬은 대기 상태로 유지 — 스코프 추가 즉시 자동 작동 (재시작 불필요).
+필요 스코프: im:write(conversations.open으로 채널 확보) + im:history(메시지 읽기).
+  im:read는 불필요 — conversations.list 대신 매핑된 사용자별 conversations.open을 쓴다
+  (기존 DM 채널을 멱등 반환). 2026-07-03 실토큰 검증: 둘 다 보유, 정상 작동.
 
 지원 명령 (DM 답장):
   상태 / status          — 현재 작업 현황
@@ -154,28 +154,35 @@ class InboundPoller:
         return True
 
     def _load_channels(self) -> bool:
-        """IM 채널 목록 (10분 캐시). missing_scope면 False + 하루 1회 안내 DM."""
+        """
+        매핑된 사용자별 IM 채널 확보 (10분 캐시).
+        conversations.list(im:read 필요) 대신 conversations.open(im:write, 이미 보유)으로
+        기존 DM 채널 id를 멱등하게 얻는다 — 추가 스코프 불필요.
+        """
         if time.time() - self._channels_loaded_at < 600 and self._channels:
             return True
-        try:
-            r = self.slack.call("conversations.list", types="im", limit=200)
-        except Exception:
-            log.exception("conversations.list failed")
-            return False
-        if not r.get("ok"):
-            if r.get("error") == "missing_scope":
-                log.info("im:read/im:history 스코프 없음 — 대기 (Slack 앱에서 추가 시 자동 작동)")
+        channels: list[dict[str, str]] = []
+        for uid in self.user_map:
+            try:
+                r = self.slack.call("conversations.open", users=uid)
+            except Exception:
+                log.exception("conversations.open failed: %s", uid)
+                continue
+            if r.get("ok") and (r.get("channel") or {}).get("id"):
+                channels.append({"id": r["channel"]["id"], "user": uid})
+            elif r.get("error") == "missing_scope":
+                log.warning("conversations.open missing_scope (needed=%s) — 대기", r.get("needed"))
                 self._warn_scope_once()
+                return False
             else:
-                log.warning("conversations.list error: %s", r.get("error"))
+                log.warning("conversations.open error(%s): %s", uid, r.get("error"))
+        if not channels:
+            log.warning("확보된 IM 채널 없음")
             return False
-        self._channels = [
-            {"id": c["id"], "user": c.get("user", "")}
-            for c in r.get("channels", [])
-            if c.get("user") in self.user_map
-        ]
+        self._channels = channels
         self._channels_loaded_at = time.time()
-        log.info("IM 채널 %d개 (매핑된 사용자만)", len(self._channels))
+        log.info("IM 채널 %d개 확보 (conversations.open, 매핑 사용자 %d명)",
+                 len(channels), len(self.user_map))
         return True
 
     def _warn_scope_once(self) -> None:
@@ -192,10 +199,10 @@ class InboundPoller:
         if admin and self.slack:
             self.slack.dm(admin,
                 "⚙️ *Slack 양방향 설정 필요*\n"
-                "Hermes DM 답장 기능이 준비됐지만 bot 스코프가 부족합니다.\n"
+                "Hermes DM 답장 기능에 bot 스코프가 부족합니다 (im:write + im:history 필요).\n"
                 "1. https://api.slack.com/apps → 해당 앱 → *OAuth & Permissions*\n"
-                "2. Bot Token Scopes에 `im:read`, `im:history` 추가\n"
-                "3. *Reinstall to Workspace*\n"
+                "2. Bot Token Scopes에 누락 스코프 추가 → *Reinstall to Workspace*\n"
+                "3. 재설치로 토큰이 바뀌었으면 ProjectHub 설정의 bot token도 갱신\n"
                 "완료되면 자동으로 작동합니다 (재시작 불필요).")
         self._scope_warned_at = time.time()
         self.state.update_one({"_id": "_meta"}, {"$set": {"scope_warned_at": self._scope_warned_at}}, upsert=True)
