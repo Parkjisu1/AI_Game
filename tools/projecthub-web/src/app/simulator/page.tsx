@@ -23,7 +23,7 @@ interface ResultDoc {
 }
 interface LevelResult {
   levelId: number; purpose: string; numColors: number; balloonCount: number; totalDarts: number;
-  runs: number; clearRate: number; avgClearTime: number; failRailOverflow: number; failNoMoves: number;
+  runs: number; clearRate: number; targetClearRate?: number; avgClearTime: number; failRailOverflow: number; failNoMoves: number;
   failTimeout: number; avgPeakOccupancy: number; avgDartsFired: number; avgDartsWasted: number; difficultyScore: number;
 }
 interface Replay {
@@ -104,7 +104,11 @@ export default function SimulatorPage() {
     setLoadingDetail(false);
   };
 
-  const closeDetail = useCallback(() => setDetail(null), []);
+  // 첫 진입 시 최신 결과 자동 선택 — 빈 화면 대신 바로 대시보드
+  useEffect(() => {
+    if (!detail && !loadingDetail && list.length > 0) openDetail(list[0]._id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [list]);
 
   // 리플레이 생성 대기 중 조용한 갱신 (로딩 표시 없이 — 선택 상태 유지)
   const refetchDetail = useCallback(async () => {
@@ -135,109 +139,123 @@ export default function SimulatorPage() {
         </button>
       </div>
 
-      {/* 요청 폼 */}
-      <section className="glass rounded-2xl p-4 sm:p-5">
-        <div className="text-[12px] mono tracking-hud mb-3" style={{ color: "var(--text-dim)" }}>NEW SIMULATION</div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 items-end">
-          <label className="block col-span-2 sm:col-span-1">
-            <span className="text-[11px]" style={{ color: "var(--text-dim)" }}>레벨 범위</span>
-            <input value={levels} onChange={(e) => setLevels(e.target.value)} placeholder="1-20, 45"
-              className="mt-1 w-full rounded-xl px-3 py-2 text-sm bg-transparent border" style={{ borderColor: "var(--line)" }} />
-          </label>
-          <label className="block">
-            <span className="text-[11px]" style={{ color: "var(--text-dim)" }}>시행 횟수 (n)</span>
-            <input type="number" value={runs} min={1} max={200} onChange={(e) => setRuns(parseInt(e.target.value) || 50)}
-              className="mt-1 w-full rounded-xl px-3 py-2 text-sm bg-transparent border" style={{ borderColor: "var(--line)" }} />
-          </label>
-          <label className="block">
-            <span className="text-[11px]" style={{ color: "var(--text-dim)" }}>정책 (유저 모델)</span>
-            <select value={policy} onChange={(e) => setPolicy(e.target.value)}
-              className="mt-1 w-full rounded-xl px-3 py-2 text-sm border bg-[var(--panel-solid)]" style={{ borderColor: "var(--line)" }}>
-              <option value="smart">smart (상급)</option>
-              <option value="greedy">greedy (중급)</option>
-              <option value="random">random (하급)</option>
-            </select>
-          </label>
-          <label className="block">
-            <span className="text-[11px]" style={{ color: "var(--text-dim)" }}>시드</span>
-            <input type="number" value={seed} onChange={(e) => setSeed(parseInt(e.target.value) || 12345)}
-              className="mt-1 w-full rounded-xl px-3 py-2 text-sm bg-transparent border" style={{ borderColor: "var(--line)" }} />
-          </label>
-          <label className="flex items-center gap-2 pb-2.5 text-[12px]" style={{ color: "var(--text-dim)" }}>
-            <input type="checkbox" checked={withReplay} onChange={(e) => setWithReplay(e.target.checked)} className="accent-cyan-400" />
-            최난 레벨 리플레이
-          </label>
-          <button onClick={submit} disabled={submitting}
-            className="rounded-xl px-4 py-2.5 text-sm font-bold transition-all disabled:opacity-50"
-            style={{ background: "linear-gradient(135deg, var(--neon-deep), var(--neon))", color: "#041018", boxShadow: "0 0 18px -4px rgba(34,211,238,.6)" }}>
-            {submitting ? "등록 중…" : "시뮬 요청"}
-          </button>
-        </div>
-        {toast && <div className="mt-3 text-[12px] neon-text-soft">{toast}</div>}
-        <div className="mt-2 text-[11px]" style={{ color: "var(--text-faint)" }}>
-          요청은 Hermes 태스크로 등록되어 Mother → 머신 B(BalloonFlowSim)에서 실행됩니다. 작업 보드에서도 진행 상황 확인 가능.
-        </div>
-      </section>
+      {/* 좌: 분석 대시보드 / 우: 요청 폼 + 결과 히스토리 (모바일: 폼 먼저) */}
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] gap-4 items-start">
+        <div className="space-y-4 min-w-0 order-2 lg:order-1">
+          {/* 진행중 */}
+          {pending.length > 0 && (
+            <section className="glass rounded-2xl p-3">
+              <div className="flex flex-wrap gap-2">
+                {pending.map((t) => (
+                  <span key={t._id} className="rounded-full px-3 py-1.5 text-[12px] border animate-pulse"
+                    style={{ borderColor: "var(--line-strong)", color: "var(--neon-soft)" }}>
+                    <Icon name="zap" size={12} /> {t.title.replace("🎯 ", "")} · {t.status}
+                  </span>
+                ))}
+              </div>
+            </section>
+          )}
 
-      {/* 진행중 */}
-      {pending.length > 0 && (
-        <section className="glass rounded-2xl p-4">
-          <div className="text-[12px] mono tracking-hud mb-2" style={{ color: "var(--text-dim)" }}>RUNNING</div>
-          <div className="flex flex-wrap gap-2">
-            {pending.map((t) => (
-              <span key={t._id} className="rounded-full px-3 py-1.5 text-[12px] border animate-pulse"
-                style={{ borderColor: "var(--line-strong)", color: "var(--neon-soft)" }}>
-                <Icon name="zap" size={12} /> {t.title.replace("🎯 ", "")} · {t.status}
-              </span>
-            ))}
-          </div>
-        </section>
-      )}
+          {loadingDetail && !detail && (
+            <div className="glass rounded-2xl p-8 text-center text-[13px]" style={{ color: "var(--text-dim)" }}>불러오는 중…</div>
+          )}
+          {!detail && !loadingDetail && (
+            <div className="glass rounded-2xl p-8 text-center text-[13px]" style={{ color: "var(--text-faint)" }}>
+              아직 결과 없음 — 우측에서 시뮬을 요청하면 완료 후 여기 표시됩니다
+            </div>
+          )}
+          {detail && (
+            <DetailView key={detail._id} doc={detail} others={list} onRefetch={refetchDetail} />
+          )}
+        </div>
 
-      {/* 결과 목록 */}
-      <section>
-        <div className="text-[12px] mono tracking-hud mb-2" style={{ color: "var(--text-dim)" }}>RESULTS</div>
-        {list.length === 0 && (
-          <div className="glass rounded-2xl p-6 text-center text-[13px]" style={{ color: "var(--text-faint)" }}>
-            아직 결과 없음 — 위에서 시뮬을 요청하면 완료 후 여기 표시됩니다
-          </div>
-        )}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {list.map((r) => {
-            const avg = r.summary?.avgClearRate ?? 0;
-            return (
-              <button key={r._id} onClick={() => openDetail(r._id)}
-                className="glass glass-hover rounded-2xl p-4 text-left transition-all"
-                style={detail?._id === r._id ? { borderColor: "var(--line-strong)", boxShadow: "0 0 20px -8px rgba(34,211,238,.5)" } : undefined}>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-bold">레벨 {r.params.levels} <span className="mono text-[11px]" style={{ color: "var(--text-dim)" }}>×{r.params.runs} · {r.params.policy}</span></span>
-                  <span className="text-lg font-bold mono" style={{ color: clearColor(avg) }}>{(avg * 100).toFixed(0)}%</span>
-                </div>
-                <div className="mt-2 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(56,189,248,.1)" }}>
-                  <div className="h-full rounded-full" style={{ width: `${avg * 100}%`, background: clearColor(avg) }} />
-                </div>
-                <div className="mt-2 flex items-center justify-between text-[11px]" style={{ color: "var(--text-dim)" }}>
-                  <span>{r.summary?.levelCount}레벨 · 50%↓ <b style={{ color: r.summary?.below50Count ? "var(--err)" : "var(--ok)" }}>{r.summary?.below50Count}개</b></span>
-                  <span>{(r.created_at || "").slice(5, 16).replace("T", " ")}</span>
-                </div>
+        <aside className="space-y-4 min-w-0 order-1 lg:order-2 lg:sticky lg:top-4">
+          {/* 요청 폼 */}
+          <section className="glass rounded-2xl p-4">
+            <div className="text-[12px] mono tracking-hud mb-3" style={{ color: "var(--text-dim)" }}>NEW SIMULATION</div>
+            <div className="grid grid-cols-2 gap-3">
+              <label className="block col-span-2">
+                <span className="text-[11px]" style={{ color: "var(--text-dim)" }}>레벨 범위</span>
+                <input value={levels} onChange={(e) => setLevels(e.target.value)} placeholder="1-20, 45"
+                  className="mt-1 w-full rounded-xl px-3 py-2 text-sm bg-transparent border" style={{ borderColor: "var(--line)" }} />
+              </label>
+              <label className="block">
+                <span className="text-[11px]" style={{ color: "var(--text-dim)" }}>시행 횟수 (n)</span>
+                <input type="number" value={runs} min={1} max={200} onChange={(e) => setRuns(parseInt(e.target.value) || 50)}
+                  className="mt-1 w-full rounded-xl px-3 py-2 text-sm bg-transparent border" style={{ borderColor: "var(--line)" }} />
+              </label>
+              <label className="block">
+                <span className="text-[11px]" style={{ color: "var(--text-dim)" }}>시드</span>
+                <input type="number" value={seed} onChange={(e) => setSeed(parseInt(e.target.value) || 12345)}
+                  className="mt-1 w-full rounded-xl px-3 py-2 text-sm bg-transparent border" style={{ borderColor: "var(--line)" }} />
+              </label>
+              <label className="block col-span-2">
+                <span className="text-[11px]" style={{ color: "var(--text-dim)" }}>정책 (유저 모델)</span>
+                <select value={policy} onChange={(e) => setPolicy(e.target.value)}
+                  className="mt-1 w-full rounded-xl px-3 py-2 text-sm border bg-[var(--panel-solid)]" style={{ borderColor: "var(--line)" }}>
+                  <option value="smart">smart (상급)</option>
+                  <option value="greedy">greedy (중급)</option>
+                  <option value="random">random (하급)</option>
+                </select>
+              </label>
+              <label className="flex items-center gap-2 text-[12px] col-span-2" style={{ color: "var(--text-dim)" }}>
+                <input type="checkbox" checked={withReplay} onChange={(e) => setWithReplay(e.target.checked)} className="accent-cyan-400" />
+                최난 레벨 리플레이
+              </label>
+              <button onClick={submit} disabled={submitting}
+                className="col-span-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-all disabled:opacity-50"
+                style={{ background: "linear-gradient(135deg, var(--neon-deep), var(--neon))", color: "#041018", boxShadow: "0 0 18px -4px rgba(34,211,238,.6)" }}>
+                {submitting ? "등록 중…" : "시뮬 요청"}
               </button>
-            );
-          })}
-        </div>
-      </section>
+            </div>
+            {toast && <div className="mt-3 text-[12px] neon-text-soft">{toast}</div>}
+            <div className="mt-2 text-[11px]" style={{ color: "var(--text-faint)" }}>
+              Hermes → 머신 B(BalloonFlowSim) 실행. 작업 보드에서도 진행 확인 가능.
+            </div>
+          </section>
 
-      {/* 상세 */}
-      {loadingDetail && <div className="text-center text-[13px] py-4" style={{ color: "var(--text-dim)" }}>불러오는 중…</div>}
-      {detail && !loadingDetail && (
-        <DetailView key={detail._id} doc={detail} onClose={closeDetail} onRefetch={refetchDetail} />
-      )}
+          {/* 결과 히스토리 */}
+          <section className="glass rounded-2xl p-4">
+            <div className="text-[12px] mono tracking-hud mb-2" style={{ color: "var(--text-dim)" }}>RESULTS</div>
+            {list.length === 0 && (
+              <div className="text-[12px] py-3 text-center" style={{ color: "var(--text-faint)" }}>아직 결과 없음</div>
+            )}
+            <div className="space-y-1.5 max-h-[420px] overflow-y-auto pr-1">
+              {list.map((r) => {
+                const avg = r.summary?.avgClearRate ?? 0;
+                const active = detail?._id === r._id;
+                return (
+                  <button key={r._id} onClick={() => openDetail(r._id)}
+                    className="w-full rounded-xl px-3 py-2 text-left border transition-all hover:bg-[rgba(56,189,248,.06)]"
+                    style={{
+                      borderColor: active ? "var(--line-strong)" : "transparent",
+                      background: active ? "rgba(34,211,238,.08)" : undefined,
+                    }}>
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[12px] font-bold truncate">레벨 {r.params.levels}</span>
+                      <span className="mono text-[12px] font-bold shrink-0" style={{ color: clearColor(avg) }}>{(avg * 100).toFixed(0)}%</span>
+                    </div>
+                    <div className="flex items-center justify-between text-[10px] mt-0.5" style={{ color: "var(--text-faint)" }}>
+                      <span>×{r.params.runs} · {r.params.policy} · 50%↓ {r.summary?.below50Count ?? 0}</span>
+                      <span>{(r.created_at || "").slice(5, 16).replace("T", " ")}</span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+        </aside>
+      </div>
     </div>
   );
 }
 
 // ──────────────────────────────────────────────────────────────
-// memo: 목록 10초 폴링 등 부모 리렌더에서 대형 테이블 리렌더 차단 (doc 참조 동일하면 스킵)
-const DetailView = memo(function DetailView({ doc, onClose, onRefetch }: { doc: ResultDoc; onClose: () => void; onRefetch: () => void }) {
+// memo: 부모 리렌더에서 대형 콘텐츠 리렌더 최소화
+const DetailView = memo(function DetailView({ doc, others, onRefetch }: { doc: ResultDoc; others: ResultDoc[]; onRefetch: () => void }) {
+  const [tab, setTab] = useState<"chart" | "fails" | "table">("chart");
+  const [compareId, setCompareId] = useState("");
+  const [compareDoc, setCompareDoc] = useState<ResultDoc | null>(null);
   const [selLevel, setSelLevel] = useState<number | null>(null);
   const [waiting, setWaiting] = useState(false);
   const [waitSecs, setWaitSecs] = useState(0);
@@ -302,24 +320,97 @@ const DetailView = memo(function DetailView({ doc, onClose, onRefetch }: { doc: 
     setSelLevel((cur) => (cur === lvl ? null : lvl));
   };
 
+  // 비교 대상 결과 로드 (레벨별 delta)
+  useEffect(() => {
+    if (!compareId) { setCompareDoc(null); return; }
+    let alive = true;
+    fetch(`/api/sim/results/${compareId}`)
+      .then((r) => r.json())
+      .then((d) => { if (alive) setCompareDoc(d); })
+      .catch(() => { /* noop */ });
+    return () => { alive = false; };
+  }, [compareId]);
+
+  // KPI 산출
+  const worst = rows.length ? rows.reduce((a, b) => (b.clearRate < a.clearRate ? b : a)) : null;
+  const belowTarget = rows.filter((r) => (r.targetClearRate ?? 0) > 0 && r.clearRate < r.targetClearRate!).length;
+  const hasTargets = rows.some((r) => (r.targetClearRate ?? 0) > 0);
+  const cmpAvg = compareDoc?.summary?.avgClearRate;
+  const avgDelta = cmpAvg != null ? (doc.summary?.avgClearRate ?? 0) - cmpAvg : null;
+
+  const compareMap = (() => {
+    if (!compareDoc?.results) return null;
+    const m = new Map<number, LevelResult>();
+    for (const r of compareDoc.results) m.set(r.levelId, r);
+    return m;
+  })();
+
   return (
     <section className="glass rounded-2xl p-4 sm:p-5">
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
         <div>
           <div className="text-[12px] mono tracking-hud" style={{ color: "var(--text-dim)" }}>DETAIL</div>
           <h2 className="text-base font-bold">레벨 {doc.params.levels} × {doc.params.runs}회 · {doc.params.policy} · 시드 {doc.params.seed}</h2>
         </div>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
+          {/* 결과 비교 — 시뮬 로직/레벨데이터 변경 전후 대조 */}
+          <select value={compareId} onChange={(e) => setCompareId(e.target.value)}
+            className="rounded-xl px-2 py-2 text-[11px] border bg-[var(--panel-solid)] max-w-[220px]"
+            style={{ borderColor: "var(--line)", color: "var(--text-dim)" }}>
+            <option value="">비교 안 함</option>
+            {others.filter((o) => o._id !== doc._id).map((o) => (
+              <option key={o._id} value={o._id}>
+                vs 레벨 {o.params.levels} ×{o.params.runs} · {(o.created_at || "").slice(5, 16).replace("T", " ")}
+              </option>
+            ))}
+          </select>
           {doc.replay_id && doc.replay_level != null && (
             <button onClick={() => selectLevel(doc.replay_level!)}
-              className="rounded-xl px-3 py-2 text-[12px] font-bold"
+              className="rounded-xl px-3 py-2 text-[12px] font-bold shrink-0"
               style={{ background: "linear-gradient(135deg, var(--neon-deep), var(--neon))", color: "#041018" }}>
               <Icon name="play" size={12} /> L{doc.replay_level} 리플레이
             </button>
           )}
-          <button onClick={onClose} className="glass glass-hover rounded-xl px-3 py-2 text-[12px]" style={{ color: "var(--text-dim)" }}>
-            <Icon name="x" size={12} />
-          </button>
+        </div>
+      </div>
+
+      {/* KPI 요약 스트립 */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+        <div className="rounded-xl border p-3" style={{ borderColor: "var(--line)" }}>
+          <div className="text-[10px] mono tracking-hud" style={{ color: "var(--text-faint)" }}>평균 클리어율</div>
+          <div className="text-2xl font-bold mono mt-0.5" style={{ color: clearColor(doc.summary?.avgClearRate ?? 0) }}>
+            {((doc.summary?.avgClearRate ?? 0) * 100).toFixed(1)}%
+          </div>
+          {avgDelta != null && (
+            <div className="text-[11px] mono" style={{ color: avgDelta >= 0 ? "var(--ok)" : "var(--err)" }}>
+              {avgDelta >= 0 ? "▲" : "▼"} {(Math.abs(avgDelta) * 100).toFixed(1)}pt vs 비교
+            </div>
+          )}
+        </div>
+        <div className="rounded-xl border p-3" style={{ borderColor: "var(--line)" }}>
+          <div className="text-[10px] mono tracking-hud" style={{ color: "var(--text-faint)" }}>클리어율 50% 미만</div>
+          <div className="text-2xl font-bold mono mt-0.5" style={{ color: (doc.summary?.below50Count ?? 0) > 0 ? "var(--err)" : "var(--ok)" }}>
+            {doc.summary?.below50Count ?? 0}<span className="text-[12px]" style={{ color: "var(--text-dim)" }}> / {doc.summary?.levelCount}레벨</span>
+          </div>
+        </div>
+        <div className="rounded-xl border p-3" style={{ borderColor: "var(--line)" }}>
+          <div className="text-[10px] mono tracking-hud" style={{ color: "var(--text-faint)" }}>타깃 미달</div>
+          <div className="text-2xl font-bold mono mt-0.5" style={{ color: belowTarget > 0 ? "var(--warn)" : "var(--ok)" }}>
+            {hasTargets ? belowTarget : "—"}
+            {hasTargets && <span className="text-[12px]" style={{ color: "var(--text-dim)" }}>개</span>}
+          </div>
+          {!hasTargets && <div className="text-[10px]" style={{ color: "var(--text-faint)" }}>타깃 미저작 데이터</div>}
+        </div>
+        <div className="rounded-xl border p-3" style={{ borderColor: "var(--line)" }}>
+          <div className="text-[10px] mono tracking-hud" style={{ color: "var(--text-faint)" }}>최난 레벨</div>
+          <div className="text-2xl font-bold mono mt-0.5">
+            {worst ? <>L{worst.levelId} <span className="text-[13px]" style={{ color: clearColor(worst.clearRate) }}>{Math.round(worst.clearRate * 100)}%</span></> : "—"}
+          </div>
+          {worst && (
+            <button onClick={() => selectLevel(worst.levelId)} className="text-[10px] underline" style={{ color: "var(--neon-soft)" }}>
+              리플레이 보기
+            </button>
+          )}
         </div>
       </div>
 
@@ -351,7 +442,30 @@ const DetailView = memo(function DetailView({ doc, onClose, onRefetch }: { doc: 
         )
       )}
 
+      {/* 탭 — 차트 / 실패 분석 / 테이블 */}
+      <div className="flex items-center gap-1 mt-1 mb-2">
+        {([["chart", "레벨 차트"], ["fails", "실패 분석"], ["table", "테이블"]] as const).map(([k, label]) => (
+          <button key={k} onClick={() => setTab(k)}
+            className="rounded-lg px-3 py-1.5 text-[12px] font-bold transition-colors"
+            style={tab === k
+              ? { background: "rgba(34,211,238,.14)", color: "var(--neon-soft)", border: "1px solid var(--line-strong)" }
+              : { color: "var(--text-dim)", border: "1px solid transparent" }}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {tab === "chart" && (
+        <>
+          <LevelBarChart rows={rows} selLevel={selLevel} onSelect={selectLevel} compareMap={compareMap} />
+          {compareMap && <CompareDeltaPanel rows={rows} compareMap={compareMap} onSelect={selectLevel} />}
+        </>
+      )}
+
+      {tab === "fails" && <FailBreakdown rows={rows} onSelect={selectLevel} />}
+
       {/* 레벨별 테이블 (모바일: 가로 스크롤) */}
+      {tab === "table" && (
       <div className="overflow-x-auto mt-3">
         <table className="w-full text-[12px] min-w-[760px]">
           <thead>
@@ -407,15 +521,228 @@ const DetailView = memo(function DetailView({ doc, onClose, onRefetch }: { doc: 
           </tbody>
         </table>
       </div>
+      )}
       <div className="mt-2 text-[11px]" style={{ color: "var(--text-faint)" }}>
-        <b style={{ color: "var(--text-dim)" }}>행 클릭 = 레벨 선택</b> → 리플레이 재생 (<span style={{ color: "var(--neon-soft)" }}>▶</span> 밝음 = 리플레이 있음, 없으면 그 자리에서 생성) ·{" "}
+        <b style={{ color: "var(--text-dim)" }}>차트 막대/테이블 행 클릭 = 레벨 선택</b> → 리플레이 재생 (없으면 그 자리에서 생성) ·{" "}
         실패 사유 — <span style={{ color: "var(--err)" }}>만석</span>: 못 쏘는 색이 레일 점유(색 밸런스/순서) ·{" "}
         <span style={{ color: "var(--warn)" }}>소진</span>: 다트 총량 부족 ·{" "}
-        <span style={{ color: "var(--violet)" }}>교착</span>: 안전한 수 없음(구조 문제) · 난이도 70↑ 행 강조 = 점검 후보
+        <span style={{ color: "var(--violet)" }}>교착</span>: 안전한 수 없음(구조 문제)
       </div>
     </section>
   );
 });
+
+// ──────────────────────────────────────────────────────────────
+// 레벨 차트 — 레벨별 클리어율 막대 (상태색 밴드) + 타깃 틱. 호버 툴팁, 클릭 = 레벨 선택.
+function LevelBarChart({ rows, selLevel, onSelect, compareMap }: {
+  rows: LevelResult[]; selLevel: number | null; onSelect: (lvl: number) => void;
+  compareMap: Map<number, LevelResult> | null;
+}) {
+  const [hover, setHover] = useState<number | null>(null);   // rows 인덱스
+  const wrapRef = useRef<HTMLDivElement>(null);
+
+  const SLOT = 9, BAR = 7, H = 150, AXIS_B = 18, PAD_L = 34, PAD_R = 8, PAD_T = 8;
+  const width = PAD_L + rows.length * SLOT + PAD_R;
+  const height = PAD_T + H + AXIS_B;
+  const y = (rate: number) => PAD_T + H * (1 - Math.max(0, Math.min(1, rate)));
+
+  if (rows.length === 0) return <div className="text-[12px] py-4" style={{ color: "var(--text-faint)" }}>레벨 데이터 없음</div>;
+
+  const onMove = (e: React.PointerEvent<SVGSVGElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const idx = Math.floor((e.clientX - rect.left - PAD_L) / SLOT);
+    setHover(idx >= 0 && idx < rows.length ? idx : null);
+  };
+  const hv = hover != null ? rows[hover] : null;
+  const hvCmp = hv && compareMap ? compareMap.get(hv.levelId) : null;
+
+  return (
+    <div className="relative">
+      <div ref={wrapRef} className="overflow-x-auto rounded-xl border" style={{ borderColor: "var(--line)", background: "rgba(6,11,22,.4)" }}>
+        <svg width={width} height={height} onPointerMove={onMove} onPointerLeave={() => setHover(null)}
+          onClick={() => { if (hover != null) onSelect(rows[hover].levelId); }}
+          style={{ display: "block", cursor: "pointer" }}>
+          {/* 그리드 + y축 라벨 (0/50/80/100%) */}
+          {[0, 0.5, 0.8, 1].map((g) => (
+            <g key={g}>
+              <line x1={PAD_L} x2={width - PAD_R} y1={y(g)} y2={y(g)} stroke="rgba(219,230,245,.08)" strokeWidth={1} />
+              <text x={PAD_L - 5} y={y(g) + 3} textAnchor="end" fontSize={9} fill="var(--text-faint)" fontFamily="ui-monospace, monospace">
+                {Math.round(g * 100)}
+              </text>
+            </g>
+          ))}
+          {rows.map((r, i) => {
+            const x = PAD_L + i * SLOT;
+            const barY = y(r.clearRate);
+            const barH = Math.max(1.5, PAD_T + H - barY);
+            const sel = selLevel === r.levelId;
+            const isHover = hover === i;
+            return (
+              <g key={r.levelId}>
+                {isHover && <rect x={x - 1} y={PAD_T} width={SLOT} height={H} fill="rgba(56,189,248,.10)" />}
+                {/* 막대: 상단 2px 라운드, 베이스라인 직각 */}
+                <path
+                  d={`M${x} ${PAD_T + H} L${x} ${barY + 2} Q${x} ${barY} ${x + 2} ${barY} L${x + BAR - 2} ${barY} Q${x + BAR} ${barY} ${x + BAR} ${barY + 2} L${x + BAR} ${PAD_T + H} Z`}
+                  fill={clearColor(r.clearRate)}
+                  opacity={sel || isHover ? 1 : 0.82}
+                  stroke={sel ? "var(--neon)" : "none"} strokeWidth={sel ? 1.5 : 0}
+                />
+                {/* 타깃 틱 */}
+                {(r.targetClearRate ?? 0) > 0 && (
+                  <line x1={x - 1} x2={x + BAR + 1} y1={y(r.targetClearRate!)} y2={y(r.targetClearRate!)}
+                    stroke="rgba(219,230,245,.75)" strokeWidth={1.2} />
+                )}
+                {/* x축 라벨 — 10레벨 간격 */}
+                {(r.levelId % 10 === 0 || rows.length <= 25) && (
+                  <text x={x + BAR / 2} y={PAD_T + H + 12} textAnchor="middle" fontSize={8.5}
+                    fill="var(--text-faint)" fontFamily="ui-monospace, monospace">{r.levelId}</text>
+                )}
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+      {/* 캡션 — 색은 상태(클리어율 밴드), 흰 틱 = 타깃 */}
+      <div className="mt-1.5 flex flex-wrap gap-3 text-[10px]" style={{ color: "var(--text-faint)" }}>
+        <span><span className="inline-block w-2.5 h-2.5 rounded-sm align-middle mr-1" style={{ background: "var(--ok)" }} />80%↑</span>
+        <span><span className="inline-block w-2.5 h-2.5 rounded-sm align-middle mr-1" style={{ background: "var(--warn)" }} />50–80%</span>
+        <span><span className="inline-block w-2.5 h-2.5 rounded-sm align-middle mr-1" style={{ background: "var(--err)" }} />50%↓</span>
+        <span><span className="inline-block w-3 align-middle mr-1 border-t" style={{ borderColor: "rgba(219,230,245,.75)" }} />타깃 클리어율</span>
+        <span>막대 클릭 = 레벨 선택(리플레이)</span>
+      </div>
+      {/* 툴팁 */}
+      {hv && (
+        <div className="absolute top-1 left-1/2 -translate-x-1/2 pointer-events-none rounded-lg border px-3 py-2 text-[11px] z-10"
+          style={{ borderColor: "var(--line-strong)", background: "rgba(7,13,24,.95)" }}>
+          <b className="text-[13px] mono">L{hv.levelId}</b>{" "}
+          <b className="mono" style={{ color: clearColor(hv.clearRate) }}>{Math.round(hv.clearRate * 100)}%</b>
+          {(hv.targetClearRate ?? 0) > 0 && <span style={{ color: "var(--text-dim)" }}> / 타깃 {Math.round(hv.targetClearRate! * 100)}%</span>}
+          {hvCmp && (
+            <b className="mono ml-1" style={{ color: hv.clearRate - hvCmp.clearRate >= 0 ? "var(--ok)" : "var(--err)" }}>
+              {hv.clearRate - hvCmp.clearRate >= 0 ? "▲" : "▼"}{Math.abs((hv.clearRate - hvCmp.clearRate) * 100).toFixed(0)}pt
+            </b>
+          )}
+          <div style={{ color: "var(--text-dim)" }}>
+            {hv.purpose} · 실패 만석 {hv.failRailOverflow} / 소진 {hv.failNoMoves} / 교착 {hv.failTimeout} · 난이도 {hv.difficultyScore}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ──────────────────────────────────────────────────────────────
+// 실패 분석 — 사유별 비중 스택바(의미색 + 라벨·수치 병기) + 실패 많은 레벨 목록
+function FailBreakdown({ rows, onSelect }: { rows: LevelResult[]; onSelect: (lvl: number) => void }) {
+  const CATS = [
+    { key: "failRailOverflow" as const, name: "만석", color: "var(--err)", desc: "못 쏘는 색이 레일 점유 (색 밸런스/순서)" },
+    { key: "failNoMoves" as const, name: "소진", color: "var(--warn)", desc: "다트 총량 부족" },
+    { key: "failTimeout" as const, name: "교착", color: "var(--violet)", desc: "안전한 수 없음 (구조 문제)" },
+  ];
+  const totals = CATS.map((c) => rows.reduce((s, r) => s + (r[c.key] || 0), 0));
+  const grand = totals.reduce((a, b) => a + b, 0);
+  const failing = rows
+    .map((r) => ({ r, fails: r.failRailOverflow + r.failNoMoves + r.failTimeout }))
+    .filter((x) => x.fails > 0)
+    .sort((a, b) => b.fails - a.fails)
+    .slice(0, 12);
+
+  if (grand === 0) {
+    return <div className="rounded-xl border p-6 text-center text-[13px]" style={{ borderColor: "var(--line)", color: "var(--ok)" }}>
+      실패 0건 — 모든 시행 클리어
+    </div>;
+  }
+  const maxFails = failing[0]?.fails || 1;
+
+  return (
+    <div className="space-y-3">
+      {/* 사유별 비중 (전체 실패 시행 대비) */}
+      <div className="rounded-xl border p-3" style={{ borderColor: "var(--line)" }}>
+        <div className="text-[10px] mono tracking-hud mb-2" style={{ color: "var(--text-faint)" }}>실패 사유 비중 — 총 {grand}회 실패</div>
+        <div className="flex h-5 rounded-md overflow-hidden" style={{ background: "rgba(6,11,22,.6)" }}>
+          {CATS.map((c, i) => totals[i] > 0 && (
+            <div key={c.key} style={{ width: `${(totals[i] / grand) * 100}%`, background: c.color, marginRight: i < 2 ? 2 : 0 }} />
+          ))}
+        </div>
+        <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px]">
+          {CATS.map((c, i) => (
+            <span key={c.key} style={{ color: "var(--text-dim)" }}>
+              <span className="inline-block w-2.5 h-2.5 rounded-sm align-middle mr-1" style={{ background: c.color }} />
+              <b style={{ color: "var(--text)" }}>{c.name} {totals[i]}회 ({grand ? Math.round((totals[i] / grand) * 100) : 0}%)</b> — {c.desc}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* 실패 많은 레벨 TOP — 클릭 = 리플레이 */}
+      <div className="rounded-xl border p-3" style={{ borderColor: "var(--line)" }}>
+        <div className="text-[10px] mono tracking-hud mb-2" style={{ color: "var(--text-faint)" }}>실패 많은 레벨 TOP {failing.length} (클릭 = 리플레이)</div>
+        <div className="space-y-1">
+          {failing.map(({ r, fails }) => (
+            <button key={r.levelId} onClick={() => onSelect(r.levelId)}
+              className="w-full flex items-center gap-2 rounded-lg px-2 py-1 text-left hover:bg-[rgba(56,189,248,.06)]">
+              <span className="mono text-[11px] font-bold w-12 shrink-0">L{r.levelId}</span>
+              <div className="flex h-3 rounded-sm overflow-hidden flex-1" style={{ background: "rgba(6,11,22,.6)" }}>
+                {CATS.map((c, i) => (r[c.key] || 0) > 0 && (
+                  <div key={c.key} style={{ width: `${((r[c.key] || 0) / maxFails) * 100}%`, background: c.color, marginRight: i < 2 ? 2 : 0 }} />
+                ))}
+              </div>
+              <span className="mono text-[11px] w-14 text-right shrink-0" style={{ color: "var(--text-dim)" }}>{fails}회</span>
+              <span className="mono text-[11px] w-10 text-right shrink-0" style={{ color: clearColor(r.clearRate) }}>{Math.round(r.clearRate * 100)}%</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ──────────────────────────────────────────────────────────────
+// 비교 델타 — 레벨별 클리어율 변화 (개선=ok / 악화=err 다이버징), |Δ| 큰 순
+function CompareDeltaPanel({ rows, compareMap, onSelect }: {
+  rows: LevelResult[]; compareMap: Map<number, LevelResult>; onSelect: (lvl: number) => void;
+}) {
+  const deltas = rows
+    .map((r) => { const c = compareMap.get(r.levelId); return c ? { r, d: r.clearRate - c.clearRate } : null; })
+    .filter((x): x is { r: LevelResult; d: number } => x != null);
+  if (deltas.length === 0) {
+    return <div className="mt-3 text-[12px]" style={{ color: "var(--text-faint)" }}>비교 대상과 겹치는 레벨이 없습니다</div>;
+  }
+  const improved = deltas.filter((x) => x.d >= 0.05).length;
+  const worse = deltas.filter((x) => x.d <= -0.05).length;
+  const top = deltas.filter((x) => Math.abs(x.d) >= 0.02).sort((a, b) => Math.abs(b.d) - Math.abs(a.d)).slice(0, 15);
+  const maxAbs = Math.max(0.01, ...top.map((x) => Math.abs(x.d)));
+
+  return (
+    <div className="mt-3 rounded-xl border p-3" style={{ borderColor: "var(--line)" }}>
+      <div className="text-[10px] mono tracking-hud mb-2" style={{ color: "var(--text-faint)" }}>
+        비교 델타 (현재 − 비교) — 공통 {deltas.length}레벨 ·{" "}
+        <b style={{ color: "var(--ok)" }}>개선(+5pt↑) {improved}</b> ·{" "}
+        <b style={{ color: "var(--err)" }}>악화(−5pt↓) {worse}</b>
+      </div>
+      {top.length === 0 && <div className="text-[12px]" style={{ color: "var(--text-dim)" }}>±2pt 이상 변화 없음</div>}
+      <div className="space-y-1">
+        {top.map(({ r, d }) => (
+          <button key={r.levelId} onClick={() => onSelect(r.levelId)}
+            className="w-full flex items-center gap-2 rounded-lg px-2 py-0.5 text-left hover:bg-[rgba(56,189,248,.06)]">
+            <span className="mono text-[11px] font-bold w-12 shrink-0">L{r.levelId}</span>
+            {/* 중앙 기준 다이버징 바 */}
+            <div className="relative flex-1 h-3">
+              <div className="absolute inset-y-0 left-1/2 w-px" style={{ background: "rgba(219,230,245,.25)" }} />
+              <div className="absolute inset-y-0 rounded-sm"
+                style={d >= 0
+                  ? { left: "50%", width: `${(d / maxAbs) * 50}%`, background: "var(--ok)" }
+                  : { right: "50%", width: `${(-d / maxAbs) * 50}%`, background: "var(--err)" }} />
+            </div>
+            <span className="mono text-[11px] w-16 text-right shrink-0" style={{ color: d >= 0 ? "var(--ok)" : "var(--err)" }}>
+              {d >= 0 ? "+" : ""}{(d * 100).toFixed(0)}pt
+            </span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 // ──────────────────────────────────────────────────────────────
 // 리플레이 캔버스 플레이어 — 보드/레일/비행다트/홀더 큐, 시크/배속 (터치 대응)
