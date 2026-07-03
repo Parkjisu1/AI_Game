@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Icon from "@/components/Icon";
+import RealtimeVoice from "./RealtimeVoice";
 
 // 음성 업무 — 회의/지시 녹음 → STT → 요약 + task 분해 → 검토/편집 → 선택 생성.
 // 안전: 잘못 인식돼도 이 화면에서 사람이 보고 고른 것만 task가 됨(human-in-loop).
@@ -253,6 +254,9 @@ export default function VoicePage() {
           </label>
         )}
       </div>
+
+      {/* 실시간 대화 (OpenAI Realtime) — 녹음 배치 처리와 별개의 라이브 모드 */}
+      {!recording && !busy && <RealtimeVoice />}
 
       {/* 빠른 명령 */}
       {!recording && !busy && (

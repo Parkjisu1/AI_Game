@@ -9,7 +9,8 @@ const SECURITY_HEADERS = [
   { key: "X-Frame-Options", value: "DENY" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), interest-cohort=()" },
+  // microphone=(self): /voice 녹음·실시간 대화에 필수 (전면 차단이면 getUserMedia가 거부됨)
+  { key: "Permissions-Policy", value: "camera=(), microphone=(self), geolocation=(), interest-cohort=()" },
   {
     key: "Content-Security-Policy",
     value: [
@@ -18,7 +19,7 @@ const SECURITY_HEADERS = [
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https://lh3.googleusercontent.com https://avatars.slack-edge.com",
       "font-src 'self' data:",
-      "connect-src 'self' https://accounts.google.com",
+      "connect-src 'self' https://accounts.google.com https://api.openai.com",  // api.openai.com: Realtime 음성 SDP
       "frame-src 'self' https://accounts.google.com",
       "frame-ancestors 'none'",
       "base-uri 'self'",

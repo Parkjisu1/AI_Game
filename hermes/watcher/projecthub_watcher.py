@@ -18,8 +18,12 @@ from __future__ import annotations
 import logging
 import os
 import signal
+import socket
 import sys
+import threading
 import time
+from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Iterator
 
@@ -32,6 +36,7 @@ try:
 except ImportError:
     pass  # dotenv 없으면 환경변수에 의존
 
+from bson import ObjectId
 from pymongo import MongoClient
 from pymongo.errors import PyMongoError
 
@@ -39,6 +44,11 @@ from context_builder import build_context
 from projecthub_writer import ProjectHubWriter
 from task_router import route_task
 from hermes_executor import execute_task
+
+try:
+    import goal_chain  # [goal] 목표 분해 체인 (없어도 watcher는 동작)
+except Exception:  # pragma: no cover
+    goal_chain = None
 
 # ──────────────────────────────────────────────
 # 설정
@@ -55,6 +65,13 @@ HERMES_ASSIGNEES = {
 }
 
 LOG_LEVEL = os.environ.get("LOG_LEVEL", "INFO").upper()
+
+# ── 워커 풀 (병렬 실행) ─────────────────────────
+# 태스크 대부분이 LLM/SSH 대기(I/O bound)라 스레드 병렬로 처리량 확보.
+# 같은 repo를 만지는 액션은 _ROUTE_LOCK 으로 직렬화 (Machine B 작업트리 충돌 방지).
+WORKER_SLOTS = int(os.environ.get("HERMES_WORKER_SLOTS", "3"))
+LEASE_MINUTES = int(os.environ.get("HERMES_LEASE_MINUTES", "30"))
+WORKER_ID = f"{socket.gethostname()}:{os.getpid()}"
 
 logging.basicConfig(
     level=LOG_LEVEL,
@@ -148,11 +165,17 @@ def _is_user_feedback_on_review(task: dict[str, Any], change: dict[str, Any]) ->
         return False
     # 승인 코멘트는 재작업 트리거 안 함 — "승인 코멘트=rework" 버그 차단 (P2-H).
     # 거짓양성 방지: kind=approval 또는 코멘트 전체가 승인어와 정확히 일치할 때만(지시형은 rework 유지).
-    _txt = (last.get("text") or "").strip().lower().rstrip("!.~ ")
-    _APPROVE = {"승인", "승인합니다", "승인함", "approve", "approved", "lgtm", "ok", "okay", "오케이", "좋아요", "굿", "good", "merge", "머지"}
-    if (last.get("kind") or "") == "approval" or _txt in _APPROVE:
+    if _is_approval_comment(last):
         return False
     return True
+
+
+_APPROVE_WORDS = {"승인", "승인합니다", "승인함", "approve", "approved", "lgtm", "ok", "okay", "오케이", "좋아요", "굿", "good", "merge", "머지"}
+
+
+def _is_approval_comment(comment: dict[str, Any]) -> bool:
+    _txt = (comment.get("text") or "").strip().lower().rstrip("!.~ ")
+    return (comment.get("kind") or "") == "approval" or _txt in _APPROVE_WORDS
 
 
 # ──────────────────────────────────────────────
@@ -191,6 +214,13 @@ def _dispatch_event(change: dict[str, Any], writer: ProjectHubWriter) -> None:
 
     # 필터: 활성 상태인지
     if not _is_active_status(task):
+        # 목표 체인 훅: 사람이 UI에서 done 처리 → 의존 하위 task 해제 + 목표 완료 판정
+        if (goal_chain is not None and op == "update"
+                and change.get("updateDescription", {}).get("updatedFields", {}).get("status") == "done"):
+            try:
+                goal_chain.on_task_done(task)
+            except Exception:
+                log.exception("goal_chain.on_task_done failed (non-fatal)")
         log.debug("Inactive status (%s): %s", task.get("status"), title)
         return
 
@@ -206,6 +236,18 @@ def _dispatch_event(change: dict[str, Any], writer: ProjectHubWriter) -> None:
                 log.info("  → USER FEEDBACK on review — triggering rework")
                 is_review_feedback = True
             else:
+                # 목표 부모 task 승인 → 하위 task 실행 시작 (rework 아님)
+                _cm = task.get("comments") or []
+                if (goal_chain is not None and _cm and task.get("goal_children")
+                        and any(k.startswith("comments") for k in updated_fields.keys())
+                        and (_cm[-1].get("author") or "").strip().lower() not in HERMES_ASSIGNEES
+                        and _is_approval_comment(_cm[-1])):
+                    log.info("  → GOAL APPROVED — releasing subtasks")
+                    try:
+                        goal_chain.on_goal_approved(task)
+                    except Exception:
+                        log.exception("goal_chain.on_goal_approved failed")
+                    return
                 log.debug("  → review status, no actionable feedback — skipping")
                 return
         elif any(k.startswith("comments") for k in updated_fields.keys()):
@@ -242,7 +284,93 @@ def _dispatch_event(change: dict[str, Any], writer: ProjectHubWriter) -> None:
     if is_review_feedback:
         task["_hermes_is_rework"] = True
 
-    # 실제 처리
+    # 워커 풀 제출 (claim 성공 시에만 — 중복 이벤트/중복 디스패치 구조적 차단)
+    _submit_task(writer, task)
+
+
+# ──────────────────────────────────────────────
+# 워커 풀 — 원자 claim/lease + 병렬 실행
+# ──────────────────────────────────────────────
+_POOL = ThreadPoolExecutor(max_workers=WORKER_SLOTS, thread_name_prefix="hermes-worker")
+
+# 실행 중 task 레지스트리 (lease 연장용)
+_ACTIVE_TASKS: dict[str, datetime] = {}
+_ACTIVE_GUARD = threading.Lock()
+
+# 액션별 직렬화 락 — 같은 자원(Machine B 작업트리 등)을 만지는 액션은 동시 실행 금지
+_LOCK_REGISTRY: dict[str, threading.Lock] = {}
+_LOCK_REGISTRY_GUARD = threading.Lock()
+
+# repo를 만지는 액션 → repo 단위 직렬화 / 시뮬은 Machine B CPU 보호용 직렬화
+_SERIAL_ACTIONS = {
+    "unity_modify": "repo:{project}",
+    "apk_build": "repo:{project}",
+    "git_sync": "repo:{project}",
+    "simulation": "sim:machineB",
+}
+
+
+def _lock_for(key: str) -> threading.Lock:
+    with _LOCK_REGISTRY_GUARD:
+        return _LOCK_REGISTRY.setdefault(key, threading.Lock())
+
+
+def _try_claim(coll, task_id: str, reason: str) -> bool:
+    """
+    원자적 태스크 클레임. 이미 유효한 lease가 있으면 실패(=다른 워커/스레드가 처리 중).
+    lease가 만료됐으면 인수 가능 (죽은 워커 복구).
+    """
+    now = datetime.now(timezone.utc)
+    try:
+        res = coll.find_one_and_update(
+            {
+                "_id": ObjectId(task_id),
+                "$or": [
+                    {"hermes_lease_until": {"$exists": False}},
+                    {"hermes_lease_until": None},
+                    {"hermes_lease_until": {"$lt": now}},
+                ],
+            },
+            {"$set": {
+                "hermes_claimed_by": WORKER_ID,
+                "hermes_claimed_at": now,
+                "hermes_lease_until": now + timedelta(minutes=LEASE_MINUTES),
+                "hermes_claim_reason": reason[:80],
+            }},
+        )
+        return res is not None
+    except Exception:
+        log.exception("claim failed: %s", task_id)
+        return False
+
+
+def _release_claim(coll, task_id: str) -> None:
+    try:
+        coll.update_one(
+            {"_id": ObjectId(task_id), "hermes_claimed_by": WORKER_ID},
+            {"$set": {"hermes_lease_until": None, "hermes_claimed_by": None}},
+        )
+    except Exception:
+        log.exception("release claim failed: %s", task_id)
+
+
+def _submit_task(writer: ProjectHubWriter, task: dict[str, Any]) -> None:
+    """claim 성공 시 워커 풀에 제출. 실패 = 이미 처리 중 → 스킵 (중복 차단)."""
+    task_id = str(task.get("_id"))
+    title = (task.get("title") or "")[:60]
+    if not _try_claim(writer.coll, task_id, reason=title):
+        log.info("  ⏭️ already claimed — skip (dedup): [%s] %s", task_id, title)
+        return
+    with _ACTIVE_GUARD:
+        _ACTIVE_TASKS[task_id] = datetime.now(timezone.utc)
+    log.info("  ▶ claimed by %s — submitting to pool (%d in flight)",
+             WORKER_ID, len(_ACTIVE_TASKS))
+    _POOL.submit(_process_task, writer, task)
+
+
+def _process_task(writer: ProjectHubWriter, task: dict[str, Any]) -> None:
+    """워커 스레드 본체 — 기존 인라인 처리 로직 + 직렬화 락 + claim 해제."""
+    task_id = str(task.get("_id"))
     try:
         # 1. 처리 시작 표시
         writer.update_status(task_id, "in_progress")
@@ -258,8 +386,19 @@ def _dispatch_event(change: dict[str, Any], writer: ProjectHubWriter) -> None:
         route = route_task(task, context)
         log.info("  Route: %s", route["action"])
 
-        # 4. 실행
-        result = execute_task(task, context, route)
+        # 4. 실행 — repo/시뮬을 만지는 액션은 자원 락으로 직렬화
+        lock_key_tpl = _SERIAL_ACTIONS.get(route["action"])
+        if lock_key_tpl:
+            lock_key = lock_key_tpl.format(project=(task.get("project") or "balloonflow"))
+            lock = _lock_for(lock_key)
+            waited = time.monotonic()
+            with lock:
+                wait_s = time.monotonic() - waited
+                if wait_s > 1:
+                    log.info("  🔒 %s 락 대기 %.0fs 후 시작", lock_key, wait_s)
+                result = execute_task(task, context, route)
+        else:
+            result = execute_task(task, context, route)
 
         # 5. 결과 반영
         if result.get("success"):
@@ -279,6 +418,14 @@ def _dispatch_event(change: dict[str, Any], writer: ProjectHubWriter) -> None:
                     on_objective_acceptance(task_id)
                 except Exception:
                     log.exception("on_objective_acceptance failed")
+                # 목표 체인: 하위 task 완료 → 다음 하위 task 해제
+                if goal_chain is not None:
+                    try:
+                        fresh = writer.get_task(task_id)
+                        if fresh:
+                            goal_chain.on_task_done(fresh)
+                    except Exception:
+                        log.exception("goal_chain.on_task_done failed (non-fatal)")
         else:
             writer.add_comment(
                 task_id,
@@ -299,6 +446,84 @@ def _dispatch_event(change: dict[str, Any], writer: ProjectHubWriter) -> None:
             writer.update_status(task_id, "review")
         except Exception:
             log.exception("Failed to report error to task")
+    finally:
+        with _ACTIVE_GUARD:
+            _ACTIVE_TASKS.pop(task_id, None)
+        _release_claim(writer.coll, task_id)
+
+
+def _lease_renewer_loop() -> None:
+    """
+    데몬 스레드: 60초마다
+      1) 실행 중 task lease 연장 (죽은 워커의 lease는 자연 만료 → 인수 가능)
+      2) hermes_workers heartbeat (플릿 관측용)
+      3) 5사이클마다 안전망 스캔 — 이벤트를 놓친 unclaimed todo task 재디스패치
+    """
+    cycle = 0
+    client = None
+    while not _shutdown_requested:
+        for _ in range(60):
+            if _shutdown_requested:
+                return
+            time.sleep(1)
+        cycle += 1
+        try:
+            if client is None:
+                client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=8000)
+            coll = client[DB_NAME][TASKS_COLLECTION]
+            now = datetime.now(timezone.utc)
+
+            with _ACTIVE_GUARD:
+                active_ids = list(_ACTIVE_TASKS.keys())
+            if active_ids:
+                coll.update_many(
+                    {"_id": {"$in": [ObjectId(t) for t in active_ids]},
+                     "hermes_claimed_by": WORKER_ID},
+                    {"$set": {"hermes_lease_until": now + timedelta(minutes=LEASE_MINUTES)}},
+                )
+
+            client[DB_NAME]["hermes_workers"].update_one(
+                {"_id": WORKER_ID},
+                {"$set": {"worker_id": WORKER_ID, "host": socket.gethostname(),
+                          "slots": WORKER_SLOTS, "active": active_ids, "ts": now}},
+                upsert=True,
+            )
+
+            if cycle % 5 == 0:
+                _safety_net_scan(coll)
+        except Exception:
+            log.exception("lease renewer cycle failed")
+            try:
+                if client is not None:
+                    client.close()
+            except Exception:
+                pass
+            client = None
+
+
+def _safety_net_scan(coll) -> None:
+    """이벤트 누락 대비: 2분 이상 unclaimed 상태로 방치된 todo task 재디스패치."""
+    now = datetime.now(timezone.utc)
+    name_variants: set[str] = set()
+    for n in HERMES_ASSIGNEES:
+        name_variants.update({n, n.capitalize(), n.upper()})
+    stale = list(coll.find({
+        "assignee": {"$in": list(name_variants)},
+        "status": "todo",
+        "hermes_stopped": {"$ne": True},
+        "$or": [
+            {"hermes_lease_until": {"$exists": False}},
+            {"hermes_lease_until": None},
+            {"hermes_lease_until": {"$lt": now}},
+        ],
+    }).sort("created_at", 1).limit(10))
+    if not stale:
+        return
+    # 유예 불필요 — change stream 디스패치와 경합해도 claim 프로토콜이 정확히 1회 실행 보장
+    writer = ProjectHubWriter(coll)
+    for t in stale:
+        log.info("safety-net: unclaimed todo 발견 → 재디스패치: %s", (t.get("title") or "")[:50])
+        _submit_task(writer, t)
 
 
 # ──────────────────────────────────────────────
@@ -356,6 +581,9 @@ def watch_forever() -> None:
     max_backoff = 60
     did_catchup = False
 
+    # lease 연장 + heartbeat + 안전망 스캔 데몬 (1회만 시작)
+    threading.Thread(target=_lease_renewer_loop, name="lease-renewer", daemon=True).start()
+
     while not _shutdown_requested:
         client = None
         try:
@@ -401,6 +629,9 @@ def watch_forever() -> None:
                 time.sleep(1)
             backoff = min(backoff * 2, max_backoff)
 
+    # 종료: 진행 중 워커는 마저 돌게 두되 새 작업은 받지 않음.
+    # 프로세스가 죽으면 lease가 만료돼 다음 기동/타 워커가 안전히 인수.
+    _POOL.shutdown(wait=False, cancel_futures=True)
     log.info("Watcher stopped.")
 
 

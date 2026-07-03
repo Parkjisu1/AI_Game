@@ -213,6 +213,9 @@ def _tag_to_action(tags: set[str]) -> str | None:
     # 우선순위: unity_modify가 git_sync를 흡수 (unity 파이프라인의 branch_prep이
     # 자동으로 pull --rebase를 수행하므로 sync를 따로 돌릴 필요 없음).
     # 동일하게 "fix/patch/code-change"처럼 코드 수정 태그가 붙으면 sync 무시.
+    # [goal]/[목표]는 최우선 — 목표 분해 task는 다른 태그가 섞여 있어도 분해 파이프라인으로
+    if tags & {"goal", "목표"}:
+        return "goal_decompose"
     UNITY_MODIFY_TAGS = {"unity", "code-change", "fix", "patch"}
     if tags & UNITY_MODIFY_TAGS:
         return "unity_modify"
@@ -235,6 +238,7 @@ def _stage_for_action(action: str) -> int:
         "db_query": 1,
         "chat": 1,
         "review_needed": 1,
+        "goal_decompose": 1,   # 목표 분해 (분해만 — 하위 실행은 승인 후 각자 라우팅)
         "git_sync": 1,         # 에이전트 없는 단순 git pull
         "simulation": 2,
         "apk_build": 3,

@@ -22,6 +22,7 @@ import os
 import re
 import shlex
 import subprocess
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -1064,11 +1065,38 @@ def _handle_rollback(task: dict[str, Any], reason: str) -> dict[str, Any]:
     return {"success": True, "summary": f"롤백 완료: {reason[:150]}", "next_status": "done"}
 
 
-def _send_slack_notice(email: str, text: str, fallback_assignee: str = "") -> None:
+_DM_HINT_CACHE: dict[str, Any] = {"active": False, "checked_at": 0.0}
+
+
+def _dm_reply_hint(default: str) -> str:
+    """
+    Slack 인바운드(slack_inbound.py) 활성 시 답장 안내로 교체. 비활성 시 기존 문구.
+    활성 여부는 폴러가 정상 폴링할 때 갱신하는 DB 플래그(hermes_slack_inbound_state._meta.active)로
+    판단 — 스코프 추가 즉시 문구가 자동 전환되고, 폴러가 죽으면 5분 내 원래 문구로 복귀.
+    """
+    import time as _time
+    now = _time.time()
+    if now - _DM_HINT_CACHE["checked_at"] > 300:
+        _DM_HINT_CACHE["checked_at"] = now
+        try:
+            client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=3000)
+            meta = client[DB_NAME]["hermes_slack_inbound_state"].find_one({"_id": "_meta"}) or {}
+            last_ok = meta.get("last_ok_ts")
+            _DM_HINT_CACHE["active"] = bool(
+                last_ok and isinstance(last_ok, (int, float)) and now - last_ok < 300)
+        except Exception:
+            _DM_HINT_CACHE["active"] = False
+    if _DM_HINT_CACHE["active"]:
+        return "📝 이 DM에 *답장*으로 처리 가능: `승인` `재시도` `중단` `상태` `브리핑` 또는 자유 텍스트(코멘트로 전달)"
+    return default
+
+
+def _send_slack_notice(email: str, text: str, fallback_assignee: str = "", task_id: str = "") -> None:
     """
     이메일 → Slack User ID → DM 발송 (범용).
     email이 Settings의 slack_assignee_webhooks에 매핑돼 있고 bot_token이 있을 때만 동작.
     email 매칭 실패 시 fallback_assignee 이름으로 재조회 (legacy task에 created_by_email 누락 대응).
+    task_id가 있으면 hermes_dm_context에 기록 — slack_inbound.py가 답장의 대상 task를 특정.
     """
     if not email and not fallback_assignee:
         log.info("Slack DM skip: no email and no fallback assignee")
@@ -1101,6 +1129,17 @@ def _send_slack_notice(email: str, text: str, fallback_assignee: str = "") -> No
             )
             return
         user_id = match["slack_user_id"]
+        # DM 문맥 기록 — 인바운드 답장이 어느 task를 가리키는지 추적 (best-effort)
+        if task_id:
+            try:
+                db["hermes_dm_context"].update_one(
+                    {"slack_user_id": user_id},
+                    {"$set": {"task_id": str(task_id),
+                              "ts": datetime.now(timezone.utc)}},
+                    upsert=True,
+                )
+            except Exception:
+                log.debug("dm context record failed", exc_info=True)
         import urllib.request
         req = urllib.request.Request(
             "https://slack.com/api/chat.postMessage",
@@ -1130,40 +1169,87 @@ def _send_slack_question(
     """Task 생성자에게 Slack DM으로 질문 발송 (needs_input 시)."""
     task_url = f"https://aimed.tailf6f809.ts.net/tasks"
     q_lines = "\n".join(f"• {q}" for q in questions[:3])
+    hint = _dm_reply_hint(
+        "📝 *답변*: ProjectHub 작업 코멘트로 남겨주세요 (이 DM은 알림 전용 — 답장 인식 안 됨)")
     text = (
         f"🤖 *Hermes 질문* — `{title}`\n\n"
         + (f"{preamble}\n\n" if preamble else "")
         + (f"_현황: {current_state}_\n\n" if current_state else "")
         + f"{q_lines}\n\n"
-        f"📝 *답변*: ProjectHub 작업 코멘트로 남겨주세요 (이 DM은 알림 전용 — 답장 인식 안 됨)\n"
+        f"{hint}\n"
         f"   → {task_url}"
     )
-    _send_slack_notice(email, text, fallback_assignee=fallback_assignee)
+    _send_slack_notice(email, text, fallback_assignee=fallback_assignee, task_id=task_id)
 
 
-def _send_slack_success(email: str, title: str, summary: str, pr_url: str = "", fallback_assignee: str = "") -> None:
+def _send_slack_success(email: str, title: str, summary: str, pr_url: str = "", fallback_assignee: str = "", task_id: str = "") -> None:
     """작업 완료 DM — 리뷰 요청."""
+    hint = _dm_reply_hint(
+        "📝 리뷰 부탁드려요. 문제·승인은 ProjectHub 작업 코멘트로 남겨주세요 (이 DM은 알림 전용).")
     text = (
         f"✅ *작업 완료* — `{title}`\n\n"
         f"{summary[:500]}\n\n"
         + (f"🔗 PR: {pr_url}\n\n" if pr_url else "")
-        + f"📝 리뷰 부탁드려요. 문제·승인은 ProjectHub 작업 코멘트로 남겨주세요 (이 DM은 알림 전용)."
+        + hint
     )
-    _send_slack_notice(email, text, fallback_assignee=fallback_assignee)
+    _send_slack_notice(email, text, fallback_assignee=fallback_assignee, task_id=task_id)
 
 
-def _send_slack_failure(email: str, title: str, reason: str, category: str = "", fallback_assignee: str = "") -> None:
+def _send_slack_failure(email: str, title: str, reason: str, category: str = "", fallback_assignee: str = "", task_id: str = "") -> None:
     """작업 실패 DM — 재시도 선택지 제공."""
     cat = f" [{category}]" if category else ""
+    hint = _dm_reply_hint(
+        "📝 *선택* (ProjectHub 작업 코멘트로 — 이 DM은 알림 전용):\n"
+        "1) *재시도* — 코멘트에 `재시도` 또는 `retry`\n"
+        "2) *수정 지시* — 추가 지시를 코멘트로 남기면 반영해 재시도\n"
+        "3) *중단* — `그만` 또는 `done`"
+    )
     text = (
         f"❌ *작업 실패*{cat} — `{title}`\n\n"
         f"원인: {reason[:400]}\n\n"
-        f"📝 *선택* (ProjectHub 작업 코멘트로 — 이 DM은 알림 전용):\n"
-        f"1) *재시도* — 코멘트에 `재시도` 또는 `retry`\n"
-        f"2) *수정 지시* — 추가 지시를 코멘트로 남기면 반영해 재시도\n"
-        f"3) *중단* — `그만` 또는 `done`"
+        f"{hint}"
     )
-    _send_slack_notice(email, text, fallback_assignee=fallback_assignee)
+    _send_slack_notice(email, text, fallback_assignee=fallback_assignee, task_id=task_id)
+
+
+def _batchmode_compile(repo_host: str, repo_dir: str) -> tuple[str, str]:
+    """
+    Machine B에서 Unity batchmode 컴파일 (MCP 다운 시 폴백).
+    반환: ("clean" | "errors" | "indeterminate", detail)
+
+    - clean: 컴파일 검증 충족 → 진실성 게이트 통과 가능
+    - errors: CS 에러 존재 → 배포 차단
+    - indeterminate: 판정 불가 (에디터가 프로젝트 열고 있음/ssh 실패/타임아웃)
+      → fail-INDETERMINATE 원칙: 차단하지 않고 기존 REQUIRE_COMPILE 정책에 위임
+    """
+    unity_editor = os.environ.get(
+        "MACHINE_B_UNITY_EXE",
+        "C:/Program Files/Unity/Hub/Editor/6000.2.7f2/Editor/Unity.exe",
+    )
+    unity_cmd = (
+        f'"{unity_editor}" -batchmode -quit -nographics '
+        f'-projectPath "{repo_dir}/BalloonFlow" -logFile -'
+    )
+    try:
+        r = subprocess.run(
+            ["ssh", repo_host, unity_cmd],
+            capture_output=True, text=True, encoding="utf-8", errors="replace",
+            timeout=260, check=False,
+        )
+    except subprocess.TimeoutExpired:
+        return "indeterminate", "batchmode 타임아웃(260s)"
+    except Exception as e:
+        return "indeterminate", f"ssh 실행 실패: {e}"
+    out = (r.stdout or "") + "\n" + (r.stderr or "")
+    if re.search(r"error CS\d+|Compilation failed|Scripts have compiler errors", out):
+        err_lines = [ln for ln in out.splitlines()
+                     if re.search(r"error CS\d+|Compilation failed", ln)][:8]
+        return "errors", "\n".join(err_lines) or "(에러 라인 파싱 실패)"
+    if re.search(r"another Unity instance|Multiple Unity instances|already open", out, re.IGNORECASE):
+        return "indeterminate", "Unity Editor가 프로젝트를 열고 있음 (batchmode 불가)"
+    if r.returncode == 0:
+        return "clean", ""
+    return "indeterminate", f"exit={r.returncode} — 로그 판독 불가"
 
 
 def _format_attachments_section(task: dict[str, Any]) -> str:
@@ -2333,6 +2419,7 @@ def _execute_content_pipeline(
             ),
             pr_url="",
             fallback_assignee=(task.get("assignee") or ""),
+            task_id=str(task.get("_id") or ""),
         )
     except Exception:
         log.exception("slack notify failed")
@@ -3104,6 +3191,7 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
                 reason=f"⚠️ 브랜치 준비 중 main과 충돌(rebase conflict). 기존 작업을 덮어쓰지 않고 중단했습니다 — 수동 확인 필요.\n{(_prep_out or '')[-300:]}",
                 category="merge_conflict",
                 fallback_assignee=(task.get("assignee") or ""),
+                task_id=str(task.get("_id") or ""),
             )
         return {
             "success": False,
@@ -3557,6 +3645,7 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
                        + f"\n변경: {', '.join(os.path.basename(f) for f in changed_files[:10])}",
                 category="large_or_suspect",
                 fallback_assignee=(task.get("assignee") or ""),
+                task_id=str(task.get("_id") or ""),
             )
             _comment("⚠️ 큰 수정/환각 의심 신호 → 작성자에게 Slack: " + "; ".join(_signals))
     except Exception:
@@ -3575,6 +3664,7 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
             reason="에이전트들이 실제 코드를 수정하지 못했습니다. 요구사항을 좀 더 구체적으로 지시해주시면 다시 시도 가능.",
             category="no_changes_made",
             fallback_assignee=(task.get("assignee") or ""),
+            task_id=str(task.get("_id") or ""),
         )
         return {
             "success": False,
@@ -3908,6 +3998,7 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
                 reason=f"Unity 컴파일 에러:\n{err_text[:300]}",
                 category="compile_error",
                 fallback_assignee=(task.get("assignee") or ""),
+                task_id=str(task.get("_id") or ""),
             )
             return {
                 "success": False,
@@ -3923,6 +4014,43 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
     # 보류(사람이 컴파일/플레이 확인). MCP가 자주 다운돼 백로그가 쌓이면 warn으로 완화 가능.
     _REQ_COMPILE = os.environ.get("HERMES_REQUIRE_COMPILE", "block").lower()
     _compile_verified = bool(mcp_ok and not mcp_compile_errors)
+    # ── batchmode 폴백: MCP 미응답이어도 batchmode 컴파일로 검증 시도 ──
+    # 성공(clean)이면 컴파일 검증 충족 → REQUIRE_COMPILE=block에서도 진행 가능.
+    # 에러면 배포 차단. 판정 불가(에디터 열림 등)면 기존 정책(block/warn)에 위임.
+    if (not _compile_verified and not _merge_blocked
+            and reviewer_verdict.get("verdict") == "APPROVED"
+            and _REQ_COMPILE != "off"
+            and repo.get("type") == "unity"
+            and os.environ.get("HERMES_COMPILE_FALLBACK", "on").lower() != "off"):
+        _comment("🏗️ Unity MCP 미응답 — batchmode 컴파일 폴백 시도 (최대 4분)...")
+        _bm_state, _bm_detail = _batchmode_compile(repo_host, repo_dir)
+        _record_gate_event(
+            task_id=task_id, gate="compile_batchmode",
+            result=("pass" if _bm_state == "clean"
+                    else ("block" if _bm_state == "errors" else "warn")),
+            reason=(_bm_detail or "clean")[:200],
+        )
+        if _bm_state == "clean":
+            _compile_verified = True
+            _comment("✅ batchmode 컴파일 통과 — 컴파일 검증 충족")
+        elif _bm_state == "errors":
+            _comment(f"❌ **Unity 컴파일 에러 (batchmode)** — 배포 보류\n```\n{_bm_detail[:800]}\n```")
+            _send_slack_failure(
+                email=(task.get("created_by_email") or ""),
+                title=title,
+                reason=f"Unity 컴파일 에러 (batchmode):\n{_bm_detail[:300]}",
+                category="compile_error",
+                fallback_assignee=(task.get("assignee") or ""),
+                task_id=str(task.get("_id") or ""),
+            )
+            return {
+                "success": False,
+                "error": "Unity compile errors (batchmode fallback)",
+                "next_status": "review",
+                "failure_category": "compile_error",
+            }
+        else:
+            _comment(f"⚠️ batchmode 컴파일 판정 불가: {_bm_detail[:200]} — 기존 정책({_REQ_COMPILE})으로 처리")
     if (not _merge_blocked and not _compile_verified
             and reviewer_verdict.get("verdict") == "APPROVED" and _REQ_COMPILE != "off"):
         _record_gate_event(task_id=task_id, gate="compile_required",
@@ -4135,6 +4263,7 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
             reason=f"⛔ 배포 차단 — {_block_reason}. Hermes가 자동 머지하지 않고 멈췄습니다(검토 필요).\nPR: {pr_url}",
             category="merge_gate_blocked",
             fallback_assignee=(task.get("assignee") or ""),
+            task_id=str(task.get("_id") or ""),
         )
     merged = False
     if auto_merge:
@@ -4163,6 +4292,7 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
                     reason=f"⚠️ Hermes 변경과 기존 코드가 충돌(merge conflict). 기능을 덮어쓰지 않고 PR을 열어둡니다 — 수동 머지/충돌 해결 필요.\nPR: {pr_url}\n{err[:300]}",
                     category="merge_conflict",
                     fallback_assignee=(task.get("assignee") or ""),
+                    task_id=str(task.get("_id") or ""),
                 )
 
     # Hermes 세션 링크 기록 (재작업 시 참조용)
@@ -4265,6 +4395,7 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
         summary=f"브랜치 `{branch_name}`에 변경 파일 {len(changed_files)}개 반영됨. {'(재작업 완료)' if is_rework else ''}",
         pr_url=pr_url,
         fallback_assignee=(task.get("assignee") or ""),
+        task_id=str(task.get("_id") or ""),
     )
     return {
         "success": True,
@@ -4559,6 +4690,150 @@ def _export_balloonflow_attachment(
 # ──────────────────────────────────────────────
 # Handler 등록 테이블
 # ──────────────────────────────────────────────
+# ──────────────────────────────────────────────
+# Handler: goal_decompose — [goal] 목표 → 하위 task DAG 분해
+# ──────────────────────────────────────────────
+_GOAL_DECOMPOSE_PROMPT = """당신은 게임 개발 PM입니다. 아래 상위 목표를 Hermes AI 팀이 실행 가능한 하위 작업들로 분해하세요.
+
+## 상위 목표
+제목: {title}
+설명: {description}
+{feedback_section}
+## 규칙
+1. 하위 작업 2~12개. 각 작업은 독립적으로 실행·검증 가능한 단위.
+2. 각 작업 title 맨 앞에 작업 유형 태그 1개를 붙일 것:
+   - [unity] — C# 코드 수정 (BalloonFlow repo)
+   - [art] — 이미지/스프라이트 생성
+   - [기획] — 기획 문서/명세 작성
+   - [level] — 레벨 데이터 생성
+   - [sim] — 클리어율 시뮬레이션
+   - [ask] — 조사/분석/보고
+3. depends_on은 선행 작업의 index 배열 (0-base). 순환 금지. 병렬 가능한 것은 의존성 없이.
+4. description에는 실행자가 바로 착수할 수 있는 구체적 지시 포함 (대상 파일/시스템/수치 등).
+
+## 출력 (JSON만, 다른 텍스트 금지)
+{{"subtasks": [{{"title": "[unity] ...", "description": "...", "depends_on": []}}, ...]}}
+"""
+
+
+def _handle_goal_decompose(task: dict[str, Any], context: dict[str, Any], route: dict[str, Any]) -> dict[str, Any]:
+    """
+    [goal] 태그 목표 task → LLM(PM)이 하위 task DAG로 분해 → status='draft'로 생성.
+    사람이 승인('승인' 코멘트 또는 Slack DM '승인')하면 goal_chain이 의존성 순서로 실행.
+    """
+    from bson import ObjectId as _OID
+    from datetime import datetime as _dt, timezone as _tz
+    from agent_team import invoke_agent, ExecutionEnv
+
+    task_id = str(task.get("_id"))
+    title = task.get("title", "")
+    description = task.get("description", "")
+
+    client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
+    coll = client[DB_NAME]["pixelforge_tasks"]
+
+    # 재작업(피드백 반영): 기존 draft 하위 task 삭제 후 재분해
+    feedback_section = ""
+    if task.get("goal_children"):
+        comments = task.get("comments") or []
+        user_fb = next((c.get("text") for c in reversed(comments)
+                        if (c.get("author") or "").strip().lower() not in {"hermes"}), "")
+        if user_fb:
+            feedback_section = f"\n## 디렉터 피드백 (반드시 반영)\n{user_fb[:1500]}\n"
+        deleted = coll.delete_many({"goal_parent": task_id, "status": "draft"})
+        log.info("goal rework: draft 하위 task %d개 삭제 후 재분해", deleted.deleted_count)
+
+    env = ExecutionEnv(
+        mode="local", cwd=str(Path.home()), timeout_sec=180,
+        task_id=task_id, task_title=title,
+    )
+    prompt = _GOAL_DECOMPOSE_PROMPT.format(
+        title=title, description=description, feedback_section=feedback_section,
+    )
+    resp = invoke_agent("lead", prompt, env)
+    if not resp.success:
+        return {"success": False, "error": f"목표 분해 실패: {resp.error}", "next_status": "review"}
+
+    data = resp.structured
+    if not data:
+        try:
+            m = re.search(r"\{.*\}", resp.output, re.DOTALL)
+            data = json.loads(m.group(0)) if m else None
+        except Exception:
+            data = None
+    subtasks = (data or {}).get("subtasks") or []
+    if not (2 <= len(subtasks) <= 15):
+        return {"success": False,
+                "error": f"분해 결과가 비정상 (하위 작업 {len(subtasks)}개) — 목표를 더 구체적으로 서술해주세요.",
+                "next_status": "review"}
+
+    # 의존성 검증: 인덱스 범위 + 순환 금지
+    n = len(subtasks)
+    deps = [[d for d in (st.get("depends_on") or []) if isinstance(d, int) and 0 <= d < n and d != i]
+            for i, st in enumerate(subtasks)]
+    visited, in_stack = [0] * n, [0] * n
+
+    def _has_cycle(i: int) -> bool:
+        visited[i], in_stack[i] = 1, 1
+        for d in deps[i]:
+            if not visited[d]:
+                if _has_cycle(d):
+                    return True
+            elif in_stack[d]:
+                return True
+        in_stack[i] = 0
+        return False
+
+    if any(not visited[i] and _has_cycle(i) for i in range(n)):
+        return {"success": False, "error": "분해 결과에 순환 의존성 — 재시도 필요", "next_status": "review"}
+
+    # 하위 task 생성 (draft — 승인 전 실행 안 됨)
+    now = _dt.now(_tz.utc).isoformat()
+    child_ids: list[str] = []
+    for i, st in enumerate(subtasks):
+        res = coll.insert_one({
+            "title": (st.get("title") or f"하위작업 {i+1}")[:150],
+            "description": st.get("description") or "",
+            "assignee": task.get("assignee") or "hermes",
+            "status": "draft",
+            "priority": task.get("priority", "medium"),
+            "created_by_email": task.get("created_by_email") or "",
+            "created_via": "goal_decompose",
+            "goal_parent": task_id,
+            "goal_index": i,
+            "goal_depends_on": deps[i],
+            "comments": [],
+            "created_at": now, "updated_at": now,
+        })
+        child_ids.append(str(res.inserted_id))
+
+    coll.update_one({"_id": _OID(task_id)},
+                    {"$set": {"goal_children": child_ids, "updated_at": now}})
+
+    # 실행 계획 코멘트
+    lines = ["🗂️ **목표 분해 완료** — 검토 후 승인해주세요 (`승인` 코멘트 또는 Slack DM `승인`)\n"]
+    for i, st in enumerate(subtasks):
+        dep_str = f" ← {', '.join(f'#{d+1}' for d in deps[i])}" if deps[i] else ""
+        lines.append(f"{i+1}. `#{child_ids[i][-8:]}` {(st.get('title') or '')[:70]}{dep_str}")
+    lines.append("\n승인 시 의존성 순서대로 자동 실행됩니다. 수정 원하시면 피드백 코멘트를 남겨주세요 (재분해).")
+    plan_md = "\n".join(lines)
+
+    _send_slack_question(
+        email=(task.get("created_by_email") or "").strip().lower(),
+        task_id=task_id, title=title,
+        preamble=f"목표를 하위 작업 {n}개로 분해했습니다. 승인해주시면 실행을 시작합니다.",
+        current_state="", questions=["승인하시겠습니까? (답장: 승인)"],
+        fallback_assignee=(task.get("assignee") or ""),
+    )
+
+    return {
+        "success": True,
+        "summary": plan_md,
+        "next_status": "review",
+        "metadata": {"action": "goal_decompose", "children": len(child_ids)},
+    }
+
+
 _HANDLERS = {
     "db_query": _handle_db_query,
     "chat": _handle_chat,
@@ -4566,6 +4841,7 @@ _HANDLERS = {
     "apk_build": _handle_apk_build,
     "unity_modify": _handle_unity_modify,  # 5-역할 팀 코드 수정
     "git_sync": _handle_git_sync,          # 단순 main 동기화 (에이전트 없음)
+    "goal_decompose": _handle_goal_decompose,  # [goal] 목표 → 하위 task DAG
     "review_needed": _handle_review_needed,
     # Stage 4~6 (GameForge 본격 통합)은 Phase 2에서
     # "gameforge_design": _handle_gameforge_design,

@@ -1,0 +1,16 @@
+[Unit]
+Description=Hermes Slack Inbound Poller (DM two-way)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/aimed/.hermes/watcher
+EnvironmentFile=/home/aimed/.hermes/watcher/.env
+ExecStart=/home/aimed/.hermes/watcher/venv/bin/python /home/aimed/.hermes/watcher/slack_inbound.py
+Restart=on-failure
+RestartSec=10
+StandardOutput=append:/home/aimed/.hermes/logs/slack_inbound.log
+StandardError=append:/home/aimed/.hermes/logs/slack_inbound.log
+
+[Install]
+WantedBy=default.target
