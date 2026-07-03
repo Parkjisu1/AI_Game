@@ -105,6 +105,19 @@ def route_task(task: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     description = task.get("description", "")
     combined = f"{title}\n{description}".lower()
 
+    # 0. 구조화 필드 기반 라우팅 (결정론, 최우선) — 시뮬레이터 탭 태스크는 sim_params를 가짐.
+    #    키워드 매칭은 설명에 섞인 ObjectId hex 문자열("db" 등)에 오탐될 수 있음 (실사례: 리플레이
+    #    태스크의 결과 id에 'db'가 포함되어 db_query로 오라우팅 → Claude 파이프라인 실패).
+    if isinstance(task.get("sim_params"), dict):
+        sim_stage = _stage_for_action("simulation")
+        return {
+            "action": "simulation",
+            "reason": "structured: sim_params present",
+            "stage": sim_stage,
+            "params": _extract_params(task, "simulation"),
+            "auto_execute": sim_stage in ACTIVE_STAGES,
+        }
+
     # 1. 태그 기반 라우팅 (우선순위 최상)
     all_tags = extract_tags(f"{title} {description}")
     tag_action = _tag_to_action(all_tags)

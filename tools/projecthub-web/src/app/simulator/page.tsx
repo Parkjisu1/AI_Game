@@ -240,8 +240,10 @@ export default function SimulatorPage() {
 const DetailView = memo(function DetailView({ doc, onClose, onRefetch }: { doc: ResultDoc; onClose: () => void; onRefetch: () => void }) {
   const [selLevel, setSelLevel] = useState<number | null>(null);
   const [waiting, setWaiting] = useState(false);
+  const [waitSecs, setWaitSecs] = useState(0);
   const [genErr, setGenErr] = useState("");
   const waitStartRef = useRef(0);
+  const waitTaskRef = useRef<string | null>(null);
   const rows = doc.results || [];
 
   // 해당 레벨의 리플레이 id (온디맨드 맵 → 레거시 최난 레벨 순)
@@ -249,14 +251,27 @@ const DetailView = memo(function DetailView({ doc, onClose, onRefetch }: { doc: 
     lvl == null ? null
       : doc.replays?.[String(lvl)] || (doc.replay_level === lvl ? doc.replay_id : null) || null;
 
-  // 생성 대기 폴링 — doc 갱신으로 리플레이가 연결되면 자동 종료
+  // 생성 대기 폴링 — doc 갱신으로 리플레이가 연결되면 자동 종료.
+  // 태스크 상태도 함께 폴링해 실패(⚠️ 코멘트)를 즉시 노출 — 조용히 4분 기다리다 타임아웃 금지.
   useEffect(() => {
     if (!waiting) return;
     if (replayIdFor(selLevel)) { setWaiting(false); return; }
-    const t = setInterval(() => {
-      if (Date.now() - waitStartRef.current > 240_000) {
+    const t = setInterval(async () => {
+      const elapsed = Date.now() - waitStartRef.current;
+      setWaitSecs(Math.round(elapsed / 1000));
+      if (waitTaskRef.current) {
+        try {
+          const s = await (await fetch(`/api/sim/replay?task_id=${waitTaskRef.current}`)).json();
+          if (s.failed) {
+            setWaiting(false);
+            setGenErr(s.message || "생성 실패 — 작업 보드에서 태스크를 확인하세요");
+            return;
+          }
+        } catch { /* 상태 조회 실패는 무시하고 계속 대기 */ }
+      }
+      if (elapsed > 600_000) {
         setWaiting(false);
-        setGenErr("생성 시간 초과 — 작업 보드에서 리플레이 태스크 상태를 확인하세요");
+        setGenErr("생성 시간 초과(10분) — 작업 보드에서 리플레이 태스크 상태를 확인하세요");
       } else onRefetch();
     }, 5000);
     return () => clearInterval(t);
@@ -273,7 +288,9 @@ const DetailView = memo(function DetailView({ doc, onClose, onRefetch }: { doc: 
       const d = await res.json();
       if (!res.ok) throw new Error(d.error || res.statusText);
       if (d.ready) { onRefetch(); return; }
+      waitTaskRef.current = d.task_id || null;
       waitStartRef.current = Date.now();
+      setWaitSecs(0);
       setWaiting(true);
     } catch (e) {
       setGenErr("요청 실패: " + (e as Error).message);
@@ -316,7 +333,8 @@ const DetailView = memo(function DetailView({ doc, onClose, onRefetch }: { doc: 
             <span className="text-[13px] font-bold">L{selLevel}</span>
             {waiting ? (
               <span className="text-[12px] animate-pulse" style={{ color: "var(--neon-soft)" }}>
-                <Icon name="zap" size={12} /> 리플레이 생성 중… 머신 B 실행 후 자동 표시됩니다 (보통 1분 이내)
+                <Icon name="zap" size={12} /> 리플레이 생성 중… {waitSecs}s — 머신 B 실행 후 자동 표시
+                (다른 헤르메스 작업이 실행 중이면 대기열만큼 늦어질 수 있음)
               </span>
             ) : (
               <>
@@ -604,9 +622,12 @@ function ReplayViewer({ resultId, level }: { resultId: string; level?: number })
         accumRef.current += ((ts - lastTsRef.current) / 1000) * speedRef.current;
         lastTsRef.current = ts;
         let changed = false;
-        while (accumRef.current >= 0.1) {
-          accumRef.current -= 0.1;
+        // 프레임 간격은 가변 — 대형 리플레이는 서버에서 다운샘플되므로 t 차이 기준으로 진행
+        for (;;) {
           if (frameRef.current >= replay.frames.length - 1) { playingRef.current = false; break; }
+          const dt = Math.max(0.05, replay.frames[frameRef.current + 1].t - replay.frames[frameRef.current].t);
+          if (accumRef.current < dt) break;
+          accumRef.current -= dt;
           frameRef.current++;
           applyFrameTo(stRef.current!, replay.frames[frameRef.current]);
           changed = true;

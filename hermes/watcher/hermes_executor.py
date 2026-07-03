@@ -293,6 +293,47 @@ def _bf_run_on_machine_b(args: list[str], remote_out: str, local_out: str, timeo
     return None
 
 
+def _bf_shrink_replay(data: dict[str, Any], max_bytes: int = 11_000_000) -> dict[str, Any]:
+    """리플레이 JSON을 브라우저가 감당할 크기로 축소 (log 제거 + 프레임 델타 병합 다운샘플).
+    델타(pop/reveal/mark)는 병합해도 총량이 보존되는 비가역 부분이라 1회로는 부족할 수 있음
+    (실사례: L268 65MB→1회 병합 22MB) → 최대 3회 재평가. 저장 자체는 gzip이 보장."""
+    for f in data.get("frames") or []:
+        f.pop("log", None)   # UI 미사용, 용량 큼
+    for _ in range(3):
+        frames = data.get("frames") or []
+        raw = len(json.dumps(data, separators=(",", ":"), ensure_ascii=False).encode("utf-8"))
+        if raw <= max_bytes or len(frames) < 40:
+            break
+        k = -(-raw // max_bytes)          # ceil — 병합 배율
+        merged = []
+        for i in range(0, len(frames), k):
+            chunk = frames[i:i + k]
+            base = chunk[-1]              # 시각/다트/홀더/스탯은 구간 마지막 프레임 기준
+            if len(chunk) > 1:
+                pop: list[Any] = []
+                reveal: list[Any] = []
+                mark: list[Any] = []
+                for f in chunk:           # 델타는 순서 보존 병합 → 상태 정확성 유지
+                    pop.extend(f.get("pop") or [])
+                    reveal.extend(f.get("reveal") or [])
+                    mark.extend(f.get("mark") or [])
+                base["pop"], base["reveal"], base["mark"] = pop, reveal, mark
+            merged.append(base)
+        data["frames"] = merged
+        data["downsampled"] = data.get("downsampled", 1) * k
+    return data
+
+
+def _bf_replay_payload(replay_data: dict[str, Any]) -> dict[str, Any]:
+    """리플레이 저장 페이로드 — gzip 압축(BSON Binary).
+    16MB BSON 한도 근본 회피 (다운샘플 후에도 초과한 실사례: L113 22MB) + 저장 공간 ~10배 절약.
+    API(results/[id]?replay=1)가 해제해서 내려줌. 레거시 문서는 비압축 data 필드."""
+    import gzip
+    from bson import Binary
+    payload = json.dumps(replay_data, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    return {"data_gz": Binary(gzip.compress(payload, 6)), "raw_bytes": len(payload)}
+
+
 def _handle_simulation(task: dict[str, Any], context: dict[str, Any], route: dict[str, Any]) -> dict[str, Any]:
     """
     BalloonFlowSim 배치 실행 (머신 B) → bf_sim_results/bf_sim_replays 저장 →
@@ -324,12 +365,13 @@ def _handle_simulation(task: dict[str, Any], context: dict[str, Any], route: dic
             os.remove(local_rep)
         except Exception as e:  # noqa: BLE001
             return {"success": False, "error": f"리플레이 파싱 실패: {e}", "next_status": "review"}
+        replay_data = _bf_shrink_replay(replay_data)
         from datetime import datetime, timezone
         from bson import ObjectId
         client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
         rep_ins = client[DB_NAME]["bf_sim_replays"].insert_one({
             "task_id": task_id, "level": lvl, "seed": p["seed"], "policy": p["policy"],
-            "data": replay_data,
+            **_bf_replay_payload(replay_data),
             "created_at": datetime.now(timezone.utc).isoformat(),
         })
         if p["result_id"]:
@@ -385,10 +427,11 @@ def _handle_simulation(task: dict[str, Any], context: dict[str, Any], route: dic
                 with open(local_rep, "r", encoding="utf-8") as f:
                     replay_data = json.load(f)
                 os.remove(local_rep)
+                replay_data = _bf_shrink_replay(replay_data)
                 client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
                 rep_ins = client[DB_NAME]["bf_sim_replays"].insert_one({
                     "task_id": task_id, "level": replay_level, "seed": p["seed"],
-                    "policy": p["policy"], "data": replay_data,
+                    "policy": p["policy"], **_bf_replay_payload(replay_data),
                     "created_at": datetime.now(timezone.utc).isoformat(),
                 })
                 replay_doc_id = str(rep_ins.inserted_id)
