@@ -17,6 +17,7 @@ interface ResultDoc {
   summary: { levelCount: number; avgClearRate: number; below50Count: number; worstLevels: { levelId: number; clearRate: number }[] };
   replay_id?: string | null;
   replay_level?: number | null;
+  replays?: Record<string, string>;   // 레벨별 온디맨드 리플레이 (level → bf_sim_replays id)
   created_at: string;
   results?: LevelResult[];
 }
@@ -102,6 +103,19 @@ export default function SimulatorPage() {
     } catch { /* noop */ }
     setLoadingDetail(false);
   };
+
+  // 리플레이 생성 대기 중 조용한 갱신 (로딩 표시 없이 — 선택 상태 유지)
+  const refetchDetail = useCallback(async () => {
+    setDetail((cur) => {
+      if (cur) {
+        fetch(`/api/sim/results/${cur._id}`)
+          .then((r) => r.json())
+          .then((d) => setDetail((now) => (now && now._id === cur._id ? d : now)))
+          .catch(() => { /* noop */ });
+      }
+      return cur;
+    });
+  }, []);
 
   return (
     <div className="space-y-5">
@@ -212,15 +226,62 @@ export default function SimulatorPage() {
 
       {/* 상세 */}
       {loadingDetail && <div className="text-center text-[13px] py-4" style={{ color: "var(--text-dim)" }}>불러오는 중…</div>}
-      {detail && !loadingDetail && <DetailView doc={detail} onClose={() => setDetail(null)} />}
+      {detail && !loadingDetail && (
+        <DetailView key={detail._id} doc={detail} onClose={() => setDetail(null)} onRefetch={refetchDetail} />
+      )}
     </div>
   );
 }
 
 // ──────────────────────────────────────────────────────────────
-function DetailView({ doc, onClose }: { doc: ResultDoc; onClose: () => void }) {
-  const [showReplay, setShowReplay] = useState(false);
+function DetailView({ doc, onClose, onRefetch }: { doc: ResultDoc; onClose: () => void; onRefetch: () => void }) {
+  const [selLevel, setSelLevel] = useState<number | null>(null);
+  const [waiting, setWaiting] = useState(false);
+  const [genErr, setGenErr] = useState("");
+  const waitStartRef = useRef(0);
   const rows = doc.results || [];
+
+  // 해당 레벨의 리플레이 id (온디맨드 맵 → 레거시 최난 레벨 순)
+  const replayIdFor = (lvl: number | null) =>
+    lvl == null ? null
+      : doc.replays?.[String(lvl)] || (doc.replay_level === lvl ? doc.replay_id : null) || null;
+
+  // 생성 대기 폴링 — doc 갱신으로 리플레이가 연결되면 자동 종료
+  useEffect(() => {
+    if (!waiting) return;
+    if (replayIdFor(selLevel)) { setWaiting(false); return; }
+    const t = setInterval(() => {
+      if (Date.now() - waitStartRef.current > 240_000) {
+        setWaiting(false);
+        setGenErr("생성 시간 초과 — 작업 보드에서 리플레이 태스크 상태를 확인하세요");
+      } else onRefetch();
+    }, 5000);
+    return () => clearInterval(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [waiting, doc, selLevel]);
+
+  const requestReplay = async (lvl: number) => {
+    setGenErr("");
+    try {
+      const res = await fetch("/api/sim/replay", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ result_id: doc._id, level: lvl }),
+      });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error || res.statusText);
+      if (d.ready) { onRefetch(); return; }
+      waitStartRef.current = Date.now();
+      setWaiting(true);
+    } catch (e) {
+      setGenErr("요청 실패: " + (e as Error).message);
+    }
+  };
+
+  const selectLevel = (lvl: number) => {
+    setGenErr("");
+    setSelLevel((cur) => (cur === lvl ? null : lvl));
+  };
+
   return (
     <section className="glass rounded-2xl p-4 sm:p-5">
       <div className="flex items-center justify-between mb-3">
@@ -229,8 +290,8 @@ function DetailView({ doc, onClose }: { doc: ResultDoc; onClose: () => void }) {
           <h2 className="text-base font-bold">레벨 {doc.params.levels} × {doc.params.runs}회 · {doc.params.policy} · 시드 {doc.params.seed}</h2>
         </div>
         <div className="flex gap-2">
-          {doc.replay_id && (
-            <button onClick={() => setShowReplay((v) => !v)}
+          {doc.replay_id && doc.replay_level != null && (
+            <button onClick={() => selectLevel(doc.replay_level!)}
               className="rounded-xl px-3 py-2 text-[12px] font-bold"
               style={{ background: "linear-gradient(135deg, var(--neon-deep), var(--neon))", color: "#041018" }}>
               <Icon name="play" size={12} /> L{doc.replay_level} 리플레이
@@ -242,7 +303,32 @@ function DetailView({ doc, onClose }: { doc: ResultDoc; onClose: () => void }) {
         </div>
       </div>
 
-      {showReplay && doc.replay_id && <ReplayViewer resultId={doc._id} />}
+      {/* 선택 레벨 리플레이 — 있으면 즉시 재생, 없으면 온디맨드 생성 */}
+      {selLevel != null && (
+        replayIdFor(selLevel) ? (
+          <ReplayViewer key={selLevel} resultId={doc._id} level={selLevel} />
+        ) : (
+          <div className="rounded-2xl border p-4 mb-2 flex flex-wrap items-center gap-3"
+            style={{ borderColor: "var(--line)", background: "rgba(6,11,22,.5)" }}>
+            <span className="text-[13px] font-bold">L{selLevel}</span>
+            {waiting ? (
+              <span className="text-[12px] animate-pulse" style={{ color: "var(--neon-soft)" }}>
+                <Icon name="zap" size={12} /> 리플레이 생성 중… 머신 B 실행 후 자동 표시됩니다 (보통 1분 이내)
+              </span>
+            ) : (
+              <>
+                <span className="text-[12px]" style={{ color: "var(--text-dim)" }}>이 레벨의 리플레이가 아직 없습니다</span>
+                <button onClick={() => requestReplay(selLevel)}
+                  className="rounded-xl px-3 py-2 text-[12px] font-bold"
+                  style={{ background: "linear-gradient(135deg, var(--neon-deep), var(--neon))", color: "#041018" }}>
+                  <Icon name="play" size={12} /> 리플레이 생성 (동일 시드·정책)
+                </button>
+              </>
+            )}
+            {genErr && <span className="text-[12px]" style={{ color: "var(--err)" }}>{genErr}</span>}
+          </div>
+        )
+      )}
 
       {/* 레벨별 테이블 (모바일: 가로 스크롤) */}
       <div className="overflow-x-auto mt-3">
@@ -259,9 +345,21 @@ function DetailView({ doc, onClose }: { doc: ResultDoc; onClose: () => void }) {
           <tbody>
             {rows.map((r) => {
               const hard = r.difficultyScore >= 70;
+              const sel = selLevel === r.levelId;
+              const hasReplay = !!replayIdFor(r.levelId);
               return (
-                <tr key={r.levelId} className="border-t" style={{ borderColor: "var(--line)", background: hard ? "rgba(251,90,107,.07)" : undefined }}>
-                  <td className="py-1.5 pr-2 font-bold">L{r.levelId}</td>
+                <tr key={r.levelId} onClick={() => selectLevel(r.levelId)}
+                  className="border-t cursor-pointer transition-colors hover:bg-[rgba(56,189,248,.06)]"
+                  style={{
+                    borderColor: sel ? "var(--line-strong)" : "var(--line)",
+                    background: sel ? "rgba(34,211,238,.10)" : hard ? "rgba(251,90,107,.07)" : undefined,
+                  }}>
+                  <td className="py-1.5 pr-2 font-bold whitespace-nowrap">
+                    L{r.levelId}
+                    <span className="ml-1 align-middle" style={{ color: hasReplay ? "var(--neon-soft)" : "var(--text-faint)" }}>
+                      <Icon name="play" size={10} />
+                    </span>
+                  </td>
                   <td className="pr-2" style={{ color: "var(--text-dim)" }}>{r.purpose}</td>
                   <td className="pr-2">{r.numColors}</td>
                   <td className="pr-2">{r.balloonCount}</td>
@@ -289,6 +387,7 @@ function DetailView({ doc, onClose }: { doc: ResultDoc; onClose: () => void }) {
         </table>
       </div>
       <div className="mt-2 text-[11px]" style={{ color: "var(--text-faint)" }}>
+        <b style={{ color: "var(--text-dim)" }}>행 클릭 = 레벨 선택</b> → 리플레이 재생 (<span style={{ color: "var(--neon-soft)" }}>▶</span> 밝음 = 리플레이 있음, 없으면 그 자리에서 생성) ·{" "}
         실패 사유 — <span style={{ color: "var(--err)" }}>만석</span>: 못 쏘는 색이 레일 점유(색 밸런스/순서) ·{" "}
         <span style={{ color: "var(--warn)" }}>소진</span>: 다트 총량 부족 ·{" "}
         <span style={{ color: "var(--violet)" }}>교착</span>: 안전한 수 없음(구조 문제) · 난이도 70↑ 행 강조 = 점검 후보
@@ -299,7 +398,7 @@ function DetailView({ doc, onClose }: { doc: ResultDoc; onClose: () => void }) {
 
 // ──────────────────────────────────────────────────────────────
 // 리플레이 캔버스 플레이어 — 보드/레일/비행다트/홀더 큐, 시크/배속 (터치 대응)
-function ReplayViewer({ resultId }: { resultId: string }) {
+function ReplayViewer({ resultId, level }: { resultId: string; level?: number }) {
   const [replay, setReplay] = useState<Replay | null>(null);
   const [err, setErr] = useState("");
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -312,11 +411,11 @@ function ReplayViewer({ resultId }: { resultId: string }) {
   const [, force] = useState(0);
 
   useEffect(() => {
-    fetch(`/api/sim/results/${resultId}?replay=1`)
+    fetch(`/api/sim/results/${resultId}?replay=1${level != null ? `&level=${level}` : ""}`)
       .then(async (r) => { if (!r.ok) throw new Error((await r.json()).error || r.statusText); return r.json(); })
       .then((d: Replay) => { setReplay(d); })
       .catch((e) => setErr(String(e.message || e)));
-  }, [resultId]);
+  }, [resultId, level]);
 
   const resetState = useCallback((rep: Replay) => {
     const m = new Map();

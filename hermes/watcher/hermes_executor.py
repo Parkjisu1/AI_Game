@@ -258,8 +258,11 @@ def _bf_sim_params(task: dict[str, Any], route: dict[str, Any]) -> dict[str, Any
     seed = int(sp.get("seed") or 12345)
     replay = bool(sp.get("replay", True))          # 기본: 최난 레벨 리플레이 자동 생성
     replay_level = int(sp.get("replay_level") or 0)  # 0 = 자동(최난)
+    replay_only = bool(sp.get("replay_only"))      # 배치 생략, 리플레이 1개만 (레벨별 온디맨드)
+    result_id = str(sp.get("result_id") or "")     # replay_only 시 연결할 bf_sim_results _id
     return {"levels": levels, "runs": runs, "policy": policy, "seed": seed,
-            "replay": replay, "replay_level": replay_level}
+            "replay": replay, "replay_level": replay_level,
+            "replay_only": replay_only, "result_id": result_id}
 
 
 def _bf_run_on_machine_b(args: list[str], remote_out: str, local_out: str, timeout: int) -> str | None:
@@ -303,6 +306,45 @@ def _handle_simulation(task: dict[str, Any], context: dict[str, Any], route: dic
     # 레벨 데이터 최신화 (apk_build 와 동일하게 pull)
     subprocess.run(["ssh", MACHINE_B_HOST, f'cd /D "{MACHINE_B_PROJECT_DIR}" && git pull'],
                    capture_output=True, text=True, errors="replace", timeout=120, check=False)
+
+    # ── 리플레이 단독 요청 (시뮬레이터 탭에서 레벨 선택 → 온디맨드 생성) ──
+    if p["replay_only"]:
+        lvl = p["replay_level"] or int(re.split(r"[,\-]", p["levels"])[0])
+        remote_rep = f"{BF_SIM_OUT_DIR_B}/replay_{stamp}.json"
+        local_rep = f"/tmp/bf_replay_{stamp}.json"
+        rerr = _bf_run_on_machine_b(
+            ["--levels", str(lvl), "--seed", str(p["seed"]), "--policy", p["policy"],
+             "--episodes", f'"{BF_EPISODES_DIR_B}"', "--replay", f'"{remote_rep}"'],
+            remote_rep, local_rep, timeout=300)
+        if rerr:
+            return {"success": False, "error": rerr, "next_status": "review"}
+        try:
+            with open(local_rep, "r", encoding="utf-8") as f:
+                replay_data = json.load(f)
+            os.remove(local_rep)
+        except Exception as e:  # noqa: BLE001
+            return {"success": False, "error": f"리플레이 파싱 실패: {e}", "next_status": "review"}
+        from datetime import datetime, timezone
+        from bson import ObjectId
+        client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
+        rep_ins = client[DB_NAME]["bf_sim_replays"].insert_one({
+            "task_id": task_id, "level": lvl, "seed": p["seed"], "policy": p["policy"],
+            "data": replay_data,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        })
+        if p["result_id"]:
+            try:
+                client[DB_NAME]["bf_sim_results"].update_one(
+                    {"_id": ObjectId(p["result_id"])},
+                    {"$set": {f"replays.{lvl}": str(rep_ins.inserted_id)}})
+            except Exception as e:  # noqa: BLE001
+                log.warning("결과 문서 리플레이 연결 실패 (무시): %s", e)
+        return {
+            "success": True,
+            "summary": f"🎬 L{lvl} 리플레이 생성 완료 ({p['policy']}, 시드 {p['seed']}) — 시뮬레이터 탭에서 재생 가능",
+            "next_status": "done",
+            "metadata": {"replay_id": str(rep_ins.inserted_id), "level": lvl},
+        }
 
     # ── 배치 실행 ──
     remote_json = f"{BF_SIM_OUT_DIR_B}/batch_{stamp}.json"
@@ -372,6 +414,8 @@ def _handle_simulation(task: dict[str, Any], context: dict[str, Any], route: dic
         },
         "replay_id": replay_doc_id,
         "replay_level": replay_level,
+        # 레벨별 온디맨드 리플레이 맵 (level → bf_sim_replays _id). 배치 시 최난 레벨 1개로 시작.
+        "replays": {str(replay_level): replay_doc_id} if replay_doc_id else {},
         "created_at": now_iso,
     })
 
