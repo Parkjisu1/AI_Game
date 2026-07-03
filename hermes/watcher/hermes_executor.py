@@ -264,24 +264,29 @@ def _bf_sim_params(task: dict[str, Any], route: dict[str, Any]) -> dict[str, Any
 
 def _bf_run_on_machine_b(args: list[str], remote_out: str, local_out: str, timeout: int) -> str | None:
     """머신 B 에서 exe 실행 후 결과 파일 scp 회수. 에러 문자열 반환 (성공 시 None)."""
+    # cmd.exe 함정: 괄호 없이 `if not exist X mkdir X & exe` 로 쓰면 & 뒤가 if 본문에
+    # 묶여서 폴더가 이미 있으면 exe 실행까지 통째로 스킵됨 (exit 0)
     remote_cmd = (
-        f'if not exist "{BF_SIM_OUT_DIR_B}" mkdir "{BF_SIM_OUT_DIR_B}" & '
+        f'(if not exist "{BF_SIM_OUT_DIR_B}" mkdir "{BF_SIM_OUT_DIR_B}") & '
         f'"{BF_SIM_EXE_B}" ' + " ".join(args)
     )
+    # 머신 B cmd.exe 출력엔 CP949 한글이 섞일 수 있음 → errors="replace" 필수
     try:
         proc = subprocess.run(["ssh", MACHINE_B_HOST, remote_cmd],
-                              capture_output=True, text=True, timeout=timeout, check=False)
+                              capture_output=True, text=True, errors="replace",
+                              timeout=timeout, check=False)
     except subprocess.TimeoutExpired:
         return f"시뮬레이션 타임아웃 ({timeout}s 초과)"
     if proc.returncode != 0:
         return f"시뮬 실행 실패 (exit={proc.returncode}): {(proc.stderr or proc.stdout)[-600:]}"
 
     scp = subprocess.run(["scp", f"{MACHINE_B_HOST}:{remote_out}", local_out],
-                         capture_output=True, text=True, timeout=120, check=False)
+                         capture_output=True, text=True, errors="replace",
+                         timeout=120, check=False)
     if scp.returncode != 0:
         return f"결과 회수(scp) 실패: {scp.stderr[-300:]}"
     subprocess.run(["ssh", MACHINE_B_HOST, f'del /Q "{remote_out.replace("/", chr(92))}"'],
-                   capture_output=True, text=True, timeout=30, check=False)
+                   capture_output=True, text=True, errors="replace", timeout=30, check=False)
     return None
 
 
@@ -297,7 +302,7 @@ def _handle_simulation(task: dict[str, Any], context: dict[str, Any], route: dic
 
     # 레벨 데이터 최신화 (apk_build 와 동일하게 pull)
     subprocess.run(["ssh", MACHINE_B_HOST, f'cd /D "{MACHINE_B_PROJECT_DIR}" && git pull'],
-                   capture_output=True, text=True, timeout=120, check=False)
+                   capture_output=True, text=True, errors="replace", timeout=120, check=False)
 
     # ── 배치 실행 ──
     remote_json = f"{BF_SIM_OUT_DIR_B}/batch_{stamp}.json"
