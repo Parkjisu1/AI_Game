@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import Icon from "@/components/Icon";
 
 // ──────────────────────────────────────────────────────────────
@@ -103,6 +103,8 @@ export default function SimulatorPage() {
     } catch { /* noop */ }
     setLoadingDetail(false);
   };
+
+  const closeDetail = useCallback(() => setDetail(null), []);
 
   // 리플레이 생성 대기 중 조용한 갱신 (로딩 표시 없이 — 선택 상태 유지)
   const refetchDetail = useCallback(async () => {
@@ -227,14 +229,15 @@ export default function SimulatorPage() {
       {/* 상세 */}
       {loadingDetail && <div className="text-center text-[13px] py-4" style={{ color: "var(--text-dim)" }}>불러오는 중…</div>}
       {detail && !loadingDetail && (
-        <DetailView key={detail._id} doc={detail} onClose={() => setDetail(null)} onRefetch={refetchDetail} />
+        <DetailView key={detail._id} doc={detail} onClose={closeDetail} onRefetch={refetchDetail} />
       )}
     </div>
   );
 }
 
 // ──────────────────────────────────────────────────────────────
-function DetailView({ doc, onClose, onRefetch }: { doc: ResultDoc; onClose: () => void; onRefetch: () => void }) {
+// memo: 목록 10초 폴링 등 부모 리렌더에서 대형 테이블 리렌더 차단 (doc 참조 동일하면 스킵)
+const DetailView = memo(function DetailView({ doc, onClose, onRefetch }: { doc: ResultDoc; onClose: () => void; onRefetch: () => void }) {
   const [selLevel, setSelLevel] = useState<number | null>(null);
   const [waiting, setWaiting] = useState(false);
   const [genErr, setGenErr] = useState("");
@@ -394,21 +397,85 @@ function DetailView({ doc, onClose, onRefetch }: { doc: ResultDoc; onClose: () =
       </div>
     </section>
   );
-}
+});
 
 // ──────────────────────────────────────────────────────────────
 // 리플레이 캔버스 플레이어 — 보드/레일/비행다트/홀더 큐, 시크/배속 (터치 대응)
+// 성능 설계:
+//  - 캔버스 draw는 rAF에서만, React 상태 갱신 없음 (기존: 매 프레임 force() 리렌더 → 페이지 전체 버벅임)
+//  - HUD/슬라이더 표시는 250ms 스로틀 상태(hudFrame)로만 갱신
+//  - 시크는 키프레임 스냅샷(SNAP_EVERY 간격) 복원 — 기존은 드래그 이벤트마다 0프레임부터 전체 재적용 O(n²)
+const SNAP_EVERY = 40;
+
+interface BalloonState {
+  n: number;
+  xs: number[]; zs: number[]; cs: number[];
+  idToIdx: Map<number, number>;
+  popped: Uint8Array; concealed: Uint8Array; marks: string[];
+  baseConcealed: Uint8Array; baseMarks: string[];
+  snaps: { popped: Uint8Array; concealed: Uint8Array; marks: string[] }[];  // [k] = 프레임 k*SNAP_EVERY 적용 후
+}
+
+function applyFrameTo(st: BalloonState, f: RFrame) {
+  for (const id of f.pop) { const i = st.idToIdx.get(id); if (i !== undefined) st.popped[i] = 1; }
+  for (const id of f.reveal) { const i = st.idToIdx.get(id); if (i !== undefined) st.concealed[i] = 0; }
+  for (const [id, mark] of f.mark) { const i = st.idToIdx.get(id); if (i !== undefined) st.marks[i] = mark; }
+}
+
+function restoreTo(st: BalloonState, rep: Replay, idx: number) {
+  const k = Math.min(Math.floor(idx / SNAP_EVERY), st.snaps.length - 1);
+  const snap = k >= 0 ? st.snaps[k] : null;
+  if (snap) {
+    st.popped.set(snap.popped);
+    st.concealed.set(snap.concealed);
+    for (let i = 0; i < st.n; i++) st.marks[i] = snap.marks[i];
+    for (let i = k * SNAP_EVERY + 1; i <= idx && i < rep.frames.length; i++) applyFrameTo(st, rep.frames[i]);
+  } else {
+    st.popped.fill(0);
+    st.concealed.set(st.baseConcealed);
+    for (let i = 0; i < st.n; i++) st.marks[i] = st.baseMarks[i];
+    for (let i = 0; i <= idx && i < rep.frames.length; i++) applyFrameTo(st, rep.frames[i]);
+  }
+}
+
+function buildBalloonState(rep: Replay): BalloonState {
+  const n = rep.balloons.length;
+  const st: BalloonState = {
+    n, xs: new Array(n), zs: new Array(n), cs: new Array(n), idToIdx: new Map(),
+    popped: new Uint8Array(n), concealed: new Uint8Array(n), marks: new Array(n).fill(""),
+    baseConcealed: new Uint8Array(n), baseMarks: new Array(n).fill(""), snaps: [],
+  };
+  rep.balloons.forEach(([id, x, z, c, mark, con], i) => {
+    st.xs[i] = x; st.zs[i] = z; st.cs[i] = c; st.idToIdx.set(id, i);
+    st.baseMarks[i] = mark; st.baseConcealed[i] = con ? 1 : 0;
+  });
+  // 시크용 키프레임 스냅샷 — 로드 시 1회 전체 패스
+  st.concealed.set(st.baseConcealed);
+  st.marks = st.baseMarks.slice();
+  for (let i = 0; i < rep.frames.length; i++) {
+    applyFrameTo(st, rep.frames[i]);
+    if (i % SNAP_EVERY === 0) {
+      st.snaps[i / SNAP_EVERY] = { popped: st.popped.slice(), concealed: st.concealed.slice(), marks: st.marks.slice() };
+    }
+  }
+  restoreTo(st, rep, 0);
+  return st;
+}
+
 function ReplayViewer({ resultId, level }: { resultId: string; level?: number }) {
   const [replay, setReplay] = useState<Replay | null>(null);
   const [err, setErr] = useState("");
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const stateRef = useRef<Map<number, { x: number; z: number; c: number; mark: string; concealed: boolean; popped: boolean }>>(new Map());
+  const stRef = useRef<BalloonState | null>(null);
   const frameRef = useRef(0);
   const playingRef = useRef(false);
   const speedRef = useRef(1);
   const accumRef = useRef(0);
   const lastTsRef = useRef(0);
-  const [, force] = useState(0);
+  const lastHudRef = useRef(0);
+  const sizeRef = useRef({ W: 0, H: 0, bs: 1 });   // 레이아웃 캐시 — 매 프레임 clientWidth 읽기(강제 레이아웃) 방지
+  const [hudFrame, setHudFrame] = useState(0);      // HUD·슬라이더 표시용 (재생 중 250ms 스로틀)
+  const [, force] = useState(0);                    // 재생/일시정지 아이콘 갱신용
 
   useEffect(() => {
     fetch(`/api/sim/results/${resultId}?replay=1${level != null ? `&level=${level}` : ""}`)
@@ -417,34 +484,27 @@ function ReplayViewer({ resultId, level }: { resultId: string; level?: number })
       .catch((e) => setErr(String(e.message || e)));
   }, [resultId, level]);
 
-  const resetState = useCallback((rep: Replay) => {
-    const m = new Map();
-    for (const [id, x, z, c, mark, con] of rep.balloons) m.set(id, { x, z, c, mark, concealed: !!con, popped: false });
-    stateRef.current = m;
+  const measure = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);      // 고DPI 백킹 과대 방지
+    const W = canvas.clientWidth, H = Math.round(W * 1.35);
+    const bs = dpr * Math.min(1, 1300 / Math.max(1, W * dpr));    // 백킹 폭 상한 ~1300px
+    sizeRef.current = { W, H, bs };
+    canvas.width = Math.round(W * bs);
+    canvas.height = Math.round(H * bs);
+    canvas.style.height = `${H}px`;
   }, []);
-
-  const applyFrame = useCallback((f: RFrame) => {
-    const m = stateRef.current;
-    for (const id of f.pop) { const b = m.get(id); if (b) b.popped = true; }
-    for (const id of f.reveal) { const b = m.get(id); if (b) b.concealed = false; }
-    for (const [id, mark] of f.mark) { const b = m.get(id); if (b) b.mark = mark; }
-  }, []);
-
-  const rebuildTo = useCallback((rep: Replay, idx: number) => {
-    resetState(rep);
-    for (let i = 0; i <= idx && i < rep.frames.length; i++) applyFrame(rep.frames[i]);
-    frameRef.current = Math.min(idx, rep.frames.length - 1);
-  }, [resetState, applyFrame]);
 
   const render = useCallback(() => {
-    const rep = replay, canvas = canvasRef.current;
-    if (!rep || !canvas) return;
+    // 캔버스만 그린다 — 여기서 React 상태를 건드리지 않음
+    const rep = replay, canvas = canvasRef.current, st = stRef.current;
+    if (!rep || !canvas || !st) return;
     const f = rep.frames[frameRef.current];
-    const dpr = window.devicePixelRatio || 1;
-    const W = canvas.clientWidth, H = Math.round(W * 1.35);
-    if (canvas.width !== W * dpr) { canvas.width = W * dpr; canvas.height = H * dpr; canvas.style.height = `${H}px`; }
+    const { W, H, bs } = sizeRef.current;
+    if (!W) return;
     const ctx = canvas.getContext("2d")!;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.setTransform(bs, 0, 0, bs, 0, 0);
     ctx.clearRect(0, 0, W, H);
     ctx.fillStyle = "#070d18";
     ctx.fillRect(0, 0, W, H);
@@ -470,16 +530,18 @@ function ReplayViewer({ resultId, level }: { resultId: string; level?: number })
     ctx.font = `bold ${Math.max(7, r * 0.85)}px ui-monospace, monospace`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    for (const b of stateRef.current.values()) {
-      if (b.popped) continue;
-      const px = X(b.x), py = Y(b.z);
-      let fill = b.concealed ? "#4b5563" : rep.palette[b.c] || "#f0f";
-      if (b.mark.startsWith("I")) fill = "#96c8eb";
+    for (let i = 0; i < st.n; i++) {
+      if (st.popped[i]) continue;
+      const px = X(st.xs[i]), py = Y(st.zs[i]);
+      const concealed = !!st.concealed[i];
+      const mark = st.marks[i];
+      let fill = concealed ? "#4b5563" : rep.palette[st.cs[i]] || "#f0f";
+      if (mark.startsWith("I")) fill = "#96c8eb";
       ctx.fillStyle = fill;
       ctx.beginPath();
       ctx.arc(px, py, r, 0, Math.PI * 2);
       ctx.fill();
-      const mk = b.concealed ? "?" : b.mark;
+      const mk = concealed ? "?" : mark;
       if (mk && showMark) { ctx.fillStyle = "#000"; ctx.fillText(mk, px, py); }
     }
     // 다트/발사체
@@ -508,19 +570,32 @@ function ReplayViewer({ resultId, level }: { resultId: string; level?: number })
         ctx.fillRect(x0, y0, colW - 5, 15);
         const bright = parseInt(fill.slice(1, 3), 16) * 0.45 + parseInt(fill.slice(3, 5), 16) * 0.5;
         ctx.fillStyle = bright > 105 ? "#000" : "#fff";
-        const st = state === "deploy" ? "▶" : state === "wait" ? "◇" : "";
-        ctx.fillText(`${st}c${c}×${mag}${tags}`, x0 + 2, y0 + 8, colW - 9);
+        const stateIcon = state === "deploy" ? "▶" : state === "wait" ? "◇" : "";
+        ctx.fillText(`${stateIcon}c${c}×${mag}${tags}`, x0 + 2, y0 + 8, colW - 9);
         y0 += 18;
       }
       if (hc.more > 0) { ctx.fillStyle = "#5a6f8c"; ctx.fillText(`+${hc.more}`, x0 + 2, y0 + 7); }
     }
-    force((v) => v + 1);   // HUD 텍스트 리렌더
   }, [replay]);
+
+  // 시크 — 키프레임 스냅샷 복원 (드래그 중에도 가벼움)
+  const seek = useCallback((v: number) => {
+    const rep = replay, st = stRef.current;
+    if (!rep || !st) return;
+    playingRef.current = false;
+    frameRef.current = Math.max(0, Math.min(v, rep.frames.length - 1));
+    restoreTo(st, rep, frameRef.current);
+    render();
+    setHudFrame(frameRef.current);
+  }, [replay, render]);
 
   // 초기화 + 재생 루프
   useEffect(() => {
     if (!replay) return;
-    rebuildTo(replay, 0);
+    stRef.current = buildBalloonState(replay);
+    frameRef.current = 0;
+    setHudFrame(0);
+    measure();
     render();
     let raf = 0;
     const tickFn = (ts: number) => {
@@ -533,29 +608,39 @@ function ReplayViewer({ resultId, level }: { resultId: string; level?: number })
           accumRef.current -= 0.1;
           if (frameRef.current >= replay.frames.length - 1) { playingRef.current = false; break; }
           frameRef.current++;
-          applyFrame(replay.frames[frameRef.current]);
+          applyFrameTo(stRef.current!, replay.frames[frameRef.current]);
           changed = true;
         }
-        if (changed) render();
+        if (changed) {
+          render();
+          // HUD/슬라이더 갱신은 4회/초로 제한 — 매 프레임 React 리렌더 금지
+          if (ts - lastHudRef.current > 250 || !playingRef.current) {
+            lastHudRef.current = ts;
+            setHudFrame(frameRef.current);
+          }
+        }
       } else lastTsRef.current = ts;
       raf = requestAnimationFrame(tickFn);
     };
     raf = requestAnimationFrame(tickFn);
-    const onResize = () => render();
+    const onResize = () => { measure(); render(); };
     window.addEventListener("resize", onResize);
     return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", onResize); };
-  }, [replay, rebuildTo, render, applyFrame]);
+  }, [replay, measure, render]);
 
   if (err) return <div className="text-[12px] py-3" style={{ color: "var(--err)" }}>리플레이 로드 실패: {err}</div>;
   if (!replay) return <div className="text-[12px] py-3" style={{ color: "var(--text-dim)" }}>리플레이 로드 중…</div>;
 
-  const f = replay.frames[frameRef.current];
+  const f = replay.frames[Math.min(hudFrame, replay.frames.length - 1)];
   const occPct = f.stat.cap > 0 ? Math.round((f.stat.occ / f.stat.cap) * 100) : 0;
   return (
     <div className="rounded-2xl border p-3 mb-2" style={{ borderColor: "var(--line)", background: "rgba(6,11,22,.5)" }}>
       {/* 컨트롤 — 모바일 터치 크기 */}
       <div className="flex flex-wrap items-center gap-2 mb-2">
-        <button onClick={() => { playingRef.current = !playingRef.current; lastTsRef.current = 0; force((v) => v + 1); }}
+        <button onClick={() => {
+          if (!playingRef.current && frameRef.current >= replay.frames.length - 1) seek(0);   // 끝났으면 처음부터
+          playingRef.current = !playingRef.current; lastTsRef.current = 0; force((v) => v + 1);
+        }}
           className="w-10 h-10 rounded-xl font-bold" style={{ background: "linear-gradient(135deg, var(--neon-deep), var(--neon))", color: "#041018" }}>
           <Icon name={playingRef.current ? "x" : "play"} size={14} />
         </button>
@@ -564,8 +649,8 @@ function ReplayViewer({ resultId, level }: { resultId: string; level?: number })
           <option value="0.5">x0.5</option><option value="1">x1</option><option value="2">x2</option>
           <option value="4">x4</option><option value="10">x10</option>
         </select>
-        <input type="range" min={0} max={replay.frames.length - 1} value={frameRef.current}
-          onChange={(e) => { playingRef.current = false; rebuildTo(replay, parseInt(e.target.value)); render(); }}
+        <input type="range" min={0} max={replay.frames.length - 1} value={Math.min(hudFrame, replay.frames.length - 1)}
+          onChange={(e) => seek(parseInt(e.target.value))}
           className="flex-1 min-w-[120px] accent-cyan-400" />
         <span className="mono text-[11px] w-24 text-right" style={{ color: "var(--text-dim)" }}>
           {f.t.toFixed(1)}s / {replay.frames[replay.frames.length - 1].t.toFixed(1)}s
@@ -573,7 +658,9 @@ function ReplayViewer({ resultId, level }: { resultId: string; level?: number })
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
-        <canvas ref={canvasRef} className="w-full rounded-xl lg:col-span-2" style={{ touchAction: "none" }} />
+        {/* contain+translateZ: 캔버스를 자체 컴포지터 레이어로 격리 — 리페인트가 glass(backdrop blur) 재합성을 유발하지 않게 */}
+        <canvas ref={canvasRef} className="w-full rounded-xl lg:col-span-2"
+          style={{ touchAction: "none", contain: "paint", transform: "translateZ(0)" }} />
         <div className="space-y-2 text-[12px]">
           <div className="rounded-xl border p-3" style={{ borderColor: "var(--line)" }}>
             <div className="font-bold mb-1">L{replay.level.id} · {replay.level.policy} · 시드 {replay.level.seed}</div>
