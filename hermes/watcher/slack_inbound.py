@@ -164,6 +164,7 @@ class InboundPoller:
             return False
         if not r.get("ok"):
             if r.get("error") == "missing_scope":
+                log.info("im:read/im:history 스코프 없음 — 대기 (Slack 앱에서 추가 시 자동 작동)")
                 self._warn_scope_once()
             else:
                 log.warning("conversations.list error: %s", r.get("error"))
@@ -296,6 +297,8 @@ class InboundPoller:
                       + (" (리뷰 상태라 재작업이 시작될 수 있어요)" if task.get("status") == "review" else ""))
 
     # ── 대상 task 결정 ─────────────────────────
+    # 안전 원칙: 전역 폴백 금지 — 문맥이 없으면 남의 task에 승인/중단이 잘못 꽂힐 수 있다.
+    # 허용 순서: 명시 #id → 최근 DM 문맥 → 본인이 만든 최근 review task. 없으면 None(되물음).
     def _resolve_task(self, slack_user: str, user: dict[str, str], ref_id: Optional[str]) -> Optional[dict]:
         if ref_id:
             for t in self.tasks.find({}, {"title": 1, "status": 1, "goal_children": 1,
@@ -313,12 +316,8 @@ class InboundPoller:
             except Exception:
                 pass
         # 2) 이 사용자가 만든 가장 최근 review task
-        t = self.tasks.find_one({"status": "review", "created_by_email": user["email"]},
-                                sort=[("updated_at", -1)])
-        if t:
-            return t
-        # 3) 최근 review task (전체)
-        return self.tasks.find_one({"status": "review"}, sort=[("updated_at", -1)])
+        return self.tasks.find_one({"status": "review", "created_by_email": user["email"]},
+                                   sort=[("updated_at", -1)])
 
     # ── 액션들 ─────────────────────────────────
     def _approve(self, channel: str, slack_user: str, user: dict, ref_id: Optional[str]) -> None:

@@ -293,8 +293,8 @@ def _dispatch_event(change: dict[str, Any], writer: ProjectHubWriter) -> None:
 # ──────────────────────────────────────────────
 _POOL = ThreadPoolExecutor(max_workers=WORKER_SLOTS, thread_name_prefix="hermes-worker")
 
-# 실행 중 task 레지스트리 (lease 연장용)
-_ACTIVE_TASKS: dict[str, datetime] = {}
+# 실행 중 task 레지스트리 (lease 연장용). 값: None=큐 대기, datetime=실행 시작 시각
+_ACTIVE_TASKS: dict[str, Any] = {}
 _ACTIVE_GUARD = threading.Lock()
 
 # 액션별 직렬화 락 — 같은 자원(Machine B 작업트리 등)을 만지는 액션은 동시 실행 금지
@@ -362,7 +362,7 @@ def _submit_task(writer: ProjectHubWriter, task: dict[str, Any]) -> None:
         log.info("  ⏭️ already claimed — skip (dedup): [%s] %s", task_id, title)
         return
     with _ACTIVE_GUARD:
-        _ACTIVE_TASKS[task_id] = datetime.now(timezone.utc)
+        _ACTIVE_TASKS[task_id] = None  # None=큐 대기, datetime=실행 시작 (셧다운 시 구분용)
     log.info("  ▶ claimed by %s — submitting to pool (%d in flight)",
              WORKER_ID, len(_ACTIVE_TASKS))
     _POOL.submit(_process_task, writer, task)
@@ -371,6 +371,8 @@ def _submit_task(writer: ProjectHubWriter, task: dict[str, Any]) -> None:
 def _process_task(writer: ProjectHubWriter, task: dict[str, Any]) -> None:
     """워커 스레드 본체 — 기존 인라인 처리 로직 + 직렬화 락 + claim 해제."""
     task_id = str(task.get("_id"))
+    with _ACTIVE_GUARD:
+        _ACTIVE_TASKS[task_id] = datetime.now(timezone.utc)  # 큐 대기 → 실행 시작
     try:
         # 1. 처리 시작 표시
         writer.update_status(task_id, "in_progress")
@@ -491,6 +493,9 @@ def _lease_renewer_loop() -> None:
 
             if cycle % 5 == 0:
                 _safety_net_scan(coll)
+                # 스테일 워커 문서 정리 — worker_id에 PID가 포함돼 재시작마다 새 doc이 생김
+                client[DB_NAME]["hermes_workers"].delete_many(
+                    {"ts": {"$lt": now - timedelta(hours=24)}})
         except Exception:
             log.exception("lease renewer cycle failed")
             try:
@@ -630,8 +635,20 @@ def watch_forever() -> None:
             backoff = min(backoff * 2, max_backoff)
 
     # 종료: 진행 중 워커는 마저 돌게 두되 새 작업은 받지 않음.
-    # 프로세스가 죽으면 lease가 만료돼 다음 기동/타 워커가 안전히 인수.
+    # 큐에서 대기만 하다 취소된 task는 claim을 즉시 해제 — 재시작 후 30분 lease 만료를
+    # 기다리지 않고 catch-up/안전망이 곧바로 인수할 수 있게 한다.
     _POOL.shutdown(wait=False, cancel_futures=True)
+    try:
+        with _ACTIVE_GUARD:
+            queued = [tid for tid, started in _ACTIVE_TASKS.items() if started is None]
+        if queued:
+            client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=8000)
+            coll = client[DB_NAME][TASKS_COLLECTION]
+            for tid in queued:
+                _release_claim(coll, tid)
+            log.info("셧다운: 큐 대기 task %d개 claim 즉시 해제", len(queued))
+    except Exception:
+        log.exception("shutdown claim release failed (non-fatal — lease가 자연 만료됨)")
     log.info("Watcher stopped.")
 
 

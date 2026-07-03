@@ -3856,6 +3856,26 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
     if _diff_patch:
         _trunc = "\n…(이하 생략, 큰 변경)" if len(_dp.stdout) > 9000 else ""
         _changes += f"\n\n## 실제 코드 변경 (git diff — stat 아닌 실제 내용, 이걸로 판정하라)\n```diff\n{_diff_patch}{_trunc}\n```"
+    # 파일 실독 그라운딩 — diff만으론 안 보이는 최종 상태(주변 문맥·시그니처·사용처)를 리뷰어가
+    # 직접 읽고 판정하게 함 (오승인 대응). 캡: .cs 3파일 × 400줄 × 12K chars. off: HERMES_REVIEWER_READ_FILES=off
+    if os.environ.get("HERMES_REVIEWER_READ_FILES", "on").lower() != "off" and changed_files:
+        try:
+            _read_targets = [f for f in changed_files if f.endswith(".cs")][:3]
+            _file_sections = []
+            for _rf in _read_targets:
+                _fc = subprocess.run(
+                    ["ssh", repo_host, f'cd "{repo_dir}" && sed -n \'1,400p\' -- "{_rf}"'],
+                    capture_output=True, text=True, encoding="utf-8", errors="replace",
+                    timeout=20, check=False,
+                )
+                if _fc.returncode == 0 and (_fc.stdout or "").strip():
+                    _file_sections.append(
+                        f"### {_rf} (1~400줄, 변경 반영된 최종 상태)\n```csharp\n{_fc.stdout[:12000]}\n```")
+            if _file_sections:
+                _changes += ("\n\n## 변경 파일 전문 — diff 밖 주변 문맥(참조·시그니처·중복)까지 이걸로 검증하라\n"
+                             + "\n\n".join(_file_sections))
+        except Exception:
+            log.exception("reviewer file-read grounding failed (non-fatal)")
     _reviewer_prompt = REVIEWER_PROMPT_TEMPLATE.format(
         changes_summary=_changes,
         validator_verdict=json.dumps(validator_verdict, indent=2, ensure_ascii=False),
@@ -4710,6 +4730,7 @@ _GOAL_DECOMPOSE_PROMPT = """당신은 게임 개발 PM입니다. 아래 상위 �
    - [ask] — 조사/분석/보고
 3. depends_on은 선행 작업의 index 배열 (0-base). 순환 금지. 병렬 가능한 것은 의존성 없이.
 4. description에는 실행자가 바로 착수할 수 있는 구체적 지시 포함 (대상 파일/시스템/수치 등).
+5. [sim] 작업은 제목 또는 설명에 반드시 "레벨 X-Y" 형식의 레벨 범위를 명시 (없으면 시뮬 파라미터 파싱 실패).
 
 ## 출력 (JSON만, 다른 텍스트 금지)
 {{"subtasks": [{{"title": "[unity] ...", "description": "...", "depends_on": []}}, ...]}}

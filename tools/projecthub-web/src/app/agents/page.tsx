@@ -140,11 +140,22 @@ export default function AgentsPage() {
   const [gateData, setGateData] = useState<{ gates: { gate: string; result: string; n: number }[]; mergeStates: { state: string; n: number }[]; blocked: { id: string; title: string; reason: string; at: string }[] }>({ gates: [], mergeStates: [], blocked: [] });
   const [latestTask, setLatestTask] = useState<{ title?: string; description?: string; created_at?: string; status?: string } | null>(null);
   const [running, setRunning] = useState<{ task_id?: string; role?: string; started_at?: string }[]>([]);
+  const [fleet, setFleet] = useState<{ workers: { worker_id: string; slots: number; active: number }[]; inProgress: { id: string; title: string; worker: string | null }[] }>({ workers: [], inProgress: [] });
 
   useEffect(() => {
     const load = () => fetch("/api/agents/node-runs").then((r) => r.json()).then((d) => setRunning(Array.isArray(d?.running) ? d.running : [])).catch(() => {});
     load();
     const id = setInterval(load, 10000);
+    return () => clearInterval(id);
+  }, []);
+
+  // 워커 플릿 (claim/lease 병렬 실행 — hermes_workers heartbeat)
+  useEffect(() => {
+    const load = () => fetch("/api/assistant/status").then((r) => r.json()).then((d) => {
+      setFleet({ workers: Array.isArray(d?.workers) ? d.workers : [], inProgress: Array.isArray(d?.in_progress) ? d.in_progress : [] });
+    }).catch(() => {});
+    load();
+    const id = setInterval(load, 15000);
     return () => clearInterval(id);
   }, []);
 
@@ -482,7 +493,7 @@ export default function AgentsPage() {
       <div className="rounded-xl border border-gray-200 bg-white p-4 mb-4">
         <div className="text-sm font-bold mb-2 flex items-center gap-1.5"><Icon name="flask" size={15} /> 검증 게이트 (최근 14일)</div>
         {gateData.gates.length === 0 ? (
-          <div className="text-sm text-gray-400">아직 게이트 이벤트 없음 — task 처리 시 누적됩니다 (현재 컴파일 게이트 warn 측정 중).</div>
+          <div className="text-sm text-gray-400">아직 게이트 이벤트 없음 — task 처리 시 누적됩니다 (컴파일 게이트 block + batchmode 폴백 가동 중).</div>
         ) : (
           <div className="flex flex-wrap gap-2">
             {Object.entries(gateData.gates.reduce((acc, g) => { if (!acc[g.gate]) acc[g.gate] = {}; acc[g.gate][g.result] = g.n; return acc; }, {} as Record<string, Record<string, number>>)).map(([gate, res]) => (
@@ -508,6 +519,38 @@ export default function AgentsPage() {
                   <a href="/tasks" className="truncate flex-1 hover:underline">{b.title}</a>
                   <span className="text-gray-400 shrink-0 truncate max-w-[40%]">{b.reason}</span>
                   <span className="text-gray-300 shrink-0">{ago(b.at, now)}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      {/* 워커 플릿 (claim/lease 병렬 실행) */}
+      <div className="rounded-xl border border-gray-200 bg-white p-4 mb-4">
+        <div className="text-sm font-bold mb-2 flex items-center gap-1.5"><Icon name="bot" size={15} /> 워커 플릿</div>
+        {fleet.workers.length === 0 ? (
+          <div className="text-sm text-gray-400">활성 워커 없음 — watcher가 내려갔거나 heartbeat 대기 중 (60s 주기).</div>
+        ) : (
+          <div className="flex flex-wrap gap-2">
+            {fleet.workers.map((w) => (
+              <div key={w.worker_id} className="rounded-lg border border-gray-200 p-2.5 min-w-[160px]">
+                <div className="text-xs font-semibold mb-1 flex items-center gap-1.5">
+                  <span className="dot dot-ok" /> {w.worker_id}
+                </div>
+                <div className="text-[11px] text-gray-500">슬롯 {w.active}/{w.slots} 사용 중</div>
+              </div>
+            ))}
+          </div>
+        )}
+        {fleet.inProgress.length > 0 && (
+          <div className="mt-3 border-t border-gray-100 pt-2">
+            <div className="text-xs font-semibold text-gray-500 mb-1">진행 중 작업</div>
+            <ul className="space-y-1">
+              {fleet.inProgress.slice(0, 6).map((t) => (
+                <li key={t.id} className="text-xs flex items-center gap-2">
+                  <a href="/tasks" className="truncate flex-1 hover:underline">{t.title}</a>
+                  {t.worker && <span className="text-gray-400 shrink-0 mono">{t.worker}</span>}
                 </li>
               ))}
             </ul>
