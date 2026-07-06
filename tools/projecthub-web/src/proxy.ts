@@ -140,7 +140,12 @@ export async function proxy(req: NextRequest) {
 export const config = {
   // SSE는 long-lived → 라우트 자체에서 auth() 처리. 정적 자산도 제외.
   // /api/auth/* 와 /api/slack/events 는 매처에 포함하여 rate limit만 적용.
+  // ⚠️ 함정 2건 수정 (2026-07-06):
+  //  1. 문자열 리터럴에서 "\."의 백슬래시가 소실돼 정규식이 ".*.(?:...|map)$"이 됨 →
+  //     /roadmap이 "map으로 끝나는 정적 파일"로 오인 제외 = 인증 우회. "\\." 필수.
+  //  2. 확장자 제외가 /api/ 경로에도 적용돼 /api/*/image/*.png가 무인증 서빙 →
+  //     (?!api/) 로 api 하위는 확장자와 무관하게 미들웨어 통과(인증 적용).
   matcher: [
-    "/((?!api/tasks/stream|api/agents/sessions/stream|_next/static|_next/image|pixelforge/_next|favicon\.ico|.*\.(?:png|jpg|jpeg|gif|svg|webp|ico|woff|woff2|ttf|eot|css|js|map)$).*)",
+    "/((?!api/tasks/stream|api/agents/sessions/stream|_next/static|_next/image|pixelforge/_next|favicon\\.ico|(?!api/).*\\.(?:png|jpg|jpeg|gif|svg|webp|ico|woff|woff2|ttf|eot|css|js|map)$).*)",
   ],
 };

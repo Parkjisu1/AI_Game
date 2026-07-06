@@ -104,11 +104,16 @@ export async function PATCH(req: NextRequest) {
   if (!body || typeof body !== "object") {
     return NextResponse.json({ error: "invalid json body" }, { status: 400 });
   }
-  const { _id, add_comment, delete_comment_index, ...update } = body;
+  const { _id, add_comment, delete_comment_index, delete_comment_id, ...update } = body;
   // _id 검증: 누락/비정상이면 new ObjectId(undefined)가 '랜덤 id'를 생성해 updateOne이
   // 아무것도 못 맞춰 {ok:true}를 반환 = 조용한 데이터 손실. 24-hex 아니면 400으로 차단.
   if (!_id || typeof _id !== "string" || !/^[a-f0-9]{24}$/i.test(_id)) {
     return NextResponse.json({ error: "invalid or missing _id" }, { status: 400 });
+  }
+  // status 화이트리스트 — 임의 문자열이 들어오면 보드 4컬럼 어디에도 안 보이는 유령 task가 됨
+  const VALID_STATUS = ["todo", "in_progress", "review", "done", "draft"];
+  if (update.status !== undefined && !VALID_STATUS.includes(String(update.status))) {
+    return NextResponse.json({ error: `invalid status (allowed: ${VALID_STATUS.join("/")})` }, { status: 400 });
   }
   const { ObjectId } = await import("mongodb");
   update.updated_at = new Date().toISOString();
@@ -144,8 +149,14 @@ export async function PATCH(req: NextRequest) {
   }
   await db.collection("pixelforge_tasks").updateOne({ _id: new ObjectId(_id) }, ops);
 
-  // 댓글 삭제
-  if (delete_comment_index !== undefined) {
+  // 댓글 삭제 — id 기반이 정본 (인덱스 기반은 목록 API가 마지막 5개만 slice해 주는 것과
+  // 어긋나면 엉뚱한 댓글이 지워짐 → legacy id 없는 댓글용 폴백으로만 유지)
+  if (delete_comment_id !== undefined && typeof delete_comment_id === "string" && delete_comment_id) {
+    await db.collection("pixelforge_tasks").updateOne(
+      { _id: new ObjectId(_id) },
+      { $pull: { comments: { id: delete_comment_id } }, $set: { updated_at: new Date().toISOString() } } as never
+    );
+  } else if (delete_comment_index !== undefined) {
     const idx = Number(delete_comment_index);
     const doc = await db.collection("pixelforge_tasks").findOne({ _id: new ObjectId(_id) });
     if (doc?.comments && Array.isArray(doc.comments) && idx >= 0 && idx < doc.comments.length) {

@@ -224,6 +224,12 @@ def _dispatch_event(change: dict[str, Any], writer: ProjectHubWriter) -> None:
         log.debug("Inactive status (%s): %s", task.get("status"), title)
         return
 
+    # insert 이벤트는 todo만 즉시 처리 — review/in_progress 상태로 직접 insert된 문서가
+    # 승인/피드백 게이트를 우회해 곧바로 실행되는 quirk 차단 (실 UI/API 흐름은 항상 todo로 insert).
+    if op == "insert" and task.get("status") != "todo":
+        log.info("  ⏭️ insert(status=%s) — todo가 아니므로 스킵: %s", task.get("status"), title)
+        return
+
     log.info("Processing task: [%s] %s (op=%s)", task_id, title, op)
 
     # update 이벤트일 때, 어떤 필드가 바뀌었는지 확인

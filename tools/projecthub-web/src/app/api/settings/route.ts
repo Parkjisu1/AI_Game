@@ -8,6 +8,9 @@ function maskSecret(s?: string): string {
 }
 
 export async function GET() {
+  // 심층방어 — middleware가 인증을 커버하지만 시크릿 인접 라우트라 자체 세션 확인도 수행
+  const session = await auth();
+  if (!session?.user?.email) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   try {
     const settings = await getSettings();
     const masked = {

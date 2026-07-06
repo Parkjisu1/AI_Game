@@ -132,7 +132,11 @@ export default function Dashboard() {
     fetch("/api/tasks").then((r) => r.json()).then((d) => Array.isArray(d) && setTasks(d)).catch(() => {});
     fetch("/api/agents/roles").then((r) => r.json()).then((d) => setRoles(Array.isArray(d) ? d : d.roles || [])).catch(() => {});
     fetch("/api/agents/sessions?limit=6").then((r) => r.json()).then((d) => setSessions(d.sessions || [])).catch(() => {});
-    fetch("/api/agents/node-runs").then((r) => r.json()).then((d) => { setRunning((d.running || []).length); setLive(true); }).catch(() => {});
+    fetch("/api/agents/node-runs").then((r) => r.json()).then((d) => { setRunning((d.running || []).length); }).catch(() => {});
+    // LIVE = 실제 watcher 워커 heartbeat(3분 내) 기준 — "API 응답됨"이 아니라 진짜 가동 신호
+    fetch("/api/assistant/status").then((r) => r.json()).then((d) => {
+      setLive(Array.isArray(d?.workers) && d.workers.length > 0);
+    }).catch(() => setLive(false));
   }, []);
 
   const stat = {
@@ -240,8 +244,12 @@ export default function Dashboard() {
         <div className="lg:col-span-5 space-y-4">
           <div className="glass hud p-5 flex flex-col items-center">
             <div className="w-full flex items-center justify-center mb-2">
-              <span className="px-3 py-1 rounded-full text-[10px] mono tracking-hud" style={{ background: "rgba(34,211,238,0.1)", border: "1px solid var(--line-strong)", color: "var(--neon)" }}>
-                ◇ AI SYSTEM ONLINE ◇
+              <span className="px-3 py-1 rounded-full text-[10px] mono tracking-hud"
+                style={live
+                  ? { background: "rgba(34,211,238,0.1)", border: "1px solid var(--line-strong)", color: "var(--neon)" }
+                  : { background: "rgba(251,90,107,0.08)", border: "1px solid rgba(251,90,107,0.35)", color: "var(--err)" }}
+                title={live ? "watcher 워커 heartbeat 정상 (3분 내)" : "watcher heartbeat 없음 — hermes-watcher 서비스 확인 필요"}>
+                {live ? "◇ AI SYSTEM ONLINE ◇" : "◇ AI SYSTEM OFFLINE ◇"}
               </span>
             </div>
             <OrbitalHub running={running} live={live} />

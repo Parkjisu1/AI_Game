@@ -374,7 +374,13 @@ function TaskBoard({ project }: { project: string }) {
       if (!m) return;
       const id = m[1];
       const t = tasks.find((x) => String(x._id) === id);
-      if (t) setDetailTask(t);
+      if (t) { setDetailTask(t); return; }
+      // 프로젝트 미선택(목록 화면)이라 tasks가 비어도 딥링크는 열려야 함 — 단건 lazy fetch
+      // (Slack DM의 /tasks#task=<id> 링크가 모달 없이 목록만 보여주던 문제)
+      fetch(`/api/tasks/${id}`)
+        .then((r) => (r.ok ? r.json() : null))
+        .then((full) => { if (full && full._id) setDetailTask(full); })
+        .catch(() => {});
     }
     openFromHash();
     window.addEventListener("hashchange", openFromHash);
@@ -495,8 +501,9 @@ function TaskBoard({ project }: { project: string }) {
     setDragOver(null);
   }
 
+  // draft(=goal 분해 하위, 승인 대기)는 별도 컬럼이 없어 유령이 되던 문제 → todo 컬럼에 배지로 표시
   const tasksByStatus = (status: Task["status"]) =>
-    filteredTasks.filter((t) => t.status === status);
+    filteredTasks.filter((t) => t.status === status || (status === "todo" && (t.status as string) === "draft"));
 
   function formatDate(iso?: string) {
     if (!iso) return "";
@@ -719,6 +726,12 @@ function TaskBoard({ project }: { project: string }) {
                           className={`mt-1.5 shrink-0 w-2 h-2 rounded-full ${priStyle(task.priority).dot}`}
                         />
                         <p className="text-sm font-medium leading-snug line-clamp-2 flex-1">{task.title}</p>
+                        {(task.status as string) === "draft" && (
+                          <span className="shrink-0 text-[10px] px-1.5 py-0.5 rounded border border-violet-200 bg-violet-50 text-violet-700 font-medium"
+                            title="목표([goal]) 분해로 생성된 하위 작업 — 부모 작업 승인 시 자동 실행">
+                            📝 승인 대기
+                          </span>
+                        )}
                         {task.has_image && (
                           <span className="shrink-0 text-gray-400" title="이미지 첨부됨 — 카드 클릭으로 상세 보기"><Icon name="paperclip" size={13} /></span>
                         )}
@@ -894,7 +907,7 @@ function TaskBoard({ project }: { project: string }) {
                   ref={titleRef}
                   value={form.title}
                   onChange={(e) => setForm({ ...form, title: e.target.value })}
-                  onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) createTask(); }}
+                  onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) createTask(); }}
                   className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
                   placeholder="작업 제목"
                 />
@@ -1164,11 +1177,18 @@ function TaskBoard({ project }: { project: string }) {
           }}
           onDeleteComment={async (index) => {
             if (!confirm("댓글 삭제?")) return;
-            await fetch("/api/tasks", {
+            // id 기반 삭제가 정본 — 목록 API가 댓글을 마지막 5개만 주는 것과 index가 어긋나면
+            // 엉뚱한 댓글이 지워짐. id 없는 legacy 댓글만 index 폴백.
+            const target = (detailTask.comments || [])[index] as { id?: string } | undefined;
+            const body = target?.id
+              ? { _id: detailTask._id, delete_comment_id: target.id }
+              : { _id: detailTask._id, delete_comment_index: index };
+            const res = await fetch("/api/tasks", {
               method: "PATCH",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ _id: detailTask._id, delete_comment_index: index }),
-            });
+              body: JSON.stringify(body),
+            }).catch(() => null);
+            if (!res || !res.ok) { alert("댓글 삭제 실패 — 새로고침 후 다시 시도해주세요."); return; }
             const updated = {
               ...detailTask,
               comments: (detailTask.comments || []).filter((_, i) => i !== index),
@@ -1629,7 +1649,7 @@ function DetailModal({
                 <input
                   value={commentText}
                   onChange={(e) => setCommentText(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) handleAddComment(); }}
+                  onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) handleAddComment(); }}
                   placeholder="댓글 작성... (Enter로 전송)"
                   className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-lg"
                   style={{ color: "#e6e9ef" }}

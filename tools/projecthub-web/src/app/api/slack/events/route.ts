@@ -77,15 +77,21 @@ export async function POST(req: NextRequest) {
     const subtype = ev.subtype;
 
     // Bot 자기 자신 메시지 / edit / delete 등은 무시
+    // ⚠️ 2026-07-06: DM(message.im) 처리는 Mother의 slack_inbound.py 폴러로 일원화.
+    //   - 여기의 매칭("24h 내 review + 이메일 일치 최신 1건")은 답변 소실/오첨부 사례가 있었고,
+    //   - 폴러는 hermes_dm_context로 대상 task를 정확히 특정 + 승인/중단/상태 등 명령 지원.
+    //   - 두 경로가 같은 DM을 이중 처리(코멘트 2번)하는 것을 막기 위해 여기는 수신만 하고 스킵.
+    //   복원하려면 아래 주석 해제 (slack_inbound.service 중지 필수).
     if (evType === "message" && channelType === "im" && !botId && !subtype) {
-      const slackUserId = String(ev.user || "");
-      const text = String(ev.text || "").trim();
-      if (slackUserId && text) {
-        // 비동기 처리 — Slack에 즉시 200 반환 후 뒤에서 처리
-        handleDmReply(slackUserId, text).catch((err) => {
-          console.error("[slack/events] DM reply handler failed:", err);
-        });
-      }
+      console.log("[slack/events] message.im 수신 — slack_inbound 폴러가 처리하므로 스킵");
+      void handleDmReply; // 미사용 경고 억제 (복원 대비 함수 유지)
+      // const slackUserId = String(ev.user || "");
+      // const text = String(ev.text || "").trim();
+      // if (slackUserId && text) {
+      //   handleDmReply(slackUserId, text).catch((err) => {
+      //     console.error("[slack/events] DM reply handler failed:", err);
+      //   });
+      // }
     }
   }
 

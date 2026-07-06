@@ -48,6 +48,94 @@ def slack(text):
         print("slack fail:", e)
 
 
+# ── push→RAG 동기화: 변경된 .cs만 code_base 임베딩 갱신 ──────────────
+# 그래프(QA)는 push마다 갱신되지만 code_base(RAG)는 수동이던 갭을 제거.
+# 실패해도 그래프 갱신에는 영향 없음 (best-effort).
+LAYER_BY_FOLDER = {
+    "Core": "Core", "Data": "Game", "InGame": "Domain", "Manager": "Domain",
+    "UI": "Game", "Popup": "Game", "UX": "Game", "Controller": "Domain",
+    "Analytics": "Domain", "UA": "Game", "Debug": "Game",
+}
+ROLE_SUFFIX = [("Manager", "Manager"), ("Controller", "Controller"), ("Calculator", "Calculator"),
+               ("Processor", "Processor"), ("Handler", "Handler"), ("Listener", "Listener"),
+               ("Provider", "Provider"), ("Factory", "Factory"), ("Service", "Service"),
+               ("Validator", "Validator"), ("Builder", "Builder"), ("Pool", "Pool"),
+               ("Effect", "UX"), ("Tweener", "UX"), ("Config", "Config"), ("Helper", "Helper")]
+
+
+def _role_of(name):
+    for suf, role in ROLE_SUFFIX:
+        if name.endswith(suf):
+            return role
+    return "Component"
+
+
+def delta_embed(sha, last, tmp_root):
+    """last..sha 사이 변경된 Assets/1.Scripts .cs를 code_base에 업서트, 삭제분은 제거."""
+    if not last:
+        print("embed skip: first run (no prev sha)")
+        return
+    r = ssh(f'git -C {REPO} diff --name-status {last} {sha} -- Assets/1.Scripts')
+    if r.returncode != 0:
+        print("embed skip: diff fail", (r.stderr or "")[:150])
+        return
+    changed, deleted = [], []
+    for ln in (r.stdout or "").splitlines():
+        parts = ln.replace("\r", "").split("\t")
+        if len(parts) < 2 or not parts[-1].endswith(".cs"):
+            continue
+        base = os.path.basename(parts[-1])
+        if base.endswith(".local.cs"):  # 시크릿 제외 (delta_embed_bf_code와 동일 정책)
+            continue
+        if parts[0].startswith("D"):
+            deleted.append(base[:-3])
+        else:  # A/M/R*
+            # git 루트는 C:/projects/balloonflow (상위) → diff 경로에 "BalloonFlow/" 접두.
+            # archive 추출본(tmp)은 "Assets/..."부터 시작 → Assets/ 기준으로 정규화.
+            rel = parts[-1]
+            if "Assets/" in rel:
+                rel = rel[rel.index("Assets/"):]
+            changed.append(rel)
+    if not changed and not deleted:
+        print("embed: no .cs changes")
+        return
+    from pymongo import MongoClient
+    db = MongoClient(os.environ["MONGODB_URI"], serverSelectionTimeoutMS=6000)[os.environ.get("MONGODB_DB", "aigame")]
+    col = db.code_base
+    if deleted:
+        res = col.delete_many({"project": "BalloonFlow", "fileId": {"$in": deleted}})
+        print(f"embed: removed {res.deleted_count} docs (deleted files: {deleted[:10]})")
+    items = []
+    for rel in changed:
+        p = os.path.join(tmp_root, rel)
+        if not os.path.isfile(p):
+            continue
+        txt = open(p, encoding="utf-8", errors="ignore").read()
+        if len(txt.strip()) < 40:
+            continue
+        cls = os.path.basename(rel)[:-3]
+        folder = os.path.basename(os.path.dirname(rel))
+        items.append((cls, folder, txt))
+    if not items:
+        print("embed: no readable changed files")
+        return
+    from openai import OpenAI
+    cli = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+    for s in range(0, len(items), 64):
+        batch = items[s:s + 64]
+        resp = cli.embeddings.create(model="text-embedding-3-small", input=[b[2][:8000] for b in batch])
+        for (cls, folder, txt), e in zip(batch, resp.data):
+            col.update_one({"fileId": cls, "project": "BalloonFlow"}, {"$set": {
+                "fileId": cls, "project": "BalloonFlow", "genre": "puzzle",
+                "layer": LAYER_BY_FOLDER.get(folder, "Game"), "role": _role_of(cls),
+                "system": folder, "source": "internal_produced",
+                "className": cls, "text": txt[:12000], "content": txt[:12000],
+                "embedding": e.embedding, "embed_model": "text-embedding-3-small",
+                "embedded_from_sha": sha[:8],
+            }, "$setOnInsert": {"score": 0.4}}, upsert=True)
+    print(f"embed: upserted {len(items)} changed files ({[i[0] for i in items[:10]]})")
+
+
 def main():
     # 1. origin/main SHA
     ssh(f'git -C {REPO} fetch origin', timeout=120)
@@ -107,6 +195,12 @@ def main():
     os.makedirs(os.path.dirname(SHAFILE), exist_ok=True)
     with open(SHAFILE, "w") as f:
         f.write(sha)
+
+    # 6. push→RAG 동기화 (best-effort — 실패해도 그래프 갱신엔 영향 없음)
+    try:
+        delta_embed(sha, last, tmp)
+    except Exception as e:
+        print("delta embed fail (non-fatal):", e)
     print("done")
 
 

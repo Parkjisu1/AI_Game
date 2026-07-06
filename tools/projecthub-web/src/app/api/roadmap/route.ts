@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
 import { getDb } from "@/lib/mongodb";
 
 // 단일 문서 컬렉션 — 가장 최근 업로드된 로드맵 1개만 유지
+// 자체 auth 이중 방어: proxy matcher가 "/roadmap"을 정적 파일로 오인 제외한 전례 (2026-07-06 수정)
 const COLLECTION = "pixelforge_roadmap";
 const SINGLETON_KEY = "current";
 
 export async function GET() {
+  const session = await auth();
+  if (!session?.user?.email) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   try {
     const db = await getDb();
     const doc = await db.collection(COLLECTION).findOne({ key: SINGLETON_KEY });
@@ -18,6 +22,8 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const session = await auth();
+  if (!session?.user?.email) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   try {
     const body = await req.json();
     if (!body?.data) {
