@@ -149,6 +149,9 @@ export default function VoicePage() {
         setDecisions(Array.isArray(j.decisions) ? j.decisions : []);
         setOpenQuestions(Array.isArray(j.open_questions) ? j.open_questions : []);
         setRisks(Array.isArray(j.risks) ? j.risks : []);
+        // 저장/Slack DM 실패를 조용히 넘기지 않고 표시 (테스트 시 원인 파악 가능)
+        if (j.meetingId == null) setErr("⚠ 회의 요약이 저장되지 않았습니다 (DB 오류) — 결과는 아래 표시되나 '저장된 회의'엔 없음");
+        else if (j.slackSent && j.slackSent.ok === false) setErr(`⚠ 요약은 저장됐으나 Slack DM 실패: ${j.slackSent.error || "미발송"}`);
         loadMeetings();
       }
     } catch (e) {
@@ -159,8 +162,8 @@ export default function VoicePage() {
   };
 
   const createSelected = async () => {
-    setBusy(true);
-    let n = 0;
+    setBusy(true); setErr("");
+    let n = 0, fail = 0;
     for (const t of tasks) {
       if (!t.sel || !t.title.trim()) continue;
       const body: Record<string, unknown> = {
@@ -172,10 +175,12 @@ export default function VoicePage() {
       if (t.team && ["dev", "art", "design"].includes(t.team)) { body.team = t.team; body.team_override = true; }
       try {
         const r = await fetch("/api/tasks", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-        if (r.ok) n++;
-      } catch { /* skip */ }
+        if (r.ok) n++; else fail++;
+      } catch { fail++; }
     }
     setCreated(n);
+    // 전부 실패해도(n=0) 사용자가 알 수 있게 — 기존엔 아무 피드백 없이 무반응이었음
+    if (fail > 0) setErr(`${fail}건 생성 실패${n > 0 ? ` (${n}건 성공)` : " — 던지기가 처리되지 않았습니다"}`);
     setBusy(false);
     loadRecent();
   };
@@ -261,7 +266,7 @@ export default function VoicePage() {
       {/* 빠른 명령 */}
       {!recording && !busy && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-          {([["프로젝트 현황", "home", "/"], ["작업 생성", "tasks", "/tasks"], ["회의 요약", "doc", "/tasks"], ["코드 분석", "code", "/balloonflow"]] as [string, string, string][]).map(([label, icon, href]) => (
+          {([["프로젝트 현황", "home", "/"], ["작업 보드", "tasks", "/tasks"], ["저장된 회의", "doc", "#saved-meetings"], ["코드 분석", "code", "/balloonflow"]] as [string, string, string][]).map(([label, icon, href]) => (
             <a key={label} href={href} className="glass glass-hover p-3 flex flex-col items-center gap-1.5 text-center">
               <span className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: "rgba(34,211,238,0.14)", color: "var(--neon)" }}><Icon name={icon} size={17} /></span>
               <span className="text-[11px] font-medium text-gray-300">{label}</span>
@@ -377,7 +382,7 @@ export default function VoicePage() {
 
       {/* 저장된 회의 (영구) — 다시 열어 업무 선택·생성 */}
       {meetings.length > 0 && (
-        <div className="rounded-2xl border border-gray-200 bg-white p-4">
+        <div id="saved-meetings" className="rounded-2xl border border-gray-200 bg-white p-4 scroll-mt-20">
           <div className="font-semibold text-sm mb-2 flex items-center gap-1.5"><Icon name="doc" size={15} /> 저장된 회의</div>
           <ul className="divide-y divide-gray-100">
             {meetings.map((m) => (

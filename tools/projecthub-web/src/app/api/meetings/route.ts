@@ -20,6 +20,10 @@ export async function GET() {
       summary: d.summary || "",
       transcript: d.transcript || "",
       tasks: Array.isArray(d.tasks) ? d.tasks : [],
+      // 저장 시 함께 넣은 필드 — 누락하면 회의 재열람 시 결정/미결/리스크가 빈 값으로 보임
+      decisions: Array.isArray(d.decisions) ? d.decisions : [],
+      open_questions: Array.isArray(d.open_questions) ? d.open_questions : [],
+      risks: Array.isArray(d.risks) ? d.risks : [],
       created_at: d.created_at || "",
     }));
     return NextResponse.json({ meetings });
