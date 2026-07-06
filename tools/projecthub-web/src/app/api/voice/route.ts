@@ -6,8 +6,13 @@ import fs from "fs";
 import path from "path";
 
 // 파일 업로드(multipart) + 외부 STT/LLM 호출 → Node 런타임 + 충분한 타임아웃 필요.
+// 긴 회의(20~40분) STT 전사 + gpt-4o 분석은 60s를 쉽게 넘김 → 300s로 상향.
 export const runtime = "nodejs";
-export const maxDuration = 60;
+export const maxDuration = 300;
+
+// gpt-4o-mini-transcribe 파일 상한(25MB) 직전에서 사전 차단 — 넘으면 OpenAI가 413을
+// 반환하는데 사용자에겐 무의미하므로, 명확한 안내로 바꾼다. webm/opus 기준 ~25~40분.
+const STT_MAX_BYTES = 24 * 1024 * 1024;
 
 // 통합 음성 처리 — STT 후 AI가 스스로 분류:
 //   kind="query"   → 코드/기능 상태 질문: DNA graph.json(실제코드) 근거로만 답 (거짓없음)
@@ -88,6 +93,13 @@ export async function POST(req: NextRequest) {
   }
   if (!audio) return NextResponse.json({ error: "오디오 없음 (audio 필드 비어있음)", ctype, clen }, { status: 400 });
 
+  if (audio.size > STT_MAX_BYTES) {
+    const mb = (audio.size / 1024 / 1024).toFixed(1);
+    return NextResponse.json({
+      error: `녹음이 너무 깁니다 (${mb}MB, 상한 24MB ≈ 25~40분). 회의를 나눠 녹음하거나, 긴 구간은 파일 업로드로 나눠서 올려주세요.`,
+    }, { status: 413 });
+  }
+
   // 1) STT
   const sttForm = new FormData();
   sttForm.append("file", audio, (audio as File).name || "audio.webm");
@@ -97,7 +109,12 @@ export async function POST(req: NextRequest) {
   const sttRes = await fetch("https://api.openai.com/v1/audio/transcriptions", {
     method: "POST", headers: { Authorization: `Bearer ${OPENAI_API_KEY}` }, body: sttForm,
   });
-  if (!sttRes.ok) return NextResponse.json({ error: "STT 실패", detail: (await sttRes.text()).slice(0, 300) }, { status: 502 });
+  if (!sttRes.ok) {
+    const detail = (await sttRes.text()).slice(0, 300);
+    const hint = sttRes.status === 413 || /too large|maximum/i.test(detail)
+      ? "녹음이 너무 깁니다 — 회의를 나눠 녹음해 주세요." : "전사 서버 오류 — 잠시 후 재시도.";
+    return NextResponse.json({ error: `STT 실패 (${hint})`, detail }, { status: 502 });
+  }
   const transcript: string = ((await sttRes.json()).text || "").trim();
   if (!transcript) return NextResponse.json({ kind: "meeting", transcript: "", summary: "(전사 결과 없음)", tasks: [] });
 

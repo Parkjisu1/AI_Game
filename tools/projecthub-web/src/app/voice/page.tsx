@@ -244,12 +244,15 @@ export default function VoicePage() {
           {Array.from({ length: 32 }).map((_, i) => <i key={i} style={{ animationDelay: `${(i % 10) * 0.08}s`, height: `${30 + ((i * 41) % 70)}%` }} />)}
         </div>
         <div className="text-center">
-          <div className="text-base font-semibold">명령을 말씀해주세요, <span className="neon-text-soft">Boss</span></div>
+          <div className="text-base font-semibold">회의를 녹음하거나 명령을 말씀하세요, <span className="neon-text-soft">Boss</span></div>
           <div className="text-sm text-gray-500 mt-1 inline-flex items-center gap-1.5 min-h-[20px]">
-            {recording ? (<><span className="dot dot-err" /> 녹음 중 {mmss} · 다시 누르면 정지</>)
-              : busy ? (<><Icon name="clock" size={14} /> 전사·분석 중…</>)
-              : "버튼을 눌러 말하면 명령을 인식합니다"}
+            {recording ? (<><span className="dot dot-err" /> 녹음 중 {mmss} · 다시 누르면 정지·분석</>)
+              : busy ? (<><Icon name="clock" size={14} /> 전사·분석 중… (긴 회의는 1~2분 소요)</>)
+              : "버튼을 누르고 회의를 진행 → 정지하면 요약·결정·할 일로 정리됩니다"}
           </div>
+          {recording && elapsed >= 1200 && (
+            <div className="text-xs text-amber-600 mt-1">⚠ {Math.floor(elapsed / 60)}분 녹음 중 — 25~40분(24MB)을 넘으면 전사가 거부됩니다. 긴 회의는 나눠서 정지·분석하세요.</div>
+          )}
         </div>
         {!recording && !busy && (
           <label className="text-xs px-3 py-1.5 rounded-lg glass glass-hover text-gray-400 cursor-pointer inline-flex items-center gap-1.5">
