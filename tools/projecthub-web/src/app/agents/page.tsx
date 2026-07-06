@@ -830,8 +830,9 @@ function TeamOrgChart({
             />
           )}
           {/* 분과 박스 가로 정렬 — 많아지면 가로 스크롤 */}
-          <div className="overflow-x-auto pb-1 thin-scroll">
-            <div className="flex gap-3 items-start min-w-fit pt-3">
+          <div className="pb-1">
+            {/* flex-wrap: 분과 58개 × 200px 가로 나열로 ~6000px 스크롤이 되던 문제 — 줄바꿈 배치 */}
+            <div className="flex gap-3 items-start flex-wrap pt-3">
               {ordered.length === 0 ? (
                 <p className="text-xs text-slate-500 italic py-4">이 팀에 분과가 없습니다 (관리자가 + 새 역할로 추가)</p>
               ) : (

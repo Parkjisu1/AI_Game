@@ -1212,7 +1212,8 @@ def _send_slack_failure(email: str, title: str, reason: str, category: str = "",
     _send_slack_notice(email, text, fallback_assignee=fallback_assignee, task_id=task_id)
 
 
-def _batchmode_compile(repo_host: str, repo_dir: str) -> tuple[str, str]:
+def _batchmode_compile(repo_host: str, repo_dir: str,
+                       changed_files: "list[str] | None" = None) -> tuple[str, str]:
     """
     Machine B에서 Unity batchmode 컴파일 (MCP 다운 시 폴백).
     반환: ("clean" | "errors" | "indeterminate", detail)
@@ -1221,23 +1222,53 @@ def _batchmode_compile(repo_host: str, repo_dir: str) -> tuple[str, str]:
     - errors: CS 에러 존재 → 배포 차단
     - indeterminate: 판정 불가 (에디터가 프로젝트 열고 있음/ssh 실패/타임아웃)
       → fail-INDETERMINATE 원칙: 차단하지 않고 기존 REQUIRE_COMPILE 정책에 위임
+
+    CI 클론 (HERMES_CI_CLONE_DIR): Unity Editor가 작업 repo를 열고 있어도 컴파일이
+    가능하도록, 별도 클론에 base(origin/main) + 변경 파일만 overlay해서 컴파일한다.
+    → 에디터가 켜져 있든 꺼져 있든 컴파일 검증이 항상 동작.
     """
     unity_editor = os.environ.get(
         "MACHINE_B_UNITY_EXE",
         "C:/Program Files/Unity/Hub/Editor/6000.2.7f2/Editor/Unity.exe",
     )
+
+    def _ssh(cmd: str, timeout: int = 60):
+        return subprocess.run(["ssh", repo_host, cmd], capture_output=True, text=True,
+                              encoding="utf-8", errors="replace", timeout=timeout, check=False)
+
+    compile_root = repo_dir
+    ci_root = os.environ.get("HERMES_CI_CLONE_DIR", "").strip()
+    if ci_root and changed_files is not None:
+        try:
+            chk = _ssh(f'git -C "{ci_root}" rev-parse --is-inside-work-tree', timeout=15)
+            if chk.returncode == 0 and "true" in (chk.stdout or ""):
+                # ci의 origin = 로컬 작업 repo → 작업 repo의 main(=GitHub main 동기 상태)으로 리셋
+                _ssh(f'git -C "{ci_root}" fetch origin', timeout=120)
+                _ssh(f'git -C "{ci_root}" reset --hard origin/main', timeout=60)
+                # 변경 파일 overlay (cmd /c copy — 명시 셸이라 기본 셸 무관)
+                for _f in (changed_files or [])[:60]:
+                    _src = (repo_dir + "/" + _f).replace("/", "\\")
+                    _dst = (ci_root + "/" + _f).replace("/", "\\")
+                    _ssh(f'cmd /c copy /Y "{_src}" "{_dst}"', timeout=20)
+                compile_root = ci_root
+                log.info("batchmode: CI 클론 사용 (%s, overlay %d files)", ci_root, len(changed_files or []))
+        except Exception:
+            log.exception("CI clone prep failed — 작업 repo로 폴백 (non-fatal)")
+            compile_root = repo_dir
+
     unity_cmd = (
         f'"{unity_editor}" -batchmode -quit -nographics '
-        f'-projectPath "{repo_dir}/BalloonFlow" -logFile -'
+        f'-projectPath "{compile_root}/BalloonFlow" -logFile -'
     )
+    _bm_timeout = int(os.environ.get("HERMES_BATCHMODE_TIMEOUT", "260"))
     try:
         r = subprocess.run(
             ["ssh", repo_host, unity_cmd],
             capture_output=True, text=True, encoding="utf-8", errors="replace",
-            timeout=260, check=False,
+            timeout=_bm_timeout, check=False,
         )
     except subprocess.TimeoutExpired:
-        return "indeterminate", "batchmode 타임아웃(260s)"
+        return "indeterminate", f"batchmode 타임아웃({_bm_timeout}s)"
     except Exception as e:
         return "indeterminate", f"ssh 실행 실패: {e}"
     out = (r.stdout or "") + "\n" + (r.stderr or "")
@@ -3863,14 +3894,18 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
             _read_targets = [f for f in changed_files if f.endswith(".cs")][:3]
             _file_sections = []
             for _rf in _read_targets:
+                # cmd /c type — Machine B 기본 셸이 cmd라 sed/head 없음. 명시적 cmd 호출이라
+                # 기본 셸이 무엇이든 동작. 줄 수/크기 캡은 Mother(Python)에서.
+                _win_path = (repo_dir + "/" + _rf).replace("/", "\\")
                 _fc = subprocess.run(
-                    ["ssh", repo_host, f'cd "{repo_dir}" && sed -n \'1,400p\' -- "{_rf}"'],
+                    ["ssh", repo_host, f'cmd /c type "{_win_path}"'],
                     capture_output=True, text=True, encoding="utf-8", errors="replace",
                     timeout=20, check=False,
                 )
-                if _fc.returncode == 0 and (_fc.stdout or "").strip():
+                _body = "\n".join((_fc.stdout or "").splitlines()[:400])[:12000]
+                if _fc.returncode == 0 and _body.strip():
                     _file_sections.append(
-                        f"### {_rf} (1~400줄, 변경 반영된 최종 상태)\n```csharp\n{_fc.stdout[:12000]}\n```")
+                        f"### {_rf} (1~400줄, 변경 반영된 최종 상태)\n```csharp\n{_body}\n```")
             if _file_sections:
                 _changes += ("\n\n## 변경 파일 전문 — diff 밖 주변 문맥(참조·시그니처·중복)까지 이걸로 검증하라\n"
                              + "\n\n".join(_file_sections))
@@ -4043,7 +4078,7 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
             and repo.get("type") == "unity"
             and os.environ.get("HERMES_COMPILE_FALLBACK", "on").lower() != "off"):
         _comment("🏗️ Unity MCP 미응답 — batchmode 컴파일 폴백 시도 (최대 4분)...")
-        _bm_state, _bm_detail = _batchmode_compile(repo_host, repo_dir)
+        _bm_state, _bm_detail = _batchmode_compile(repo_host, repo_dir, changed_files=changed_files)
         _record_gate_event(
             task_id=task_id, gate="compile_batchmode",
             result=("pass" if _bm_state == "clean"
@@ -4094,28 +4129,33 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
     _comment("📦 Git commit + push 중...")
     commit_msg = title.replace('"', "'")[:72]
 
-    # commit (secret-leak hardened: gitignore 보장 + 시크릿 경로 unstage + 내용 스캔)
-    # Why: 과거 PR #92에서 git add -A 가 .env 토큰을 그대로 push/merge. 1차=대상 repo .gitignore,
-    #      2차=시크릿 경로 강제 unstage, 3차=staged 추가라인 시그니처 스캔 → 적중 시 commit/push 차단.
-    _gi_patterns = ".env .env.* *.pem *.key id_rsa id_rsa.* run_mcp.cmd mcp.log mcp.err"
-    _reset_specs = "'*.env' '.env' '.env.*' '*.pem' '*.key' 'id_rsa' 'id_rsa.*' 'run_mcp.cmd' 'mcp.log' 'mcp.err'"
-    _leak_re = ('BEGIN ([A-Z ]+ )?PRIVATE KEY|xox[baprs]-[0-9A-Za-z-]{10,}|'
-                'AKIA[0-9A-Z]{16}|sk-[A-Za-z0-9]{20,}|gh[pousr]_[A-Za-z0-9]{36,}')
-    commit_cmd = (
-        'cd "' + repo_dir + '" || exit 9\n'
-        'for p in ' + _gi_patterns + '; do grep -qxF "$p" .gitignore 2>/dev/null || echo "$p" >> .gitignore; done\n'
-        'git add -A\n'
-        'git reset -q -- ' + _reset_specs + ' 2>/dev/null\n'
-        'LEAK=$(git diff --cached -U0 | grep -E "^\\+" | grep -Ein \'' + _leak_re + '\' | head -5)\n'
-        'if [ -n "$LEAK" ]; then echo HERMES_SECRET_LEAK_DETECTED; echo "$LEAK"; git reset -q; exit 42; fi\n'
-        'git commit -m "hermes: ' + commit_msg + '" -m "Task: ' + str(task_id) + '" 2>&1\n'
-    )
-    commit_result = subprocess.run(
-        ["ssh", repo_host, commit_cmd],
-        capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=60, check=False,
-    )
-    if commit_result.returncode == 42 or "HERMES_SECRET_LEAK_DETECTED" in (commit_result.stdout or ""):
-        _leak_detail = (commit_result.stdout or "")[-400:]
+    # commit (secret-leak hardened: 시크릿 경로 unstage + 내용 스캔)
+    # Why: 과거 PR #92에서 git add -A 가 .env 토큰을 그대로 push/merge.
+    # ⚠️ 셸 불가지론 재작성 (2026-07-06): Machine B ssh 기본 셸이 cmd.exe라 다중행 bash 스크립트는
+    #   **첫 줄만 실행**됨 — 6/29 하드닝 이후 모든 dev 커밋이 조용히 무커밋(빈 브랜치 push)되던 회귀 원인.
+    #   → 단일행 `git -C` 명령들로 분해(git 자체가 pathspec 처리 = 셸 무관) + 시크릿 스캔은
+    #     Mother(Python 정규식)에서 수행. cmd/bash 어느 쪽이 기본이어도 동작.
+    def _git_b(args: str, timeout: int = 60):
+        return subprocess.run(
+            ["ssh", repo_host, f'git -C "{repo_dir}" {args}'],
+            capture_output=True, text=True, encoding="utf-8", errors="replace",
+            timeout=timeout, check=False,
+        )
+
+    _git_b("add -A")
+    # 시크릿 경로 강제 unstage — 따옴표 없이(cmd에서 '...'는 리터럴), git이 직접 pathspec 해석
+    _git_b("reset -q -- *.env .env .env.* *.pem *.key id_rsa id_rsa.* run_mcp.cmd mcp.log mcp.err")
+
+    # 시크릿 내용 스캔 (staged 추가 라인 — Python 정규식, 원격 grep/head 의존 제거)
+    _leak_re = re.compile(
+        r"BEGIN ([A-Z ]+ )?PRIVATE KEY|xox[baprs]-[0-9A-Za-z-]{10,}|"
+        r"AKIA[0-9A-Z]{16}|sk-[A-Za-z0-9]{20,}|gh[pousr]_[A-Za-z0-9]{36,}")
+    _staged = _git_b("diff --cached -U0", timeout=90)
+    _leaks = [ln for ln in (_staged.stdout or "").splitlines()
+              if ln.startswith("+") and _leak_re.search(ln)][:5]
+    if _leaks:
+        _git_b("reset -q")
+        _leak_detail = "\n".join(_leaks)[:400]
         _comment("🔒 시크릿 의심 패턴 감지 — commit/push 차단 (Error Fix Protocol 필요)\n"
                  "```\n" + _leak_detail + "\n```")
         return {
@@ -4124,11 +4164,26 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
             "next_status": "review",
             "failure_category": "secret_leak_blocked",
         }
+
+    commit_result = _git_b(f'commit -m "hermes: {commit_msg}" -m "Task: {task_id}"')
+    _commit_out = (commit_result.stdout or "") + (commit_result.stderr or "")
     if commit_result.returncode != 0:
-        _comment(f"❌ git commit 실패:\n```\n{commit_result.stdout[-400:]}\n```")
+        # 'nothing to commit' = diff는 있었는데 스테이징이 비었거나 이미 커밋됨 — 조용히 진행 금지
+        _cat = "no_changes_made" if "nothing to commit" in _commit_out.lower() else "commit_failed"
+        _comment(f"❌ git commit 실패 ({_cat}):\n```\n{_commit_out[-400:]}\n```")
         return {
             "success": False,
-            "error": _fmt_failure("commit_failed", commit_result.stdout[-400:]),
+            "error": _fmt_failure(_cat, _commit_out[-400:]),
+            "next_status": "review",
+            "failure_category": _cat,
+        }
+    # 커밋 실존 검증 — '커밋했다고 믿고 빈 브랜치 push' 재발 방지 (결정론적 확인)
+    _verify = _git_b(f"rev-list --count origin/main..{branch_name}")
+    if _verify.returncode == 0 and (_verify.stdout or "").strip() == "0":
+        _comment("❌ 커밋 검증 실패 — 브랜치에 신규 커밋이 없음 (조용한 무커밋 방지 가드)")
+        return {
+            "success": False,
+            "error": _fmt_failure("commit_failed", "rev-list shows 0 new commits after commit step"),
             "next_status": "review",
             "failure_category": "commit_failed",
         }

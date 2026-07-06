@@ -283,7 +283,9 @@ export default function Dashboard() {
               <div className="space-y-2">
                 {activeTasks.map((t) => {
                   const sm = STATUS_META[t.status || "todo"] || STATUS_META.todo;
-                  const prog = typeof t.progress === "number" ? t.progress : (t.status === "review" ? 90 : 45);
+                  // 실측 progress 없으면 상태 기반 '단계' 표시 (todo 시작~done 완료) — 임의 % 오인 방지
+                  const PROG_BY_STATUS: Record<string, number> = { todo: 10, in_progress: 50, review: 85, done: 100 };
+                  const prog = typeof t.progress === "number" ? t.progress : (PROG_BY_STATUS[t.status || "todo"] ?? 10);
                   return (
                     <Link key={t._id} href="/tasks" className="block glass glass-hover p-2.5">
                       <div className="flex items-center gap-2 mb-1.5">

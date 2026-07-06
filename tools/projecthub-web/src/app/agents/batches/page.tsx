@@ -3145,9 +3145,17 @@ function PipelineStagePanel({ detail, curations, setCurations, onAdvance, submit
         <div className="text-center py-4">
           {detail.field_complete_job?.job_id && (
             <a href={`/api/agents/field-complete/${detail.field_complete_job.job_id}/export?force=1`}
+               onClick={() => {
+                 // 다운로드 = 파이프라인 완료 처리 — 이걸 안 불러서 행이 영원히 'Field 완료'에
+                 // 머물고 완료 Slack 통지가 안 나가던 문제 (2026-07-06)
+                 if (stage === "field_done" && !submitting) onAdvance("download").catch(() => {});
+               }}
                className="inline-block px-5 py-2 text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-700 rounded">
               ⬇ BalloonFlow Importer ZIP 다운로드
             </a>
+          )}
+          {stage === "field_done" && (
+            <div className="text-[10px] text-gray-400 mt-2">다운로드하면 파이프라인이 완료(done) 처리됩니다.</div>
           )}
         </div>
       </div>
