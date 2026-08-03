@@ -1424,6 +1424,15 @@ async function parseProject(sourcePath, genre, dbPath, projectName, mongoEnabled
     return stats;
 }
 
+// 재사용을 위한 export — CLI 동작은 아래 가드 안에 그대로 둔다.
+// (이걸 안 붙이면 require 하는 순간 파싱이 실행되고 process.exit 이 불린다)
+module.exports = { CSharpParser, parseProject, resolveUsedBy };
+
+// CLI — 직접 실행할 때만
+if (require.main !== module) {
+    // require 로 불린 경우 여기서 종료. 아래 CLI 블록은 실행하지 않는다.
+} else {
+
 // CLI
 const args = process.argv.slice(2);
 
@@ -1464,3 +1473,5 @@ for (let i = 2; i < args.length; i++) {
 parseProject(sourcePath, genre, dbPath, projectName, mongoEnabled)
     .then(() => process.exit(0))
     .catch(e => { console.error(e); process.exit(1); });
+
+}
