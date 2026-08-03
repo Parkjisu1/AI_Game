@@ -46,6 +46,46 @@ SUB_ROLE = {
 }
 PM_ROLE = {"dev": "dev_pm", "data": "data_pm", "design": "design_pm"}
 
+# 분과 → 검수 역할. 작업 결과를 같은 급의 모델이 다시 본다.
+# 리뷰어를 안 부르면 카탈로그에만 있고 아무 일도 안 하는 역할이 된다 —
+# 게임팀에서 data 팀 역할이 그 상태로 방치돼 요청이 전부 chat 으로 새던 전례가 있다.
+REVIEW_ROLE = {
+    "dev": {
+        "backend": "dev_backend_reviewer",
+        "frontend": "dev_frontend_reviewer",
+        "infra": "dev_infra_reviewer",
+        "qa": "qa_reviewer",
+        "general": "reviewer",
+    },
+    "data": {"review": None, "bq": "data_reviewer", "logspec": "data_reviewer", "general": "data_reviewer"},
+    "design": {"ux": "design_ux_reviewer", "general": "design_ux_reviewer"},
+}
+
+REVIEW_PROMPT = """아래는 같은 팀의 `{worker}` 가 낸 결과다. 너는 이것을 검수한다.
+
+# 원래 요청
+{title}
+
+## 상세
+{description}
+
+# 검수 대상 결과
+{result}
+
+{kb}
+
+# 검수 기준
+- 인용된 파일·줄 번호가 실제 근거와 맞는가? 위 "관련 코드"에 없는 내용을 단정하지 않았는가?
+- 요청 범위를 넘어선 제안이 섞이지 않았는가?
+- 결제·금액·권한을 다뤘다면 실패 경로(타임아웃·중복요청·부분환불·통화)가 검토됐는가?
+- 검증 명령(어느 워크스페이스에서 무엇을 돌릴지)이 빠지지 않았는가?
+
+통과시킬 근거가 부족하면 통과시키지 마라. "아마 맞을 것"은 반려 사유다.
+
+# 출력 (JSON 하나만)
+{{"verdict":"approve|revise|reject","score":0-100,
+"issues":["구체적 문제 (없으면 빈 배열)"],"comment":"2~4줄 총평"}}"""
+
 # KB 검색 시 분과별로 좁힐 영역 — 프런트 질문에 백엔드 코드가 딸려오면 답이 흐려진다.
 AREA_HINT = {"backend": "backend", "frontend": "front-end", "infra": "", "qa": ""}
 
@@ -84,8 +124,15 @@ TRANSLATOR_PROMPT = """너는 NewPlay 팀(blocore/webstore — 결제 웹 플랫
 # 판정할 것
 1. clarity — 지금 정보로 진행할 수 있는가?
    - "clear": 진행 가능
-   - "needs_input": 핵심 정보가 없어 물어봐야 함 (질문 최대 3개)
+   - "needs_input": **사용자만 답할 수 있는** 정보가 없어 물어봐야 함 (질문 최대 3개)
    - "cancel": 사용자가 중단을 요청함
+
+   **중요 — 코드에 관한 것은 묻지 마라.** 레포 전체(1,236파일)가 의미 검색 가능한
+   지식베이스에 들어 있어서, 담당 에이전트가 파일명·구현 위치·현재 동작을 스스로 찾는다.
+   ❌ 묻지 말 것: "어떤 파일인가요", "어떤 프레임워크인가요", "현재 어떻게 구현돼 있나요"
+   ✅ 물어도 되는 것: 사용자의 **의도·선택·값** — 예) "A안과 B안 중 무엇으로 할까요",
+      "적용 대상이 프로덕션인가요 QA인가요", "기한이 언제인가요"
+   즉 코드를 읽으면 알 수 있는 것이면 clarity=clear 로 두고 진행시켜라.
 2. team — 어느 팀이 처리하는가?
    - "dev"    : 코드 수정/버그/리팩토링/배포 설정
    - "data"   : 지표·로그·쿼리·분석 (BigQuery)
@@ -231,12 +278,51 @@ def _run_work(task: dict[str, Any], context: dict[str, Any], team: str, sub: str
         header += "\n\n> 🔒 레포 쓰기 권한이 없어 **제안까지만** 수행했습니다. deploy key 등록 후 자동 적용이 가능해집니다."
     _comment(writer, task_id, f"{header}\n\n{body[:9000]}")
 
+    # ── 검수 단계
+    verdict = _review(task, team, sub, role, body, kb, writer, task_id)
+
     return {
         "success": True,
-        "summary": f"{team}/{sub} — {role} 완료",
+        "summary": f"{team}/{sub} — {role} 완료" + (f" · 검수 {verdict}" if verdict else ""),
         "next_status": "review",
-        "metadata": {"team": team, "sub_team": sub, "role": role, "model": resp.model},
+        "metadata": {"team": team, "sub_team": sub, "role": role,
+                     "model": resp.model, "verdict": verdict},
     }
+
+
+def _review(task: dict[str, Any], team: str, sub: str, worker: str, result: str,
+            kb: str, writer, task_id: str) -> str:
+    """작업 결과를 검수 역할이 다시 본다. 실패해도 태스크를 죽이지 않는다(검수는 보조 게이트)."""
+    rrole = (REVIEW_ROLE.get(team) or {}).get(sub, (REVIEW_ROLE.get(team) or {}).get("general"))
+    if not rrole or rrole == worker:
+        return ""
+
+    prompt = REVIEW_PROMPT.format(
+        worker=worker,
+        title=task.get("title", ""),
+        description=task.get("description", "") or "(없음)",
+        result=result[:12000],
+        kb=kb,
+    )
+    resp = agent_team.invoke(rrole, prompt, timeout=600, want_json=True)
+    agent_team.log_session(task, rrole, resp, prompt)
+    if not resp.success:
+        _comment(writer, task_id, f"⚠️ {rrole} 검수 실패: {resp.error[:200]} — 결과는 그대로 두고 사람 검수로 넘깁니다.")
+        return ""
+
+    out = resp.structured or {}
+    v = str(out.get("verdict") or "").lower()
+    score = out.get("score")
+    issues = [str(i) for i in (out.get("issues") or [])][:6]
+    icon = {"approve": "✅", "revise": "🟡", "reject": "❌"}.get(v, "ℹ️")
+    lines = [f"### {icon} {rrole} 검수: `{v or '판정없음'}`" + (f" ({score}점)" if score is not None else "")]
+    if issues:
+        lines.append("")
+        lines += [f"- {i}" for i in issues]
+    if out.get("comment"):
+        lines += ["", str(out["comment"])[:1200]]
+    _comment(writer, task_id, "\n".join(lines))
+    return v
 
 
 def _persist(task: dict[str, Any], writer, task_id: str, patch: dict[str, Any]) -> None:

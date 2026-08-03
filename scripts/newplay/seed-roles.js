@@ -110,20 +110,20 @@ const CATALOG = [
   // ── backend
   R('dev_backend_lead', 'claude', 'claude-opus-4-7', '[Lead] 백엔드 계획 — API 계약·DB 스키마 영향', 'dev', 'backend', 10, BACKEND + `\n${KB}`),
   R('dev_backend_coder', 'claude', 'claude-opus-4-7', '[Coder] 백엔드 구현 — controller/service/entity/migration', 'dev', 'backend', 11, BACKEND + `\n${KB}`),
-  R('dev_backend_reviewer', 'litellm', 'validator-agent', '[Reviewer] API 계약·트랜잭션·금액 처리 검수', 'dev', 'backend', 12, BACKEND + `\n특히 트랜잭션 경계, 예외 시 롤백, 금액/통화 처리를 본다.\n${KB}`),
+  R('dev_backend_reviewer', 'claude', 'claude-opus-4-7', '[Reviewer] API 계약·트랜잭션·금액 처리 검수', 'dev', 'backend', 12, BACKEND + `\n특히 트랜잭션 경계, 예외 시 롤백, 금액/통화 처리를 본다.\n${KB}`),
 
   // ── frontend
   R('dev_frontend_lead', 'claude', 'claude-opus-4-7', '[Lead] 프런트 계획 — 화면·상태·API 연동 영향', 'dev', 'frontend', 20, FRONTEND + `\n${KB}`),
   R('dev_frontend_coder', 'claude', 'claude-opus-4-7', '[Coder] 프런트 구현 — React 컴포넌트/훅/SCSS/i18n', 'dev', 'frontend', 21, FRONTEND + `\n${KB}`),
-  R('dev_frontend_reviewer', 'litellm', 'validator-agent', '[Reviewer] 접근성·i18n·diff 오염 검수', 'dev', 'frontend', 22, FRONTEND + `\n무관한 파일이 재포맷돼 diff 가 부풀지 않았는지 반드시 확인한다.\n${KB}`),
+  R('dev_frontend_reviewer', 'claude', 'claude-opus-4-7', '[Reviewer] 접근성·i18n·diff 오염 검수', 'dev', 'frontend', 22, FRONTEND + `\n무관한 파일이 재포맷돼 diff 가 부풀지 않았는지 반드시 확인한다.\n${KB}`),
 
   // ── infra
   R('dev_infra_engineer', 'claude', 'claude-opus-4-7', '[Infra] Helm/Docker/EKS·CI 변경', 'dev', 'infra', 30, INFRA + `\n${KB}`),
-  R('dev_infra_reviewer', 'litellm', 'validator-agent', '[Reviewer] 배포 영향·시크릿 노출 검수', 'dev', 'infra', 31, INFRA + `\n${KB}`),
+  R('dev_infra_reviewer', 'claude', 'claude-opus-4-7', '[Reviewer] 배포 영향·시크릿 노출 검수', 'dev', 'infra', 31, INFRA + `\n${KB}`),
 
   // ── qa
   R('qa_test_writer', 'claude', 'claude-opus-4-7', '[QA] 재현 테스트 작성 · 커버리지 보강', 'dev', 'qa', 40, QA + `\n${KB}`),
-  R('qa_reviewer', 'litellm', 'validator-agent', '[Reviewer] 테스트가 실제로 결함을 잡는지 검수', 'dev', 'qa', 41, QA + `\n통과만 하는 테스트(단언 없음, 모킹으로 우회)는 반려한다.\n${KB}`),
+  R('qa_reviewer', 'claude', 'claude-opus-4-7', '[Reviewer] 테스트가 실제로 결함을 잡는지 검수', 'dev', 'qa', 41, QA + `\n통과만 하는 테스트(단언 없음, 모킹으로 우회)는 반려한다.\n${KB}`),
 
   // ── data
   R('data_pm', 'litellm', 'sub-coder-agent', '[PM] 데이터 분과 배정 — bq/logspec/review', 'data', 'general', 50,
@@ -131,7 +131,7 @@ const CATALOG = [
   R('data_analyst', 'claude', 'claude-opus-4-7', '[Data] BigQuery 집계 — 결제·전환·리텐션', 'data', 'bq', 51, DATA),
   R('data_logspec', 'claude', 'claude-opus-4-7', '[Data] 이벤트·파라미터 설계, 로그 요청서', 'data', 'logspec', 52,
     `${DATA}\n\n로그 요청서를 쓸 때는 이벤트마다 "1행이 무엇을 의미하는지"를 먼저 정의한다.\n기존 스키마로 답할 수 있는 것과 없는 것을 갈라서 표로 제시한다.`),
-  R('data_reviewer', 'litellm', 'validator-agent', '[Reviewer] 분석 검증 — 표본·기간·정의 오류', 'data', 'review', 53,
+  R('data_reviewer', 'claude', 'claude-opus-4-7', '[Reviewer] 분석 검증 — 표본·기간·정의 오류', 'data', 'review', 53,
     `${DATA}\n\n숫자를 믿기 전에 정의를 본다. 기간이 다른 값 비교, 생존 편향, 평균의 함정, 중복 집계를 찾는다.`),
 
   // ── design (UX 문서 — 게임 기획이 아니라 결제/스토어 플로우)
@@ -139,7 +139,7 @@ const CATALOG = [
     '요청을 ux / general 로 배정한다. 화면 흐름·정책 문서면 ux.'),
   R('design_ux_writer', 'claude', 'claude-opus-4-7', '[Design] 스토어·결제 플로우 및 정책 문서', 'design', 'ux', 61,
     `webstore 는 결제 웹 플랫폼이다. 게임 레벨·밸런스 기획이 아니다.\n구매·환불·쿠폰·정산 흐름을 화면 단위로 쓰고, 실패·예외 경로를 반드시 포함한다.\n${KB}`),
-  R('design_ux_reviewer', 'litellm', 'validator-agent', '[Reviewer] 플로우 누락·예외 경로 검수', 'design', 'ux', 62,
+  R('design_ux_reviewer', 'claude', 'claude-opus-4-7', '[Reviewer] 플로우 누락·예외 경로 검수', 'design', 'ux', 62,
     `해피 패스만 적힌 문서를 반려한다. 결제 실패, 타임아웃, 중복 요청, 부분 환불이 빠졌는지 본다.\n${KB}`),
 ];
 
