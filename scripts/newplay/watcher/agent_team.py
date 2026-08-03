@@ -112,11 +112,20 @@ def _call_litellm(model: str, prompt: str, timeout: int) -> tuple[bool, str, str
         return False, "", f"{type(e).__name__}: {e}"
 
 
-def _call_claude(prompt: str, timeout: int, cwd: Optional[str] = None) -> tuple[bool, str, str]:
-    """Claude Code CLI. 자격은 ~/.claude/.credentials.json (워크스테이션에서 미러됨)."""
+def _call_claude(prompt: str, timeout: int, cwd: Optional[str] = None,
+                 model: str = "") -> tuple[bool, str, str]:
+    """Claude Code CLI. 자격은 ~/.claude/.credentials.json (워크스테이션에서 미러됨).
+
+    `--model` 을 반드시 넘긴다. 안 넘기면 CLI 기본 모델이 돌면서 DB·세션 로그에는
+    역할에 적힌 모델명이 찍혀 **기록이 거짓말을 한다**
+    (실측 2026-08-03: DB 는 claude-opus-4-7, 실제로는 claude-opus-4-8 이 돌고 있었다).
+    """
+    cmd = [CLAUDE_BIN, "-p", prompt]
+    if model:
+        cmd += ["--model", model]
     try:
         p = subprocess.run(
-            [CLAUDE_BIN, "-p", prompt],
+            cmd,
             capture_output=True, text=True, timeout=timeout,
             cwd=cwd or os.path.expanduser("~"),
         )
@@ -152,7 +161,7 @@ def invoke(role: str, prompt: str, timeout: Optional[int] = None,
 
     t0 = _now()
     if tool == "claude":
-        ok, out, err = _call_claude(full, tmo, cwd)
+        ok, out, err = _call_claude(full, tmo, cwd, model=model)
     else:
         ok, out, err = _call_litellm(model, full, tmo)
     dur = _now() - t0
