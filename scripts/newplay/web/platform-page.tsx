@@ -16,8 +16,9 @@ type FileItem = { path: string; kind: string; lang: string; lines: number; symbo
 type Mod = { name: string; files: number; lines: number; kinds: Record<string, number>; items: FileItem[] };
 type Area = { area: string; files: number; lines: number; modules: Mod[] };
 type Screen = { path: string; component: string; section: string; params: string[] };
+type Env = { key: string; label: string; url: string };
 type Comp = {
-  project: string; sha: string; generatedAt: string; liveBaseUrl?: string; screens?: Screen[];
+  project: string; sha: string; generatedAt: string; liveBaseUrl?: string; screens?: Screen[]; envs?: Env[];
   totals: { files: number; chunks: number; lines: number; areas: number; modules: number };
   kindCount: Record<string, number>;
   tree: Area[];
@@ -66,6 +67,13 @@ export default function PlatformPage() {
   const [screen, setScreen] = useState("");
   // 실제 앱을 어느 폭으로 볼지 — 해상도 대응 확인용
   const [device, setDevice] = useState<"mobile" | "tablet" | "desktop">("desktop");
+  // 어느 환경을 볼지 — 운영 / QA. 배포되지 않은 작업본은 어디에도 없다.
+  const [env, setEnv] = useState("prod");
+  // 수정안 미리보기 상태 — 어떤 패치가 언제 적용돼 빌드됐는지
+  const [prev, setPrev] = useState<{ ok: boolean; patch: string; files: number; baseSha: string; finishedAt: string } | null>(null);
+  useEffect(() => {
+    fetch("/api/platform/preview").then((r) => r.json()).then((j) => setPrev(j?.state || null)).catch(() => {});
+  }, []);
 
   // 최초 1회는 구성도까지, 이후 10초 폴링은 상태만 받는다(구성도 약 220KB 재전송 방지).
   const load = (live: boolean) => fetch(`/api/platform/overview${live ? "?live=1" : ""}`)
@@ -215,13 +223,19 @@ export default function PlatformPage() {
           </div>
 
           {tab === "screen" && (() => {
-            const base = comp.liveBaseUrl || "";
+            const deployed: Env[] = comp.envs?.length ? comp.envs : [{ key: "prod", label: "운영", url: comp.liveBaseUrl || "" }];
+            // "수정안" 은 배포된 환경이 아니라 이 서버에서 빌드한 결과다. 항상 선택지로 둔다.
+            const envs: Env[] = [...deployed, { key: "preview", label: "수정안", url: "" }];
+            const curEnv = envs.find((e) => e.key === env) || envs[0];
+            const base = curEnv?.url || "";
             const list = (comp.screens || []).filter(
               (sc) => !q.trim() || sc.path.toLowerCase().includes(q.toLowerCase()) || sc.component.toLowerCase().includes(q.toLowerCase()));
             const cur = list.find((sc) => sc.path === screen) || list[0] || null;
             // :gameSlug 같은 동적 구간은 그대로 열 수 없다. 예시값을 넣어 링크를 만든다.
             const resolved = cur ? cur.path.replace(/:[A-Za-z0-9_]+/g, "demo") : "";
-            const url = base && cur ? base.replace(/\/$/, "") + resolved : "";
+            const url = curEnv?.key === "preview"
+              ? (cur ? "/preview" + resolved : "/preview/")
+              : (base && cur ? base.replace(/\/$/, "") + resolved : "");
             const W = { mobile: 390, tablet: 820, desktop: 1440 }[device];
             const H = { mobile: 780, tablet: 700, desktop: 720 }[device];
             return (
@@ -244,6 +258,13 @@ export default function PlatformPage() {
 
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-1.5">
+                    {envs.map((e) => (
+                      <button key={e.key} onClick={() => setEnv(e.key)}
+                        className={`rounded px-2 py-1 text-[11px] ${curEnv?.key === e.key ? (e.key === "prod" ? "bg-red-600 text-white" : "bg-blue-600 text-white") : "bg-gray-100 text-gray-700"}`}>
+                        {e.label}
+                      </button>
+                    ))}
+                    <span className="mx-1 h-4 w-px bg-gray-300" />
                     {(["mobile", "tablet", "desktop"] as const).map((dv) => (
                       <button key={dv} onClick={() => setDevice(dv)}
                         className={`rounded px-2 py-1 text-[11px] ${device === dv ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-700"}`}>
@@ -277,7 +298,11 @@ export default function PlatformPage() {
                     )}
                   </div>
                   <div className="mt-1 text-[10px] text-gray-400">
-                    실제 운영 서비스를 그대로 띄웁니다. 로그인이 필요한 화면은 비로그인 상태로 보입니다.
+                    {curEnv?.key === "prod"
+                      ? "실제 운영 서비스입니다. 로그인이 필요한 화면은 비로그인 상태로 보입니다."
+                      : curEnv?.key === "qa"
+                      ? "QA 환경입니다. 여기에 배포된 변경은 운영에 올리기 전에 확인할 수 있습니다."
+                      : `이 서버에서 직접 빌드한 수정안입니다 — 운영·QA 어디에도 반영되지 않습니다. ${prev ? `적용 패치: ${prev.patch === "none" ? "없음(원본 그대로)" : prev.patch} · ${prev.files}개 파일 · base ${prev.baseSha}` : "아직 빌드된 미리보기가 없습니다."}`}
                   </div>
                 </div>
               </div>

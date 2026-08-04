@@ -207,6 +207,12 @@ async function main() {
   const map = build(points);
   map.screens = extractScreens(await fetchRouterChunks(points));
   map.liveBaseUrl = argOf('--live-url', 'https://newplay.store');
+  // 미리보기 대상 환경. QA 는 helm values-qa.yaml 의 `qa-api.newplay.store` 와 짝이고
+  // 프런트는 qa.newplay.store 에 떠 있다(실측 200). 운영에 올리기 전 확인용.
+  map.envs = [
+    { key: 'prod', label: '운영', url: 'https://newplay.store' },
+    { key: 'qa', label: 'QA', url: 'https://qa.newplay.store' },
+  ];
   const bySec = map.screens.reduce((a, s) => (a[s.section] = (a[s.section] || 0) + 1, a), {});
   console.log(`앱 화면 ${map.screens.length}개 —`, Object.entries(bySec).map(([k, v]) => `${k}:${v}`).join(' '));
   console.log(`파일 ${map.totals.files} · 모듈 ${map.totals.modules} · 영역 ${map.totals.areas} · 총 ${map.totals.lines}줄`);

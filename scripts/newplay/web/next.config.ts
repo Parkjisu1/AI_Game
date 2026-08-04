@@ -23,7 +23,7 @@ const SECURITY_HEADERS = [
       // newplay.store: /platform "앱 화면" 탭에서 실제 서비스를 미리보기로 띄운다.
       // 우리 앱이 프레임에 담기는 것은 여전히 금지(frame-ancestors none / X-Frame-Options DENY)라
       // clickjacking 방어는 그대로다 — 여기는 우리가 담는 대상의 허용 목록이다.
-      "frame-src 'self' https://accounts.google.com https://newplay.store",
+      "frame-src 'self' https://accounts.google.com https://newplay.store https://qa.newplay.store",
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self' https://accounts.google.com",
