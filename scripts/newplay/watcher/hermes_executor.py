@@ -17,6 +17,8 @@ from __future__ import annotations
 
 import logging
 import os
+import re
+from datetime import datetime, timezone
 from typing import Any, Optional
 
 import agent_team
@@ -240,8 +242,29 @@ WORK_PROMPT = """# 요청
 
 DEV_EXTRA = """- **지금은 레포에 쓰기(commit/push)를 할 수 없다.** newplay 노드의 deploy key 가
   GitHub 에 아직 등록되지 않았다. 그러니 "고쳤다"고 쓰지 말고, 어떤 파일의 어디를
-  어떻게 바꿔야 하는지 diff 수준으로 제시한다.
-- 변경안에는 그에 맞는 검증 명령(yarn lint / build / test, 어느 워크스페이스인지)을 함께 적는다."""
+  어떻게 바꿔야 하는지 제시한다.
+- 변경안에는 그에 맞는 검증 명령(yarn lint / build / test, 어느 워크스페이스인지)을 함께 적는다.
+
+- **답변 맨 끝에 적용 가능한 패치를 하나 붙인다.** 설명과 별개로, 아래 형식을 정확히 지킨다.
+  이 블록은 사람이 읽는 용도가 아니라 `git apply` 로 그대로 먹여 미리보기를 빌드하는 데 쓴다.
+
+```diff
+diff --git a/front-end/src/... b/front-end/src/...
+--- a/front-end/src/...
++++ b/front-end/src/...
+@@ -<시작>,<줄수> +<시작>,<줄수> @@
+ (문맥 3줄)
+-지울 줄
++넣을 줄
+ (문맥 3줄)
+```
+
+  규칙:
+  * 경로는 레포 루트 기준(`front-end/...`, `backend/...`). `a/`·`b/` 접두사 필수.
+  * 문맥 줄은 **실제 파일 내용과 한 글자도 달라선 안 된다.** 위 "관련 코드" 에 있는 원문을 그대로 쓴다.
+    확신이 없으면 그 파일은 패치에 넣지 말고 설명으로만 남긴다 — 틀린 패치는 적용 자체가 실패한다.
+  * 프런트(front-end/) 변경만 미리보기에 반영된다. 백엔드 변경은 패치에 넣어도 화면에 안 보인다.
+  * 바꿀 게 없으면 diff 블록을 아예 넣지 않는다. 빈 블록을 만들지 마라."""
 
 
 def _run_work(task: dict[str, Any], context: dict[str, Any], team: str, sub: str,
@@ -274,8 +297,29 @@ def _run_work(task: dict[str, Any], context: dict[str, Any], team: str, sub: str
 
     body = (resp.output or "").strip() or "(빈 응답)"
     header = f"### ⚙️ {role} 결과 ({resp.model}, {resp.duration_sec:.0f}s)"
+
+    # dev 제안은 패치를 따로 떼어 저장한다 — 플랫폼 화면에서 미리보기로 빌드할 수 있게.
+    # 저장만 할 뿐 레포·운영·QA 어디에도 적용하지 않는다.
     if team == "dev":
-        header += "\n\n> 🔒 레포 쓰기 권한이 없어 **제안까지만** 수행했습니다. deploy key 등록 후 자동 적용이 가능해집니다."
+        patch, pfiles = _extract_patch(body)
+        if patch:
+            _persist(task, writer, task_id, {
+                "proposed_patch": patch,
+                "patch_files": pfiles,
+                "patch_role": role,
+                "patch_at": datetime.now(timezone.utc).isoformat(),
+            })
+            fe = [f for f in pfiles if f.startswith("front-end/")]
+            header += (
+                "\n\n> 🔒 레포 쓰기 권한이 없어 **제안까지만** 수행했습니다."
+                f"\n> 📦 적용 가능한 패치를 저장했습니다 — 대상 {len(pfiles)}개 파일"
+                + (f" (프런트 {len(fe)}개)" if fe else "")
+                + "\n> **플랫폼 현황 → 앱 화면 → 수정안**에서 실제 화면으로 확인할 수 있습니다."
+                + ("" if fe else "\n> ⚠️ 프런트 변경이 없어 미리보기 화면에는 차이가 안 보입니다.")
+            )
+        else:
+            header += "\n\n> 🔒 레포 쓰기 권한이 없어 **제안까지만** 수행했습니다. (적용 가능한 패치 형식은 포함되지 않았습니다)"
+
     _comment(writer, task_id, f"{header}\n\n{body[:9000]}")
 
     # ── 검수 단계
@@ -323,6 +367,31 @@ def _review(task: dict[str, Any], team: str, sub: str, worker: str, result: str,
         lines += ["", str(out["comment"])[:1200]]
     _comment(writer, task_id, "\n".join(lines))
     return v
+
+
+def _extract_patch(text: str) -> tuple[str, list[str]]:
+    """답변 끝의 ```diff 블록을 뽑는다. (패치문자열, 대상파일목록)
+
+    미리보기 빌드에 그대로 먹일 것이라 형식이 어긋나면 차라리 버린다 —
+    깨진 패치를 저장해두면 화면에서 "미리보기" 를 눌렀을 때 그때서야 실패한다.
+    """
+    if not text:
+        return "", []
+    blocks = re.findall(r"```diff\s*\n(.*?)```", text, re.S)
+    if not blocks:
+        return "", []
+    # 여러 개면 이어 붙인다(파일별로 나눠 쓰는 경우가 있다)
+    patch = "\n".join(b.rstrip() for b in blocks).strip()
+    if not patch:
+        return "", []
+    # 최소 형식 검증: diff 헤더와 hunk 가 하나씩은 있어야 한다
+    if "diff --git" not in patch or "@@" not in patch:
+        log.info("diff 블록이 있으나 형식이 불완전 — 저장하지 않음")
+        return "", []
+    files = sorted(set(re.findall(r"^\+\+\+ b/(.+)$", patch, re.M)))
+    if not patch.endswith("\n"):
+        patch += "\n"   # git apply 는 마지막 개행이 없으면 거부한다
+    return patch, files
 
 
 def _persist(task: dict[str, Any], writer, task_id: str, patch: dict[str, Any]) -> None:

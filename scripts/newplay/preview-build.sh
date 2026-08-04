@@ -38,6 +38,14 @@ fail() {
 
 cd "$FE" || fail "front-end 디렉토리 없음: $FE"
 
+# 동시 빌드 차단 — 두 사람이 동시에 미리보기를 누르면 서로의 패치가 섞이고
+# serve 디렉토리 교체가 겹쳐 반쪽짜리 화면이 나온다.
+LOCK="$HOME/newplay-preview/.build.lock"
+exec 9>"$LOCK"
+if ! flock -n 9; then
+  fail "다른 미리보기 빌드가 진행 중입니다. 잠시 후 다시 시도하세요."
+fi
+
 # 1) 원본 복구 — 이전 미리보기의 패치가 남아 있으면 안 된다
 $GIT -C "$ROOT" checkout -- . 2>/dev/null
 $GIT -C "$ROOT" clean -fd front-end/src >/dev/null 2>&1

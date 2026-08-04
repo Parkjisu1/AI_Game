@@ -70,10 +70,39 @@ export default function PlatformPage() {
   // 어느 환경을 볼지 — 운영 / QA. 배포되지 않은 작업본은 어디에도 없다.
   const [env, setEnv] = useState("prod");
   // 수정안 미리보기 상태 — 어떤 패치가 언제 적용돼 빌드됐는지
-  const [prev, setPrev] = useState<{ ok: boolean; patch: string; files: number; baseSha: string; finishedAt: string } | null>(null);
-  useEffect(() => {
-    fetch("/api/platform/preview").then((r) => r.json()).then((j) => setPrev(j?.state || null)).catch(() => {});
-  }, []);
+  const [prev, setPrev] = useState<{ ok: boolean; patch: string; files: number; baseSha: string; finishedAt: string; error?: string } | null>(null);
+  const [cands, setCands] = useState<{ _id: string; title: string; patch_files?: string[]; patch_role?: string; patch_at?: string }[]>([]);
+  const [building, setBuilding] = useState("");
+  const [buildMsg, setBuildMsg] = useState("");
+  const [nonce, setNonce] = useState(0);   // 빌드 후 iframe 을 강제로 다시 그린다
+
+  const loadPreview = () => fetch("/api/platform/preview")
+    .then((r) => r.json())
+    .then((j) => { setPrev(j?.state || null); setCands(Array.isArray(j?.candidates) ? j.candidates : []); })
+    .catch(() => {});
+  useEffect(() => { loadPreview(); }, []);
+
+  // 헤르메스 제안을 미리보기로 빌드한다. 운영·QA 에는 아무 영향이 없다.
+  const buildPreview = async (taskId: string, label: string) => {
+    setBuilding(taskId || "reset");
+    setBuildMsg(`${label} 빌드 중…`);
+    try {
+      const r = await fetch("/api/platform/preview", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(taskId ? { taskId } : { reset: true }),
+      });
+      const j = await r.json();
+      setBuildMsg(j?.ok ? `${label} 반영 완료` : `실패: ${j?.error || j?.state?.error || "알 수 없음"}`);
+      await loadPreview();
+      setEnv("preview");
+      setNonce((n) => n + 1);
+    } catch (e) {
+      setBuildMsg("실패: " + String((e as Error).message || e));
+    } finally {
+      setBuilding("");
+    }
+  };
 
   // 최초 1회는 구성도까지, 이후 10초 폴링은 상태만 받는다(구성도 약 220KB 재전송 방지).
   const load = (live: boolean) => fetch(`/api/platform/overview${live ? "?live=1" : ""}`)
@@ -281,11 +310,47 @@ export default function PlatformPage() {
                       동적 구간 {cur.params.join(", ")} 은(는) 예시값 <code className="rounded bg-amber-50 px-1">demo</code> 로 대체했습니다 — 실제 값으로 바꿔야 화면이 정상 표시됩니다.
                     </div>
                   ) : null}
+                  {curEnv?.key === "preview" && (
+                    <div className="mt-2 rounded border border-gray-200 bg-gray-50 p-2">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-[12px] font-semibold text-gray-900">헤르메스 제안</span>
+                        <button
+                          onClick={() => buildPreview("", "원본")}
+                          disabled={!!building}
+                          className="rounded bg-gray-200 px-2 py-1 text-[11px] text-gray-800 disabled:opacity-50"
+                        >원본으로 되돌리기</button>
+                        {buildMsg && <span className="text-[11px] text-gray-600">{buildMsg}</span>}
+                      </div>
+                      <ul className="mt-1.5 space-y-1">
+                        {cands.map((t) => {
+                          const fe = (t.patch_files || []).filter((f) => f.startsWith("front-end/"));
+                          return (
+                            <li key={t._id} className="flex flex-wrap items-center gap-1.5">
+                              <button
+                                onClick={() => buildPreview(t._id, t.title.slice(0, 20))}
+                                disabled={!!building}
+                                className="rounded bg-blue-600 px-2 py-0.5 text-[11px] text-white disabled:opacity-50"
+                              >{building === t._id ? "빌드 중…" : "미리보기"}</button>
+                              <span className="truncate text-[11px] text-gray-800">{t.title}</span>
+                              <span className="shrink-0 text-[10px] text-gray-400">
+                                {(t.patch_files || []).length}개 파일{fe.length ? ` · 프런트 ${fe.length}` : " · 프런트 변경 없음"}
+                              </span>
+                            </li>
+                          );
+                        })}
+                        {!cands.length && (
+                          <li className="text-[11px] text-gray-400">
+                            아직 패치를 낸 태스크가 없습니다. 헤르메스에 코드 수정을 요청하면 여기에 나타납니다.
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                  )}
                   <div className="mt-1.5 truncate text-[11px] text-gray-500">{url || "(서비스 URL 미설정)"}</div>
                   <div className="mt-1.5 overflow-auto rounded border border-gray-200 bg-gray-50 p-2">
                     {url ? (
                       <iframe
-                        key={url + device}
+                        key={url + device + nonce}
                         src={url}
                         title={cur?.path || "preview"}
                         width={W} height={H}

@@ -36,7 +36,19 @@ export async function GET() {
     const s = await auth();
     if (!s?.user?.email) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
-  return NextResponse.json({ state: await readState() });
+  // 미리보기로 띄울 수 있는 후보 = 헤르메스가 패치를 남긴 태스크.
+  // 본문(proposed_patch)은 무거우니 목록에서는 빼고 메타만 준다.
+  let candidates: unknown[] = [];
+  try {
+    const db = await getDb();
+    candidates = await db.collection("pixelforge_tasks")
+      .find(
+        { proposed_patch: { $exists: true, $ne: "" } },
+        { projection: { title: 1, status: 1, team: 1, sub_team: 1, patch_files: 1, patch_role: 1, patch_at: 1 } },
+      )
+      .sort({ patch_at: -1 }).limit(20).toArray();
+  } catch { /* 목록 실패가 상태 조회를 막지는 않는다 */ }
+  return NextResponse.json({ state: await readState(), candidates });
 }
 
 export async function POST(req: NextRequest) {
@@ -56,7 +68,21 @@ export async function POST(req: NextRequest) {
 
   let patchFile = "";
   if (!body.reset) {
-    const patch = String(body.patch || "");
+    // taskId 가 오면 그 태스크에 저장된 헤르메스 제안을 쓴다.
+    let raw = String(body.patch || "");
+    if (!raw && body.taskId) {
+      const id = String(body.taskId);
+      if (!/^[a-f0-9]{24}$/i.test(id)) return NextResponse.json({ error: "invalid taskId" }, { status: 400 });
+      const { ObjectId } = await import("mongodb");
+      const db = await getDb();
+      const t = await db.collection("pixelforge_tasks").findOne(
+        { _id: new ObjectId(id) }, { projection: { proposed_patch: 1, title: 1 } });
+      if (!t?.proposed_patch) {
+        return NextResponse.json({ error: "이 태스크에는 저장된 패치가 없습니다" }, { status: 404 });
+      }
+      raw = String(t.proposed_patch);
+    }
+    const patch = raw;
     if (!patch.trim()) return NextResponse.json({ error: "patch 가 비었습니다" }, { status: 400 });
     if (patch.length > 2_000_000) return NextResponse.json({ error: "patch 가 너무 큽니다" }, { status: 400 });
     // 파일명에 사용자 입력을 쓰지 않는다.

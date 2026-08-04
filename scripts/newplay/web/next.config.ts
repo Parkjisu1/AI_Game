@@ -31,6 +31,17 @@ const SECURITY_HEADERS = [
   },
 ];
 
+// /preview 전용 — 수정안 미리보기를 /platform 안에서 iframe 으로 띄우기 위한 완화.
+// frame-ancestors 'none' 은 같은 오리진 프레이밍까지 막기 때문에 여기만 'self' 로 둔다.
+// 외부 사이트가 우리를 담는 것은 여전히 불가능하다.
+const PREVIEW_HEADERS = SECURITY_HEADERS.map((h) => {
+  if (h.key === "X-Frame-Options") return { key: "X-Frame-Options", value: "SAMEORIGIN" };
+  if (h.key === "Content-Security-Policy") {
+    return { key: "Content-Security-Policy", value: h.value.replace("frame-ancestors 'none'", "frame-ancestors 'self'") };
+  }
+  return h;
+});
+
 const nextConfig: NextConfig = {
   // Tailscale로 다른 PC/폰에서 접근할 때 Next.js 16이 cross-origin 리소스를 차단하는 문제 해결.
   // 자리 PC의 Tailscale IP 및 LAN IP를 허용.
@@ -50,8 +61,11 @@ const nextConfig: NextConfig = {
 
   async headers() {
     return [
-      // 모든 경로에 보안 헤더 일괄 적용
-      { source: "/:path*", headers: SECURITY_HEADERS },
+      // /preview 를 뺀 모든 경로에 보안 헤더 일괄 적용 (X-Frame-Options: DENY 유지)
+      { source: "/((?!preview).*)", headers: SECURITY_HEADERS },
+      // /preview 만 같은 오리진 프레이밍 허용
+      { source: "/preview", headers: PREVIEW_HEADERS },
+      { source: "/preview/:path*", headers: PREVIEW_HEADERS },
     ];
   },
 
