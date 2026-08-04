@@ -78,6 +78,10 @@ REVIEW_PROMPT = """아래는 같은 팀의 `{worker}` 가 낸 결과다. 너는 
 
 # 검수 기준
 - 인용된 파일·줄 번호가 실제 근거와 맞는가? 위 "관련 코드"에 없는 내용을 단정하지 않았는가?
+- **빠뜨린 표면이 없는가?** 이 레포는 같은 개념이 backend 와 front-end 에 따로 구현된 경우가 많다.
+  프런트만 고치고 이메일·엑셀·어드민 API 를 놓치면 절반만 고친 것이다.
+  "영향 범위" 표가 없거나, 표는 있는데 한쪽 표면을 근거 없이 "해당 없음" 처리했으면 revise 다.
+- **고쳐야 할 성격인데 테스트 제안이 없으면 revise** 다(표시 오류·버그 수정 등).
 - 요청 범위를 넘어선 제안이 섞이지 않았는가?
 - 결제·금액·권한을 다뤘다면 실패 경로(타임아웃·중복요청·부분환불·통화)가 검토됐는가?
 - 검증 명령(어느 워크스페이스에서 무엇을 돌릴지)이 빠지지 않았는가?
@@ -97,6 +101,35 @@ def _comment(writer, task_id: str, text: str) -> None:
         writer.add_comment(task_id, text, author="hermes")
     except Exception:  # noqa: BLE001
         log.exception("코멘트 실패")
+
+
+HERMES_AUTHORS = {"hermes", "hermes-bot", "헤르메스"}
+ASK_MARK = "정보 확인 필요"
+
+
+def _asked_and_answered(context: dict[str, Any]) -> tuple[bool, str]:
+    """이미 물어봤고 사용자가 답했는가? (답했으면 True, 답변 텍스트)
+
+    Translator 는 프롬프트만으로는 같은 질문을 반복한다 — 실측에서 3라운드를 돌며
+    글자만 조금 바꾼 동일 질문을 다시 냈다(Game Key 판매 태스크, 코멘트 11개).
+    사용자 입장에서는 답을 줬는데도 계속 되묻는 것이라 진행이 막힌다.
+    그래서 프롬프트에 맡기지 않고 코드로 끊는다.
+    """
+    comments = context.get("comments") or []
+    last_ask = -1
+    for i, c in enumerate(comments):
+        author = str(c.get("author") or "").strip().lower()
+        if author in HERMES_AUTHORS and ASK_MARK in str(c.get("text") or ""):
+            last_ask = i
+    if last_ask < 0:
+        return False, ""
+    replies = [
+        str(c.get("text") or "").strip()
+        for c in comments[last_ask + 1:]
+        if str(c.get("author") or "").strip().lower() not in HERMES_AUTHORS
+        and str(c.get("text") or "").strip()
+    ]
+    return (len(replies) > 0), "\n".join(replies)
 
 
 def _history(context: dict[str, Any]) -> str:
@@ -245,6 +278,19 @@ DEV_EXTRA = """- **지금은 레포에 쓰기(commit/push)를 할 수 없다.** 
   어떻게 바꿔야 하는지 제시한다.
 - 변경안에는 그에 맞는 검증 명령(yarn lint / build / test, 어느 워크스페이스인지)을 함께 적는다.
 
+- **영향 범위를 먼저 훑고 시작한다. 답변 맨 앞에 "영향 범위" 표를 넣는다.**
+  이 레포는 같은 개념이 backend 와 front-end 에 **따로 구현돼 있는 경우가 많다.**
+  한쪽만 고치면 화면은 맞는데 영수증 메일·정산 엑셀·어드민 API 는 그대로 틀린 채로 남는다.
+  (실제 사례: 결제수단 표시명 — 프런트 매핑만 고치면 `backend/src/lib/paymentMethodName.ts`
+   가 쓰는 메일·엑셀은 여전히 코드값을 뿌린다)
+  표에는 이렇게 적는다:
+  | 표면 | 해당 파일 | 이번에 고치나 | 안 고치면 남는 문제 |
+  최소한 다음을 확인하고 각각 "해당 없음" 이라도 적는다:
+  프런트 화면 / 백엔드 API 응답 / 이메일·PDF·엑셀 등 문서 산출물 / 어드민 화면 / DB 저장값.
+
+- **버그 수정이나 표시 오류 수정이면 재현 테스트를 함께 제시한다.**
+  어느 파일에 어떤 케이스를 추가할지 적는다. 테스트 없이 "고쳤다" 고만 하지 않는다.
+
 - **답변 맨 끝에 적용 가능한 패치를 하나 붙인다.** 설명과 별개로, 아래 형식을 정확히 지킨다.
   이 블록은 사람이 읽는 용도가 아니라 `git apply` 로 그대로 먹여 미리보기를 빌드하는 데 쓴다.
 
@@ -274,7 +320,16 @@ def _run_work(task: dict[str, Any], context: dict[str, Any], team: str, sub: str
         return {"success": False, "error": f"{team}/{sub} 에 매핑된 역할이 없습니다", "next_status": "review"}
 
     query = f"{task.get('title', '')} {task.get('description', '') or ''}".strip()
-    kb = newplay_kb.as_prompt_block(query, top=6, area=AREA_HINT.get(sub, ""))
+    # 분과로 검색을 좁히면 **반대편 표면이 통째로 안 보인다.**
+    # 실측(결제수단 표시명 태스크): area=front-end 로 좁히자
+    # backend/src/lib/paymentMethodName.ts(무필터 4위)가 빠졌고,
+    # 그 결과 백엔드(영수증 메일·정산 엑셀)의 같은 문제를 제안에서 누락했다.
+    # 사람이 낸 PR(EW-2839)은 그 파일을 128줄 고쳤다.
+    # → 분과 중심 + 전체 교차, 두 번 검색해 합친다.
+    kb = newplay_kb.as_prompt_block(query, top=5, area=AREA_HINT.get(sub, ""))
+    cross = newplay_kb.as_prompt_block(query, top=5)
+    if cross:
+        kb = (kb + "\n\n" + cross) if kb else cross
     if not kb:
         kb = "## 관련 코드\n(지식베이스 검색 결과 없음 — 코드 근거 없이 답하고 있음을 명시할 것)"
 
@@ -287,8 +342,12 @@ def _run_work(task: dict[str, Any], context: dict[str, Any], team: str, sub: str
         extra=(DEV_EXTRA if team == "dev" else ""),
     )
 
-    _comment(writer, task_id, f"⚙️ **{role}** 실행 중... (`{team}/{sub}` 분과)")
-    resp = agent_team.invoke(role, prompt, timeout=600)
+    # 역할 성격에 따라 필요한 시간이 다르다.
+    # 실측: dev 코더는 220~240초면 끝나지만, design 문서 작성은 600초를 넘겨 타임아웃 났다
+    # (Game Key 판매 태스크 — ASIS 가 긴 기획 문서라 산출물도 길다).
+    timeout = {"design": 1500, "data": 1200, "dev": 900}.get(team, 900)
+    _comment(writer, task_id, f"⚙️ **{role}** 실행 중... (`{team}/{sub}` 분과, 최대 {timeout // 60}분)")
+    resp = agent_team.invoke(role, prompt, timeout=timeout)
     agent_team.log_session(task, role, resp, prompt)
 
     if not resp.success:
@@ -348,7 +407,7 @@ def _review(task: dict[str, Any], team: str, sub: str, worker: str, result: str,
         result=result[:12000],
         kb=kb,
     )
-    resp = agent_team.invoke(rrole, prompt, timeout=600, want_json=True)
+    resp = agent_team.invoke(rrole, prompt, timeout=1200, want_json=True)
     agent_team.log_session(task, rrole, resp, prompt)
     if not resp.success:
         _comment(writer, task_id, f"⚠️ {rrole} 검수 실패: {resp.error[:200]} — 결과는 그대로 두고 사람 검수로 넘깁니다.")
@@ -435,6 +494,18 @@ def execute_task(task: dict[str, Any], context: dict[str, Any],
             _comment(writer, task_id, f"🛑 **작업 취소 감지** — {tr.get('reason', '')[:300]}\n\n변경 없이 완료 처리합니다.")
             return {"success": True, "summary": "취소", "next_status": "done"}
 
+        # 이미 물어봤고 사용자가 답했으면 다시 묻지 않는다.
+        # 답이 부족해도 그걸 전제로 진행하고, 무엇을 가정했는지 코멘트에 남긴다 —
+        # 되묻기를 반복하는 것보다 가정을 밝히고 결과를 내는 편이 훨씬 낫다.
+        answered, replies = _asked_and_answered(context)
+        if tr["clarity"] == "needs_input" and answered:
+            _comment(writer, task_id,
+                     "↩️ **이미 답변을 받았으므로 되묻지 않고 진행합니다.**\n\n"
+                     f"받은 답변:\n> {replies[:600]}\n\n"
+                     "_부족한 부분은 가정하고 진행하며, 가정한 내용은 결과에 명시합니다._")
+            tr["clarity"] = "clear"
+            tr["enriched"] = (tr.get("enriched") or "") + f"\n\n[사용자 답변]\n{replies[:1200]}"
+
         if tr["clarity"] == "needs_input" and tr.get("questions"):
             qs = "\n".join(f"- {q}" for q in tr["questions"])
             _comment(writer, task_id,
@@ -454,7 +525,7 @@ def execute_task(task: dict[str, Any], context: dict[str, Any],
             enriched=tr.get("enriched") or "(없음)", history=_history(context),
             kb=kbblock, extra="",
         )
-        resp = agent_team.invoke("lead", prompt, timeout=300)
+        resp = agent_team.invoke("lead", prompt, timeout=600)
         agent_team.log_session(task, "lead", resp, prompt)
         if not resp.success:
             _comment(writer, task_id, f"❌ 답변 실패: {resp.error[:300]}")

@@ -41,12 +41,34 @@ export async function GET() {
   let candidates: unknown[] = [];
   try {
     const db = await getDb();
-    candidates = await db.collection("pixelforge_tasks")
+    const rows = await db.collection("pixelforge_tasks")
       .find(
-        { proposed_patch: { $exists: true, $ne: "" } },
-        { projection: { title: 1, status: 1, team: 1, sub_team: 1, patch_files: 1, patch_role: 1, patch_at: 1 } },
+        {},
+        { projection: { title: 1, status: 1, team: 1, sub_team: 1, patch_files: 1, patch_role: 1, patch_at: 1, proposed_patch: 1 } },
       )
-      .sort({ patch_at: -1 }).limit(20).toArray();
+      .sort({ updated_at: -1 }).limit(20).toArray();
+    // 미리볼 수 없는 것도 목록에 남기고 이유를 붙인다 —
+    // "끝났는데 왜 안 보이지" 를 화면에서 바로 알 수 있어야 한다.
+    candidates = rows.map((t) => {
+      const files: string[] = Array.isArray(t.patch_files) ? t.patch_files : [];
+      const fe = files.filter((f) => String(f).startsWith("front-end/"));
+      let previewable = true;
+      let reason = "";
+      if (!t.proposed_patch) {
+        previewable = false;
+        reason = t.team === "design" || t.team === "data"
+          ? "문서·분석 산출물이라 미리볼 코드 변경이 없습니다"
+          : "적용 가능한 패치가 만들어지지 않았습니다";
+      } else if (fe.length === 0) {
+        previewable = false;
+        reason = "백엔드/인프라만 바뀌어 화면에는 차이가 없습니다";
+      }
+      return {
+        _id: t._id, title: t.title, status: t.status, team: t.team, sub_team: t.sub_team,
+        patch_files: files, patch_role: t.patch_role, patch_at: t.patch_at,
+        previewable, reason,
+      };
+    });
   } catch { /* 목록 실패가 상태 조회를 막지는 않는다 */ }
   return NextResponse.json({ state: await readState(), candidates });
 }

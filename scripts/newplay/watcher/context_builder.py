@@ -50,7 +50,7 @@ def build_context(task: dict[str, Any]) -> dict[str, Any]:
         "repo": cfg.get("repo") or {},
         "knowledge": cfg.get("knowledge") or {},
         "kb_health": newplay_kb.health(),
-        "comments": comments[-8:],
+        "comments": comments[-14:],   # 물어봄→답변 패턴이 잘리지 않게 넉넉히
         "last_user_reply": (user_replies[-1].get("text") if user_replies else "") or "",
         "comment_count": len(comments),
     }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 /**
  * 플랫폼 현황 — webstore 가 어떤 기능으로 구성돼 있는지 + 지금 살아 있는지 한 화면에서 본다.
@@ -67,11 +67,22 @@ export default function PlatformPage() {
   const [screen, setScreen] = useState("");
   // 실제 앱을 어느 폭으로 볼지 — 해상도 대응 확인용
   const [device, setDevice] = useState<"mobile" | "tablet" | "desktop">("desktop");
+  // 미리보기 박스의 실제 폭 — 프리셋이 이보다 넓으면 축소해서 전체를 보여준다.
+  const frameBoxRef = useRef<HTMLDivElement | null>(null);
+  const [boxW, setBoxW] = useState(0);
+  useEffect(() => {
+    // 좁은 화면에서 데스크톱 1440 으로 시작하면 왼쪽 귀퉁이만 보인다.
+    if (typeof window !== "undefined" && window.innerWidth < 640) setDevice("mobile");
+    const measure = () => setBoxW(frameBoxRef.current?.clientWidth ?? 0);
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
   // 어느 환경을 볼지 — 운영 / QA. 배포되지 않은 작업본은 어디에도 없다.
   const [env, setEnv] = useState("prod");
   // 수정안 미리보기 상태 — 어떤 패치가 언제 적용돼 빌드됐는지
   const [prev, setPrev] = useState<{ ok: boolean; patch: string; files: number; baseSha: string; finishedAt: string; error?: string } | null>(null);
-  const [cands, setCands] = useState<{ _id: string; title: string; patch_files?: string[]; patch_role?: string; patch_at?: string }[]>([]);
+  const [cands, setCands] = useState<{ _id: string; title: string; status?: string; team?: string; patch_files?: string[]; patch_role?: string; patch_at?: string; previewable?: boolean; reason?: string }[]>([]);
   const [building, setBuilding] = useState("");
   const [buildMsg, setBuildMsg] = useState("");
   const [nonce, setNonce] = useState(0);   // 빌드 후 iframe 을 강제로 다시 그린다
@@ -153,16 +164,16 @@ export default function PlatformPage() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="w-full min-w-0 space-y-4 overflow-x-hidden">
       {/* ── 실시간 상태 ─────────────────────────────── */}
       <section>
         <h2 className="mb-2 text-[13px] font-bold text-gray-900">실시간 상태</h2>
-        <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3 lg:grid-cols-4">
           {d.services.map((s) => (
             <div key={s.name} className="glass p-3">
               <div className="flex items-center gap-1.5">
                 <span className={`inline-block h-2 w-2 shrink-0 rounded-full ${s.ok ? "bg-emerald-500" : "bg-red-500"}`} />
-                <span className="truncate text-[12px] font-semibold text-gray-900">{s.label}</span>
+                <span className="min-w-0 truncate text-[12px] font-semibold text-gray-900">{s.label}</span>
               </div>
               <div className="mt-1 truncate text-[11px] text-gray-500" title={s.detail}>{s.detail}</div>
               <div className="mt-0.5 text-[10px] text-gray-400">{s.ms}ms</div>
@@ -175,7 +186,7 @@ export default function PlatformPage() {
       <section className="grid grid-cols-1 gap-3 lg:grid-cols-2">
         <div className="glass p-3.5">
           <h3 className="mb-2 text-[13px] font-bold text-gray-900">작업 현황</h3>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
             {([["todo", "대기"], ["in_progress", "진행"], ["review", "검수"], ["done", "완료"]] as const).map(([k, label]) => (
               <div key={k} className="rounded border border-gray-200 p-2 text-center">
                 <div className="text-lg font-bold text-gray-900">{d.tasks[k]}</div>
@@ -187,7 +198,7 @@ export default function PlatformPage() {
             {d.tasks.recent.map((t) => (
               <li key={t._id} className="flex items-center gap-2 text-[11px]">
                 <span className="shrink-0 rounded bg-gray-100 px-1.5 py-0.5 text-gray-600">{t.status}</span>
-                <span className="truncate text-gray-800">{t.title}</span>
+                <span className="min-w-0 flex-1 truncate text-gray-800">{t.title}</span>
                 <span className="ml-auto shrink-0 text-gray-400">{ago(t.updated_at)}</span>
               </li>
             ))}
@@ -203,7 +214,7 @@ export default function PlatformPage() {
                 <span className={`inline-block h-1.5 w-1.5 shrink-0 rounded-full ${s.success ? "bg-emerald-500" : "bg-red-500"}`} />
                 <span className="shrink-0 font-medium text-gray-800">{s.role}</span>
                 <span className="hidden shrink-0 text-gray-400 sm:inline">{s.model}</span>
-                <span className="truncate text-gray-500">{s.task_title || ""}</span>
+                <span className="min-w-0 flex-1 truncate text-gray-500">{s.task_title || ""}</span>
                 <span className="ml-auto shrink-0 text-gray-400">{Math.round(s.duration_sec)}s · {ago(s.created_at)}</span>
               </li>
             ))}
@@ -266,10 +277,12 @@ export default function PlatformPage() {
               ? (cur ? "/preview" + resolved : "/preview/")
               : (base && cur ? base.replace(/\/$/, "") + resolved : "");
             const W = { mobile: 390, tablet: 820, desktop: 1440 }[device];
-            const H = { mobile: 780, tablet: 700, desktop: 720 }[device];
+            const H = { mobile: 844, tablet: 900, desktop: 810 }[device];
+            // 박스보다 넓은 프리셋은 축소해 전체를 보여준다(가로 스크롤보다 이쪽이 읽기 쉽다).
+            const scale = boxW > 0 && W > boxW ? boxW / W : 1;
             return (
               <div className="mt-2.5 grid grid-cols-1 gap-3 xl:grid-cols-[minmax(0,300px)_minmax(0,1fr)]">
-                <div className="max-h-[300px] overflow-y-auto rounded border border-gray-200 xl:max-h-[760px]">
+                <div className="max-h-[300px] w-full min-w-0 overflow-y-auto rounded border border-gray-200 xl:max-h-[760px]">
                   {list.map((sc) => (
                     <button
                       key={sc.path} onClick={() => setScreen(sc.path)}
@@ -278,14 +291,14 @@ export default function PlatformPage() {
                       <span className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] ${sc.section === "admin" ? "bg-slate-200 text-slate-700" : sc.section === "auth" ? "bg-amber-100 text-amber-700" : "bg-emerald-100 text-emerald-700"}`}>
                         {sc.section}
                       </span>
-                      <span className="truncate text-[12px] text-gray-900">{sc.path}</span>
+                      <span className="min-w-0 flex-1 truncate text-[12px] text-gray-900">{sc.path}</span>
                       <span className="ml-auto hidden shrink-0 text-[10px] text-gray-400 sm:inline">{sc.component}</span>
                     </button>
                   ))}
                   {!list.length && <div className="p-3 text-[11px] text-gray-400">화면 없음</div>}
                 </div>
 
-                <div className="min-w-0">
+                <div className="min-w-0 w-full">
                   <div className="flex flex-wrap items-center gap-1.5">
                     {envs.map((e) => (
                       <button key={e.key} onClick={() => setEnv(e.key)}
@@ -323,17 +336,21 @@ export default function PlatformPage() {
                       </div>
                       <ul className="mt-1.5 space-y-1">
                         {cands.map((t) => {
-                          const fe = (t.patch_files || []).filter((f) => f.startsWith("front-end/"));
+                          const ok = t.previewable !== false;
                           return (
-                            <li key={t._id} className="flex flex-wrap items-center gap-1.5">
-                              <button
-                                onClick={() => buildPreview(t._id, t.title.slice(0, 20))}
-                                disabled={!!building}
-                                className="rounded bg-blue-600 px-2 py-0.5 text-[11px] text-white disabled:opacity-50"
-                              >{building === t._id ? "빌드 중…" : "미리보기"}</button>
-                              <span className="truncate text-[11px] text-gray-800">{t.title}</span>
+                            <li key={t._id} className={`flex flex-wrap items-center gap-1.5 ${ok ? "" : "opacity-60"}`}>
+                              {ok ? (
+                                <button
+                                  onClick={() => buildPreview(t._id, t.title.slice(0, 20))}
+                                  disabled={!!building}
+                                  className="shrink-0 rounded bg-blue-600 px-2 py-0.5 text-[11px] text-white disabled:opacity-50"
+                                >{building === t._id ? "빌드 중…" : "미리보기"}</button>
+                              ) : (
+                                <span className="shrink-0 rounded bg-gray-200 px-2 py-0.5 text-[11px] text-gray-500">미리보기 불가</span>
+                              )}
+                              <span className="min-w-0 flex-1 truncate text-[11px] text-gray-800">{t.title}</span>
                               <span className="shrink-0 text-[10px] text-gray-400">
-                                {(t.patch_files || []).length}개 파일{fe.length ? ` · 프런트 ${fe.length}` : " · 프런트 변경 없음"}
+                                {ok ? `${(t.patch_files || []).length}개 파일` : t.reason}
                               </span>
                             </li>
                           );
@@ -347,22 +364,26 @@ export default function PlatformPage() {
                     </div>
                   )}
                   <div className="mt-1.5 truncate text-[11px] text-gray-500">{url || "(서비스 URL 미설정)"}</div>
-                  <div className="mt-1.5 overflow-auto rounded border border-gray-200 bg-gray-50 p-2">
+                  <div ref={frameBoxRef} className="mt-1.5 w-full overflow-hidden rounded border border-gray-200 bg-gray-50 p-2">
                     {url ? (
-                      <iframe
-                        key={url + device + nonce}
-                        src={url}
-                        title={cur?.path || "preview"}
-                        width={W} height={H}
-                        className="block max-w-full border-0 bg-white"
-                        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                        loading="lazy"
-                      />
+                      <div style={{ height: H * scale, overflow: "hidden" }}>
+                        <iframe
+                          key={url + device + nonce}
+                          src={url}
+                          title={cur?.path || "preview"}
+                          width={W} height={H}
+                          style={{ transform: `scale(${scale})`, transformOrigin: "top left" }}
+                          className="block border-0 bg-white"
+                          sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                          loading="lazy"
+                        />
+                      </div>
                     ) : (
                       <div className="p-6 text-center text-[12px] text-gray-400">서비스 URL 이 설정되지 않았습니다.</div>
                     )}
                   </div>
                   <div className="mt-1 text-[10px] text-gray-400">
+                    {scale < 1 && `화면 폭에 맞춰 ${Math.round(scale * 100)}% 로 축소해 보여줍니다 (실제 ${W}px 기준). `}
                     {curEnv?.key === "prod"
                       ? "실제 운영 서비스입니다. 로그인이 필요한 화면은 비로그인 상태로 보입니다."
                       : curEnv?.key === "qa"
@@ -388,20 +409,20 @@ export default function PlatformPage() {
 
               {/* 좁은 화면: 세로 스택 / 넓은 화면: 모듈 목록 + 상세 2열 */}
               <div className="mt-2.5 grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,260px)_minmax(0,1fr)]">
-                <div className="max-h-[420px] overflow-y-auto rounded border border-gray-200">
+                <div className="max-h-[420px] w-full min-w-0 overflow-y-auto rounded border border-gray-200">
                   {mods.map((m) => (
                     <button
                       key={m.name} onClick={() => setMod(m.name)}
                       className={`flex w-full items-center gap-2 border-b border-gray-100 px-2.5 py-1.5 text-left text-[12px] last:border-0 ${curMod?.name === m.name ? "bg-gray-100 font-semibold" : ""}`}
                     >
-                      <span className="truncate text-gray-800">{m.name}</span>
+                      <span className="min-w-0 flex-1 truncate text-gray-800">{m.name}</span>
                       <span className="ml-auto shrink-0 text-[10px] text-gray-400">{m.files}개 · {m.lines.toLocaleString()}줄</span>
                     </button>
                   ))}
                   {!mods.length && <div className="p-3 text-[11px] text-gray-400">검색 결과 없음</div>}
                 </div>
 
-                <div className="max-h-[420px] overflow-auto rounded border border-gray-200">
+                <div className="max-h-[420px] w-full min-w-0 overflow-auto rounded border border-gray-200">
                   {files.map((f) => (
                     <div key={f.path} className="border-b border-gray-100 px-2.5 py-1.5 last:border-0">
                       <div className="flex flex-wrap items-center gap-1.5">
@@ -423,7 +444,7 @@ export default function PlatformPage() {
           )}
 
           {tab === "api" && (
-            <div className="mt-2.5 max-h-[480px] overflow-auto rounded border border-gray-200">
+            <div className="mt-2.5 max-h-[480px] w-full min-w-0 overflow-auto rounded border border-gray-200">
               {comp.apis
                 .filter((a) => !q.trim() || a.path.toLowerCase().includes(q.toLowerCase()) || a.handlers.some((h) => h.toLowerCase().includes(q.toLowerCase())))
                 .map((a) => (
