@@ -60,6 +60,50 @@ if [ -n "$PATCH" ]; then
   APPLIED=$(basename "$PATCH")
 fi
 
+# 1-5) 미리보기 전용 보정 — 라우터 basename
+#
+# 앱은 /preview 하위에서 서빙되는데 <BrowserRouter> 에 basename 이 없다.
+# 그러면 /preview/home 이 라우트 /:gameSlug 에 gameSlug="preview" 로 잡혀
+# 존재하지 않는 게임의 스토어 화면이 그려진다 — 쿠키 모달만 뜨고 본문이 비던 이유다.
+# 사용자 패치를 먼저 적용한 뒤 덧대고, 빌드가 끝나면 아래에서 통째로 되돌린다.
+python3 - "$ROOT" <<'PYBASE'
+import io, sys
+p = sys.argv[1] + "/front-end/src/containers/Router.tsx"
+s = io.open(p, encoding="utf-8").read()
+if "basename=" in s:
+    print("  basename 이미 있음 — 생략")
+else:
+    old = "<BrowserRouter>"
+    n = s.count(old)
+    if n == 1:
+        s = s.replace(old, "<BrowserRouter basename={import.meta.env.BASE_URL.replace(/[/]$/, '')}>")
+        io.open(p, "w", encoding="utf-8").write(s)
+        print("  basename 주입 완료")
+    else:
+        print("  BrowserRouter 앵커 %d개 — 주입 생략(수동 확인 필요)" % n)
+PYBASE
+
+# 홈이 끼우는 마케팅 정적 사이트 경로도 BASE_URL 기준으로 바꾼다.
+python3 - "$ROOT" <<'PYHOME'
+import io, sys
+p = sys.argv[1] + "/front-end/src/pages/Home.tsx"
+try:
+    s = io.open(p, encoding="utf-8").read()
+except FileNotFoundError:
+    print("  Home.tsx 없음 — 생략")
+    raise SystemExit(0)
+old = "`/newplay/index.html"
+if "BASE_URL}newplay" in s:
+    print("  홈 iframe 경로 이미 처리됨")
+elif old in s:
+    n = s.count(old)
+    s = s.replace(old, "`${import.meta.env.BASE_URL}newplay/index.html")
+    io.open(p, "w", encoding="utf-8").write(s)
+    print("  홈 iframe 경로 %d곳 보정" % n)
+else:
+    print("  홈 iframe 앵커 없음 — 생략(구조 변경 확인 필요)")
+PYHOME
+
 # 2) 빌드
 # base=/preview/ — Next 앱의 /preview 하위에서 서빙하므로 에셋 절대경로를 그에 맞춘다.
 # (기본 빌드는 /assets/... 로 나와서 /preview/ 아래에서는 전부 404 가 된다)
