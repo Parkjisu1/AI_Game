@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Md from "@/components/Md";
 
 /**
  * 플랫폼 현황 — webstore 가 어떤 기능으로 구성돼 있는지 + 지금 살아 있는지 한 화면에서 본다.
@@ -63,7 +64,53 @@ export default function PlatformPage() {
   const [area, setArea] = useState("");
   const [mod, setMod] = useState("");
   const [q, setQ] = useState("");
-  const [tab, setTab] = useState<"tree" | "api" | "entity" | "screen">("screen");
+  const [tab, setTab] = useState<"tree" | "api" | "entity" | "screen" | "doc">("screen");
+  // 산출물(문서) — design·data 결과는 미리보기에 나올 수 없어 여기서 읽고 판정한다.
+  type DocItem = { _id: string; title: string; team?: string; sub_team?: string; deliverable_role?: string;
+                   deliverable_at?: string; chars: number; criteria: { total: number; ok: number; ng: number } };
+  type Crit = { id: string; text: string; state: string; judged_by?: string };
+  const [docs, setDocs] = useState<DocItem[]>([]);
+  const [docId, setDocId] = useState("");
+  const [docBody, setDocBody] = useState<{ deliverable?: string; acceptance_criteria?: Crit[]; title?: string } | null>(null);
+  const loadDocs = () => fetch("/api/platform/deliverables")
+    .then((r) => r.json()).then((j) => setDocs(Array.isArray(j?.items) ? j.items : [])).catch(() => {});
+  useEffect(() => { loadDocs(); }, []);
+  useEffect(() => {
+    if (!docId) { setDocBody(null); return; }
+    fetch(`/api/platform/deliverables?id=${docId}`).then((r) => r.json())
+      .then((j) => setDocBody(j?.item || null)).catch(() => setDocBody(null));
+  }, [docId]);
+  const [mockMsg, setMockMsg] = useState("");
+  const [making, setMaking] = useState(false);
+  // 설계 문서 → 화면 목업 dev 태스크. 태스크 하나를 만들 뿐 레포엔 아무것도 쓰지 않는다.
+  const makeMockup = async () => {
+    if (!docId) return;
+    setMaking(true); setMockMsg("목업 태스크 생성 중…");
+    try {
+      const r = await fetch("/api/platform/mockup", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: docId }),
+      });
+      const j = await r.json();
+      setMockMsg(j?.ok
+        ? `${j.reused ? "이미 있는 목업 태스크입니다" : "목업 태스크를 만들었습니다"} — 작업 보드에서 진행되며, 끝나면 앱 화면 → 수정안에서 볼 수 있습니다. ${j.warning || ""}`
+        : `실패: ${j?.error || "알 수 없음"}`);
+    } catch (e) {
+      setMockMsg("실패: " + String((e as Error).message || e));
+    } finally { setMaking(false); }
+  };
+
+  const judge = async (cid: string, state: string) => {
+    if (!docId) return;
+    await fetch("/api/platform/deliverables", {
+      method: "PATCH", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: docId, cid, state }),
+    }).catch(() => {});
+    // 낙관적 갱신 대신 다시 읽는다 — 판정은 사람이 믿어야 하는 값이라 화면과 DB 가 어긋나면 안 된다.
+    const j = await fetch(`/api/platform/deliverables?id=${docId}`).then((r) => r.json()).catch(() => null);
+    if (j?.item) setDocBody(j.item);
+    loadDocs();
+  };
   const [screen, setScreen] = useState("");
   // 실제 앱을 어느 폭으로 볼지 — 해상도 대응 확인용
   const [device, setDevice] = useState<"mobile" | "tablet" | "desktop">("desktop");
@@ -254,7 +301,7 @@ export default function PlatformPage() {
 
           {/* 탭 */}
           <div className="mt-3 flex gap-1 border-b border-gray-200">
-            {([["screen", `앱 화면 (${comp.screens?.length ?? 0})`], ["tree", "모듈 구조"], ["api", `API (${comp.apis.length})`], ["entity", `엔티티 (${comp.entities.length})`]] as const).map(([k, label]) => (
+            {([["screen", `앱 화면 (${comp.screens?.length ?? 0})`], ["doc", `산출물 (${docs.length})`], ["tree", "모듈 구조"], ["api", `API (${comp.apis.length})`], ["entity", `엔티티 (${comp.entities.length})`]] as const).map(([k, label]) => (
               <button
                 key={k} onClick={() => setTab(k)}
                 className={`px-2.5 py-1.5 text-[12px] ${tab === k ? "border-b-2 border-gray-900 font-semibold text-gray-900" : "text-gray-500"}`}
@@ -390,6 +437,73 @@ export default function PlatformPage() {
                       ? "QA 환경입니다. 여기에 배포된 변경은 운영에 올리기 전에 확인할 수 있습니다."
                       : `이 서버에서 직접 빌드한 수정안입니다 — 운영·QA 어디에도 반영되지 않습니다. ${prev ? `적용 패치: ${prev.patch === "none" ? "없음(원본 그대로)" : prev.patch} · ${prev.files}개 파일 · base ${prev.baseSha}` : "아직 빌드된 미리보기가 없습니다."}`}
                   </div>
+                </div>
+              </div>
+            );
+          })()}
+
+          {tab === "doc" && (() => {
+            const cur = docs.find((x) => x._id === docId) || docs[0] || null;
+            if (docId === "" && cur) setTimeout(() => setDocId(cur._id), 0);
+            const crits: Crit[] = docBody?.acceptance_criteria || [];
+            return (
+              <div className="mt-2.5 grid grid-cols-1 gap-3 xl:grid-cols-[minmax(0,300px)_minmax(0,1fr)]">
+                <div className="max-h-[300px] w-full min-w-0 overflow-y-auto rounded border border-gray-200 xl:max-h-[820px]">
+                  {docs.map((d2) => (
+                    <button key={d2._id} onClick={() => setDocId(d2._id)}
+                      className={`w-full border-b border-gray-100 px-2.5 py-1.5 text-left last:border-0 ${cur?._id === d2._id ? "bg-gray-100" : ""}`}>
+                      <div className="flex items-center gap-1.5">
+                        <span className="shrink-0 rounded bg-gray-100 px-1.5 py-0.5 text-[10px] text-gray-600">{d2.team}/{d2.sub_team}</span>
+                        <span className="min-w-0 flex-1 truncate text-[12px] font-medium text-gray-900">{d2.title}</span>
+                      </div>
+                      <div className="mt-0.5 text-[10px] text-gray-400">
+                        {d2.deliverable_role} · {(d2.chars / 1000).toFixed(1)}K자
+                        {d2.criteria.total > 0 && ` · 확인 ${d2.criteria.ok}/${d2.criteria.total}`}
+                        {d2.criteria.ng > 0 && ` · 아니오 ${d2.criteria.ng}`}
+                      </div>
+                    </button>
+                  ))}
+                  {!docs.length && <div className="p-3 text-[11px] text-gray-400">아직 산출물이 없습니다. design·data 태스크가 끝나면 여기에 쌓입니다.</div>}
+                </div>
+
+                <div className="min-w-0 w-full">
+                  {!docBody ? (
+                    <div className="rounded border border-gray-200 p-4 text-[12px] text-gray-400">문서를 선택하세요.</div>
+                  ) : (
+                    <>
+                      {!!crits.length && (
+                        <div className="mb-2 rounded border border-gray-200 bg-gray-50 p-2.5">
+                          <div className="text-[12px] font-semibold text-gray-900">확인 항목 — 맞으면 예, 틀리면 아니오</div>
+                          <div className="mt-0.5 text-[10px] text-gray-500">
+                            가정이 틀리면 결과가 통째로 바뀝니다. 항목별로 판정해 주세요.
+                          </div>
+                          <ul className="mt-1.5 space-y-1">
+                            {crits.map((c2) => (
+                              <li key={c2.id} className="flex flex-wrap items-start gap-1.5">
+                                <span className="flex shrink-0 gap-1">
+                                  <button onClick={() => judge(c2.id, c2.state === "ok" ? "pending" : "ok")}
+                                    className={`rounded px-1.5 py-0.5 text-[11px] ${c2.state === "ok" ? "bg-emerald-600 text-white" : "bg-gray-200 text-gray-600"}`}>예</button>
+                                  <button onClick={() => judge(c2.id, c2.state === "ng" ? "pending" : "ng")}
+                                    className={`rounded px-1.5 py-0.5 text-[11px] ${c2.state === "ng" ? "bg-red-600 text-white" : "bg-gray-200 text-gray-600"}`}>아니오</button>
+                                </span>
+                                <span className={`min-w-0 flex-1 text-[12px] ${c2.state === "ng" ? "text-red-700 line-through" : "text-gray-800"}`}>{c2.text}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      <div className="mb-2 flex flex-wrap items-center gap-2">
+                        <button onClick={makeMockup} disabled={making}
+                          className="rounded bg-gray-900 px-2.5 py-1 text-[11px] text-white disabled:opacity-50">
+                          {making ? "생성 중…" : "이 설계로 목업 만들기"}
+                        </button>
+                        <span className="min-w-0 flex-1 text-[11px] text-gray-600">{mockMsg}</span>
+                      </div>
+                      <div className="max-h-[720px] w-full min-w-0 overflow-auto rounded border border-gray-200 p-3">
+                        <Md text={docBody.deliverable || ""} />
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             );

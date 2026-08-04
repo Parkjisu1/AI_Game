@@ -271,7 +271,18 @@ WORK_PROMPT = """# 요청
 - 지식베이스에서 가져온 코드가 위에 있으면 그것을 근거로 답한다. 없는 동작을 있다고 하지 마라.
 - 파일을 언급할 때는 경로와 줄 번호를 함께 적는다.
 {extra}
-마크다운으로 답한다."""
+마크다운으로 답한다.
+
+- **답변 맨 끝에 `## 확인 항목` 을 붙인다.** 사람이 이 결과가 맞는지 판정할 수 있는 항목을
+  5~8개, 아래 형식 그대로 적는다. "잘 됐나요?" 가 아니라 **하나씩 O/X 로 답할 수 있는 문장**이어야 한다.
+
+## 확인 항목
+- [ ] (판정 가능한 문장 하나)
+- [ ] (또 하나)
+
+  좋은 항목: "키는 1주문 1키로 판매한다 — 수량 선택 없음", "환불은 키 미열람 상태에서만 허용한다"
+  나쁜 항목: "설계가 적절한가", "구현 가능한가" (판정 기준이 없다)
+  네가 세운 **가정**이 있으면 그 가정을 확인 항목으로 올려라 — 가정이 틀리면 결과가 통째로 바뀐다."""
 
 DEV_EXTRA = """- **지금은 레포에 쓰기(commit/push)를 할 수 없다.** newplay 노드의 deploy key 가
   GitHub 에 아직 등록되지 않았다. 그러니 "고쳤다"고 쓰지 말고, 어떤 파일의 어디를
@@ -356,6 +367,16 @@ def _run_work(task: dict[str, Any], context: dict[str, Any], team: str, sub: str
 
     body = (resp.output or "").strip() or "(빈 응답)"
     header = f"### ⚙️ {role} 결과 ({resp.model}, {resp.duration_sec:.0f}s)"
+
+    # 산출물과 확인 항목을 태스크에 구조화해 저장한다.
+    # 코멘트에만 두면 긴 문서가 스크롤에 묻혀 읽기도 판정하기도 어렵다.
+    criteria = _extract_criteria(body)
+    _persist(task, writer, task_id, {
+        "deliverable": body[:60000],
+        "deliverable_role": role,
+        "deliverable_at": datetime.now(timezone.utc).isoformat(),
+        "acceptance_criteria": criteria,
+    })
 
     # dev 제안은 패치를 따로 떼어 저장한다 — 플랫폼 화면에서 미리보기로 빌드할 수 있게.
     # 저장만 할 뿐 레포·운영·QA 어디에도 적용하지 않는다.
@@ -451,6 +472,27 @@ def _extract_patch(text: str) -> tuple[str, list[str]]:
     if not patch.endswith("\n"):
         patch += "\n"   # git apply 는 마지막 개행이 없으면 거부한다
     return patch, files
+
+
+def _extract_criteria(text: str) -> list[dict[str, Any]]:
+    """`## 확인 항목` 아래의 `- [ ]` 목록을 뽑는다.
+
+    사람이 O/X 로 판정할 수 있는 형태로 저장해 둔다 — 문서 전체를 읽고
+    "잘 나왔나?" 를 묻는 것보다, 항목별로 맞다/틀리다를 찍는 편이 훨씬 정확하다.
+    """
+    if not text:
+        return []
+    m = re.search(r"##\s*확인\s*항목\s*\n(.*?)(?:\n##\s|\Z)", text, re.S)
+    if not m:
+        return []
+    items = re.findall(r"^\s*[-*]\s*\[[ xX]?\]\s*(.+?)\s*$", m.group(1), re.M)
+    out: list[dict[str, Any]] = []
+    for idx, it in enumerate(items[:12]):
+        t = it.strip()
+        if len(t) < 4:
+            continue
+        out.append({"id": f"c{idx}", "text": t[:400], "state": "pending"})
+    return out
 
 
 def _persist(task: dict[str, Any], writer, task_id: str, patch: dict[str, Any]) -> None:
