@@ -128,7 +128,7 @@ export default function PlatformPage() {
   // 어느 환경을 볼지 — 운영 / QA. 배포되지 않은 작업본은 어디에도 없다.
   const [env, setEnv] = useState("prod");
   // 수정안 미리보기 상태 — 어떤 패치가 언제 적용돼 빌드됐는지
-  const [prev, setPrev] = useState<{ ok: boolean; patch: string; files: number; baseSha: string; finishedAt: string; error?: string } | null>(null);
+  const [prev, setPrev] = useState<{ ok: boolean; patch: string; files: number; baseSha: string; finishedAt: string; error?: string; routes?: string[] } | null>(null);
   const [cands, setCands] = useState<{ _id: string; title: string; status?: string; team?: string; patch_files?: string[]; patch_role?: string; patch_at?: string; previewable?: boolean; reason?: string }[]>([]);
   const [building, setBuilding] = useState("");
   const [buildMsg, setBuildMsg] = useState("");
@@ -300,7 +300,7 @@ export default function PlatformPage() {
           </div>
 
           {/* 탭 */}
-          <div className="mt-3 flex gap-1 border-b border-gray-200">
+          <div className="mt-3 flex flex-wrap gap-1 border-b border-gray-200">
             {([["screen", `앱 화면 (${comp.screens?.length ?? 0})`], ["doc", `산출물 (${docs.length})`], ["tree", "모듈 구조"], ["api", `API (${comp.apis.length})`], ["entity", `엔티티 (${comp.entities.length})`]] as const).map(([k, label]) => (
               <button
                 key={k} onClick={() => setTab(k)}
@@ -315,7 +315,13 @@ export default function PlatformPage() {
             const envs: Env[] = [...deployed, { key: "preview", label: "수정안", url: "" }];
             const curEnv = envs.find((e) => e.key === env) || envs[0];
             const base = curEnv?.url || "";
-            const list = (comp.screens || []).filter(
+            // 앱 화면 목록은 기준 커밋 스냅샷이라, 패치가 새로 만든 라우트(/mockup/... 등)가 없다.
+            // 미리보기 빌드가 알려준 라우트 중 스냅샷에 없는 것을 앞에 끼워 넣는다 —
+            // 목업을 만들고도 "어디서 보나" 가 되던 문제다.
+            const previewRoutes: Screen[] = (curEnv?.key === "preview" ? (prev?.routes || []) : [])
+              .filter((r) => !(comp.screens || []).some((sc) => sc.path === r))
+              .map((r) => ({ path: r, component: "(미리보기 전용)", section: "preview", params: (r.match(/:[A-Za-z0-9_]+/g) || []) }));
+            const list = [...previewRoutes, ...(comp.screens || [])].filter(
               (sc) => !q.trim() || sc.path.toLowerCase().includes(q.toLowerCase()) || sc.component.toLowerCase().includes(q.toLowerCase()));
             const cur = list.find((sc) => sc.path === screen) || list[0] || null;
             // :gameSlug 같은 동적 구간은 그대로 열 수 없다. 예시값을 넣어 링크를 만든다.
@@ -335,7 +341,7 @@ export default function PlatformPage() {
                       key={sc.path} onClick={() => setScreen(sc.path)}
                       className={`flex w-full items-center gap-1.5 border-b border-gray-100 px-2.5 py-1.5 text-left last:border-0 ${cur?.path === sc.path ? "bg-gray-100 font-semibold" : ""}`}
                     >
-                      <span className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] ${sc.section === "admin" ? "bg-slate-200 text-slate-700" : sc.section === "auth" ? "bg-amber-100 text-amber-700" : "bg-emerald-100 text-emerald-700"}`}>
+                      <span className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] ${sc.section === "preview" ? "bg-blue-600 text-white" : sc.section === "admin" ? "bg-slate-200 text-slate-700" : sc.section === "auth" ? "bg-amber-100 text-amber-700" : "bg-emerald-100 text-emerald-700"}`}>
                         {sc.section}
                       </span>
                       <span className="min-w-0 flex-1 truncate text-[12px] text-gray-900">{sc.path}</span>

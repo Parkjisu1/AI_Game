@@ -96,6 +96,37 @@ REVIEW_PROMPT = """아래는 같은 팀의 `{worker}` 가 낸 결과다. 너는 
 AREA_HINT = {"backend": "backend", "frontend": "front-end", "infra": "", "qa": ""}
 
 
+MOCKUP_REVIEW_PROMPT = """아래는 `{worker}` 가 만든 **화면 목업**이다. 너는 이것을 검수한다.
+
+# 원래 요청
+{title}
+
+## 상세
+{description}
+
+# 검수 대상 결과
+{result}
+
+{kb}
+
+# 검수 기준 — 목업이다. 프로덕션 기준을 적용하지 마라.
+목업은 "설계가 화면으로 어떻게 보이는지" 를 확인하려고 만드는 실험물이다.
+**테스트 미포함, lint/build 미실행, i18n 미적용은 반려 사유가 아니다.** 그건 목업의 전제다.
+
+볼 것은 이 셋뿐이다.
+1. 설계와 맞는가 — 요청에 적힌 확정 전제를 화면이 반영했는가? 빠진 화면·단계가 있는가?
+2. 기존 톤앤매너를 따랐는가 — 새 디자인 언어를 만들어내지 않았는가?
+3. **확정되지 않은 전제를 몰래 쓰지 않았는가** — "아니오" 로 판정된 전제를 썼으면 그것만으로 reject.
+   미판정 전제를 썼다면 화면이나 설명에 가정임을 표시했는가?
+
+또 하나: 목업이 **실제 동작하는 것처럼 보이게 만들었으면** 지적하라(가짜 성공 화면 등).
+목업임을 사용자가 알 수 있어야 한다.
+
+# 출력 (JSON 하나만)
+{{"verdict":"approve|revise|reject","score":0-100,
+"issues":["구체적 문제 (없으면 빈 배열)"],"comment":"2~4줄 총평"}}"""
+
+
 def _comment(writer, task_id: str, text: str) -> None:
     try:
         writer.add_comment(task_id, text, author="hermes")
@@ -284,6 +315,27 @@ WORK_PROMPT = """# 요청
   나쁜 항목: "설계가 적절한가", "구현 가능한가" (판정 기준이 없다)
   네가 세운 **가정**이 있으면 그 가정을 확인 항목으로 올려라 — 가정이 틀리면 결과가 통째로 바뀐다."""
 
+MOCKUP_EXTRA = """- **이건 목업이다.** 실제 동작·API 연동·테스트는 필요 없다. 화면이 보이면 된다.
+- 화면 어딘가에 **목업임을 알리는 표시**를 반드시 넣는다(배너 등). 진짜 서비스로 오인되면 안 된다.
+- 기존 스토어의 톤앤매너·컴포넌트·SCSS 규칙을 따른다. 새 디자인 언어를 만들지 마라.
+- **front-end/ 안에서만** 변경한다. 백엔드는 건드리지 마라.
+
+- **답변 맨 끝에 적용 가능한 패치를 붙인다.** 형식은 아래를 정확히 지킨다.
+
+```diff
+diff --git a/front-end/src/... b/front-end/src/...
+--- a/front-end/src/...
++++ b/front-end/src/...
+@@ -<시작>,<줄수> +<시작>,<줄수> @@
+ (문맥)
++추가
+```
+
+  * 새 파일은 `--- /dev/null` 과 `+++ b/<경로>` 로 시작하고 모든 줄을 `+` 로 적는다.
+  * 기존 파일의 문맥 줄은 원문과 한 글자도 달라선 안 된다.
+  * 새로 만든 라우트 경로를 답변 본문에 **한 줄로 명시**한다 — 그래야 미리보기에서 찾아갈 수 있다."""
+
+
 DEV_EXTRA = """- **지금은 레포에 쓰기(commit/push)를 할 수 없다.** newplay 노드의 deploy key 가
   GitHub 에 아직 등록되지 않았다. 그러니 "고쳤다"고 쓰지 말고, 어떤 파일의 어디를
   어떻게 바꿔야 하는지 제시한다.
@@ -350,7 +402,7 @@ def _run_work(task: dict[str, Any], context: dict[str, Any], team: str, sub: str
         enriched=tr.get("enriched") or "(없음)",
         history=_history(context),
         kb=kb,
-        extra=(DEV_EXTRA if team == "dev" else ""),
+        extra=(MOCKUP_EXTRA if task.get("mockup_of") else (DEV_EXTRA if team == "dev" else "")),
     )
 
     # 역할 성격에 따라 필요한 시간이 다르다.
@@ -421,7 +473,9 @@ def _review(task: dict[str, Any], team: str, sub: str, worker: str, result: str,
     if not rrole or rrole == worker:
         return ""
 
-    prompt = REVIEW_PROMPT.format(
+    # 목업 태스크(mockup_of 로 생성)는 기준이 다르다.
+    tmpl = MOCKUP_REVIEW_PROMPT if task.get("mockup_of") else REVIEW_PROMPT
+    prompt = tmpl.format(
         worker=worker,
         title=task.get("title", ""),
         description=task.get("description", "") or "(없음)",

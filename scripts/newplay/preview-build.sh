@@ -53,10 +53,13 @@ $GIT -C "$ROOT" clean -fd front-end/src >/dev/null 2>&1
 APPLIED="none"
 if [ -n "$PATCH" ]; then
   [ -f "$PATCH" ] || fail "패치 파일 없음: $PATCH"
-  if ! OUT=$($GIT -C "$ROOT" apply --check "$PATCH" 2>&1); then
-    fail "패치 적용 불가(--check 실패): $OUT"
+  # --recount: LLM 이 만든 패치는 hunk 헤더의 줄 수(@@ -a,b +c,d @@)를 자주 틀린다.
+  # 실측(게임키 목업): @@ -102,6 +102,10 @@ 인데 실제 추가는 3줄 → "corrupt patch".
+  # --recount 는 헤더를 무시하고 본문에서 다시 세므로 이 부류가 그대로 통과한다.
+  if ! OUT=$($GIT -C "$ROOT" apply --recount --check "$PATCH" 2>&1); then
+    fail "패치 적용 불가(--recount --check 실패): $OUT"
   fi
-  $GIT -C "$ROOT" apply "$PATCH" || fail "패치 적용 실패"
+  $GIT -C "$ROOT" apply --recount "$PATCH" || fail "패치 적용 실패"
   APPLIED=$(basename "$PATCH")
 fi
 
@@ -104,6 +107,24 @@ else:
     print("  홈 iframe 앵커 없음 — 생략(구조 변경 확인 필요)")
 PYHOME
 
+# 1-7) 이번 빌드에 존재하는 라우트를 기록한다(패치로 새로 생긴 것 포함).
+ROUTES_JSON=$(python3 - "$ROOT" <<'PYROUTES'
+import io, json, re, sys
+p = sys.argv[1] + "/front-end/src/containers/Router.tsx"
+try:
+    s = io.open(p, encoding="utf-8").read()
+except Exception:
+    print("[]")
+    raise SystemExit(0)
+seen = []
+for m in re.finditer(r"""path=["'`]([^"'`]+)["'`]""", s):
+    v = m.group(1)
+    if v and v != "*" and v not in seen:
+        seen.append(v)
+print(json.dumps(seen, ensure_ascii=False))
+PYROUTES
+)
+
 # 2) 빌드
 # base=/preview/ — Next 앱의 /preview 하위에서 서빙하므로 에셋 절대경로를 그에 맞춘다.
 # (기본 빌드는 /assets/... 로 나와서 /preview/ 아래에서는 전부 404 가 된다)
@@ -123,17 +144,26 @@ rm -rf "$SERVE.old"
 mv "$SERVE.new" "$SERVE" || fail "serve 교체 실패"
 rm -rf "$SERVE.old"
 
-# 4) 소스는 항상 깨끗하게 되돌린다
+# 4) 소스는 항상 깨끗하게 되돌린다 — 빌드 후 정리
+# checkout 은 **추적되던 파일만** 되돌린다. 목업처럼 새 파일을 만드는 패치는
+# untracked 로 남아 다음 미리보기에 섞인다(실측: 목업 빌드 후 1건 잔존).
+# clean -fd 로 새로 생긴 것까지 지운다.
 $GIT -C "$ROOT" checkout -- . 2>/dev/null
+$GIT -C "$ROOT" clean -fdq front-end/src front-end/public 2>/dev/null
 
 SHA=$($GIT -C "$ROOT" rev-parse --short HEAD 2>/dev/null)
 FILES=$(find "$SERVE" -type f | wc -l)
-python3 - "$APPLIED" "$SHA" "$FILES" "$STARTED" <<'PY' > "$META"
+python3 - "$APPLIED" "$SHA" "$FILES" "$STARTED" "$ROUTES_JSON" <<'PY' > "$META"
 import json, sys, datetime
 applied, sha, files, started = sys.argv[1:5]
+try:
+    routes = json.loads(sys.argv[5]) if len(sys.argv) > 5 else []
+except Exception:
+    routes = []
 print(json.dumps({
     "ok": True, "patch": applied, "baseSha": sha, "files": int(files),
     "startedAt": started, "finishedAt": datetime.datetime.now().astimezone().isoformat(),
+    "routes": routes,
 }, ensure_ascii=False))
 PY
 
