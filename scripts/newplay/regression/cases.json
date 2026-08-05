@@ -1,0 +1,103 @@
+{
+  "_comment": [
+    "NewPlay 파이프라인 회귀 세트.",
+    "왜 필요한가: 같은 입력에 매번 다른 결과가 나온다(실측 — Game Key 재현에서 질문 내용이 달랐다).",
+    "그 상태로 학습·그래프를 붙이면 좋아졌는지 알 수가 없다. 고정 입력으로 먼저 눈금을 만든다.",
+    "",
+    "expect.team/sub_team — 라우팅 정답. fast 모드가 이것만 잰다.",
+    "expect.files       — 결과가 언급해야 할 파일. 사람이 실제로 고친 것(PR)이 정답지다.",
+    "expect.no_ask      — true 면 되묻지 않고 진행해야 정상.",
+    "ground_truth       — 정답지 출처. 비어 있으면 recall 을 재지 않는다."
+  ],
+  "cases": [
+    {
+      "id": "payment-label",
+      "title": "결제수단 표시명을 유저가 알아보기 쉽게 바꾸기",
+      "description": "FOREIGN_EASY_PAY 같은 내부 코드값이 화면에 그대로 노출된다. 어디를 어떻게 고쳐야 하는지 제시해줘.",
+      "expect": { "team": "dev", "no_ask": true },
+      "ground_truth": "blocore/webstore PR#1819 (EW-2839) — 사람이 실제로 고친 파일",
+      "expect_files": [
+        "front-end/src/utils/paymentMethodLabel.ts",
+        "front-end/src/utils/constants.ts",
+        "front-end/src/components/Invoice.tsx",
+        "front-end/src/pages/OrderSheet.tsx",
+        "front-end/src/pages/PgPaymentSelect.tsx",
+        "front-end/src/dashboard/pages/Payments.tsx",
+        "front-end/src/dashboard/pages/PgPayments.tsx",
+        "front-end/src/dashboard/pages/Refunds.tsx",
+        "front-end/src/locales/store/ko.ts",
+        "backend/src/lib/paymentMethodName.ts",
+        "backend/src/lib/mailer.ts",
+        "backend/src/lib/excelBuilder.ts"
+      ]
+    },
+    {
+      "id": "footer-year",
+      "title": "스토어 푸터 저작권 연도가 하드코딩이면 현재 연도로 자동 계산되게 바꿔줘",
+      "description": "front-end 푸터에 표시되는 저작권 연도가 코드에 박혀 있는지 확인하고, 박혀 있다면 매년 손대지 않아도 되게 현재 연도를 계산해 쓰도록 바꿔줘.",
+      "expect": { "team": "dev", "sub_team": "frontend", "no_ask": true },
+      "ground_truth": "우리 실행 결과 — 사람 확인 완료",
+      "expect_files": ["front-end/src/components/Footer.tsx"]
+    },
+    {
+      "id": "nav-order",
+      "title": "마케팅 사이트 상단 내비 순서를 역순으로 바꿔줘",
+      "description": "Pricing / Features / Case / Developers 의 순서를 역순으로 바꿔서 보여줘.",
+      "expect": { "team": "dev", "sub_team": "frontend", "no_ask": true },
+      "ground_truth": "우리 실행 결과 — 사람 확인 완료",
+      "expect_files": ["front-end/public/newplay/index.html"]
+    },
+    {
+      "id": "toss-orderid",
+      "title": "Toss 결제 승인에서 orderId 불일치는 어떤 조건에서 나는지 코드 근거로 설명해줘",
+      "description": "최근 EW-2837 커밋이 이 문제를 고쳤다고 들었다. 어떤 경로에서 불일치가 발생하고 어떻게 처리되는지, 실제 파일과 줄 번호를 들어 설명해줘.",
+      "expect": { "team": "dev", "sub_team": "backend", "no_ask": true },
+      "ground_truth": "커밋 EW-2837",
+      "expect_files": [
+        "backend/src/modules/payment/payment.controller.ts",
+        "backend/src/modules/store/store.controller.ts"
+      ]
+    },
+    {
+      "id": "partial-refund",
+      "title": "부분환불 시 정산 금액이 어떻게 계산되는지 코드로 확인해줘",
+      "description": "환불이 전액이 아닌 경우 플랫폼 수수료와 세금이 어떻게 재계산되는지, 관련 파일과 줄 번호를 들어 설명해줘.",
+      "expect": { "team": "dev", "sub_team": "backend", "no_ask": true },
+      "ground_truth": "",
+      "expect_files": []
+    },
+    {
+      "id": "retention-drop",
+      "title": "D1 리텐션이 지난주부터 떨어졌는데 원인 세그먼트를 찾아줘",
+      "description": "결제 완료율과 함께 봐야 할 것 같다. 어떤 세그먼트에서 빠지는지 확인해줘.",
+      "expect": { "team": "data", "no_ask": true },
+      "ground_truth": "",
+      "expect_files": []
+    },
+    {
+      "id": "booster-log",
+      "title": "부스터 사용 로그가 없어서 효과를 못 본다. 이벤트를 설계해줘",
+      "description": "지금 로그로는 부스터가 클리어율에 얼마나 기여하는지 알 수 없다. 무엇을 더 쌓아야 하는지 정의해줘.",
+      "expect": { "team": "data", "sub_team": "logspec", "no_ask": true },
+      "ground_truth": "",
+      "expect_files": []
+    },
+    {
+      "id": "game-key",
+      "title": "Game Key 판매",
+      "description": "목표\n우리 플랫폼에 입점한 퍼블리셔가 웹스토어에서 본인 게임의 스팀키를 판매할 수 있어야 한다.\n\nASIS\n판매 상품: 인게임 재화와 아이템만\n지급 방식: 구매자가 게임 ID를 입력하고, 게임 서버 웹훅으로 인게임 지급. 단일 경로\n재고: 개념 없음. 수량 필드는 전부 유저당 구매 한도이며 매일/매주 리셋되는 설정도 있음\n구매자 식별: 로그인 기반 계정 있음, 구매 내역 페이지 존재\n환불: 결제 취소 기준의 단순 구조\n세금: 자체 계산 및 기록. 상품 유형은 하나로 취급\n판매 지역: 국가 단위 on/off 없음. 통화별 가격 입력 여부가 사실상 시장 개방 여부\n상점 화면: 게임 하나당 상점 하나, 고정 레이아웃, 모바일 우선, 밝은 톤\n상품 등록: 3스텝 위저드, 카테고리 2축, 패키지 구성 등 이미 복잡한 상태\n퍼블리셔 운영 도구: 상품 활성화 토글, 판매 기간, 결제 및 환불 조회",
+      "expect": { "team": "design", "no_ask": false },
+      "note": "TOBE 미제공이 전제인 벤치마크 케이스. 되묻기가 나오는 게 정상 — no_ask=false.",
+      "ground_truth": "",
+      "expect_files": ["backend/src/entities/Order.ts"]
+    },
+    {
+      "id": "status-question",
+      "title": "지금 webstore 결제 파이프라인이 어떻게 구성돼 있는지 설명해줘",
+      "description": "PG 별로 어떤 경로를 타는지 개괄로 알려줘.",
+      "expect": { "team": "chat", "no_ask": true },
+      "ground_truth": "",
+      "expect_files": []
+    }
+  ]
+}
