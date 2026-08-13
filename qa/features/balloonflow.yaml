@@ -1,0 +1,194 @@
+# BalloonFlow 기능 QA 카탈로그
+#
+# 왜 필요한가
+#   코드 그래프의 판정 단위는 "파일/클래스"라서 "아이템 사용이 되는가" 를 물어볼 대상이 없었다.
+#   여기서 기능을 1급 대상으로 세운다. 각 기능은 3등급으로 판정된다.
+#     ① 구조  — 진입점·경로가 현재 코드에 실존하는가 (그래프 대조, git push 마다 자동)
+#     ② 컴파일 — 그 기능이 걸친 파일에 컴파일 에러가 있는가 (Unity batchmode 결과)
+#     ③ 실행  — 실제로 그 기능이 수행된 관측이 있는가 (analytics 이벤트 / 시뮬 / 테스트)
+#   ①②가 통과여도 ③이 없으면 "된다"고 말하지 않는다. 그것이 이 파일의 존재 이유다.
+#
+# 필드
+#   entry   : 기능의 진입점 `클래스.메서드`. 그래프의 node.methods 에 실존해야 한다.
+#   path    : 기대 호출 사슬. 인접쌍마다 실제 참조 엣지가 있어야 한다(끊기면 결함 후보).
+#   signals : 실행 관측 신호.
+#             analytics — AnalyticsConsts.cs 의 실제 이벤트명. 세션 로그에 뜨면 실행됨.
+#             sim       — bf_sim_results 지표(시뮬레이터 관측. 실기 아님 — 라벨로 구분한다).
+#   severity: blocker(핵심 동선) / major / minor. 요약 판정에서 가중치로 쓴다.
+#
+# 주의: 여기 적는 클래스/메서드/엣지는 전부 **실측으로 존재를 확인한 것만** 넣는다.
+#       추측으로 적으면 체커가 "결함"으로 보고해 오탐이 된다.
+#       (작성 시 확인: scripts/qa-feature-check.mjs --verify-only)
+
+project: balloonflow
+version: 1
+updated: "2026-08-13"
+
+features:
+  # ── 부팅 / 진입 ───────────────────────────────────────────────────────────
+  - id: bf.boot.sdk
+    name: "SDK 부팅 — 매니저 기동"
+    group: 부팅
+    severity: blocker
+    entry: SdkBootstrap.Bootstrap
+    path: []
+    signals:
+      # 실기 logcat 에서 실제로 확인한 문구 (릴리스 빌드 v2.0.1).
+      # 이벤트가 아니라 게임 자체 로그라 앱이 여기까지 왔는지를 직접 말해 준다.
+      logcat: "\\[SdkBootstrap\\] Boot object created"
+    why: "앱을 켜면 SDK 매니저(광고·어트리뷰션·애널리틱스)가 붙고 부트 오브젝트가 만들어져야 한다"
+
+  - id: bf.boot.title
+    name: "앱 시작 — 타이틀 부트 플로우"
+    group: 부팅
+    severity: blocker
+    entry: TitleController.StartupFlow
+    path: [TitleController, GameManager]
+    signals:
+      analytics: [boot_checkpoint_event, session_start_event]
+    why: "앱을 켜면 타이틀이 부트 체크포인트를 거쳐 게임 매니저로 넘어가야 한다"
+
+  - id: bf.boot.lobby
+    name: "로비 진입"
+    group: 부팅
+    severity: blocker
+    entry: GameManager.InitLobby
+    path: [GameManager, LevelManager]
+    signals:
+      analytics: [session_start_event]
+    why: "타이틀 이후 로비가 구성되고 레벨 정보가 준비돼야 한다"
+
+  # ── 인게임 핵심 동선 ──────────────────────────────────────────────────────
+  - id: bf.level.start
+    name: "레벨 시작 — 인게임 진입"
+    group: 인게임
+    severity: blocker
+    entry: GameManager.StartLevel
+    path: [GameManager, LevelManager, BalloonController]
+    signals:
+      analytics: [level_play_start_event]
+      sim: { metric: levelCount, expect: ">0" }
+    why: "레벨을 시작하면 레벨 매니저가 보드를 구성하고 풍선이 배치돼야 한다"
+
+  - id: bf.ingame.dart_launch
+    name: "다트 발사 — 레일에서 다트가 나감"
+    group: 인게임
+    severity: blocker
+    entry: RailManager.AdvanceAllDarts
+    path: [RailManager, BalloonController]
+    signals:
+      sim: { metric: totalDarts, expect: ">0" }
+    why: "레일의 다트가 전진해 풍선을 향해 발사돼야 한다"
+
+  - id: bf.ingame.balloon_pop
+    name: "풍선 터짐 — 다트 명중 처리"
+    group: 인게임
+    severity: blocker
+    entry: BalloonController.PopBalloonWithDart
+    path: [DartManager, BalloonController, BoardStateManager]
+    signals:
+      sim: { metric: balloonCount, expect: ">0" }
+    why: "다트가 맞으면 풍선이 터지고 보드 상태가 갱신돼야 한다"
+
+  - id: bf.ingame.booster_use
+    name: "아이템(부스터) 사용"
+    group: 인게임
+    severity: blocker
+    entry: BoosterManager.UseBooster
+    path: [BoosterExecutor, BoosterManager, CurrencyManager]
+    signals:
+      analytics: [item_use_event]
+    why: "아이템을 쓰면 실행기가 보드에 반영하고 보유 수량·재화가 차감돼야 한다"
+
+  - id: bf.ingame.level_clear
+    name: "레벨 클리어"
+    group: 인게임
+    severity: blocker
+    entry: LevelManager.CompleteLevel
+    path: [LevelManager, PopProcessor]
+    signals:
+      analytics: [level_play_event]
+      sim: { metric: avgClearRate, expect: ">0" }
+    why: "클리어 조건을 만족하면 레벨이 종료되고 결과가 기록돼야 한다"
+
+  - id: bf.ingame.level_fail
+    name: "레벨 실패"
+    group: 인게임
+    severity: major
+    entry: LevelManager.FailLevel
+    path: [LevelManager, HolderManager]
+    signals:
+      analytics: [level_play_event]
+    why: "자원 소진/데드락 시 실패 처리가 되고 이어하기 흐름으로 이어져야 한다"
+
+  - id: bf.ingame.continue
+    name: "이어하기 — 실패 후 재개"
+    group: 인게임
+    severity: major
+    entry: ContinueHandler.Continue
+    path: [ContinueHandler, CurrencyManager]
+    signals:
+      analytics: [economy_event]
+    why: "이어하기를 사면 코인이 차감되고 보드가 재개 상태로 복구돼야 한다"
+
+  # ── 경제 / 상점 ───────────────────────────────────────────────────────────
+  - id: bf.economy.spend_coin
+    name: "코인 소모"
+    group: 경제
+    severity: major
+    entry: CurrencyManager.SpendCoins
+    path: [CurrencyManager, UserDataService]
+    signals:
+      analytics: [economy_event]
+    why: "코인을 쓰면 잔액이 줄고 서버 유저 데이터에 반영돼야 한다"
+
+  - id: bf.economy.life_use
+    name: "하트 소모"
+    group: 경제
+    severity: major
+    entry: LifeManager.UseLive
+    path: [LifeManager, CurrencyManager]
+    signals:
+      analytics: [economy_event]
+    why: "레벨 진입 시 하트가 차감돼야 한다"
+
+  - id: bf.shop.purchase
+    name: "상점 결제"
+    group: 상점
+    severity: major
+    entry: ShopManager.PurchaseProduct
+    path: [ShopManager, IAPManager]
+    signals:
+      analytics: [purchase_event]
+    why: "상품을 사면 IAP 결제가 호출되고 지급이 이뤄져야 한다"
+
+  - id: bf.shop.booster_buy
+    name: "부스터 구매"
+    group: 상점
+    severity: minor
+    entry: BoosterManager.PurchaseBooster
+    path: [ShopManager, BoosterManager, CurrencyManager]
+    signals:
+      analytics: [economy_event]
+    why: "부스터를 사면 재화가 차감되고 보유 수량이 늘어야 한다"
+
+  # ── 광고 / 튜토리얼 ───────────────────────────────────────────────────────
+  - id: bf.ads.rewarded
+    name: "보상형 광고 시청"
+    group: 광고
+    severity: major
+    entry: AdManager.ShowRewardedAd
+    path: [AdManager, LevelManager]
+    signals:
+      analytics: [ad_event]
+    why: "보상형 광고를 보면 보상이 지급되고 인게임 흐름이 재개돼야 한다"
+
+  - id: bf.tutorial.start
+    name: "튜토리얼 진행"
+    group: 온보딩
+    severity: major
+    entry: TutorialController.StartTutorial
+    path: [TutorialController, LevelManager]
+    signals:
+      analytics: [level_play_start_event]
+    why: "첫 실행 시 튜토리얼이 시작되고 레벨 흐름과 맞물려야 한다"
