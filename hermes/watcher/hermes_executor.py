@@ -77,9 +77,62 @@ for _sub in ("ui", "server", "ingame", "outgame", "general", "background", "illu
         }
 
 
-def get_repo_config(sub_team: str) -> dict[str, str]:
-    """sub_team에 매핑된 레포 설정 반환. 미설정이면 DEFAULT_REPO."""
-    return SUBTEAM_REPO_OVERRIDES.get((sub_team or "general").lower(), DEFAULT_REPO)
+# 프로젝트별 레포 — hermes_projects.repo 를 실행 시점에 조회 (프로세스 캐시).
+# project_onboard.py 가 기록해두던 필드를 여기서 처음으로 소비한다.
+_PROJECT_REPO_CACHE: dict[str, dict[str, str] | None] = {}
+
+
+def get_project_repo(project: str | None) -> dict[str, str] | None:
+    """hermes_projects 레지스트리에서 project의 레포 설정 조회. 미등록이면 None."""
+    key = (project or "").strip().lower()
+    if not key:
+        return None
+    if key in _PROJECT_REPO_CACHE:
+        return _PROJECT_REPO_CACHE[key]
+
+    cfg: dict[str, str] | None = None
+    try:
+        client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
+        try:
+            doc = client[DB_NAME]["hermes_projects"].find_one(
+                {"project": key}, {"repo": 1, "_id": 0}
+            )
+        finally:
+            client.close()
+        raw = (doc or {}).get("repo") or {}
+        host, rdir = raw.get("host"), raw.get("dir")
+        if host and rdir:
+            # 레지스트리는 "name", 실행부는 "repo" 키를 쓴다 — 여기서 매핑.
+            cfg = {
+                "host":  host,
+                "dir":   rdir,
+                "owner": raw.get("owner") or GITHUB_REPO_OWNER,
+                "repo":  raw.get("name") or GITHUB_REPO_NAME,
+                "type":  raw.get("type") or "code",
+            }
+        elif doc:
+            log.warning("project repo 불완전 — project=%s (host/dir 누락)", key)
+    except Exception:
+        # 일시적 DB 장애일 수 있으므로 캐시하지 않고 DEFAULT_REPO로 폴백.
+        log.exception("project repo 조회 실패 — project=%s", key)
+        return None
+
+    _PROJECT_REPO_CACHE[key] = cfg
+    return cfg
+
+
+def get_repo_config(sub_team: str, project: str | None = None) -> dict[str, str]:
+    """레포 설정 반환.
+
+    우선순위:
+      1) HERMES_REPO_<SUBTEAM>_* env override — 기존 동작 그대로 보존
+      2) hermes_projects.repo (task.project 기준) — 멀티프로젝트 라우팅
+      3) DEFAULT_REPO (BalloonFlow)
+    """
+    override = SUBTEAM_REPO_OVERRIDES.get((sub_team or "general").lower())
+    if override:
+        return override
+    return get_project_repo(project) or DEFAULT_REPO
 
 # Claude Code 비대화 모드 타임아웃
 CLAUDE_TIMEOUT = int(os.environ.get("CLAUDE_CLI_TIMEOUT_SEC", "600"))
@@ -493,15 +546,20 @@ def _handle_apk_build(task: dict[str, Any], context: dict[str, Any], route: dict
     params = route.get("params", {})
     version = params.get("version", "")
 
+    # 빌드 대상 레포도 프로젝트별 라우팅을 따른다 (미등록 프로젝트는 DEFAULT_REPO).
+    build_repo = get_repo_config(task.get("sub_team") or "general", task.get("project"))
+    build_host = build_repo["host"]
+    build_dir = build_repo["dir"]
+
     # Windows에선 PowerShell 명령이지만, 머신 B가 Windows이므로 cmd.exe로 실행
     # (OpenSSH on Windows는 기본 shell이 cmd or PowerShell)
     remote_cmd = (
-        f'cd /D "{MACHINE_B_PROJECT_DIR}" && '
+        f'cd /D "{build_dir}" && '
         f'git pull && '
         f'gradlew.bat assembleRelease'
     )
 
-    ssh_cmd = ["ssh", MACHINE_B_HOST, remote_cmd]
+    ssh_cmd = ["ssh", build_host, remote_cmd]
     log.info("Running APK build: %s", " ".join(shlex.quote(c) for c in ssh_cmd))
 
     try:
@@ -530,8 +588,8 @@ def _handle_apk_build(task: dict[str, Any], context: dict[str, Any], route: dict
         "success": True,
         "summary": (
             f"✅ **APK 빌드 완료** ({version})\n\n"
-            f"머신 B: {MACHINE_B_HOST}\n"
-            f"빌드 디렉토리: {MACHINE_B_PROJECT_DIR}/app/build/outputs/apk/release/\n\n"
+            f"머신 B: {build_host}\n"
+            f"빌드 디렉토리: {build_dir}/app/build/outputs/apk/release/\n\n"
             f"빌드 로그 요약:\n```\n{proc.stdout[-800:]}\n```"
         ),
         "next_status": "review",  # 사람이 APK 다운로드 → 테스트 후 done
@@ -542,6 +600,27 @@ def _handle_apk_build(task: dict[str, Any], context: dict[str, Any], route: dict
 # ──────────────────────────────────────────────
 # Handler: chat — Hermes CLI 비대화 호출 (Stage 1)
 # ──────────────────────────────────────────────
+def _load_task_image(task: dict[str, Any]) -> str:
+    """task 첨부 이미지를 가져온다.
+
+    이미지는 pixelforge_tasks 를 가볍게 유지하려고 pixelforge_task_images 로 분리했다
+    (2026-08-03 — 796건 106MB 라 목록 조회가 87초 걸렸다).
+    본 문서에 legacy 값이 남아 있으면 그걸 우선 쓰고, 없으면 옆 컬렉션을 본다.
+    """
+    inline = task.get("image_base64")
+    if inline:
+        return str(inline)
+    if not task.get("has_image"):
+        return ""
+    try:
+        _c = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
+        doc = _c[DB_NAME]["pixelforge_task_images"].find_one({"_id": task.get("_id")})
+        return str((doc or {}).get("image_base64") or "")
+    except Exception as e:  # noqa: BLE001
+        log.warning("task image lookup failed: %s: %s", type(e).__name__, e)
+        return ""
+
+
 def _handle_chat(task: dict[str, Any], context: dict[str, Any], route: dict[str, Any]) -> dict[str, Any]:
     """
     Hermes 담당자에게 온 일반 태스크 엔트리포인트.
@@ -568,6 +647,8 @@ def _handle_chat(task: dict[str, Any], context: dict[str, Any], route: dict[str,
         return _execute_art_pipeline(task)
     if team_override and stored_team == "design":
         return _execute_design_pipeline(task)
+    if team_override and stored_team == "data":
+        return _execute_data_pipeline(task)
     if team_override and stored_team == "dev":
         return _handle_unity_modify(task, context, route)
 
@@ -628,6 +709,9 @@ def _handle_chat(task: dict[str, Any], context: dict[str, Any], route: dict[str,
     if translator_team == "design":
         _persist_team(task, "design")
         return _execute_design_pipeline(task)
+    if translator_team == "data":
+        _persist_team(task, "data")
+        return _execute_data_pipeline(task)
 
     # team == "chat" — 순수 Q&A. Claude 답변 후 review(기존 done 대신) — 사용자가 확인 후 done 처리
     _persist_team(task, "chat")
@@ -1213,7 +1297,9 @@ def _send_slack_failure(email: str, title: str, reason: str, category: str = "",
 
 
 def _batchmode_compile(repo_host: str, repo_dir: str,
-                       changed_files: "list[str] | None" = None) -> tuple[str, str]:
+                       changed_files: "list[str] | None" = None,
+                       unity_subdir: "str | None" = None,
+                       use_ci_clone: bool = True) -> tuple[str, str]:
     """
     Machine B에서 Unity batchmode 컴파일 (MCP 다운 시 폴백).
     반환: ("clean" | "errors" | "indeterminate", detail)
@@ -1237,7 +1323,9 @@ def _batchmode_compile(repo_host: str, repo_dir: str,
                               encoding="utf-8", errors="replace", timeout=timeout, check=False)
 
     compile_root = repo_dir
-    ci_root = os.environ.get("HERMES_CI_CLONE_DIR", "").strip()
+    # CI 클론은 BalloonFlow 전용 env 1개뿐이라 다른 프로젝트엔 적용하면 안 된다
+    # (엉뚱한 repo를 컴파일하게 됨). 호출부가 use_ci_clone=False로 끈다.
+    ci_root = os.environ.get("HERMES_CI_CLONE_DIR", "").strip() if use_ci_clone else ""
     if ci_root and changed_files is not None:
         try:
             chk = _ssh(f'git -C "{ci_root}" rev-parse --is-inside-work-tree', timeout=15)
@@ -1256,9 +1344,12 @@ def _batchmode_compile(repo_host: str, repo_dir: str,
             log.exception("CI clone prep failed — 작업 repo로 폴백 (non-fatal)")
             compile_root = repo_dir
 
+    # Unity 프로젝트는 repo 루트가 아니라 하위 폴더에 있다 (repo명과 동일한 것이 규약).
+    # 미지정 시 BalloonFlow — 기존 동작 보존.
+    _usub = (unity_subdir or "BalloonFlow").strip("/")
     unity_cmd = (
         f'"{unity_editor}" -batchmode -quit -nographics '
-        f'-projectPath "{compile_root}/BalloonFlow" -logFile -'
+        f'-projectPath "{compile_root}/{_usub}" -logFile -'
     )
     _bm_timeout = int(os.environ.get("HERMES_BATCHMODE_TIMEOUT", "260"))
     try:
@@ -1569,7 +1660,7 @@ def _handle_git_sync(task: dict[str, Any], context: dict[str, Any], route: dict[
 
     # 어느 레포를 sync할지 결정 — task.sub_team 우선, 없으면 default 레포
     sync_sub_team = (task.get("sub_team") or "general").lower()
-    sync_repo = get_repo_config(sync_sub_team)
+    sync_repo = get_repo_config(sync_sub_team, task.get("project"))
     sync_host = sync_repo["host"]
     sync_dir = sync_repo["dir"]
     if sync_repo is not DEFAULT_REPO:
@@ -1970,6 +2061,96 @@ def _with_trace(span_name: str):
                     return fn(task, *args, **kwargs)
         return wrapper
     return decorator
+
+
+# 분과 → 실행 역할. hermes_agent_roles 에 등록된 이름과 일치해야 한다.
+_DATA_SUB_ROLE = {
+    "bq": "data_analyst",
+    "logspec": "data_logspec",
+    "review": "data_reviewer",
+    "livesync": "data_livesync",
+    "general": "data_analyst",
+}
+
+
+@_with_trace("data_pipeline")
+def _execute_data_pipeline(task: dict[str, Any]) -> dict[str, Any]:
+    """📊 데이터팀 파이프라인.
+
+    data_pm 이 분과를 정하고, 그 분과의 역할 에이전트가 답을 만든다.
+    분과별 역할과 페르소나는 hermes_agent_roles(team="data")에 있다.
+
+    자동 완료하지 않는다 — 분석 결과는 사람이 보고 판단할 대상이라
+    next_status 는 항상 review 다.
+    """
+    from agent_team import ExecutionEnv, invoke_agent
+    from projecthub_writer import ProjectHubWriter as _PHW
+    from pymongo import MongoClient as _MC
+
+    task_id = str(task.get("_id"))
+    title = task.get("title", "")
+    description = task.get("description", "")
+
+    _c = _MC(MONGO_URI, serverSelectionTimeoutMS=5000)
+    _wr = _PHW(_c[DB_NAME]["pixelforge_tasks"])
+
+    def _comment(text: str) -> None:
+        try:
+            _wr.add_comment(task_id, text, author="hermes")
+        except Exception:
+            log.exception("comment failed")
+
+    # 분과 결정 — 사용자가 손으로 지정했으면 PM 을 돌리지 않는다.
+    stored_sub = (task.get("sub_team") or "").lower()
+    if bool(task.get("sub_team_override")) and stored_sub:
+        sub_team = stored_sub
+        _comment(f"🔒 **data_pm 스킵** — 사용자 수동 지정: `{sub_team}` 분과")
+    else:
+        sub_team = _run_pm(task, "data", _comment)
+        _persist_sub_team(task, sub_team)
+
+    role = _DATA_SUB_ROLE.get(sub_team)
+    if not role:
+        _comment(f"ℹ️ 알 수 없는 분과 `{sub_team}` — `bq` 로 진행합니다.")
+        sub_team, role = "bq", _DATA_SUB_ROLE["bq"]
+
+    comments = task.get("comments") or []
+    history = "\n".join(
+        f"- [{c.get('author', '?')}]: {(c.get('text') or '')[:300]}"
+        for c in comments[-6:]
+    ) or "(없음)"
+
+    prompt = (
+        f"# 요청\n{title}\n\n"
+        f"## 상세\n{description or '(없음)'}\n\n"
+        f"## 이전 대화\n{history}\n\n"
+        "## 지시\n"
+        "너의 역할 정의(페르소나)에 적힌 원칙을 그대로 따른다.\n"
+        "- 수치를 말할 때는 기간·표본·정의를 반드시 함께 적는다.\n"
+        "- 지금 있는 로그로 답할 수 없으면 추측하지 말고, 무엇을 더 쌓아야 하는지 적는다.\n"
+        "- 쿼리를 낼 때는 실행 가능한 형태로, 어떤 테이블을 읽는지 명시한다.\n"
+        "마크다운으로 답한다."
+    )
+
+    _comment(f"📊 **{role}** 실행 중... (`data/{sub_team}` 분과)")
+    env = ExecutionEnv(
+        mode="local", cwd=str(Path.home()), timeout_sec=300,
+        task_id=task_id, task_title=title,
+        team="data", sub_team=sub_team,
+    )
+    resp = invoke_agent(role, prompt, env)
+    if not resp.success:
+        _comment(f"❌ {role} 실패: {(resp.error or '?')[:300]}")
+        return {"success": False, "error": resp.error or f"{role} failed",
+                "next_status": "review"}
+
+    out = (resp.output or "").strip() or "(빈 응답)"
+    _comment(f"### 📊 {role} 결과 ({resp.model})\n\n{out[:9000]}")
+    return {
+        "success": True,
+        "summary": f"data/{sub_team} — {role} 분석 완료",
+        "next_status": "review",
+    }
 
 
 @_with_trace("design_pipeline")
@@ -2665,6 +2846,28 @@ def _scoped_standards_block(
         )
         if not files:
             return ""
+
+        # 챕터 단위 선별 주입 (기본). 표준 전체를 통째로 넣으면 대부분 안 쓰이는데다,
+        # 정작 작업 지시가 수만 자 배경에 희석된다. 목차는 전부 주고 본문만 고른다.
+        # 실측(2026-08-11): 기존 50,000자 컷은 34개 파일 중 앞 5개만 남기고 있었고,
+        # team.md·roles/*.md·projects/*.md·MEMORY.md 는 도달조차 못 했다.
+        # HERMES_SKILL_CHAPTERS=off 로 아래 기존 경로(통째 주입)로 즉시 되돌릴 수 있다.
+        if os.environ.get("HERMES_SKILL_CHAPTERS", "on").strip().lower() not in ("off", "0", "false"):
+            try:
+                import skill_chapters
+                from scoped_memory_loader import MEMORY_ROOT
+                query = f"{task.get('title', '')} {task.get('description', '')}"
+                block = skill_chapters.build_block(
+                    files, query,
+                    budget_chars=min(max_chars, skill_chapters.DEFAULT_BUDGET),
+                    memory_root=str(MEMORY_ROOT),
+                    index_only=not full,
+                )
+                if block:
+                    return block
+            except Exception:
+                log.debug("chapter selection failed — falling back to full inject", exc_info=True)
+
         if not full:
             names = "\n".join(f"- {f['path']}" for f in files)
             return "\n\n## 📚 인용 가능한 팀 표준/디렉션 목록 (본문은 Writer에 주입됨)\n" + names
@@ -3051,6 +3254,9 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
     if team_override and stored_team == "design":
         log.info("[team_dispatch] %s → design pipeline (user override)", short_id)
         return _execute_design_pipeline(task)
+    if team_override and stored_team == "data":
+        log.info("[team_dispatch] %s → data pipeline (user override)", short_id)
+        return _execute_data_pipeline(task)
 
     # 전체 코멘트 이력 (이전 Hermes 작업 + 사용자 피드백 포함)
     all_comments = task.get("comments") or []
@@ -3082,7 +3288,7 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
         sub_team = _run_pm(task, "dev", _early_comment)
         _persist_sub_team(task, sub_team)
 
-    repo = get_repo_config(sub_team)
+    repo = get_repo_config(sub_team, task.get("project"))
     repo_host = repo["host"]
     repo_dir = repo["dir"]
     if repo is not DEFAULT_REPO:
@@ -3094,7 +3300,7 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
     # 이미지 첨부 처리 (task.image_base64가 있으면 해당 레포 호스트로 전송)
     # env 생성 전에 실행되어야 함 (image_path를 env에 주입)
     remote_image_path: Optional[str] = None
-    img_b64 = task.get("image_base64")
+    img_b64 = _load_task_image(task)
     if img_b64:
         try:
             import base64 as _b64
@@ -3261,10 +3467,24 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
         log.debug("code/design retrieval skipped", exc_info=True)
 
     # P2-G DNA 1-hop 그라운딩 (HERMES_GROUNDING on). 순수 additive·실패시 '' (비치명).
+    # 2026-07-20: 앵커를 task 텍스트 매칭만 쓰면 클래스명이 안 적힌 현상 기반 task
+    # ("레벨 클리어가 안 됨" 등)는 그라운딩이 0이 된다. RAG 벡터검색이 뽑은 유사 코드
+    # 클래스를 앵커로 함께 넘겨 그 구멍을 메운다.
+    # 2026-08-13: project 를 반드시 넘긴다. 안 넘기면 모듈이 BalloonFlow 그래프 하나만 읽어
+    #   NextPR/CrewFlowRotation 작업에 **다른 게임의 메서드 목록**이 "실제 코드 구조"로 주입됐다
+    #   (세 프로젝트가 같은 템플릿 파생이라 클래스명이 109/174·179/191 겹친다).
+    #   그래프가 없는 프로젝트는 모듈이 ''를 돌려준다 — 틀린 그라운딩보다 없는 편이 낫다.
     if os.environ.get("HERMES_GROUNDING", "off").lower() in {"on", "1", "true", "warn", "block"}:
         try:
             from bf_graph_context import build_graph_context
-            code_design_section += build_graph_context(title, description)
+            try:
+                from hermes_atlas_retrieval import code_anchor_classes
+                _anchors = code_anchor_classes(title, description)
+            except Exception:
+                _anchors = []
+            code_design_section += build_graph_context(
+                title, description, extra_anchors=_anchors, project=task.get("project"),
+            )
         except Exception:
             log.debug("graph grounding skipped", exc_info=True)
 
@@ -3398,6 +3618,8 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
                 return _execute_chat_only(task)
             if translator_team == "design":
                 return _execute_design_pipeline(task)
+            if translator_team == "data":
+                return _execute_data_pipeline(task)
     else:
         _comment(f"⚠️ Translator 실패: {translator_resp.error} — 원본 그대로 Lead 진행")
 
@@ -4078,7 +4300,12 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
             and repo.get("type") == "unity"
             and os.environ.get("HERMES_COMPILE_FALLBACK", "on").lower() != "off"):
         _comment("🏗️ Unity MCP 미응답 — batchmode 컴파일 폴백 시도 (최대 4분)...")
-        _bm_state, _bm_detail = _batchmode_compile(repo_host, repo_dir, changed_files=changed_files)
+        _bm_state, _bm_detail = _batchmode_compile(
+            repo_host, repo_dir, changed_files=changed_files,
+            unity_subdir=repo.get("repo"),
+            # HERMES_CI_CLONE_DIR은 BalloonFlow 클론 1개 — 기본 레포일 때만 사용.
+            use_ci_clone=(repo.get("dir") == MACHINE_B_PROJECT_DIR),
+        )
         _record_gate_event(
             task_id=task_id, gate="compile_batchmode",
             result=("pass" if _bm_state == "clean"
