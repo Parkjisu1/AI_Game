@@ -90,9 +90,11 @@ app.get('/embedding', requireAuth, (req, res) => res.render('embedding'));
 app.get('/review', requireAuth, (req, res) => res.render('review'));
 app.get('/log', requireAuth, (req, res) => res.render('log'));
 app.get('/users', requireAuth, requireAdmin, (req, res) => res.render('users'));
+app.get('/simulator', requireAuth, (req, res) => res.render('simulator'));
 
 // API routes
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/sim', requireAuth, require('./routes/sim'));
 app.use('/api', requireAuth, require('./routes/api'));
 
 // Error handler

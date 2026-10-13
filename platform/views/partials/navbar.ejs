@@ -46,6 +46,10 @@
             <%= currentPath === '/log' ? 'text-gf-accent bg-gf-accent/10' : 'text-zinc-400 hover:text-white hover:bg-gf-surface' %>">
             <i class="fa-solid fa-clock-rotate-left mr-1.5"></i>Log
           </a>
+          <a href="/simulator" class="nav-link px-3 py-1.5 rounded-lg text-sm font-medium transition-colors
+            <%= currentPath === '/simulator' ? 'text-gf-accent bg-gf-accent/10' : 'text-zinc-400 hover:text-white hover:bg-gf-surface' %>">
+            <i class="fa-solid fa-gamepad mr-1.5"></i>Simulator
+          </a>
         </div>
 
         <!-- Right Side -->
@@ -98,6 +102,9 @@
         </a>
         <a href="/log" class="block px-3 py-2 rounded-lg text-sm <%= currentPath === '/log' ? 'text-gf-accent bg-gf-accent/10' : 'text-zinc-400' %>">
           <i class="fa-solid fa-clock-rotate-left mr-2 w-5"></i>Log
+        </a>
+        <a href="/simulator" class="block px-3 py-2 rounded-lg text-sm <%= currentPath === '/simulator' ? 'text-gf-accent bg-gf-accent/10' : 'text-zinc-400' %>">
+          <i class="fa-solid fa-gamepad mr-2 w-5"></i>Simulator
         </a>
       </div>
     </div>

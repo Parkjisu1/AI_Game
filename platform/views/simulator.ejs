@@ -1,0 +1,171 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<main class="max-w-7xl mx-auto px-3 sm:px-6 py-6">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+    <h1 class="text-lg font-bold text-white">
+      <i class="fa-solid fa-gamepad text-gf-accent mr-2"></i>BalloonFlow 시뮬레이터
+    </h1>
+    <div id="gitInfo" class="text-[11px] text-gf-muted"></div>
+  </div>
+
+  <!-- 로컬 전용 경고 -->
+  <div id="localOnlyWarn" class="hidden bg-gf-danger/10 border border-gf-danger/40 text-gf-danger rounded-xl p-4 mb-4 text-sm">
+    <i class="fa-solid fa-triangle-exclamation mr-2"></i>
+    시뮬레이터 exe / 레벨 데이터를 찾을 수 없습니다. 이 기능은 시뮬레이터가 설치된 PC에서 서버를 실행할 때만 동작합니다.
+    (모바일에서는 같은 네트워크에서 <code class="text-xs">http://PC아이피:3000</code> 으로 접속)
+  </div>
+
+  <!-- 탭 -->
+  <div class="flex gap-2 mb-4">
+    <button id="tabBatch" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold bg-gf-accent/15 text-gf-accent">
+      <i class="fa-solid fa-chart-column mr-1.5"></i>배치 분석 (n회 시행)
+    </button>
+    <button id="tabReplay" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-zinc-400 hover:text-white">
+      <i class="fa-solid fa-circle-play mr-1.5"></i>리플레이 (시각 확인)
+    </button>
+  </div>
+
+  <!-- ── 배치 분석 ─────────────────────────────────────────── -->
+  <section id="panelBatch">
+    <div class="bg-gf-card border border-gf-border rounded-xl p-4 mb-4">
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 items-end">
+        <div class="col-span-2 sm:col-span-1">
+          <label class="block text-xs text-gf-muted mb-1">레벨 범위</label>
+          <input id="batchLevels" value="1-20" class="w-full bg-gf-surface border border-gf-border rounded-lg px-3 py-2 text-sm" placeholder="예: 1-20, 45">
+        </div>
+        <div>
+          <label class="block text-xs text-gf-muted mb-1">시행 횟수 (n)</label>
+          <input id="batchRuns" type="number" value="50" min="1" max="500" class="w-full bg-gf-surface border border-gf-border rounded-lg px-3 py-2 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs text-gf-muted mb-1">정책 (유저 모델)</label>
+          <select id="batchPolicy" class="w-full bg-gf-surface border border-gf-border rounded-lg px-3 py-2 text-sm">
+            <option value="smart">smart (상급)</option>
+            <option value="greedy">greedy (중급)</option>
+            <option value="random">random (하급)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs text-gf-muted mb-1">시드</label>
+          <input id="batchSeed" type="number" value="12345" class="w-full bg-gf-surface border border-gf-border rounded-lg px-3 py-2 text-sm">
+        </div>
+        <div class="flex items-center gap-2 pb-2">
+          <input id="batchContinues" type="checkbox" class="accent-amber-500">
+          <label for="batchContinues" class="text-xs text-zinc-300">이어하기 사용</label>
+        </div>
+        <button id="batchRunBtn" class="bg-gf-accent hover:bg-gf-accent2 text-black font-bold rounded-lg px-4 py-2 text-sm transition-colors">
+          <i class="fa-solid fa-play mr-1.5"></i>실행
+        </button>
+      </div>
+      <div class="mt-2 text-[11px] text-gf-muted">
+        레벨당 n회 몬테카를로 → 클리어율/실패사유/난이도. 결과 해석: clearRate 는 절대값보다 레벨 간 비교 —
+        smart 기준 90%+ 가 보통, 50% 미만은 밸런스 점검 후보.
+      </div>
+    </div>
+
+    <!-- 진행률 -->
+    <div id="batchProgress" class="hidden bg-gf-card border border-gf-border rounded-xl p-4 mb-4">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm font-semibold text-white"><i class="fa-solid fa-spinner fa-spin mr-2 text-gf-accent"></i>실행 중…</span>
+        <span id="batchProgressText" class="text-xs text-gf-muted"></span>
+      </div>
+      <div id="batchProgressBars" class="space-y-1.5"></div>
+    </div>
+
+    <!-- 결과 -->
+    <div id="batchResults" class="hidden">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4" id="batchSummaryCards"></div>
+      <div class="bg-gf-card border border-gf-border rounded-xl p-4 overflow-x-auto">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-sm font-bold text-white">레벨별 결과</h2>
+          <button id="batchCsvBtn" class="text-xs text-gf-accent hover:text-gf-accent2">
+            <i class="fa-solid fa-download mr-1"></i>CSV 다운로드
+          </button>
+        </div>
+        <table class="w-full text-xs min-w-[720px]">
+          <thead>
+            <tr class="text-gf-muted border-b border-gf-border text-left">
+              <th class="py-2 pr-2">레벨</th><th class="pr-2">의도</th><th class="pr-2">색</th>
+              <th class="pr-2">풍선</th><th class="pr-2">다트</th>
+              <th class="pr-2 w-52">클리어율</th>
+              <th class="pr-2">실패 (만석/소진/교착)</th>
+              <th class="pr-2">평균시간</th><th class="pr-2">최대점유</th><th class="pr-2">난이도</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="batchTable"></tbody>
+        </table>
+      </div>
+      <div class="mt-2 text-[11px] text-gf-muted">
+        실패 사유 — <span class="text-red-400">만석</span>: 못 쏘는 색이 레일을 채움(색 밸런스/순서 문제) ·
+        <span class="text-amber-400">소진</span>: 다트 총량 부족(제로슬랙 의심) ·
+        <span class="text-purple-400">교착</span>: 안전한 수 없음(구조 문제). 난이도 70↑ = 점검 후보(행 강조).
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 리플레이 ─────────────────────────────────────────── -->
+  <section id="panelReplay" class="hidden">
+    <div class="bg-gf-card border border-gf-border rounded-xl p-4 mb-4">
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 items-end">
+        <div>
+          <label class="block text-xs text-gf-muted mb-1">레벨</label>
+          <select id="replayLevel" class="w-full bg-gf-surface border border-gf-border rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label class="block text-xs text-gf-muted mb-1">시드</label>
+          <input id="replaySeed" type="number" value="12345" class="w-full bg-gf-surface border border-gf-border rounded-lg px-3 py-2 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs text-gf-muted mb-1">정책</label>
+          <select id="replayPolicy" class="w-full bg-gf-surface border border-gf-border rounded-lg px-3 py-2 text-sm">
+            <option value="smart">smart</option><option value="greedy">greedy</option><option value="random">random</option>
+          </select>
+        </div>
+        <button id="replayLoadBtn" class="bg-gf-accent hover:bg-gf-accent2 text-black font-bold rounded-lg px-4 py-2 text-sm col-span-2 sm:col-span-1">
+          <i class="fa-solid fa-film mr-1.5"></i>리플레이 생성
+        </button>
+        <div id="replayStatus" class="text-xs text-gf-muted pb-2 col-span-2 sm:col-span-1"></div>
+      </div>
+    </div>
+
+    <div id="replayPlayer" class="hidden">
+      <!-- 플레이어 컨트롤 (모바일 터치 대응: 큰 버튼) -->
+      <div class="bg-gf-card border border-gf-border rounded-xl p-3 mb-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="rpPlay" class="w-11 h-11 rounded-lg bg-gf-accent text-black font-bold text-lg"><i class="fa-solid fa-play"></i></button>
+          <button id="rpStepB" class="w-11 h-11 rounded-lg bg-gf-surface border border-gf-border text-zinc-300"><i class="fa-solid fa-backward-step"></i></button>
+          <button id="rpStepF" class="w-11 h-11 rounded-lg bg-gf-surface border border-gf-border text-zinc-300"><i class="fa-solid fa-forward-step"></i></button>
+          <select id="rpSpeed" class="bg-gf-surface border border-gf-border rounded-lg px-2 py-2.5 text-sm">
+            <option value="0.5">x0.5</option><option value="1" selected>x1</option><option value="2">x2</option>
+            <option value="4">x4</option><option value="10">x10</option>
+          </select>
+          <input id="rpSeek" type="range" min="0" max="100" value="0" class="flex-1 min-w-[140px] accent-amber-500">
+          <span id="rpTime" class="text-xs text-gf-muted w-24 text-right">0.0s / 0.0s</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
+        <!-- 캔버스 (보드+레일+홀더) -->
+        <div class="lg:col-span-2 bg-gf-card border border-gf-border rounded-xl p-2">
+          <canvas id="rpCanvas" class="w-full rounded-lg" style="touch-action:none"></canvas>
+        </div>
+        <!-- 정보 패널 -->
+        <div class="space-y-3">
+          <div class="bg-gf-card border border-gf-border rounded-xl p-4" id="rpStats"></div>
+          <div class="bg-gf-card border border-gf-border rounded-xl p-4">
+            <h3 class="text-xs font-bold text-white mb-2">색별 노출 / 레일 재고</h3>
+            <div id="rpColors" class="space-y-1 text-xs"></div>
+          </div>
+          <div class="bg-gf-card border border-gf-border rounded-xl p-4">
+            <h3 class="text-xs font-bold text-white mb-2">이벤트 로그</h3>
+            <div id="rpLog" class="h-40 overflow-y-auto text-[11px] font-mono text-zinc-400 space-y-0.5"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="/js/simulator.js"></script>
+<%- include('partials/footer') %>
