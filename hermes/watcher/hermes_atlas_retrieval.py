@@ -10,8 +10,9 @@ Atlas Vector Search 로 검색해 **Lead / Main Coder / Designer / Writer 프롬
   - 모든 임베딩이 Atlas 에 있으므로 **단일 저장소(Atlas)로 통일**하고 생성에 연결한다.
 
 검색 대상 / 방식:
-  - code_base       : Atlas $vectorSearch (index=vector_index, READY)        → 유사 검증 코드
-  - pixelforge_tasks: Atlas $vectorSearch (index=vector_index, READY)        → 유사 과거 task (Qdrant 세션 대체)
+  - code_base       : (현재) Qdrant gf_code_chunks_m3 (hermes_embedding_client) → 유사 검증 코드
+  - 유사 과거 task  : (현재) Qdrant hermes_text_memory_m3 세션                  → 유사 과거 task
+    ※ Mother 의 Mongo 는 로컬 mongod 라 Atlas $vectorSearch 는 쓰지 않는다(2026-10-13 _vector_search 제거).
   - design_base     : 벡터 인덱스 없음(M0 한도) → 토큰 오버랩 키워드 랭킹     → 관련 기획 디렉션
 
 장애 대응: OpenAI/Atlas 실패 시 모든 함수가 빈 문자열/빈 리스트 반환 → 프롬프트 영향 0 (non-fatal).
@@ -60,7 +61,7 @@ def _mongo_db():
         if not uri:
             return None
         # 3000ms는 Atlas 콜드 커넥션에 짧다 — 프로세스 기동 후 첫 호출이 server selection
-        # 타임아웃으로 실패하면 _vector_search 가 경고만 남기고 []를 반환해
+        # 타임아웃으로 실패하면 조회가 경고만 남기고 빈 결과를 반환해
         # **해당 task는 RAG 컨텍스트를 통째로 못 받는다**(조용한 품질 저하).
         # lru_cache 로 클라이언트는 프로세스당 1회만 만들어지므로 여유를 줘도 상시 비용은 없다.
         _sel_ms = int(os.environ.get("HERMES_MONGO_SELECT_TIMEOUT_MS", "10000"))
@@ -84,23 +85,8 @@ def _embed(text: str) -> list[float] | None:
         return None
 
 
-def _vector_search(coll_name: str, qvec: list[float], k: int) -> list[dict]:
-    db = _mongo_db()
-    if db is None:
-        return []
-    pipe = [
-        {"$vectorSearch": {
-            "index": "vector_index", "path": "embedding",
-            "queryVector": qvec, "numCandidates": k * 10, "limit": k,
-        }},
-        {"$addFields": {"_score": {"$meta": "vectorSearchScore"}}},
-        {"$project": {"embedding": 0}},  # 1536-d 배열 회수 방지
-    ]
-    try:
-        return list(db[coll_name].aggregate(pipe))
-    except Exception as e:
-        log.warning("%s vector search failed: %s", coll_name, e)
-        return []
+# _vector_search(Mongo $vectorSearch) 는 2026-10-13 제거 — 호출처 0(코드/세션 검색은 Qdrant 로 이전 완료,
+# 리뷰어 검색은 reviewer_retrieval.py 가 Qdrant reviewer_tasks_m3 사용). 로컬 mongod 에선 $vectorSearch 자체가 불가.
 
 
 # ─────────────────────────── code_base ───────────────────────────
