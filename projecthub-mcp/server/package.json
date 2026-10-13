@@ -1,0 +1,15 @@
+{
+  "name": "projecthub-mcp-server",
+  "version": "0.1.0",
+  "description": "ProjectHub Unity MCP — Tier 1 Node.js server (forwards RPC to Unity HTTP bridge)",
+  "type": "module",
+  "main": "index.mjs",
+  "scripts": {
+    "start": "node index.mjs",
+    "test:ping": "node test/ping.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {}
+}

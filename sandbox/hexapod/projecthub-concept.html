@@ -1,0 +1,3740 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProjectHub — 계기판 구조 개념 시안</title>
+<style>
+/* =========================================================
+   ProjectHub × HEXAPOD 계기판 언어 — 개념 시안 (샌드박스 전용)
+   실제 ProjectHub에는 적용되지 않은 독립 파일입니다.
+   ========================================================= */
+
+/* ---------- tokens ---------- */
+:root{
+  --mono: ui-monospace,"Cascadia Mono",Consolas,"DejaVu Sans Mono",monospace;
+  --sans: Pretendard,"Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;
+  --r: 2px;                 /* 라디우스: 계기판은 거의 직각 */
+  --gap: 8px;
+}
+body[data-skin="dark"]{
+  --bg:#0f1115; --panel:#161a1f; --panel2:#1c2027; --raise:#232830;
+  --line:#272c34; --line2:#39404a; --ink:#e9ebee; --dim:#99a2ae; --faint:#5f6873;
+  --ok:#3fb950; --warn:#e3903c; --err:#f0503f; --grid:rgba(255,255,255,.028);
+}
+body[data-skin="light"]{
+  --bg:#d9d9d5; --panel:#f7f7f4; --panel2:#eeeeea; --raise:#e4e4df;
+  --line:#c8c8c2; --line2:#141414; --ink:#141414; --dim:#6d6d68; --faint:#9a9a94;
+  --ok:#2f8f3f; --warn:#b26a15; --err:#c92800; --grid:rgba(0,0,0,.035);
+}
+body[data-accent="red"]{  --acc:#ff4a2b; --acc2:#c92800; --accSoft:rgba(255,74,43,.13); }
+body[data-accent="blue"]{ --acc:#4b8bfa; --acc2:#2f6fed; --accSoft:rgba(75,139,250,.14); }
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+/* 이중 타이포 규칙을 이 페이지 자체가 따른다:
+   기본 = 산세리프(한글 가독성), 숫자·ID·영문 기술 라벨만 모노 */
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:var(--sans); font-size:13px; line-height:1.45;
+  -webkit-font-smoothing:antialiased; overflow:hidden;
+}
+.kr{font-family:var(--sans)}
+.num,.id,.age,.vl,.log,.hud,.badge,.chip,.kv .k,.kv .v,.tab .n,
+.sech .r,.brand h1,.brand .sub,.tg,table.plan th,.stat .vl,.trow .id{
+  font-family:var(--mono); font-variant-numeric:tabular-nums;
+}
+/* 한글이 들어가는 라벨은 자간을 좁힌다 — 영문 트래킹을 그대로 쓰면 읽기 어렵다 */
+.sech{letter-spacing:.01em}
+.tab{letter-spacing:.04em}
+.cap{letter-spacing:.04em}
+h2.sh{letter-spacing:.04em}
+.balab{letter-spacing:.06em}
+.grouph{letter-spacing:.04em}
+.mrow .lb,.stat .lb,.dl dt,.wgrp .gh{letter-spacing:.02em}
+.btn{letter-spacing:.03em}
+
+/* ---------- shell ---------- */
+.frame{height:100vh; display:flex; flex-direction:column; padding:8px 10px 6px; gap:7px}
+
+/* 좌우 블록 폭이 달라도 브랜드가 페이지 정중앙에 오도록 3열 그리드.
+   flex:1 중앙 정렬은 "남은 공간의 가운데"라 좌우 폭 차이의 절반만큼 어긋난다. */
+header{
+  border:1px solid var(--line); background:var(--panel);
+  display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:center; gap:16px;
+  padding:6px 12px; min-height:44px; flex-shrink:0;
+}
+.hstat{display:flex; gap:20px; align-items:center; justify-self:start; min-width:0}
+.kv{display:flex; flex-direction:column; gap:1px; white-space:nowrap}
+.kv .k{font-size:9px; letter-spacing:.14em; color:var(--faint)}
+.kv .v{font-size:11.5px; letter-spacing:.05em; font-weight:700}
+.kv .v.acc{color:var(--acc)}
+.kv .v.ok{color:var(--ok)}
+.brand{text-align:center}
+.brand h1{font-size:17.5px; letter-spacing:.34em; font-weight:800; padding-left:.34em}
+.brand .sub{font-size:9.5px; letter-spacing:.4em; color:var(--faint); padding-left:.4em; margin-top:2px}
+
+.toggles{display:flex; gap:5px; align-items:center; justify-self:end}
+.tg{
+  border:1px solid var(--line2); background:transparent; color:var(--dim);
+  font:inherit; font-size:9.5px; letter-spacing:.12em; padding:4px 7px; cursor:pointer; border-radius:var(--r);
+}
+.tg:hover{color:var(--ink); border-color:var(--acc)}
+.tg.on{background:var(--acc); border-color:var(--acc); color:#fff; font-weight:700}
+.tgset{display:flex; border:1px solid var(--line2); border-radius:var(--r); overflow:hidden}
+.tgset .tg{border:none; border-radius:0}
+
+
+
+
+/* ---------- tabs ---------- */
+nav.tabs{display:flex; gap:5px; flex-shrink:0}
+.tab{
+  flex:1; border:1px solid var(--line); background:var(--panel); color:var(--dim);
+  padding:6px 10px; font-size:10px; letter-spacing:.16em; cursor:pointer;
+  display:flex; align-items:center; gap:7px; user-select:none; position:relative; border-radius:var(--r);
+}
+.tab .n{font-size:9px; color:var(--faint)}
+.tab:hover{color:var(--ink)}
+.tab.active{background:var(--ink); color:var(--bg); border-color:var(--ink)}
+.tab.active .n{color:var(--bg); opacity:.55}
+.tab.active::after{content:""; position:absolute; right:-1px; top:-1px;
+  border-top:8px solid var(--acc); border-left:8px solid transparent}
+/* 하위 탭 — 그룹 안의 화면 전환. 화면 목록이므로 그룹 탭만큼 또렷해야 한다 */
+nav.subtabs{
+  display:flex; flex-shrink:0; align-items:stretch; overflow-x:auto;
+  border:1px solid var(--line); background:var(--panel); border-radius:var(--r);
+}
+.subcap{
+  display:flex; align-items:center; gap:6px; padding:0 11px; flex-shrink:0;
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.14em; color:var(--faint);
+  border-right:1px solid var(--line); background:var(--panel2);
+}
+.stab{
+  border:none; border-right:1px solid var(--line); background:transparent;
+  color:var(--ink); padding:7px 14px; font-size:11.5px; cursor:pointer; user-select:none;
+  display:flex; align-items:center; gap:7px; flex-shrink:0; white-space:nowrap;
+}
+.stab:hover{background:var(--panel2)}
+.stab.active{background:var(--acc); color:#fff; font-weight:700}
+.stab .rt{font-family:var(--mono); font-size:10px; color:var(--faint)}
+.stab.active .rt{color:rgba(255,255,255,.78)}
+.stab .sc{font-family:var(--mono); font-size:9.5px; border:1px solid var(--line2);
+  padding:0 4px; color:var(--faint); border-radius:2px}
+.stab .sc.g{border-color:var(--warn); color:var(--warn)}
+.stab .sc.o{border-color:var(--err); color:var(--err)}
+.stab.active .sc{border-color:rgba(255,255,255,.55); color:#fff}
+nav.subtabs .fill{flex:1; min-width:8px}
+.tab .cnt{margin-left:auto; font-family:var(--mono); font-size:9.5px; color:var(--faint)}
+.tab.active .cnt{color:var(--bg); opacity:.6}
+
+/* ---------- screens ---------- */
+main{flex:1; min-height:0; position:relative}
+.screen{position:absolute; inset:0; display:none; min-height:0}
+.screen.active{display:flex; gap:var(--gap)}
+.screen.scroll{display:none; overflow:auto}
+.screen.scroll.active{display:block}
+
+.panel{border:1px solid var(--line); background:var(--panel); position:relative; border-radius:var(--r);
+  display:flex; flex-direction:column; min-height:0}
+.pad{padding:9px}
+/* 좌우 레일은 같은 폭 — 달라지면 중앙 스테이지가 페이지 중심에서 벗어난다 */
+.rail{width:304px; flex-shrink:0; overflow:auto; padding-bottom:14px}
+.rail.wide{width:304px}
+/* 레일 마지막 위젯이 잘려 보이지 않게 여유를 둔다 */
+.rail > .sec:last-child{margin-bottom:4px}
+.stage{flex:1; min-width:0}
+
+/* corner brackets — 계기판 프레이밍 */
+.ck{position:absolute; width:6px; height:6px; pointer-events:none; border:1px solid var(--line2); opacity:.85}
+.ck.tl{left:3px; top:3px; border-right:none; border-bottom:none}
+.ck.tr{right:3px; top:3px; border-left:none; border-bottom:none}
+.ck.bl{left:3px; bottom:3px; border-right:none; border-top:none}
+.ck.br{right:3px; bottom:3px; border-left:none; border-top:none}
+
+.sec{display:flex; flex-direction:column; gap:5px; margin-bottom:8px}
+.sech{
+  background:var(--panel2); border:1px solid var(--line);
+  padding:3px 7px; display:flex; justify-content:space-between; align-items:center;
+  font-size:10px; letter-spacing:.14em; font-weight:700; border-radius:var(--r);
+}
+.sech .r{font-weight:400; color:var(--faint); font-size:9px; letter-spacing:.08em}
+.sech .r b{color:var(--acc)}
+
+/* ---------- instrument widgets ---------- */
+.meter{display:flex; gap:1.5px; height:9px; align-items:stretch}
+.meter i{flex:1; background:var(--line); border-radius:0}
+.meter i.on{background:var(--ink)}
+.meter i.hot{background:var(--acc)}
+.mrow{display:flex; align-items:center; gap:7px; margin:3px 0}
+.mrow .lb{width:64px; font-size:9.5px; color:var(--dim); letter-spacing:.06em; flex-shrink:0}
+.mrow .meter{flex:1}
+.mrow .vl{width:52px; text-align:right; font-size:10.5px; font-weight:700}
+
+.spark{width:100%; display:block; background:transparent}
+.stat{display:flex; justify-content:space-between; align-items:baseline; padding:3px 0; gap:6px}
+/* 값이 길어도 라벨이 한 글자씩 세로로 쌓이지 않게 — 한글 min-content 방어 */
+.stat .lb{font-size:9.5px; color:var(--dim); letter-spacing:.1em; white-space:nowrap; flex-shrink:0}
+.stat .vl{font-size:17.5px; font-weight:800; letter-spacing:-.01em;
+  min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.stat .vl small{font-size:9.5px; font-weight:400; color:var(--faint); margin-left:3px}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:7px}
+.grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:6px}
+.cell{border:1px solid var(--line); background:var(--panel2); padding:6px 7px; border-radius:var(--r)}
+
+.chip{
+  display:inline-flex; align-items:center; gap:4px; border:1px solid var(--line2);
+  padding:1.5px 6px; font-size:9.5px; letter-spacing:.06em; border-radius:var(--r); color:var(--dim);
+}
+.chip.acc{border-color:var(--acc); color:var(--acc)}
+.chip.ai{border-color:var(--acc); color:var(--acc); background:var(--accSoft)}
+.chip b{font-weight:700}
+.dotk{width:5px; height:5px; border-radius:50%; background:var(--acc); flex-shrink:0}
+.dotk.ok{background:var(--ok)} .dotk.warn{background:var(--warn)} .dotk.dim{background:var(--faint)}
+
+.log{background:var(--bg); border:1px solid var(--line); padding:5px 7px; font-size:10px;
+  line-height:1.7; color:var(--dim); overflow:hidden; flex:1; min-height:60px; border-radius:var(--r)}
+.log div{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.log .t{color:var(--acc); font-weight:700}
+.log b{color:var(--ink); font-weight:700}
+
+.btn{border:1px solid var(--line2); background:transparent; color:var(--ink); font:inherit;
+  font-size:10px; letter-spacing:.13em; font-weight:700; padding:7px 6px; cursor:pointer; border-radius:var(--r)}
+.btn:hover{border-color:var(--acc); color:var(--acc)}
+.btn.pressed{border-color:var(--acc); color:var(--acc); background:var(--accSoft)}
+.chip{cursor:default}
+.sec .chip[class*="acc"], .sec .chip{cursor:pointer}
+.btn.pri{background:var(--acc); border-color:var(--acc); color:#fff}
+.btn.pri:hover{background:var(--acc2); color:#fff}
+.btn.sm{padding:4px 6px; font-size:9.5px; letter-spacing:.1em; font-weight:400}
+input[type=text],select,textarea{
+  background:var(--bg); border:1px solid var(--line2); color:var(--ink);
+  font:inherit; font-size:10.5px; padding:5px 6px; width:100%; border-radius:var(--r);
+}
+input[type=range]{-webkit-appearance:none; appearance:none; width:100%; height:13px; background:transparent; cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:2px; background:var(--line2)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; width:8px; height:12px;
+  background:var(--acc); margin-top:-5px}
+
+/* ---------- schematic ---------- */
+.stagewrap{position:relative; flex:1; min-height:0}
+canvas.sch{position:absolute; inset:0; width:100%; height:100%}
+.hud{position:absolute; font-size:9.5px; letter-spacing:.08em; color:var(--faint); pointer-events:none; line-height:1.7}
+.hud b{color:var(--ink)} .hud .a{color:var(--acc); font-weight:700}
+/* 상단 열 캡션 스트립(캔버스가 y=16~23에 그림) 아래로 내려 겹침 방지 */
+.hud.tl{top:34px; left:11px} .hud.tr{top:34px; right:11px; text-align:right}
+.hud.bl{bottom:8px; left:11px} .hud.br{bottom:8px; right:11px; text-align:right}
+
+/* ---------- annotations ---------- */
+.pin{position:absolute; z-index:40; display:none}
+body.notes .pin{display:block}
+.pin .no{
+  width:17px; height:17px; border-radius:50%; background:var(--acc); color:#fff;
+  font-size:10.5px; font-weight:800; display:flex; align-items:center; justify-content:center;
+  cursor:help; box-shadow:0 0 0 3px var(--accSoft);
+}
+.pin .cal{
+  position:absolute; left:22px; top:-4px; width:280px; background:var(--raise);
+  border:1px solid var(--acc); padding:7px 9px; font-size:10.5px; line-height:1.6;
+  display:none; z-index:41; border-radius:var(--r); box-shadow:0 6px 22px rgba(0,0,0,.4);
+}
+.pin .cal b{color:var(--acc); display:block; margin-bottom:3px; font-size:10px; letter-spacing:.08em}
+.pin:hover .cal{display:block}
+.pin.left .cal{left:auto; right:22px}
+
+/* ---------- board ---------- */
+.tlist{overflow:auto; flex:1}
+.trow{display:flex; align-items:center; gap:8px; padding:6px 8px; border-bottom:1px solid var(--line);
+  cursor:pointer}
+.trow:hover{background:var(--panel2)}
+.trow.sel{background:var(--accSoft); box-shadow:inset 2px 0 0 var(--acc)}
+.trow .id{font-size:9.5px; color:var(--faint); width:54px; flex-shrink:0}
+.trow .ti{flex:1; font-size:11.5px; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.trow .mt{display:flex; gap:5px; align-items:center; flex-shrink:0}
+.trow .age{font-size:9.5px; color:var(--faint); width:48px; text-align:right}
+.grouph{background:var(--panel2); padding:3px 8px; font-size:9.5px; letter-spacing:.14em;
+  color:var(--dim); border-bottom:1px solid var(--line); display:flex; justify-content:space-between}
+.stepbar{display:flex; gap:1.5px; width:62px; flex-shrink:0}
+.stepbar i{flex:1; height:6px; background:var(--line)}
+.stepbar i.on{background:var(--dim)}     /* 지나온 단계 */
+.stepbar i.cur{background:var(--acc)}    /* 지금 단계 — 액센트는 여기 하나뿐 */
+/* 프로젝트 컨텍스트 바 — "지금 어느 프로젝트인가"를 항상 노출 */
+.crumb{display:flex; align-items:center; gap:7px; padding:6px 8px;
+  border-bottom:1px solid var(--line); background:var(--panel2); font-size:10.5px}
+.crumb .sep{color:var(--faint)}
+.crumb .ck-home{color:var(--dim); cursor:pointer}
+.crumb .ck-home:hover{color:var(--acc)}
+.crumb select{width:auto; padding:2px 6px; font-size:11px; font-weight:700; border-color:var(--acc); color:var(--acc)}
+.crumb .cur{font-weight:700}
+/* 상태 빠른 필터 */
+.quick{display:flex; gap:5px; flex-wrap:wrap; padding:7px 8px 0; flex-shrink:0}
+.quick button{
+  border:1px solid var(--line2); background:transparent; color:var(--dim);
+  font:inherit; font-family:var(--sans); font-size:10.5px; padding:5px 10px;
+  cursor:pointer; border-radius:var(--r); display:flex; align-items:center; gap:6px;
+}
+.quick button:hover{color:var(--ink); border-color:var(--acc)}
+.quick button.on{background:var(--acc); border-color:var(--acc); color:#fff; font-weight:700}
+.quick button b{font-family:var(--mono); font-size:10px; opacity:.75}
+.quick button.on b{opacity:.9}
+/* 실시간 구독 표시 — 다른 사용자·워커의 변경이 들어오고 있음을 알린다 */
+.live{display:flex; align-items:center; gap:5px; font-family:var(--mono);
+  font-size:10px; color:var(--ok); flex-shrink:0}
+.live i{width:6px; height:6px; border-radius:50%; background:var(--ok);
+  animation:pulseDot 1.6s ease-in-out infinite}
+@keyframes pulseDot{0%,100%{opacity:1}50%{opacity:.25}}
+.toast{font-size:10px; color:var(--acc); opacity:0; transition:opacity .35s;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0}
+.toast.on{opacity:1}
+.crumb .rt{margin-left:auto; font-size:9.5px; color:var(--faint)}
+/* 상태 이동 — 4단계 중 현재 위치와 다음 행동을 명시 */
+/* 첨부 — 이미지 1장 + 텍스트 다중 (실제 앱과 동일한 상한) */
+.attbar{display:flex; gap:6px; align-items:center; flex-wrap:wrap; min-width:0}
+.att{display:flex; align-items:center; gap:5px; border:1px solid var(--line2);
+  padding:3px 6px; font-size:10px; border-radius:var(--r); max-width:100%}
+.att .nm{max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.att .x{cursor:pointer; color:var(--faint); font-family:var(--mono)}
+.att .x:hover{color:var(--err)}
+.attkind{font-family:var(--mono); font-size:9.5px; border:1px solid var(--line2);
+  padding:0 3px; color:var(--faint); border-radius:2px}
+.thumb{width:54px; height:54px; object-fit:cover; border:1px solid var(--line2); display:block}
+.imgbox{border:1px solid var(--line); background:var(--bg); padding:6px;
+  display:flex; gap:8px; align-items:flex-start}
+.imgbox img{max-width:100%; max-height:150px; object-fit:contain; display:block}
+.attview{background:var(--bg); border:1px solid var(--line); padding:6px 7px;
+  font-family:var(--mono); font-size:10px; line-height:1.6; color:var(--dim);
+  max-height:150px; overflow:auto; white-space:pre-wrap; word-break:break-all}
+.steps{display:flex; gap:0; border:1px solid var(--line2); border-radius:var(--r); overflow:hidden}
+.steps button{flex:1; border:none; border-right:1px solid var(--line2); background:transparent;
+  color:var(--dim); font:inherit; font-size:10.5px; padding:6px 2px; cursor:pointer; font-family:var(--sans)}
+.steps button:last-child{border-right:none}
+.steps button:hover:not(:disabled){background:var(--panel2); color:var(--ink)}
+.steps button.done{color:var(--ink)}
+.steps button.cur{background:var(--acc); color:#fff; font-weight:700}
+.steps button:disabled{opacity:.34; cursor:not-allowed}
+.nextact{display:grid; grid-template-columns:1fr auto; gap:6px; margin-top:6px; align-items:center}
+.dl{display:grid; grid-template-columns:82px 1fr; gap:3px 8px; font-size:10.5px; padding:2px 0}
+.dl dt{color:var(--faint); font-size:9.5px; letter-spacing:.08em; padding-top:1px}
+.dl dd{color:var(--ink)}
+.tline{border-left:1px solid var(--line2); margin-left:5px; padding-left:11px}
+.tline .ev{position:relative; padding:4px 0; font-size:10px; color:var(--dim)}
+.tline .ev::before{content:""; position:absolute; left:-15px; top:9px; width:5px; height:5px;
+  background:var(--acc); border-radius:50%}
+.tline .ev b{color:var(--ink); display:block; font-size:10.5px}
+
+/* ---------- wiring screen ---------- */
+.wirewrap{position:relative; flex:1; min-height:0; overflow:hidden}
+canvas.wires{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1}
+/* 열 간격은 배선 곡선이 지나갈 통로 — 좁으면 선이 뭉쳐 읽히지 않는다 */
+.wcols{position:absolute; inset:0; display:grid; grid-template-columns:1fr 1.2fr 0.85fr;
+  gap:66px; padding:14px 16px; z-index:2;
+  transform-origin:0 0; will-change:transform}
+/* 배선도 확대·이동 — 역할이 늘어나면 전체를 한 화면에 못 담는다 */
+.wirewrap, #genstage .stagewrap{cursor:grab}
+.wirewrap.panning, #genstage .stagewrap.panning{cursor:grabbing}
+.zoombar{position:absolute; right:11px; bottom:32px; z-index:4;
+  display:flex; gap:5px; align-items:center; background:var(--panel);
+  border:1px solid var(--line2); border-radius:var(--r); padding:4px 6px}
+.zoombar .btn{padding:4px 9px; min-width:32px}
+.zoombar .num{font-size:10px; color:var(--dim); min-width:44px; text-align:right}
+.wcol{display:flex; flex-direction:column; gap:7px; min-height:0}
+.wcol > .cap{font-size:9.5px; letter-spacing:.18em; color:var(--faint); padding-bottom:2px;
+  border-bottom:1px solid var(--line)}
+.wnode{
+  border:1px solid var(--line2); background:var(--panel2); padding:6px 8px; cursor:pointer;
+  border-radius:var(--r); position:relative;
+}
+.wnode:hover{border-color:var(--acc)}
+.wnode.hi{border-color:var(--acc); background:var(--accSoft)}
+.wnode .t{font-size:11px; font-weight:700; display:flex; justify-content:space-between; align-items:center}
+.wnode .s{font-size:9.5px; color:var(--faint); margin-top:2px}
+.wgrp{border:1px solid var(--line); border-radius:var(--r); padding:6px; display:flex;
+  flex-direction:column; gap:5px; background:rgba(127,127,127,.04)}
+.wgrp .gh{font-size:9.5px; letter-spacing:.14em; color:var(--dim); display:flex; justify-content:space-between}
+
+/* ---------- overview (before/after) ---------- */
+.wrap{max-width:1580px; margin:0 auto; padding:2px 2px 24px}
+/* minmax(0,·) 필수 — 기본 1fr은 minmax(auto,1fr)이라 min-content가 큰 칸이
+   옆 칸의 폭을 빼앗는다. 그 결과 한쪽이 찌부러지고 한글은 글자당 한 줄로 쌓인다. */
+.cols3{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.7fr) minmax(0,1fr);
+  gap:var(--gap); align-items:start}
+@media (max-width:1500px){ .cols3{grid-template-columns:minmax(0,1fr) minmax(0,1fr)} }
+@media (max-width:1080px){ .cols3{grid-template-columns:minmax(0,1fr)} }
+h2.sh{font-size:10.5px; letter-spacing:.2em; color:var(--acc); margin:0 0 7px; font-weight:800}
+.ba{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:0;
+  border:1px solid var(--line); margin-bottom:9px; border-radius:var(--r); overflow:hidden}
+.ba > div{padding:11px; min-width:0; overflow:hidden}
+.ba .before{background:var(--panel2); border-right:1px solid var(--line)}
+.ba .after{background:var(--panel)}
+/* 표본 행은 칸이 좁아져도 무너지지 않게: 넘치면 가로 스크롤 */
+.demo{overflow-x:auto}
+.demo .trow{min-width:0}
+.demo .id{width:30px}        /* 표본 행은 좁은 칸에서도 제목이 읽히게 압축 */
+.demo .stepbar{width:42px}
+.balab{font-size:9px; letter-spacing:.16em; color:var(--faint); margin-bottom:8px; display:flex;
+  justify-content:space-between}
+.balab .tag{color:var(--acc); font-weight:700}
+.why{font-size:10.5px; color:var(--dim); line-height:1.65; padding:7px 9px; border-top:1px solid var(--line);
+  background:var(--bg); grid-column:1/-1}
+.why b{color:var(--ink)}
+
+/* legacy(현행) 목업 — 임의 색이 아니라 실제 globals.css 토큰값을 그대로 씀
+   --neon #22d3ee · --neon-deep #0891b2 · 버튼 gradient(135deg, deep→neon) + 시안 글로우 */
+.legacy{font-family:var(--sans)}
+.legacy .lcard{
+  border-radius:16px; padding:16px; background:linear-gradient(145deg,rgba(34,211,238,.07),rgba(127,127,127,.03));
+  border:1px solid rgba(34,211,238,.20); box-shadow:0 8px 24px rgba(0,0,0,.18); backdrop-filter:blur(6px);
+}
+.legacy .lbtn{
+  border-radius:12px; padding:11px 18px; border:none; font-size:14.5px; font-weight:600; cursor:pointer;
+  background:linear-gradient(135deg,#0891b2,#22d3ee); color:#041018;
+  box-shadow:0 0 18px -2px rgba(34,211,238,.5); font-family:var(--sans);
+}
+.legacy .lbadge{border-radius:999px; padding:4px 12px; font-size:13.5px; background:rgba(34,211,238,.12);
+  border:1px solid rgba(34,211,238,.22); display:inline-block}
+.legacy .lprog{height:10px; border-radius:999px; background:rgba(127,127,127,.2); overflow:hidden}
+.legacy .lprog i{display:block; height:100%; width:62%; border-radius:999px;
+  background:linear-gradient(90deg,#0891b2,#22d3ee); box-shadow:0 0 12px rgba(34,211,238,.55)}
+.legacy .lbig{font-size:32px; font-weight:800; letter-spacing:-.02em}
+.legacy .lmut{font-size:13.5px; opacity:.6}
+.legacy .lrow{display:flex; align-items:center; gap:10px; padding:12px 4px}
+.legacy .lav{width:28px; height:28px; border-radius:999px; background:rgba(127,127,127,.25);
+  display:flex; align-items:center; justify-content:center; font-size:14.5px; flex-shrink:0}
+/* 한글은 어절 경계가 없어 min-content가 '한 글자'다 — flex 안에서 그대로 두면
+   상자가 좁아질 때 글자가 세로로 쌓인다. 잘라내기로 강제한다. */
+.legacy .lrow > div{min-width:0}
+.legacy .lrow > div > div{white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.legacy .lbadge,.legacy .lbtn{white-space:nowrap; flex-shrink:0}
+
+/* ---------- plan table ---------- */
+table.plan{width:100%; border-collapse:collapse; font-size:10.5px}
+table.plan th{background:var(--panel2); text-align:left; padding:5px 7px; font-size:9.5px;
+  letter-spacing:.12em; color:var(--dim); border:1px solid var(--line); font-weight:700}
+table.plan td{padding:6px 7px; border:1px solid var(--line); vertical-align:top; line-height:1.6}
+table.plan td.kr{font-family:var(--sans)}
+.badge{display:inline-block; padding:1px 6px; font-size:9.5px; border:1px solid var(--line2); border-radius:var(--r)}
+.badge.s{border-color:var(--ok); color:var(--ok)}
+.badge.m{border-color:var(--warn); color:var(--warn)}
+.badge.l{border-color:var(--err); color:var(--err)}
+
+footer{flex-shrink:0; display:flex; justify-content:space-between; align-items:center;
+  font-size:9.5px; color:var(--faint); letter-spacing:.1em; padding:0 3px}
+footer .sb{color:var(--acc)}
+/* 레일 접기 — 데스크톱·모바일 공통. 기본은 데스크톱 펼침 / 모바일 접힘 */
+.railtog{
+  display:flex; align-items:center; justify-content:space-between; width:100%;
+  border:1px solid var(--line2); background:var(--panel2); color:var(--ink);
+  font:inherit; font-size:10.5px; font-weight:700; padding:6px 9px; cursor:pointer;
+  border-radius:var(--r); font-family:var(--sans); margin-bottom:8px;
+}
+.railtog:hover{border-color:var(--acc)}
+.railtog .mk{font-family:var(--mono); color:var(--acc); flex-shrink:0}
+.rail.collapsed > .sec{display:none}
+.rail.collapsed{padding-bottom:0}
+
+/* ============================================================
+   모바일 — 3열 계기판은 데스크톱 전제. 좁아지면 세로로 쌓고
+   레일은 접힌 상태로 두어 중앙(주역)이 먼저 보이게 한다.
+   ============================================================ */
+@media (max-width:900px){
+  body{font-size:13.5px}
+  .frame{padding:6px 7px 10px; gap:6px; height:100dvh}
+  /* 헤더 — 브랜드는 접고, 상태 스트립과 토글을 위아래로 분리 (겹침 방지) */
+  header{grid-template-columns:minmax(0,1fr); row-gap:7px; padding:7px 9px; min-height:auto}
+  .brand{display:none}
+  .hstat{gap:14px; overflow-x:auto; -webkit-overflow-scrolling:touch; min-width:0; justify-self:stretch}
+  .hstat::-webkit-scrollbar{display:none}
+  .toggles{flex-wrap:wrap; justify-content:flex-start; gap:4px; justify-self:start}
+  .tg{padding:6px 8px}
+  /* 가로 넘침 차단 — 좁은 화면에서 한 요소만 삐져나가도 전체가 흔들린다 */
+  .frame{overflow-x:hidden}
+  .panel, .stage, .screen > *{min-width:0}
+  .sech{flex-wrap:wrap; gap:5px}
+  /* 검색·정렬·추가 묶음은 제목과 한 줄에 못 들어간다 — 통째로 다음 줄로 */
+  .sech .r{display:flex; flex-wrap:wrap; gap:5px; align-items:center;
+    flex:1 1 100%; min-width:0; max-width:100%; justify-content:flex-start}
+  #b-q{flex:1 1 120px; width:auto !important; min-width:0}
+  #b-sort{flex:0 0 auto; width:auto}
+  #b-new{flex:0 0 auto}
+  .tlist, .trow{max-width:100%}
+  /* 탭 — 가로 스크롤 */
+  nav.tabs{overflow-x:auto; -webkit-overflow-scrolling:touch}
+  nav.tabs::-webkit-scrollbar{display:none}
+  .tab{flex:0 0 auto; min-width:132px; padding:8px 11px}
+  .tab .cnt{margin-left:10px}
+  .subcap{display:none}
+  .stab{padding:9px 13px}
+  /* 화면 — 세로 스택 + 전체 스크롤 */
+  .screen.active{flex-direction:column; overflow-y:auto; -webkit-overflow-scrolling:touch; gap:6px}
+  .rail, .rail.wide{width:auto; flex:0 0 auto; overflow:visible; max-height:none; padding-bottom:8px}
+  .stage{flex:0 0 auto; min-height:60vh}
+  .stagewrap{min-height:60vh}
+  .tlist{overflow:visible; flex:none}
+  .railtog{padding:9px 11px; font-size:11.5px}
+  /* 문서형 화면 */
+  .cols3{grid-template-columns:1fr}
+  .ba{grid-template-columns:1fr}
+  .ba .before{border-right:none; border-bottom:1px solid var(--line)}
+  table.plan{font-size:10.5px}
+  table.plan td, table.plan th{padding:6px 5px}
+  /* 보드 — 행이 좁아지므로 부가 정보는 접는다 */
+  .trow{flex-wrap:wrap; row-gap:4px; padding:8px}
+  .trow .ti{flex:1 1 100%; order:-1; white-space:normal}
+  .trow .id{width:auto}
+  .trow .age{width:auto; margin-left:auto}
+  .crumb{flex-wrap:wrap; row-gap:5px}
+  .crumb .rt{margin-left:0; flex:1 1 100%}
+  #b-form select, #b-form input{font-size:12px}
+  #b-form > div[style*="repeat(4"]{grid-template-columns:1fr 1fr !important}
+  #b-form > div[style*="1fr 1fr 2fr"]{grid-template-columns:1fr 1fr !important}
+  .attbar{width:100%}
+  /* 터치 타깃 */
+  .btn{padding:9px 8px}
+  .btn.sm{padding:6px 8px}
+  .steps button{padding:10px 2px}
+  input[type=text],select,textarea{padding:8px 7px}
+  .pin .cal{width:min(74vw,280px)}
+  footer{font-size:9px; gap:8px}
+  footer span:last-child{display:none}
+}
+@media (max-width:560px){
+  .tab{min-width:106px; font-size:10px}
+  .stat .vl{font-size:15px}
+  .grid2,.grid3{grid-template-columns:1fr 1fr}
+}
+::-webkit-scrollbar{width:7px; height:7px}
+::-webkit-scrollbar-thumb{background:var(--line2)}
+::-webkit-scrollbar-track{background:transparent}
+/* 레일은 스크롤 가능함이 보여야 한다 — 안 보이면 잘린 것처럼 읽힌다 */
+.rail::-webkit-scrollbar{width:9px}
+.rail::-webkit-scrollbar-track{background:var(--bg)}
+.rail::-webkit-scrollbar-thumb{background:var(--line2); border:2px solid var(--panel)}
+.rail{scrollbar-width:thin; scrollbar-color:var(--line2) var(--bg)}
+</style>
+</head>
+<body data-skin="dark" data-accent="red">
+<div class="frame">
+
+  <!-- ================= header ================= -->
+  <header>
+    <div class="hstat">
+      <div class="kv"><span class="k">INSTANCE</span><span class="v">PROJECTHUB · CONCEPT</span></div>
+      <div class="kv"><span class="k">QUEUE</span><span class="v num" id="h-queue">0</span></div>
+      <div class="kv"><span class="k">SLOTS</span><span class="v num" id="h-slots">0/3</span></div>
+      <div class="kv"><span class="k">GATE</span><span class="v ok" id="h-gate">BLOCK</span></div>
+    </div>
+    <div class="brand">
+      <h1>PROJECTHUB</h1>
+      <div class="sub">INSTRUMENT LAYOUT — 개념 시안</div>
+    </div>
+    <div class="toggles">
+      <div class="tgset" id="sw-skin">
+        <button class="tg on" data-skin="dark">DARK</button>
+        <button class="tg" data-skin="light">LIGHT</button>
+      </div>
+      <div class="tgset" id="sw-acc">
+        <button class="tg on" data-acc="red">RED</button>
+        <button class="tg" data-acc="blue">BLUE</button>
+      </div>
+      <button class="tg" id="sw-notes">주석 OFF</button>
+    </div>
+  </header>
+
+  <!-- ================= tabs ================= -->
+  <nav class="tabs" id="tabs"></nav>
+  <nav class="subtabs" id="subtabs"></nav>
+
+  <main>
+
+  <!-- ============ 01 디자인 델타 ============ -->
+  <section class="screen scroll active" data-s="delta">
+    <div class="wrap">
+      <div class="cols3">
+
+        <!-- 토큰 -->
+        <div class="panel pad">
+          <h2 class="sh">토큰 — 무엇이 바뀌나</h2>
+          <div class="sec">
+            <div class="sech">RADIUS <span class="r">16px → <b>2px</b></span></div>
+            <div style="display:flex; gap:7px; align-items:center; padding:4px 0">
+              <div style="width:52px;height:30px;border:1px solid var(--line2);border-radius:16px"></div>
+              <span style="color:var(--faint)">→</span>
+              <div style="width:52px;height:30px;border:1px solid var(--acc);border-radius:2px"></div>
+              <span class="kr" style="font-size:10.5px;color:var(--dim);flex:1">둥근 모서리는 화면당 요소가 적을 때만 성립. 밀도를 올리면 직각이 정렬을 만든다.</span>
+            </div>
+          </div>
+          <div class="sec">
+            <div class="sech">TYPOGRAPHY <span class="r">이중 체계</span></div>
+            <div class="cell">
+              <div style="font-size:10.5px;color:var(--faint);letter-spacing:.1em">숫자·ID·라벨 = MONO</div>
+              <div class="num" style="font-size:18.5px;font-weight:800">1,284 <small style="font-size:10.5px;color:var(--faint)">tok/s</small></div>
+              <div style="font-size:10.5px;color:var(--faint);letter-spacing:.1em;margin-top:7px">한글 산문 = SANS</div>
+              <div class="kr" style="font-size:13px">결제 실패 리트라이 정책 정리</div>
+            </div>
+            <div class="kr" style="font-size:10.5px;color:var(--dim);line-height:1.6">
+              전부 모노로 가면 한글 가독성이 무너진다. <b>숫자는 모노(자릿수 정렬), 문장은 산세리프</b>로 나누는 것이 이 언어의 핵심 규칙.
+            </div>
+          </div>
+          <div class="sec">
+            <div class="sech">COLOR <span class="r">액센트 1개</span></div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap">
+              <span class="chip">면 3단계</span><span class="chip">선 2단계</span>
+              <span class="chip acc">액센트 1</span><span class="chip">상태 3</span>
+            </div>
+            <div class="kr" style="font-size:10.5px;color:var(--dim);line-height:1.6">
+              그라디언트·글로우 제거. 색은 <b>상태를 뜻할 때만</b> 쓴다. 나머지는 전부 회색조 — 그래서 빨강 하나가 즉시 눈에 띈다.
+            </div>
+          </div>
+          <div class="sec">
+            <div class="sech">DENSITY <span class="r">약 <b>2.4배</b></span></div>
+            <div class="kr" style="font-size:10.5px;color:var(--dim);line-height:1.6">
+              같은 1080p 화면에서 현행 대시보드가 카드 6개를 보여줄 때, 계기판 배치는 지표 14개 + 라이브 도식 1개를 스크롤 없이 담는다.
+            </div>
+          </div>
+        </div>
+
+        <!-- 컴포넌트 before/after -->
+        <div>
+          <h2 class="sh">컴포넌트 — 현재 → 제안</h2>
+
+          <div class="ba">
+            <div class="before legacy">
+              <div class="balab"><span>현재</span></div>
+              <div class="lcard">
+                <div class="lmut">진행 중인 작업</div>
+                <div class="lbig">12</div>
+                <div class="lprog" style="margin-top:12px"><i></i></div>
+                <div class="lmut" style="margin-top:8px">62% 완료</div>
+              </div>
+            </div>
+            <div class="after">
+              <div class="balab"><span>제안</span><span class="tag">SEGMENTED</span></div>
+              <div class="cell">
+                <div class="stat"><span class="lb">진행 중</span><span class="vl num">12<small>/31</small></span></div>
+                <div class="mrow"><span class="lb">완료율</span>
+                  <span class="meter" data-meter="62" data-segs="22"></span><span class="vl num">62%</span></div>
+                <div class="mrow"><span class="lb">검수 대기</span>
+                  <span class="meter" data-meter="18" data-segs="22"></span><span class="vl num">4</span></div>
+                <div class="mrow"><span class="lb">차단</span>
+                  <span class="meter" data-meter="9" data-segs="22"></span><span class="vl num">2</span></div>
+              </div>
+            </div>
+            <div class="why kr">매끈한 진행률 바 하나는 <b>“대충 60%쯤”</b>까지만 읽힌다. 세그먼트 미터는 칸을 세게 만들어 값을 읽게 하고, 같은 높이에 지표를 4개 쌓을 수 있다 — 카드 하나가 대시보드 한 구획이 된다.</div>
+          </div>
+
+          <div class="ba">
+            <div class="before legacy">
+              <div class="balab"><span>현재</span></div>
+              <div class="lrow">
+                <div class="lav">🤖</div>
+                <div style="flex:1">
+                  <div style="font-size:14.5px">결제 웹훅 재시도 로직</div>
+                  <div class="lmut">AI · 2시간 전</div>
+                </div>
+                <span class="lbadge">진행 중</span>
+              </div>
+              <div class="lrow">
+                <div class="lav">👤</div>
+                <div style="flex:1">
+                  <div style="font-size:14.5px">정산 리포트 스키마</div>
+                  <div class="lmut">영훈 · 어제</div>
+                </div>
+                <span class="lbadge">검수</span>
+              </div>
+            </div>
+            <div class="after">
+              <div class="balab"><span>제안</span><span class="tag">DATA ROW</span></div>
+              <div class="demo" style="border:1px solid var(--line)">
+                <div class="trow" style="border-bottom:1px solid var(--line)">
+                  <span class="id num">4182</span>
+                  <span class="ti kr">결제 웹훅 재시도 로직</span>
+                  <span class="stepbar"><i class="on"></i><i class="cur"></i><i></i><i></i></span>
+                  <span class="chip ai">payment_ops</span>
+                  <span class="age num">2h04</span>
+                </div>
+                <div class="trow">
+                  <span class="id num">4179</span>
+                  <span class="ti kr">정산 리포트 스키마</span>
+                  <span class="stepbar"><i class="on"></i><i class="on"></i><i class="cur"></i><i></i></span>
+                  <span class="chip">영훈</span>
+                  <span class="age num">1d02</span>
+                </div>
+              </div>
+            </div>
+            <div class="why kr">아바타·이모지는 자리만 먹고 정보가 없다. 그 폭을 <b>4단계 진행 스텝바 + 정확한 경과시간</b>에 준다. 담당이 AI인지 사람인지는 아이콘이 아니라 <b>칩 테두리 색</b>으로 구분 — 목록을 훑을 때 훨씬 빠르다.</div>
+          </div>
+
+          <div class="ba">
+            <div class="before legacy">
+              <div class="balab"><span>현재</span></div>
+              <button class="lbtn">작업 등록하기</button>
+              <div style="margin-top:12px">
+                <span class="lbadge">● 대기</span> <span class="lbadge">● 실행</span>
+              </div>
+            </div>
+            <div class="after">
+              <div class="balab"><span>제안</span><span class="tag">CONTROL</span></div>
+              <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:6px">
+                <button class="btn pri">작업 등록</button>
+                <button class="btn">초기화</button>
+              </div>
+              <div style="margin-top:9px;display:flex;gap:5px;flex-wrap:wrap">
+                <span class="chip"><span class="dotk dim"></span>대기 <b class="num">7</b></span>
+                <span class="chip"><span class="dotk"></span>실행 <b class="num">3</b></span>
+                <span class="chip"><span class="dotk warn"></span>검수 <b class="num">4</b></span>
+                <span class="chip"><span class="dotk ok"></span>완료 <b class="num">31</b></span>
+              </div>
+            </div>
+            <div class="why kr">버튼은 크기가 아니라 <b>대비</b>로 위계를 만든다. 상태 배지는 개수를 함께 실어 배지가 곧 지표가 되게 한다 — 별도 통계 영역이 필요 없어진다.</div>
+          </div>
+
+          <div class="ba">
+            <div class="before legacy">
+              <div class="balab"><span>현재</span></div>
+              <div class="lcard" style="padding:14px">
+                <div style="font-size:14.5px;font-weight:600">AI 팀</div>
+                <div class="lmut" style="margin-top:6px">역할 9개 · 활성 3</div>
+                <button class="lbtn" style="margin-top:12px;font-size:13.5px;padding:8px 14px">관리하기 →</button>
+              </div>
+            </div>
+            <div class="after">
+              <div class="balab"><span>제안</span><span class="tag">LIVE</span></div>
+              <div class="cell">
+                <div class="sech" style="margin-bottom:6px">AI 팀 <span class="r">활성 <b>3</b>/9</span></div>
+                <div class="mrow"><span class="lb">backend</span><span class="meter" data-meter="78" data-segs="16"></span><span class="vl num">3</span></div>
+                <div class="mrow"><span class="lb">payment</span><span class="meter" data-meter="45" data-segs="16"></span><span class="vl num">2</span></div>
+                <div class="mrow"><span class="lb">qa</span><span class="meter" data-meter="12" data-segs="16"></span><span class="vl num">1</span></div>
+              </div>
+            </div>
+            <div class="why kr">“관리하기 →”는 클릭해야 뭔가 알 수 있다. 같은 면적에 <b>지금 누가 얼마나 물려 있는지</b>를 직접 그리면, 카드가 링크가 아니라 계기가 된다. 클릭은 여전히 되지만 안 눌러도 답을 준다.</div>
+          </div>
+        </div>
+
+        <!-- 원칙 -->
+        <div class="panel pad">
+          <h2 class="sh">이식할 원칙 6가지</h2>
+          <div class="sec">
+            <div class="sech">01 &nbsp;하나의 주역</div>
+            <div class="kr" style="font-size:11px;color:var(--dim);line-height:1.65">
+              헥사포드 화면의 중앙은 언제나 <b>로봇 하나</b>다. ProjectHub의 주역은 <b>작업 파이프라인</b> — 유입에서 완료까지의 흐름. 카드 격자를 걷어내고 그 자리에 살아 움직이는 도식 하나를 둔다. (02 탭)
+            </div>
+          </div>
+          <div class="sec">
+            <div class="sech">02 &nbsp;계기는 가장자리</div>
+            <div class="kr" style="font-size:11px;color:var(--dim);line-height:1.65">
+              좌측 = 관측(내가 못 바꾸는 값), 우측 = 조작(내가 바꾸는 값). 이 규칙 하나로 “이 버튼 어디 있었지”가 사라진다.
+            </div>
+          </div>
+          <div class="sec">
+            <div class="sech">03 &nbsp;숫자엔 단위를</div>
+            <div class="kr" style="font-size:11px;color:var(--dim);line-height:1.65">
+              <span class="num">62%</span> 대신 <span class="num">62% · 19/31</span>, “2시간 전” 대신 <span class="num">2h04</span>. 판단에 쓰이는 값은 정밀하게.
+            </div>
+          </div>
+          <div class="sec">
+            <div class="sech">04 &nbsp;색은 상태에만</div>
+            <div class="kr" style="font-size:11px;color:var(--dim);line-height:1.65">
+              장식용 그라디언트를 없애면 액센트 한 색이 <b>주의를 요구하는 곳</b>만 가리킨다. 지금은 색이 어디에나 있어 아무것도 가리키지 못한다.
+            </div>
+          </div>
+          <div class="sec">
+            <div class="sech">05 &nbsp;프레이밍</div>
+            <div class="kr" style="font-size:11px;color:var(--dim);line-height:1.65">
+              그림자 대신 <b>1px 선 + 모서리 브래킷</b>으로 영역을 나눈다. 다크에서 그림자는 안 보이지만 선은 보인다.
+            </div>
+          </div>
+          <div class="sec">
+            <div class="sech">06 &nbsp;상시 텔레메트리</div>
+            <div class="kr" style="font-size:11px;color:var(--dim);line-height:1.65">
+              헤더에 큐·슬롯·게이트 상태를 항상 띄운다. 어느 화면에 있든 시스템이 살아있는지 알 수 있다.
+            </div>
+          </div>
+          <div class="sec">
+            <div class="sech" style="border-color:var(--acc)">주의 — 그대로 옮기면 안 되는 것</div>
+            <div class="kr" style="font-size:11px;color:var(--dim);line-height:1.65">
+              헥사포드는 <b>종이 흰색</b> 배경이다. 두 인스턴스 모두 다크를 쓰고 있으니 밝기만 뒤집고 대비 규칙은 유지한다. 상단 LIGHT 버튼으로 두 벌을 비교해볼 수 있다.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 02 대시보드 ============ -->
+  <section class="screen" data-s="dash">
+    <!-- 좌: 관측 -->
+    <div class="panel pad rail">
+      <div class="sec">
+        <div class="sech">처리량 <span class="r">완료/시간</span></div>
+        <canvas class="spark" id="sp-through" height="52"></canvas>
+      </div>
+      <div class="sec">
+        <div class="sech">큐 깊이 <span class="r">배선 대기</span></div>
+        <canvas class="spark" id="sp-queue" height="44"></canvas>
+      </div>
+      <div class="sec">
+        <div class="sech">실행 슬롯 <span class="r">claim · lease</span></div>
+        <div class="mrow"><span class="lb">SLOT 1</span><span class="meter" id="m-w0" data-segs="18"></span><span class="vl num" id="v-w0">—</span></div>
+        <div class="mrow"><span class="lb">SLOT 2</span><span class="meter" id="m-w1" data-segs="18"></span><span class="vl num" id="v-w1">—</span></div>
+        <div class="mrow"><span class="lb">SLOT 3</span><span class="meter" id="m-w2" data-segs="18"></span><span class="vl num" id="v-w2">—</span></div>
+      </div>
+      <div class="sec">
+        <div class="sech">게이트 <span class="r">컴파일·검증</span></div>
+        <div class="grid2">
+          <div class="cell"><div class="stat"><span class="lb">통과</span><span class="vl num" id="v-pass">0</span></div></div>
+          <div class="cell"><div class="stat"><span class="lb">반려</span><span class="vl num" id="v-fail" style="color:var(--acc)">0</span></div></div>
+        </div>
+        <div class="mrow"><span class="lb">통과율</span><span class="meter" id="m-rate" data-segs="24"></span><span class="vl num" id="v-rate">—</span></div>
+      </div>
+      <div class="sec">
+        <div class="sech">프로젝트 분포</div>
+        <div class="mrow"><span class="lb">BalloonFlow</span><span class="meter" id="m-p0" data-segs="14"></span><span class="vl num" id="v-p0">0</span></div>
+        <div class="mrow"><span class="lb">NextPR</span><span class="meter" id="m-p1" data-segs="14"></span><span class="vl num" id="v-p1">0</span></div>
+        <div class="mrow"><span class="lb">CrewFlow</span><span class="meter" id="m-p2" data-segs="14"></span><span class="vl num" id="v-p2">0</span></div>
+      </div>
+      <div class="sec" style="flex:1;min-height:90px;display:flex">
+        <div class="sech">이벤트</div>
+        <div class="log" id="dash-log"></div>
+      </div>
+      <div class="pin" style="left:12px; top:38px">
+        <div class="no">1</div>
+        <div class="cal kr"><b>좌측 레일 = 관측 전용</b>
+          현행 대시보드의 통계 카드 6개가 이 레일 하나로 압축된다. 스파크라인은 “지금 값”이 아니라 <b>추세</b>를 보여주므로, 막혔는지 풀렸는지를 숫자 없이 판단할 수 있다.</div>
+      </div>
+    </div>
+
+    <!-- 중앙: 파이프라인 -->
+    <div class="panel stage">
+      <div class="stagewrap">
+        <canvas class="sch" id="pipe"></canvas>
+        <div class="hud tl">파이프라인 <b>LIVE</b><br>유입 → 배선 → 실행 → 게이트 → 검수</div>
+        <div class="hud tr">가동 <b class="num" id="hud-util">0%</b><br>평균 리드타임 <b class="num" id="hud-lead">0.0</b>s</div>
+        <div class="hud bl">인플라이트 <b class="num" id="hud-fly">0</b> · 완료 <b class="num" id="hud-done">0</b></div>
+        <div class="hud br"><span class="a">■</span> 재작업 루프 · 점선 = 반려 경로</div>
+        <div class="pin" style="left:46%; top:11%">
+          <div class="no">2</div>
+          <div class="cal kr"><b>중앙 = 살아있는 도식 하나</b>
+            현행 대시보드는 “최근 작업 목록 + 통계 카드”라 <b>어디가 막혔는지</b>를 알 수 없다. 이 도식은 패킷이 실제로 흐르므로 병목이 눈으로 보인다 — 슬롯이 모두 차면 배선 앞에 대기열이 쌓이는 게 그대로 그려진다.</div>
+        </div>
+        <div class="pin left" style="right:5%; top:62%">
+          <div class="no">3</div>
+          <div class="cal kr"><b>반려 경로를 그린다</b>
+            게이트 실패와 검수 반려는 지금 UI 어디에도 표현되지 않는다. 점선 되돌림 배선으로 그리면 <b>재작업이 얼마나 도는지</b>가 드러난다 — 이게 실제 파이프라인 품질 지표다.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 우: 조작 -->
+    <div class="panel pad rail">
+      <div class="sec">
+        <div class="sech">시뮬레이션 <span class="r"><span class="dotk"></span></span></div>
+        <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:6px">
+          <button class="btn pri" id="btn-pause">‖ 일시정지</button>
+          <button class="btn" id="btn-burst">유입 폭주</button>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sech">유입 속도 <span class="r"><b id="v-rateIn">0.6</b>/s</span></div>
+        <input type="range" id="p-rateIn" min="0.2" max="3" step="0.1" value="0.6">
+      </div>
+      <div class="sec">
+        <div class="sech">워커 슬롯 <span class="r"><b id="v-slots">3</b>개</span></div>
+        <input type="range" id="p-slots" min="1" max="6" step="1" value="3">
+      </div>
+      <div class="sec">
+        <div class="sech">게이트 강도 <span class="r">REQUIRE_COMPILE</span></div>
+        <div class="grid3" id="gate-btns">
+          <button class="btn sm" data-gate="off">OFF</button>
+          <button class="btn sm" data-gate="warn">WARN</button>
+          <button class="btn sm pri" data-gate="block">BLOCK</button>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sech">자동 배선</div>
+        <div class="grid2" id="route-btns">
+          <button class="btn sm pri" data-route="on">켜짐</button>
+          <button class="btn sm" data-route="off">꺼짐</button>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sech">작업 등록</div>
+        <input type="text" id="q-title" placeholder="제목 — 담당 미지정 시 배선이 배정">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px">
+          <select id="q-proj"><option>BalloonFlow</option><option>NextPR</option><option>CrewFlowRotation</option></select>
+          <button class="btn" id="q-add">등록</button>
+        </div>
+      </div>
+      <div class="pin left" style="right:12px; top:38px">
+        <div class="no">4</div>
+        <div class="cal kr"><b>우측 레일 = 조작 전용</b>
+          지금은 설정이 /settings, 배선이 /agents, 등록이 보드에 흩어져 있다. <b>이 화면에서 바꿀 수 있는 것</b>을 한 열에 모으면, 대시보드가 보고서가 아니라 조종석이 된다.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 03 작업 보드 ============ -->
+  <section class="screen" data-s="board">
+    <div class="panel pad rail">
+      <div class="sec">
+        <div class="sech">프로젝트</div>
+        <div id="f-projects"></div>
+      </div>
+      <div class="sec">
+        <div class="sech">상태</div>
+        <div id="f-status"></div>
+      </div>
+      <div class="sec">
+        <div class="sech">담당</div>
+        <div id="f-owner"></div>
+      </div>
+      <div class="sec">
+        <div class="sech">경과 분포 <span class="r">등록 후 경과</span></div>
+        <canvas class="spark" id="sp-age" height="60"></canvas>
+      </div>
+      <div class="pin" style="left:12px; top:38px">
+        <div class="no">1</div>
+        <div class="cal kr"><b>필터가 곧 지표</b>
+          각 필터 줄에 건수를 붙이면 필터 목록이 그대로 분포 통계가 된다. 별도 “통계” 화면이 필요 없어지는 지점.</div>
+      </div>
+    </div>
+
+    <div class="panel stage" style="max-width:none">
+      <!-- 프로젝트 컨텍스트 — 지금 어느 프로젝트의 보드인지 항상 보이게 -->
+      <div class="crumb" style="flex-shrink:0">
+        <span class="ck-home">프로젝트</span>
+        <span class="sep">›</span>
+        <select id="b-proj"></select>
+        <span class="sep">›</span>
+        <span class="cur">작업 보드</span>
+        <span class="live" title="/api/tasks/stream 구독 중"><i></i>LIVE</span>
+        <span class="toast" id="b-toast"></span>
+        <span class="rt num" id="b-scope">/tasks?project=balloonflow</span>
+      </div>
+      <!-- 상태 빠른 필터 — "지금 뭘 봐야 하나"를 한 번에 -->
+      <div class="quick" id="b-quick"></div>
+      <div class="sech" style="margin:7px 7px 0; flex-shrink:0">
+        <span>작업 <b class="num" id="b-count">0</b>건</span>
+        <span class="r" style="display:flex;gap:6px;align-items:center">
+          <input type="text" id="b-q" placeholder="검색" style="width:130px;padding:2px 5px;font-size:10px">
+          <select id="b-sort" style="width:auto;padding:2px 5px;font-size:10px">
+            <option value="recent">최신순</option><option value="age">오래된순</option>
+            <option value="prio">우선순위</option><option value="title">제목순</option>
+          </select>
+          <button class="btn sm pri" id="b-new">+ 작업 추가</button>
+        </span>
+      </div>
+      <!-- 작업 추가 — 모달 대신 인라인 (맥락을 잃지 않게) -->
+      <div id="b-form" style="display:none; flex-shrink:0; border-bottom:1px solid var(--line);
+           background:var(--panel2); padding:9px">
+        <input type="text" id="nf-title" placeholder="제목 — 무엇을 해야 하는가" style="margin-bottom:6px">
+        <textarea id="nf-desc" rows="2" placeholder="설명 (선택)" style="margin-bottom:6px;resize:vertical"></textarea>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:6px">
+          <select id="nf-proj"></select>
+          <select id="nf-owner"></select>
+          <select id="nf-rev"></select>
+          <select id="nf-prio">
+            <option value="urgent">긴급</option><option value="high">높음</option>
+            <option value="normal" selected>보통</option><option value="low">낮음</option>
+          </select>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 2fr;gap:6px;margin-bottom:6px;align-items:center">
+          <select id="nf-status">
+            <option value="todo" selected>대기</option><option value="in_progress">진행</option>
+            <option value="review">검수</option><option value="draft">초안</option>
+          </select>
+          <input type="text" id="nf-level" placeholder="관련 레벨 (예: 47)">
+          <div class="attbar">
+            <label class="btn sm" for="nf-img">🖼 이미지 첨부</label>
+            <input type="file" id="nf-img" accept="image/*" style="display:none">
+            <label class="btn sm" for="nf-file">📎 파일 첨부</label>
+            <input type="file" id="nf-file" multiple style="display:none"
+                   accept=".md,.markdown,.json,.txt,.log,.yml,.yaml,.cs,.py,.ts,.tsx,.js">
+            <span class="num" id="nf-limit" style="font-size:9.5px;color:var(--faint)">파일당 256KB · 합계 5MB</span>
+          </div>
+        </div>
+        <div id="nf-attwrap" style="display:none;margin-bottom:6px">
+          <div class="attbar" id="nf-attlist"></div>
+        </div>
+        <div id="nf-err" class="kr" style="display:none;font-size:10px;color:var(--err);margin-bottom:6px"></div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <button class="btn pri" id="nf-add" style="padding:6px 14px">등록</button>
+          <button class="btn" id="nf-cancel" style="padding:6px 14px">취소</button>
+          <span class="kr" style="font-size:10px;color:var(--faint);flex:1" id="nf-hint">
+            담당을 비우면 배선 규칙이 자동 배정한다</span>
+        </div>
+      </div>
+      <div class="tlist" id="b-list"></div>
+      <div class="pin" style="left:38%; top:9%">
+        <div class="no">2</div>
+        <div class="cal kr"><b>칸반 4열 → 밀도 있는 단일 목록</b>
+          4열 칸반은 열마다 카드가 5개만 보여 전체를 못 본다. <b>우선순위로 묶은 단일 목록 + 스텝바</b>로 바꾸면 같은 높이에 3~4배가 들어오고, 상태는 스텝바가 대신 말해준다.</div>
+      </div>
+    </div>
+
+    <div class="panel pad rail wide" id="b-detail"></div>
+  </section>
+
+  <!-- ============ 04 AI 팀 · 배선 ============ -->
+  <section class="screen" data-s="wire">
+    <div class="panel pad rail">
+      <div class="sec">
+        <div class="sech">직군 <span class="r">JOB FAMILY</span></div>
+        <div id="w-cats"></div>
+      </div>
+      <div class="sec">
+        <div class="sech">부하 <span class="r">역할별 인플라이트</span></div>
+        <div id="w-load"></div>
+      </div>
+      <div class="sec" style="flex:1;min-height:80px;display:flex">
+        <div class="sech">배선 로그</div>
+        <div class="log" id="wire-log"></div>
+      </div>
+      <div class="pin" style="left:12px; top:38px">
+        <div class="no">1</div>
+        <div class="cal kr"><b>직군 → 역할 2단 구조</b>
+          역할이 평평한 목록이면 9개만 넘어도 못 찾는다. 직군으로 묶으면 조직도처럼 읽히고, 새 역할을 어디에 넣을지도 자명해진다.</div>
+      </div>
+    </div>
+
+    <div class="panel stage">
+      <div class="wirewrap" id="wirewrap">
+        <canvas class="wires" id="wcanvas"></canvas>
+        <div class="wcols">
+          <div class="wcol">
+            <div class="cap">조건 — 무엇이 들어오면</div>
+            <div id="wc-cond"></div>
+          </div>
+          <div class="wcol">
+            <div class="cap">담당 — 누가 받고</div>
+            <div id="wc-role" style="display:flex;flex-direction:column;gap:7px;overflow:auto"></div>
+          </div>
+          <div class="wcol">
+            <div class="cap">검수 — 누가 확인하나</div>
+            <div id="wc-rev"></div>
+          </div>
+        </div>
+        <div class="pin" style="left:41%; top:5%">
+          <div class="no">2</div>
+          <div class="cal kr"><b>규칙 목록 → 실제 배선도</b>
+            지금 배선은 “규칙 행”의 목록이다. 같은 데이터를 <b>3열 사이의 선</b>으로 그리면, 어느 역할에 배선이 몰렸는지·어느 역할이 연결이 없는지가 즉시 보인다. 선은 DOM 요소 위치를 측정해 캔버스로 그리므로 React에서 그대로 재현 가능하다.</div>
+        </div>
+        <div class="zoombar">
+          <button class="btn sm" id="z-out">−</button>
+          <button class="btn sm" id="z-fit">100%</button>
+          <button class="btn sm" id="z-in">＋</button>
+          <span class="num" id="z-lv">100%</span>
+        </div>
+        <div class="hud br">드래그로 이동 · 휠로 확대 · <span class="a">굵은 선 = 트래픽 많음</span></div>
+      </div>
+    </div>
+
+    <div class="panel pad rail wide">
+      <!-- 권한 분기 — 실제 앱은 /api/admin/allowed-users 200 여부로 판정 -->
+      <div class="sec">
+        <div class="sech">권한 <span class="r"><span class="live"><i></i>SSE</span></span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          <button class="btn sm pri" id="w-admin-on">관리자</button>
+          <button class="btn sm" id="w-admin-off">일반</button>
+        </div>
+        <div class="kr" id="w-perm-note" style="font-size:10px;color:var(--dim);line-height:1.6">
+          관리자만 역할 생성·편집·삭제와 배선 저장이 가능하다.</div>
+      </div>
+      <div class="sec">
+        <div class="sech">규칙 <span class="r"><b id="w-rulen">0</b>개</span></div>
+        <div id="w-rules"></div>
+      </div>
+      <div class="sec">
+        <div class="sech">규칙 추가</div>
+        <select id="nr-proj" style="margin-bottom:5px">
+          <option value="">모든 프로젝트</option><option>BalloonFlow</option><option>NextPR</option><option>CrewFlowRotation</option>
+        </select>
+        <input type="text" id="nr-kw" placeholder="키워드 (선택)" style="margin-bottom:5px">
+        <select id="nr-role" style="margin-bottom:5px"></select>
+        <select id="nr-rev" style="margin-bottom:6px"></select>
+        <button class="btn pri" id="nr-add" style="width:100%">배선 추가</button>
+      </div>
+      <div class="pin left" style="right:12px; top:38px">
+        <div class="no">3</div>
+        <div class="cal kr"><b>편집기와 도식이 한 화면</b>
+          규칙을 추가하면 선이 즉시 생긴다. 편집 결과를 확인하러 다른 화면으로 갈 필요가 없다 — 이게 계기판 배치의 실질 이득.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 05 적용 계획 ============ -->
+  <section class="screen scroll" data-s="plan">
+    <div class="wrap">
+      <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:var(--gap);align-items:start">
+        <div class="panel pad">
+          <h2 class="sh">화면별 구조 변경</h2>
+          <table class="plan">
+            <thead><tr><th style="width:88px">화면</th><th>현재 구조</th><th>제안 구조</th><th style="width:52px">규모</th><th style="width:150px">비고</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><b>대시보드</b></td>
+                <td class="kr">통계 카드 4~6 + 최근 작업 목록 + 요청 입력</td>
+                <td class="kr">3열 계기판 — 좌 관측 레일 / 중앙 파이프라인 도식 / 우 조작 레일</td>
+                <td><span class="badge l">큼</span></td>
+                <td class="kr">신규 컴포넌트 1개(도식). 기존 API로 충분</td>
+              </tr>
+              <tr>
+                <td><b>작업 보드</b></td>
+                <td class="kr">3-pane (필터 / 우선순위 그룹 목록 / 상세)</td>
+                <td class="kr">골격 유지. 행을 데이터 행으로 교체 + 상세를 정의목록·타임라인으로</td>
+                <td><span class="badge m">중간</span></td>
+                <td class="kr">구조 변경 없음 — 렌더링만 교체</td>
+              </tr>
+              <tr>
+                <td><b>AI 팀 · 배선</b></td>
+                <td class="kr">흐름도 + 배선 규칙 행 목록 + 3-pane 역할 편집</td>
+                <td class="kr">3열 배선도(조건→담당→검수) + 우측 규칙 편집기 통합</td>
+                <td><span class="badge m">중간</span></td>
+                <td class="kr">규칙 데이터 모델 그대로. 선 렌더러만 추가</td>
+              </tr>
+              <tr>
+                <td><b>데이터(BigQuery)</b></td>
+                <td class="kr">좌 브라우저 / SQL 입력 / 결과 표·차트</td>
+                <td class="kr">골격 유지. 차트를 동일 팔레트·그리드로 통일, 결과에 행수·바이트·소요 계기 추가</td>
+                <td><span class="badge s">작음</span></td>
+                <td class="kr">차트 토큰만 교체</td>
+              </tr>
+              <tr>
+                <td><b>음성</b></td>
+                <td class="kr">중앙 녹음 버튼 + 전사 영역</td>
+                <td class="kr">좌 세션 계기(레벨·길이·토큰) / 중앙 전사 / 우 추출된 작업</td>
+                <td><span class="badge m">중간</span></td>
+                <td class="kr">추출 결과를 바로 배선에 태울 수 있음</td>
+              </tr>
+              <tr>
+                <td><b>로드맵</b></td>
+                <td class="kr">목표·마일스톤 목록</td>
+                <td class="kr">타임라인 스트립 + 목표별 진행 세그먼트 미터</td>
+                <td><span class="badge m">중간</span></td>
+                <td class="kr">—</td>
+              </tr>
+              <tr>
+                <td><b>비용</b></td>
+                <td class="kr">기간 토글 + 토큰·USD 카드 + 추세</td>
+                <td class="kr">골격 유지. 모델별·역할별 비중 미터 추가로 "어디서 쓰는지"까지</td>
+                <td><span class="badge s">작음</span></td>
+                <td class="kr">/agents/cost — clean에서도 노출</td>
+              </tr>
+              <tr>
+                <td><b>QA 검사</b></td>
+                <td class="kr">코드 그래프 / 실행 파이프라인 / QA 정합성 3모드</td>
+                <td class="kr">골격 유지. 그래프를 중앙 주역으로 두고 레이어·이슈를 좌측 계기로</td>
+                <td><span class="badge m">중간</span></td>
+                <td class="kr">게임 전용 · 이미 계기판에 가장 가까운 화면</td>
+              </tr>
+              <tr>
+                <td><b>시뮬레이터</b></td>
+                <td class="kr">요청 폼 + 결과 목록 + 3탭</td>
+                <td class="kr">요청 폼을 우측 조작 레일로, 클리어율 분포를 중앙 차트로</td>
+                <td><span class="badge m">중간</span></td>
+                <td class="kr">게임 전용</td>
+              </tr>
+              <tr>
+                <td><b>갤러리 · 레벨</b></td>
+                <td class="kr">이미지/패턴 그리드 + 필터 + 상세 모달</td>
+                <td class="kr">그리드는 유지(에셋은 커야 판단 가능). 필터를 좌측 계기로, 변환·내보내기를 우측으로</td>
+                <td><span class="badge s">작음</span></td>
+                <td class="kr">게임 전용 · 밀도보다 이미지 크기가 우선</td>
+              </tr>
+              <tr>
+                <td><b>레벨 배치</b></td>
+                <td class="kr">모드 토글 + 파이프라인 세션 + 업로드</td>
+                <td class="kr">세션 단계를 중앙 스테이지 도식으로 — 지금 어디까지 갔는지가 한눈에</td>
+                <td><span class="badge l">큼</span></td>
+                <td class="kr">게임 전용 · 3795줄로 가장 큰 화면</td>
+              </tr>
+              <tr>
+                <td><b>팀 점수 · Eval</b></td>
+                <td class="kr">별도 화면 2개(Leaderboard / Eval Harness)</td>
+                <td class="kr">품질 루프가 하나이므로 한 화면 2탭으로 통합</td>
+                <td><span class="badge m">중간</span></td>
+                <td class="kr">게임 전용 · 별점→golden→회귀가 한 흐름</td>
+              </tr>
+              <tr>
+                <td><b>설정</b></td>
+                <td class="kr">섹션 스택(사용자·감사·Slack·DM 라우팅·알림)</td>
+                <td class="kr">DM 라우팅 표는 그대로. 도달률·감사 로그를 좌측 계기로 올려 결과가 보이게</td>
+                <td><span class="badge m">중간</span></td>
+                <td class="kr">소유자 전용 · 표 형태 유지가 정답</td>
+              </tr>
+              <tr>
+                <td><b>전역 셸</b></td>
+                <td class="kr">사이드바(clean) / 상단+하단 독(게임팀)</td>
+                <td class="kr">상단 상태 스트립 + 그룹 탭 + 하위 탭 2단으로 통일</td>
+                <td><span class="badge l">큼</span></td>
+                <td class="kr">두 인스턴스 셸이 하나로 수렴 — 유지보수 감소</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h2 class="sh" style="margin-top:16px">단계별 적용 — 되돌릴 수 있는 순서</h2>
+          <table class="plan">
+            <thead><tr><th style="width:44px">단계</th><th style="width:120px">범위</th><th>내용</th><th style="width:150px">되돌리기</th></tr></thead>
+            <tbody>
+              <tr><td><b>1</b></td><td class="kr">토큰만</td><td class="kr">라디우스·간격·타이포·색 토큰을 CSS 변수로 교체. 컴포넌트 코드 무수정</td><td class="kr">변수 파일 1개 롤백</td></tr>
+              <tr><td><b>2</b></td><td class="kr">공용 부품</td><td class="kr">세그먼트 미터·칩·데이터 행·패널 프레임을 컴포넌트로 추가 (기존 것과 병존)</td><td class="kr">신규 파일 삭제</td></tr>
+              <tr><td><b>3</b></td><td class="kr">작업 보드</td><td class="kr">행·상세만 신규 부품으로 교체. 가장 자주 쓰는 화면에서 먼저 체감 확인</td><td class="kr">렌더러 스위치</td></tr>
+              <tr><td><b>4</b></td><td class="kr">배선 화면</td><td class="kr">3열 배선도 도입. 규칙 편집기를 같은 화면에 통합</td><td class="kr">화면 단위 롤백</td></tr>
+              <tr><td><b>5</b></td><td class="kr">대시보드</td><td class="kr">파이프라인 도식 신규 개발 — 가장 크고 마지막에</td><td class="kr">화면 단위 롤백</td></tr>
+              <tr><td><b>6</b></td><td class="kr">셸 통일</td><td class="kr">두 인스턴스 셸을 상태 스트립 + 탭으로 수렴</td><td class="kr">env 게이트</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:var(--gap)">
+          <div class="panel pad">
+            <h2 class="sh">그대로 유지되는 것</h2>
+            <div class="kr" style="font-size:11px;color:var(--dim);line-height:1.8">
+              · <b>URL·라우트</b> — 링크·북마크 전부 유효<br>
+              · <b>API·데이터 모델</b> — 작업/역할/배선 스키마 무변경<br>
+              · <b>권한·인증</b> — 로그인 흐름 무관<br>
+              · <b>Slack·음성·워커</b> — 백엔드 경로 전부 그대로<br>
+              · <b>게임 전용 페이지</b> — 배치/시뮬레이터/갤러리는 게임 인스턴스에만, 지금 규칙 유지
+            </div>
+          </div>
+          <div class="panel pad">
+            <h2 class="sh">위험과 대응</h2>
+            <div class="kr" style="font-size:11px;color:var(--dim);line-height:1.75">
+              <b style="color:var(--ink)">밀도 ↑ = 모바일 압박</b><br>
+              3열 계기판은 데스크톱 전제. 모바일은 중앙 열만 남기고 좌우 레일을 시트로 접는 규칙을 부품 단계에서 함께 정의해야 한다.<br><br>
+              <b style="color:var(--ink)">한글 가독성</b><br>
+              모노를 문장에 쓰면 안 된다. 숫자·라벨만 모노, 문장은 Pretendard — 토큰 단계에서 못 박고 간다.<br><br>
+              <b style="color:var(--ink)">그리드 <span class="num">1fr</span>의 함정</b><br>
+              CSS의 <span class="num">1fr</span>은 균등 분할이 아니라 <span class="num">minmax(auto,1fr)</span>이다. 최소 내용 폭이 큰 칸이 옆 칸을 빼앗아 한쪽이 찌부러진다. 이 시안에서도 실제로 발생해 <span class="num">minmax(0,1fr)</span>로 전부 교체했다. 실 제품에도 같은 위험이 있다.<br><br>
+              <b style="color:var(--ink)">한글의 최소 폭은 한 글자</b><br>
+              영어는 단어가 최소 단위지만 한글은 어절 경계가 없어 flex/grid 안에서 <b>한 글자 폭까지 줄어든다</b>. 그러면 글자가 세로로 쌓인다. 한 줄 라벨에는 <span class="num">min-width:0</span> + 말줄임을 기본으로 걸어야 한다.<br><br>
+              <b style="color:var(--ink)">두 인스턴스 동시 영향</b><br>
+              공용 코드를 건드리므로 전 단계를 <b>env 게이트</b> 뒤에 둔다. 게임팀 인스턴스는 플래그가 없으면 렌더링이 1px도 바뀌지 않아야 한다 — 지금 clean 테마가 쓰는 방식 그대로.
+            </div>
+          </div>
+          <div class="panel pad">
+            <h2 class="sh">이 시안의 상태</h2>
+            <div class="kr" style="font-size:11px;color:var(--dim);line-height:1.75">
+              샌드박스 독립 파일이며 <b>ProjectHub·Hermes 어디에도 적용되지 않았다</b>. 데이터는 이 페이지 안에서 도는 시뮬레이션이고 서버로 나가는 요청은 없다.<br><br>
+              위 표의 단계 1(토큰)만 먼저 해봐도 체감의 절반은 나온다. 되돌리기 비용이 가장 낮은 지점이라 여기부터 보는 걸 권한다.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 데이터 정의로 렌더되는 나머지 화면 전부 ============ -->
+  <section class="screen" data-s="__gen" id="genstage"></section>
+
+  <!-- ============ 기능 커버리지 ============ -->
+  <section class="screen scroll" data-s="coverage" id="coverage"></section>
+
+  </main>
+
+  <footer>
+    <span>ProjectHub 계기판 개념 시안 · <span class="sb">샌드박스 전용 — 실제 인스턴스 미적용</span></span>
+    <span id="foot-r">TAB 전환 · 주석 버튼으로 구조 설명 표시</span>
+  </footer>
+</div>
+
+<script>
+"use strict";
+/* =========================================================================
+   개념 시안 런타임 — 서버 요청 없음. 전부 로컬 시뮬레이션.
+   ========================================================================= */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const lerp = (a,b,t) => a + (b-a)*t;
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const css = n => getComputedStyle(document.body).getPropertyValue(n).trim();
+const pad2 = n => String(n).padStart(2,"0");
+
+/* ---------- 모바일: 레일 접기/펼치기 ----------
+   좁은 화면에서 3열을 그대로 쌓으면 중앙(주역)에 닿기까지 스크롤이 길어진다.
+   레일마다 토글을 붙여 기본은 접고, 필요할 때만 펼친다. */
+const isNarrow = () => window.matchMedia("(max-width:900px)").matches;
+function railToggles(){
+  $$(".screen.active .rail").forEach(rail => {
+    let tog = rail.querySelector(":scope > .railtog");
+    if (!tog){
+      tog = document.createElement("button");
+      tog.className = "railtog";
+      rail.insertBefore(tog, rail.firstChild);
+      tog.onclick = () => { rail.classList.toggle("collapsed"); syncTog(rail); };
+      // 첫 렌더 시 기본 상태 — 데스크톱은 펼침, 모바일은 접힘
+      if (isNarrow()) rail.classList.add("collapsed");
+    }
+    syncTog(rail);
+  });
+}
+function syncTog(rail){
+  const tog = rail.querySelector(":scope > .railtog"); if (!tog) return;
+  const secs = rail.querySelectorAll(":scope > .sec");
+  const first = rail.querySelector(":scope > .sec .sech");
+  const name = rail.classList.contains("wide") ? "조작 · 상세" : "관측 지표";
+  const collapsed = rail.classList.contains("collapsed");
+  tog.innerHTML = '<span>' + name +
+    ' <span style="color:var(--faint);font-weight:400">· ' + secs.length + '개' +
+    (first ? ' · ' + first.textContent.trim().split(" ")[0] + ' 외' : "") +
+    '</span></span><span class="mk">' + (collapsed ? "+ 펼치기" : "− 접기") + '</span>';
+}
+// 화면 폭이 바뀌면 기본 상태만 다시 맞춘다 (사용자가 직접 연 것은 존중)
+let wasNarrow = null;
+window.addEventListener("resize", () => {
+  const n = isNarrow();
+  if (n !== wasNarrow){
+    wasNarrow = n;
+    $$(".screen.active .rail").forEach(r => { r.classList.toggle("collapsed", n); syncTog(r); });
+  }
+});
+
+/* ---------- corner brackets ---------- */
+function brackets(){
+  $$(".panel").forEach(p=>{
+    if (p.dataset.ck) return; p.dataset.ck = "1";
+    for (const c of ["tl","tr","bl","br"]){
+      const i = document.createElement("i"); i.className = "ck " + c; p.appendChild(i);
+    }
+  });
+}
+
+/* ---------- segmented meters ---------- */
+function meterFill(el, pct, segs){
+  segs = segs || +el.dataset.segs || 20;
+  if (el.children.length !== segs){
+    el.innerHTML = "";
+    for (let i=0;i<segs;i++) el.appendChild(document.createElement("i"));
+  }
+  const on = Math.round(clamp(pct,0,100)/100*segs);
+  Array.from(el.children).forEach((c,i)=>{
+    c.className = i < on ? (i >= segs-3 && pct > 82 ? "hot" : "on") : "";
+  });
+}
+function initMeters(){ $$("[data-meter]").forEach(m => meterFill(m, +m.dataset.meter)); }
+
+/* ---------- toggles ---------- */
+$$("#sw-skin .tg").forEach(b => b.onclick = () => {
+  document.body.dataset.skin = b.dataset.skin;
+  $$("#sw-skin .tg").forEach(x => x.classList.toggle("on", x===b));
+});
+$$("#sw-acc .tg").forEach(b => b.onclick = () => {
+  document.body.dataset.accent = b.dataset.acc;
+  $$("#sw-acc .tg").forEach(x => x.classList.toggle("on", x===b));
+});
+$("#sw-notes").onclick = () => {
+  const on = document.body.classList.toggle("notes");
+  $("#sw-notes").classList.toggle("on", on);
+  $("#sw-notes").textContent = "주석 " + (on ? "ON" : "OFF");
+};
+
+/* =========================================================================
+   화면 정의 — ProjectHub 실제 라우트 전체.
+   scope: common(공통) / game(게임 전용, proxy.ts GAME_PAGES 차단) / owner(소유자)
+   bespoke: 전용 화면 구현이 있는 경우 그 data-s 값
+   ========================================================================= */
+const GROUPS = [
+  { id:"overview", label:"개요",       items:["delta","plan","coverage"] },
+  { id:"ws",       label:"워크스페이스", items:["dash","projects","tasks","roadmap"] },
+  { id:"ai",       label:"AI",          items:["agents","cost","voice"] },
+  { id:"data",     label:"데이터",       items:["bq","simulator"] },
+  { id:"game",     label:"게임 전용",    items:["balloonflow","gallery","levels","batches","teams"] },
+  { id:"sys",      label:"시스템",       items:["settings","access"] },
+];
+
+const S = {};   // 화면 정의
+const F = (n,d,src,tag) => ({ n, d, src, tag: tag || "" });
+
+S.delta = { label:"디자인 델타", route:"—", scope:"doc", bespoke:"delta", features:[] };
+S.plan  = { label:"적용 계획",   route:"—", scope:"doc", bespoke:"plan",  features:[] };
+S.coverage = { label:"기능 커버리지", route:"—", scope:"doc", bespoke:"coverage", features:[] };
+
+S.dash = {
+  label:"대시보드", route:"/", scope:"common", bespoke:"dash",
+  note:"현행은 통계 카드 + 최근 목록. 제안은 파이프라인 도식을 중앙 주역으로.",
+  features:[
+    F("지표 카드 4종","전체 / 진행 중 / 완료 / 오류·긴급 → /tasks 링크","page.tsx:173,289"),
+    F("진행 중인 작업 목록","상태별 진행률 바 포함","page.tsx:301"),
+    F("최근 활동","에이전트 세션 성공/실패","page.tsx:348"),
+    F("AI 팀 현황","Developer/Designer/Artist/Router 역할 수","page.tsx:331"),
+    F("텍스트 명령 → 작업 생성","POST /api/tasks 후 /tasks 이동","page.tsx:161"),
+    F("빠른 명령 칩 4종","진행 보고 / 코드 리뷰 / 회의 요약 / 배포 점검","page.tsx:221"),
+    F("AI 워커 ONLINE 표시","watcher heartbeat · /api/assistant/status","page.tsx:145"),
+    F("시스템 상태 게이지","RUN / TODO / REVIEW / TOTAL","page.tsx:230"),
+    F("오늘의 요약 바","완료·진행·대기·리뷰·전체·실행 중 에이전트","page.tsx:371"),
+    F("마이크 버튼 → /voice","","page.tsx:213"),
+    F("JARVIS 오비탈 허브","6단계 파이프라인 회전 링","page.tsx:62","game"),
+    F("음성 웨이브폼 패널","","page.tsx:196","game"),
+  ],
+};
+
+S.projects = {
+  label:"프로젝트", route:"/tasks (선택 화면)", scope:"common", center:"projects",
+  note:"Task가 어느 프로젝트로 들어가는지 = project 필드 하나. 보드는 ?project=<id>로 스코프된다.",
+  observe:[
+    {k:"list", t:"레지스트리 (hermes_projects)", rows:[["BalloonFlow","31"],["NextPR","14"],["CrewFlowRotation","12"],["내부도구 · 비노출","6"]]},
+    {k:"meters", t:"진행률 (done/total)", rows:[["BalloonFlow",68,"68%"],["NextPR",41,"41%"],["CrewFlow",25,"25%"]]},
+    {k:"stats", t:"스코프", cells:[["legacy 흡수","7건"],["비노출","1개"]]},
+  ],
+  control:[
+    {k:"select", t:"현재 프로젝트", items:["BalloonFlow","NextPR","CrewFlowRotation"], ctl:"proj-sel"},
+    {k:"btns", t:"이동", items:[["보드 입장","pri"],["새 프로젝트 온보딩",""]]},
+    {k:"note", t:"온보딩", v:"project_onboard.py로 등록하면 이 목록에 자동 반영"},
+    {k:"toggle", t:"board_hidden 포함", on:false},
+    {k:"note", t:"주의", v:"레지스트리에서 삭제하면 repo 기반 Hermes 라우팅이 깨진다 — 삭제 대신 board_hidden 플래그"},
+  ],
+  features:[
+    F("프로젝트 선택 화면","진행률·진행·리뷰·완료 카드 + 입장","tasks:1893"),
+    F("레지스트리 기반 목록","hermes_projects 온보딩 시 자동 반영","proj:17"),
+    F("board_hidden 플래그","보드에서 제외하되 Hermes 라우팅은 유지","proj:14,18"),
+    F("balloonflow legacy 흡수","project 미지정·null·빈 문자열 task를 포함","proj:47"),
+    F("진행률 계산","done / total","proj:59"),
+    F("보드 링크","/tasks?project=<id>","proj:58"),
+    F("clean 인스턴스 차이","balloonflow 기본값 없음 · subtitle = owner/name","proj:23,37"),
+    F("아이콘 판정","repo.type === unity ? balloon : box","proj:38"),
+    F("정렬","task 총건수 내림차순","proj:65"),
+    F("브레드크럼 + 되돌아가기","프로젝트 > 보드","tasks:1958"),
+  ],
+};
+
+S.tasks = {
+  label:"작업 보드", route:"/tasks", scope:"common", bespoke:"board",
+  note:"게임팀은 4열 칸반, clean은 3패널. 제안은 밀도 있는 단일 목록 + 스텝바로 수렴.",
+  features:[
+    F("프로젝트 선택 화면","진행률·진행·리뷰·완료 카드 + 입장","tasks:1893"),
+    F("4 컬럼 칸반","할 일 / 진행 중 / 리뷰 / 완료 (draft는 todo에)","tasks:134,505"),
+    F("드래그 앤 드롭 상태 이동","","tasks:496"),
+    F("카드 퀵 액션","다음 상태로 이동 / 삭제","tasks:772,784"),
+    F("Hermes 작업 중단·재개","assignee가 hermes 계열일 때","tasks:801"),
+    F("설명 요청","생성자에게 Slack DM · POST /api/tasks/[id]/ask-owner","tasks:848"),
+    F("새 작업 모달","제목·설명·담당·우선순위·상태·관련 레벨·첨부","tasks:900"),
+    F("텍스트 파일 첨부","md/json/txt · 크기 상한 검증","tasks:290"),
+    F("필터","검색·담당·우선순위·팀·분과·내 태스크·[tag] 다중","tasks:556"),
+    F("전역 검색 팔레트","Cmd/Ctrl+K","tasks:211"),
+    F("팀·분과 체계","dev/art/design/chat/auto × 9분과 + 자동 추론","tasks:57,85"),
+    F("상세 편집","제목·설명·담당·우선순위·관련 레벨","tasks:1305"),
+    F("팀/분과 재배정","","tasks:1449,1481"),
+    F("첨부 열람 · 이미지 미리보기","json pretty-print","tasks:1525,1533"),
+    F("실시간 로그","hermes 코멘트 최근 6건","tasks:1590"),
+    F("댓글 작성·삭제","","tasks:1613"),
+    F("생성 이미지 연결","task ↔ design 양방향 · /gallery","tasks:1705","game"),
+    F("4팀 경쟁 레벨 비교 + 별점","hermes_native/geometric/organic/tile/balloonflow","tasks:1768","game"),
+    F("clean 3패널","프로젝트·상태 필터 / 우선순위 그룹 / 상세","Flex:384,496"),
+    F("검색 + 정렬","최신순·오래된순·제목순","Flex:437"),
+    F("인라인 새 작업 폼","제목·내용·담당·검수자·우선순위","Flex:461"),
+    F("담당 = AI 역할 | 팀원","@gameberry 계정은 후보 제외","Flex:59,113"),
+    F("모바일 전체화면 상세","","Flex:429"),
+  ],
+};
+
+S.roadmap = {
+  label:"로드맵", route:"/roadmap", scope:"common", center:"gantt",
+  note:"주차 간트. 제안은 스프린트 스트립 + 목표별 진행 세그먼트 미터.",
+  observe:[
+    {k:"stats", t:"스프린트", cells:[["진행 중","S3"],["남은 주","7"]]},
+    {k:"meters", t:"역할별 물량", rows:[["기획",62,"8"],["개발",88,"14"],["아트",41,"5"],["★",25,"3"]]},
+    {k:"list", t:"이번 주 마감", rows:[["정산 리포트 스키마","W3"],["결제 웹훅 재시도","W3"],["권한 매트릭스","W4"]]},
+  ],
+  control:[
+    {k:"btns", t:"편집", items:[["Task 추가","pri"],["Sprint 추가",""]]},
+    {k:"input", t:"시작일 (W1)", ph:"2026-08-04"},
+    {k:"seg", t:"역할 필터", items:["ALL","기획","개발","아트"], on:0},
+    {k:"toggle", t:"현재 주차 마커", on:true},
+    {k:"note", t:"스프린트", v:"스프린트별 task 수 집계 · 현재 주차가 속한 스프린트 강조"},
+    {k:"note", t:"저장", v:"POST /api/roadmap · 자동 저장 · 결과 토스트 2초"},
+  ],
+  features:[
+    F("간트 뷰","task × 주차","roadmap:212"),
+    F("드래그로 주차 이동","","roadmap:212"),
+    F("Task 추가·편집·삭제","역할 기획/개발/아트/★/ALL","roadmap:7,227"),
+    F("Sprint 추가·편집·삭제","","roadmap:313"),
+    F("시작일(W1) 설정","","roadmap:190"),
+    F("저장 상태·알림","POST /api/roadmap 영속화","roadmap:40,188"),
+  ],
+};
+
+S.agents = {
+  label:"AI 팀 · 배선", route:"/agents", scope:"common", bespoke:"wire",
+  note:"게임팀은 세로 섹션 스택(파이프라인·게이트·워커·조직도·점수·패치), clean은 배선 + 역할 편집.",
+  features:[
+    F("헤더 액션","비용 / 팀 점수·Eval·Batch(게임) / DB 시드 / + 에이전트","agents:325"),
+    F("스탯바 5칸","진행 중·완료·오류·총 비용·팀 점수(A+~D)","agents:356,120"),
+    F("현재 요청","","agents:373"),
+    F("작업 흐름 stepper","분석→계획→실행→검증→배포","agents:384"),
+    F("AI 팀 파이프라인","Thinking/Planning/Execution/Review/Deploy 5레이어 노드그래프","agents:403","game"),
+    F("Live Inspector","실행 중 에이전트 node-runs","agents:477","game"),
+    F("검증 게이트 (최근 14일)","게이트별 통과·차단 + 차단된 task","agents:502","game"),
+    F("워커 플릿","활성 워커·슬롯 사용량·진행 중 작업","agents:539","game"),
+    F("팀 플로우차트 / 조직도","User Input→Translator→기획·개발·아트→PM→분과→Git/PR","agents:571","game"),
+    F("팀 보상 점수 (Phase 3)","팀·분과별 품질 점수 + 최근 기록","agents:1194","game"),
+    F("자가 진화 패치 (Phase 5)","프롬프트 패치 목록·revert·Bad Case 차단","agents:1383","game"),
+    F("실시간 활동","진행 중 / 완료 세션 그룹","agents:641"),
+    F("에이전트 편집 모달","role·tool·model·description·team·sub_team·persona","agents:976"),
+    F("업무 흐름 5단계","등록→배정→AI 처리→검수→완료 실측 카운트","Clean:156"),
+    F("배선(자동 배정 규칙)","프로젝트·키워드 → 담당 + 검수자, 순서·on/off·삭제","Clean:289"),
+    F("직군 → 역할 2단 구조","좌 직군 / 중 역할 / 우 상세","Clean:359"),
+    F("페르소나 (직무 기술서)","4000자","Clean:184"),
+    F("역할이 담당 중인 작업","→ /tasks 링크","Clean:231"),
+  ],
+};
+
+S.cost = {
+  label:"비용", route:"/agents/cost", scope:"common", center:"chart",
+  note:"토큰·USD 추세. 계기판에서는 기간 토글이 좌측 관측, 예산 경고가 액센트.",
+  observe:[
+    {k:"stats", t:"기간 합계", cells:[["토큰","1.28M"],["USD","$41.7"]]},
+    {k:"meters", t:"모델별 비중", rows:[["opus",64,"$26.7"],["sonnet",28,"$11.6"],["haiku",8,"$3.4"]]},
+    {k:"meters", t:"역할별 비중", rows:[["backend",52,"$21.7"],["data",26,"$10.8"],["qa",22,"$9.2"]]},
+  ],
+  control:[
+    {k:"seg", t:"기간", items:["1일","7일","14일","30일"], on:1},
+    {k:"seg", t:"breakdown", items:["모델별","역할별","분과별","최근 호출"], on:0},
+    {k:"note", t:"표 컬럼", v:"호출 / 입력 / 출력 / 비용 / 평균시간"},
+    {k:"note", t:"집계", v:"/api/agents/cost · 일자별 추세"},
+  ],
+  features:[
+    F("기간 토글","1 / 7 / 14 / 30일","cost:67"),
+    F("토큰·USD 지표 카드","","cost:199"),
+    F("일자별 추세","","cost:29"),
+  ],
+};
+
+S.voice = {
+  label:"음성 명령", route:"/voice", scope:"common", center:"voice",
+  note:"녹음 → STT → 요약·업무 분해 → 선택 생성. 제안은 좌 세션 계기 / 중 전사 / 우 추출 업무.",
+  observe:[
+    {k:"stats", t:"세션", cells:[["길이","12:04"],["토큰","8.4k"]]},
+    {k:"meters", t:"입력 레벨", rows:[["MIC",72,"-12dB"],["잡음",18,"low"]]},
+    {k:"list", t:"저장된 회의", rows:[["기획 정례 07/28","69m"],["결제 스펙 리뷰","24m"],["스프린트 회고","41m"]]},
+    {k:"list", t:"최근 음성 명령", rows:[["작업 현황 알려줘","2m"],["배포 점검 등록","1h"]]},
+  ],
+  control:[
+    {k:"btns", t:"녹음", items:[["● 녹음 시작","pri"],["파일 업로드",""]]},
+    {k:"seg", t:"모드", items:["회의 녹음","실시간 대화","코드 질의"], on:0},
+    {k:"note", t:"상한", v:"70분 / 25MB 초과 시 경고"},
+    {k:"btns", t:"추출", items:[["선택 3건 던지기","pri"],["전사 원문",""]]},
+    {k:"toggle", t:"요약 Slack DM 발송", on:true},
+    {k:"note", t:"실패 진단", v:"요약 분해 실패 / 전사만 성공 / DB 저장 실패를 구분해 안내"},
+  ],
+  features:[
+    F("녹음 시작·정지","48kbps · 30초 timeslice","voice:93"),
+    F("오디오 파일 업로드","마이크 없는 데스크톱 대안","voice:295"),
+    F("녹음 시간 + 상한 경고","70분 / 25MB","voice:284"),
+    F("STT → 자동 분해","요약·결정사항·업무·미결 질문·리스크","voice:342"),
+    F("업무 개별 편집 후 선택 생성","선택 N건 던지기 → task","voice:364"),
+    F("코드 기반 질의 응답","구현됨/부분/미구현 + 근거 파일","voice:322"),
+    F("저장된 회의 목록","열기·삭제","voice:81"),
+    F("최근 음성 명령 5건","","voice:56"),
+    F("전사 원문 보기","","voice:420"),
+    F("안내 모달","STT 한계 + 검증 게이트","voice:236"),
+    F("빠른 명령 4칸","현황/보드/회의/로드맵 · 게임은 코드 분석","voice:306"),
+    F("실시간 대화 (Realtime WebRTC)","툴 get_status / create_task","Realtime:52,153"),
+  ],
+};
+
+S.bq = {
+  label:"데이터 (BigQuery)", route:"/data", scope:"common", center:"sql",
+  note:"메뉴는 clean 사이드바에만 존재(SideNav:16). 읽기 전용 · 1000행 · 2GB 상한.",
+  observe:[
+    {k:"tree", t:"데이터셋 · 테이블", rows:[["analytics",""],["  events","1.2B"],["  sessions","84M"],["billing",""],["  invoices","3.1M"],["  refunds","210k"]]},
+    {k:"list", t:"저장된 쿼리", rows:[["일별 결제 성공률","4d"],["환불 사유 Top10","9d"],["세션 길이 분포","2w"]]},
+    {k:"stats", t:"마지막 실행", cells:[["스캔","412MB"],["소요","1.8s"]]},
+  ],
+  control:[
+    {k:"btns", t:"실행", items:[["실행 (Ctrl+Enter)","pri"],["쿼리 저장",""]]},
+    {k:"seg", t:"결과 보기", items:["표","막대","선"], on:1},
+    {k:"select", t:"X축", items:["day","channel","status"], ctl:"bq-x"},
+    {k:"select", t:"Y축 (다중)", items:["success_rate","count","amount"], ctl:"bq-y"},
+    {k:"toggle", t:"축 자동 추천", on:true},
+    {k:"note", t:"안전장치", v:"SELECT/WITH만 · maximumBytesBilled 2GB"},
+  ],
+  features:[
+    F("데이터셋 / 테이블 브라우저","테이블 클릭 시 SELECT 템플릿","data:118,194"),
+    F("SQL 편집기","Ctrl+Enter 실행","data:135"),
+    F("읽기 전용 가드","SELECT/WITH만 · 1000행 · 2GB","data:8,246"),
+    F("저장된 쿼리","localStorage 저장·불러오기·삭제","data:157"),
+    F("결과 뷰 전환","표 / 막대 / 선 (인라인 SVG)","data:34,274"),
+    F("X축·Y축(다중) 선택","","data:283"),
+    F("스캔 바이트·실행 시간","","data:25"),
+    F("미설정 안내 화면","BigQuery 연결 대기","data:173"),
+  ],
+};
+
+S.simulator = {
+  label:"시뮬레이터", route:"/simulator", scope:"game", center:"chart",
+  note:"BalloonFlow 클리어율 배치 분석. 요청은 hermes 태스크로 등록되어 머신 B에서 실행.",
+  observe:[
+    {k:"stats", t:"요약", cells:[["평균 클리어율","61%"],["50% 미만","14"]]},
+    {k:"meters", t:"난도 구간", rows:[["L1-20",88,"88%"],["L21-40",64,"64%"],["L41-60",39,"39%"],["L61+",22,"22%"]]},
+    {k:"list", t:"최난 레벨", rows:[["L-47","11%"],["L-52","14%"],["L-63","17%"]]},
+  ],
+  control:[
+    {k:"btns", t:"시뮬 요청", items:[["실행","pri"],["새로고침",""]]},
+    {k:"input", t:"레벨 범위", ph:"1-100"},
+    {k:"input", t:"시행 횟수 n", ph:"1~200"},
+    {k:"seg", t:"정책", items:["smart","greedy","random"], on:0},
+    {k:"toggle", t:"최난 레벨 리플레이", on:true},
+    {k:"seg", t:"탭", items:["레벨 차트","실패 분석","테이블"], on:0},
+    {k:"select", t:"비교 대상 (전후 대조)", items:["비교 안 함","run #214 (어제)","run #209 (지난주)"], ctl:"sim-cmp"},
+    {k:"note", t:"비교 결과", v:"평균 Δ +4.2pt · 레벨별 ±2pt 초과만 표시 · 차트에 비교선 오버레이"},
+  ],
+  features:[
+    F("시뮬 요청 폼","레벨 범위·n(1~200)·시드·정책·리플레이 체크","sim:174"),
+    F("hermes 태스크로 등록","머신 B 실행","sim:205"),
+    F("결과 목록 + 새로고침","","sim:137,228"),
+    F("요약 지표","평균 클리어율 / 50% 미만 / 목표 미달 / 최난 레벨","sim:378"),
+    F("탭 3종","레벨 차트 / 실패 분석 / 테이블","sim:446"),
+    F("레벨 상세 + 리플레이 요청","","sim:424"),
+    F("리플레이 뷰어","프레임 재생 · 데드락 모드 · ★Almost There","sim:986"),
+  ],
+};
+
+S.balloonflow = {
+  label:"QA 검사", route:"/balloonflow", scope:"game", center:"graph",
+  note:"BalloonFlow Unity 코드 그래프 169노드 × 1006엣지. 정적 참조 스냅샷.",
+  observe:[
+    {k:"stats", t:"그래프", cells:[["노드","169"],["엣지","1006"]]},
+    {k:"meters", t:"시스템 레이어", rows:[["Core",100,"32"],["Board",74,"41"],["UI",58,"36"],["Data",40,"28"],["FX",22,"32"]]},
+    {k:"list", t:"QA 이슈", rows:[["고아 노드","7"],["순환 참조","3"],["엔트리 미도달","2"]]},
+  ],
+  control:[
+    {k:"seg", t:"모드", items:["코드 그래프","실행 파이프라인","QA 정합성"], on:0, ctl:"bf-mode"},
+    {k:"input", t:"클래스·파일 검색", ph:"Balloon / Board / UI …", ctl:"bf-search"},
+    {k:"btns", t:"뷰", items:[["확대",""],["리셋",""]]},
+    {k:"toggle", t:"이슈 시스템만", on:false},
+    {k:"btns", t:"QA 뷰 전용", items:[["시스템 펼치기",""],["전체 접기",""]]},
+    {k:"note", t:"자동 갱신", v:"실행 파이프라인 최근 활동 15초 폴링"},
+    {k:"note", t:"한계", v:"정적 참조 기준 · 스냅샷 @565ba578"},
+  ],
+  features:[
+    F("모드 3종 토글","코드 그래프 / 실행 파이프라인 / QA 정합성","bf:120"),
+    F("Force-directed 코드 그래프","169 노드 × 1006 엣지 · 시스템별 색","bf:7,96"),
+    F("클래스·파일 검색 + 확대·축소·리셋","","bf:286"),
+    F("시스템 레이어 표시·숨김","","bf:312"),
+    F("노드 상세 패널","참조 in/out 클릭 점프","bf:325"),
+    F("실행 파이프라인 뷰","최근 활동·태스크 선택 → 파일 점프","bf:514"),
+    F("QA 정합성 뷰","고아·순환·엔트리 판정, 이슈만 필터","bf:693"),
+    F("한계 안내 모달","정적 참조 한계 · 스냅샷 명시","bf:117"),
+  ],
+};
+
+S.gallery = {
+  label:"설계 갤러리", route:"/gallery", scope:"game", center:"tiles",
+  note:"이미지 생성·편집 워크플로. 9-Slice / Frame Cutout은 Unity import용 변환.",
+  observe:[
+    {k:"stats", t:"에셋", cells:[["전체","1,284"],["이번 주","96"]]},
+    {k:"meters", t:"소스", rows:[["task",68,"873"],["gallery",32,"411"]]},
+    {k:"list", t:"태그", rows:[["ui_frame","212"],["icon","184"],["bg","141"]]},
+  ],
+  control:[
+    {k:"btns", t:"생성", items:[["새 이미지 생성","pri"],["인페인팅",""]]},
+    {k:"input", t:"프롬프트 검색", ph:"wooden frame", ctl:"tile-q"},
+    {k:"seg", t:"정렬", items:["최신","오래된","프롬프트"], on:0},
+    {k:"btns", t:"변환", items:[["9-Slice",""],["Frame Cutout",""]]},
+    {k:"select", t:"작성자", items:["전체","박지수","hermes"]},
+    {k:"toggle", t:"⭐ 내 즐겨찾기만", on:false},
+    {k:"seg", t:"최소 별점", items:["전체","≥3","≥4","≥5"], on:0},
+    {k:"note", t:"?task_id= 진입", v:"원본 Task로 자동 필터 + 배너 표시 · 해제 시 URL에서 파라미터 제거"},
+  ],
+  features:[
+    F("이미지 그리드 + 필터","프롬프트 검색·정렬·태그·작성자·소스(task/gallery)","gal:349"),
+    F("새 이미지 생성 모달","프롬프트·참조 이미지·태그","gal:586"),
+    F("디자인 상세 모달","확대·메타·피드백 코멘트","gal:744"),
+    F("9-Slice 변환","Unity import 가이드 + border 4값 메타","gal:781,987"),
+    F("Frame Cutout 변환","","gal:792"),
+    F("인페인팅","브러시 영역만 새 프롬프트로 재생성","gal:948"),
+    F("디자인 삭제 · zoom 오버레이","","gal:955,977"),
+  ],
+};
+
+S.levels = {
+  label:"레벨", route:"/levels", scope:"game", center:"tiles",
+  note:"격자 패턴 갤러리. 별점이 4팀 경쟁·Eval golden 추출과 연결된다.",
+  observe:[
+    {k:"stats", t:"레벨", cells:[["전체","1,367"],["별점≥4","228"]]},
+    {k:"meters", t:"mood", rows:[["calm",70,"412"],["tense",52,"306"],["playful",38,"224"]]},
+    {k:"list", t:"style (batch v2)", rows:[["wooden","318"],["metal","201"],["glass","96"]]},
+  ],
+  control:[
+    {k:"input", t:"이름·task 검색", ph:"L-047 / wooden …", ctl:"tile-q"},
+    {k:"seg", t:"대칭", items:["전체","대칭","비대칭"], on:0},
+    {k:"seg", t:"별점", items:["≥1","≥3","≥4","≥5"], on:0},
+    {k:"btns", t:"내보내기", items:[["PNG",""],["JSON (Unity)","pri"]]},
+    {k:"note", t:"딥링크", v:"#level=<id>로 상세 바로 열기 · 닫을 때 해시 정리"},
+    {k:"note", t:"메타 오버라이드", v:"targetLevel·packageId·railCapacity·flipY 등 URL 쿼리"},
+  ],
+  features:[
+    F("격자 패턴 갤러리","design/level 분과 생성물","lv:237"),
+    F("mood 탭 필터","","lv:253"),
+    F("style 탭 필터","batch v2","lv:284"),
+    F("검색·대칭·별점 필터","","lv:318,367"),
+    F("카드별 1~5 별점 입력","PATCH /api/levels/[id]","lv:174,445"),
+    F("페이지네이션","","lv:482"),
+    F("레벨 상세","난이도 선택·시드 리셋·PNG·JSON(BalloonFlow 포맷)","lv:594"),
+    F("QueuePreview","큐 생성기 미리보기","lv:656"),
+    F("URL 쿼리 메타 오버라이드","pixelforge_levels 자동 매칭","lv:707"),
+    F("/gallery · /tasks 교차 링크","","lv:244"),
+  ],
+};
+
+S.batches = {
+  label:"레벨 배치", route:"/agents/batches", scope:"game", center:"stages",
+  note:"가장 큰 화면(3795줄). Art 생성 ↔ Field Complete 두 모드의 파이프라인 세션.",
+  observe:[
+    {k:"stats", t:"진행", cells:[["활성 job","3"],["대기","11"]]},
+    {k:"meters", t:"세션 단계", rows:[["Art",100,"done"],["큐레이션",100,"done"],["Queue",64,"run"],["Field",0,"wait"]]},
+    {k:"list", t:"최근 요청 (8초 갱신)", rows:[["v47 pattern","2m"],["fc-job 118","14m"],["art batch 92","1h"]]},
+  ],
+  control:[
+    {k:"seg", t:"모드", items:["Art 생성","Field Complete"], on:0},
+    {k:"btns", t:"실행", items:[["▶ 새 batch","pri"],["고급 옵션",""]]},
+    {k:"btns", t:"입력", items:[["CSV 업로드",""],["폴더 업로드",""]]},
+    {k:"btns", t:"레벨 선택", items:[["전체 선택",""],["전체 해제",""]]},
+    {k:"input", t:"범위 입력", ph:"1-5,8,12-20"},
+    {k:"seg", t:"퀵필터", items:["Linear","도형","Hard 제외"], on:0},
+    {k:"btns", t:"큐레이션 일괄", items:[["전체 A",""],["전체 B",""]]},
+    {k:"btns", t:"후처리", items:[["기믹 후보정",""],["download",""]]},
+    {k:"note", t:"import", v:"pixelforge_levels에서 가져오기 (fc 모드)"},
+  ],
+  features:[
+    F("모드 토글","Art 생성 batch ↔ Field Complete","bat:1461"),
+    F("사용 가이드 · 시나리오 매트릭스 · FAQ","","bat:1299,1322,1423"),
+    F("새 batch 트리거 + 고급 옵션","n=10 후보 표시 · Iron Wall mode","bat:1348,1502"),
+    F("CSV / 폴더 업로드","PixelForge 포맷 호환 · 업로드·교체","bat:1599,2423"),
+    F("pixelforge_levels import","field-complete 모드 한정","bat:1545"),
+    F("최근 요청","8초 자동 갱신","bat:2162"),
+    F("Pipeline Session","Art → 큐레이션(A/B) → Queue 생성 → Field Complete → download","bat:2299,2866,3011,3084"),
+    F("기믹 후보정","Art batch / 기존 fc job에 적용","bat:2243,2746"),
+    F("v47 Pattern Batch","디자이너 원본 직접 실행","bat:2660"),
+    F("필드완성 job 상세","총 row 등","bat:3446"),
+  ],
+};
+
+S.teams = {
+  label:"팀 점수 · Eval", route:"/agents/design-teams · /agents/eval", scope:"game", center:"board",
+  note:"두 화면을 하나로 묶어 표시. 별점 → golden case → 회귀 batch로 이어지는 품질 루프.",
+  observe:[
+    {k:"stats", t:"Eval", cells:[["golden","64"],["임계","0.70"]]},
+    {k:"meters", t:"팀 평균 별점", rows:[["native",84,"4.2"],["geometric",72,"3.6"],["organic",60,"3.0"],["tile",52,"2.6"]]},
+    {k:"list", t:"최근 회귀 batch", rows:[["rb-214 pass","0.81"],["rb-213 fail","0.66"],["rb-212 pass","0.74"]]},
+  ],
+  control:[
+    {k:"seg", t:"화면", items:["Leaderboard","Eval Harness"], on:0},
+    {k:"btns", t:"실행", items:[["회귀 batch 실행","pri"],["golden 재추출",""]]},
+    {k:"note", t:"golden 조건", v:"별점 ≥ 4인 task에서 추출 · 패스 임계 0.7"},
+  ],
+  features:[
+    F("Design Teams Leaderboard","팀별 카드 · 경고 배지","dt:73,97"),
+    F("팀 × 패턴별 평균 별점","","dt:126"),
+    F("최근 별점 30건","","dt:167"),
+    F("H4 Eval Harness","별점 ≥4 task에서 golden 추출 · 패스 임계 0.7","ev:37"),
+    F("역할별 Golden cases","","ev:56"),
+    F("최근 회귀 batch","","ev:66"),
+  ],
+};
+
+S.settings = {
+  label:"설정", route:"/settings", scope:"owner", center:"form",
+  note:"소유자 전용(layout:15). 알림 라우팅이 실제 운영의 핵심이라 계기판에서도 표 형태 유지.",
+  observe:[
+    {k:"stats", t:"사용자", cells:[["허용","6"],["관리자","6"]]},
+    {k:"list", t:"감사 로그 (최근 100)", rows:[["task.created","2m"],["settings.update","1h"],["user.added","3h"]]},
+    {k:"meters", t:"알림 도달", rows:[["DM",92,"46"],["Webhook",71,"18"]]},
+  ],
+  control:[
+    {k:"btns", t:"사용자", items:[["이메일 추가","pri"],["권한 회수",""]]},
+    {k:"input", t:"Slack Bot Token", ph:"xoxb-•••••••••"},
+    {k:"btns", t:"테스트", items:[["DM 테스트",""],["Webhook 테스트",""]]},
+    {k:"toggle", t:"새 작업 등록 시 알림", on:true},
+    {k:"toggle", t:"작업 상태 변경 시 알림", on:true},
+    {k:"btns", t:"저장", items:[["전체 저장","pri"]]},
+  ],
+  features:[
+    F("허용 사용자 관리","이메일 추가·권한 회수 · env 목록과 DB 목록 구분","set:54,301"),
+    F("감사 로그","최근 100건 · event/actor/시각","set:45,373"),
+    F("Slack Bot Token","마스킹 표시 + 재입력","set:423"),
+    F("작업자별 DM 라우팅","이름 / 로그인 이메일 / Slack 멤버 ID / 개별 Webhook","set:141,447"),
+    F("DM 테스트 (행별)","","set:506"),
+    F("Webhook 테스트 (행별)","","set:526"),
+    F("기본 Webhook (fallback) + 테스트","","set:544"),
+    F("알림 토글 2종","새 작업 등록 / 상태 변경","set:573"),
+    F("전체 저장","","set:585"),
+    F("가이드","봇 DM 설정 절차","set:598"),
+  ],
+};
+
+S.access = {
+  label:"인증 · 셸", route:"/login · 공통 셸", scope:"common", center:"form",
+  note:"화면은 아니지만 모든 화면에 얹히는 공통 층. 계기판에서는 상단 상태 스트립이 이 역할을 흡수.",
+  observe:[
+    {k:"stats", t:"세션", cells:[["활성","4"],["소유자","1"]]},
+    {k:"list", t:"레이트 리밋", rows:[["auth","30/min"],["slack","60/min"],["api","600/min"],["page","1000/min"]]},
+    {k:"meters", t:"알림 벨", rows:[["최근 세션",80,"8"],["실패",25,"2"]]},
+  ],
+  control:[
+    {k:"btns", t:"인증", items:[["Google 로그인","pri"],["로그아웃",""]]},
+    {k:"seg", t:"셸", items:["사이드바(clean)","상단+독(게임)"], on:0},
+    {k:"note", t:"소유자", v:"OWNER_EMAILS 기준 설정 메뉴 노출"},
+  ],
+  features:[
+    F("Google OAuth 로그인","clean만 /login 사용, 게임은 /api/auth/signin","login:28 · proxy:148"),
+    F("세션 게이트 · Hermes 내부 키 우회","","proxy:118"),
+    F("레이트 리밋","auth 30 / slack 60 / api 600 / page 1000 per min","proxy:21"),
+    F("소유자 판정","OWNER_EMAILS → 설정 메뉴 · Boss/Owner 라벨","layout:15,53"),
+    F("알림 벨","최근 8건 세션 · 실패 배지","TopNav:85"),
+    F("사용자 메뉴 드롭다운","환경 설정 / AI 팀 / 로그아웃","TopNav:141"),
+    F("모바일 셸","상단 Nav + 하단 탭바(홈·작업·AI팀) + FAB + 더보기 시트","layout:33,77"),
+    F("보안 헤더 · 마이크 권한","HSTS · CSP · microphone=(self)","next.config:7"),
+    F("게임 라우트 차단","clean에서 GAME_PAGES 8개 → / 리다이렉트","proxy:107"),
+  ],
+};
+
+/* ===== 2차 감사 보강 — 1차에서 누락된 기능 43개 ===== */
+const EXTRA = {
+  dash:[
+    F("빈 상태 CTA","진행 0건 → '작업 보드에서 시작하기', 활동 0건 → 안내 문구","CleanDash:108,136"),
+  ],
+  tasks:[
+    F("SSE 실시간 보드 동기화","/api/tasks/stream insert·update·delete 즉시 반영 · 스코프 밖 무시","tasks:396"),
+    F("#task=<id> 해시 딥링크","Slack DM 링크로 상세 자동 오픈 · 없으면 단건 lazy fetch · hashchange 재처리","tasks:370"),
+    F("검수자 지정 + 검수 게이트","검수 요청 → 승인·완료, 완료 버튼은 검수자 본인만 활성","Flex:230,323"),
+    F("이미지 첨부 2MB 상한","FileReader base64 data URL · 텍스트 첨부와 별개 경로","tasks:336"),
+    F("상세 lazy 로드","목록에 없는 image_base64·attachments·전체 댓글을 모달 오픈 시 재조회 머지","tasks:355"),
+    F("창 포커스 복귀 시 재조회","SSE는 400ms 디바운스, focus는 즉시","Flex:156"),
+    F("모바일 전용 컨트롤","프로젝트 select·+버튼이 md 이하에서만 · 상태 칩 가로 스크롤","Flex:430,450"),
+    F("Escape로 검색 팔레트 닫기","Cmd/Ctrl+K 토글과 별개","tasks:216"),
+  ],
+  agents:[
+    F("관리자 권한 분기","/api/admin/allowed-users 200 여부로 isAdmin → 시드·에이전트 추가·편집·삭제 노출","agents:203,345"),
+    F("세션 SSE + LIVE 배지","/api/agents/sessions/stream ready·session 이벤트 append(최대 200) · error 시 LIVE off","agents:207"),
+    F("패널별 자동 폴링","node-runs 10s / status 15s / 팀 점수 30s / 패치 60s","agents:154,164,1166,1349"),
+    F("AI 팀 상태 요약 7칸","총·활성·대기·오늘 완료·성공률·평균 응답·총 비용","agents:688"),
+    F("세션 그룹 접기·펼치기","진행 중만 기본 노출, 완료 그룹은 토글","agents:665"),
+    F("경과 시간 1초 틱","실행 중 경과·활성 5분 창을 실시간 계산","agents:186,222"),
+  ],
+  cost:[
+    F("breakdown 표 4종","모델별 · 역할별 TOP 30 · 분과별 · 최근 호출 30건 (호출/입력/출력/비용/평균시간)","cost:128,143,158,171"),
+  ],
+  roadmap:[
+    F("현재 주차 마커","startDate 기준 currentWeek → 헤더 강조 + today 세로선 + 행 배경","Roadmap:115,212,243"),
+    F("Sprint 헤더 카드","스프린트별 task 수 집계 · 현재 주차가 속한 스프린트 강조","Roadmap:131,171"),
+    F("저장 결과 토스트","저장됨 / 저장 실패 / title 필수 2초 flash","roadmap:36,83"),
+  ],
+  gallery:[
+    F("?task_id= 딥링크","진입 시 자동 필터 + 배너(원본 Task로 이동) + 해제 시 URL 정리","gal:244,430"),
+    F("사용자별 즐겨찾기","카드 ★ 토글 + 내 즐겨찾기만 필터","gal:152,517"),
+    F("사용자별 별점 + 평균","내 별점 입력 · 참여자 수와 평균 · 최소 별점 필터","gal:170,824"),
+  ],
+  levels:[
+    F("#level=<id> 해시 딥링크","진입·hashchange로 상세 오픈 · 닫을 때 pushState로 해시 정리","lv:199,225"),
+  ],
+  simulator:[
+    F("결과 비교 (전후 대조)","비교 대상 선택 → 평균 Δ 배지 · 차트 비교선 · 레벨별 델타(±2pt, |Δ| 순)","sim:257,323,701"),
+    F("10초 폴링 + 조용한 갱신","진행 중 폴링 · 리플레이 대기 중엔 선택 유지한 채 재조회","sim:76,113"),
+    F("첫 진입 시 최신 결과 자동 선택","빈 화면 대신 바로 대시보드","sim:107"),
+  ],
+  batches:[
+    F("레벨 선택 도구 세트","전체 선택·해제 / 1-5,8 범위 입력(오류 경고) / Linear·도형 퀵필터 / Hard 제외","bat:1211,1668"),
+    F("CSV 드래그앤드롭","드롭존 하이라이트 + 페이지 전역 기본 drop 차단","bat:534,2441"),
+    F("큐레이션 일괄 선택","전체 A / 전체 B / total_score 기준 자동","bat:2898"),
+    F("첫 방문 가이드 자동 오픈","localStorage fc_guide_seen_v1 · ESC로 닫기","bat:942"),
+    F("CSV 인코딩 깨짐 감지","치환문자 카운트 경고 · 헤더 인식 실패 안내","bat:156,587"),
+  ],
+  balloonflow:[
+    F("QA 정합성 뷰 전용 조작","시스템 펼치기 / 전체 접기 / 이슈만 / 뷰 리셋 / 확대·축소","bf:693"),
+    F("15초 자동 갱신","실행 파이프라인용 최근 활동 폴링","bf:427"),
+  ],
+  bq:[
+    F("차트 축 자동 추천","x=첫 비숫자 컬럼, y=숫자 컬럼 상위 3개 자동 지정","data:147"),
+    F("로딩·빈 상태 + 모바일 숨김","불러오는 중 / 데이터셋 없음 · 좌 패널은 lg 이상","data:193,199"),
+  ],
+  voice:[
+    F("회의 요약 Slack DM 자동 발송","전사·분석 후 생성자에게 DM · 실패 사유 화면 표시","api/voice:339 · voice:175"),
+    F("단계별 실패 진단","요약 분해 실패 / 전사만 성공 / DB 저장 실패를 구분 안내","voice:172"),
+    F("#saved-meetings 앵커 이동","빠른 명령의 저장된 회의가 페이지 내 스크롤 점프","voice:309,427"),
+  ],
+  access:[
+    F("데스크톱 하단 아이콘 독","게임 md+ 전용 · 8아이콘 + 툴팁 + 음성 FAB · clean은 게임 항목 제거","BottomDock:8"),
+    F("clean 좌측 사이드바 셸","워크스페이스/AI 그룹 + 하단 설정(소유자)·사용자·로그아웃","SideNav:10,44"),
+    F("Slack Event 수신","HMAC 서명 검증(5분 리플레이 방어) + url_verification challenge","api/slack:26,67"),
+    F("TopNav 채팅 아이콘","/agents 대화 로그 바로가기","TopNav:95"),
+    F("뷰포트·테마 컬러","maximumScale 5 · 인스턴스별 themeColor · clean Pretendard 동적 서브셋","layout:25,61"),
+  ],
+};
+Object.keys(EXTRA).forEach(k => { if (S[k]) S[k].features.push(...EXTRA[k]); });
+
+/* ---------- tabs ---------- */
+let screen = "delta", group = "overview";
+function renderNav(){
+  $("#tabs").innerHTML = GROUPS.map((g,i) =>
+    '<div class="tab' + (g.id===group?" active":"") + '" data-g="' + g.id + '">' +
+    '<span class="n">' + String(i+1).padStart(2,"0") + '</span>' + g.label +
+    '<span class="cnt">' + g.items.length + '</span></div>').join("");
+  const g = GROUPS.find(x => x.id === group);
+  $("#subtabs").innerHTML =
+    '<div class="subcap">화면 ' + g.items.length + '</div>' +
+    g.items.map(id => {
+      const d = S[id]; if (!d) return "";
+      const sc = d.scope === "game" ? '<span class="sc g">게임</span>'
+               : d.scope === "owner" ? '<span class="sc o">소유자</span>' : "";
+      const rt = d.route && d.route !== "—" ? '<span class="rt">' + d.route + '</span>' : "";
+      return '<div class="stab' + (id===screen?" active":"") + '" data-s="' + id + '">' +
+        d.label + rt + sc + '</div>';
+    }).join("") + '<div class="fill"></div>';
+  $$("#tabs .tab").forEach(t => t.onclick = () => {
+    group = t.dataset.g;
+    const gg = GROUPS.find(x => x.id === group);
+    setScreen(gg.items[0]);
+  });
+  $$("#subtabs .stab").forEach(t => t.onclick = () => setScreen(t.dataset.s));
+}
+function setScreen(s){
+  screen = s;
+  const g = GROUPS.find(x => x.items.includes(s));
+  if (g) group = g.id;
+  const def = S[s] || {};
+  const target = def.bespoke || "__gen";
+  $$(".screen").forEach(el => el.classList.toggle("active", el.dataset.s === target));
+  if (target === "__gen") renderGeneric(s);
+  if (s === "coverage") renderCoverage();
+  renderNav();
+  requestAnimationFrame(()=>{ sizeCanvases(); railToggles(); if (s==="agents"){ initWireView(); applyView(); } });
+}
+
+/* =========================================================================
+   공용 데이터
+   ========================================================================= */
+const PROJECTS = ["BalloonFlow","NextPR","CrewFlowRotation"];
+const PCOLOR = ["#4b8bfa","#e0a33a","#3fb950"];
+const MEMBERS = ["영훈","세영","병훈","창훈","슬기"];
+
+const ROLE_TREE = [
+  { cat:"개발", roles:[
+    {id:"backend_dev",  label:"백엔드",     sub:"API·스키마"},
+    {id:"frontend_dev", label:"프런트엔드", sub:"화면·상태"},
+    {id:"infra_ops",    label:"인프라",     sub:"EKS·배포"},
+  ]},
+  { cat:"결제·정산", roles:[
+    {id:"payment_ops",  label:"결제",   sub:"PG·웹훅"},
+    {id:"settle_ops",   label:"정산",   sub:"리포트·대사"},
+  ]},
+  { cat:"데이터", roles:[
+    {id:"data_eng",     label:"데이터", sub:"파이프라인"},
+    {id:"analyst",      label:"분석",   sub:"지표·쿼리"},
+  ]},
+  { cat:"품질", roles:[
+    {id:"qa_auto",      label:"QA 자동화", sub:"회귀·게이트"},
+    {id:"reviewer_ai",  label:"코드 리뷰", sub:"1차 검토"},
+  ]},
+];
+const ALL_ROLES = ROLE_TREE.flatMap(g => g.roles.map(r => ({...r, cat:g.cat})));
+const roleById = id => ALL_ROLES.find(r => r.id === id);
+
+/* =========================================================================
+   대시보드 — 파이프라인 시뮬레이션
+   ========================================================================= */
+const sim = {
+  paused:false, rateIn:0.6, slots:3, gate:"block", routing:true,
+  t:0, spawnAcc:0, seq:4180,
+  tasks:[], done:0, pass:0, fail:0, leadSum:0, leadN:0,
+  queue:[], workers:[null,null,null,null,null,null],
+  through:new Array(70).fill(0), qhist:new Array(70).fill(0), thrAcc:0, histT:0,
+};
+
+const NODES = {
+  in_board:{col:0,row:0,label:"작업 보드",sub:"수동 등록"},
+  in_voice:{col:0,row:1,label:"음성 명령",sub:"STT 추출"},
+  in_slack:{col:0,row:2,label:"Slack",sub:"DM·채널"},
+  in_cron :{col:0,row:3,label:"크론·목표",sub:"자동 분해"},
+  router  :{col:1,row:0,label:"배선 라우터",sub:"규칙 매칭"},
+  w0:{col:2,row:0,label:"SLOT 1",sub:"claim·lease"},
+  w1:{col:2,row:1,label:"SLOT 2",sub:"claim·lease"},
+  w2:{col:2,row:2,label:"SLOT 3",sub:"claim·lease"},
+  w3:{col:2,row:3,label:"SLOT 4",sub:"claim·lease"},
+  w4:{col:2,row:4,label:"SLOT 5",sub:"claim·lease"},
+  w5:{col:2,row:5,label:"SLOT 6",sub:"claim·lease"},
+  gate  :{col:3,row:0,label:"게이트",sub:"컴파일·검증"},
+  review:{col:4,row:0,label:"검수",sub:"사람 확인"},
+  done  :{col:4,row:1,label:"완료",sub:"머지·배포"},
+};
+const COL_CAPS = ["유입","배선","실행 슬롯","게이트","산출"];
+const INTAKE = ["in_board","in_voice","in_slack","in_cron"];
+const rect = {};   // node id -> {x,y,w,h}
+
+/* 노드 배치 밴드: 위는 캡션 스트립(BAND_TOP), 아래는 되돌림 배선·범례 자리(BAND_BOT)를
+   비워 두고 그 사이에서만 세로로 펼친다. 밴드를 벗어나면 선과 텍스트가 겹친다. */
+const BAND_TOP = 52, BAND_BOT = 112;
+const LAY = { w:0, h:0 };
+function computeLayout(w,h){
+  LAY.w = w; LAY.h = h;
+  const padX = 78;
+  const colX = i => padX + (w - padX*2) * (i/4);
+  const nw = Math.min(146, (w - padX*2)/5.4), nh = 40;
+  const bandH = Math.max(120, h - BAND_TOP - BAND_BOT);
+  const bandMid = BAND_TOP + bandH/2;
+  const groups = {};
+  for (const [id,n] of Object.entries(NODES)) (groups[n.col] = groups[n.col] || []).push(id);
+  for (const col of Object.keys(groups)){
+    let ids = groups[col];
+    if (col === "2") ids = ids.slice(0, sim.slots);
+    const n = ids.length;
+    // 최소 간격은 보장하되, 남는 높이가 있으면 펼쳐서 스테이지를 채운다
+    const span = n <= 1 ? 0 : Math.min(bandH, Math.max(n * (nh + 16), bandH * (n / 5)));
+    const top = bandMid - span/2;
+    ids.forEach((id,i) => {
+      rect[id] = {
+        x: colX(+col) - nw/2,
+        y: n === 1 ? bandMid - nh/2 : top + (span - nh) * (i/(n-1)),
+        w: nw, h: nh,
+      };
+    });
+    if (col === "2") for (let i = sim.slots; i < 6; i++) delete rect["w"+i];
+  }
+}
+function edge(id, side){
+  const r = rect[id]; if (!r) return [0,0];
+  if (side === "r") return [r.x + r.w, r.y + r.h/2];
+  if (side === "l") return [r.x, r.y + r.h/2];
+  if (side === "b") return [r.x + r.w/2, r.y + r.h];
+  return [r.x + r.w/2, r.y];
+}
+function wirePath(from, to, kind){
+  if (kind === "back"){                       // 되돌림 — 하단 예약 구간에 레인을 나눠 우회
+    const a = edge(from,"b"), b = edge(to,"b");
+    const lane = from === "review" ? 1 : 0;   // 두 되돌림 배선이 겹치지 않도록
+    const yy = Math.min(LAY.h - 34, LAY.h - BAND_BOT + 30 + lane * 17);
+    return [a, [a[0],yy], [b[0],yy], b];
+  }
+  // 같은 열끼리는 세로로 잇는다 — 좌우 엣지 라우팅을 쓰면 뒤로 꺾인다
+  if (NODES[from] && NODES[to] && NODES[from].col === NODES[to].col){
+    const a = edge(from,"b"), b = edge(to,"t");
+    return [a, b];
+  }
+  const a = edge(from,"r"), b = edge(to,"l");
+  const mx = (a[0] + b[0]) / 2;
+  return [a, [mx,a[1]], [mx,b[1]], b];
+}
+function pathLen(p){ let L=0; for(let i=1;i<p.length;i++) L += Math.hypot(p[i][0]-p[i-1][0], p[i][1]-p[i-1][1]); return L; }
+function pathAt(p,t){
+  const segs=[]; let total=0;
+  for(let i=1;i<p.length;i++){ const d=Math.hypot(p[i][0]-p[i-1][0],p[i][1]-p[i-1][1]); segs.push(d); total+=d; }
+  let d = clamp(t,0,1)*total;
+  for(let i=0;i<segs.length;i++){
+    if (d <= segs[i] || i === segs.length-1){
+      const u = segs[i] ? d/segs[i] : 0;
+      return [lerp(p[i][0],p[i+1][0],u), lerp(p[i][1],p[i+1][1],u)];
+    }
+    d -= segs[i];
+  }
+  return p[p.length-1];
+}
+
+const dlog = [];
+function dLog(s){
+  dlog.push('<div><span class="t">[' + sim.t.toFixed(1).padStart(6,"0") + "]</span> " + s + "</div>");
+  while (dlog.length > 7) dlog.shift();
+  const el = $("#dash-log"); if (el) el.innerHTML = dlog.join("");
+}
+
+const TITLES = [
+  "결제 웹훅 재시도 로직","정산 리포트 스키마 확정","레벨 배치 생성 파이프라인","로그인 세션 만료 처리",
+  "구독 갱신 실패 알림","보드 검색 인덱스 추가","환불 정책 예외 처리","에셋 번들 용량 최적화",
+  "권한 매트릭스 정리","배포 롤백 스크립트","대시보드 쿼리 캐싱","알림 중복 발송 수정",
+];
+function spawn(src, projIdx, title){
+  const pi = projIdx !== undefined ? projIdx : Math.floor(Math.random()*3);
+  const t = {
+    id: ++sim.seq, proj: pi, src,
+    title: title || TITLES[Math.floor(Math.random()*TITLES.length)],
+    role: ALL_ROLES[Math.floor(Math.random()*ALL_ROLES.length)].id,
+    born: sim.t, plan: [], step: 0, p: 0, slot: -1, tries: 0,
+  };
+  t.plan = [ {k:"hold", n:src, d:0.5}, {k:"wire", a:src, b:"router", d:0.9}, {k:"hold", n:"router", d:0.4} ];
+  sim.tasks.push(t);
+  return t;
+}
+function toWorker(t, slot){
+  t.slot = slot;
+  const w = "w" + slot;
+  t.plan.push({k:"wire", a:"router", b:w, d:0.8});
+  t.plan.push({k:"hold", n:w, d:2.2 + Math.random()*2.6, work:true});
+  t.plan.push({k:"wire", a:w, b:"gate", d:0.8});
+  t.plan.push({k:"hold", n:"gate", d:0.7, gate:true});
+}
+function afterGate(t, ok){
+  if (ok){
+    t.plan.push({k:"wire", a:"gate", b:"review", d:0.7});
+    t.plan.push({k:"hold", n:"review", d:1.4 + Math.random()*1.8, review:true});
+  } else {
+    t.plan.push({k:"wire", a:"gate", b:"router", d:1.1, kind:"back", fail:true});
+    t.plan.push({k:"hold", n:"router", d:0.4});
+  }
+}
+
+function stepSim(dt){
+  sim.t += dt;
+  // 유입
+  sim.spawnAcc += dt * sim.rateIn;
+  while (sim.spawnAcc >= 1){
+    sim.spawnAcc -= 1;
+    const t = spawn(INTAKE[Math.floor(Math.random()*INTAKE.length)]);
+    if (Math.random() < .25) dLog('intake · <b>' + t.title.slice(0,14) + '</b> ← ' + NODES[t.src].label);
+  }
+  // 진행
+  for (let i = sim.tasks.length - 1; i >= 0; i--){
+    const t = sim.tasks[i];
+    const st = t.plan[t.step];
+    if (!st){ sim.tasks.splice(i,1); continue; }
+    t.p += dt / st.d;
+    if (t.p < 1) continue;
+    t.p = 0;
+
+    // 스텝 완료 처리
+    if (st.k === "hold" && st.n === "router" && t.slot < 0){
+      if (!sim.routing && Math.random() < .5){
+        // 자동배선 꺼짐 → 담당 미지정으로 대기
+        t.plan.push({k:"hold", n:"router", d:2.0});
+        t.step++; continue;
+      }
+      const free = sim.workers.findIndex((w,idx) => idx < sim.slots && w === null);
+      if (free < 0){ t.plan.push({k:"hold", n:"router", d:0.4}); t.step++; continue; }
+      sim.workers[free] = t.id;
+      toWorker(t, free);
+    }
+    else if (st.k === "hold" && st.gate){
+      const failP = sim.gate === "block" ? 0.20 : sim.gate === "warn" ? 0.07 : 0;
+      const ok = Math.random() > failP;
+      if (ok) sim.pass++; else { sim.fail++; t.tries++; }
+      if (!ok) dLog('gate <span style="color:var(--acc)">FAIL</span> · T-' + t.id + " 재작업 " + t.tries);
+      if (t.slot >= 0){ sim.workers[t.slot] = null; t.slot = -1; }
+      afterGate(t, ok);
+    }
+    else if (st.k === "hold" && st.review){
+      if (Math.random() < 0.12){
+        t.plan.push({k:"wire", a:"review", b:"router", d:1.2, kind:"back", fail:true});
+        t.plan.push({k:"hold", n:"router", d:0.4});
+        dLog('review <span style="color:var(--acc)">반려</span> · T-' + t.id);
+      } else {
+        t.plan.push({k:"wire", a:"review", b:"done", d:0.6});
+        t.plan.push({k:"hold", n:"done", d:0.5, fin:true});
+      }
+    }
+    else if (st.k === "hold" && st.fin){
+      sim.done++; sim.thrAcc++;
+      sim.leadSum += sim.t - t.born; sim.leadN++;
+      sim.tasks.splice(i,1); continue;
+    }
+    t.step++;
+  }
+  // 히스토리
+  sim.histT += dt;
+  if (sim.histT >= 0.5){
+    sim.histT = 0;
+    sim.through.push(sim.thrAcc); sim.thrAcc = 0;
+    const waiting = sim.tasks.filter(t => t.slot < 0 && t.plan[t.step] && t.plan[t.step].n === "router").length;
+    sim.qhist.push(waiting);
+    while (sim.through.length > 70) sim.through.shift();
+    while (sim.qhist.length > 70) sim.qhist.shift();
+  }
+}
+
+function drawPipe(){
+  const c = $("#pipe"); if (!c) return;
+  const ctx = c.getContext("2d");
+  const w = c.clientWidth, h = c.clientHeight;
+  ctx.clearRect(0,0,w,h);
+  computeLayout(w,h);
+
+  const LINE = css("--line"), LINE2 = css("--line2"), INK = css("--ink"),
+        DIM = css("--dim"), FAINT = css("--faint"), ACC = css("--acc"), PANEL2 = css("--panel2");
+
+  // 배경 그리드
+  ctx.strokeStyle = css("--grid"); ctx.lineWidth = 1;
+  for (let x = 0; x < w; x += 26){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
+  for (let y = 0; y < h; y += 26){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+
+  // 열 캡션
+  ctx.font = "9.5px " + css("--sans"); ctx.fillStyle = FAINT; ctx.textAlign = "center";
+  for (let i = 0; i < 5; i++){
+    const anchor = ["in_board","router","w0","gate","review"][i];
+    if (!rect[anchor]) continue;
+    const x = rect[anchor].x + rect[anchor].w/2;
+    ctx.fillText(COL_CAPS[i].toUpperCase(), x, 18);
+    ctx.strokeStyle = LINE; ctx.beginPath(); ctx.moveTo(x-30,23); ctx.lineTo(x+30,23); ctx.stroke();
+  }
+
+  // 배선
+  const wires = [];
+  for (const s of INTAKE) wires.push([s,"router","fwd"]);
+  for (let i = 0; i < sim.slots; i++){ wires.push(["router","w"+i,"fwd"]); wires.push(["w"+i,"gate","fwd"]); }
+  wires.push(["gate","review","fwd"]); wires.push(["review","done","fwd"]);
+  wires.push(["gate","router","back"]); wires.push(["review","router","back"]);
+  const paths = {};
+  for (const [a,b,k] of wires){
+    if (!rect[a] || !rect[b]) continue;
+    const p = wirePath(a,b,k); paths[a+">"+b] = p;
+    ctx.setLineDash(k === "back" ? [3,5] : []);
+    ctx.strokeStyle = k === "back" ? ACC : LINE2;
+    ctx.globalAlpha = k === "back" ? .5 : .85;
+    ctx.lineWidth = 1;
+    ctx.beginPath(); p.forEach((q,i) => i ? ctx.lineTo(q[0],q[1]) : ctx.moveTo(q[0],q[1])); ctx.stroke();
+    ctx.globalAlpha = 1; ctx.setLineDash([]);
+  }
+
+  // 노드
+  const busy = {};
+  for (const t of sim.tasks){ const st = t.plan[t.step]; if (st && st.k === "hold") busy[st.n] = (busy[st.n]||0)+1; }
+  for (const [id,r] of Object.entries(rect)){
+    const n = NODES[id]; if (!n) continue;
+    const active = busy[id] > 0;
+    ctx.fillStyle = PANEL2; ctx.fillRect(r.x, r.y, r.w, r.h);
+    ctx.strokeStyle = active ? ACC : LINE2; ctx.lineWidth = active ? 1.4 : 1;
+    ctx.strokeRect(r.x + .5, r.y + .5, r.w - 1, r.h - 1);
+    // 모서리 브래킷
+    ctx.strokeStyle = active ? ACC : LINE; ctx.lineWidth = 1;
+    const k = 4;
+    for (const [cx,cy,sx,sy] of [[r.x,r.y,1,1],[r.x+r.w,r.y,-1,1],[r.x,r.y+r.h,1,-1],[r.x+r.w,r.y+r.h,-1,-1]]){
+      ctx.beginPath(); ctx.moveTo(cx+sx*k,cy); ctx.lineTo(cx,cy); ctx.lineTo(cx,cy+sy*k); ctx.stroke();
+    }
+    ctx.textAlign = "left";
+    ctx.font = "700 11.5px " + css("--sans"); ctx.fillStyle = INK;
+    ctx.fillText(n.label, r.x + 9, r.y + 17);
+    ctx.font = "9.5px " + css("--sans"); ctx.fillStyle = FAINT;
+    ctx.fillText(n.sub, r.x + 9, r.y + 30);
+    if (active){
+      ctx.fillStyle = ACC; ctx.textAlign = "right";
+      ctx.font = "700 13px " + css("--mono");
+      ctx.fillText(String(busy[id]), r.x + r.w - 9, r.y + 24);
+    }
+  }
+
+  // 패킷 — 노드별 대기 인덱스를 한 번만 계산 (O(n))
+  const holdIdx = new Map(), holdN = {};
+  for (const t of sim.tasks){
+    const st = t.plan[t.step];
+    if (st && st.k === "hold"){ holdIdx.set(t, holdN[st.n] || 0); holdN[st.n] = (holdN[st.n] || 0) + 1; }
+  }
+  const QCAP = 32;
+  for (const t of sim.tasks){
+    const st = t.plan[t.step]; if (!st) continue;
+    let pos = null;
+    if (st.k === "wire"){
+      const key = st.a + ">" + st.b;
+      const p = paths[key] || (rect[st.a] && rect[st.b] ? wirePath(st.a, st.b, st.kind || "fwd") : null);
+      if (p) pos = pathAt(p, t.p);
+    } else if (rect[st.n]){
+      const r = rect[st.n], idx = holdIdx.get(t) || 0;
+      if (idx >= QCAP) continue;                       // 넘치는 분은 아래 카운터로 표시
+      pos = (st.n === "router")
+        ? [r.x - 11 - (idx % 8) * 6, r.y + r.h/2 + Math.floor(idx/8) * 6]
+        : [r.x + r.w + 9 + (idx % 6) * 6, r.y + r.h + 8 + Math.floor(idx/6) * 6];
+    }
+    if (!pos) continue;
+    ctx.fillStyle = PCOLOR[t.proj];
+    ctx.fillRect(pos[0]-2.5, pos[1]-2.5, 5, 5);
+    if (st.k === "wire" && st.fail){
+      ctx.strokeStyle = ACC; ctx.lineWidth = 1;
+      ctx.strokeRect(pos[0]-4.5, pos[1]-4.5, 9, 9);
+    }
+  }
+  // 대기열 초과분
+  if (rect.router && (holdN.router || 0) > QCAP){
+    const r = rect.router;
+    ctx.fillStyle = ACC; ctx.textAlign = "right";
+    ctx.font = "700 10.5px " + css("--mono");
+    ctx.fillText("+" + (holdN.router - QCAP), r.x - 13, r.y + r.h/2 + 34);
+  }
+
+  // 범례 — 한 줄로 눕혀 하단 HUD와 겹치지 않게
+  ctx.textAlign = "left"; ctx.font = "9px " + css("--mono");
+  let lx = 12;
+  PROJECTS.forEach((p,i) => {
+    const y = h - 42;
+    ctx.fillStyle = PCOLOR[i]; ctx.fillRect(lx, y-4, 5, 5);
+    ctx.fillStyle = DIM; ctx.fillText(p, lx + 9, y);
+    lx += 9 + ctx.measureText(p).width + 14;
+  });
+}
+
+function sparkline(id, data, color, fill){
+  const c = $(id); if (!c) return;
+  const ctx = c.getContext("2d");
+  const w = c.clientWidth, h = c.clientHeight;   // 논리 크기 (DPR은 transform이 처리)
+  if (!w || !h) return;
+  ctx.clearRect(0,0,w,h);
+  ctx.strokeStyle = css("--line"); ctx.lineWidth = 1;
+  for (let y = h/3; y < h-1; y += h/3){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+  const mx = Math.max(1, ...data);
+  const X = i => i/(data.length-1)*w, Y = v => h - 4 - (v/mx)*(h-9);
+  if (fill){
+    ctx.beginPath(); ctx.moveTo(0,h);
+    data.forEach((v,i) => ctx.lineTo(X(i), Y(v)));
+    ctx.lineTo(w,h); ctx.closePath();
+    ctx.fillStyle = fill; ctx.fill();
+  }
+  ctx.beginPath();
+  data.forEach((v,i) => i ? ctx.lineTo(X(i),Y(v)) : ctx.moveTo(X(i),Y(v)));
+  ctx.strokeStyle = color; ctx.lineWidth = 1.3; ctx.stroke();
+  ctx.beginPath(); ctx.arc(X(data.length-1), Y(data[data.length-1]), 1.8, 0, 7);
+  ctx.fillStyle = color; ctx.fill();
+  ctx.font = "8.5px " + css("--mono"); ctx.fillStyle = css("--faint");
+  ctx.fillText("max " + mx, 3, 9);
+}
+
+/* 분포는 누적 곡선이 아니라 구간별 막대로 — "분포"라는 라벨에 맞는 형태 */
+const AGE_BUCKETS = [1, 4, 24, 72, Infinity];
+const AGE_LABELS  = ["<1h", "<4h", "<1d", "<3d", "3d+"];
+function histogram(id, values, buckets, labels){
+  const c = $(id); if (!c) return;
+  const ctx = c.getContext("2d");
+  const w = c.clientWidth, h = c.clientHeight;
+  if (!w || !h) return;
+  ctx.clearRect(0,0,w,h);
+  const counts = new Array(buckets.length).fill(0);
+  for (const v of values){
+    let bi = buckets.findIndex(b => v < b);
+    if (bi < 0) bi = buckets.length - 1;
+    counts[bi]++;
+  }
+  const mx = Math.max(1, ...counts);
+  const padB = 13, padT = 11, bw = w/counts.length;
+  ctx.strokeStyle = css("--line"); ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(0, h-padB+.5); ctx.lineTo(w, h-padB+.5); ctx.stroke();
+  ctx.textAlign = "center";
+  counts.forEach((n,i) => {
+    const bh = (n/mx)*(h-padB-padT);
+    const x = bw*i + 3, ww = Math.max(4, bw - 6);
+    ctx.fillStyle = n === mx && n > 0 ? css("--acc") : css("--line2");
+    ctx.fillRect(x, h-padB-bh, ww, bh);
+    ctx.font = "8.5px " + css("--mono");
+    ctx.fillStyle = css("--faint");
+    ctx.fillText(labels[i], x+ww/2, h-3);
+    if (n){
+      ctx.fillStyle = css("--ink"); ctx.font = "700 9.5px " + css("--mono");
+      ctx.fillText(String(n), x+ww/2, h-padB-bh-3);
+    }
+  });
+}
+
+let uiTick = 0;
+function updateDashUI(){
+  if (++uiTick % 3) return;
+  const acc = css("--acc"), ink = css("--ink");
+  sparkline("#sp-through", sim.through, acc, css("--accSoft"));
+  sparkline("#sp-queue", sim.qhist, ink, null);
+
+  for (let i = 0; i < 3; i++){
+    const m = $("#m-w"+i), v = $("#v-w"+i);
+    if (!m) continue;
+    if (i >= sim.slots){ meterFill(m, 0, 18); v.textContent = "off"; continue; }
+    const tid = sim.workers[i];
+    const t = tid ? sim.tasks.find(x => x.id === tid) : null;
+    const st = t && t.plan[t.step];
+    const p = (st && st.k === "hold" && st.work) ? t.p*100 : (t ? 8 : 0);
+    meterFill(m, p, 18);
+    v.textContent = t ? "T-" + String(tid).slice(-3) : "idle";
+  }
+  const total = sim.pass + sim.fail;
+  $("#v-pass").textContent = sim.pass;
+  $("#v-fail").textContent = sim.fail;
+  const rate = total ? sim.pass/total*100 : 0;
+  meterFill($("#m-rate"), rate, 24);
+  $("#v-rate").textContent = total ? rate.toFixed(0) + "%" : "—";
+
+  const counts = [0,0,0];
+  sim.tasks.forEach(t => counts[t.proj]++);
+  const mxp = Math.max(1, ...counts);
+  counts.forEach((n,i) => { meterFill($("#m-p"+i), n/mxp*100, 14); $("#v-p"+i).textContent = n; });
+
+  const waiting = sim.tasks.filter(t => { const s = t.plan[t.step]; return s && s.n === "router" && t.slot < 0; }).length;
+  const used = sim.workers.slice(0, sim.slots).filter(Boolean).length;
+  $("#h-queue").textContent = waiting;
+  $("#h-slots").textContent = used + "/" + sim.slots;
+  $("#hud-util").textContent = Math.round(used/sim.slots*100) + "%";
+  $("#hud-lead").textContent = sim.leadN ? (sim.leadSum/sim.leadN).toFixed(1) : "0.0";
+  $("#hud-fly").textContent = sim.tasks.length;
+  $("#hud-done").textContent = sim.done;
+}
+
+/* 컨트롤 */
+$("#btn-pause").onclick = () => {
+  sim.paused = !sim.paused;
+  $("#btn-pause").textContent = sim.paused ? "▶ 재개" : "‖ 일시정지";
+  dLog("sim." + (sim.paused ? "pause" : "resume") + "()");
+};
+$("#btn-burst").onclick = () => {
+  for (let i = 0; i < 9; i++) spawn(INTAKE[i % 4]);
+  dLog("intake <b>burst</b> · 9건 동시 유입");
+};
+$("#p-rateIn").oninput = e => { sim.rateIn = +e.target.value; $("#v-rateIn").textContent = sim.rateIn.toFixed(1); };
+$("#p-slots").oninput = e => {
+  sim.slots = +e.target.value; $("#v-slots").textContent = sim.slots;
+  for (let i = sim.slots; i < 6; i++){
+    const tid = sim.workers[i];
+    if (tid){ const t = sim.tasks.find(x => x.id === tid); if (t) t.slot = -1; sim.workers[i] = null; }
+  }
+  dLog("worker.slots(" + sim.slots + ")");
+};
+$$("#gate-btns .btn").forEach(b => b.onclick = () => {
+  sim.gate = b.dataset.gate;
+  $$("#gate-btns .btn").forEach(x => x.classList.toggle("pri", x === b));
+  $("#h-gate").textContent = sim.gate.toUpperCase();
+  $("#h-gate").className = "v " + (sim.gate === "block" ? "ok" : sim.gate === "warn" ? "acc" : "");
+  dLog('gate.mode("' + sim.gate + '")');
+});
+$$("#route-btns .btn").forEach(b => b.onclick = () => {
+  sim.routing = b.dataset.route === "on";
+  $$("#route-btns .btn").forEach(x => x.classList.toggle("pri", x === b));
+  dLog("routing." + (sim.routing ? "enable" : "disable") + "()");
+});
+$("#q-add").onclick = () => {
+  const title = $("#q-title").value.trim() || "제목 없는 작업";
+  const pi = PROJECTS.indexOf($("#q-proj").value);
+  spawn("in_board", pi < 0 ? 0 : pi, title);
+  dLog("task.create · <b>" + title.slice(0,16) + "</b>");
+  $("#q-title").value = "";
+};
+$("#q-title").addEventListener("keydown", e => { if (e.key === "Enter") $("#q-add").click(); });
+
+/* =========================================================================
+   작업 보드
+   ========================================================================= */
+const PRIOS = [
+  {k:"urgent", label:"긴급", n:0},
+  {k:"high",   label:"높음", n:0},
+  {k:"normal", label:"보통", n:0},
+  {k:"low",    label:"낮음", n:0},
+];
+const STATUSES = [
+  {k:"todo", label:"대기", step:1}, {k:"in_progress", label:"진행", step:2},
+  {k:"review", label:"검수", step:3}, {k:"done", label:"완료", step:4},
+];
+const BOARD = [];
+(function seedBoard(){
+  const seeds = [
+    ["결제 웹훅 재시도 로직 정리", 0, "urgent", "in_progress", "payment_ops", "슬기", 2.07, 8],
+    ["정산 리포트 스키마 확정", 1, "urgent", "review", null, "영훈", 26.2, 14],
+    ["레벨 배치 생성 파이프라인 안정화", 0, "high", "in_progress", "data_eng", "병훈", 5.4, 6],
+    ["로그인 세션 만료 처리", 2, "high", "todo", null, null, 1.2, 2],
+    ["보드 검색 인덱스 추가", 1, "high", "in_progress", "backend_dev", null, 9.8, 5],
+    ["환불 정책 예외 케이스", 0, "normal", "review", "payment_ops", "세영", 48.5, 11],
+    ["에셋 번들 용량 최적화", 0, "normal", "todo", null, null, 3.1, 1],
+    ["권한 매트릭스 문서화", 2, "normal", "in_progress", "reviewer_ai", null, 14.6, 4],
+    ["배포 롤백 스크립트 점검", 1, "normal", "done", "infra_ops", "창훈", 72.0, 16],
+    ["대시보드 쿼리 캐싱", 1, "low", "todo", null, null, 0.6, 0],
+    ["알림 중복 발송 수정", 2, "low", "in_progress", "backend_dev", null, 20.3, 3],
+    ["회귀 테스트 시나리오 보강", 0, "low", "done", "qa_auto", "슬기", 96.4, 9],
+  ];
+  seeds.forEach(([title, proj, prio, status, role, rev, age, comments], i) => {
+    BOARD.push({ id: 4200 - i, title, proj, prio, status, role, reviewer: rev, age, comments,
+      desc: "요구사항 정리 후 구현 → 게이트 통과 → 검수. 배선 규칙에 의해 자동 배정되었으며 담당 변경 시 규칙은 개입하지 않는다." });
+  });
+  // 첨부 예시 — 이미지 1장 + 텍스트 첨부 + 관련 레벨
+  const shot = "data:image/svg+xml;utf8," + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="360" height="200">' +
+    '<rect width="360" height="200" fill="#12151a"/>' +
+    '<rect x="14" y="14" width="150" height="52" fill="none" stroke="#ff4a2b" stroke-width="2"/>' +
+    '<text x="20" y="44" fill="#e8eaed" font-family="monospace" font-size="12">POST /webhook</text>' +
+    '<text x="20" y="96" fill="#e8eaed" font-family="monospace" font-size="12">500 Internal Error</text>' +
+    '<text x="20" y="116" fill="#98a1ad" font-family="monospace" font-size="11">retry 1 → 2 → (중단)</text>' +
+    '<line x1="14" y1="136" x2="346" y2="136" stroke="#39404a"/>' +
+    '<text x="20" y="160" fill="#ff4a2b" font-family="monospace" font-size="11">3회차에서 백오프가 끊김</text>' +
+    '<text x="20" y="180" fill="#5f6873" font-family="monospace" font-size="10">캡처 · 2026-07-31</text></svg>');
+  BOARD[0].image = { name:"webhook_retry_fail.png", size:18240, url:shot };
+  BOARD[0].atts = [
+    { id:"s1", kind:"json", name:"retry_policy.json", size:214,
+      content:'{"max_attempts":3,"backoff":"exponential","base_ms":500,"jitter":true,"on_exhaust":"dead_letter"}' },
+    { id:"s2", kind:"md", name:"장애_보고.md", size:180,
+      content:"# 결제 웹훅 재시도 실패\n\n- 3회차 백오프 진입 직후 워커가 종료\n- dead_letter 큐로 넘어가지 않음\n- 재현: PG 타임아웃 2회 연속" },
+  ];
+  BOARD[2].level = "47";
+  BOARD[2].atts = [
+    { id:"s3", kind:"json", name:"level_47.json", size:156,
+      content:'{"level":47,"rail_capacity":4,"colors":["r","b","g","y"],"target_clear":0.62}' },
+  ];
+  BOARD[6].level = "12";
+})();
+let bSel = BOARD[0].id, bFilterP = "0", bFilterS = null, bFilterO = null, bQuery = "", bSort = "recent";
+
+function fmtAge(h){
+  if (h < 1) return Math.round(h*60) + "m";
+  if (h < 24) return Math.floor(h) + "h" + pad2(Math.round((h%1)*60));
+  return Math.floor(h/24) + "d" + pad2(Math.floor(h%24));
+}
+function renderFilters(){
+  const mk = (arr, cur, cb) => arr.map(a =>
+    '<div class="trow" data-v="' + a.v + '" style="padding:4px 6px;border:none">' +
+      '<span class="dotk ' + (a.v === cur ? "" : "dim") + '"></span>' +
+      '<span class="ti" style="font-size:10.5px">' + a.label + '</span>' +
+      '<span class="age num">' + a.n + '</span></div>').join("");
+  const byP = PROJECTS.map((p,i) => ({v:String(i), label:p, n:BOARD.filter(t => t.proj === i).length}));
+  const byS = STATUSES.map(s => ({v:s.k, label:s.label, n:BOARD.filter(t => t.status === s.k).length}));
+  const byO = [{v:"ai", label:"AI", n:BOARD.filter(t => t.role).length},
+               {v:"human", label:"사람", n:BOARD.filter(t => !t.role).length}];
+  $("#f-projects").innerHTML = mk(byP, bFilterP);
+  $("#f-status").innerHTML = mk(byS, bFilterS);
+  $("#f-owner").innerHTML = mk(byO, bFilterO);
+  $("#f-projects").onclick = e => { const r = e.target.closest("[data-v]"); if(!r) return;
+    bFilterP = bFilterP === r.dataset.v ? null : r.dataset.v; renderBoard(); };
+  $("#f-status").onclick = e => { const r = e.target.closest("[data-v]"); if(!r) return;
+    bFilterS = bFilterS === r.dataset.v ? null : r.dataset.v; renderBoard(); };
+  $("#f-owner").onclick = e => { const r = e.target.closest("[data-v]"); if(!r) return;
+    bFilterO = bFilterO === r.dataset.v ? null : r.dataset.v; renderBoard(); };
+}
+/* 상태 빠른 필터 — 사람이 실제로 묻는 질문에 맞춘 묶음 */
+const QUICK = [
+  { k:"all",    label:"전체",           test:() => true },
+  { k:"todo",   label:"해야 할 일",     test:t => t.status === "todo" },
+  { k:"doing",  label:"하는 중",        test:t => t.status === "in_progress" },
+  { k:"review", label:"리뷰해야 할 일", test:t => t.status === "review" },
+  { k:"open",   label:"안 한 일",       test:t => t.status !== "done" },
+  { k:"done",   label:"한 일",          test:t => t.status === "done" },
+];
+let bQuick = "all";
+function renderQuick(scoped){
+  const el = $("#b-quick"); if (!el) return;
+  el.innerHTML = QUICK.map(q =>
+    '<button data-q="' + q.k + '" class="' + (q.k === bQuick ? "on" : "") + '">' +
+    q.label + ' <b>' + scoped.filter(q.test).length + '</b></button>').join("");
+  $$("#b-quick button").forEach(b => b.onclick = () => {
+    bQuick = b.dataset.q;
+    bFilterS = null;              // 좌측 상태 필터와 충돌하지 않게 초기화
+    renderBoard();
+  });
+}
+
+function renderBoard(){
+  renderFilters();
+  // 빠른 필터 건수는 "현재 프로젝트" 기준으로 센다
+  const scoped = BOARD.filter(t => bFilterP === null || String(t.proj) === bFilterP);
+  renderQuick(scoped);
+  const quick = QUICK.find(q => q.k === bQuick) || QUICK[0];
+  let rows = BOARD.filter(t =>
+    (bFilterP === null || String(t.proj) === bFilterP) &&
+    quick.test(t) &&
+    (bFilterS === null || t.status === bFilterS) &&
+    (bFilterO === null || (bFilterO === "ai" ? !!t.role : !t.role)) &&
+    (!bQuery || (t.title + (t.role||"") + (t.reviewer||"")).toLowerCase().includes(bQuery)));
+  const so = { recent:(a,b)=>a.age-b.age, age:(a,b)=>b.age-a.age,
+               title:(a,b)=>a.title.localeCompare(b.title,"ko"),
+               prio:(a,b)=>PRIOS.findIndex(p=>p.k===a.prio)-PRIOS.findIndex(p=>p.k===b.prio) };
+  rows = rows.slice().sort(so[bSort] || so.recent);
+  $("#b-count").textContent = rows.length;
+
+  let html = "";
+  if (bSort === "prio" || bSort === "recent"){
+    for (const p of PRIOS){
+      const g = rows.filter(t => t.prio === p.k);
+      if (!g.length) continue;
+      html += '<div class="grouph"><span>' + p.label + '</span><span class="num">' + g.length + '</span></div>';
+      html += g.map(rowHtml).join("");
+    }
+  } else html = rows.map(rowHtml).join("");
+  $("#b-list").innerHTML = html || '<div style="padding:14px;color:var(--faint);font-size:10.5px">조건에 맞는 작업이 없습니다</div>';
+  renderDetail();
+  histogram("#sp-age", BOARD.map(t => t.age), AGE_BUCKETS, AGE_LABELS);
+}
+function rowHtml(t){
+  const st = STATUSES.find(s => s.k === t.status);
+  const steps = [1,2,3,4].map(i =>
+    '<i class="' + (i === st.step ? "cur" : i < st.step ? "on" : "") + '"></i>').join("");
+  const own = t.role
+    ? '<span class="chip ai">' + roleById(t.role).label + '</span>'
+    : '<span class="chip">미지정</span>';
+  const rev = t.reviewer ? '<span class="chip">검수 ' + t.reviewer + '</span>' : "";
+  // 첨부 표시 — 목록 API는 본문을 빼고 has_image 플래그만 내려준다 (api/tasks:24)
+  const marks =
+    (t.image ? '<span class="attkind" title="이미지 첨부">IMG</span>' : "") +
+    (t.atts && t.atts.length ? '<span class="attkind" title="파일 첨부">📎' + t.atts.length + '</span>' : "") +
+    (t.level ? '<span class="attkind" title="관련 레벨">Lv ' + t.level + '</span>' : "");
+  return '<div class="trow' + (t.id === bSel ? " sel" : "") + '" data-id="' + t.id + '">' +
+    '<span class="id num">T-' + t.id + '</span>' +
+    '<span class="dotk ' + (t.status==="done"?"ok":t.status==="review"?"warn":t.status==="todo"?"dim":"") + '"></span>' +
+    '<span class="ti kr">' + t.title + '</span>' + marks +
+    '<span class="chip" style="border-color:' + PCOLOR[t.proj] + ';color:' + PCOLOR[t.proj] + '">' + PROJECTS[t.proj].slice(0,8) + '</span>' +
+    own + rev +
+    '<span class="stepbar">' + steps + '</span>' +
+    '<span class="age num">' + fmtAge(t.age) + '</span></div>';
+}
+function renderDetail(){
+  const t = BOARD.find(x => x.id === bSel) || BOARD[0];
+  const st = STATUSES.find(s => s.k === t.status);
+  $("#b-detail").innerHTML =
+    '<div class="sec"><div class="sech">T-' + t.id + ' <span class="r">' + st.label + '</span></div>' +
+    '<div class="kr" style="font-size:13.5px;font-weight:700;line-height:1.4;padding:2px 0">' + t.title + '</div></div>' +
+    '<div class="sec"><div class="sech">메타</div><dl class="dl">' +
+      '<dt>프로젝트</dt><dd>' + PROJECTS[t.proj] + '</dd>' +
+      '<dt>담당</dt><dd>' + (t.role ? roleById(t.role).label + ' <span style="color:var(--faint)">· AI</span>' : '미지정') + '</dd>' +
+      '<dt>검수</dt><dd>' + (t.reviewer || '—') + '</dd>' +
+      '<dt>우선순위</dt><dd>' + (PRIOS.find(p=>p.k===t.prio)||{}).label + '</dd>' +
+      '<dt>경과</dt><dd class="num">' + fmtAge(t.age) + '</dd>' +
+      '<dt>댓글</dt><dd class="num">' + t.comments + '</dd>' +
+      '<dt>배선</dt><dd>' + (t.role ? '규칙 자동 배정' : '해당 없음') + '</dd>' +
+    '</dl></div>' +
+    '<div class="sec"><div class="sech">상태 이동 <span class="r"><b>' + st.step + '</b>/4</span></div>' +
+      '<div class="steps">' + STATUSES.map(s =>
+        '<button data-go="' + s.k + '" class="' + (s.k===t.status ? "cur" : s.step < st.step ? "done" : "") + '"' +
+        (s.k === "done" && !t.reviewer ? ' disabled title="검수자가 지정되어야 완료할 수 있다"' : "") +
+        '>' + s.label + '</button>').join("") + '</div>' +
+      (nextOf(t) ? '<div class="nextact"><button class="btn pri" data-go="' + nextOf(t).k + '">' +
+        nextLabel(t) + '</button><span class="kr" style="font-size:9.5px;color:var(--faint)">클릭 = 상태 변경</span></div>' : "") +
+      '<div class="kr" style="font-size:10px;color:var(--dim);line-height:1.6;margin-top:6px">' +
+        (t.reviewer
+          ? '완료는 검수자 <b>' + t.reviewer + '</b>만 누를 수 있다.'
+          : '검수자가 없어 <b>완료로 이동할 수 없다</b> — 먼저 검수자를 지정한다.') +
+      '</div></div>' +
+    '<div class="sec"><div class="sech">설명</div>' +
+      '<div class="kr" style="font-size:11px;color:var(--dim);line-height:1.7">' + t.desc + '</div></div>' +
+    // 첨부 — 상세를 열 때 본문을 가져온다 (목록엔 없음, tasks:353)
+    (t.image ? '<div class="sec"><div class="sech">이미지 <span class="r">' +
+      t.image.name + ' · ' + fmtSize(t.image.size) + '</span></div>' +
+      '<div class="imgbox"><img src="' + t.image.url + '" alt=""></div></div>' : "") +
+    (t.atts && t.atts.length ? '<div class="sec"><div class="sech">첨부 <span class="r"><b>' +
+      t.atts.length + '</b>개</span></div>' +
+      '<div class="attbar">' + t.atts.map(a =>
+        '<span class="att" data-open="' + a.id + '" style="cursor:pointer">' +
+        '<span class="attkind">' + a.kind + '</span><span class="nm">' + a.name + '</span>' +
+        '<span class="num" style="color:var(--faint)">' + fmtSize(a.size) + '</span></span>').join("") +
+      '</div><div id="att-view"></div></div>' : "") +
+    (t.level ? '<div class="sec"><div class="sech">관련 레벨 <span class="r">게임</span></div>' +
+      '<div style="display:flex;gap:6px;align-items:center">' +
+      '<span class="chip acc">Lv ' + t.level + '</span>' +
+      '<span class="kr" style="font-size:10px;color:var(--faint)">레벨·갤러리 화면과 교차 링크</span></div></div>' : "") +
+    '<div class="sec"><div class="sech">이력</div><div class="tline">' +
+      '<div class="ev"><b>검수 요청</b>' + fmtAge(t.age*0.2) + ' 전 · ' + (t.reviewer||'—') + '</div>' +
+      '<div class="ev"><b>게이트 통과</b>' + fmtAge(t.age*0.4) + ' 전 · 컴파일 OK</div>' +
+      '<div class="ev"><b>실행 시작</b>' + fmtAge(t.age*0.8) + ' 전 · SLOT 2</div>' +
+      '<div class="ev"><b>배선 배정</b>' + fmtAge(t.age*0.95) + ' 전 · ' + (t.role ? roleById(t.role).label : '미지정') + '</div>' +
+      '<div class="ev"><b>등록</b>' + fmtAge(t.age) + ' 전 · 작업 보드</div>' +
+    '</div></div>';
+  brackets();
+  // 상태 이동 — 단계 버튼과 다음 행동 버튼이 같은 동작
+  $$('#b-detail [data-go]').forEach(b => b.onclick = () => moveStatus(t.id, b.dataset.go));
+  // 첨부 열람 — json은 보기 좋게 정렬해서 (tasks:1533)
+  $$('#b-detail [data-open]').forEach(el => el.onclick = () => {
+    const a = (t.atts || []).find(x => x.id === el.dataset.open);
+    const v = $("#att-view"); if (!a || !v) return;
+    let body = a.content;
+    if (a.kind === "json"){ try { body = JSON.stringify(JSON.parse(a.content), null, 2); } catch {} }
+    v.innerHTML = '<div class="attview">' +
+      body.slice(0, 4000).replace(/&/g,"&amp;").replace(/</g,"&lt;") +
+      (body.length > 4000 ? "\n… (" + fmtSize(a.size) + " 중 앞부분)" : "") + '</div>';
+  });
+}
+/* 상태 전이 규칙 — 완료는 검수자가 있어야만 (실제 앱의 검수 게이트와 동일) */
+function nextOf(t){
+  const i = STATUSES.findIndex(s => s.k === t.status);
+  if (i < 0 || i >= STATUSES.length - 1) return null;
+  const nx = STATUSES[i+1];
+  if (nx.k === "done" && !t.reviewer) return null;
+  return nx;
+}
+function nextLabel(t){
+  const nx = nextOf(t); if (!nx) return "";
+  return nx.k === "review" ? "검수 요청 →" : nx.k === "done" ? "완료 처리 →" : "진행 시작 →";
+}
+function moveStatus(id, to){
+  const t = BOARD.find(x => x.id === id); if (!t) return;
+  if (to === "done" && !t.reviewer) return;
+  t.status = to;
+  renderBoard();
+}
+$("#b-list").onclick = e => { const r = e.target.closest("[data-id]"); if (!r) return;
+  bSel = +r.dataset.id;
+  history.replaceState(null, "", "#task=" + bSel);   // 공유 가능한 링크로
+  renderBoard(); };
+
+/* ---------- 첨부 (실제 앱과 같은 상한) ---------- */
+const ATT_MAX_ONE = 256 * 1024;        // 파일당 256KB (tasks:123)
+const ATT_MAX_TOTAL = 5 * 1024 * 1024; // 합계 5MB (tasks:124)
+const kindOf = name => {
+  const e = (name.split(".").pop() || "").toLowerCase();
+  return e === "json" ? "json" : (e === "md" || e === "markdown") ? "md" : "text";
+};
+const fmtSize = n => n >= 1024*1024 ? (n/1024/1024).toFixed(1) + "MB"
+  : n >= 1024 ? Math.round(n/1024) + "KB" : n + "B";
+let nfImage = null, nfAtts = [], attSeq = 0;
+
+/* 파일 읽기는 비동기다. 읽는 중에 등록을 누르면 첨부가 조용히 빠지므로 그동안 등록을 막는다. */
+let pendingReads = 0;
+function setBusy(){
+  const b = $("#nf-add"); if (!b) return;
+  b.disabled = pendingReads > 0;
+  b.textContent = pendingReads > 0 ? "첨부 읽는 중…" : "등록";
+}
+
+function nfError(msg){
+  const el = $("#nf-err");
+  if (!msg){ el.style.display = "none"; return; }
+  el.textContent = msg; el.style.display = "block";
+}
+function renderAtt(){
+  const wrap = $("#nf-attwrap"), list = $("#nf-attlist");
+  const has = nfImage || nfAtts.length;
+  wrap.style.display = has ? "block" : "none";
+  list.innerHTML =
+    (nfImage ? '<span class="att"><img class="thumb" src="' + nfImage.url + '">' +
+      '<span><span class="nm">' + nfImage.name + '</span><br>' +
+      '<span class="num" style="color:var(--faint)">' + fmtSize(nfImage.size) + '</span></span>' +
+      '<span class="x" data-rm="img">✕</span></span>' : "") +
+    nfAtts.map(a => '<span class="att"><span class="attkind">' + a.kind + '</span>' +
+      '<span class="nm">' + a.name + '</span>' +
+      '<span class="num" style="color:var(--faint)">' + fmtSize(a.size) + '</span>' +
+      '<span class="x" data-rm="' + a.id + '">✕</span></span>').join("");
+  const total = (nfImage ? nfImage.size : 0) + nfAtts.reduce((s,a) => s + a.size, 0);
+  $("#nf-limit").textContent = total
+    ? "합계 " + fmtSize(total) + " / 5MB"
+    : "파일당 256KB · 합계 5MB";
+  $$("#nf-attlist [data-rm]").forEach(x => x.onclick = () => {
+    if (x.dataset.rm === "img") nfImage = null;
+    else nfAtts = nfAtts.filter(a => a.id !== x.dataset.rm);
+    nfError(""); renderAtt();
+  });
+}
+function attTotal(){ return (nfImage ? nfImage.size : 0) + nfAtts.reduce((s,a) => s + a.size, 0); }
+
+$("#nf-img").onchange = e => {
+  const f = e.target.files && e.target.files[0]; if (!f) return;
+  nfError("");
+  if (attTotal() + f.size > ATT_MAX_TOTAL){
+    nfError("첨부 합계가 5MB를 초과할 수 없습니다."); e.target.value = ""; return;
+  }
+  const input = e.target, r = new FileReader();
+  pendingReads++; setBusy();
+  // value 를 읽는 도중에 비우면 읽기가 중단된다 — 완료 후에 비운다
+  r.onloadend = () => {
+    if (r.result) nfImage = { name:f.name, size:f.size, url:String(r.result) };
+    pendingReads--; setBusy(); renderAtt(); input.value = "";
+  };
+  r.readAsDataURL(f);
+};
+$("#nf-file").onchange = e => {
+  const input = e.target;
+  const files = Array.from(input.files || []); if (!files.length) return;
+  nfError("");
+  for (const f of files){
+    if (f.size > ATT_MAX_ONE){
+      nfError("파일은 256KB 이하만 지원됩니다. (" + f.name + ": " + fmtSize(f.size) + ")");
+      continue;
+    }
+    if (attTotal() + f.size > ATT_MAX_TOTAL){
+      nfError("첨부 합계가 5MB를 초과할 수 없습니다."); break;
+    }
+    const r = new FileReader();
+    pendingReads++; setBusy();
+    r.onloadend = () => {
+      if (r.result != null)
+        nfAtts.push({ id:"a"+(++attSeq), kind:kindOf(f.name), name:f.name,
+                      size:f.size, content:String(r.result) });
+      pendingReads--; setBusy(); renderAtt();
+      if (pendingReads === 0) input.value = "";
+    };
+    r.readAsText(f);   // 평문 저장 — LLM이 그대로 읽을 수 있게 (tasks:19)
+  }
+};
+
+/* ---------- 작업 추가 ---------- */
+let bProj = 0, seqNew = 4300;
+(function initForm(){
+  const projOpts = PROJECTS.map((p,i) => '<option value="' + i + '">' + p + '</option>').join("");
+  $("#b-proj").innerHTML = projOpts;
+  $("#nf-proj").innerHTML = projOpts;
+  $("#nf-owner").innerHTML = '<option value="">담당 — 미지정(배선)</option>' +
+    ALL_ROLES.map(r => '<option value="ai:' + r.id + '">AI · ' + r.label + '</option>').join("") +
+    MEMBERS.map(m => '<option value="' + m + '">' + m + '</option>').join("");
+  $("#nf-rev").innerHTML = '<option value="">검수 — 없음</option>' +
+    MEMBERS.map(m => '<option value="' + m + '">검수 ' + m + '</option>').join("");
+})();
+$("#b-proj").onchange = e => {
+  bProj = +e.target.value;
+  bFilterP = String(bProj);
+  $("#b-scope").textContent = "/tasks?project=" + PROJECTS[bProj].toLowerCase();
+  $("#nf-proj").value = String(bProj);
+  renderBoard();
+};
+$("#b-new").onclick = () => {
+  const f = $("#b-form");
+  const open = f.style.display === "none";
+  f.style.display = open ? "block" : "none";
+  $("#b-new").textContent = open ? "× 닫기" : "+ 작업 추가";
+  if (open){ $("#nf-proj").value = String(bProj); $("#nf-title").focus(); }
+};
+$("#nf-cancel").onclick = () => $("#b-new").click();
+$("#nf-owner").onchange = () => {
+  const v = $("#nf-owner").value;
+  $("#nf-hint").innerHTML = v
+    ? '담당을 직접 지정했으므로 배선 규칙은 개입하지 않는다'
+    : '담당을 비우면 배선 규칙이 자동 배정한다';
+};
+$("#nf-add").onclick = () => {
+  const title = $("#nf-title").value.trim();
+  if (!title){ $("#nf-title").focus(); return; }
+  const own = $("#nf-owner").value;
+  BOARD.unshift({
+    id: ++seqNew, title,
+    desc: $("#nf-desc").value.trim() || "설명 없음. 배선 규칙 또는 담당자가 이어서 채운다.",
+    proj: +$("#nf-proj").value,
+    prio: $("#nf-prio").value,
+    status: $("#nf-status").value,
+    role: own.startsWith("ai:") ? own.slice(3) : null,
+    reviewer: $("#nf-rev").value || null,
+    level: $("#nf-level").value.trim(),
+    image: nfImage,
+    atts: nfAtts.slice(),
+    age: 0.01, comments: 0,
+  });
+  bSel = seqNew;
+  $("#nf-title").value = ""; $("#nf-desc").value = ""; $("#nf-level").value = "";
+  nfImage = null; nfAtts = []; nfError(""); renderAtt();
+  $("#b-new").click();
+  renderBoard();
+};
+$("#nf-title").addEventListener("keydown", e => { if (e.key === "Enter") $("#nf-add").click(); });
+
+/* ---------- #task=<id> 딥링크 (Slack DM 링크로 상세 바로 열기) ---------- */
+function applyTaskHash(){
+  const m = /^#task=(\d+)$/.exec(location.hash);
+  if (!m) return false;
+  const id = +m[1];
+  const t = BOARD.find(x => x.id === id);
+  if (!t) return false;                       // 실제 앱은 여기서 단건 lazy fetch
+  if (screen !== "tasks") setScreen("tasks");
+  bProj = t.proj; bFilterP = String(t.proj); bFilterS = null; bFilterO = null; bQuery = "";
+  const q = $("#b-q"); if (q) q.value = "";
+  $("#b-proj").value = String(bProj);
+  $("#b-scope").textContent = "/tasks?project=" + PROJECTS[bProj].toLowerCase();
+  bSel = id; renderBoard();
+  return true;
+}
+window.addEventListener("hashchange", applyTaskHash);
+
+/* ---------- SSE 실시간 동기화 (다른 사용자·Hermes 워커의 변경) ---------- */
+let toastTimer = 0;
+function boardToast(msg){
+  const el = $("#b-toast"); if (!el) return;
+  el.textContent = msg; el.classList.add("on");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove("on"), 4200);
+}
+const EXT_ACTORS = ["hermes", "영훈", "세영", "병훈"];
+function externalChange(){
+  if (screen !== "tasks" || sim.paused) return;
+  const movable = BOARD.filter(t => t.id !== bSel && t.status !== "done");
+  if (!movable.length) return;
+  const t = movable[Math.floor(Math.random() * movable.length)];
+  const i = STATUSES.findIndex(s => s.k === t.status);
+  const nx = STATUSES[i+1];
+  if (!nx || (nx.k === "done" && !t.reviewer)) return;
+  t.status = nx.k;
+  const who = EXT_ACTORS[Math.floor(Math.random() * EXT_ACTORS.length)];
+  renderBoard();
+  boardToast("● " + who + " 님이 T-" + t.id + "을(를) " + nx.label + "(으)로 옮김");
+}
+setInterval(externalChange, 11000);
+$("#b-q").oninput = e => { bQuery = e.target.value.toLowerCase().trim(); renderBoard(); };
+$("#b-sort").onchange = e => { bSort = e.target.value; renderBoard(); };
+
+/* =========================================================================
+   배선 화면
+   ========================================================================= */
+let RULES = [
+  { id:"r1", proj:"BalloonFlow", kw:"레벨",  role:"data_eng",     rev:"병훈", on:true,  hits:0 },
+  { id:"r2", proj:"NextPR",      kw:"결제",  role:"payment_ops",  rev:"슬기", on:true,  hits:0 },
+  { id:"r3", proj:"",            kw:"리뷰",  role:"reviewer_ai",  rev:"",     on:true,  hits:0 },
+  { id:"r4", proj:"CrewFlowRotation", kw:"", role:"backend_dev",  rev:"영훈", on:true,  hits:0 },
+  { id:"r5", proj:"",            kw:"배포",  role:"infra_ops",    rev:"창훈", on:false, hits:0 },
+];
+let ruleSeq = 5, wireSel = null, roleSel = null;
+
+function renderWireCols(){
+  $("#wc-cond").innerHTML = RULES.map(r =>
+    '<div class="wnode' + (wireSel===r.id?" hi":"") + '" id="cond-' + r.id + '" data-rule="' + r.id + '" style="margin-bottom:7px;opacity:' + (r.on?1:.42) + '">' +
+      '<div class="t"><span>' + (r.proj || "모든 프로젝트") + '</span><span class="dotk ' + (r.on?"":"dim") + '"></span></div>' +
+      '<div class="s">' + (r.kw ? '키워드 "' + r.kw + '"' : "조건 없음") + ' · <span class="num">' + r.hits + '</span>건</div>' +
+    '</div>').join("");
+
+  $("#wc-role").innerHTML = ROLE_TREE.map(g =>
+    '<div class="wgrp"><div class="gh"><span>' + g.cat + '</span><span class="num">' + g.roles.length + '</span></div>' +
+    g.roles.map(r => {
+      const load = RULES.filter(x => x.on && x.role === r.id).length;
+      return '<div class="wnode' + ((roleSel===r.id) || (wireSel && RULES.find(x=>x.id===wireSel&&x.role===r.id)) ? " hi":"") + '" id="role-' + r.id + '" data-role="' + r.id + '">' +
+        '<div class="t"><span>' + r.label + '</span><span class="chip ai" style="font-size:9px">' + r.id + '</span></div>' +
+        '<div class="s">' + r.sub + ' · 배선 <span class="num">' + load + '</span></div></div>';
+    }).join("") + '</div>').join("");
+
+  const revs = ["영훈","세영","병훈","창훈","슬기"];
+  $("#wc-rev").innerHTML = revs.map(m => {
+    const n = RULES.filter(x => x.on && x.rev === m).length;
+    return '<div class="wnode' + (wireSel && RULES.find(x=>x.id===wireSel&&x.rev===m) ? " hi":"") + '" id="rev-' + m + '" data-rev="' + m + '" style="margin-bottom:7px">' +
+      '<div class="t"><span>' + m + '</span><span class="num" style="font-size:9.5px;color:var(--faint)">' + n + '</span></div>' +
+      '<div class="s">' + (n ? "검수 담당" : "배선 없음") + '</div></div>';
+  }).join("");
+
+  $("#w-cats").innerHTML = ROLE_TREE.map(g =>
+    '<div class="trow" style="padding:4px 6px;border:none">' +
+      '<span class="ti" style="font-size:10.5px">' + g.cat + '</span>' +
+      '<span class="age num">' + g.roles.length + '</span></div>').join("");
+
+  $("#w-load").innerHTML = ALL_ROLES.slice(0,6).map(r => {
+    const load = RULES.filter(x => x.on && x.role === r.id).length;
+    return '<div class="mrow"><span class="lb">' + r.label + '</span>' +
+      '<span class="meter" data-segs="12" data-fill="' + (load/3*100) + '"></span>' +
+      '<span class="vl num">' + load + '</span></div>';
+  }).join("");
+  $$("#w-load .meter").forEach(m => meterFill(m, +m.dataset.fill, 12));
+
+  $("#w-rulen").textContent = RULES.length;
+  $("#w-rules").innerHTML = RULES.map((r,i) =>
+    '<div class="trow' + (wireSel===r.id?" sel":"") + '" data-rule="' + r.id + '" style="padding:5px 6px">' +
+      '<span class="id num">' + (i+1) + '</span>' +
+      '<span class="ti" style="font-size:10.5px">' + (r.proj||"전체") + (r.kw ? ' · "' + r.kw + '"' : "") + '</span>' +
+      '<span class="chip ai">' + roleById(r.role).label + '</span>' +
+      '<button class="btn sm" data-tog="' + r.id + '" style="padding:1px 5px">' + (r.on?"켜":"꺼") + '</button>' +
+      '<button class="btn sm" data-del="' + r.id + '" style="padding:1px 5px">✕</button>' +
+    '</div>').join("");
+
+  const roleOpts = ALL_ROLES.map(r => '<option value="' + r.id + '">' + r.cat + " · " + r.label + '</option>').join("");
+  if ($("#nr-role").innerHTML !== roleOpts) $("#nr-role").innerHTML = roleOpts;
+  const revOpts = '<option value="">검수 없음</option>' + revs.map(m => '<option>' + m + '</option>').join("");
+  if ($("#nr-rev").innerHTML !== revOpts) $("#nr-rev").innerHTML = revOpts;
+  brackets();
+  if (typeof applyPerm === "function") applyPerm();
+}
+$("#w-rules").onclick = e => {
+  const tog = e.target.closest("[data-tog]"), del = e.target.closest("[data-del]");
+  if (tog){ const r = RULES.find(x => x.id === tog.dataset.tog); r.on = !r.on; renderWireCols(); layoutWires(); wLog('rule.' + (r.on?"enable":"disable") + '("' + r.id + '")'); return; }
+  if (del){ RULES = RULES.filter(x => x.id !== del.dataset.del); renderWireCols(); layoutWires(); wLog("rule.delete()"); return; }
+  const row = e.target.closest("[data-rule]"); if (!row) return;
+  wireSel = wireSel === row.dataset.rule ? null : row.dataset.rule;
+  renderWireCols(); layoutWires();
+};
+$("#wc-cond").onclick = e => {
+  const n = e.target.closest("[data-rule]"); if (!n) return;
+  wireSel = wireSel === n.dataset.rule ? null : n.dataset.rule;
+  renderWireCols(); layoutWires();
+};
+$("#wc-role").onclick = e => {
+  const n = e.target.closest("[data-role]"); if (!n) return;
+  roleSel = roleSel === n.dataset.role ? null : n.dataset.role;
+  wireSel = null;
+  renderWireCols(); layoutWires();
+  if (roleSel){
+    const hits = RULES.filter(r => r.on && r.role === roleSel);
+    wLog("role.select(\"" + roleSel + "\") 배선 " + hits.length + "건" +
+      (hits.length ? " · " + hits.map(r => r.proj || "전체").join(", ") : " — 연결 없음"));
+  }
+};
+$("#nr-add").onclick = () => {
+  RULES.push({ id:"r" + (++ruleSeq), proj:$("#nr-proj").value, kw:$("#nr-kw").value.trim(),
+    role:$("#nr-role").value, rev:$("#nr-rev").value, on:true, hits:0 });
+  $("#nr-kw").value = "";
+  renderWireCols(); layoutWires();
+  wLog('rule.create · ' + ($("#nr-proj").value || "전체") + " → " + roleById($("#nr-role").value).label);
+};
+
+/* 권한 분기 — 관리자가 아니면 편집 계열이 전부 잠긴다 */
+let isAdmin = true;
+function applyPerm(){
+  $("#w-admin-on").classList.toggle("pri", isAdmin);
+  $("#w-admin-off").classList.toggle("pri", !isAdmin);
+  $("#w-perm-note").innerHTML = isAdmin
+    ? "관리자만 역할 생성·편집·삭제와 배선 저장이 가능하다."
+    : '<b style="color:var(--warn)">읽기 전용</b> — 편집 컨트롤이 비활성화된다. 실제 앱은 <span class="num">/api/admin/allowed-users</span> 응답으로 판정.';
+  $$("#nr-add, #w-rules [data-tog], #w-rules [data-del], #nr-proj, #nr-kw, #nr-role, #nr-rev")
+    .forEach(el => { el.disabled = !isAdmin; el.style.opacity = isAdmin ? "" : ".45"; });
+}
+$("#w-admin-on").onclick = () => { isAdmin = true; applyPerm(); wLog("auth.role(admin)"); };
+$("#w-admin-off").onclick = () => { isAdmin = false; applyPerm(); wLog("auth.role(viewer)"); };
+
+const wlog = [];
+function wLog(s){
+  wlog.push('<div><span class="t">[' + sim.t.toFixed(1).padStart(6,"0") + "]</span> " + s + "</div>");
+  while (wlog.length > 7) wlog.shift();
+  const el = $("#wire-log"); if (el) el.innerHTML = wlog.join("");
+}
+
+/* ---------- 배선도 확대·이동 ----------
+   .wcols 에 transform 을 걸면 getBoundingClientRect 가 변환된 좌표를 돌려주므로
+   배선 계산은 그대로 두고 layoutWires() 만 다시 부르면 선이 따라온다. */
+const view = { k:1, tx:0, ty:0 };
+function applyView(){
+  const cols = $(".wcols"); if (!cols) return;
+  cols.style.transform = "translate(" + view.tx + "px," + view.ty + "px) scale(" + view.k + ")";
+  const lv = $("#z-lv"); if (lv) lv.textContent = Math.round(view.k * 100) + "%";
+  layoutWires();
+}
+function zoomAt(factor, cx, cy){
+  const k2 = clamp(view.k * factor, 0.45, 2.4);
+  const r = k2 / view.k;
+  // 커서 위치를 고정점으로 두고 확대 (화면에서 보던 지점이 그대로 유지된다)
+  view.tx = cx - (cx - view.tx) * r;
+  view.ty = cy - (cy - view.ty) * r;
+  view.k = k2;
+  applyView();
+}
+function initWireView(){
+  const wrap = $("#wirewrap"), zin = $("#z-in"), zout = $("#z-out"), zfit = $("#z-fit");
+  if (!wrap || !zin || !zout || !zfit) return;      // 하나라도 없으면 다음 기회에 다시 시도
+  // onclick 은 덮어쓰기라 매번 호출해도 중복되지 않는다
+  zin.onclick  = () => zoomAt(1.25, wrap.clientWidth/2, wrap.clientHeight/2);
+  zout.onclick = () => zoomAt(0.8,  wrap.clientWidth/2, wrap.clientHeight/2);
+  zfit.onclick = () => { view.k = 1; view.tx = 0; view.ty = 0; applyView(); };
+  if (wrap.dataset.zoom) return;                    // 아래 addEventListener 만 1회
+  wrap.dataset.zoom = "1";
+  wrap.addEventListener("wheel", e => {
+    e.preventDefault();
+    const r = wrap.getBoundingClientRect();
+    zoomAt(e.deltaY < 0 ? 1.12 : 0.89, e.clientX - r.left, e.clientY - r.top);
+  }, { passive:false });
+  let drag = null;
+  wrap.addEventListener("pointerdown", e => {
+    if (e.target.closest(".wnode, .zoombar, button, select, input")) return;
+    drag = { x:e.clientX, y:e.clientY, tx:view.tx, ty:view.ty };
+    wrap.classList.add("panning"); wrap.setPointerCapture(e.pointerId);
+  });
+  wrap.addEventListener("pointermove", e => {
+    if (!drag) return;
+    view.tx = drag.tx + (e.clientX - drag.x);
+    view.ty = drag.ty + (e.clientY - drag.y);
+    applyView();
+  });
+  const end = () => { drag = null; wrap.classList.remove("panning"); };
+  wrap.addEventListener("pointerup", end);
+  wrap.addEventListener("pointercancel", end);
+}
+
+/* DOM 위치를 측정해 캔버스로 배선을 그린다 — React에서도 동일 방식 사용 가능 */
+let wirePaths = [];
+function layoutWires(){
+  const wrap = $("#wirewrap"); if (!wrap) return;
+  const W = wrap.getBoundingClientRect();
+  const c = $("#wcanvas");
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  c.width = W.width * dpr; c.height = W.height * dpr;
+  const ctx = c.getContext("2d");
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  const box = el => { if (!el) return null; const r = el.getBoundingClientRect();
+    return { x:r.left - W.left, y:r.top - W.top, w:r.width, h:r.height }; };
+  wirePaths = [];
+  RULES.forEach((r, i) => {
+    const a = box($("#cond-" + r.id)), b = box($("#role-" + r.role));
+    if (!a || !b) return;
+    const p1 = [a.x + a.w, a.y + a.h/2], p2 = [b.x, b.y + b.h/2];
+    wirePaths.push({ rule:r.id, on:r.on, seg:"main", a:p1, b:p2, idx:i, role:r.role });
+    if (r.rev){
+      const d = box($("#rev-" + r.rev));
+      if (d) wirePaths.push({ rule:r.id, on:r.on, seg:"rev", a:[b.x + b.w, b.y + b.h/2], b:[d.x, d.y + d.h/2], idx:i, role:r.role });
+    }
+  });
+}
+function bez(ctx, a, b){
+  const mx = (a[0] + b[0]) / 2;
+  ctx.moveTo(a[0], a[1]);
+  ctx.bezierCurveTo(mx, a[1], mx, b[1], b[0], b[1]);
+}
+function bezAt(a, b, t){
+  const mx = (a[0] + b[0]) / 2;
+  const u = 1 - t;
+  const x = u*u*u*a[0] + 3*u*u*t*mx + 3*u*t*t*mx + t*t*t*b[0];
+  const y = u*u*u*a[1] + 3*u*u*t*a[1] + 3*u*t*t*b[1] + t*t*t*b[1];
+  return [x,y];
+}
+const WCOL = ["#ff4a2b","#4b8bfa","#3fb950","#e0a33a","#b06cf0","#2fc6c0"];
+let wireT = 0;
+function drawWires(dt){
+  const c = $("#wcanvas"); if (!c) return;
+  const ctx = c.getContext("2d");
+  ctx.clearRect(0, 0, c.width, c.height);
+  wireT += dt;
+  for (const p of wirePaths){
+    const sel = wireSel === p.rule || (roleSel && p.role === roleSel);
+    const col = WCOL[p.idx % WCOL.length];
+    ctx.globalAlpha = p.on ? ((wireSel || roleSel) && !sel ? .16 : .9) : .13;
+    ctx.strokeStyle = col;
+    ctx.lineWidth = sel ? 2.4 : (p.seg === "rev" ? 1 : 1.5);
+    ctx.setLineDash(p.seg === "rev" ? [3,4] : []);
+    ctx.beginPath(); bez(ctx, p.a, p.b); ctx.stroke();
+    ctx.setLineDash([]);
+    if (p.on && p.seg === "main"){
+      const t = (wireT * 0.32 + p.idx * 0.17) % 1;
+      const q = bezAt(p.a, p.b, t);
+      ctx.globalAlpha = (wireSel || roleSel) && !sel ? .2 : 1;
+      ctx.fillStyle = col;
+      ctx.fillRect(q[0]-2.5, q[1]-2.5, 5, 5);
+    }
+  }
+  ctx.globalAlpha = 1;
+}
+
+/* =========================================================================
+   일반 화면 렌더러 — 정의(S)를 계기판 3열 배치로 그린다
+   ========================================================================= */
+function wObserve(w){
+  const h = t => '<div class="sech">' + t + (w.r ? ' <span class="r">' + w.r + '</span>' : "") + '</div>';
+  if (w.k === "spark")  return '<div class="sec">' + h(w.t) + '<canvas class="spark gsp" height="46"></canvas></div>';
+  if (w.k === "stats")  return '<div class="sec">' + h(w.t) + '<div class="grid2">' +
+    w.cells.map(c => '<div class="cell"><div class="stat"><span class="lb">' + c[0] +
+      '</span><span class="vl num">' + c[1] + '</span></div></div>').join("") + '</div></div>';
+  if (w.k === "meters") return '<div class="sec">' + h(w.t) +
+    w.rows.map(r => '<div class="mrow"><span class="lb">' + r[0] + '</span>' +
+      '<span class="meter" data-segs="16" data-fill="' + r[1] + '"></span>' +
+      '<span class="vl num">' + r[2] + '</span></div>').join("") + '</div>';
+  if (w.k === "list")   return '<div class="sec">' + h(w.t) +
+    '<div style="border:1px solid var(--line)">' + w.rows.map(r =>
+      '<div class="trow" style="padding:4px 7px"><span class="ti kr">' + r[0] +
+      '</span><span class="age num">' + r[1] + '</span></div>').join("") + '</div></div>';
+  if (w.k === "tree")   return '<div class="sec">' + h(w.t) +
+    '<div style="border:1px solid var(--line);padding:3px 0">' + w.rows.map(r => {
+      const ind = r[0].startsWith("  ");
+      return '<div class="trow" style="padding:3px 7px;border:none' + (ind?"":";font-weight:700") + '">' +
+        '<span class="ti kr" style="' + (ind?"padding-left:10px;color:var(--dim)":"") + '">' +
+        r[0].trim() + '</span><span class="age num">' + r[1] + '</span></div>';
+    }).join("") + '</div></div>';
+  return "";
+}
+function wControl(w){
+  const h = t => '<div class="sech">' + t + '</div>';
+  if (w.k === "btns")  return '<div class="sec">' + h(w.t) +
+    '<div style="display:grid;grid-template-columns:repeat(' + Math.min(2,w.items.length) + ',1fr);gap:6px">' +
+    w.items.map(b => '<button class="btn' + (b[1]==="pri"?" pri":"") + '">' + b[0] + '</button>').join("") + '</div></div>';
+  if (w.k === "seg")   return '<div class="sec">' + h(w.t) +
+    '<div data-ctl="' + (w.ctl||"") + '" style="display:grid;grid-template-columns:repeat(' + w.items.length + ',1fr);gap:5px">' +
+    w.items.map((s,i) => '<button class="btn sm' + (i===w.on?" pri":"") + '" data-i="' + i + '">' + s + '</button>').join("") + '</div></div>';
+  if (w.k === "input") return '<div class="sec">' + h(w.t) +
+    '<input type="text"' + (w.ctl ? ' data-ctl="' + w.ctl + '"' : "") +
+    ' placeholder="' + (w.ph||"") + '"></div>';
+  if (w.k === "select")return '<div class="sec">' + h(w.t) + '<select' + (w.ctl ? ' data-ctl="' + w.ctl + '"' : "") + '>' +
+    w.items.map(o => '<option>' + o + '</option>').join("") + '</select></div>';
+  if (w.k === "toggle")return '<div class="sec"><div class="sech" style="background:transparent;border:none;padding:2px 0">' +
+    '<span>' + w.t + '</span><span class="r"><span class="chip' + (w.on?" acc":"") + '">' +
+    (w.on?"켜짐":"꺼짐") + '</span></span></div></div>';
+  if (w.k === "note")  return '<div class="sec">' + h(w.t) +
+    '<div class="kr" style="font-size:10.5px;color:var(--dim);line-height:1.6">' + w.v + '</div></div>';
+  return "";
+}
+function renderGeneric(id){
+  const d = S[id]; if (!d) return;
+  const scopeChip = d.scope === "game" ? '<span class="chip" style="border-color:var(--warn);color:var(--warn)">게임 전용</span>'
+    : d.scope === "owner" ? '<span class="chip" style="border-color:var(--err);color:var(--err)">소유자 전용</span>'
+    : '<span class="chip">공통</span>';
+  $("#genstage").innerHTML =
+    '<div class="panel pad rail">' + (d.observe||[]).map(wObserve).join("") + '</div>' +
+    '<div class="panel stage"><div class="stagewrap">' +
+      '<canvas class="sch gcenter"></canvas>' +
+      '<div class="hud tl"><b>' + d.label + '</b><br>' + d.route + '</div>' +
+      '<div class="hud tr">' + (d.center||"").toUpperCase() + '</div>' +
+      '<div class="hud bl kr" style="max-width:52%">' + (d.note||"") + '</div>' +
+      '<div class="zoombar">' +
+        '<button class="btn sm" id="g-out">−</button>' +
+        '<button class="btn sm" id="g-fit">100%</button>' +
+        '<button class="btn sm" id="g-in">＋</button>' +
+        '<span class="num" id="g-lv">100%</span>' +
+      '</div>' +
+    '</div></div>' +
+    '<div class="panel pad rail wide">' +
+      '<div class="sec"><div class="sech">' + d.label + ' <span class="r">' + d.route + '</span></div>' +
+      '<div style="padding:3px 0;display:flex;gap:5px;align-items:center;flex-wrap:wrap">' + scopeChip +
+      '<span class="chip" style="border-style:dashed">시안 미리보기</span></div>' +
+      '<div class="kr" style="font-size:9.5px;color:var(--faint);line-height:1.55">' +
+      '이 화면의 조작은 <b>상태만 바뀌는 미리보기</b>입니다. 실제로 데이터가 움직이는 화면은 ' +
+      '<b>대시보드 · 프로젝트 · 작업 보드 · AI 팀</b> 네 곳입니다.</div></div>' +
+      (d.control||[]).map(wControl).join("") +
+      '<div class="sec"><div class="sech">이 화면의 기능 <span class="r"><b>' + d.features.length + '</b>개</span></div>' +
+      '<div style="border:1px solid var(--line)">' + d.features.map(f =>
+        '<div style="padding:4px 7px;border-bottom:1px solid var(--line)">' +
+        '<div style="display:flex;gap:5px;align-items:center">' +
+        '<span class="dotk' + (f.tag==="game"?" warn":"") + '"></span>' +
+        '<span class="kr" style="font-size:10.5px;font-weight:700;flex:1">' + f.n + '</span>' +
+        '<span class="num" style="font-size:9px;color:var(--faint)">' + f.src + '</span></div>' +
+        (f.d ? '<div class="kr" style="font-size:10px;color:var(--dim);padding-left:10px">' + f.d + '</div>' : "") +
+        '</div>').join("") + '</div></div>' +
+    '</div>';
+  $$("#genstage .meter").forEach(m => meterFill(m, +m.dataset.fill, 16));
+  brackets(); railToggles();
+  resetGView();
+  bindGView(); gLabel();          // 요소가 막 생성된 직후 — rAF를 기다리면 클릭이 먹지 않는 순간이 생긴다
+  requestAnimationFrame(() => { sizeCanvases(); drawCenter(id); });
+}
+
+/* 일반 화면 조작 — 상태는 실제로 바뀐다(데이터 연결은 실 제품에서).
+   눌러도 아무 반응이 없으면 "고장"으로 읽히므로 최소한 상태는 반응시킨다. */
+$("#genstage").addEventListener("click", e => {
+  const seg = e.target.closest(".btn.sm");
+  if (seg && seg.parentElement && seg.parentElement.children.length > 1){
+    Array.from(seg.parentElement.children).forEach(b => b.classList.toggle("pri", b === seg));
+    seg.classList.add("pressed"); setTimeout(() => seg.classList.remove("pressed"), 260);
+    const ctl = seg.parentElement.dataset.ctl;
+    if (ctl === "bf-mode"){ bfMode = +seg.dataset.i; resetGView(); gLabel(); drawCenter(screen); }
+    return;
+  }
+  const chip = e.target.closest(".chip");
+  if (chip && /켜짐|꺼짐/.test(chip.textContent.trim())){
+    const on = chip.classList.toggle("acc");
+    chip.textContent = on ? "켜짐" : "꺼짐";
+    return;
+  }
+  const btn = e.target.closest(".btn");
+  if (btn){ btn.classList.add("pressed"); setTimeout(() => btn.classList.remove("pressed"), 240); }
+});
+
+let bfMode = 0, bfQuery = "", projSel = 0, simCmp = 0, bqX = 0, bqY = 0, tileQ = "";
+$("#genstage").addEventListener("change", e => {
+  const c = e.target.dataset && e.target.dataset.ctl;
+  if (c === "proj-sel"){ projSel = e.target.selectedIndex; drawCenter(screen); }
+  else if (c === "sim-cmp"){ simCmp = e.target.selectedIndex; drawCenter(screen); }
+  else if (c === "bq-x"){ bqX = e.target.selectedIndex; drawCenter(screen); }
+  else if (c === "bq-y"){ bqY = e.target.selectedIndex; drawCenter(screen); }
+});
+$("#genstage").addEventListener("input", e => {
+  const c = e.target.dataset && e.target.dataset.ctl;
+  if (c === "bf-search"){ bfQuery = e.target.value.trim().toLowerCase(); drawCenter(screen); }
+  else if (c === "tile-q"){ tileQ = e.target.value.trim().toLowerCase(); drawCenter(screen); }
+});
+
+/* ---------- 중앙 도식 공통 확대·이동 ----------
+   캔버스에 transform 을 걸어 모든 화면의 도식을 확대/이동할 수 있게 한다.
+   그리기 코드는 논리 좌표 그대로 두면 되므로 화면별 수정이 필요 없다. */
+const gview = { k:1, tx:0, ty:0 };
+function resetGView(){ gview.k = 1; gview.tx = 0; gview.ty = 0; }
+function gLabel(){ const el = $("#g-lv"); if (el) el.textContent = Math.round(gview.k*100) + "%"; }
+function gZoomAt(factor, cx, cy){
+  const k2 = clamp(gview.k * factor, 0.5, 3);
+  const r = k2 / gview.k;
+  gview.tx = cx - (cx - gview.tx) * r;
+  gview.ty = cy - (cy - gview.ty) * r;
+  gview.k = k2;
+  gLabel(); drawCenter(screen);
+}
+function bindGView(){
+  const wrap = $("#genstage .stagewrap"); if (!wrap) return;
+  const zi = $("#g-in"), zo = $("#g-out"), zf = $("#g-fit");
+  if (zi) zi.onclick = () => gZoomAt(1.25, wrap.clientWidth/2, wrap.clientHeight/2);
+  if (zo) zo.onclick = () => gZoomAt(0.8,  wrap.clientWidth/2, wrap.clientHeight/2);
+  if (zf) zf.onclick = () => { resetGView(); gLabel(); drawCenter(screen); };
+  if (wrap.dataset.gz) return;
+  wrap.dataset.gz = "1";
+  wrap.addEventListener("wheel", e => {
+    e.preventDefault();
+    const r = wrap.getBoundingClientRect();
+    gZoomAt(e.deltaY < 0 ? 1.12 : 0.89, e.clientX - r.left, e.clientY - r.top);
+  }, { passive:false });
+  let drag = null;
+  wrap.addEventListener("pointerdown", e => {
+    if (e.target.closest(".zoombar, button, input, select")) return;
+    drag = { x:e.clientX, y:e.clientY, tx:gview.tx, ty:gview.ty };
+    wrap.classList.add("panning"); wrap.setPointerCapture(e.pointerId);
+  });
+  wrap.addEventListener("pointermove", e => {
+    if (!drag) return;
+    gview.tx = drag.tx + (e.clientX - drag.x);
+    gview.ty = drag.ty + (e.clientY - drag.y);
+    drawCenter(screen);
+  });
+  const end = () => { drag = null; wrap.classList.remove("panning"); };
+  wrap.addEventListener("pointerup", end);
+  wrap.addEventListener("pointercancel", end);
+}
+
+/* ---------- 화면별 중앙 비주얼 ---------- */
+function ctxOf(){
+  const c = $("#genstage .gcenter"); if (!c) return null;
+  const ctx = c.getContext("2d");
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  const w = c.clientWidth, h = c.clientHeight;
+  if (!w || !h) return null;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,w,h);
+  // 배경 그리드는 확대와 무관하게 고정 (기준면 역할)
+  ctx.strokeStyle = css("--grid"); ctx.lineWidth = 1;
+  for (let x=0;x<w;x+=26){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
+  for (let y=0;y<h;y+=26){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+  ctx.translate(gview.tx, gview.ty); ctx.scale(gview.k, gview.k);
+  return [ctx,w,h];
+}
+const RND = (s) => { let x = Math.sin(s) * 10000; return x - Math.floor(x); };
+
+function drawCenter(id){
+  const got = ctxOf(); if (!got) return;
+  const [ctx,w,h] = got;
+  const ACC = css("--acc"), INK = css("--ink"), LINE2 = css("--line2"),
+        FAINT = css("--faint"), DIM = css("--dim"), P2 = css("--panel2");
+  const kind = (S[id]||{}).center;
+  const T = (s,x,y,f,c,a) => { ctx.font=f; ctx.fillStyle=c; ctx.textAlign=a||"left"; ctx.fillText(s,x,y); };
+  const M = css("--mono"), SA = css("--sans");
+  // 상단 HUD(2줄)와 하단 HUD가 차지하는 영역 — 캔버스 내용은 이 밖으로 나가면 겹친다
+  const TOP = 74, BOT = h - 46;
+
+  if (kind === "gantt"){
+    const x0 = 118, y0 = TOP + 14, cw = (w - x0 - 40)/12;
+    const rh = Math.max(26, Math.min(56, (BOT - y0 - 10)/8));
+    for (let i=0;i<12;i++){
+      T("W"+(i+1), x0+cw*i+cw/2, y0-14, "9.5px "+M, FAINT, "center");
+      ctx.strokeStyle = css("--line"); ctx.beginPath();
+      ctx.moveTo(x0+cw*i, y0-8); ctx.lineTo(x0+cw*i, y0+rh*8); ctx.stroke();
+    }
+    const rows = [["결제 웹훅 재시도",0,3,0],["정산 리포트 스키마",2,4,0],["레벨 배치 파이프라인",1,5,1],
+      ["권한 매트릭스",4,3,2],["보드 검색 인덱스",5,2,0],["배포 롤백 스크립트",6,3,1],
+      ["회귀 테스트 보강",8,3,2],["대시보드 쿼리 캐싱",9,2,0]];
+    const COL = [ACC, "#4b8bfa", "#3fb950"];
+    const bh = Math.min(18, rh*0.44);
+    rows.forEach((r,i) => {
+      const y = y0 + rh*i, by = y + (rh-bh)/2;
+      T(r[0], 10, y + rh/2 + 3, "10.5px "+SA, DIM);
+      ctx.fillStyle = COL[r[3]]; ctx.globalAlpha = .85;
+      ctx.fillRect(x0 + cw*r[1] + 2, by, cw*r[2] - 4, bh);
+      ctx.globalAlpha = 1;
+      ctx.strokeStyle = INK; ctx.lineWidth = 1;
+      ctx.strokeRect(x0 + cw*r[1] + 2.5, by+.5, cw*r[2] - 5, bh-1);
+    });
+    ctx.strokeStyle = ACC; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(x0+cw*3, y0-8); ctx.lineTo(x0+cw*3, y0+rh*8); ctx.stroke();
+    T("오늘", x0+cw*3+4, y0+rh*8+13, "9.5px "+M, ACC);
+  }
+  else if (kind === "projects"){
+    const srcs = ["작업 보드","대시보드 요청","음성 명령","Slack","크론 · 목표"];
+    const projs = [["BalloonFlow","balloonflow","31건 · 68%",0],["NextPR","nextpr","14건 · 41%",1],
+                   ["CrewFlowRotation","crewflowrotation","12건 · 25%",2],["내부도구","internal","board_hidden",3]];
+    const cx1 = 44, cw1 = 156, cx2 = w*0.44, cw2 = 118, cx3 = w - 44 - 210, cw3 = 210;
+    T("등록 경로", cx1, TOP-6, "9.5px "+SA, FAINT);
+    T("project 필드", cx2, TOP-6, "9.5px "+SA, FAINT);
+    T("프로젝트 · 보드 스코프", cx3, TOP-6, "9.5px "+SA, FAINT);
+    const sy = TOP + 14, sh = 34, sgap = 44;
+    srcs.forEach((s,i) => {
+      const y = sy + sgap*i;
+      ctx.fillStyle = P2; ctx.fillRect(cx1, y, cw1, sh);
+      ctx.strokeStyle = LINE2; ctx.lineWidth = 1; ctx.strokeRect(cx1+.5, y+.5, cw1-1, sh-1);
+      T(s, cx1+10, y+22, "11.5px "+SA, INK);
+      // 게이트로 모이는 선
+      ctx.strokeStyle = css("--line2"); ctx.globalAlpha=.75;
+      ctx.beginPath(); ctx.moveTo(cx1+cw1, y+sh/2);
+      ctx.lineTo(cx2-26, y+sh/2); ctx.lineTo(cx2-26, sy+sgap*2+sh/2); ctx.lineTo(cx2, sy+sgap*2+sh/2);
+      ctx.stroke(); ctx.globalAlpha=1;
+    });
+    // 게이트
+    const gy = sy + sgap*2, gh2 = sh;
+    ctx.fillStyle = P2; ctx.fillRect(cx2, gy, cw2, gh2);
+    ctx.strokeStyle = ACC; ctx.lineWidth = 1.5; ctx.strokeRect(cx2+.5, gy+.5, cw2-1, gh2-1);
+    T("project", cx2+10, gy+15, "700 11.5px "+M, ACC);
+    T("미지정 가능", cx2+10, gy+29, "9.5px "+SA, FAINT);
+    // 프로젝트 카드
+    const py = TOP + 14, ph2 = 50, pgap = 62;
+    projs.forEach((p,i) => {
+      const y = py + pgap*i, hidden = p[3]===3;
+      const picked = (i === projSel && !hidden);
+      ctx.fillStyle = picked ? "rgba(255,74,43,.10)" : P2; ctx.fillRect(cx3, y, cw3, ph2);
+      ctx.strokeStyle = picked ? ACC : (hidden ? css("--line") : LINE2);
+      ctx.lineWidth = picked ? 1.8 : 1; ctx.strokeRect(cx3+.5, y+.5, cw3-1, ph2-1);
+      if (picked){ ctx.fillStyle = ACC; ctx.fillRect(cx3, y, 3, ph2);
+        T("현재 보드", cx3+cw3-11, y+37, "9px "+SA, ACC, "right"); }
+      ctx.globalAlpha = hidden ? .5 : 1;
+      T(p[0], cx3+11, y+20, "700 11.5px "+SA, hidden?DIM:INK);
+      T("/tasks?project=" + p[1], cx3+11, y+37, "9.5px "+M, FAINT);
+      T(p[2], cx3+cw3-11, y+20, "9.5px "+SA, hidden?css("--warn"):DIM, "right");
+      ctx.globalAlpha = 1;
+      // 게이트 → 프로젝트
+      ctx.strokeStyle = picked ? ACC : (hidden ? css("--line") : LINE2);
+      ctx.lineWidth = picked ? 1.6 : 1;
+      ctx.setLineDash(hidden?[3,4]:[]);
+      ctx.globalAlpha = hidden ? .5 : (picked ? 1 : .5);
+      ctx.beginPath();
+      ctx.moveTo(cx2+cw2, gy+gh2/2);
+      ctx.lineTo(cx2+cw2+22, gy+gh2/2); ctx.lineTo(cx2+cw2+22, y+ph2/2); ctx.lineTo(cx3, y+ph2/2);
+      ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha=1;
+    });
+    // legacy 흡수 규칙
+    const ly = py + pgap*4 + 4;
+    ctx.strokeStyle = ACC; ctx.setLineDash([4,4]); ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(cx2+cw2/2, gy+gh2); ctx.lineTo(cx2+cw2/2, ly+14);
+    ctx.lineTo(cx3+30, ly+14); ctx.lineTo(cx3+30, py+ph2);
+    ctx.stroke(); ctx.setLineDash([]);
+    T("project 미지정 · null · \"\" → BalloonFlow가 흡수 (proj:47)", cx2+cw2/2+8, ly+10, "9.5px "+SA, ACC);
+    T("board_hidden = 보드에서만 숨김 · Hermes 라우팅은 유지 (proj:14)", cx3, py+pgap*3+ph2+16, "9.5px "+SA, css("--warn"));
+  }
+  else if (kind === "chart"){
+    const x0=44, y0=TOP, cw=w-x0-30, ch=BOT-y0-18;
+    ctx.strokeStyle = css("--line");
+    for (let i=0;i<=4;i++){ const y=y0+ch*i/4; ctx.beginPath(); ctx.moveTo(x0,y); ctx.lineTo(x0+cw,y); ctx.stroke();
+      T(String(100-i*25), x0-6, y+3, "9px "+M, FAINT, "right"); }
+    const N=30, bw=cw/N;
+    for (let i=0;i<N;i++){
+      const v = 0.35 + RND(i*7.3+2)*0.5;
+      ctx.fillStyle = i>N-4 ? ACC : LINE2;
+      ctx.fillRect(x0+bw*i+1.5, y0+ch-ch*v, bw-3, ch*v);
+    }
+    ctx.strokeStyle = ACC; ctx.lineWidth=1.6; ctx.beginPath();
+    for (let i=0;i<N;i++){
+      const v = 0.42 + Math.sin(i/3.4)*0.16 + RND(i*3.1)*0.08;
+      const x=x0+bw*i+bw/2, y=y0+ch-ch*v;
+      i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+    }
+    ctx.stroke();
+    if (id === "simulator" && simCmp > 0){
+      // 비교 대상 오버레이 — 점선 + 평균 Δ 배지
+      const off = simCmp === 1 ? -0.042 : -0.078;
+      ctx.setLineDash([4,4]); ctx.strokeStyle = "#4b8bfa"; ctx.lineWidth=1.4;
+      ctx.beginPath();
+      for (let i=0;i<N;i++){
+        const v = 0.42 + Math.sin(i/3.4)*0.16 + RND(i*3.1)*0.08 + off;
+        const x=x0+bw*i+bw/2, y=y0+ch-ch*v;
+        i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+      }
+      ctx.stroke(); ctx.setLineDash([]);
+      const dlt = (-off*100).toFixed(1);
+      const bx = x0+cw-176, by = y0+8;
+      ctx.fillStyle = P2; ctx.fillRect(bx, by, 168, 30);
+      ctx.strokeStyle = ACC; ctx.lineWidth=1.3; ctx.strokeRect(bx+.5, by+.5, 167, 29);
+      T((simCmp===1?"run #214":"run #209")+" 대비", bx+9, by+13, "9px "+SA, DIM);
+      T("평균 Δ +"+dlt+"pt", bx+9, by+26, "700 11px "+M, ACC);
+      T("점선 = 비교 대상", bx+108, by+26, "8.5px "+SA, "#4b8bfa");
+    }
+    T("일자별 추세 · 막대=사용량 · 선=이동평균", x0, BOT+14, "9.5px "+SA, FAINT);
+  }
+  else if (kind === "graph"){
+    const SYS = ["Core","Board","UI","Data","FX"];
+    const GC  = [ACC,"#4b8bfa","#3fb950","#e0a33a","#2fc6c0"];
+    const N = 46;
+    const nodes = [];
+    for (let i=0;i<N;i++){
+      const sys = i % 5;
+      nodes.push({ i, sys, name: SYS[sys] + "/" + ["Controller","Manager","View","Data","Fx","Pool","Util"][i%7] + (i+1),
+                   orphan: i % 13 === 7, cyc: i % 17 === 3 });
+    }
+    const hit = n => bfQuery && n.name.toLowerCase().includes(bfQuery);
+    const anyHit = bfQuery && nodes.some(hit);
+
+    if (bfMode === 0){                       // 코드 그래프 — force-directed 배치
+      const cx=w/2, cy=h/2;
+      nodes.forEach((n,i) => {
+        const a = i/N*Math.PI*2 + RND(i)*0.5;
+        const r = 60 + RND(i*2.7)*Math.min(w,h)*0.32;
+        n.x = cx+Math.cos(a)*r*1.25; n.y = cy+Math.sin(a)*r*0.85;
+      });
+      ctx.strokeStyle = LINE2; ctx.globalAlpha=.32; ctx.lineWidth=1;
+      for (let i=0;i<N;i++) for (let k=1;k<=2;k++){
+        const j=(i*3+k*7)%N;
+        ctx.beginPath(); ctx.moveTo(nodes[i].x,nodes[i].y); ctx.lineTo(nodes[j].x,nodes[j].y); ctx.stroke();
+      }
+      ctx.globalAlpha=1;
+      nodes.forEach(n => {
+        const on = !anyHit || hit(n);
+        ctx.globalAlpha = on ? 1 : .18;
+        ctx.beginPath(); ctx.arc(n.x,n.y, 3 + (n.orphan?2.5:0), 0, 7);
+        ctx.fillStyle = GC[n.sys]; ctx.fill();
+        ctx.strokeStyle = css("--panel"); ctx.lineWidth=1; ctx.stroke();
+        if (hit(n)){
+          ctx.strokeStyle = ACC; ctx.lineWidth=1.6;
+          ctx.beginPath(); ctx.arc(n.x,n.y,10,0,7); ctx.stroke();
+          T(n.name, n.x+13, n.y+3, "9.5px "+SA, ACC);
+        }
+        ctx.globalAlpha = 1;
+      });
+      const orph = nodes.find(n => n.orphan);
+      if (orph && !anyHit){
+        ctx.strokeStyle = ACC; ctx.lineWidth=1.4;
+        ctx.beginPath(); ctx.arc(orph.x,orph.y,9,0,7); ctx.stroke();
+        T("고아 노드", orph.x+13, orph.y+3, "9.5px "+SA, ACC);
+      }
+      T("코드 그래프 — 참조 관계 · 색 = 시스템 레이어", 14, BOT+14, "9.5px "+SA, FAINT);
+    }
+    else if (bfMode === 1){                  // 실행 파이프라인 — 호출 순서 선형 배치
+      const lanes = ["입력","보드 판정","상태 갱신","연출","저장"];
+      const lh = (BOT-TOP)/lanes.length;
+      lanes.forEach((L,li) => {
+        const y = TOP + lh*li + lh/2;
+        T(L, 14, y+4, "700 10px "+SA, DIM);
+        ctx.strokeStyle = css("--line"); ctx.beginPath();
+        ctx.moveTo(96, y); ctx.lineTo(w-30, y); ctx.stroke();
+        const inLane = nodes.filter(n => n.i % 5 === li).slice(0,7);
+        inLane.forEach((n,k) => {
+          const x = 130 + k*((w-190)/6);
+          n.x = x; n.y = y;
+          const on = !anyHit || hit(n);
+          ctx.globalAlpha = on ? 1 : .18;
+          ctx.fillStyle = P2; ctx.fillRect(x-30, y-13, 60, 26);
+          ctx.strokeStyle = hit(n) ? ACC : LINE2; ctx.lineWidth = hit(n)?1.6:1;
+          ctx.strokeRect(x-29.5, y-12.5, 59, 25);
+          T(n.name.split("/")[1].slice(0,7), x-24, y+4, "9px "+M, hit(n)?ACC:INK);
+          if (k < inLane.length-1){
+            ctx.strokeStyle = ACC; ctx.globalAlpha = on ? .55 : .12; ctx.lineWidth=1.2;
+            ctx.beginPath(); ctx.moveTo(x+31, y); ctx.lineTo(x+((w-190)/6)-31, y); ctx.stroke();
+          }
+          ctx.globalAlpha = 1;
+        });
+      });
+      T("실행 파이프라인 — 최근 활동이 지나간 경로 (태스크 선택 시 해당 파일로 점프)", 14, BOT+14, "9.5px "+SA, FAINT);
+    }
+    else {                                   // QA 정합성 — 시스템별 묶음 + 이슈 표시
+      const cols = 5, cw = (w-60)/cols;
+      SYS.forEach((sname, si) => {
+        const x = 30 + cw*si;
+        const group = nodes.filter(n => n.sys === si);
+        const issues = group.filter(n => n.orphan || n.cyc).length;
+        ctx.fillStyle = P2; ctx.fillRect(x+6, TOP, cw-12, BOT-TOP);
+        ctx.strokeStyle = issues ? ACC : css("--line"); ctx.lineWidth = issues ? 1.4 : 1;
+        ctx.strokeRect(x+6.5, TOP+.5, cw-13, BOT-TOP-1);
+        T(sname, x+16, TOP+20, "700 11px "+SA, INK);
+        T(group.length + "개 · 이슈 " + issues, x+16, TOP+36, "9px "+SA, issues?ACC:FAINT);
+        group.forEach((n,k) => {
+          const y = TOP + 54 + k*24;
+          if (y > BOT-14) return;
+          const bad = n.orphan || n.cyc;
+          const on = !anyHit || hit(n);
+          ctx.globalAlpha = on ? 1 : .18;
+          ctx.fillStyle = bad ? "rgba(255,74,43,.14)" : "transparent";
+          ctx.fillRect(x+12, y-11, cw-24, 20);
+          ctx.strokeStyle = hit(n) ? ACC : css("--line"); ctx.lineWidth = hit(n)?1.5:1;
+          ctx.strokeRect(x+12.5, y-10.5, cw-25, 19);
+          T(n.name.split("/")[1].slice(0,9), x+18, y+3, "9px "+M, bad?ACC:DIM);
+          if (bad) T(n.orphan ? "고아" : "순환", x+cw-22, y+3, "8.5px "+SA, ACC, "right");
+          ctx.globalAlpha = 1;
+        });
+      });
+      T("QA 정합성 — 고아·순환 참조를 시스템별로 묶어 표시", 14, BOT+14, "9.5px "+SA, FAINT);
+    }
+    if (bfQuery && !anyHit) T('"' + bfQuery + '" 일치 없음', 14, TOP-8, "10px "+SA, ACC);
+  }
+  else if (kind === "tiles"){
+    const cols=6, rows=4, pad=44, gw=(w-pad*2)/cols, gh=(BOT-TOP)/rows;
+    for (let r=0;r<rows;r++) for (let c=0;c<cols;c++){
+      const x=pad+gw*c+4, y=TOP+gh*r+4, ww=gw-8, hh=gh-8;
+      ctx.fillStyle = P2; ctx.fillRect(x,y,ww,hh);
+      ctx.strokeStyle = LINE2; ctx.lineWidth=1; ctx.strokeRect(x+.5,y+.5,ww-1,hh-1);
+      const seed=r*cols+c;
+      const nm = "l-0" + (47+seed) + " " + ["wooden","metal","glass","calm"][seed%4];
+      const dim = tileQ && !nm.includes(tileQ);
+      if (dim) ctx.globalAlpha = .18;
+      ctx.fillStyle = [ACC,"#4b8bfa","#3fb950","#e0a33a"][seed%4];
+      ctx.globalAlpha=.20+RND(seed)*0.3;
+      const n=3+Math.floor(RND(seed*1.7)*4);
+      for(let k=0;k<n;k++){
+        const bx=x+6+RND(seed*3+k)*(ww-24), by=y+6+RND(seed*5+k)*(hh-24);
+        ctx.fillRect(bx,by,10,10);
+      }
+      ctx.globalAlpha=1;
+      const stars = 1+Math.floor(RND(seed*9)*5);
+      T("★".repeat(stars), x+5, y+hh-5, "8.5px "+M, stars>=4?ACC:FAINT);
+      if (tileQ && !dim){ ctx.strokeStyle=ACC; ctx.lineWidth=1.6; ctx.strokeRect(x+.5,y+.5,ww-1,hh-1); }
+      ctx.globalAlpha = 1;
+    }
+    T("카드별 별점 입력 · mood/style 필터 적용 결과", pad, BOT+14, "9.5px "+SA, FAINT);
+  }
+  else if (kind === "stages"){
+    const st=["Art 생성","큐레이션 A/B","Queue 생성","Field Complete","download"];
+    const bw=Math.min(168,(w-90)/5), y=h/2-30;
+    st.forEach((s,i)=>{
+      const x=45+((w-90)/5)*i+((w-90)/5-bw)/2;
+      const done=i<2, run=i===2;
+      ctx.fillStyle=P2; ctx.fillRect(x,y,bw,58);
+      ctx.strokeStyle= run?ACC : done?LINE2 : css("--line");
+      ctx.lineWidth= run?1.6:1; ctx.strokeRect(x+.5,y+.5,bw-1,57);
+      T(s, x+10, y+23, "700 11.5px "+SA, run?ACC:INK);
+      T(done?"완료":run?"진행 중":"대기", x+10, y+42, "9.5px "+SA, FAINT);
+      if(i<4){ ctx.strokeStyle=LINE2; ctx.beginPath();
+        ctx.moveTo(x+bw,y+29); ctx.lineTo(x+((w-90)/5),y+29); ctx.stroke(); }
+      if(run){ ctx.fillStyle=ACC; ctx.fillRect(x, y+58-3, bw*0.64, 3); }
+    });
+    T("Pipeline Session — 단계마다 산출물이 다음 단계 입력이 된다", 45, y+92, "9.5px "+SA, FAINT);
+  }
+  else if (kind === "voice"){
+    const mid=h*0.34, x0=40, ww=w-80;
+    ctx.strokeStyle=ACC; ctx.lineWidth=1.3; ctx.beginPath();
+    for(let i=0;i<=ww;i+=3){
+      const t=i/ww;
+      const amp=(Math.sin(t*40)*0.5+Math.sin(t*13)*0.3+Math.sin(t*77)*0.2)*(30+20*Math.sin(t*6));
+      const y=mid+amp*(t<0.72?1:0.12);
+      i?ctx.lineTo(x0+i,y):ctx.moveTo(x0+i,y);
+    }
+    ctx.stroke();
+    ctx.strokeStyle=LINE2; ctx.setLineDash([3,4]);
+    ctx.beginPath(); ctx.moveTo(x0+ww*0.72,mid-52); ctx.lineTo(x0+ww*0.72,mid+52); ctx.stroke();
+    ctx.setLineDash([]);
+    T("현재 재생 위치", x0+ww*0.72+5, mid-56, "9.5px "+SA, DIM);
+    const rows=[["요약","결제 실패 리트라이 정책을 3회·지수 백오프로 통일"],
+      ["결정","환불 예외는 별도 큐로 분리 — 담당 슬기"],
+      ["업무","웹훅 재시도 로직 구현 · 정산 스키마 확정 · 회귀 시나리오"],
+      ["질문","PG사 타임아웃 상한 확인 필요"],
+      ["리스크","정산 마감일과 배포일 충돌"]];
+    rows.forEach((r,i)=>{
+      const y=mid+92+i*24;
+      ctx.fillStyle=P2; ctx.fillRect(x0,y-13,ww,20);
+      ctx.strokeStyle=css("--line"); ctx.strokeRect(x0+.5,y-12.5,ww-1,19);
+      T(r[0], x0+9, y+1, "700 10.5px "+SA, i===2?ACC:DIM);
+      T(r[1], x0+62, y+1, "10.5px "+SA, INK);
+    });
+  }
+  else if (kind === "sql"){
+    const x0=40, y0=TOP, ww=w-80, eh=118;
+    ctx.fillStyle=css("--bg"); ctx.fillRect(x0,y0,ww,eh);
+    ctx.strokeStyle=LINE2; ctx.strokeRect(x0+.5,y0+.5,ww-1,eh-1);
+    const sql=["SELECT day, channel,","  SUM(ok)/COUNT(*) AS success_rate","FROM billing.invoices",
+      "WHERE day >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)","GROUP BY day, channel ORDER BY day"];
+    sql.forEach((l,i)=> T(l, x0+10, y0+22+i*18, "11.5px "+M, i===0?ACC:INK));
+    const XC=["day","channel","status"], YC=["success_rate","count","amount"];
+    const ty=y0+eh+24, cols=[XC[bqX],"channel",YC[bqY],"count"], cw=(ww)/4;
+    ctx.fillStyle=P2; ctx.fillRect(x0,ty,ww,23);
+    cols.forEach((c,i)=> T(c, x0+10+cw*i, ty+16, "9.5px "+M, DIM));
+    for(let r=0;r<7;r++){
+      const y=ty+23+r*21;
+      ctx.strokeStyle=css("--line"); ctx.beginPath(); ctx.moveTo(x0,y+21); ctx.lineTo(x0+ww,y+21); ctx.stroke();
+      const vals=["2026-07-"+(24+r), ["card","vbank","paypal"][r%3],
+        (0.91+RND(r)*0.07).toFixed(3), String(1200+Math.floor(RND(r*3)*900))];
+      vals.forEach((v,i)=> T(v, x0+10+cw*i, y+37, "10.5px "+M, i===2?ACC:INK));
+    }
+    T("읽기 전용 · 1000행 · 2GB 상한 · 412MB 스캔 / 1.8s", x0, BOT+14, "9.5px "+SA, FAINT);
+  }
+  else if (kind === "form"){
+    const x0=40, y0=TOP+10, ww=Math.min(w-80, 720);
+    const rows=[["담당자","박지수","jisu.park@…","U04AB…","(기본)"],
+      ["영훈","younghun.kim@…","U07CD…","hook-a"],["세영","ssyoung@…","U09EF…","—"],
+      ["병훈","darmma@…","U11GH…","hook-b"],["창훈","chyoo@…","U13IJ…","—"],["슬기","seulki.lee@…","U15KL…","hook-c"]];
+    const cw=[122,206,164,122];
+    T("작업자별 DM 라우팅", x0, y0-10, "700 11.5px "+SA, INK);
+    ["이름","로그인 이메일","Slack 멤버 ID","개별 Webhook"].forEach((c,i)=>{
+      const x=x0+cw.slice(0,i).reduce((a,b)=>a+b,0);
+      ctx.fillStyle=P2; ctx.fillRect(x,y0,cw[i],20);
+      ctx.strokeStyle=css("--line"); ctx.strokeRect(x+.5,y0+.5,cw[i]-1,19);
+      T(c, x+8, y0+14, "9.5px "+SA, DIM);
+    });
+    rows.slice(1).forEach((r,ri)=>{
+      const y=y0+24+ri*26;
+      r.forEach((v,i)=>{
+        if(i>=4) return;
+        const x=x0+cw.slice(0,i).reduce((a,b)=>a+b,0);
+        ctx.strokeStyle=css("--line"); ctx.strokeRect(x+.5,y+.5,cw[i]-1,25);
+        T(v, x+8, y+17, "10.5px "+(i===0?SA:M), i===0?INK:DIM);
+      });
+      const bx=x0+cw.reduce((a,b)=>a+b,0)+8;
+      ["DM","HOOK"].forEach((b,bi)=>{
+        ctx.strokeStyle=LINE2; ctx.strokeRect(bx+bi*48+.5, y+4.5, 44, 17);
+        T(b, bx+bi*48+10, y+17, "9.5px "+M, DIM);
+      });
+    });
+    T("행별 테스트 버튼 — 실제 도달 여부를 이 화면에서 바로 확인", x0, y0+24+5*26+28, "9.5px "+SA, FAINT);
+  }
+  else if (kind === "board"){
+    const x0=40, y0=TOP+10, ww=Math.min(w-80,760);
+    const teams=[["native",4.2,84],["geometric",3.6,72],["organic",3.0,60],["tile",2.6,52],["balloonflow",3.9,78]];
+    T("팀 평균 별점", x0, y0-10, "700 11.5px "+SA, INK);
+    teams.forEach((t,i)=>{
+      const y=y0+i*38;
+      ctx.fillStyle=P2; ctx.fillRect(x0,y,ww,32);
+      ctx.strokeStyle=i===0?ACC:css("--line"); ctx.lineWidth=i===0?1.4:1;
+      ctx.strokeRect(x0+.5,y+.5,ww-1,31);
+      T(String(i+1), x0+12, y+21, "700 13px "+M, i===0?ACC:FAINT);
+      T(t[0], x0+38, y+21, "700 11.5px "+SA, INK);
+      const bx=x0+150, bw=ww-260;
+      ctx.fillStyle=css("--line"); ctx.fillRect(bx,y+13,bw,6);
+      ctx.fillStyle=i===0?ACC:LINE2; ctx.fillRect(bx,y+13,bw*t[2]/100,6);
+      T(t[1].toFixed(1), x0+ww-74, y+21, "700 13px "+M, INK);
+      T("★", x0+ww-42, y+21, "11.5px "+M, i===0?ACC:FAINT);
+    });
+    T("별점 ≥ 4 → golden case 추출 → 회귀 batch (패스 임계 0.70)", x0, y0+5*38+24, "9.5px "+SA, FAINT);
+  }
+}
+
+/* ---------- 기능 커버리지 ---------- */
+function renderCoverage(){
+  const ids = GROUPS.flatMap(g => g.items).filter(id => (S[id].features||[]).length);
+  const total = ids.reduce((a,id) => a + S[id].features.length, 0);
+  const gameN = ids.reduce((a,id) => a + S[id].features.filter(f=>f.tag==="game").length, 0)
+    + ids.filter(id=>S[id].scope==="game").reduce((a,id)=>a+S[id].features.length,0);
+  $("#coverage").innerHTML = '<div class="wrap">' +
+    '<div class="panel pad" style="margin-bottom:8px">' +
+    '<h2 class="sh">기능 커버리지 — 이 시안이 담은 ProjectHub 기능 전체</h2>' +
+    '<div class="grid3" style="margin-bottom:9px">' +
+      '<div class="cell"><div class="stat"><span class="lb">화면</span><span class="vl num">' + ids.length + '</span></div></div>' +
+      '<div class="cell"><div class="stat"><span class="lb">기능</span><span class="vl num">' + total + '</span></div></div>' +
+      '<div class="cell"><div class="stat"><span class="lb">게임 전용</span><span class="vl num">' + gameN + '</span></div></div>' +
+    '</div>' +
+    '<div class="kr" style="font-size:11px;color:var(--dim);line-height:1.7">' +
+    '실제 소스에서 확인한 기능만 넣었습니다. 오른쪽 끝의 <span class="num">파일:라인</span>이 근거입니다. ' +
+    '주황 점은 <b>게임 전용</b>(clean 인스턴스에서 <span class="num">proxy.ts:107</span> 이 라우트를 차단하거나, ' +
+    'clean 분기에서 렌더되지 않는 기능)입니다.</div></div>' +
+    ids.map(id => {
+      const d = S[id];
+      const sc = d.scope==="game" ? '<span class="chip" style="border-color:var(--warn);color:var(--warn)">게임 전용</span>'
+        : d.scope==="owner" ? '<span class="chip" style="border-color:var(--err);color:var(--err)">소유자</span>'
+        : '<span class="chip">공통</span>';
+      return '<div class="panel pad" style="margin-bottom:8px">' +
+        '<div class="sech" style="margin-bottom:6px"><span>' + d.label +
+        ' <span class="r">' + d.route + '</span></span><span class="r">' + sc +
+        ' &nbsp;<b>' + d.features.length + '</b>개</span></div>' +
+        '<table class="plan"><tbody>' + d.features.map(f =>
+          '<tr><td style="width:22px">' + (f.tag==="game"
+            ? '<span class="dotk warn"></span>' : '<span class="dotk dim"></span>') + '</td>' +
+          '<td class="kr" style="width:230px;font-weight:700">' + f.n + '</td>' +
+          '<td class="kr">' + (f.d||"—") + '</td>' +
+          '<td class="num" style="width:130px;color:var(--faint)">' + f.src + '</td></tr>').join("") +
+        '</tbody></table></div>';
+    }).join("") + '</div>';
+  brackets();
+}
+
+/* =========================================================================
+   루프
+   ========================================================================= */
+function sizeCanvases(){
+  for (const c of $$("canvas")){
+    if (c.classList.contains("sch")){
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      const r = c.getBoundingClientRect();
+      if (!r.width) continue;
+      if (c.width !== Math.floor(r.width*dpr) || c.height !== Math.floor(r.height*dpr)){
+        c.width = r.width*dpr; c.height = r.height*dpr;
+        c.getContext("2d").setTransform(dpr,0,0,dpr,0,0);
+      }
+    } else if (c.classList.contains("spark")){
+      // 스파크라인도 DPR을 적용해야 한다 — 안 하면 고해상도 화면에서 2배 확대되어 뭉갠다
+      if (!c.dataset.h) c.dataset.h = c.getAttribute("height") || "46";
+      const H = +c.dataset.h;
+      const r = c.getBoundingClientRect();
+      if (!r.width) continue;
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      const pw = Math.round(r.width * dpr), ph = Math.round(H * dpr);
+      if (c.width !== pw || c.height !== ph){
+        c.width = pw; c.height = ph;
+        c.style.height = H + "px";
+        c.getContext("2d").setTransform(dpr, 0, 0, dpr, 0, 0);
+        c.dataset.dirty = "1";
+      }
+    }
+  }
+}
+let last = performance.now();
+function loop(now){
+  const dt = Math.max(0, Math.min(0.05, (now - last)/1000)); last = now;
+  if (!sim.paused) stepSim(dt);
+  sizeCanvases();
+  if (screen === "dash"){ drawPipe(); updateDashUI(); }
+  else if (screen === "agents"){ drawWires(dt); }
+  else if (screen === "tasks" && !(uiTick++ % 30)) histogram("#sp-age", BOARD.map(t=>t.age), AGE_BUCKETS, AGE_LABELS);
+  requestAnimationFrame(loop);
+}
+
+/* ---------- boot ---------- */
+brackets();
+initMeters();
+renderBoard();
+renderWireCols();
+initWireView();      // 화면 전환 순서와 무관하게 부팅 시 한 번 확실히 바인딩
+renderNav();
+requestAnimationFrame(() => { sizeCanvases(); layoutWires(); });
+new ResizeObserver(() => {
+  sizeCanvases();
+  if (screen === "agents") layoutWires();
+  else if (S[screen] && !S[screen].bespoke) drawCenter(screen);
+}).observe(document.body);
+dLog("pipeline.start()");
+wLog("routing.load(" + RULES.length + " rules)");
+for (let i = 0; i < 6; i++) spawn(INTAKE[i % 4]);
+const initTab = new URLSearchParams(location.search).get("tab");
+setScreen(initTab && S[initTab] ? initTab : "delta");
+if (!applyTaskHash() && location.hash.startsWith("#task=")) boardToast("해당 작업을 찾을 수 없습니다");
+if (new URLSearchParams(location.search).get("notes") === "1") $("#sw-notes").click();
+if (new URLSearchParams(location.search).get("skin") === "light") $$("#sw-skin .tg")[1].click();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

@@ -1,0 +1,411 @@
+# ProjectHub Unity MCP — Tier 1 RPC Specification
+# version: 0.1-draft (2026-05-07)
+#
+# 구조: Hermes(Plan/OpenAI Execute) ──HTTP──> MCP Server(Node.js) ──HTTP──> Unity Editor(C# HttpListener)
+#                                                                              │
+#                                                                              └─ EditorApplication.delayCall queue (single thread)
+#
+# 모든 Modify 호출은 다음 보강을 자동 수행:
+#   - Undo.IncrementCurrentGroup() + SetCurrentGroupName  → group_id 반환
+#   - AssetDatabase.SaveAssets() + Refresh(Synchronous)    → import 완료 보장
+#   - ICS write-through                                    → _CONTRACTS.yaml / _ASSET_MANIFEST.yaml 갱신
+
+meta:
+  version: "0.1-draft"
+  transport: "HTTP/1.1 + JSON"
+  auth: "Bearer token (env: PROJECTHUB_MCP_TOKEN)"
+  base_url: "http://localhost:7900"   # MCP server, fronts Unity bridge
+  unity_bridge_url: "http://localhost:7901"  # Unity HttpListener (internal)
+  encoding: "UTF-8"
+
+# ─────────────────────────────────────────────
+# 공용 타입
+# ─────────────────────────────────────────────
+common_types:
+
+  AssetRef:
+    description: "에셋 식별 — path 또는 guid 중 하나. path 우선."
+    fields:
+      path: "string?  # 'Assets/Prefabs/Balloon.prefab'"
+      guid: "string?  # AssetDatabase GUID 32hex"
+
+  GameObjectRef:
+    description: "씬 내 GameObject 식별 — scene + hierarchy_path."
+    fields:
+      scene_path: "string  # 'Assets/Scenes/GameScene.unity'"
+      hierarchy_path: "string  # 'Managers/PoolManager' (root부터 슬래시 구분)"
+
+  ComponentRef:
+    description: "컴포넌트 식별 — GameObjectRef + type + ordinal(같은 타입 여러 개일 때)."
+    fields:
+      target: "GameObjectRef | AssetRef  # AssetRef는 prefab 내부 컴포넌트일 때"
+      type_name: "string  # 'UnityEngine.UI.Image' (full namespace)"
+      ordinal: "int = 0  # 같은 타입 N번째"
+
+  Value:
+    description: "직렬화 가능 값. typed union."
+    variants:
+      - {kind: "primitive", value: "string|int|float|bool|null"}
+      - {kind: "vector2", x: "float", y: "float"}
+      - {kind: "vector3", x: "float", y: "float", z: "float"}
+      - {kind: "color", r: "float", g: "float", b: "float", a: "float"}
+      - {kind: "asset_ref", ref: "AssetRef"}
+      - {kind: "scene_object_ref", ref: "GameObjectRef"}
+      - {kind: "enum", type_name: "string", value: "string"}
+      - {kind: "array", items: "Value[]"}
+
+  Error:
+    fields:
+      code: "string  # 'unity.compile_error' | 'mcp.timeout' | ..."
+      message: "string"
+      details: "object?  # 추가 컨텍스트"
+
+  TxResult:
+    description: "Modify 호출 공통 응답 헤더."
+    fields:
+      ok: "bool"
+      undo_group_id: "int?  # Modify 성공 시"
+      ics_changes: "IcsChange[]?  # 자동 갱신된 yaml 변경 요약"
+      duration_ms: "int"
+
+  IcsChange:
+    fields:
+      file: "string  # '_CONTRACTS.yaml' | '_ASSET_MANIFEST.yaml'"
+      op: "string    # 'append_event' | 'append_pool_key' | 'append_serialized_field' | 'append_prefab' | ..."
+      entry: "object # 갱신된 yaml 엔트리"
+
+# ─────────────────────────────────────────────
+# Inspect — 읽기 전용, Undo 없음, 빠름
+# ─────────────────────────────────────────────
+tools:
+
+  inspect.scene.list:
+    description: "현재 build settings 등록된 씬 + 열려있는 씬."
+    params: {}
+    returns:
+      build_settings: "string[]  # build에 등록된 scene path"
+      open_scenes: "string[]"
+      active_scene: "string"
+
+  inspect.scene.read:
+    description: "씬 hierarchy + manager objects + 카메라/Canvas 메타."
+    params:
+      scene_path: "string"
+      depth: "int = 4  # GameObject 트리 최대 깊이"
+    returns:
+      root_objects: "object[]  # {name, path, components[], children[]}"
+      canvases: "object[]      # {path, scaler_mode, ref_resolution}"
+      camera: "object?"
+
+  inspect.asset.list:
+    description: "에셋 폴더 내 파일 목록."
+    params:
+      folder: "string  # 'Assets/Prefabs' (재귀 X), 'Assets/**' 재귀"
+      type_filter: "string?  # 'Prefab' | 'Sprite' | 'ScriptableObject' | ..."
+    returns:
+      assets: "object[]  # {path, guid, type, size_bytes}"
+
+  inspect.asset.read:
+    description: "에셋 단일 메타 + (prefab인 경우) 컴포넌트 트리."
+    params:
+      ref: "AssetRef"
+    returns:
+      ref: "AssetRef"
+      type: "string"
+      created_at: "string"
+      modified_at: "string"
+      prefab_root: "object?  # prefab일 때 hierarchy + components"
+
+  inspect.prefab.read:
+    description: "prefab 컴포넌트 + serialized field 전체 덤프 (asset.read의 prefab 전용 더 깊은 버전)."
+    params:
+      ref: "AssetRef"
+      include_field_values: "bool = true"
+    returns:
+      hierarchy: "object  # {name, path, components: [{type, fields: {name: Value}}], children: [...]}"
+      asset_dependencies: "AssetRef[]  # 이 prefab이 의존하는 모든 에셋"
+
+  inspect.serializedfield.read:
+    description: "단일 serialized field 값 조회."
+    params:
+      target: "ComponentRef"
+      field_name: "string"
+    returns:
+      value: "Value"
+      field_type: "string  # C# type name"
+
+  inspect.console.read_errors:
+    description: "Editor 콘솔의 error/exception 메시지 (warning 제외)."
+    params:
+      since_unix_ms: "int?  # 이 timestamp 이후만"
+      limit: "int = 100"
+    returns:
+      errors: "object[]  # {timestamp_ms, message, stack_trace, file, line}"
+      cleared_at_unix_ms: "int  # console이 마지막으로 clear된 시각"
+
+  inspect.compilation.status:
+    description: "현재 컴파일 상태 + 컴파일 에러 목록."
+    params: {}
+    returns:
+      is_compiling: "bool"
+      assemblies: "object[]  # {name, status: 'idle'|'compiling'|'failed', errors: [...]}"
+
+# ─────────────────────────────────────────────
+# Modify — 상태 변경. Undo 자동 묶음 + import await + ICS write-through
+# ─────────────────────────────────────────────
+
+  modify.prefab.create:
+    description: "신규 prefab 생성. 컴포넌트 + 초기 field 값 한 번에. ICS: _ASSET_MANIFEST.prefabs append + 컴포넌트 중 EventBus publisher/subscriber 검출 시 _CONTRACTS.events 갱신."
+    params:
+      path: "string  # 'Assets/Prefabs/Balloon.prefab'"
+      components: "object[]  # [{type_name, fields: {name: Value}}]"
+      pool_key: "string?  # ObjectPool 등록 시 자동으로 _CONTRACTS.pool_keys append"
+    returns: "TxResult & {ref: AssetRef}"
+    errors: ["asset.path_exists", "asset.invalid_component_type", "asset.missing_component_dependency"]
+
+  modify.prefab.modify:
+    description: "기존 prefab batch 수정 (add_component / remove_component / set_field / move_child)."
+    params:
+      ref: "AssetRef"
+      ops: "object[]  # [{op: 'add_component', type_name, fields}, {op: 'set_field', component, field, value}, ...]"
+    returns: "TxResult"
+    errors: ["asset.not_found", "ref.field_type_mismatch", "ref.unresolvable_target"]
+
+  modify.gameobject.add_to_scene:
+    description: "씬에 GameObject 추가 (root 또는 부모 아래). 컴포넌트 + field 세팅 동시. ICS: _ASSET_MANIFEST.scenes.manager_objects 또는 ui_hierarchy append."
+    params:
+      scene_path: "string"
+      parent_path: "string?  # null이면 root"
+      name: "string"
+      components: "object[]"
+      pivot: "{x: float, y: float}?  # RectTransform일 때"
+      anchor_min: "{x: float, y: float}?"
+      anchor_max: "{x: float, y: float}?"
+    returns: "TxResult & {ref: GameObjectRef}"
+
+  modify.gameobject.modify:
+    description: "씬 GameObject batch 수정 (add_component / set_field / set_active / set_parent / rename / delete)."
+    params:
+      ref: "GameObjectRef"
+      ops: "object[]"
+    returns: "TxResult"
+
+  modify.serializedfield.set:
+    description: "단일 field 설정. SerializedObject + ApplyModifiedProperties 자동. asset_ref 값일 경우 자동 import 보장. ICS: 클래스 [SerializeField]면 _CONTRACTS.serialized_fields append."
+    params:
+      target: "ComponentRef"
+      field_name: "string"
+      value: "Value"
+    returns: "TxResult"
+
+  modify.asset.move:
+    description: "에셋 이동 / 이름 변경. AssetDatabase.MoveAsset 사용. 의존하는 prefab/scene 자동 업데이트."
+    params:
+      from_path: "string"
+      to_path: "string"
+    returns: "TxResult & {new_ref: AssetRef}"
+
+  modify.asset.delete:
+    description: "에셋 삭제. 사용 중인 ref 있으면 결과에 broken_refs로 보고."
+    params:
+      ref: "AssetRef"
+      force: "bool = false  # broken_refs 있어도 진행"
+    returns: "TxResult & {broken_refs: object[]}"
+
+  modify.scriptableobject.create:
+    description: "ScriptableObject 인스턴스 생성. CLAUDE.md output-data 규칙 준수 — [CreateAssetMenu] 클래스만 허용."
+    params:
+      class_full_name: "string  # 'Game.Data.LevelData'"
+      path: "string  # 'Assets/Data/Level_001.asset'"
+      fields: "object?  # 초기 값 {name: Value}"
+    returns: "TxResult & {ref: AssetRef}"
+
+# ─────────────────────────────────────────────
+# Validate — 읽기 전용, 비쌈, 명시적 호출
+# ─────────────────────────────────────────────
+
+  validate.compile.wait:
+    description: "컴파일 끝날 때까지 블록 + 에러 반환. 이미 idle이면 즉시."
+    params:
+      timeout_sec: "int = 60"
+    returns:
+      is_compiling: "bool  # timeout 시 true"
+      errors: "object[]"
+
+  validate.references:
+    description: "씬/prefab의 missing script + null serialized field + broken AssetRef 검사."
+    params:
+      scope: "string = 'all'  # 'all' | 'scene:<path>' | 'prefab:<path>'"
+    returns:
+      missing_scripts: "object[]  # {path, gameobject, type_name}"
+      null_serialized_fields: "object[]  # {target, field}"
+      broken_asset_refs: "object[]  # {target, field, original_path}"
+
+  validate.contracts:
+    description: "_CONTRACTS.yaml + _ASSET_MANIFEST.yaml의 엔트리가 실제 씬/코드와 일치하는지 양방향 검사 (Validator Stage 5.5의 라이브 버전)."
+    params:
+      project_root: "string  # 'Assets/'"
+    returns:
+      events: "object  # {ok: int, missing_publisher: [...], missing_subscriber: [...], unregistered: [...]}"
+      pool_keys: "object  # {ok, missing_consumer, missing_prefab, unregistered}"
+      serialized_fields: "object  # {ok, missing_attribute, missing_wiring}"
+      method_calls: "object  # {ok, missing_caller, missing_target}"
+      asset_requirements: "object  # {ok, missing_creator}"
+
+# ─────────────────────────────────────────────
+# Transaction — 메타 도구
+# ─────────────────────────────────────────────
+
+  tx.undo:
+    description: "Modify 호출이 반환한 undo_group_id로 그 그룹까지 되돌림. group_id가 most-recent group이 아니면 거부 (그 위에 후속 변경 있음)."
+    params:
+      undo_group_id: "int"
+    returns:
+      ok: "bool"
+      reverted_groups: "int  # 실제 되돌린 그룹 수"
+      reason: "string?  # 거부 사유"
+
+  tx.list_recent:
+    description: "최근 N개 Modify 그룹 (디버그/감사)."
+    params:
+      limit: "int = 20"
+    returns:
+      groups: "object[]  # {undo_group_id, name, timestamp_ms, tool_name}"
+
+# ─────────────────────────────────────────────
+# 에러 카테고리
+# ─────────────────────────────────────────────
+errors:
+  asset:
+    - "asset.not_found"
+    - "asset.path_exists"
+    - "asset.invalid_path"
+    - "asset.invalid_component_type"
+    - "asset.missing_component_dependency"  # 예: Image without Canvas
+    - "asset.import_failed"
+  ref:
+    - "ref.unresolvable_target"   # GameObjectRef hierarchy_path 못 찾음
+    - "ref.field_not_found"
+    - "ref.field_type_mismatch"
+    - "ref.component_not_found"
+  unity:
+    - "unity.compile_error"        # 컴파일 실패 시 modify 거부
+    - "unity.busy"                 # 다른 modify 진행 중 (queue 대기 권장)
+    - "unity.in_play_mode"         # play mode에서 modify 금지
+  mcp:
+    - "mcp.timeout"
+    - "mcp.unauthorized"
+    - "mcp.bridge_disconnected"    # Unity HttpListener 응답 없음
+  ics:
+    - "ics.contracts_yaml_invalid"
+    - "ics.asset_manifest_invalid"
+    - "ics.write_through_failed"   # modify는 성공했지만 yaml 갱신 실패 (롤백 필요)
+
+# ─────────────────────────────────────────────
+# ICS Write-through 매핑
+# ─────────────────────────────────────────────
+ics_write_through:
+  description: "Modify 툴 → yaml 자동 갱신 매핑. modify가 성공해도 ics.write_through_failed 발생 시 자동 tx.undo로 롤백."
+
+  rules:
+    modify.prefab.create:
+      - file: "_ASSET_MANIFEST.yaml"
+        op: "append_prefab"
+        derive:
+          name: "filename without ext"
+          path: "params.path"
+          components: "params.components[].type_name"
+          pool_key: "params.pool_key"
+          created_by: "'mcp'"
+      - file: "_CONTRACTS.yaml"
+        op: "append_pool_key"
+        when: "params.pool_key != null"
+        derive: {key: "params.pool_key", prefab_path: "params.path", initial_size: 30}
+
+    modify.gameobject.add_to_scene:
+      - file: "_ASSET_MANIFEST.yaml"
+        op: "append_scene_object"
+        derive:
+          scene: "params.scene_path"
+          name: "params.name"
+          components: "params.components[].type_name"
+
+    modify.serializedfield.set:
+      - file: "_CONTRACTS.yaml"
+        op: "append_serialized_field"
+        when: "field has [SerializeField] OR field is public"
+        derive:
+          class: "from ComponentRef.type_name"
+          field: "params.field_name"
+          type: "field_type from inspect.serializedfield.read"
+          wired_by: "'mcp'"
+          scene_object_name: "if value.kind == 'scene_object_ref'"
+
+    modify.prefab.modify:
+      - "ops 단위로 위 규칙 분해 적용"
+
+  failure_policy: "ICS 갱신 실패 = Modify 자체 롤백 (tx.undo). 코드/씬과 yaml의 드리프트 0 보장."
+
+# ─────────────────────────────────────────────
+# 운영 제약
+# ─────────────────────────────────────────────
+runtime_constraints:
+  - "Unity가 Play Mode인 동안 모든 Modify 거부 (errors.unity.in_play_mode)"
+  - "Unity 컴파일 진행 중에는 Modify 큐에 enqueue, idle 상태에서 직렬 처리"
+  - "동시 Modify 요청은 MCP 서버에서 직렬화 — Unity 메인 스레드는 1요청만"
+  - "타임아웃 기본값: Inspect 5s / Modify 30s / Validate 60s / compile.wait 명시값"
+  - "각 Modify는 단일 Undo 그룹 — tx.undo로 되돌림 가능 (most-recent만)"
+
+# ─────────────────────────────────────────────
+# 1차에서 의도적으로 제외
+# ─────────────────────────────────────────────
+out_of_scope_tier1:
+  - "Addressables 그룹/라벨/번들 (→ 2차)"
+  - "Build Settings scenes 추가 외 PlayerSettings / 빌드 실행 (→ 3차 = 본 워크플로우 제외)"
+  - "Material/Shader 생성 — 사용자 제공 정책"
+  - "AnimationClip / Timeline 편집"
+  - "TextMeshPro 폰트 atlas 생성"
+  - "Lighting bake / Reflection probe"
+
+# ─────────────────────────────────────────────
+# 호출 예시 (Hermes Plan/Execute 시나리오)
+# ─────────────────────────────────────────────
+examples:
+
+  - name: "BalloonEnemy 프리팹 생성 + Pool 등록 + Scene 매니저 wiring"
+    sequence:
+      - call: inspect.asset.list
+        params: {folder: "Assets/Prefabs", type_filter: "Prefab"}
+        comment: "기존 prefab 중복 확인"
+      - call: modify.prefab.create
+        params:
+          path: "Assets/Prefabs/BalloonEnemy.prefab"
+          components:
+            - {type_name: "BalloonEnemyController", fields: {speed: {kind: primitive, value: 5.0}}}
+            - {type_name: "UnityEngine.SpriteRenderer", fields: {}}
+            - {type_name: "UnityEngine.CircleCollider2D", fields: {radius: {kind: primitive, value: 0.5}}}
+          pool_key: "BalloonEnemy"
+        returns_used: "ref, undo_group_id, ics_changes"
+      - call: validate.compile.wait
+        params: {timeout_sec: 30}
+        if_errors: "tx.undo with previous undo_group_id"
+      - call: modify.serializedfield.set
+        params:
+          target:
+            target: {scene_path: "Assets/Scenes/GameScene.unity", hierarchy_path: "Managers/PoolManager"}
+            type_name: "ObjectPoolManager"
+          field_name: "_balloonEnemyPrefab"
+          value: {kind: asset_ref, ref: {path: "Assets/Prefabs/BalloonEnemy.prefab"}}
+
+  - name: "ShopListItem 스프라이트 매핑 (17-cycle 영역)"
+    sequence:
+      - call: inspect.prefab.read
+        params: {ref: {path: "Assets/Prefabs/UI/ShopListItem.prefab"}, include_field_values: true}
+      - call: modify.prefab.modify
+        params:
+          ref: {path: "Assets/Prefabs/UI/ShopListItem.prefab"}
+          ops:
+            - {op: set_field, component: {type_name: "UnityEngine.UI.Image"}, field: "sprite",
+               value: {kind: asset_ref, ref: {path: "Assets/2.Sprite/UI/gold03.png"}}}
+      - call: validate.references
+        params: {scope: "prefab:Assets/Prefabs/UI/ShopListItem.prefab"}

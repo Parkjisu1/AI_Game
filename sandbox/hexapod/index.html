@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HEXAPOD SIMULATOR — test build</title>
+<style>
+  :root{
+    --bg:#d9d9d5; --panel:#f7f7f4; --strip:#e4e4df; --ink:#141414;
+    --line:#141414; --soft:#b9b9b3; --red:#f03000; --red2:#c92800; --gray:#8b8b86;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{
+    background:var(--bg);
+    font-family:ui-monospace,"Cascadia Mono",Consolas,"Courier New",monospace;
+    color:var(--ink); font-size:11px; -webkit-font-smoothing:antialiased;
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+  }
+  .frame{
+    width:min(1780px, 100vw); height:100vh; padding:10px 14px 16px;
+    display:flex; flex-direction:column; gap:8px; position:relative;
+  }
+  .frame::after{ /* bottom center marker */
+    content:""; position:absolute; left:50%; bottom:4px; transform:translateX(-50%);
+    border-left:6px solid transparent; border-right:6px solid transparent; border-top:7px solid var(--red);
+  }
+
+  /* ---------- header ---------- */
+  /* 3열 그리드 — 좌우 블록 폭이 달라도 브랜드가 정중앙에 온다.
+     flex + justify-content:space-between 은 좌우 폭 차이의 절반만큼 중앙을 밀어낸다. */
+  header{
+    border:1px solid var(--line); background:var(--panel);
+    display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+    align-items:center;
+    padding:6px 14px; min-height:46px;
+  }
+  .hd-col{display:flex; gap:22px; align-items:center;}
+  .hd-col:first-child{justify-self:start;}
+  .hd-col:last-child{justify-self:end;}
+  .hd-kv{display:flex; flex-direction:column; gap:2px;}
+  .hd-kv .k{font-size:8px; letter-spacing:.12em; color:var(--gray);}
+  .hd-kv .v{font-size:10px; font-weight:700; letter-spacing:.06em;}
+  .hd-kv .v.red{color:var(--red);}
+  .brand{text-align:center; align-self:center;}
+  .brand h1{font-size:21px; letter-spacing:.42em; font-weight:800; padding-left:.42em;}
+  .brand .sub{font-size:8px; letter-spacing:.62em; color:var(--gray); padding-left:.62em; margin-top:1px;}
+  .sig{display:flex; align-items:flex-end; gap:2px; height:14px;}
+  .sig i{width:3px; background:var(--ink); display:block;}
+  .batt{width:26px; height:13px; border:1.5px solid var(--ink); border-radius:2px; position:relative; padding:2px;}
+  .batt::after{content:""; position:absolute; right:-4px; top:3px; width:2.5px; height:5px; background:var(--ink);}
+  .batt i{display:block; height:100%; width:83%; background:var(--red);}
+
+  /* ---------- tabs ---------- */
+  .tabs{display:flex; gap:6px;}
+  .tab{
+    flex:1; border:1px solid var(--line); background:var(--panel);
+    padding:7px 10px; font-size:9px; letter-spacing:.18em; cursor:pointer;
+    display:flex; align-items:center; gap:8px; user-select:none; position:relative;
+  }
+  .tab .n{color:var(--gray); font-size:8px;}
+  .tab:hover{background:#efefeb;}
+  .tab.active{background:var(--ink); color:#fff;}
+  .tab.active .n{color:#999;}
+  .tab.active::after{
+    content:""; position:absolute; right:-1px; top:-1px;
+    border-top:9px solid var(--red); border-left:9px solid transparent;
+  }
+
+  /* ---------- main grid ---------- */
+  main{flex:1; display:grid; grid-template-columns:292px 1fr 292px; gap:8px; min-height:0;}
+  .panel{
+    border:1px solid var(--line); background:var(--panel);
+    display:flex; flex-direction:column; min-height:0; overflow:hidden;
+  }
+  .side{padding:8px; gap:8px; overflow-y:auto;}
+  .sec{display:flex; flex-direction:column; gap:5px;}
+  .sec-h{
+    background:var(--strip); border:1px solid var(--soft);
+    padding:3px 7px; display:flex; justify-content:space-between; align-items:center;
+    font-size:9px; letter-spacing:.14em; font-weight:700;
+  }
+  .sec-h .r{font-weight:400; color:var(--gray); font-size:8px; letter-spacing:.08em;}
+  .sec-h .r b{color:var(--red); font-weight:700;}
+  canvas.chart{width:100%; display:block; background:#fff; border:1px solid var(--soft);}
+
+  /* viewport */
+  #viewport-wrap{position:relative;}
+  #view{position:absolute; inset:0; width:100%; height:100%; cursor:grab;}
+  #view.dragging{cursor:grabbing;}
+  .hud{position:absolute; font-size:9px; letter-spacing:.08em; line-height:1.7; pointer-events:none; color:#333;}
+  .hud b{font-weight:700; color:var(--ink);}
+  .hud .red{color:var(--red); font-weight:700;}
+  #hud-tl{top:10px; left:12px;}
+  #hud-tr{top:10px; right:12px; text-align:right;}
+  #hud-bl{bottom:8px; left:12px;}
+  #hud-br{bottom:8px; right:12px; text-align:right;}
+  #offline{
+    position:absolute; inset:0; display:none; align-items:center; justify-content:center;
+    flex-direction:column; gap:10px; background:repeating-linear-gradient(45deg,#f3f3f0 0 14px,#ededea 14px 28px);
+  }
+  #offline .box{border:1px solid var(--line); background:var(--panel); padding:18px 30px; text-align:center;}
+  #offline .box .t{font-size:13px; letter-spacing:.3em; font-weight:800;}
+  #offline .box .s{font-size:9px; letter-spacing:.14em; color:var(--gray); margin-top:6px;}
+
+  /* right panel widgets */
+  .btn{
+    border:1px solid var(--line); background:var(--panel); color:var(--ink);
+    font-family:inherit; font-size:9px; letter-spacing:.16em; font-weight:700;
+    padding:8px 6px; cursor:pointer; user-select:none;
+  }
+  .btn:hover{background:#eeeeea;}
+  .btn:active{transform:translateY(1px);}
+  .btn.primary{background:var(--red); border-color:var(--red2); color:#fff;}
+  .btn.primary:hover{background:var(--red2);}
+  .btn.dark{background:var(--ink); color:#fff;}
+  .row2{display:grid; grid-template-columns:1.4fr 1fr; gap:6px;}
+  .row3{display:grid; grid-template-columns:repeat(3,1fr); gap:6px;}
+  .sim-dot{width:7px; height:7px; border-radius:50%; background:var(--red); animation:blink 1.2s steps(2) infinite;}
+  @keyframes blink{50%{opacity:.15;}}
+
+  .dpad{display:grid; grid-template-columns:repeat(3,1fr); gap:6px;}
+  .dpad .btn{padding:11px 0; font-size:11px;}
+  .dpad .btn.on{background:var(--ink); color:#fff;}
+
+  .param{display:flex; flex-direction:column; gap:3px; padding:2px 0;}
+  .param .lab{display:flex; justify-content:space-between; font-size:9px; letter-spacing:.12em;}
+  .param .lab .val{font-weight:700;}
+  input[type=range]{
+    -webkit-appearance:none; appearance:none; width:100%; height:14px; background:transparent; cursor:pointer;
+  }
+  input[type=range]::-webkit-slider-runnable-track{height:3px; background:var(--soft);}
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:9px; height:13px; background:var(--red);
+    border:1px solid var(--red2); margin-top:-5px;
+  }
+  input[type=range]::-moz-range-track{height:3px; background:var(--soft);}
+  input[type=range]::-moz-range-thumb{width:9px; height:13px; background:var(--red); border:1px solid var(--red2); border-radius:0;}
+
+  #cmdlog{
+    background:#fff; border:1px solid var(--soft); padding:5px 7px; flex:1; min-height:74px; overflow:hidden;
+    font-size:9px; line-height:1.65; color:#444;
+  }
+  #cmdlog .t{color:var(--red); font-weight:700;}
+  ::-webkit-scrollbar{width:0; height:0;}
+</style>
+</head>
+<body>
+<div class="frame">
+
+  <header>
+    <div class="hd-col">
+      <div class="hd-kv"><span class="k">CPU</span><span class="v" id="st-cpu">DIRECT</span></div>
+      <div class="hd-kv"><span class="k">TEMP: <b id="st-temp">41°C</b></span><span class="v">CLK: <span id="st-clk">00:00:00</span></span></div>
+      <div class="hd-kv"><span class="k">MODE</span><span class="v">IK · KINEMATIC</span></div>
+    </div>
+    <div class="brand">
+      <h1>HEXAPOD</h1>
+      <div class="sub">SIMULATOR</div>
+    </div>
+    <div class="hd-col">
+      <div class="hd-kv" style="text-align:right">
+        <span class="k">STATE: <b class="v red" id="st-state" style="font-size:9px">WALKING</b></span>
+        <span class="k">GAIT: <b id="st-gait" style="color:var(--ink)">TRIPOD</b></span>
+      </div>
+      <div class="hd-kv"><span class="k">CONNECTED</span></div>
+      <div class="sig"><i style="height:4px"></i><i style="height:7px"></i><i style="height:10px"></i><i style="height:13px"></i></div>
+      <div class="batt"><i></i></div>
+    </div>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <div class="tab" data-tab="telemetry"><span class="n">01</span>TELEMETRY</div>
+    <div class="tab active" data-tab="kinematics"><span class="n">02</span>KINEMATICS</div>
+    <div class="tab" data-tab="sensors"><span class="n">03</span>SENSORS</div>
+    <div class="tab" data-tab="mission"><span class="n">04</span>MISSION</div>
+    <div class="tab" data-tab="terrain"><span class="n">05</span>TERRAIN</div>
+    <div class="tab" data-tab="network"><span class="n">06</span>NETWORK</div>
+    <div class="tab" data-tab="logs"><span class="n">07</span>LOGS</div>
+    <div class="tab" data-tab="config"><span class="n">08</span>CONFIG</div>
+  </nav>
+
+  <main>
+    <!-- ======== left: telemetry ======== -->
+    <div class="panel side">
+      <div class="sec">
+        <div class="sec-h">JOINT TORQUE <span class="r">— FEMUR <b>TIBIA</b></span></div>
+        <canvas class="chart" id="ch-torque" height="86"></canvas>
+      </div>
+      <div class="sec">
+        <div class="sec-h">FOOT HEIGHT <span class="r">SWING TRACE · L1</span></div>
+        <canvas class="chart" id="ch-foot" height="72"></canvas>
+      </div>
+      <div class="sec">
+        <div class="sec-h">LEG LOAD <span class="r">STRUT FORCE</span></div>
+        <canvas class="chart" id="ch-load" height="108"></canvas>
+      </div>
+      <div class="sec">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <canvas class="chart" id="g-solver" height="104" style="border:none; background:transparent;"></canvas>
+          <canvas class="chart" id="g-servo" height="104" style="border:none; background:transparent;"></canvas>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="param">
+          <div class="lab"><span>POWER</span><span class="val" id="v-power">83%</span></div>
+          <div style="height:5px; border:1px solid var(--soft); background:#fff;"><div id="bar-power" style="height:100%; width:83%; background:var(--ink);"></div></div>
+        </div>
+        <div class="param">
+          <div class="lab"><span>DRAW</span><span class="val" id="v-draw">2.58 A</span></div>
+          <div style="height:5px; border:1px solid var(--soft); background:#fff;"><div id="bar-draw" style="height:100%; width:52%; background:var(--red);"></div></div>
+        </div>
+      </div>
+      <div class="sec" style="flex:1; min-height:70px;">
+        <div class="sec-h">COMMANDS</div>
+        <div id="cmdlog"></div>
+      </div>
+    </div>
+
+    <!-- ======== center: 3d viewport ======== -->
+    <div class="panel" id="viewport-wrap">
+      <canvas id="view"></canvas>
+      <div class="hud" id="hud-tl">
+        <b>MDL: HXPD-06 REV C</b><br>
+        SOLVER: <b>ANALYTIC 3-DOF IK</b><br>
+        DOF: <b>18</b> · LEGS: <b>6</b>
+      </div>
+      <div class="hud" id="hud-tr">
+        CAM <b>ORBIT</b> &nbsp;<span style="color:#888">DRAG TO ROTATE<br>SCROLL TO ZOOM</span>
+      </div>
+      <div class="hud" id="hud-bl">BODY Y=<b id="hud-by">0.00</b> &nbsp; PHASE <b id="hud-ph">0.00</b></div>
+      <div class="hud" id="hud-br"><span class="red" id="hud-v">v 0.00 m/s</span> &nbsp; <b id="hud-w">ω 0.00 rad/s</b></div>
+      <div id="offline">
+        <div class="box">
+          <div class="t" id="offline-name">SENSORS</div>
+          <div class="s">MODULE NOT INSTALLED — TEST BUILD</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======== right: simulation ======== -->
+    <div class="panel side">
+      <div class="sec-h" style="border:none; background:transparent; padding:2px 2px 0;">
+        SIMULATION <span class="sim-dot"></span>
+      </div>
+      <div class="row2">
+        <button class="btn primary" id="btn-pause">‖ PAUSE</button>
+        <button class="btn" id="btn-reset">RESET</button>
+      </div>
+
+      <div class="sec">
+        <div class="sec-h">GAIT PATTERN</div>
+        <div class="row3" id="gait-btns">
+          <button class="btn dark" data-gait="tripod">TRIPOD</button>
+          <button class="btn" data-gait="ripple">RIPPLE</button>
+          <button class="btn" data-gait="wave">WAVE</button>
+        </div>
+        <canvas class="chart" id="ch-phase" height="96"></canvas>
+      </div>
+
+      <div class="sec">
+        <div class="sec-h">LOCOMOTION</div>
+        <div class="dpad" id="dpad">
+          <button class="btn" data-cmd="TL">⟲</button>
+          <button class="btn on" data-cmd="F">▲</button>
+          <button class="btn" data-cmd="TR">⟳</button>
+          <button class="btn" data-cmd="L">◄</button>
+          <button class="btn" data-cmd="S">■</button>
+          <button class="btn" data-cmd="R">►</button>
+          <button class="btn" data-cmd="" disabled style="visibility:hidden"></button>
+          <button class="btn" data-cmd="B">▼</button>
+          <button class="btn" data-cmd="" disabled style="visibility:hidden"></button>
+        </div>
+      </div>
+
+      <div class="sec" style="flex:1;">
+        <div class="sec-h">PARAMETERS</div>
+        <div class="param">
+          <div class="lab"><span>GAIT SPEED</span><span class="val" id="pv-speed">1.6x</span></div>
+          <input type="range" id="p-speed" min="0.2" max="3" step="0.1" value="1.6">
+        </div>
+        <div class="param">
+          <div class="lab"><span>STRIDE LENGTH</span><span class="val" id="pv-stride">1.08 m</span></div>
+          <input type="range" id="p-stride" min="0.2" max="2" step="0.02" value="1.08">
+        </div>
+        <div class="param">
+          <div class="lab"><span>STEP HEIGHT</span><span class="val" id="pv-step">0.46 m</span></div>
+          <input type="range" id="p-step" min="0.05" max="1.2" step="0.01" value="0.46">
+        </div>
+        <div class="param">
+          <div class="lab"><span>BODY HEIGHT</span><span class="val" id="pv-body">0.68 m</span></div>
+          <input type="range" id="p-body" min="0.3" max="1.5" step="0.01" value="0.68">
+        </div>
+        <div class="param">
+          <div class="lab"><span>STANCE WIDTH</span><span class="val" id="pv-stance">2.84 m</span></div>
+          <input type="range" id="p-stance" min="1.8" max="3.6" step="0.02" value="2.84">
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+"use strict";
+/* ============================================================
+   HEXAPOD SIMULATOR — single-file test build (no external deps)
+   3D: hand-rolled perspective projection onto 2D canvas
+   ============================================================ */
+
+// ---------- state ----------
+const DEFAULTS = { speed:1.6, stride:1.08, step:0.46, body:0.68, stance:2.84 };
+const P = { ...DEFAULTS };
+const GAITS = {
+  tripod: { duty:0.52, offsets:[0,.5,0,.5,0,.5] },
+  ripple: { duty:0.68, offsets:[0,1/3,2/3,1/2,5/6,1/6] },
+  wave:   { duty:5/6,  offsets:[0,1/6,2/6,3/6,4/6,5/6] },
+};
+let gait = "tripod";
+let paused = false;
+let phase = 0;            // global gait phase [0,1)
+let simTime = 0;
+let cmd = "F";            // F/B/L/R/TL/TR/S
+let gridScroll = { x:0, z:0, rot:0 };
+
+// geometry (metres)
+const BODY_R = 1.5, BODY_T = 0.52;   // body radius / slab thickness
+const COXA = 0.45, FEMUR = 1.35, TIBIA = 1.9;
+const LEG_AZ = [40, 90, 140, 220, 270, 320].map(d => d * Math.PI / 180); // 0 = +Z fwd, cw→+X
+const LEG_NAMES = ["R1","R2","R3","L3","L2","L1"];
+
+const cam = { yaw: 0.55, pitch: 0.92, dist: 11.2, fov: 760 };
+
+// ---------- dom ----------
+const $ = id => document.getElementById(id);
+const view = $("view"), vctx = view.getContext("2d");
+let W = 0, H = 0, DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+function resize() {
+  const r = $("viewport-wrap").getBoundingClientRect();
+  W = Math.floor(r.width); H = Math.floor(r.height);
+  view.width = W * DPR; view.height = H * DPR;
+  vctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  for (const id of ["ch-torque","ch-foot","ch-load","ch-phase","g-solver","g-servo"]) {
+    const c = $(id), b = c.getBoundingClientRect();
+    if (b.width && Math.abs(c.width - b.width) > 1) c.width = b.width;
+  }
+}
+new ResizeObserver(resize).observe($("viewport-wrap"));
+window.addEventListener("resize", resize);
+
+// ---------- command log ----------
+const logEl = $("cmdlog");
+const logLines = [];
+function logCmd(s) {
+  logLines.push(`<span class="t">[${simTime.toFixed(1).padStart(6,"0")}]</span> ${s}`);
+  if (logLines.length > 9) logLines.shift();
+  logEl.innerHTML = logLines.join("<br>");
+}
+
+// periodic solver telemetry so the console reads as a live link
+let nextTick = 2.5;
+function autoLog() {
+  if (simTime < nextTick) return;
+  nextTick = simTime + 2.2 + Math.random() * 2.4;
+  const stance = LEG_AZ.filter((_, i) => legState(i).h < 0.02).length;
+  const pool = [
+    () => `ik.solve(6) ok · res ${(0.4 + Math.random() * 0.9).toFixed(2)}mm`,
+    () => `gait.sync("${gait}") stance=${stance}/6`,
+    () => `imu.read() pitch=${(Math.sin(simTime * 0.6) * 1.8).toFixed(2)}° roll=${(Math.cos(simTime * 0.5) * 1.4).toFixed(2)}°`,
+    () => `servo.bus temp=${(40 + 2 * Math.sin(simTime * 0.05)).toFixed(0)}°C ok`,
+    () => `traj.push(${(P.stride * 100).toFixed(0)}mm, ${(P.step * 100).toFixed(0)}mm)`,
+  ];
+  logCmd(pool[Math.floor(Math.random() * pool.length)]());
+}
+
+// ---------- ui wiring ----------
+document.querySelectorAll("#tabs .tab").forEach(t => t.addEventListener("click", () => {
+  document.querySelectorAll("#tabs .tab").forEach(x => x.classList.toggle("active", x === t));
+  const kin = t.dataset.tab === "kinematics";
+  $("offline").style.display = kin ? "none" : "flex";
+  if (!kin) $("offline-name").textContent = t.dataset.tab.toUpperCase();
+}));
+
+$("btn-pause").addEventListener("click", () => {
+  paused = !paused;
+  $("btn-pause").textContent = paused ? "► RESUME" : "‖ PAUSE";
+  logCmd(`sim.${paused ? "pause" : "resume"}()`);
+});
+$("btn-reset").addEventListener("click", () => {
+  Object.assign(P, DEFAULTS);
+  for (const [k, id] of [["speed","p-speed"],["stride","p-stride"],["step","p-step"],["body","p-body"],["stance","p-stance"]])
+    $(id).value = P[k];
+  setGait("tripod"); setCmd("F");
+  phase = 0; gridScroll = { x:0, z:0, rot:0 };
+  cam.yaw = 0.55; cam.pitch = 0.92; cam.dist = 11.2;
+  syncParamLabels();
+  logCmd("sim.reset()");
+});
+
+function setGait(g) {
+  gait = g;
+  $("st-gait").textContent = g.toUpperCase();
+  document.querySelectorAll("#gait-btns .btn").forEach(b =>
+    b.classList.toggle("dark", b.dataset.gait === g));
+}
+document.querySelectorAll("#gait-btns .btn").forEach(b => b.addEventListener("click", () => {
+  setGait(b.dataset.gait); logCmd(`cmd.gait("${b.dataset.gait}")`);
+}));
+
+function setCmd(c) {
+  cmd = c;
+  document.querySelectorAll("#dpad .btn").forEach(b =>
+    b.classList.toggle("on", b.dataset.cmd === c));
+  $("st-state").textContent = c === "S" ? "IDLE" : "WALKING";
+}
+document.querySelectorAll("#dpad .btn").forEach(b => b.addEventListener("click", () => {
+  if (!b.dataset.cmd) return;
+  setCmd(b.dataset.cmd); logCmd(`cmd.move("${b.dataset.cmd}")`);
+}));
+window.addEventListener("keydown", e => {
+  const map = { w:"F", ArrowUp:"F", s:"B", ArrowDown:"B", a:"L", ArrowLeft:"L",
+                d:"R", ArrowRight:"R", q:"TL", e:"TR", x:"S" };
+  if (e.key === " ") { e.preventDefault(); $("btn-pause").click(); return; }
+  const c = map[e.key]; if (c) { setCmd(c); logCmd(`key.move("${c}")`); }
+});
+
+function syncParamLabels() {
+  $("pv-speed").textContent  = P.speed.toFixed(1) + "x";
+  $("pv-stride").textContent = P.stride.toFixed(2) + " m";
+  $("pv-step").textContent   = P.step.toFixed(2) + " m";
+  $("pv-body").textContent   = P.body.toFixed(2) + " m";
+  $("pv-stance").textContent = P.stance.toFixed(2) + " m";
+}
+for (const [k, id] of [["speed","p-speed"],["stride","p-stride"],["step","p-step"],["body","p-body"],["stance","p-stance"]]) {
+  $(id).addEventListener("input", () => { P[k] = parseFloat($(id).value); syncParamLabels(); });
+}
+syncParamLabels();
+
+// ---------- camera orbit ----------
+let drag = null;
+view.addEventListener("pointerdown", e => {
+  drag = { x:e.clientX, y:e.clientY }; view.classList.add("dragging"); view.setPointerCapture(e.pointerId);
+});
+view.addEventListener("pointermove", e => {
+  if (!drag) return;
+  cam.yaw   += (e.clientX - drag.x) * 0.008;
+  cam.pitch += (e.clientY - drag.y) * 0.006;
+  cam.pitch = Math.max(0.15, Math.min(1.45, cam.pitch));
+  drag = { x:e.clientX, y:e.clientY };
+});
+view.addEventListener("pointerup", () => { drag = null; view.classList.remove("dragging"); });
+view.addEventListener("wheel", e => {
+  e.preventDefault();
+  cam.dist = Math.max(7, Math.min(30, cam.dist + e.deltaY * 0.012));
+}, { passive:false });
+
+// ---------- 3d math ----------
+function project(p) {
+  const cy = Math.cos(cam.yaw), sy = Math.sin(cam.yaw);
+  const cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch);
+  let x = p[0], y = p[1] - P.body * 0.9, z = p[2];
+  const x1 = cy * x + sy * z, z1 = -sy * x + cy * z;
+  const y1 = cp * y - sp * z1, z2 = sp * y + cp * z1 + cam.dist;
+  const s = cam.fov / Math.max(z2, 0.1);
+  return [W / 2 + x1 * s, H / 2 + 30 - y1 * s, z2, s];
+}
+const lerp = (a, b, t) => a + (b - a) * t;
+
+// ---------- gait / IK ----------
+// returns { foot:[x,y,z], swing:0..1(height factor), load:0..1, localPhase }
+function legState(i) {
+  const G = GAITS[gait];
+  const lp = (phase + G.offsets[i]) % 1;
+  const az = LEG_AZ[i];
+  const dir = [Math.sin(az), 0, Math.cos(az)];             // radial
+  const tan = [Math.cos(az), 0, -Math.sin(az)];            // tangential (cw)
+  const neutral = [dir[0] * P.stance, 0, dir[2] * P.stance];
+
+  // motion input in body frame
+  let mx = 0, mz = 0, turn = 0;
+  if (cmd === "F") mz = 1; else if (cmd === "B") mz = -1;
+  else if (cmd === "L") mx = -1; else if (cmd === "R") mx = 1;
+  else if (cmd === "TL") turn = 1; else if (cmd === "TR") turn = -1;
+
+  let u, h;                                                // u: -.5..+.5 along stride, h: lift
+  if (lp < G.duty) { const t = lp / G.duty; u = 0.5 - t; h = 0; }
+  else { const t = (lp - G.duty) / (1 - G.duty); u = -0.5 + t; h = Math.sin(Math.PI * t); }
+
+  const s = P.stride;
+  const fx = neutral[0] + mx * s * u + tan[0] * turn * s * 0.62 * u;
+  const fz = neutral[2] + mz * s * u + tan[2] * turn * s * 0.62 * u;
+  const fy = h * P.step;
+
+  let load;
+  if (lp < G.duty) {
+    const t = lp / G.duty;
+    load = 0.35 + 0.65 * Math.sin(Math.PI * Math.min(1, Math.max(0, t)));
+  } else load = 0.06;
+  if (cmd === "S") load = 0.4 + 0.1 * Math.sin(simTime * 2 + i);
+
+  return { foot:[fx, fy, fz], h, load, lp };
+}
+
+// analytic 3-dof IK → joint positions in world space
+function solveLeg(i, bodyY, tilt) {
+  const az = LEG_AZ[i];
+  const hipBase = [Math.sin(az) * BODY_R, bodyY, Math.cos(az) * BODY_R];
+  // small body tilt offset
+  hipBase[1] += tilt[0] * hipBase[2] + tilt[1] * hipBase[0];
+
+  const st = legState(i);
+  const [fx, fy, fz] = st.foot;
+  const dx = fx - hipBase[0], dz = fz - hipBase[2];
+  const yaw = Math.atan2(dx, dz);
+  const hd = Math.hypot(dx, dz);
+
+  const kneeDirX = dx / (hd || 1), kneeDirZ = dz / (hd || 1);
+  const coxaEnd = [hipBase[0] + kneeDirX * COXA, hipBase[1], hipBase[2] + kneeDirZ * COXA];
+
+  let r = hd - COXA;
+  let v = coxaEnd[1] - fy;                                 // vertical drop (down +)
+  let D = Math.hypot(r, v);
+  const maxD = FEMUR + TIBIA - 0.02;
+  if (D > maxD) { const k = maxD / D; r *= k; v *= k; D = maxD; }
+  const alpha = Math.atan2(v, r);                          // down angle to foot
+  const cosA = Math.min(1, Math.max(-1, (FEMUR*FEMUR + D*D - TIBIA*TIBIA) / (2*FEMUR*D)));
+  const A = Math.acos(cosA);
+  const femAng = A - alpha;                                // elevation from horizontal
+  const knee = [
+    coxaEnd[0] + kneeDirX * FEMUR * Math.cos(femAng),
+    coxaEnd[1] + FEMUR * Math.sin(femAng),
+    coxaEnd[2] + kneeDirZ * FEMUR * Math.cos(femAng),
+  ];
+  return { hip:hipBase, coxaEnd, knee, foot:[fx, fy, fz], st, yaw };
+}
+
+// ---------- render helpers ----------
+function seg(ctx, a, b, w, fill, outline) {
+  const pa = project(a), pb = project(b);
+  const lw = Math.max(1.5, w * (pa[3] + pb[3]) / 2);
+  ctx.lineCap = "round";
+  ctx.strokeStyle = outline; ctx.lineWidth = lw + 2.6;
+  ctx.beginPath(); ctx.moveTo(pa[0], pa[1]); ctx.lineTo(pb[0], pb[1]); ctx.stroke();
+  ctx.strokeStyle = fill; ctx.lineWidth = lw;
+  ctx.beginPath(); ctx.moveTo(pa[0], pa[1]); ctx.lineTo(pb[0], pb[1]); ctx.stroke();
+  return (pa[2] + pb[2]) / 2;
+}
+function joint(ctx, p, r, fill) {
+  const pp = project(p);
+  ctx.beginPath(); ctx.arc(pp[0], pp[1], Math.max(1.5, r * pp[3]), 0, 7);
+  ctx.fillStyle = fill; ctx.fill();
+  ctx.lineWidth = 1; ctx.strokeStyle = "#141414"; ctx.stroke();
+}
+
+/** rungs across a limb — reads as machined ribs / linkage detail */
+function ribs(ctx, a, b, n, w, color, from, to) {
+  const pa = project(a), pb = project(b);
+  const dx = pb[0] - pa[0], dy = pb[1] - pa[1];
+  const len = Math.hypot(dx, dy) || 1;
+  const nx = -dy / len, ny = dx / len;
+  const s = (pa[3] + pb[3]) / 2;
+  ctx.lineWidth = Math.max(1, 0.03 * s);
+  ctx.strokeStyle = color;
+  for (let i = 0; i < n; i++) {
+    const t = from + (to - from) * (n === 1 ? 0.5 : i / (n - 1));
+    const cx = pa[0] + dx * t, cy = pa[1] + dy * t;
+    const hw = w * s * 0.5;
+    ctx.beginPath();
+    ctx.moveTo(cx - nx * hw, cy - ny * hw);
+    ctx.lineTo(cx + nx * hw, cy + ny * hw);
+    ctx.stroke();
+  }
+}
+
+/** servo housing block at a joint — small rotated rectangle */
+function housing(ctx, p, along, w, h, fill) {
+  const pp = project(p), pa = project(along);
+  const dx = pa[0] - pp[0], dy = pa[1] - pp[1];
+  const len = Math.hypot(dx, dy) || 1;
+  const ux = dx / len, uy = dy / len, nx = -uy, ny = ux;
+  const s = pp[3], hw = w * s * 0.5, hh = h * s * 0.5;
+  const pts = [
+    [pp[0] - ux * hh - nx * hw, pp[1] - uy * hh - ny * hw],
+    [pp[0] + ux * hh - nx * hw, pp[1] + uy * hh - ny * hw],
+    [pp[0] + ux * hh + nx * hw, pp[1] + uy * hh + ny * hw],
+    [pp[0] - ux * hh + nx * hw, pp[1] - uy * hh + ny * hw],
+  ];
+  ctx.beginPath();
+  pts.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]));
+  ctx.closePath();
+  ctx.fillStyle = fill; ctx.fill();
+  ctx.lineWidth = 1.1; ctx.strokeStyle = "#141414"; ctx.stroke();
+}
+
+function ringPath(ctx, R, y) {
+  ctx.beginPath();
+  for (let a = 0; a <= 72; a++) {
+    const t = a / 72 * Math.PI * 2;
+    const p = project([Math.cos(t) * R, y, Math.sin(t) * R]);
+    a ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]);
+  }
+}
+
+function drawGrid(ctx) {
+  const EXT = 14, SP = 1;
+  ctx.lineWidth = 1;
+  // very faint scrolled construction grid (motion cue only)
+  const ox = ((gridScroll.x % SP) + SP) % SP;
+  const oz = ((gridScroll.z % SP) + SP) % SP;
+  ctx.strokeStyle = "rgba(0,0,0,0.045)";
+  for (let g = -EXT; g <= EXT; g += SP) {
+    let a = project([g - ox, 0, -EXT]), b = project([g - ox, 0, EXT]);
+    ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+    a = project([-EXT, 0, g - oz]); b = project([EXT, 0, g - oz]);
+    ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+  }
+  // dashed reference rings (workspace envelope)
+  const R_IN = P.stance * 0.72, R_MID = P.stance, R_OUT = P.stance * 1.5;
+  ctx.setLineDash([4, 7]);
+  ctx.strokeStyle = "rgba(0,0,0,0.16)"; ringPath(ctx, R_IN, 0); ctx.stroke();
+  ctx.strokeStyle = "rgba(0,0,0,0.22)"; ringPath(ctx, R_MID, 0); ctx.stroke();
+  ctx.strokeStyle = "rgba(0,0,0,0.14)"; ringPath(ctx, R_OUT, 0); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // radial ticks on the outer ring
+  ctx.strokeStyle = "rgba(0,0,0,0.22)";
+  for (let a = 0; a < 24; a++) {
+    const t = a / 24 * Math.PI * 2 + gridScroll.rot;
+    const major = a % 6 === 0;
+    const len = major ? 0.4 : 0.18;
+    const p1 = project([Math.cos(t) * R_OUT, 0, Math.sin(t) * R_OUT]);
+    const p2 = project([Math.cos(t) * (R_OUT + len), 0, Math.sin(t) * (R_OUT + len)]);
+    ctx.lineWidth = major ? 1.3 : 1;
+    ctx.beginPath(); ctx.moveTo(p1[0], p1[1]); ctx.lineTo(p2[0], p2[1]); ctx.stroke();
+  }
+
+  // per-leg radial guide from centre to neutral stance point
+  ctx.strokeStyle = "rgba(0,0,0,0.10)"; ctx.lineWidth = 1;
+  ctx.setLineDash([2, 5]);
+  for (const az of LEG_AZ) {
+    const p1 = project([0, 0, 0]);
+    const p2 = project([Math.sin(az) * R_OUT, 0, Math.cos(az) * R_OUT]);
+    ctx.beginPath(); ctx.moveTo(p1[0], p1[1]); ctx.lineTo(p2[0], p2[1]); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  // foot travel arcs (red, thin) — where each foot swept this cycle
+  ctx.strokeStyle = "rgba(240,48,0,0.30)"; ctx.lineWidth = 1;
+  LEG_AZ.forEach((az, i) => {
+    const st = legState(i);
+    const n = [Math.sin(az) * P.stance, 0, Math.cos(az) * P.stance];
+    const half = P.stride * 0.5;
+    let dx = 0, dz = 0;
+    if (cmd === "F") dz = 1; else if (cmd === "B") dz = -1;
+    else if (cmd === "L") dx = -1; else if (cmd === "R") dx = 1;
+    else if (cmd === "TL" || cmd === "TR") { dx = Math.cos(az) * (cmd === "TL" ? .62 : -.62); dz = -Math.sin(az) * (cmd === "TL" ? .62 : -.62); }
+    if (!dx && !dz) return;
+    const a = project([n[0] - dx * half, 0.004, n[2] - dz * half]);
+    const b = project([n[0] + dx * half, 0.004, n[2] + dz * half]);
+    ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+  });
+
+  // heading marker
+  ctx.strokeStyle = "rgba(240,48,0,0.55)"; ctx.lineWidth = 1.5;
+  const h1 = project([0, 0.01, R_OUT + 0.1]), h2 = project([0, 0.01, R_OUT + 0.6]);
+  ctx.beginPath(); ctx.moveTo(h1[0], h1[1]); ctx.lineTo(h2[0], h2[1]); ctx.stroke();
+}
+
+function drawScene() {
+  const ctx = vctx;
+  ctx.clearRect(0, 0, W, H);
+  // paper background vignette
+  ctx.fillStyle = "#f4f4f1"; ctx.fillRect(0, 0, W, H);
+
+  const bob = (cmd === "S" ? 0.02 : 0.045) * Math.sin(phase * Math.PI * 4);
+  const bodyY = P.body + BODY_T / 2 + bob;
+  const tilt = [0.018 * Math.sin(phase * Math.PI * 2), 0.015 * Math.cos(phase * Math.PI * 2)];
+
+  drawGrid(ctx);
+
+  const legs = LEG_AZ.map((_, i) => solveLeg(i, bodyY, tilt));
+
+  // ---- shadows ----
+  ctx.fillStyle = "rgba(20,20,20,0.08)";
+  // body shadow
+  ctx.beginPath();
+  for (let k = 0; k < 8; k++) {
+    const a = k / 8 * Math.PI * 2 + Math.PI / 8;
+    const p = project([Math.sin(a) * BODY_R * 1.02, 0.005, Math.cos(a) * BODY_R * 1.02]);
+    k ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]);
+  }
+  ctx.closePath(); ctx.fill();
+  for (const L of legs) {
+    ctx.strokeStyle = "rgba(20,20,20,0.07)"; ctx.lineWidth = 5;
+    const pts = [L.hip, L.coxaEnd, L.knee, L.foot].map(p => project([p[0], 0.005, p[2]]));
+    ctx.beginPath(); pts.forEach((p, k) => k ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.stroke();
+  }
+
+  // ---- depth-sorted primitives ----
+  const prims = [];
+
+  // body faces
+  const topY = bodyY + BODY_T / 2, botY = bodyY - BODY_T / 2;
+  const oct = k => { const a = k / 8 * Math.PI * 2 + Math.PI / 8; return [Math.sin(a) * BODY_R, 0, Math.cos(a) * BODY_R]; };
+  for (let k = 0; k < 8; k++) {
+    const a = oct(k), b = oct((k + 1) % 8);
+    const quad = [[a[0], topY, a[2]], [b[0], topY, b[2]], [b[0], botY, b[2]], [a[0], botY, a[2]]];
+    const pp = quad.map(project);
+    prims.push({
+      z: pp.reduce((s, p) => s + p[2], 0) / 4,
+      fn() {
+        ctx.beginPath(); pp.forEach((p, j) => j ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]));
+        ctx.closePath();
+        ctx.fillStyle = k % 2 ? "#e9e9e5" : "#f2f2ee"; ctx.fill();
+        ctx.lineWidth = 1.2; ctx.strokeStyle = "#141414"; ctx.stroke();
+      },
+    });
+  }
+  { // top face + deck details
+    const pp = [0,1,2,3,4,5,6,7].map(k => { const v = oct(k); return project([v[0], topY, v[2]]); });
+    const zTop = pp.reduce((s, p) => s + p[2], 0) / 8 - 0.4;
+    prims.push({
+      z: zTop,
+      fn() {
+        ctx.beginPath(); pp.forEach((p, j) => j ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]));
+        ctx.closePath();
+        ctx.fillStyle = "#fbfbf8"; ctx.fill();
+        ctx.lineWidth = 1.3; ctx.strokeStyle = "#141414"; ctx.stroke();
+        // inset outline
+        ctx.beginPath();
+        for (let k = 0; k < 8; k++) {
+          const a = k / 8 * Math.PI * 2 + Math.PI / 8;
+          const p = project([Math.sin(a) * BODY_R * 0.72, topY + 0.001, Math.cos(a) * BODY_R * 0.72]);
+          k ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]);
+        }
+        ctx.closePath();
+        ctx.lineWidth = 1; ctx.strokeStyle = "rgba(20,20,20,0.35)"; ctx.stroke();
+        // status led
+        const led = project([0, topY + 0.02, BODY_R * 0.55]);
+        ctx.beginPath(); ctx.arc(led[0], led[1], Math.max(2, 0.05 * led[3]), 0, 7);
+        ctx.fillStyle = "#f03000"; ctx.fill();
+      },
+    });
+  }
+  { // belly pack
+    const q = [[-0.5, botY - 0.16, 0.55], [0.5, botY - 0.16, 0.55], [0.5, botY, 0.55], [-0.5, botY, 0.55]];
+    const pp = q.map(project);
+    prims.push({
+      z: pp.reduce((s, p) => s + p[2], 0) / 4 + 0.2,
+      fn() {
+        ctx.beginPath(); pp.forEach((p, j) => j ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]));
+        ctx.closePath(); ctx.fillStyle = "#2a2a2a"; ctx.fill();
+      },
+    });
+  }
+
+  // legs
+  legs.forEach((L, i) => {
+    const midZ = (project(L.knee)[2] + project(L.foot)[2]) / 2;
+    prims.push({
+      z: midZ,
+      fn() {
+        // limbs — white housings with dark outline
+        seg(ctx, L.hip, L.coxaEnd, 0.24, "#f6f6f2", "#141414");
+        seg(ctx, L.coxaEnd, L.knee, 0.21, "#f8f8f4", "#141414");
+        seg(ctx, L.knee, L.foot, 0.155, "#f3f3ef", "#141414");
+        // sparse machined ribs (structure hint, not stripes)
+        ribs(ctx, L.coxaEnd, L.knee, 3, 0.19, "rgba(20,20,20,0.16)", 0.30, 0.78);
+        ribs(ctx, L.knee, L.foot, 2, 0.14, "rgba(20,20,20,0.14)", 0.35, 0.70);
+        // single red actuator band per limb
+        ribs(ctx, L.coxaEnd, L.knee, 1, 0.23, "#f03000", 0.42, 0.42);
+        ribs(ctx, L.knee, L.foot, 1, 0.17, "#f03000", 0.52, 0.52);
+        // compact servo housings + red joint caps
+        housing(ctx, L.hip, L.coxaEnd, 0.26, 0.20, "#f03000");
+        joint(ctx, L.coxaEnd, 0.115, "#f03000");
+        joint(ctx, L.knee, 0.12, "#f03000");
+        joint(ctx, L.coxaEnd, 0.045, "#fbfbf8");
+        joint(ctx, L.knee, 0.048, "#fbfbf8");
+        // wheel-style foot
+        const fp = project(L.foot);
+        const r = Math.max(2.5, 0.185 * fp[3]);
+        ctx.beginPath(); ctx.arc(fp[0], fp[1], r, 0, 7);
+        ctx.fillStyle = "#f03000"; ctx.fill();
+        ctx.lineWidth = 1.5; ctx.strokeStyle = "#141414"; ctx.stroke();
+        ctx.beginPath(); ctx.arc(fp[0], fp[1], r * 0.46, 0, 7);
+        ctx.fillStyle = "#fbfbf8"; ctx.fill();
+        ctx.lineWidth = 1; ctx.stroke();
+        ctx.beginPath(); ctx.arc(fp[0], fp[1], r * 0.17, 0, 7);
+        ctx.fillStyle = "#2a2a2a"; ctx.fill();
+        // contact ring when planted
+        if (L.st.h < 0.02) {
+          ctx.beginPath(); ctx.arc(fp[0], fp[1] + r * 0.35, r * 1.45, 0, 7);
+          ctx.lineWidth = 1; ctx.strokeStyle = "rgba(240,48,0,0.38)"; ctx.stroke();
+        }
+      },
+    });
+  });
+
+  prims.sort((a, b) => b.z - a.z).forEach(p => p.fn());
+}
+
+// ---------- charts ----------
+const HIST = 150;
+// prefilled with the steady-state waveform so the strips read as live traces from t=0
+const histT1 = [], histT2 = [], histF = [];
+for (let i = 0; i < HIST; i++) {
+  const p = i / HIST * 2.5;
+  histT1.push(0.5 + 0.34 * Math.sin(p * Math.PI * 2));
+  histT2.push(0.5 + 0.30 * Math.cos(p * Math.PI * 2 + 0.8));
+  const lp = (p * 1.0) % 1;
+  histF.push(lp < 0.52 ? 0 : Math.sin(Math.PI * (lp - 0.52) / 0.48));
+}
+
+function pushHistory() {
+  const l0 = legState(0), l3 = legState(3);
+  histT1.push(0.5 + 0.42 * Math.sin(l0.lp * Math.PI * 2) * (0.55 + 0.45 * l0.load));
+  histT2.push(0.5 + 0.40 * Math.cos(l3.lp * Math.PI * 2 + 0.8) * (0.55 + 0.45 * l3.load));
+  histF.push(legState(5).foot[1] / Math.max(P.step, 0.01));
+  for (const h of [histT1, histT2, histF]) while (h.length > HIST) h.shift();
+}
+
+function drawLine(ctx, data, w, h, color, fill) {
+  if (data.length < 2) return;
+  const pad = 7;
+  const yOf = v => h - pad - Math.max(0, Math.min(1, v)) * (h - pad * 2);
+  const xOf = i => i / (data.length - 1) * w;
+  if (fill) {
+    ctx.beginPath();
+    ctx.moveTo(0, h);
+    data.forEach((v, i) => ctx.lineTo(xOf(i), yOf(v)));
+    ctx.lineTo(w, h); ctx.closePath();
+    ctx.fillStyle = fill; ctx.fill();
+  }
+  ctx.beginPath();
+  data.forEach((v, i) => i ? ctx.lineTo(xOf(i), yOf(v)) : ctx.moveTo(xOf(i), yOf(v)));
+  ctx.strokeStyle = color; ctx.lineWidth = 1.4; ctx.lineJoin = "round"; ctx.stroke();
+  // live head dot
+  const lx = xOf(data.length - 1), ly = yOf(data[data.length - 1]);
+  ctx.beginPath(); ctx.arc(lx, ly, 1.8, 0, 7); ctx.fillStyle = color; ctx.fill();
+}
+
+function corners(ctx, w, h) {
+  const L = 6, m = 2.5;
+  ctx.strokeStyle = "rgba(20,20,20,0.55)"; ctx.lineWidth = 1;
+  const set = [[m, m, 1, 1], [w - m, m, -1, 1], [m, h - m, 1, -1], [w - m, h - m, -1, -1]];
+  for (const [x, y, sx, sy] of set) {
+    ctx.beginPath();
+    ctx.moveTo(x + sx * L, y); ctx.lineTo(x, y); ctx.lineTo(x, y + sy * L);
+    ctx.stroke();
+  }
+}
+
+function chartFrame(c, hi, lo) {
+  const ctx = c.getContext("2d"), w = c.width, h = c.height;
+  ctx.clearRect(0, 0, w, h);
+  ctx.strokeStyle = "rgba(0,0,0,0.06)"; ctx.lineWidth = 1;
+  for (let y = h * 0.25; y < h - 1; y += h * 0.25) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+  }
+  corners(ctx, w, h);
+  if (hi !== undefined) {
+    ctx.font = "7px ui-monospace,Consolas,monospace";
+    ctx.fillStyle = "#a2a29c"; ctx.textAlign = "left";
+    ctx.fillText(hi, 11, 12);
+    ctx.fillText(lo, 11, h - 6);
+  }
+  return [ctx, w, h];
+}
+
+function drawCharts() {
+  { const [ctx, w, h] = chartFrame($("ch-torque"), "+2.4 Nm", "-2.4 Nm");
+    drawLine(ctx, histT2, w, h, "#f03000", "rgba(240,48,0,0.09)");
+    drawLine(ctx, histT1, w, h, "#141414", null); }
+  { const [ctx, w, h] = chartFrame($("ch-foot"), P.step.toFixed(2) + " m", "0.00");
+    drawLine(ctx, histF, w, h, "#141414", "rgba(0,0,0,0.05)"); }
+  { // leg load segmented bars
+    const c = $("ch-load"), ctx = c.getContext("2d"), w = c.width, h = c.height;
+    ctx.clearRect(0, 0, w, h);
+    const rows = 6, rh = h / rows;
+    for (let i = 0; i < rows; i++) {
+      const L = legState(i);
+      const y = i * rh + rh * 0.22;
+      ctx.font = "8px ui-monospace,Consolas,monospace";
+      ctx.fillStyle = "#141414";
+      ctx.fillText(LEG_NAMES[i], 3, y + rh * 0.42);
+      const bx = 24, bw = w - bx - 6, SEGS = 26, sw = bw / SEGS;
+      const fillN = Math.round(L.load * SEGS);
+      for (let s = 0; s < SEGS; s++) {
+        const on = s < fillN;
+        ctx.fillStyle = on ? (s >= SEGS - 4 && L.load > 0.82 ? "#f03000" : "#141414") : "#e2e2dd";
+        ctx.fillRect(bx + s * sw, y, sw * 0.62, rh * 0.5);
+      }
+    }
+  }
+  drawGauge($("g-solver"), 33 + 8 * Math.abs(Math.sin(simTime * 0.7)), 0, 100, "#141414", "SOLVER µs");
+  drawGauge($("g-servo"), 41 + 2.2 * Math.sin(simTime * 0.2), 0, 90, "#f03000", "SERVO °C");
+  drawPhaseDiagram();
+}
+
+function drawGauge(c, val, min, max, color, label) {
+  const ctx = c.getContext("2d"), w = c.width, h = c.height;
+  ctx.clearRect(0, 0, w, h);
+  const cx = w / 2, cy = h / 2 - 6, r = Math.min(w, h) / 2 - 12;
+  const a0 = Math.PI * 0.75, a1 = Math.PI * 2.25;
+  ctx.lineWidth = 5; ctx.lineCap = "butt";
+  ctx.strokeStyle = "#e2e2dd";
+  ctx.beginPath(); ctx.arc(cx, cy, r, a0, a1); ctx.stroke();
+  const t = Math.min(1, Math.max(0, (val - min) / (max - min)));
+  ctx.strokeStyle = color;
+  ctx.beginPath(); ctx.arc(cx, cy, r, a0, a0 + (a1 - a0) * t); ctx.stroke();
+  ctx.fillStyle = "#141414"; ctx.textAlign = "center";
+  ctx.font = "700 20px ui-monospace,Consolas,monospace";
+  ctx.fillText(String(Math.round(val)), cx, cy + 7);
+  ctx.font = "7px ui-monospace,Consolas,monospace";
+  ctx.fillStyle = "#8b8b86"; ctx.letterSpacing = "1px";
+  ctx.fillText(label, cx, h - 4);
+}
+
+function drawPhaseDiagram() {
+  const c = $("ch-phase"), ctx = c.getContext("2d"), w = c.width, h = c.height;
+  ctx.clearRect(0, 0, w, h);
+  const G = GAITS[gait], rows = 6, rh = h / rows, bx = 24, bw = w - bx - 8;
+  ctx.font = "8px ui-monospace,Consolas,monospace";
+  for (let i = 0; i < rows; i++) {
+    const y = i * rh + rh / 2;
+    ctx.fillStyle = "#141414";
+    ctx.fillText(LEG_NAMES[i], 4, y + 3);
+    // baseline (swing)
+    ctx.fillStyle = "#dcdcd6";
+    ctx.fillRect(bx, y - 1, bw, 2);
+    // stance block (may wrap)
+    const s0 = G.offsets[i] % 1, len = G.duty;
+    ctx.fillStyle = "#141414";
+    if (s0 + len <= 1) ctx.fillRect(bx + s0 * bw, y - 3, len * bw, 6);
+    else {
+      ctx.fillRect(bx + s0 * bw, y - 3, (1 - s0) * bw, 6);
+      ctx.fillRect(bx, y - 3, (s0 + len - 1) * bw, 6);
+    }
+  }
+  // playhead — leg i is in stance when (phase + offset) % 1 < duty, i.e. marker at 1-phase.. keep simple global marker
+  const px = bx + ((1 - phase) % 1) * bw;
+  ctx.strokeStyle = "#f03000"; ctx.lineWidth = 1.4;
+  ctx.beginPath(); ctx.moveTo(px, 2); ctx.lineTo(px, h - 2); ctx.stroke();
+}
+
+// ---------- readouts ----------
+let frame = 0;
+function updateReadouts(vNow, wNow) {
+  $("hud-by").textContent = (P.body + 0.045 * Math.sin(phase * Math.PI * 4)).toFixed(2);
+  $("hud-ph").textContent = phase.toFixed(2);
+  $("hud-v").textContent = "v " + vNow.toFixed(2) + " m/s";
+  $("hud-w").textContent = "ω " + Math.abs(wNow).toFixed(2) + " rad/s";
+  if (frame % 30 === 0) {
+    const tt = Math.floor(simTime);
+    const pad = n => String(n).padStart(2, "0");
+    $("st-clk").textContent = `${pad(Math.floor(tt / 3600) % 100)}:${pad(Math.floor(tt / 60) % 60)}:${pad(tt % 60)}`;
+    $("st-temp").textContent = (40 + 2 * Math.sin(simTime * 0.05)).toFixed(0) + "°C";
+    const swinging = LEG_AZ.filter((_, i) => legState(i).h > 0.05).length;
+    const draw = 1.9 + swinging * 0.22 + P.speed * 0.12;
+    $("v-draw").textContent = draw.toFixed(2) + " A";
+    $("bar-draw").style.width = Math.min(100, draw / 5 * 100) + "%";
+    const pw = 83 - simTime * 0.005;
+    $("v-power").textContent = Math.max(5, pw).toFixed(0) + "%";
+    $("bar-power").style.width = Math.max(5, pw) + "%";
+  }
+}
+
+// ---------- main loop ----------
+let last = performance.now();
+function loop(now) {
+  // clamp to [0, 50ms] — a negative delta (clock skew / first frame) would run the sim backwards
+  const dt = Math.max(0, Math.min(0.05, (now - last) / 1000)); last = now;
+  if (!paused) {
+    simTime += dt;
+    const moving = cmd !== "S";
+    phase = (phase + dt * P.speed * (moving ? 0.62 : 0.3)) % 1;
+    // ground scroll from motion (treadmill view — body stays centred)
+    const G = GAITS[gait];
+    const v = moving && cmd !== "TL" && cmd !== "TR" ? P.stride * P.speed * 0.62 * G.duty * 1.6 : 0;
+    const wv = cmd === "TL" ? 0.5 * P.speed * 0.4 : cmd === "TR" ? -0.5 * P.speed * 0.4 : 0;
+    if (cmd === "F") gridScroll.z -= v * dt;
+    else if (cmd === "B") gridScroll.z += v * dt;
+    else if (cmd === "L") gridScroll.x += v * dt;
+    else if (cmd === "R") gridScroll.x -= v * dt;
+    gridScroll.rot += wv * dt;
+    pushHistory();
+    updateReadouts(v, wv);
+    autoLog();
+  }
+  drawScene();
+  if (frame % 2 === 0) drawCharts();
+  frame++;
+  requestAnimationFrame(loop);
+}
+
+resize();
+logCmd('sim.boot("HXPD-06")');
+logCmd('cmd.gait("tripod")');
+logCmd('cmd.move("F")');
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
