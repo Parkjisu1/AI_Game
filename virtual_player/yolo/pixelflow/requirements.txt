@@ -1,0 +1,11 @@
+# PixelFlow Labeling + YOLO Training 환경
+# Python 3.11+ 권장
+
+ultralytics>=8.4.0
+torch>=2.6.0
+torchvision>=0.21.0
+opencv-python>=4.10.0
+Pillow>=11.0.0
+numpy>=2.0.0
+PySide6>=6.11.0
+PyYAML>=6.0
