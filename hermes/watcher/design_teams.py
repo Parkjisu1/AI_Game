@@ -776,6 +776,13 @@ def _load_pattern_performance(
     hermes_design_team_scores에서 (team_id, pattern) 별 평균 별점 (1~5)을 반환.
     Bayesian prior = 3.0, prior 표본 2개 (작은 표본일 때 평균이 극단으로 가지 않도록).
     표본이 0건이거나 DB 미가용이면 빈 dict.
+
+    **변형 접미사 정규화 (2026-08-11 수정)**
+    저장되는 값은 `"wave _P"` 처럼 변형 id(P/A/B/…/H)가 붙는다 — 한 패턴에서 9개 변형을
+    만들어 채점하기 때문이다. 그런데 여기선 맨 이름(`"wave"`)으로 `$in` 매칭을 하고 있어서
+    **799건 중 791건이 한 번도 매칭되지 않았다**(실측). 그 결과 이 함수는 늘 빈 dict를 돌려주고,
+    호출부의 '별점 가중치' 단계는 통째로 건너뛰어져 항상 시드 랜덤으로 떨어졌다.
+    → 접미사를 떼어 **기저 패턴명 기준으로 변형들을 합산**한다.
     """
     try:
         import os
@@ -790,10 +797,19 @@ def _load_pattern_performance(
 
     out: dict[str, float] = {}
     try:
+        import re as _re
+        # 맨 이름 또는 "이름 _변형" 둘 다 잡는다. 패턴명엔 공백이 없으므로 " _" 가 안전한 구분자다.
+        alt = "|".join(_re.escape(p) for p in patterns)
         agg = db["hermes_design_team_scores"].aggregate([
-            {"$match": {"team_id": team_id, "pattern_chosen": {"$in": patterns}}},
+            {"$match": {
+                "team_id": team_id,
+                "pattern_chosen": {"$regex": f"^({alt})( _.+)?$"},
+            }},
+            {"$addFields": {
+                "_base": {"$arrayElemAt": [{"$split": ["$pattern_chosen", " _"]}, 0]},
+            }},
             {"$group": {
-                "_id": "$pattern_chosen",
+                "_id": "$_base",
                 "avg": {"$avg": "$score"},
                 "n": {"$sum": 1},
             }},
@@ -808,6 +824,29 @@ def _load_pattern_performance(
             # smoothed = (prior*prior_n + avg*n) / (prior_n + n)
             smoothed = (prior * prior_n + avg * n) / (prior_n + n)
             out[pname] = smoothed
+
+        # ── 팀 데이터가 없으면 팀 무관 평균으로 폴백 ───────────────────
+        # 누적된 별점 799건 중 대부분은 `batch_*` 태그(패턴×팔레트 배치 실행)에 달려 있고,
+        # 정작 겨루는 팀(tile/organic/…)의 표본은 0~1건이다. 그런데 "i_tetromino 가 별로다"
+        # 같은 신호는 **팀이 아니라 패턴의 성질**이라 팀을 넘어 유효하다.
+        # 팀 표본이 있으면 그쪽이 우선이고, 없을 때만 이 폴백이 쓰인다.
+        missing = [p for p in patterns if p not in out]
+        if missing:
+            alt2 = "|".join(_re.escape(p) for p in missing)
+            agg2 = db["hermes_design_team_scores"].aggregate([
+                {"$match": {"pattern_chosen": {"$regex": f"^({alt2})( _.+)?$"}}},
+                {"$addFields": {
+                    "_base": {"$arrayElemAt": [{"$split": ["$pattern_chosen", " _"]}, 0]},
+                }},
+                {"$group": {"_id": "$_base", "avg": {"$avg": "$score"}, "n": {"$sum": 1}}},
+            ])
+            for row in agg2:
+                pname = row.get("_id")
+                n = float(row.get("n") or 0)
+                avg = float(row.get("avg") or 3.0)
+                if n < 1 or pname in out:
+                    continue
+                out[pname] = (prior * prior_n + avg * n) / (prior_n + n)
     except Exception:
         log.exception("_load_pattern_performance failed")
         return {}

@@ -121,6 +121,84 @@ def get_project_repo(project: str | None) -> dict[str, str] | None:
     return cfg
 
 
+_PROJECT_DOC_CACHE: dict[str, dict | None] = {}
+
+
+def _project_header_block(task: dict, repo: dict) -> str:
+    """모든 역할 프롬프트 최상단에 붙는 '이 작업이 어느 프로젝트 일인가' 블록.
+
+    2026-09-14 감사: 역할 페르소나 46건과 4개 템플릿이 BalloonFlow 를 하드코딩해
+    NextPR 작업에 퍼즐팀 네임스페이스 규약(AimedPuzzle.*)을 들이대고, 없는 경로
+    (BalloonFlow/Assets/Scripts)를 탐색했다. 페르소나는 프로젝트 중립으로 바꾸고
+    프로젝트 사실은 여기서 주입한다 — 레지스트리(hermes_projects.profile)가 유일한 출처.
+    """
+    key = (task.get("project") or "").strip().lower()
+    name = repo.get("repo") or "BalloonFlow"
+    doc = None
+    if key:
+        if key in _PROJECT_DOC_CACHE:
+            doc = _PROJECT_DOC_CACHE[key]
+        else:
+            try:
+                client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
+                try:
+                    doc = client[DB_NAME]["hermes_projects"].find_one(
+                        {"project": key}, {"display_name": 1, "genre": 1, "profile": 1, "_id": 0})
+                finally:
+                    client.close()
+            except Exception:
+                log.debug("project header lookup failed", exc_info=True)
+                doc = None
+            _PROJECT_DOC_CACHE[key] = doc
+    doc = doc or {}
+    prof = doc.get("profile") or {}
+    conv = prof.get("conventions") or {}
+    disp = doc.get("display_name") or name
+    lines = [
+        f"## 🏷️ 프로젝트 컨텍스트 — 이 작업은 **{disp}** 프로젝트다 (다른 프로젝트 아님)",
+        f"- 저장소: {repo.get('owner', '?')}/{name} · Unity 프로젝트 폴더: `{name}/` (스크립트는 `{name}/Assets/...` 아래)",
+        f"- 장르: {doc.get('genre') or '미상'}",
+    ]
+    if prof.get("summary"):
+        lines.append(f"- 요약: {str(prof['summary'])[:300]}")
+    if conv.get("namespace_pattern"):
+        lines.append(f"- 네임스페이스 규약: {conv['namespace_pattern']}")
+    if conv.get("file_naming"):
+        lines.append(f"- 파일 명명: {conv['file_naming']}")
+    if conv.get("notable"):
+        lines.append("- 특기 사항: " + "; ".join(str(x) for x in list(conv["notable"])[:5]))
+    ks = prof.get("key_systems") or []
+    if ks:
+        lines.append("- 핵심 시스템: " + "; ".join(
+            f"{k.get('name')}({', '.join((k.get('evidence_files') or [])[:1])})"
+            for k in ks[:5] if isinstance(k, dict)))
+    lines.append(
+        "- 규칙: 다른 프로젝트(BalloonFlow 등)의 규약·경로·네임스페이스를 이 프로젝트에 적용하지 말 것. "
+        "이 프로젝트에 명시 규약이 없으면 **기존 코드의 스타일**을 그대로 따른다.")
+    return "\n".join(lines) + "\n\n"
+
+
+def _plain_block_message(reason: str, pr_url: str, branch: str, n_files: int) -> str:
+    """요청자(대개 기획/아트)에게 보내는 보류 안내. 컴파일러 스택트레이스 대신 '무엇이 됐고 무엇을 하면 되는지'."""
+    r = reason or ""
+    head = f"✋ 변경 {n_files}개 파일을 브랜치 `{branch}`" + (f" / PR {pr_url}" if pr_url and pr_url.startswith("http") else "") + " 에 올렸습니다. 자동 병합만 보류했습니다."
+    if "컴파일 에러" in r:
+        why = ("이 프로젝트를 빌드하면 컴파일 에러가 납니다. 요청하신 변경 때문인지, 원래 있던 에러인지는 "
+               "태스크 코멘트의 에러 목록으로 확인할 수 있습니다.")
+        nxt = ("원래 있던 에러라면 개발 담당자가 베이스라인으로 등록하면 다음부터는 막지 않습니다. "
+               "변경 자체의 문제라면 코멘트로 알려주시면 재작업합니다.")
+    elif "컴파일 검증 불가" in r:
+        why = "빌드 PC에서 컴파일 결과를 받지 못했습니다(에디터 열림 또는 응답 없음)."
+        nxt = "변경은 안전하게 올려두었습니다. 개발 담당자가 PR을 열어 확인 후 병합하면 됩니다."
+    elif "Reviewer" in r or "리뷰" in r:
+        why = "코드 리뷰어가 수정 요청을 남겼고, 자동 재작업 후에도 남은 항목이 있습니다(태스크 코멘트 참조)."
+        nxt = "남은 지적이 타당하면 코멘트로 '재작업'을, 무시해도 되면 PR을 직접 병합해 주세요."
+    else:
+        why = r[:200] or "게이트 판정 보류"
+        nxt = "PR을 열어 확인 후 병합하거나, 코멘트로 재작업을 요청해 주세요."
+    return f"{head}\n\n이유: {why}\n다음: {nxt}"
+
+
 def get_repo_config(sub_team: str, project: str | None = None) -> dict[str, str]:
     """레포 설정 반환.
 
@@ -778,7 +856,7 @@ def _run_translator_preflight(task: dict[str, Any]) -> dict[str, Any]:
         )
 
     env = ExecutionEnv(
-        mode="local", cwd=str(Path.home()), timeout_sec=60,
+        mode="local", cwd=str(Path.home()), timeout_sec=300,
         task_id=str(task.get("_id")), task_title=title,
     )
     prompt = TRANSLATOR_PROMPT_TEMPLATE.format(
@@ -852,7 +930,7 @@ def _run_pm(task: dict[str, Any], team: str, comment_fn) -> str:
 
     pm_role = f"{team}_pm"
     env = ExecutionEnv(
-        mode="local", cwd=str(Path.home()), timeout_sec=60,
+        mode="local", cwd=str(Path.home()), timeout_sec=300,
         task_id=str(task.get("_id")), task_title=task.get("title", ""),
     )
     resp = invoke_agent(pm_role, prompt, env)
@@ -1199,10 +1277,14 @@ def _send_slack_notice(email: str, text: str, fallback_assignee: str = "", task_
                 if (w.get("email") or "").strip().lower() == low:
                     match = w
                     break
-        if not match and fallback_assignee:
+        # fail-loud: 봇 신원으로는 절대 폴백하지 않는다 — 실패 통보가 사람 아닌
+        # hermes 봇으로 새던 결함(감사) 차단. 봇에게 보내느니 안 보내고 loud하게 로그.
+        _BOT_NAMES = {"hermes", "hermes bot", "헤르메스", "bot"}
+        if not match and fallback_assignee and fallback_assignee.strip().lower() not in _BOT_NAMES:
             fa = fallback_assignee.strip().lower()
             for w in webhooks:
-                if (w.get("assignee") or "").strip().lower() == fa:
+                wa = (w.get("assignee") or "").strip().lower()
+                if wa == fa and wa not in _BOT_NAMES:
                     match = w
                     log.info("Slack DM: email lookup failed, using assignee fallback=%s", fallback_assignee)
                     break
@@ -1296,6 +1378,153 @@ def _send_slack_failure(email: str, title: str, reason: str, category: str = "",
     _send_slack_notice(email, text, fallback_assignee=fallback_assignee, task_id=task_id)
 
 
+def _compile_err_signatures(out: str) -> set:
+    """Normalize CS errors to line-number-agnostic signatures: basename|CScode|msg.
+    Line numbers shift with edits, so we key on file basename + code + message."""
+    import re as _re, os as _os
+    sigs = set()
+    for ln in (out or "").splitlines():
+        m = _re.search(r"([^\\/\s(]+)\((\d+),\d+\):\s*error\s+(CS\d+):\s*(.+)", ln)
+        if m:
+            base = _os.path.basename(m.group(1)).strip()
+            sigs.add("%s|%s|%s" % (base, m.group(3), m.group(4).strip()[:120]))
+    return sigs
+
+def _baseline_path(repo_dir: str) -> str:
+    import os as _os, hashlib as _h
+    d = _os.path.expanduser("~/.hermes/watcher/compile_baseline")
+    _os.makedirs(d, exist_ok=True)
+    key = _h.sha1((repo_dir or "").encode()).hexdigest()[:16]
+    return _os.path.join(d, key + ".json")
+
+def _load_baseline(repo_dir: str) -> set:
+    import json as _j, os as _os
+    p = _baseline_path(repo_dir)
+    if not _os.path.exists(p):
+        return set()
+    try:
+        return set(_j.load(open(p)))
+    except Exception:
+        return set()
+
+
+def _batchmode_compile_raw(repo_host, repo_dir, changed_files=None, unity_subdir=None, use_ci_clone=False):
+    """Compile and return (status, detail, signatures) ignoring baseline."""
+    import re as _re
+    # temporarily hide baseline by pointing loader at empty
+    _orig = globals()["_load_baseline"]
+    globals()["_load_baseline"] = lambda _rd: set()
+    try:
+        st, detail = _batchmode_compile(repo_host, repo_dir, changed_files, unity_subdir, use_ci_clone)
+    finally:
+        globals()["_load_baseline"] = _orig
+    sigs = _compile_err_signatures(detail)
+    return st, detail, sigs
+
+def capture_compile_baseline(repo_host: str, repo_dir: str, unity_subdir=None) -> str:
+    """Run a compile and store its current error signatures as the accepted baseline.
+    Use ONLY when the pre-existing errors are known/accepted. Explicit action."""
+    import json as _j
+    st, detail, sigs = _batchmode_compile_raw(repo_host, repo_dir, None, unity_subdir, False)
+    p = _baseline_path(repo_dir)
+    _j.dump(sorted(sigs), open(p, "w"))
+    return "baseline captured: %d errors -> %s (compile=%s)" % (len(sigs), p, st)
+
+
+def _find_smoke_runner(repo_host: str, repo_dir: str) -> "tuple[str, str] | None":
+    """저장소에서 스모크 러너를 찾아 (executeMethod 이름, 결과파일 상대경로) 를 돌려준다.
+
+    규약(IdleFrontier 실물 기준):
+      - Editor 폴더의 `SmokeRunner.cs` 에 `public static void Run()`
+      - 결과를 `<unity project>/ai_errors/smoke.json` 에 summary{pass,fail,indeterminate} 로 기록
+    러너가 없으면 None → 게이트는 skip(no_runner). 프로젝트마다 강제하지 않는다.
+    """
+    name = os.environ.get("HERMES_SMOKE_FILE", "SmokeRunner.cs")
+    ls = subprocess.run(
+        ["ssh", repo_host, f'git -C "{repo_dir}" ls-files "*{name}"'],
+        capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=30, check=False,
+    )
+    path = next((l.strip() for l in (ls.stdout or "").splitlines() if l.strip()), "")
+    if not path:
+        return None
+    win = (repo_dir + "/" + path).replace("/", "\\")
+    body = subprocess.run(
+        ["ssh", repo_host, f'cmd /c type "{win}"'],
+        capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=25, check=False,
+    )
+    src = body.stdout or ""
+    ns = re.search(r"^\s*namespace\s+([A-Za-z0-9_.]+)", src, re.M)
+    cls = re.search(r"class\s+([A-Za-z0-9_]+)", src)
+    if not cls:
+        return None
+    fq = (ns.group(1) + "." if ns else "") + cls.group(1) + ".Run"
+    return fq, "ai_errors/smoke.json"
+
+
+def _batchmode_smoke(repo_host: str, repo_dir: str, unity_subdir: str) -> tuple[str, str]:
+    """Unity batchmode -executeMethod 로 런타임 스모크 실행.
+
+    반환: ("pass" | "fail" | "no_runner" | "indeterminate", detail)
+    fail-INDETERMINATE 원칙: 실행 불가·판독 불가는 절대 차단하지 않는다(에디터 점유·타임아웃 등).
+    """
+    found = _find_smoke_runner(repo_host, repo_dir)
+    if not found:
+        return "no_runner", "스모크 러너 없음(프로젝트가 아직 제공하지 않음)"
+    method, out_rel = found
+
+    unity_editor = os.environ.get(
+        "MACHINE_B_UNITY_EXE",
+        "C:/Program Files/Unity/Hub/Editor/6000.2.7f2/Editor/Unity.exe",
+    )
+    proj = f"{repo_dir}/{(unity_subdir or '').strip('/')}" if unity_subdir else repo_dir
+    out_win = (proj + "/" + out_rel).replace("/", "\\")
+
+    # 이전 실행 결과를 지운다 — 남아 있으면 실행 실패를 옛 성공으로 오독한다.
+    subprocess.run(["ssh", repo_host, f'cmd /c del /q "{out_win}"'],
+                   capture_output=True, timeout=20, check=False)
+
+    cmd = (f'"{unity_editor}" -batchmode -quit -nographics '
+           f'-projectPath "{proj}" -logFile - -executeMethod {method}')
+    timeout = int(os.environ.get("HERMES_SMOKE_TIMEOUT", "420"))
+    try:
+        r = subprocess.run(["ssh", repo_host, cmd], capture_output=True, text=True,
+                           encoding="utf-8", errors="replace", timeout=timeout, check=False)
+    except subprocess.TimeoutExpired:
+        return "indeterminate", f"스모크 타임아웃({timeout}s)"
+    except Exception as e:
+        return "indeterminate", f"스모크 실행 실패: {e}"
+
+    log = (r.stdout or "") + (r.stderr or "")
+    if "Multiple Unity instances" in log or "another Unity instance" in log.lower():
+        return "indeterminate", "Unity Editor 가 프로젝트를 열고 있음"
+
+    got = subprocess.run(["ssh", repo_host, f'cmd /c type "{out_win}"'],
+                         capture_output=True, text=True, encoding="utf-8",
+                         errors="replace", timeout=25, check=False)
+    raw = (got.stdout or "").strip()
+    if not raw:
+        return "indeterminate", f"결과 파일 없음({out_rel}) — 러너가 기록하지 않았거나 실행 전 중단"
+    try:
+        data = json.loads(raw[raw.index("{"):raw.rindex("}") + 1])
+    except Exception:
+        return "indeterminate", "결과 JSON 파싱 실패"
+
+    summary = data.get("summary") or {}
+    n_fail = int(summary.get("fail") or 0)
+    n_pass = int(summary.get("pass") or 0)
+    n_ind = int(summary.get("indeterminate") or 0)
+    checks = data.get("checks") or []
+    if n_fail:
+        bad = "; ".join(
+            f"{c.get('id')} {str(c.get('title'))[:40]} — {str(c.get('detail'))[:80]}"
+            for c in checks if str(c.get("verdict")) == "FAIL"
+        )[:600]
+        return "fail", f"{n_fail} FAIL / {n_pass} PASS / {n_ind} IND :: {bad}"
+    if n_pass == 0:
+        return "indeterminate", "판정 0건 — 러너가 아무것도 검사하지 않음"
+    return "pass", f"{n_pass} PASS / {n_ind} IND"
+
+
 def _batchmode_compile(repo_host: str, repo_dir: str,
                        changed_files: "list[str] | None" = None,
                        unity_subdir: "str | None" = None,
@@ -1366,7 +1595,18 @@ def _batchmode_compile(repo_host: str, repo_dir: str,
     if re.search(r"error CS\d+|Compilation failed|Scripts have compiler errors", out):
         err_lines = [ln for ln in out.splitlines()
                      if re.search(r"error CS\d+|Compilation failed", ln)][:8]
-        return "errors", "\n".join(err_lines) or "(에러 라인 파싱 실패)"
+        # Baseline-aware gating: pre-existing (accepted) errors do not block deploy;
+        # only NEW error signatures (not in baseline) fail the gate. Fixes the case where
+        # an unrelated pre-existing error (e.g. IAPManager) blocked an approved change.
+        cur_sigs = _compile_err_signatures(out)
+        base_sigs = _load_baseline(repo_dir)
+        new_sigs = cur_sigs - base_sigs if base_sigs else cur_sigs
+        if base_sigs and not new_sigs:
+            return "clean", "baseline-only errors ignored (%d pre-existing)" % len(base_sigs)
+        detail = "\n".join(err_lines) or "(에러 라인 파싱 실패)"
+        if base_sigs:
+            detail = "NEW errors (%d) beyond baseline (%d):\n" % (len(new_sigs), len(base_sigs)) + detail
+        return "errors", detail
     if re.search(r"another Unity instance|Multiple Unity instances|already open", out, re.IGNORECASE):
         return "indeterminate", "Unity Editor가 프로젝트를 열고 있음 (batchmode 불가)"
     if r.returncode == 0:
@@ -3291,6 +3531,8 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
     repo = get_repo_config(sub_team, task.get("project"))
     repo_host = repo["host"]
     repo_dir = repo["dir"]
+    _unity_sub = repo.get("repo") or "BalloonFlow"      # Unity 프로젝트 하위 폴더(레포명과 동일 규약)
+    _proj_hdr = _project_header_block(task, repo)       # 모든 역할 프롬프트 최상단 주입
     if repo is not DEFAULT_REPO:
         _early_comment(
             f"📦 **레포 라우팅** — `{sub_team}` 분과 → "
@@ -3401,19 +3643,102 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
     )
 
     # 2단계: 본 git 체인 — 실패하면 branch_prep 에러
-    git_cmds = (
-        f'cd "{repo_dir}" && '
-        f'git reset --hard HEAD && '
-        f'git fetch origin --prune && '
-        f'git checkout main && '
-        f'git pull --rebase origin main && '
-        f'git checkout -B {branch_name} origin/main'
+    # 원격(origin) 유무 감지: 없으면 로컬 전용 repo로 취급(fetch/pull/origin 생략).
+    # repo_dir 기준이므로 해당 repo만 건드림 — 다른 repo/원격은 오염 안 됨.
+    _remote_chk = subprocess.run(
+        ["ssh", repo_host, f'cd "{repo_dir}" && git remote'],
+        capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=30, check=False,
     )
+    _has_remote = bool((_remote_chk.stdout or "").strip())
+    # 기본 브랜치명 감지(main 없으면 master 등 현재 HEAD)
+    _def_br = subprocess.run(
+        ["ssh", repo_host, f'cd "{repo_dir}" && git rev-parse --abbrev-ref HEAD'],
+        capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=30, check=False,
+    )
+    _base_br = (_def_br.stdout or "main").strip() or "main"
+    # 이전 사이클 작업 이어받기. 이전엔 무조건 `checkout -B origin/main` 이라 재실행마다 직전
+    # 사이클의 커밋이 사라졌다 (NextPR 6c99ff30 reflog: "Reset to origin/main" ×2) —
+    # "같은 task 는 같은 브랜치 재사용(축적)" 이라는 위 주석은 실제로는 거짓이었다.
+    _prior_ahead = 0
+    if _has_remote:
+        subprocess.run(
+            ["ssh", repo_host, f'git -C "{repo_dir}" fetch origin --prune'],
+            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=120, check=False,
+        )
+        _ah = subprocess.run(
+            ["ssh", repo_host, f'git -C "{repo_dir}" rev-list --count origin/main..{branch_name}'],
+            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=30, check=False,
+        )
+        try:
+            _prior_ahead = int((_ah.stdout or "0").strip() or 0) if _ah.returncode == 0 else 0
+        except ValueError:
+            _prior_ahead = 0
+    if _has_remote and _prior_ahead > 0:
+        git_cmds = (
+            f'cd "{repo_dir}" && '
+            f'git reset --hard HEAD && '
+            f'git checkout {branch_name} && '
+            f'git rebase origin/main'
+        )
+    elif _has_remote:
+        git_cmds = (
+            f'cd "{repo_dir}" && '
+            f'git reset --hard HEAD && '
+            f'git fetch origin --prune && '
+            f'git checkout main && '
+            f'git pull --rebase origin main && '
+            f'git checkout -B {branch_name} origin/main'
+        )
+    else:
+        # 로컬 전용: 현재 브랜치에서 새 작업 브랜치 분기(원격 없음).
+        git_cmds = (
+            f'cd "{repo_dir}" && '
+            f'git reset --hard HEAD && '
+            f'git checkout {_base_br} && '
+            f'git checkout -B {branch_name}'
+        )
 
     git_prep = subprocess.run(
         ["ssh", repo_host, git_cmds],
         capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=120, check=False,
     )
+    _stale_patch = ""
+    if git_prep.returncode != 0 and _has_remote and _prior_ahead > 0:
+        # 이어받기 rebase 가 충돌하면 (a) rebase 상태를 반드시 정리하고 (b) merge 로 한 번 더 시도한다.
+        # 정리를 안 하면 .git/rebase-merge 가 남아 다음 실행부터 전부 즉시 실패한다 (2026-09-14 실사례).
+        subprocess.run(["ssh", repo_host, f'git -C "{repo_dir}" rebase --abort'],
+                       capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=60, check=False)
+        _mg = subprocess.run(
+            ["ssh", repo_host,
+             f'cd "{repo_dir}" && git checkout {branch_name} && '
+             f'git merge origin/main -m "hermes: merge origin/main into {branch_name}"'],
+            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=120, check=False,
+        )
+        if _mg.returncode == 0:
+            _comment("♻️ 이전 작업 브랜치와 main 이 갈라져 rebase 는 충돌 — merge 로 최신 main 을 합쳤습니다")
+            git_prep = _mg
+        else:
+            # (c) 둘 다 충돌 = 옛 작업이 최신 코드와 맞지 않는다. 사무직 기준의 올바른 처리는 "최신 코드 위에
+            # 다시 적용" 이다. 옛 브랜치의 diff(merge-base 기준) 를 보존해 코더에게 넘기고, 브랜치는
+            # main 최신에서 새로 시작한다. 이전엔 여기서 merge_conflict 로 멈춰 사람이 풀어야 했다.
+            subprocess.run(["ssh", repo_host, f'git -C "{repo_dir}" merge --abort'],
+                           capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=60, check=False)
+            _sd = subprocess.run(
+                ["ssh", repo_host, f'git -C "{repo_dir}" diff origin/main...{branch_name}'],
+                capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=60, check=False,
+            )
+            _stale_patch = (_sd.stdout or "")[:7000]
+            git_prep = subprocess.run(
+                ["ssh", repo_host,
+                 f'cd "{repo_dir}" && git reset --hard HEAD && git checkout main && '
+                 f'git reset --hard origin/main && git checkout -B {branch_name} origin/main'],
+                capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=120, check=False,
+            )
+            _prior_ahead = 0
+            _comment(
+                f"♻️ 이전 브랜치 작업이 최신 main 과 충돌(rebase·merge 모두) — 브랜치를 main 최신에서 새로 시작하고, "
+                f"이전 변경 내용({len(_stale_patch)}자 diff)은 코더에게 넘겨 다시 적용합니다"
+            )
     if git_prep.returncode != 0:
         _prep_out = git_prep.stderr or git_prep.stdout
         _log_and_maybe_learn(
@@ -3440,6 +3765,34 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
     # 첨부 파일 섹션 (Lead 프롬프트에만 주입 — Lead가 main_coder_task에 필요한 정보를 녹여 전달)
     attach_section = _format_attachments_section(task)
 
+    # 이전 사이클 작업을 Lead/Coder 에게 보여 준다 — 중복 구현 금지 + "이미 충족됐으면 그렇다고 말할 것".
+    prior_work_section = ""
+    _resumed_from_branch = False
+    if _prior_ahead > 0:
+        _pwl = subprocess.run(
+            ["ssh", repo_host, f'git -C "{repo_dir}" log --oneline origin/main..{branch_name}'],
+            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=30, check=False,
+        )
+        _pws = subprocess.run(
+            ["ssh", repo_host, f'git -C "{repo_dir}" diff --stat origin/main..{branch_name}'],
+            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=30, check=False,
+        )
+        prior_work_section = (
+            f"\n\n## ♻️ 이미 이 브랜치에 반영된 이전 사이클 작업 (origin/main 대비 {_prior_ahead} 커밋)\n"
+            f"커밋:\n{(_pwl.stdout or '')[:1200]}\n변경 파일:\n{(_pws.stdout or '')[:1500]}\n\n"
+            "규칙: 위 작업을 다시 구현하지 말 것. 요청이 이미 충족돼 있으면 추가 수정 없이 "
+            "`files_modified: []` 로 답하고 summary 에 'already_on_branch' 라고 적을 것. "
+            "부족한 부분이 있으면 그 부분만 보완할 것.\n"
+        )
+        _comment(f"♻️ 이전 사이클 작업 이어받음 — 브랜치에 origin/main 대비 {_prior_ahead} 커밋 존재 (리셋하지 않음)")
+    elif _stale_patch:
+        prior_work_section = (
+            "\n\n## ♻️ 이전 사이클 작업 (최신 main 과 충돌해 브랜치를 새로 시작함 — 아래 변경을 현재 코드에 다시 적용하라)\n"
+            "단순 복붙 금지: 현재 main 의 코드 구조·시그니처에 맞춰 같은 의도를 다시 구현할 것. "
+            "이미 main 에 동일 변경이 들어가 있으면 그 부분은 건너뛸 것.\n"
+            f"```diff\n{_stale_patch}\n```\n"
+        )
+
     # 재작업 시 주입할 "이전 시도 로그" — 첫 호출이면 빈 문자열
     rework_log_section = ""
     if is_rework:
@@ -3462,7 +3815,10 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
     code_design_section = ""
     try:
         from hermes_atlas_retrieval import build_code_context, build_design_context
-        code_design_section = build_code_context(title, description) + build_design_context(title, description)
+        # 2026-09-14: project 를 넘긴다. 안 넘기면 design 은 기본값 "BalloonFlow" 기획서를,
+        # code 는 전 프로젝트 혼합을 주입했다 (NextPR 작업에 BF 기획 3건이 "근거"로 들어간 실사례).
+        code_design_section = (build_code_context(title, description, project=_unity_sub)
+                               + build_design_context(title, description, project=_unity_sub))
     except Exception:
         log.debug("code/design retrieval skipped", exc_info=True)
 
@@ -3519,7 +3875,7 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
 
     # ── Step 0.5: Translator — 자연어 해석 + 정보 부족 시 생성자에게 Slack DM 질문
     _comment("🔎 **Translator** 자연어 해석 중...")
-    translator_prompt = TRANSLATOR_PROMPT_TEMPLATE.format(
+    translator_prompt = _proj_hdr + TRANSLATOR_PROMPT_TEMPLATE.format(
         title=title, description=description or "(설명 없음)", comments=comments_text,
     )
     translator_resp = invoke_agent("translator", translator_prompt, env)
@@ -3658,6 +4014,7 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
             f"{best_practices_section}"
             f"{principles_section}"
             f"{attach_section}"
+            f"{prior_work_section}"
         )
     else:
         _comment("🧠 **Lead Agent** 태스크 분석 중...")
@@ -3670,8 +4027,10 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
             + best_practices_section
             + principles_section
             + attach_section
+            + prior_work_section
         )
 
+    lead_prompt = _proj_hdr + lead_prompt
     lead_resp = invoke_agent(lead_role, lead_prompt, env)
     if not lead_resp.success:
         _comment(f"❌ Lead 실패: {lead_resp.error}")
@@ -3731,10 +4090,10 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
     sub_tasks = plan.get("sub_tasks") or []
 
     # ── Step 2: Main Coder — 핵심 변경 (환각 감지 + 재시도 포함)
-    _comment("👨‍💻 **Main Coder** (Opus 4.7) 핵심 구현 중...")
-    main_prompt_base = MAIN_CODER_PROMPT_TEMPLATE.format(
+    _comment("👨‍💻 **Main Coder** (Opus 5) 핵심 구현 중...")
+    main_prompt_base = _proj_hdr + MAIN_CODER_PROMPT_TEMPLATE.format(
         lead_plan=plan_summary, main_task=main_task,
-    ) + code_design_section  # RAG: 유사 검증 코드 + 관련 기획 디렉션 직접 주입
+    ) + code_design_section + prior_work_section  # RAG + 이전 사이클 작업(중복 구현 금지)
     # 실패패턴 가드레일 — 이 도메인 과거 반려 함정을 구현 전 선주입(첫 시도 정확성 ↑, 재작업 감소)
     try:
         from reviewer_retrieval import build_coder_guardrails_block as _guard_block
@@ -3852,6 +4211,13 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
                 _comment(f"⚠️ Sub Coder #{i} 실패: {r.error}")
 
     # ── Step 4: diff 체크
+    # 신규 파일(untracked) 포함 필수 — 새 시스템을 만드는 태스크는 새 폴더를 만들기 때문에
+    # `git diff`(추적 파일만)로는 '변경 없음'으로 오판된다(실제 사고: IdleFrontier Core 3파일).
+    # `add -N`(intent-to-add)로 미추적 파일을 diff 대상에 포함시킨다. 내용은 스테이징하지 않음.
+    subprocess.run(
+        ["ssh", repo_host, f'git -C "{repo_dir}" add -N -- .'],
+        capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=60, check=False,
+    )
     diff_check = subprocess.run(
         ["ssh", repo_host,
          f'cd "{repo_dir}" && '
@@ -3903,6 +4269,23 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
             _comment("⚠️ 큰 수정/환각 의심 신호 → 작성자에게 Slack: " + "; ".join(_signals))
     except Exception:
         log.debug("suspicion detect skipped (non-fatal)", exc_info=True)
+
+    if not changed_files and _prior_ahead > 0:
+        # 이번 코더가 추가 수정 없음 = 요청이 이미 브랜치에 반영돼 있음. 죽은 길로 보내지 않고
+        # 브랜치의 기존 변경으로 검수·push·PR·인계를 이어간다 (NextPR 사례 08 의 "변경 불필요" 종료 방지).
+        _rl = subprocess.run(
+            ["ssh", repo_host, f'git -C "{repo_dir}" diff --name-only origin/main..{branch_name}'],
+            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=30, check=False,
+        )
+        _rs = subprocess.run(
+            ["ssh", repo_host, f'git -C "{repo_dir}" diff --stat origin/main..{branch_name}'],
+            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=30, check=False,
+        )
+        changed_files = [f for f in (_rl.stdout or "").splitlines() if f.strip()]
+        diff_stat = (_rs.stdout or "").strip()
+        _resumed_from_branch = bool(changed_files)
+        if _resumed_from_branch:
+            _comment(f"♻️ 추가 수정 없음 — 브랜치의 기존 작업({len(changed_files)}개 파일)으로 검수·인계를 이어갑니다")
 
     if not changed_files:
         _log_and_maybe_learn(
@@ -3964,10 +4347,21 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
         lines.append("\n**중요**: 위 에러들은 추정이 아닌 Unity Editor의 실제 상태입니다. issues에 반드시 포함하고 passed=false 처리하세요.")
         mcp_findings_block = "\n".join(lines)
 
+    # Validator 는 도구가 없는 순수 LLM 이다 — diff 를 직접 넣어 준다 (2026-09-14: 이전엔 "git diff 출력 누락 → 검증 불가" 반복).
+    _val_patch = ""
+    try:
+        _vp = subprocess.run(
+            ["ssh", repo_host, f'cd "{repo_dir}" && git diff {"origin/main" if _resumed_from_branch else "HEAD"} --unified=3'],
+            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=30, check=False,
+        )
+        if _vp.returncode == 0 and (_vp.stdout or "").strip():
+            _val_patch = "\n\n## 실제 코드 변경 (git diff — 이 내용으로 판정하라, 셸 실행 불필요)\n```diff\n" + _vp.stdout[:8000] + "\n```"
+    except Exception:
+        log.debug("validator diff fetch failed (non-fatal)", exc_info=True)
     validator_resp = invoke_agent(
         validator_role,
-        VALIDATOR_PROMPT_TEMPLATE.format(
-            changes_summary=f"Diff stats:\n{diff_stat}\n\nFiles: {', '.join(changed_files)}{mcp_findings_block}"
+        _proj_hdr + VALIDATOR_PROMPT_TEMPLATE.format(
+            changes_summary=f"Diff stats:\n{diff_stat}\n\nFiles: {', '.join(changed_files)}{_val_patch}{mcp_findings_block}"
         ),
         env,
     )
@@ -4098,7 +4492,7 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
     _diff_patch = ""
     try:
         _dp = subprocess.run(
-            ["ssh", repo_host, f'cd "{repo_dir}" && git diff HEAD --unified=3'],
+            ["ssh", repo_host, f'cd "{repo_dir}" && git diff {"origin/main" if _resumed_from_branch else "HEAD"} --unified=3'],
             capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=30, check=False,
         )
         if _dp.returncode == 0 and (_dp.stdout or "").strip():
@@ -4133,7 +4527,7 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
                              + "\n\n".join(_file_sections))
         except Exception:
             log.exception("reviewer file-read grounding failed (non-fatal)")
-    _reviewer_prompt = REVIEWER_PROMPT_TEMPLATE.format(
+    _reviewer_prompt = _proj_hdr + REVIEWER_PROMPT_TEMPLATE.format(
         changes_summary=_changes,
         validator_verdict=json.dumps(validator_verdict, indent=2, ensure_ascii=False),
     )
@@ -4168,6 +4562,89 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
     _block_reason = ""
     _MERGE_GATE = os.environ.get("HERMES_MERGE_GATE", "block").lower()
     reviewer_verdict = reviewer_resp.structured or {"verdict": "REQUEST_CHANGES"}
+
+    # ── 반려 재작업 루프 (구조 B, 2026-09-14): REQUEST_CHANGES 면 사람 개입 없이 코더에게 되돌려
+    # 최대 N 회 고친다. 이전엔 반려 즉시 review 로 멈추고 사람이 코멘트를 달아야만 재작업했다
+    # (review 정지 28건). 정지 조건: APPROVED / 횟수 소진 / 지시 없음 / 코더 무수정 / 사용자 중단.
+    _REVIEW_RETRIES = int(os.environ.get("HERMES_REVIEW_RETRIES", "2"))
+    _review_round = 0
+    _diff_base = "origin/main" if _resumed_from_branch else "HEAD"
+    while reviewer_verdict.get("verdict") != "APPROVED" and _review_round < _REVIEW_RETRIES:
+        _review_round += 1
+        if _should_abort(task_id):
+            return _abort_result("리뷰 재작업")
+        _req = [str(c) for c in (reviewer_verdict.get("required_changes") or [])]
+        _con = [str(c) for c in (reviewer_verdict.get("concerns") or [])]
+        if not _req and not _con:
+            break
+        _comment(f"🔁 **리뷰 반려 → 자동 재작업 {_review_round}/{_REVIEW_RETRIES}**\n"
+                 + "\n".join(f"- {c}" for c in _req[:6]))
+        _fix_prompt = (
+            f"## 리뷰어 반려 — 아래 지시를 반영해 코드를 고쳐라 (재작업 {_review_round}/{_REVIEW_RETRIES})\n"
+            + "\n".join(f"- {c}" for c in _req[:8])
+            + (("\n\n리뷰어 우려:\n" + "\n".join(f"- {c}" for c in _con[:5])) if _con else "")
+            + f"\n\n원래 과제: {title}\n{description[:1500]}\n\n"
+            "규칙: 지시된 항목만 고친다. 다른 파일/라인은 건드리지 않는다. Edit 툴로 실제 수정하고 "
+            "files_modified 에 수정한 파일을 적어라. 지시가 잘못됐다고 판단되면 수정 없이 summary 에 근거를 적어라.\n\n"
+            + main_prompt_base
+        )
+        _fix_resp = invoke_agent(main_coder_role, _fix_prompt, env)
+        if not _fix_resp.success:
+            _comment(f"⚠️ 재작업 코더 실패: {_fix_resp.error} — 반려 상태 유지")
+            break
+        subprocess.run(
+            ["ssh", repo_host, f'git -C "{repo_dir}" add -N -- .'],
+            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=60, check=False,
+        )
+        _fd = subprocess.run(
+            ["ssh", repo_host,
+             f'cd "{repo_dir}" && git diff --stat {_diff_base} && echo ---END--- && git diff --name-only {_diff_base}'],
+            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=30, check=False,
+        )
+        _nf: list[str] = []
+        if "---END---" in (_fd.stdout or ""):
+            _nf = [f for f in _fd.stdout.split("---END---")[1].strip().splitlines() if f.strip()]
+            if _nf:
+                changed_files = _nf
+                diff_stat = _fd.stdout.split("---END---")[0].strip()
+        _fix_claimed = (_fix_resp.structured or {}).get("files_modified") or []
+        if not _fix_claimed and not _nf:
+            _comment("ℹ️ 재작업 코더가 수정하지 않음(지시 부당 판단 또는 불가) — 반려 상태 유지")
+            break
+        # 재검수: Validator → Reviewer (실제 diff 로 다시 판정)
+        _vp2 = subprocess.run(
+            ["ssh", repo_host, f'cd "{repo_dir}" && git diff {_diff_base} --unified=3'],
+            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=30, check=False,
+        )
+        _val_patch2 = ("\n\n## 실제 코드 변경 (git diff)\n```diff\n" + (_vp2.stdout or "")[:8000] + "\n```") if (_vp2.stdout or "").strip() else ""
+        validator_resp = invoke_agent(
+            validator_role,
+            _proj_hdr + VALIDATOR_PROMPT_TEMPLATE.format(
+                changes_summary=f"Diff stats:\n{diff_stat}\n\nFiles: {', '.join(changed_files)}{_val_patch2}"),
+            env,
+        )
+        validator_verdict = validator_resp.structured or {"passed": False, "issues": ["no structured response"]}
+        _dp2 = subprocess.run(
+            ["ssh", repo_host, f'cd "{repo_dir}" && git diff {_diff_base} --unified=3'],
+            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=30, check=False,
+        )
+        _changes2 = (f"Files: {', '.join(changed_files)}\n\nDiff stat:\n{diff_stat}\n\n"
+                     f"## 실제 코드 변경 (git diff)\n```diff\n{(_dp2.stdout or '')[:9000]}\n```")
+        reviewer_resp = invoke_agent(
+            reviewer_role,
+            _proj_hdr + REVIEWER_PROMPT_TEMPLATE.format(
+                changes_summary=_changes2,
+                validator_verdict=json.dumps(validator_verdict, indent=2, ensure_ascii=False),
+            ) + f"\n\n## 이전 리뷰 반려 사항 ({_review_round}회차) — 해소됐는지 먼저 확인하고 판정하라\n"
+              + "\n".join(f"- {c}" for c in _req[:8]),
+            env,
+        )
+        reviewer_verdict = reviewer_resp.structured or {"verdict": "REQUEST_CHANGES"}
+        _comment(
+            f"{'✅ APPROVED' if reviewer_verdict.get('verdict') == 'APPROVED' else '🔄 REQUEST_CHANGES'} "
+            f"**Reviewer 재검수 {_review_round}** ({reviewer_resp.model})"
+        )
+
     _q_score = reviewer_verdict.get("quality_score")
     try:
         _q_score = int(_q_score) if _q_score is not None else None
@@ -4248,7 +4725,7 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
         )
         unity_cmd = (
             f'"{unity_editor}" -batchmode -quit -nographics '
-            f'-projectPath "{repo_dir}/BalloonFlow" '
+            f'-projectPath "{repo_dir}/{_unity_sub}" '
             f'-logFile -'
         )
         compile_result = subprocess.run(
@@ -4316,21 +4793,13 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
             _compile_verified = True
             _comment("✅ batchmode 컴파일 통과 — 컴파일 검증 충족")
         elif _bm_state == "errors":
-            _comment(f"❌ **Unity 컴파일 에러 (batchmode)** — 배포 보류\n```\n{_bm_detail[:800]}\n```")
-            _send_slack_failure(
-                email=(task.get("created_by_email") or ""),
-                title=title,
-                reason=f"Unity 컴파일 에러 (batchmode):\n{_bm_detail[:300]}",
-                category="compile_error",
-                fallback_assignee=(task.get("assignee") or ""),
-                task_id=str(task.get("_id") or ""),
-            )
-            return {
-                "success": False,
-                "error": "Unity compile errors (batchmode fallback)",
-                "next_status": "review",
-                "failure_category": "compile_error",
-            }
+            # 구조 A (2026-09-14): 여기서 return 하면 commit/push/PR 이 전부 건너뛰어져 올바른 변경이
+            # 작업트리에만 남았다(NextPR 사례 06). 병합만 보류하고 PR 은 만든다 — "완료물은 항상 검토 가능한 형태로".
+            _merge_blocked = True
+            _block_reason = "컴파일 에러 (batchmode): " + (_bm_detail or "")[:200]
+            _comment(f"❌ **Unity 컴파일 에러 (batchmode)** — 자동 병합 보류. 변경은 브랜치/PR 에 올립니다\n```\n{_bm_detail[:800]}\n```")
+            _record_gate_event(task_id=task_id, gate="compile_batchmode", result="block",
+                               reason=(_bm_detail or "")[:200], merge_state="blocked")
         else:
             _comment(f"⚠️ batchmode 컴파일 판정 불가: {_bm_detail[:200]} — 기존 정책({_REQ_COMPILE})으로 처리")
     if (not _merge_blocked and not _compile_verified
@@ -4339,15 +4808,94 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
                            result=("block" if _REQ_COMPILE == "block" else "warn"),
                            reason="compile unverified (MCP unavailable) on APPROVED")
         if _REQ_COMPILE == "block":
-            _comment("⚠️ **컴파일 검증 불가**(Unity MCP 미응답) — Reviewer APPROVED이나 "
-                     "자동배포 보류. 수동 컴파일/플레이 확인 후 done 처리 필요. "
-                     "(해제: HERMES_REQUIRE_COMPILE=warn)")
-            return {
-                "success": True,
-                "summary": "Reviewer APPROVED이나 컴파일 미검증 — 수동 확인 위해 review 보류",
-                "next_status": "review",
-            }
+            _merge_blocked = True
+            _block_reason = "컴파일 검증 불가 (Unity MCP 미응답·batchmode 판정 불가)"
+            _comment("⚠️ **컴파일 검증 불가** — Reviewer APPROVED 이나 자동 병합 보류. "
+                     "변경은 브랜치/PR 에 올립니다. (해제: HERMES_REQUIRE_COMPILE=warn)")
         _comment("⚠️ 컴파일 검증 불가(MCP 미응답) — warn 모드라 배포는 진행하되 수동 확인 권장.")
+
+    # ── 런타임 스모크 게이트 (2026-09-14 신설). HERMES_SMOKE_GATE=off|warn|block
+    # 컴파일만으로는 "빌드되지만 실행하면 아무 일도 없는 코드"를 막지 못한다(IdleFrontier 실사례:
+    # HUD 가 타입 불일치로 영원히 배선 불가인 채 done 이었다). 러너가 없는 프로젝트는 skip.
+    _smoke_gate = os.environ.get("HERMES_SMOKE_GATE", "warn").lower()
+    if _smoke_gate in ("warn", "block") and repo.get("type") == "unity" and not _merge_blocked:
+        _comment("🎮 런타임 스모크 실행 중 (최대 7분)...")
+        _sstate, _sdetail = _batchmode_smoke(repo_host, repo_dir, _unity_sub)
+        if _sstate == "no_runner":
+            _record_gate_event(task_id=task_id, gate="smoke", result="skip", reason=_sdetail[:200])
+            _comment("ℹ️ 런타임 스모크 건너뜀 — 이 프로젝트에 스모크 러너가 없습니다 "
+                     "(`Editor/**/SmokeRunner.cs` 에 `public static void Run()` + `ai_errors/smoke.json` 기록)")
+        elif _sstate == "fail":
+            _record_gate_event(task_id=task_id, gate="smoke",
+                               result=("block" if _smoke_gate == "block" else "warn"),
+                               reason=_sdetail[:200],
+                               merge_state=("blocked" if _smoke_gate == "block" else None))
+            if _smoke_gate == "block":
+                _merge_blocked = True
+                _block_reason = "런타임 스모크 실패: " + _sdetail[:160]
+                _comment(f"⛔ **런타임 스모크 실패** — 자동 병합 보류. 변경은 브랜치/PR 에 올립니다\n```\n{_sdetail[:700]}\n```")
+            else:
+                warnings.append(f"**런타임 스모크:** {_sdetail[:300]}")
+                _comment(f"⚠️ **런타임 스모크 실패**(warn 모드, 차단 X)\n```\n{_sdetail[:700]}\n```")
+        elif _sstate == "pass":
+            _record_gate_event(task_id=task_id, gate="smoke", result="pass", reason=_sdetail[:200])
+            _comment(f"✅ **런타임 스모크 통과** — {_sdetail}")
+        else:
+            _record_gate_event(task_id=task_id, gate="smoke", result="indeterminate", reason=_sdetail[:200])
+            _comment(f"ℹ️ 런타임 스모크 판정 불가 — {_sdetail[:200]} (차단 안 함)")
+
+    # ── Stage 5.5: ICS Integration Validation (계약↔코드 정적 교차검증) ──
+    # _CONTRACTS.yaml 이 있는 프로젝트만 검사(없으면 skip=no_contract). 기본 warn.
+    # Design by Contract / CDC / Clover 근거 — 문헌 기반 구현(이전엔 프롬프트뿐).
+    if (not _merge_blocked and repo.get('type') == 'unity'
+            and os.environ.get('HERMES_ICS_GATE', 'warn').lower() != 'off'):
+        try:
+            _ics_repo = f"{repo_dir}/{repo.get('repo')}" if repo.get('repo') else repo_dir
+            # 2026-09-14: 빌드PC(Windows)에는 `python3` 가 없고 `python`(3.12) 만 있다.
+            # 기존 명령은 항상 실패했고 try/except 가 삼켜 ICS 게이트가 조용히 꺼져 있었다.
+            # 검사기도 Mother 에만 있어 원격에서 $HOME 경로가 풀리지 않는다 → 매 실행마다 전송한다.
+            _ics_py = "python3" if repo_host.startswith("aimed@") else "python"
+            _ics_remote = "C:/tmp/ics_validator.py" if _ics_py == "python" else "$HOME/.hermes/watcher/ics_validator.py"
+            if _ics_py == "python":
+                subprocess.run(["ssh", repo_host, "if not exist C:\tmp mkdir C:\tmp"],
+                               capture_output=True, timeout=20, check=False)
+                subprocess.run(["scp", "-q", os.path.expanduser("~/.hermes/watcher/ics_validator.py"),
+                                f"{repo_host}:{_ics_remote}"], capture_output=True, timeout=30, check=False)
+            _ics_cmd = (
+                f'cd "{_ics_repo}" && {_ics_py} "{_ics_remote}" '
+                f'--repo "{_ics_repo}" --json'
+            )
+            _ics = subprocess.run(['ssh', repo_host, _ics_cmd], capture_output=True,
+                                  text=True, encoding='utf-8', errors='replace', timeout=120)
+            import json as _json
+            try:
+                _ics_raw = (_ics.stdout or '').strip()
+                # 검사기는 indent=2 다중행 JSON 을 찍는다 — 마지막 줄만 읽으면 '}' 라 항상 파싱 실패였다
+                # (2026-09-14, 같은 게이트의 4번째 사망 원인). 첫 '{' 부터 마지막 '}' 까지를 통째로 읽는다.
+                _ires = _json.loads(_ics_raw[_ics_raw.index('{'):_ics_raw.rindex('}') + 1]) if '{' in _ics_raw else {}
+            except Exception:
+                _ires = {}
+            _istatus = _ires.get('status', 'error')
+            if _istatus == 'violations':
+                _errs = [f for f in _ires.get('findings', []) if f.get('severity') == 'error'][:6]
+                _msg = '\n'.join('- %s: %s' % (f['kind'], f['msg']) for f in _errs)
+                _gate = os.environ.get('HERMES_ICS_GATE', 'warn').lower()
+                _record_gate_event(task_id=task_id, gate='ics_integration',
+                                   result=('block' if _gate == 'block' else 'warn'),
+                                   reason=('ICS %d errors' % _ires.get('errors', 0))[:200])
+                if _gate == 'block':
+                    _comment('⛔ **ICS 통합검증 실패** (계약↔코드 불일치) — 배포 보류\n```\n' + _msg + '\n```')
+                    return {'success': False, 'error': 'ICS integration violations',
+                            'next_status': 'review', 'failure_category': 'ics_violation'}
+                else:
+                    _comment('⚠️ **ICS 통합검증 경고** (%d건) — warn 모드, PR에 기록\n```\n%s\n```' % (_ires.get('errors', 0), _msg))
+            elif _istatus == 'pass':
+                _record_gate_event(task_id=task_id, gate='ics_integration', result='pass',
+                                   reason='ICS ok (%s checks)' % _ires.get('checked', {}).get('cs_files', 0))
+                _comment('✅ ICS 통합검증 통과 (계약↔코드 정합)')
+            # no_contract / error → 조용히 skip(계약 없는 프로젝트가 대부분)
+        except Exception:
+            log.exception('ICS validation gate failed (non-blocking)')
 
     # ── Step 7: commit + push (non-fast-forward 시 자동 rebase 재시도)
     # A7 취소 체크포인트: 되돌릴 수 없는 commit/push 직전 — 중단 시 여기서 멈춤(push 방지)
@@ -4394,7 +4942,11 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
 
     commit_result = _git_b(f'commit -m "hermes: {commit_msg}" -m "Task: {task_id}"')
     _commit_out = (commit_result.stdout or "") + (commit_result.stderr or "")
-    if commit_result.returncode != 0:
+    if commit_result.returncode != 0 and "nothing to commit" in _commit_out.lower() and _prior_ahead > 0:
+        # 재개(resume): 이번 사이클에 새 수정이 없고 이전 사이클 커밋이 이미 브랜치에 있다 — 정상.
+        # 그 커밋으로 push/PR/병합/인계를 이어간다 (2026-09-14 실행 #3 이 여기서 no_changes_made 로 죽었다).
+        _comment(f"ℹ️ 새 커밋 없음 — 브랜치의 기존 커밋({_prior_ahead}개)으로 push/인계를 이어갑니다")
+    elif commit_result.returncode != 0:
         # 'nothing to commit' = diff는 있었는데 스테이징이 비었거나 이미 커밋됨 — 조용히 진행 금지
         _cat = "no_changes_made" if "nothing to commit" in _commit_out.lower() else "commit_failed"
         _comment(f"❌ git commit 실패 ({_cat}):\n```\n{_commit_out[-400:]}\n```")
@@ -4495,6 +5047,16 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
             if warnings else ""
         )
     )
+    # 원격이 GitHub이 아니면(격리된 로컬 bare 등) PR 단계를 건너뛰고 게이트/머지로 진행.
+    _remote_url = subprocess.run(
+        ["ssh", repo_host, f'git -C "{repo_dir}" remote get-url origin'],
+        capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=30, check=False,
+    )
+    _is_github = "github.com" in (_remote_url.stdout or "").lower()
+    if not _is_github:
+        pr_url = "(local repo — PR 생략)"
+        _comment(f"ℹ️ 로컬 전용 저장소 — PR 생성 생략, 게이트/머지로 진행 (branch `{branch_name}` push 완료)")
+
     # 기존 open PR 있으면 재사용 (단일 hermes 브랜치가 force-push로 업데이트되므로
     # PR은 그대로 살아있고 새 commit만 반영됨)
     existing_pr = subprocess.run(
@@ -4502,7 +5064,8 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
          f'cd "{repo_dir}" && gh pr list --head {branch_name} --state open --json url --jq ".[0].url // empty"'],
         capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=30, check=False,
     )
-    pr_url = (existing_pr.stdout or "").strip()
+    if _is_github:
+        pr_url = (existing_pr.stdout or "").strip()
 
     if pr_url:
         _comment(f"ℹ️ 기존 open PR 재사용: {pr_url}")
@@ -4548,8 +5111,40 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
             _record_gate_event(task_id=task_id, gate="compile", result=_cstate, reason=_creason)
             if _cstate == "error":
                 _comment(f"⚠️ **컴파일 경고**(차단 X — warn 모드) — {_creason}")
-            elif _cstate == "indeterminate":
+            elif _cstate == "indeterminate" and not _compile_verified:
+                # batchmode 폴백으로 이미 통과했으면 이 문구는 거짓이라 혼동만 준다(실사례: NextPR
+                # [131] batchmode 통과 직후 [135] "검증 불가"가 찍혔다). 미검증일 때만 알린다.
                 _comment("ℹ️ 컴파일 검증 불가(MCP 미가용) — 차단 안 함, 머지 진행")
+
+    # ── 기능 보존 게이트 (Phase C). HERMES_FEATURE_GATE=off|warn|block (기본 off — opt-in)
+    # baseline 대비 필수 기능(blocker/major)의 structure/compile 판정이 fail이면
+    # "이식하며 있던 기능이 사라짐"으로 간주해 머지 차단. (감사 LINK 3: 경고→차단 승격)
+    # 주의: 정확한 pre-merge 판정은 그래프가 브랜치 상태를 반영해야 함 → warn으로 먼저 측정 권장.
+    # 게이트 자체 오류/카탈로그 부재는 fail-INDETERMINATE로 절대 차단하지 않음.
+    _feature_gate = os.environ.get("HERMES_FEATURE_GATE", "off").lower()
+    if _feature_gate in ("warn", "block"):
+        _feat_project = (task.get("project") or repo.get("repo") or "balloonflow").lower()
+        try:
+            import feature_gate as _fg
+            _fv = _fg.check_gate(_feat_project)
+            if not _fv.get("passed", True):
+                _dropped = ", ".join(f'{v["id"]}({v["tier"]})' for v in _fv["violations"][:8])
+                _freason = f"기능 보존 위반 {len(_fv['violations'])}건: {_dropped}"
+                if _feature_gate == "block":
+                    _merge_blocked = True
+                    _block_reason = _freason
+                    _comment(f"⛔ **기능 보존 게이트 차단** — {_freason}")
+                    _record_gate_event(task_id=task_id, gate="feature", result="block",
+                                       reason=_freason, merge_state="blocked")
+                else:
+                    _comment(f"⚠️ **기능 보존 경고**(warn 모드, 차단 X) — {_freason}")
+                    _record_gate_event(task_id=task_id, gate="feature", result="warn", reason=_freason)
+            else:
+                _record_gate_event(task_id=task_id, gate="feature", result="pass",
+                                   reason=f"{_fv.get('checked', 0)}개 기능 보존 확인")
+        except Exception as _fe:
+            _record_gate_event(task_id=task_id, gate="feature", result="indeterminate", reason=str(_fe)[:200])
+            _comment("ℹ️ 기능 보존 검증 불가(게이트 오류/카탈로그 부재) — 차단 안 함")
 
     # ── 자동 머지 (HERMES_AUTO_MERGE=false로 끌 수 있음. 기본 on)
     # 팀원들이 git pull로 바로 받을 수 있게 main에 즉시 반영.
@@ -4562,17 +5157,26 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
         _send_slack_failure(
             email=(task.get("created_by_email") or ""),
             title=title,
-            reason=f"⛔ 배포 차단 — {_block_reason}. Hermes가 자동 머지하지 않고 멈췄습니다(검토 필요).\nPR: {pr_url}",
+            reason=_plain_block_message(_block_reason, pr_url, branch_name, len(changed_files)),
             category="merge_gate_blocked",
             fallback_assignee=(task.get("assignee") or ""),
             task_id=str(task.get("_id") or ""),
         )
     merged = False
     if auto_merge:
-        merge_cmd = (
-            f'cd "{repo_dir}" && '
-            f'gh pr merge {pr_url} --squash --delete-branch 2>&1'
-        )
+        if _is_github:
+            merge_cmd = (
+                f'cd "{repo_dir}" && '
+                f'gh pr merge {pr_url} --squash --delete-branch 2>&1'
+            )
+        else:
+            # 로컬 전용 저장소: gh 불가 → git 으로 main 병합 + push.
+            # 이전엔 "(local repo — PR 생략)" 문자열을 gh pr merge 에 그대로 넘겨 항상 실패했다.
+            merge_cmd = (
+                f'cd "{repo_dir}" && git checkout main && '
+                f'git merge --no-ff {branch_name} -m "hermes: merge {branch_name}" && '
+                f'git push origin main 2>&1'
+            )
         mr = subprocess.run(
             ["ssh", repo_host, merge_cmd],
             capture_output=True, text=True, encoding="utf-8", errors="replace",
@@ -4680,6 +5284,12 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
         except Exception:
             log.exception("phase_log 갱신 실패 — 기본 review 흐름")
 
+    # 인계 완료 정의 (구조 A): main 에 병합됐으면 파이프라인이 done 을 찍는다. 이전엔 성공 반환값이
+    # review/todo 뿐이라 done 215건 전부 사람 클릭이었고, 보드 상태가 저장소와 연결되지 않았다.
+    # phase 진행 중(todo)은 유지, 마지막 phase/비phase 는 done.
+    if merged and auto_advance_status == "review":
+        auto_advance_status = "done"
+
     summary = (
         f"{'♻️' if is_rework else '🎉'} **팀 작업 {'재' if is_rework else ''}완료**"
         + (f" (phase {current_phase_n}/{len(phase_plan)})" if is_phased else "")
@@ -4687,7 +5297,10 @@ def _handle_unity_modify(task: dict[str, Any], context: dict[str, Any], route: d
         f"- 브랜치: `{branch_name}`\n"
         f"- 변경 파일: {len(changed_files)}개\n"
         f"- PR: {pr_url}\n"
-        f"{'- 피드백 반영 포함' if is_rework else ''}\n\n"
+        + (f"- 병합: **main 반영 완료** → 상태 done\n" if merged
+           else f"- 병합: 보류 — {_block_reason or '자동 병합 실패(PR 확인)'}\n")
+        + (f"- 리뷰 자동 재작업: {_review_round}회\n" if _review_round else "")
+        + f"{'- 피드백 반영 포함' if is_rework else ''}\n\n"
         f"추가 피드백 있으면 **이 태스크 코멘트로** 남겨주세요 → Hermes가 자동 재작업합니다."
     )
     # 요청자에게 완료 DM (리뷰 요청)
@@ -5137,6 +5750,100 @@ def _handle_goal_decompose(task: dict[str, Any], context: dict[str, Any], route:
     }
 
 
+def _handle_project_create(task: dict[str, Any], context: dict[str, Any], route: dict[str, Any]) -> dict[str, Any]:
+    """
+    Fork로 신규 프로젝트 생성 — 완성 baseline을 소스 Git에서 clone → 새 Git 생성 → 등록.
+
+    트리거: task.fork_params (구조화) 또는 [fork]/[new-project] 태그.
+    params(route): new_name, baseline, owner, private, dry_run.
+
+    project_fork.fork_project 를 호출한다 (git/gh 는 빌드 호스트에서 SSH 실행).
+    ForkError는 여기서 잡아 review로 반환 — 워처 프로세스는 죽지 않는다.
+    """
+    task_id = str(task.get("_id"))
+    params = route.get("params") or {}
+    new_name = params.get("new_name")
+    baseline = params.get("baseline")
+    owner = params.get("owner")
+    private = params.get("private", True)
+    dry_run = bool(params.get("dry_run", False))
+
+    from projecthub_writer import ProjectHubWriter
+    client = MongoClient(MONGO_URI)
+    writer = ProjectHubWriter(client[DB_NAME]["pixelforge_tasks"])
+
+    def _comment(text: str) -> None:
+        try:
+            writer.add_comment(task_id, text, author="hermes")
+        except Exception:
+            pass
+
+    if not new_name or not baseline:
+        return {
+            "success": False,
+            "error": ("fork 파라미터 부족 — new_name/baseline 필요. "
+                      "fork_params={\"new_name\":\"MyGame\",\"baseline\":\"BalloonFlow\"} 또는 "
+                      "'BalloonFlow로 MyGame 만들어줘' 형식."),
+            "next_status": "review",
+            "metadata": {"action": "project_create"},
+        }
+
+    import project_fork
+    kwargs = {"baseline": baseline, "private": private, "dry_run": dry_run}
+    if owner:
+        kwargs["owner"] = owner
+
+    if dry_run:
+        _comment(f"🍴 **Fork 계획(dry-run)** — `{baseline}` → `{new_name}`")
+    else:
+        _comment(f"🍴 **Fork 시작** — `{baseline}` 소스 Git → 새 Git `{new_name}` 생성 중… "
+                 f"(clone+LFS로 수 분 소요)")
+
+    try:
+        res = project_fork.fork_project(new_name, **kwargs)
+    except project_fork.ForkError as e:
+        return {
+            "success": False,
+            "error": _fmt_failure("project_create_failed", str(e)[:600]),
+            "next_status": "review",
+            "failure_category": "project_create_failed",
+            "metadata": {"action": "project_create", "new_name": new_name, "baseline": baseline},
+        }
+
+    if res.get("dry_run"):
+        plan = "\n".join(f"  {c}" for c in res.get("commands", []))
+        return {
+            "success": True,
+            "summary": (f"🍴 **Fork 계획** `{res['baseline']}` → `{res['new_slug']}`\n```\n{plan}\n```\n"
+                        f"실제 실행하려면 dry_run 없이 다시 요청하세요."),
+            "next_status": "review",
+            "metadata": {"action": "project_create", "dry_run": True},
+        }
+
+    summary = (
+        f"✅ **신규 프로젝트 생성 완료** — Fork\n\n"
+        f"- 새 레포: {res['new_repo']}\n"
+        f"- baseline: `{res['baseline']}` (fork_sha `{res['fork_sha']}`)\n"
+        f"- remote: {res['remotes']}\n"
+        f"- 계약 상속: {res['catalog_inherited']}\n"
+        f"- 등록: {res['registered']}\n\n"
+        f"이제 이 프로젝트에 델타(메커닉·아트 변환)를 요청하면 됩니다."
+    )
+    try:
+        from failure_learning import record_success
+        record_success(client[DB_NAME], task_id=task_id, metadata={"action": "project_create"})
+    except Exception:
+        pass
+
+    return {
+        "success": True,
+        "summary": summary,
+        "next_status": "review",
+        "metadata": {"action": "project_create", "new_repo": res["new_repo"],
+                     "fork_sha": res["fork_sha"], "baseline": res["baseline"]},
+    }
+
+
 _HANDLERS = {
     "db_query": _handle_db_query,
     "chat": _handle_chat,
@@ -5145,6 +5852,7 @@ _HANDLERS = {
     "unity_modify": _handle_unity_modify,  # 5-역할 팀 코드 수정
     "git_sync": _handle_git_sync,          # 단순 main 동기화 (에이전트 없음)
     "goal_decompose": _handle_goal_decompose,  # [goal] 목표 → 하위 task DAG
+    "project_create": _handle_project_create,  # Fork로 신규 프로젝트 생성
     "review_needed": _handle_review_needed,
     # Stage 4~6 (GameForge 본격 통합)은 Phase 2에서
     # "gameforge_design": _handle_gameforge_design,

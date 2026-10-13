@@ -1,0 +1,32 @@
+[Unit]
+Description=ProjectHub Watcher — MongoDB Change Streams → Hermes
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=aimed
+Group=aimed
+WorkingDirectory=/home/aimed/.hermes/watcher
+EnvironmentFile=/home/aimed/.hermes/watcher/.env
+ExecStart=/home/aimed/.hermes/watcher/venv/bin/python /home/aimed/.hermes/watcher/projecthub_watcher.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+# 보안
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/aimed/.hermes /tmp
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

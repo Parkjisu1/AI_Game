@@ -1,0 +1,18 @@
+[Unit]
+Description=ProjectHub MCP SSH tunnel — Mother(:7900) ↔ Build PC(:7900)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/ssh -N -L 7900:localhost:7900 user@100.92.43.9 \
+    -o ExitOnForwardFailure=yes \
+    -o ServerAliveInterval=30 \
+    -o ServerAliveCountMax=3 \
+    -o StrictHostKeyChecking=accept-new \
+    -o ConnectTimeout=10
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=default.target

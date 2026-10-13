@@ -1,0 +1,29 @@
+[Unit]
+Description=LiteLLM Proxy — OpenAI/Anthropic 통합 게이트웨이
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=aimed
+Group=aimed
+WorkingDirectory=/home/aimed/litellm-env
+EnvironmentFile=/home/aimed/litellm-env/.env
+ExecStart=/home/aimed/litellm-env/bin/litellm --config /home/aimed/litellm-config.yaml --port 4000
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+# 보안
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/aimed/litellm-env /tmp
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,99 @@
+# LiteLLM 프록시 설정 — Mother 포트 4000
+#
+# 배포: /home/aimed/litellm-config.yaml
+# 실행: litellm --config ~/litellm-config.yaml --port 4000
+#
+# 역할별 모델 alias 9개 정의. Hermes와 GameForge가 이름으로 호출.
+# OpenAI API 키가 수령되면 .env에 OPENAI_API_KEY 추가만 하면 전체 작동.
+
+model_list:
+  # ────────────────────────────────────────
+  # 고품질 결정 (리드, 메인 코더) — Claude Opus
+  # ────────────────────────────────────────
+  - model_name: lead-agent
+    litellm_params:
+      model: anthropic/claude-opus-4-6
+      api_key: os.environ/ANTHROPIC_API_KEY
+
+  - model_name: main-coder-agent
+    litellm_params:
+      model: anthropic/claude-opus-4-6
+      api_key: os.environ/ANTHROPIC_API_KEY
+
+  # ────────────────────────────────────────
+  # 양산 작업 (디자이너, 서브 코더) — Claude Sonnet
+  # ────────────────────────────────────────
+  - model_name: designer-agent
+    litellm_params:
+      model: anthropic/claude-sonnet-4-6
+      api_key: os.environ/ANTHROPIC_API_KEY
+
+  - model_name: sub-coder-agent
+    litellm_params:
+      model: anthropic/claude-sonnet-4-6
+      api_key: os.environ/ANTHROPIC_API_KEY
+
+  # ────────────────────────────────────────
+  # 검증 (validator) — 비용 절감으로 GPT-4o
+  # ────────────────────────────────────────
+  - model_name: validator-agent
+    litellm_params:
+      model: openai/gpt-4o
+      api_key: os.environ/OPENAI_API_KEY
+
+  - model_name: design-validator-agent
+    litellm_params:
+      model: openai/gpt-4o
+      api_key: os.environ/OPENAI_API_KEY
+
+  # ────────────────────────────────────────
+  # 대량 파싱/분류 — GPT-4o-mini (초저가)
+  # ────────────────────────────────────────
+  - model_name: bulk-parser-agent
+    litellm_params:
+      model: openai/gpt-4o-mini
+      api_key: os.environ/OPENAI_API_KEY
+
+  - model_name: intent-classifier-agent
+    litellm_params:
+      model: openai/gpt-4o-mini
+      api_key: os.environ/OPENAI_API_KEY
+
+  # ────────────────────────────────────────
+  # 범용 (Hermes 기본 모델)
+  # ────────────────────────────────────────
+  - model_name: default
+    litellm_params:
+      model: openai/gpt-4o
+      api_key: os.environ/OPENAI_API_KEY
+
+# ────────────────────────────────────────
+# 라우팅 & Fallback
+# ────────────────────────────────────────
+router_settings:
+  # 메인이 실패하면 fallback 체인
+  fallbacks:
+    - lead-agent: ["designer-agent"]              # Opus 실패 → Sonnet
+    - main-coder-agent: ["sub-coder-agent"]
+    - validator-agent: ["bulk-parser-agent"]      # GPT-4o 실패 → mini
+    - default: ["designer-agent"]                 # 최종 fallback = Anthropic
+
+# ────────────────────────────────────────
+# 일반 설정 + 예산 통제
+# ────────────────────────────────────────
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
+  # 사용자별 키 발급 시 사용
+  # database_url: os.environ/DATABASE_URL    # 운영 로그 저장 (선택)
+
+litellm_settings:
+  # 🔴 중요: 일일 예산 하드 캡 ($50). 에이전트 루프 폭주 방지
+  max_budget: 50
+  budget_duration: 1d
+  drop_params: true       # 지원 안 하는 파라미터 자동 제거
+  set_verbose: false
+  # 캐싱으로 비용 추가 절감
+  cache: true
+  cache_params:
+    type: "local"
+    ttl: 600              # 10분 캐시

@@ -59,7 +59,12 @@ def _mongo_db():
         uri = os.environ.get("MONGODB_URI") or os.environ.get("MONGO_URI")
         if not uri:
             return None
-        return MongoClient(uri, serverSelectionTimeoutMS=3000)[os.environ.get("MONGODB_DB", "aigame")]
+        # 3000ms는 Atlas 콜드 커넥션에 짧다 — 프로세스 기동 후 첫 호출이 server selection
+        # 타임아웃으로 실패하면 _vector_search 가 경고만 남기고 []를 반환해
+        # **해당 task는 RAG 컨텍스트를 통째로 못 받는다**(조용한 품질 저하).
+        # lru_cache 로 클라이언트는 프로세스당 1회만 만들어지므로 여유를 줘도 상시 비용은 없다.
+        _sel_ms = int(os.environ.get("HERMES_MONGO_SELECT_TIMEOUT_MS", "10000"))
+        return MongoClient(uri, serverSelectionTimeoutMS=_sel_ms)[os.environ.get("MONGODB_DB", "aigame")]
     except Exception:
         log.exception("Mongo client init failed")
         return None
@@ -100,35 +105,70 @@ def _vector_search(coll_name: str, qvec: list[float], k: int) -> list[dict]:
 
 # ─────────────────────────── code_base ───────────────────────────
 
-def build_code_context(title: str, description: str, k: int = 4) -> str:
-    """유사 검증 코드(code_base) 블록 — Main Coder/Lead 프롬프트용."""
+# 그래프 앵커 전용 기준선 — 일반 RAG(CODE_SIM_FLOOR)보다 높게 잡는다.
+# 앵커는 "네가 지금 건드릴 코드다"라고 코더에게 선언하는 것이라 오탐 비용이 크다.
+# 2026-07-20 실측: 0.75/0.73 = 명백히 관련, 0.68 = 경계, 0.64 이하 = 무관
+#   ("레일이 꽉 찼는데 발사가 안 됨" → 최고 0.636 → PopupLoadingSpinner/LocalizedImage 등 전부 무관).
+# 기준선 미달이면 앵커 0개 = 그라운딩 침묵. 잘못된 그라운딩보다 없는 편이 낫다.
+GRAPH_ANCHOR_FLOOR = float(os.environ.get("HERMES_GRAPH_ANCHOR_FLOOR", "0.65"))
+
+
+def code_anchor_classes(title: str, description: str, k: int = 2) -> list[str]:
+    """벡터검색이 뽑은 유사 코드의 클래스명 목록 — 그래프 그라운딩 앵커용.
+
+    build_code_context 와 같은 검색을 쓰되 문자열이 아닌 식별자를 돌려준다.
+    bf_graph_context 가 "곧 수정될 파일"을 추정하는 신호로 쓴다
+    (task 텍스트에 클래스명이 없으면 그라운딩이 0이 되던 문제 보완).
+    graph node.cls 와 join 되도록 className > fileId 순으로 고른다.
+    """
+    try:
+        query = f"{title}\n{description or ''}".strip()[:2000]
+        # 검색은 아래 _ec.search_similar_code(Qdrant)가 자체 임베딩으로 수행한다.
+        # 예전엔 여기서 OpenAI _embed 로 가드했는데, 키가 죽자 401 → 조기 return 이 되어
+        # 멀쩡한 Qdrant 검색까지 함께 막혔다. 가드를 제거한다.
+        import os as _os
+        import hermes_embedding_client as _ec
+        hits = _ec.search_similar_code(query, limit=k + 6)
+        out: list[str] = []
+        for h in hits:
+            path = h.get("file") or ""
+            stem = _os.path.splitext(_os.path.basename(path))[0]
+            if stem and stem not in out:
+                out.append(stem)
+            if len(out) >= k:
+                break
+        return out
+    except Exception:
+        log.debug("code_anchor_classes failed", exc_info=True)
+        return []
+
+
+def build_code_context(title: str, description: str, k: int = 4, project: str | None = None) -> str:
+    """유사 검증 코드(code_base) 블록 — Main Coder/Lead 프롬프트용. project 가 있으면 같은 프로젝트 우선."""
     query = f"{title}\n{description or ''}".strip()[:2000]
-    qvec = _embed(query)
-    if qvec is None:
+    # Qdrant(gf_code_chunks, nomic 768d) 기반 — Atlas $vectorSearch 는 로컬 mongo 에서 죽음.
+    try:
+        import hermes_embedding_client as _ec
+        hits = _ec.search_similar_code(query, limit=k, project=project)
+    except Exception:
+        hits = []
+    if not hits:
         return ""
-    rows = [r for r in _vector_search("code_base", qvec, k + 4) if r.get("_score", 0) >= CODE_SIM_FLOOR][:k]
-    if not rows:
-        return ""
-
     lines = []
-    for r in rows:
-        classes = r.get("classes") or []
-        cls = (classes[0].get("className") if classes and isinstance(classes[0], dict) else "") or r.get("fileId") or "?"
-        base = classes[0].get("baseClass") if classes and isinstance(classes[0], dict) else ""
-        provides = ", ".join((r.get("provides") or [])[:6])[:400]
-        uses = ", ".join((r.get("uses") or [])[:8])[:240]
+    for h in hits:
+        path = h.get("file") or "?"
+        proj = h.get("project") or "?"
+        prev = " ".join((h.get("preview") or "").split())[:200]
+        _same = (project and str(proj).lower() == str(project).lower())
+        _tag = "같은 프로젝트 — 그대로 재사용" if _same else ("타 프로젝트 — 패턴 참고만, 경로·네임스페이스 복사 금지" if project else "")
         lines.append(
-            f"- **{cls}**{f' : {base}' if base else ''} [{r.get('_score',0):.2f}] "
-            f"(layer={r.get('layer','?')} / role={r.get('role','?')} / system={r.get('system','?')})\n"
-            f"  - file: `{r.get('filePath', r.get('fileId',''))}`"
-            + (f"\n  - provides: {provides}" if provides else "")
-            + (f"\n  - uses: {uses}" if uses else "")
+            f"- `{path}` [{h.get('score',0):.2f}] (project={proj}, lang={h.get('lang','?')}{', ' + _tag if _tag else ''})\n"
+            f"  - {prev}"
         )
-
     return (
-        "\n## 🔎 유사 검증 코드 (code_base Vector Search)\n"
-        "이 task와 유사한 **이미 검증된 BalloonFlow 코드**입니다. 새로 짜기 전에 이 패턴/계약을 우선 재사용하고, "
-        "동일 시스템이면 기존 클래스를 수정하세요(중복 생성 금지). 환각 방지: 아래 file 경로가 실제 존재하는지 전제로 참조.\n"
+        "\n## 🔎 유사 검증 코드 (Qdrant gf_code_chunks)\n"
+        "이 task와 유사한 **이미 검증된 실제 코드**입니다. 새로 짜기 전에 이 패턴을 우선 재사용하고, "
+        "동일 시스템이면 기존 클래스를 수정하세요(중복 생성 금지).\n"
         + "\n".join(lines) + "\n"
     )
 
@@ -138,10 +178,18 @@ def build_code_context(title: str, description: str, k: int = 4) -> str:
 def build_similar_tasks_block(title: str, description: str, k: int = 4, exclude_id: str = "") -> str:
     """유사 과거 task(pixelforge_tasks) 블록 — 기존 Qdrant format_similar_sessions_section 대체."""
     query = f"{title}\n{description or ''}".strip()[:2000]
-    qvec = _embed(query)
-    if qvec is None:
-        return ""
-    rows = _vector_search("pixelforge_tasks", qvec, k + 12)  # good 필터 보정 위해 넓게
+    # 위와 같은 이유로 OpenAI _embed 가드를 제거한다 — 검색은 Qdrant 가 수행한다.
+    try:
+        import hermes_embedding_client as _ec
+        _sess = _ec.search_similar_sessions(query, limit=k + 12)
+    except Exception:
+        _sess = []
+    # Qdrant hermes_text_memory 기반(과거 세션). Atlas $vectorSearch(pixelforge_tasks) 죽음 대체.
+    rows = [{"_id": x.get("task_id"), "_score": x.get("score", 0) * 100.0,
+             "title": x.get("task_title"), "status": ("done" if x.get("success") else "review"),
+             "best_score": 100.0 if x.get("success") else 0.0,
+             "comments": [{"author": "user", "text": x.get("preview") or ""}] if x.get("preview") else []}
+            for x in _sess]
     # 결과가 좋았던 작업만 참조 (best_score = reviewer max). 검증된 우수 사례만 RAG 주입.
     GOOD = 80.0
     rows = [r for r in rows
@@ -182,7 +230,14 @@ def build_design_context(title: str, description: str, k: int = 3, project: str 
     """관련 기획 디렉션(design_base) 블록 — Designer/Writer/Lead 프롬프트용.
 
     design_base 는 벡터 인덱스가 없어(M0 한도) 토큰 오버랩으로 랭킹한다.
-    프로젝트 design_base 가 작아(<100) 전체 fetch 후 in-Python 랭킹이 충분히 빠르다.
+    BalloonFlow 기준 444건(과거 주석의 "<100" 은 낡음, 2026-07-20 실측) 전체 fetch 후
+    in-Python 랭킹. text 포함 총 ~730KB 로 task 당 1회 호출에는 충분히 가볍다.
+
+    2026-07-20 — 랭킹/출력 대상 필드 확대.
+      444건 중 395건이 title+text 형태의 청크 문서이고 system/summary/tags/headings 가 없다.
+      이전 구현은 이 필드들만 haystack 으로 써서 395건(89%)이 domain 단일 토큰으로만
+      랭킹됐고, 설령 뽑혀도 출력이 `**?**` 로 렌더돼 사실상 쓸모가 없었다.
+      → haystack 과 출력 모두 title/text 폴백을 추가한다.
     """
     db = _mongo_db()
     if db is None:
@@ -193,7 +248,8 @@ def build_design_context(title: str, description: str, k: int = 3, project: str 
     try:
         docs = list(db.design_base.find(
             {"project": project},
-            {"system": 1, "domain": 1, "summary": 1, "tags": 1, "document_role": 1, "headings": 1},
+            {"system": 1, "domain": 1, "summary": 1, "tags": 1, "document_role": 1,
+             "headings": 1, "title": 1, "text": 1, "doc_file": 1},
         ))
     except Exception as e:
         log.warning("design_base fetch failed: %s", e)
@@ -205,6 +261,7 @@ def build_design_context(title: str, description: str, k: int = 3, project: str 
     for d in docs:
         hay = " ".join([
             str(d.get("system", "")), str(d.get("domain", "")), str(d.get("summary", "")),
+            str(d.get("title", "")), str(d.get("text", ""))[:2000],
             " ".join(d.get("tags", []) or []),
             " ".join(h.get("title", "") for h in (d.get("headings") or []) if isinstance(h, dict)),
         ])
@@ -215,12 +272,26 @@ def build_design_context(title: str, description: str, k: int = 3, project: str 
         return ""
     scored.sort(key=lambda x: x[0], reverse=True)
 
+    # 같은 원본 문서의 여러 청크가 k칸을 잠식하지 않도록 출처 단위로 중복 제거.
+    deduped, seen_src = [], set()
+    for ov, d in scored:
+        src = d.get("doc_file") or d.get("system") or d.get("title") or id(d)
+        if src in seen_src:
+            continue
+        seen_src.add(src)
+        deduped.append((ov, d))
+        if len(deduped) >= k:
+            break
+
     lines = []
-    for ov, d in scored[:k]:
-        summary = (d.get("summary") or "").strip()[:MAX_SUMMARY_CHARS]
+    for ov, d in deduped:
+        # 청크 문서는 system/summary 가 없다 — title/doc_file, text 로 폴백.
+        label = d.get("system") or d.get("title") or d.get("doc_file") or "?"
+        body = ((d.get("summary") or d.get("text") or "")
+                .strip().replace("\n", " ")[:MAX_SUMMARY_CHARS])
         lines.append(
-            f"- **{d.get('system','?')}** (domain={d.get('domain','?')}, match={ov})"
-            + (f"\n  - {summary}" if summary else "")
+            f"- **{label}** (domain={d.get('domain','?')}, match={ov})"
+            + (f"\n  - {body}" if body else "")
         )
 
     return (

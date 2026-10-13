@@ -197,6 +197,71 @@ def profile_to_md(project: str, genre: str, team: str, repo: dict, profile: dict
     return "\n".join(lines)
 
 
+def _detect_scripts_dir(host: str, root: str, unity_sub: str) -> str:
+    """Unity 프로젝트에서 .cs 가 가장 많이 모인 Assets 하위 폴더를 찾는다.
+
+    graph 설정의 기본값은 `Assets/1.Scripts` 인데 이건 BalloonFlow 규약이다. IdleFrontier 는
+    `Assets/IdleFrontier/Scripts` 라 기본값으로는 그래프가 비어서 나온다. 실제 배치를 보고 정한다.
+    """
+    import subprocess as _sp
+    from collections import Counter
+    base = f"{root}/{unity_sub}" if unity_sub else root
+    r = _sp.run(["ssh", host, f'git -C "{root}" ls-files "*.cs"'],
+                capture_output=True, text=True, encoding="utf-8", errors="replace",
+                timeout=60, check=False)
+    cnt: Counter = Counter()
+    for line in (r.stdout or "").splitlines():
+        p = line.strip().replace("\\", "/")
+        if "/Assets/" not in p and not p.startswith("Assets/"):
+            continue
+        # Assets 이후 두 단계까지를 후보로 본다 (Assets/X, Assets/X/Y)
+        tail = p.split("Assets/", 1)[1]
+        parts = tail.split("/")
+        if len(parts) >= 2:
+            cnt["Assets/" + parts[0]] += 1
+        if len(parts) >= 3:
+            cnt["Assets/" + parts[0] + "/" + parts[1]] += 1
+    if not cnt:
+        return "Assets/1.Scripts"
+
+    # 포크 프로젝트 주의: 베이스라인 게임의 스크립트가 훨씬 많아 밀도만 보면 그쪽이 뽑힌다
+    # (실측: IdleFrontier → Assets/IdleMoney/Scripts). 프로젝트 이름과 일치하는 폴더를 우선한다.
+    want = (unity_sub or "").strip("/").lower()
+    if want:
+        named = [(k, v) for k, v in cnt.items() if want in k.lower()]
+        if named:
+            return max(named, key=lambda kv: (kv[1] * (1 + kv[0].count("/") * 0.25)))[0]
+
+    # 이름 단서가 없으면 밀도 × 깊이 가중 — 얕은 Assets/X 는 항상 더 크므로 깊이를 보정한다.
+    best = max(cnt.items(), key=lambda kv: (kv[1] * (1 + kv[0].count("/") * 0.25)))
+    _ = base
+    return best[0]
+
+
+def _ensure_graph_config(project: str, repo: dict) -> str:
+    """레지스트리에 graph 설정을 쓰고 그래프/카탈로그를 1회 생성한다."""
+    import subprocess as _sp
+    slug = (project or "").strip().lower()
+    unity_sub = repo.get("name") or ""
+    scripts = _detect_scripts_dir(repo["host"], repo["dir"], unity_sub)
+
+    # 이 모듈엔 _db() 헬퍼가 없다 — persist() 와 같은 방식으로 직접 연결한다.
+    db = MongoClient(os.environ["MONGODB_URI"])[os.environ.get("MONGODB_DB", "aigame")]
+    db["hermes_projects"].update_one(
+        {"project": slug},
+        {"$set": {"graph": {"enabled": True, "subdir": unity_sub,
+                            "scripts": scripts, "branch": "origin/main",
+                            "embed_project": unity_sub or slug}}},
+    )
+
+    r = _sp.run([sys.executable, "/home/aimed/.hermes/watcher/bf_graph_refresh.py",
+                 "--project", slug, "--force"],
+                capture_output=True, text=True, encoding="utf-8", errors="replace",
+                timeout=900, check=False)
+    tail = (r.stdout or r.stderr or "").strip().splitlines()
+    return f"graph scripts={scripts} rc={r.returncode} :: " + (tail[-1][:160] if tail else "")
+
+
 def persist(project: str, genre: str, team_dir: str, team: str, repo: dict, profile: dict, mode: str, facts: dict) -> dict:
     db = MongoClient(os.environ["MONGODB_URI"])[os.environ.get("MONGODB_DB", "aigame")]
     now = datetime.now(timezone.utc).isoformat()
@@ -227,6 +292,25 @@ def persist(project: str, genre: str, team_dir: str, team: str, repo: dict, prof
         for n in (c.get("notable") or []): cl.append(f"- {n}")
         conv.write_text("\n".join(cl), encoding="utf-8")
         wrote_conv = True
+    # 2026-09-14: 온보딩 시 컴파일 베이스라인을 캡처한다. 없으면 게이트가 기존 에러를 전부 새 에러로
+    # 계산해 모든 요청이 그 프로젝트의 누적 부채에 막힌다 (NextPR IAPManager 사례).
+    # 주의: persist() 의 인자명은 `repo` 다. 초판이 `registry_doc` 을 참조해 NameError 로 매번 죽었고
+    # except 가 삼켜 조용히 skip 됐다 — 베이스라인이 어느 프로젝트에도 없던 이유의 절반.
+    _is_unity = isinstance(repo, dict) and repo.get("type") == "unity" and repo.get("host") and repo.get("dir")
+    if _is_unity:
+        try:
+            import hermes_executor as _hx
+            print("   ", _hx.capture_compile_baseline(repo["host"], repo["dir"], repo.get("name")))
+        except Exception as _e:
+            print("    baseline capture skipped:", _e)
+
+        # 코드 그래프 + 기능 카탈로그 — feature_gate 의 입력. 없으면 그 게이트가 새 게임에서만
+        # indeterminate 로 빠진다(가장 필요한 곳에서 꺼져 있던 문제).
+        try:
+            print("    graph/catalog 생성 중 ...")
+            print("   ", _ensure_graph_config(project, repo))
+        except Exception as _e:
+            print("    graph/catalog skipped:", _e)
     return {"registry": "hermes_projects", "memory_md": str(md_path), "conventions_written": wrote_conv}
 
 

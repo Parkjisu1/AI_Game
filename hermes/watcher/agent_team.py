@@ -36,12 +36,12 @@ DEFAULT_AGENT_ROLES: dict[str, dict[str, str]] = {
     },
     "lead": {
         "tool": "claude",
-        "model": "claude-opus-4-7",
+        "model": "claude-opus-5",
         "description": "태스크 분해, 영향 분석, 작업 계획 수립",
     },
     "main_coder": {
         "tool": "claude",
-        "model": "claude-opus-4-7",
+        "model": "claude-opus-5",
         "description": "핵심 아키텍처/복잡 로직 구현",
     },
     "sub_coder": {
@@ -57,18 +57,49 @@ DEFAULT_AGENT_ROLES: dict[str, dict[str, str]] = {
     },
     "reviewer": {
         "tool": "claude",
-        "model": "claude-opus-4-7",
+        "model": "claude-opus-5",
         "description": "최종 품질 게이트 — Claude Max 프리미엄 채널",
     },
     "optimizer": {
         "tool": "claude",
-        "model": "claude-opus-4-7",
+        "model": "claude-opus-5",
         "description": "성능 최적화 — GC alloc, 매 프레임 연산, Unity 안티패턴 제거 (기능 변경 금지)",
     },
     "optimization_reviewer": {
         "tool": "litellm",
         "model": "validator-agent",  # 검증 유형이라 저가 모델로 충분
         "description": "최적화가 정확성 깨뜨리지 않고 실제 개선인지 검증",
+    },
+    # ── data 팀 — 기획팀이 쓰는 데이터 분과 ──
+    # persona(직무 기술서)는 4000자 cap 이 있어 통합 지침을 하나에 넣지 않고
+    # 흐름(sub_team)별로 쪼개 각 역할에 심는다. persona 본문은 DB(hermes_agent_roles)에 있고
+    # 여기 DEFAULT 는 **DB 를 못 읽을 때의 폴백**이라 tool/model/description 만 둔다.
+    # 이게 없으면 DB 가 흔들리는 순간 데이터 작업이 "Unknown role" 로 죽는다.
+    # 통합 원본: E:\AI\analytics\CLAUDE.md
+    "data_pm": {
+        "tool": "litellm",
+        "model": "sub-coder-agent",
+        "description": "데이터 요청을 bq/logspec/livesync 중 어디로 보낼지 결정 + 누구·언제·상황·어디 4항목 질문 좁히기",
+    },
+    "data_analyst": {
+        "tool": "claude",
+        "model": "claude-sonnet-4-6",
+        "description": "BigQuery 추출·집계. 규칙 view 선행 조회 → 4축 세그먼트 분해 → 중위수·분위 동반 보고",
+    },
+    "data_reviewer": {
+        "tool": "claude",
+        "model": "claude-sonnet-4-6",
+        "description": "분석 결과 검수 — 평균 단독·세그먼트 누락·기간 미지정·1행 정의 혼동 차단",
+    },
+    "data_logspec": {
+        "tool": "claude",
+        "model": "claude-sonnet-4-6",
+        "description": "로그 요청서 작성·검수. 퍼즐 공용 Raw Data Schema 기준, UID 누락과 사후 복원 불가 항목 점검",
+    },
+    "data_livesync": {
+        "tool": "claude",
+        "model": "claude-sonnet-4-6",
+        "description": "라이브 실측을 기획서로 환류 (Stage 8). sync-live 입력 생성 + 예측 대비 delta 판정",
     },
 }
 
@@ -85,11 +116,11 @@ _ROLES_CACHE_TTL_SEC = 10.0  # UI 수정 후 최대 10초 반영 지연
 # 분과의 최근 평균 품질점수가 임계값 미만이면 다음 호출 모델을 한 단계 위로.
 # PM/Translator는 분류 역할이라 승격 대상에서 제외 (저비용 유지).
 _MODEL_PROMOTION_LADDER = {
-    # LiteLLM alias (gpt-4o-mini) → gpt-4o → claude-opus-4-7
+    # LiteLLM alias (gpt-4o-mini) → gpt-4o → claude-opus-5
     "sub-coder-agent": "gpt-4o",
     "validator-agent": "gpt-4o",
     "gpt-4o-mini":     "gpt-4o",
-    "gpt-4o":          "claude-opus-4-7",
+    "gpt-4o":          "claude-opus-5",
 }
 _PROMOTION_THRESHOLD = 65.0          # 평균 점수 < 65 → 승격
 _PROMOTION_MIN_SAMPLES = 5            # 표본 5건 이상에서만 평가
@@ -180,7 +211,7 @@ def _load_agent_roles() -> dict[str, dict[str, str]]:
                     continue
                 mapping[role] = {
                     "tool": str(d.get("tool") or "claude"),
-                    "model": str(d.get("model") or "claude-opus-4-7"),
+                    "model": str(d.get("model") or "claude-opus-5"),
                     "description": str(d.get("description") or ""),
                     # Phase 2에서 분과별 파이프라인 라우팅에 사용 (Phase 1: 메타만 보존)
                     "team": str(d.get("team") or "dev"),
@@ -222,7 +253,7 @@ class ExecutionEnv:
     mode: str = "remote_ssh"  # "remote_ssh" | "local"
     ssh_host: Optional[str] = None  # e.g. "user@100.92.43.9"
     cwd: str = "."  # 작업 디렉토리
-    timeout_sec: int = 600
+    timeout_sec: int = 1500
     image_path: Optional[str] = None  # Claude --image로 전달할 이미지 경로 (원격 기준)
     task_id: Optional[str] = None     # 세션 로그 연결용 — 설정되면 호출마다 기록
     task_title: str = ""              # 검색 편의용 짧은 라벨
@@ -238,6 +269,8 @@ class ExecutionEnv:
 # ──────────────────────────────────────────────
 MODEL_PRICES_PER_MTOK: dict[str, dict[str, float]] = {
     # Claude (Anthropic)
+    "claude-opus-5":        {"in": 15.00, "out": 75.00},
+    # 4-7/4-6 은 과거 hermes_token_usage 기록 집계용으로 남긴다 (지우면 옛 비용이 0 이 된다)
     "claude-opus-4-7":      {"in": 15.00, "out": 75.00},
     "claude-opus-4-6":      {"in": 15.00, "out": 75.00},
     "claude-sonnet-4-6":    {"in":  3.00, "out": 15.00},
@@ -259,7 +292,7 @@ def _lookup_model_price(model: str) -> dict[str, float]:
     """model_id에 해당하는 가격 dict 반환. 정확 매칭 → prefix 매칭 → 0 폴백."""
     if model in MODEL_PRICES_PER_MTOK:
         return MODEL_PRICES_PER_MTOK[model]
-    # prefix 매칭 (claude-opus-4-7-some-suffix 같은 변형 대응)
+    # prefix 매칭 (claude-opus-5-some-suffix 같은 변형 대응)
     for k, v in MODEL_PRICES_PER_MTOK.items():
         if model.startswith(k):
             return v
@@ -410,6 +443,15 @@ def invoke_agent(
             log.debug("[%s] injected %d chars of auto-learned patches", role, len(patches_text))
     except Exception:
         pass  # 모듈 없거나 DB 다운이어도 기본 동작 유지
+
+    # 공통 가드레일 (신뢰 경계 + 결론부터) — 프롬프트 조립이 끝난 **뒤** 최상단에 얹는다.
+    # 여기서 하는 이유: 모든 역할·모든 백엔드(claude/litellm)가 이 함수 하나를 통과한다.
+    # 프롬프트마다 따로 넣으면 반드시 빠지는 데가 생긴다.
+    try:
+        from prompt_guardrails import apply as _apply_guardrails
+        prompt = _apply_guardrails(prompt, role)
+    except Exception:
+        pass  # 가드레일 실패가 본 작업을 막지 않는다
 
     log.info("[%s/%s] invoking (mode=%s)", role, model, env.mode)
 
@@ -735,7 +777,7 @@ def _try_parse_json(text: str) -> Optional[dict[str, Any]]:
 # ──────────────────────────────────────────────
 # 프롬프트 템플릿 (역할별)
 # ──────────────────────────────────────────────
-TRANSLATOR_PROMPT_TEMPLATE = """You are the Translator / Requirements Analyst for the aimed-puzzle team.
+TRANSLATOR_PROMPT_TEMPLATE = """You are the Translator / Requirements Analyst for this project's team (프로젝트 컨텍스트 참조).
 Your job: take a terse, informal task written in natural language (often by non-engineers)
 and decide whether there is enough information to start coding, or whether we need to ask
 the author a follow-up question first.
@@ -753,6 +795,11 @@ Existing comments:
 - **같은 needs_input 질문을 반복하지 말 것**. 답변이 일부만 채워졌다면 *남은 부분만* 다시 묻거나, 합리적 default로 채워 clarity=clear 처리.
 - 답변이 색상/난이도/주제 같은 키워드를 포함하면 `clarity=clear`로 진행하고 `enriched_description`에 답변 내용을 통합 기재.
 
+## ⛔ 재질문 금지 (중요)
+- **제목·설명·기존 코멘트에 이미 적힌 값·대상은 절대 다시 묻지 말 것.** 예: 제목이 "큐 1,1,1 / 배치대 1,1,1.16" 이면
+  "큐를 (1,1,1)로 바꾸는 것이 맞습니까?" 같은 확인 질문은 금지 — 그대로 clear 처리.
+- 이전 hermes 질문에 사용자가 이미 답했으면(코멘트에 답변 존재) 같은 질문을 반복하지 말 것.
+- 질문은 요청서 어디에도 없는 정보(값이 빠짐, 범위가 모호)에만 한다.
 ## 수행 단계
 1. 태스크의 핵심 개념 단어를 추출해 영문/한글/snake_case/camelCase 변형으로 Grep한다
    (Assets/Scripts/**, *.asset, *.prefab 등)
@@ -812,7 +859,15 @@ Existing comments:
   · content 키워드: 시나리오, 보상 시스템, 레벨 기획(난이도 기획), 스펙 문서, PDR, 튜토리얼 카피
   · `[design]`, `[기획]`, `[level]`, `[레벨]`, `[balance]`, `[spec]`, `[plan]` 태그
   · 이 경우 design 파이프라인으로 라우팅 → design_pm이 level/content 분류 → 각 분과 처리
-- **chat**: 위 셋 모두 아닌 일반 문의/대화 (예: "지금 상태 설명해줘", "이 태스크 뭐야")
+- **data**: 게임 데이터 분석·로그 설계 — "숫자로 답하는" 요청
+  · 키워드: 지표, KPI, 리텐션, 이탈, 전환율, ARPU/ARPPU, 퍼널, 코호트, 세그먼트,
+    로그 요청서, 이벤트 설계, 파라미터 정의, BigQuery, 쿼리 짜줘, 대시보드,
+    "왜 떨어졌는지", "얼마나 되는지", "분포 보여줘"
+  · `[data]`, `[분석]`, `[지표]`, `[log]`, `[bq]`, `[kpi]` 태그
+  · data 파이프라인으로 라우팅 → data_pm 이 bq/review/logspec/livesync 분과 배정
+  · 주의: "이 수치 밸런스 조정해줘"처럼 기획 변경이 목적이면 design 이다.
+    data 는 **측정·집계·로그 설계**가 목적일 때만.
+- **chat**: 위 넷 모두 아닌 일반 문의/대화 (예: "지금 상태 설명해줘", "이 태스크 뭐야")
 
 **중요**: team_override가 true(사용자가 수동 재배정)인 태스크는 이 분류를 무시하고
 사용자가 지정한 팀을 그대로 사용해야 한다 (executor가 처리).
@@ -821,7 +876,7 @@ Existing comments:
 ```json
 {{
   "clarity": "clear" | "needs_input" | "cancel" | "rollback",
-  "team": "dev" | "art" | "design" | "chat",
+  "team": "dev" | "art" | "design" | "data" | "chat",
   "concept_keywords": ["핵심 단어1", "변형1", ...],
   "files_examined": ["Assets/.../FileA.cs", ...],
   "current_state": "현재 코드에서 파악한 기본값/구조 1~2줄 요약",
@@ -837,7 +892,7 @@ Existing comments:
 """
 
 
-LEAD_PROMPT_TEMPLATE = """You are the Lead Agent for the aimed-puzzle team (Balloonflow project).
+LEAD_PROMPT_TEMPLATE = """You are the Lead Agent for the project named in the 프로젝트 컨텍스트 above.
 
 Task from ProjectHub:
 Title: {title}
@@ -928,7 +983,7 @@ phase_plan을 반환하라. 각 phase는 독립적으로 commit + Reviewer 검�
 ```
 """
 
-MAIN_CODER_PROMPT_TEMPLATE = """You are the Main Coder for the aimed-puzzle team. You have FILE EDITING TOOLS — use them.
+MAIN_CODER_PROMPT_TEMPLATE = """You are the Main Coder for the project named in the 프로젝트 컨텍스트 above. You have FILE EDITING TOOLS — use them.
 
 Lead's plan:
 {lead_plan}
@@ -936,7 +991,7 @@ Lead's plan:
 Focus on the MAIN task: {main_task}
 
 ACTIONS YOU MUST TAKE (not describe — DO):
-1. Use the Glob/Read tools to explore the project structure (look inside BalloonFlow/Assets/Scripts or similar).
+1. Use the Glob/Read tools to explore the project structure (look inside the Unity project folder named in the 프로젝트 컨텍스트, e.g. <Project>/Assets/... — never assume another project's layout).
 2. Use Edit or Write to MODIFY the actual files — do not just describe changes.
 3. Follow existing coding conventions (namespaces, SingletonManagers, etc.)
 4. Do NOT modify _CONTRACTS.yaml, _ARCHITECTURE.md, _ASSET_MANIFEST.yaml (GameForge-owned).
@@ -950,9 +1005,9 @@ ACTIONS YOU MUST TAKE (not describe — DO):
 5. **diff 최소화**: 과제와 직접 관련된 변경만. "겸사겸사" 정리/개선 금지. 변경량이 과제 규모를 크게 넘으면 과도수정 — 되돌려 좁힌다.
 6. **무에러·완벽**: 변경 후 컴파일·기존 동작이 깨지지 않아야 한다. 불확실하면 추측하지 말고 기존 패턴을 따른다.
 
-## ⚠️ GameManager는 신뢰하지 말 것 (Balloonflow 프로젝트 특수 규칙)
+## ⚠️ GameManager류 오케스트레이터는 신뢰하지 말 것 (일반 규칙)
 
-Balloonflow의 GameManager에는 런타임에 실제로 읽히지 않는 **dead 필드/메서드가 다수** 존재한다.
+이런 프로젝트의 GameManager류 파일에는 흔히 런타임에 실제로 읽히지 않는 **dead 필드/메서드**가 존재한다.
 GameManager만 수정하고 끝내면 git diff는 통과해도 **실제 동작이 바뀌지 않아 재작업**으로 이어진 사례가 많다.
 
 **반드시 수행**:
@@ -966,7 +1021,7 @@ GameManager만 수정하고 끝내면 git diff는 통과해도 **실제 동작�
 After you have ACTUALLY edited files, respond with:
 ```json
 {{
-  "files_modified": ["BalloonFlow/Assets/Scripts/BalloonManager.cs", ...],
+  "files_modified": ["<Project>/Assets/Scripts/SomeManager.cs", ...],
   "summary": "what you changed and why",
   "tests_needed": "manual/automated test checklist"
 }}
@@ -975,7 +1030,7 @@ After you have ACTUALLY edited files, respond with:
 If you did not modify any files, respond with `"files_modified": []` and explain why in summary.
 """
 
-SUB_CODER_PROMPT_TEMPLATE = """You are a Sub Coder for the aimed-puzzle team. You have FILE EDITING TOOLS — use them.
+SUB_CODER_PROMPT_TEMPLATE = """You are a Sub Coder for this project's team (프로젝트 컨텍스트 참조). You have FILE EDITING TOOLS — use them.
 
 Lead's plan:
 {lead_plan}
@@ -999,13 +1054,13 @@ After actually editing files, respond:
 If no files were modified, set "files_modified": [] and explain.
 """
 
-VALIDATOR_PROMPT_TEMPLATE = """You are the Validator for the aimed-puzzle team.
+VALIDATOR_PROMPT_TEMPLATE = """You are the Validator for this project's team (프로젝트 컨텍스트 참조 — 다른 프로젝트의 네임스페이스/컨벤션을 요구하지 말 것).
 
 Changes made:
 {changes_summary}
 
 Your job:
-1. Run `git diff HEAD~1` to see the actual changes
+1. Read the actual diff provided in `Changes made` above (you have NO shell — do not ask for git output; if the diff is absent, say so and judge from the file list)
 2. Verify the changes follow team conventions (namespaces, naming, singleton patterns)
 3. Check if any contracts are implicitly violated
 4. Check if tests exist or are needed
@@ -1021,7 +1076,7 @@ Respond with:
 ```
 """
 
-REVIEWER_PROMPT_TEMPLATE = """You are the Reviewer — final quality gate for the aimed-puzzle team.
+REVIEWER_PROMPT_TEMPLATE = """You are the Reviewer — final quality gate for this project's team (프로젝트 컨텍스트 참조).
 
 Changes summary:
 {changes_summary}
@@ -1147,6 +1202,21 @@ _ART_PM_RULES = """가장 구체적인 분과를 고르세요.
 - art_fx: 이펙트·파티클 스프라이트·연출 프레임
 - ui/background/illustration/general: 위 세부에 안 맞는 거친 분과 fallback"""
 
+_DATA_PM_RULES = """**무엇을 산출물로 원하는지로 나누세요.**
+
+- `bq`       : 지금 있는 로그로 답할 수 있는 질문 → 쿼리를 짜서 수치를 낸다.
+               (리텐션, 퍼널 전환율, 코호트, 세그먼트별 분포, 이상치 확인)
+- `logspec`  : 지금 로그로는 답할 수 없는 질문 → 무엇을 더 쌓아야 하는지 정의한다.
+               (이벤트/파라미터 설계, 로그 요청서 작성, 스키마 싱크)
+- `review`   : 이미 나온 분석·수치를 검증한다. (표본/기간/정의 오류, 평균의 함정, 생존 편향)
+- `livesync` : 라이브 지표를 기획 수치와 대조해 갱신한다. (예측 vs 실측, KPI 기록)
+- `general`  : 위 넷으로 안 갈리는 경우.
+
+판정 순서: ①답에 필요한 로그가 이미 있는가? 없으면 logspec.
+②이미 나온 분석을 다시 보자는 요청인가? 그러면 review.
+③라이브 수치를 기획에 반영하자는 요청인가? 그러면 livesync. 나머지는 bq.
+"""
+
 _DESIGN_PM_RULES = """**생성 분과(격자/이미지 산출)와 문서 분과(기획 문서)를 구분하세요.**
 [생성]
 - level: **선형 격자 패턴** — chevron/kaleidoscope/rings/대칭/기하 (키워드: 패턴·대칭·기하학·격자·타일)
@@ -1192,6 +1262,10 @@ def build_pm_prompt(team: str, title: str, description: str) -> Optional[tuple[s
         defaults = ["content", "level", "motif", "general"]
         rules = _DESIGN_PM_RULES
         label = "기획"
+    elif team == "data":
+        defaults = ["bq", "review", "logspec", "livesync", "general"]
+        rules = _DATA_PM_RULES
+        label = "데이터"
     else:
         return None
     # DB-발견 sub_team을 합쳐서 옵션 확장 (순서: DEFAULT 먼저, 신규 발견 뒤)

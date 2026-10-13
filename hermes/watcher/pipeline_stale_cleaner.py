@@ -98,6 +98,35 @@ def main() -> None:
             log.warning("%s: art_running 3h+ 스턱 %d건 — 수동 확인 필요", coll_name, n)
             _slack(db, f"⚠️ `{coll_name}` art_running 3h+ 스턱 {n}건 — 자동 복구 불가, 수동 확인 필요")
 
+    # pixelforge_tasks watchdog: fail-loud detect of stopped/review-parked hermes tasks.
+    # Audit found 107 review/stopped tasks up to 131d old because nothing watched this table.
+    # Read-only + Slack alert only (no writes) - safe.
+    try:
+        from collections import Counter
+        WD_H = int(os.environ.get("HERMES_TASK_WATCHDOG_H", "12"))
+        cut = datetime.now(timezone.utc) - timedelta(hours=WD_H)
+        def _lt(field):
+            return [{field: {"$lt": cut}}, {field: {"$lt": cut.isoformat()}}]
+        base = {"assignee": {"$in": ["hermes", "Hermes", "\ud5e4\ub974\uba54\uc2a4"]}}
+        stopped_q = {**base, "hermes_stopped": True, "$or": _lt("updated_at")}
+        review_q = {**base, "status": "review", "$or": _lt("updated_at")}
+        n_stop = db.pixelforge_tasks.count_documents(stopped_q)
+        n_rev = db.pixelforge_tasks.count_documents(review_q)
+        if n_stop or n_rev:
+            who = Counter()
+            for t in db.pixelforge_tasks.find({"$or": [stopped_q, review_q]}, {"created_by_email": 1}).limit(200):
+                who[(t.get("created_by_email") or "?")] += 1
+            top = ", ".join("%s:%d" % (e, c) for e, c in who.most_common(4))
+            # 2026-09-11: 30분 주기로 같은 수치를 다시 보내 순수 스팸이 됐다(147회 연속 stopped=7/review=28).
+            # 파킹된 태스크는 대부분 의도적으로 세워 둔 것이라 "변하지 않는 사실"을 반복 통지할 이유가 없다.
+            # 기본을 미발송으로 바꾸고 로그에는 계속 남긴다 — 감사 흔적은 유지하되 알림만 끈다.
+            # 다시 켜려면 크론에 HERMES_TASK_WATCHDOG_SLACK=1 을 준다.
+            if os.environ.get("HERMES_TASK_WATCHDOG_SLACK", "0") == "1":
+                _slack(db, ":eyes: hermes tasks parked >%dh - stopped %d / review %d. requesters: %s" % (WD_H, n_stop, n_rev, top))
+            log.info("task watchdog: stopped=%d review=%d (>%dh)", n_stop, n_rev, WD_H)
+    except Exception:
+        log.exception("task watchdog failed")
+
     log.info("done")
 
 

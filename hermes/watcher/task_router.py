@@ -65,7 +65,10 @@ KEYWORD_RULES = [
     # unity_modify로 가야 함 (unity 파이프라인의 branch_prep 단계에서 이미
     # git fetch + pull --rebase를 수행하므로 sync가 자동 포함됨).
     # 순수 "[sync] main 최신화"처럼 unity 언급 없을 때만 git_sync로 떨어짐.
-    ({"unity", "c#", ".cs", "수정", "patch"}, "unity_modify", 3),
+    # 2026-09-14: "구현/추가/적용/교체/개발/기능" 이 없어 새 기능 요청("이어하기 기능 구현")이 stage 5 로 흘러
+    #   "사람의 개입 필요" 로 막혔다. 디벨롭 요청은 같은 Unity 파이프라인(stage 3)이 처리한다.
+    ({"unity", "c#", ".cs", "수정", "patch", "수치 변경", "값 변경", "수치 조정", "값 조정", "스케일 변경", "수치 수정", "파라미터 변경",
+      "구현", "추가", "적용", "교체", "개발", "기능", "변경", "만들어", "붙여", "연결", "개선"}, "unity_modify", 3),
     ({"pull", "sync", "동기화", "최신화", "main에서", "main 반영"}, "git_sync", 1),
     ({"apk", "gradle", "릴리스", "release", "assembleRelease", "apk 빌드"}, "apk_build", 3),
     ({"db", "쿼리", "조회", "검색", "리스트"}, "db_query", 1),
@@ -76,7 +79,8 @@ KEYWORD_RULES = [
       # design/level 격자 패턴 키워드 — Translator가 team=design 으로 분류, design_pm이 sub_team=level 결정
       "만화경", "kaleidoscope", "격자", "grid 패턴", "grid pattern", "tilemap", "타일맵", "스테이지 레이아웃", "level layout"}, "chat", 1),
     ({"generate-design"}, "gameforge_design", 4),
-    ({"코드", "phase", "main coder", "sub coder"}, "gameforge_code", 5),
+    # "코드" 는 일상어라 제거 — 이 규칙 하나가 코드 언급 요청을 전부 비활성 stage 5 로 보냈다.
+    ({"phase", "main coder", "sub coder"}, "gameforge_code", 5),
     ({"파이프라인", "pipeline", "end-to-end", "e2e"}, "gameforge_pipeline", 6),
     ({"학습", "훈련", "train", "qlora", "파인튜닝"}, "training", 5),
     # review_needed는 명시적 트리거(사람 개입 필요)일 때만. "리뷰", "review" 단어가 description 본문에
@@ -116,6 +120,19 @@ def route_task(task: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
             "stage": sim_stage,
             "params": _extract_params(task, "simulation"),
             "auto_execute": sim_stage in ACTIVE_STAGES,
+        }
+
+    # 0b. Fork로 신규 프로젝트 생성 — 구조화 필드 fork_params 최우선 (결정론).
+    #     "새 게임 만들어줘" 같은 느슨한 키워드는 다른 태스크를 가로챌 수 있어
+    #     구조화 필드 + 명시 태그 [fork]/[new-project] 로만 라우팅한다.
+    if isinstance(task.get("fork_params"), dict):
+        fk_stage = _stage_for_action("project_create")
+        return {
+            "action": "project_create",
+            "reason": "structured: fork_params present",
+            "stage": fk_stage,
+            "params": _extract_params(task, "project_create"),
+            "auto_execute": fk_stage in ACTIVE_STAGES,
         }
 
     # 1. 태그 기반 라우팅 (우선순위 최상)
@@ -206,6 +223,10 @@ TAG_ACTION_MAP = {
     "chat": "chat",
     # review 태그는 의도적인 사람 개입 요청일 때만 — 일반 작업에 [review_needed] 명시한 경우만
     "review_needed": "review_needed",
+    # Fork로 신규 프로젝트 생성 — 명시 태그로만 (느슨한 키워드 라우팅 금지)
+    "fork": "project_create",
+    "new-project": "project_create",
+    "신규프로젝트": "project_create",
 }
 
 
@@ -243,6 +264,7 @@ def _stage_for_action(action: str) -> int:
         "simulation": 2,
         "apk_build": 3,
         "unity_modify": 3,     # 멀티 에이전트 Unity 코드 수정 + PR
+        "project_create": 3,   # Fork로 신규 프로젝트 생성 (clone+gh+등록)
         "gameforge_design": 4,
         "gameforge_code": 5,
         "training": 5,
@@ -278,6 +300,31 @@ def _extract_params(task: dict[str, Any], action: str) -> dict[str, Any]:
     elif action in ("gameforge_design", "gameforge_code"):
         # 장르, 기능 키워드
         params["genre_hint"] = _extract_genre(description)
+
+    elif action == "project_create":
+        # fork_params 구조화 필드 우선, 없으면 description 파싱
+        fp = task.get("fork_params") if isinstance(task.get("fork_params"), dict) else {}
+        params["new_name"] = fp.get("new_name") or fp.get("name")
+        params["baseline"] = fp.get("baseline") or fp.get("forked_from")
+        params["owner"] = fp.get("owner")
+        params["private"] = fp.get("private", True)
+        params["dry_run"] = bool(fp.get("dry_run", False))
+        blob = f"{title} {description}"
+        # "BASE로 NEW ..." / "BASE from NEW" / "BASE 기반 NEW" — 한 번에 둘 다 캡처
+        m2 = re.search(r"([A-Za-z][A-Za-z0-9_-]{1,48})\s*(?:로|으로|from|기반|베이스)\s+([A-Za-z][A-Za-z0-9_-]{1,48})", blob)
+        if m2:
+            params.setdefault("baseline", None)
+            params["baseline"] = params["baseline"] or m2.group(1)
+            params["new_name"] = params["new_name"] or m2.group(2)
+        if not params["new_name"]:
+            # "... as MergeMania" / "이름 MergeMania"
+            m = re.search(r"(?:as|→|->|이름)\s*([A-Za-z][A-Za-z0-9_-]{1,48})", blob)
+            if m:
+                params["new_name"] = m.group(1)
+        if not params["baseline"]:
+            m = re.search(r"([A-Za-z][A-Za-z0-9_-]{1,48})\s*(?:로|으로|from|기반|베이스)", blob)
+            if m:
+                params["baseline"] = m.group(1)
 
     return params
 

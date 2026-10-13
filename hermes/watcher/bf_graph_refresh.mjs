@@ -8,6 +8,9 @@ const ROOT = process.argv[2];
 const PREV = process.argv[3];
 const OUT = process.argv[4];
 const GENFROM = process.argv[5] || "origin/main";
+// 파일 경로에서 상대경로를 자를 기준. 프로젝트마다 스크립트 폴더명이 다를 수 있어
+// 인자로 받는다(기본값은 기존 동작 그대로 "/1.Scripts/").
+const SPLIT = process.argv[6] || "/1.Scripts/";
 const D = "|##|";
 
 function walk(dir) {
@@ -25,7 +28,11 @@ const files = walk(ROOT);
 const recs = [];
 for (const f of files) {
   const raw = fs.readFileSync(f, "utf8");
-  const rel = f.replace(/\\/g, "/").split("/1.Scripts/")[1];
+  const norm = f.replace(/\\/g, "/");
+  // 기준 폴더가 경로에 없으면(다른 레이아웃) ROOT 기준 상대경로로 떨어뜨린다 — undefined 로 죽지 않게.
+  const rel = norm.includes(SPLIT)
+    ? norm.split(SPLIT)[1]
+    : norm.replace(ROOT.replace(/\\/g, "/").replace(/\/$/, "") + "/", "");
   const parts = rel.split("/");
   const system = parts.length > 1 ? parts[0] : "(root)";
   const text = stripComments(raw);

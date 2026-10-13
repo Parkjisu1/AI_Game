@@ -29,11 +29,17 @@ log = logging.getLogger("hermes-embedding")
 
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://100.87.87.59:11434")
 QDRANT_URL = os.environ.get("QDRANT_URL", "http://127.0.0.1:6333")
-EMBEDDING_MODEL = os.environ.get("HERMES_EMBED_MODEL", "nomic-embed-text")
-EMBEDDING_DIM = 768
+# nomic-embed-text 는 한국어를 판별하지 못한다.
+# 2026-09-09 실측: 무관한 한국어 문장쌍 cos 0.996 / 유사한 쌍 0.997 — 격차 0.001.
+# Hermes 의 태스크 설명과 검색 쿼리는 전부 한국어라, 어떤 질의를 넣어도
+# 같은 결과가 나오는 상태였다(검색이 사실상 무작위).
+# bge-m3 는 같은 실측에서 격차 0.264. 차원이 768 -> 1024 이므로 컬렉션도 함께 옮긴다.
+EMBEDDING_MODEL = os.environ.get("HERMES_EMBED_MODEL", "bge-m3")
+EMBEDDING_DIM = 1024
 
-COLL_TEXT = "hermes_text_memory"
-COLL_CODE = "hermes_code_index"
+COLL_TEXT = os.environ.get("HERMES_TEXT_COLLECTION", "hermes_text_memory_m3")  # 464 pts, 1024d bge-m3
+COLL_CODE = "hermes_code_index"  # legacy (empty)
+COLL_CODE_CHUNKS = os.environ.get("HERMES_CODE_COLLECTION", "gf_code_chunks_m3")  # 7,778 pts, 1024d bge-m3
 
 # 한 텍스트당 Ollama에 보낼 최대 문자 수 (너무 길면 품질↓ + latency↑)
 MAX_EMBED_INPUT_CHARS = 8000
@@ -192,8 +198,12 @@ def search_similar_sessions(query: str, limit: int = 5) -> list[dict[str, Any]]:
         return []
 
 
-def search_similar_code(query: str, limit: int = 5) -> list[dict[str, Any]]:
-    """쿼리와 유사한 코드 청크 검색. hermes_code_index에서."""
+def search_similar_code(query: str, limit: int = 5, project: Optional[str] = None) -> list[dict[str, Any]]:
+    """쿼리와 유사한 코드 청크 검색. hermes_code_index에서.
+
+    project 가 주어지면 그 프로젝트 청크를 먼저 채우고, 모자라면 전체에서 보충한다
+    (2026-09-14: 필터가 없어 러너 요청에 타 게임 코드가 "검증된 유사 코드"로 주입되던 것 수정).
+    """
     if not query:
         return []
     vec = _embed(query)
@@ -203,21 +213,40 @@ def search_similar_code(query: str, limit: int = 5) -> list[dict[str, Any]]:
     if client is None:
         return []
     try:
-        res = client.query_points(
-            collection_name=COLL_CODE,
-            query=vec,
-            limit=limit,
-            with_payload=True,
-        )
-        return [
-            {
+        points = []
+        if project:
+            try:
+                from qdrant_client.http.models import Filter, FieldCondition, MatchValue
+                _f = Filter(must=[FieldCondition(key="project", match=MatchValue(value=project))])
+                points = list(client.query_points(
+                    collection_name=COLL_CODE_CHUNKS, query=vec, limit=limit,
+                    with_payload=True, query_filter=_f,
+                ).points)
+            except Exception:
+                log.debug("project-filtered code search failed — falling back to global", exc_info=True)
+                points = []
+        if len(points) < limit:
+            _seen = {p.id for p in points}
+            res = client.query_points(
+                collection_name=COLL_CODE_CHUNKS,
+                query=vec,
+                limit=limit,
+                with_payload=True,
+            )
+            points += [p for p in res.points if p.id not in _seen][: limit - len(points)]
+        out = []
+        for h in points:
+            p = h.payload or {}
+            content = p.get("content") or p.get("content_preview") or ""
+            out.append({
                 "score": float(h.score),
-                "file": h.payload.get("file"),
-                "symbol": h.payload.get("symbol"),
-                "preview": h.payload.get("content_preview"),
-            }
-            for h in res.points
-        ]
+                "file": p.get("path") or p.get("file"),
+                "project": p.get("project"),
+                "lang": p.get("lang"),
+                "symbol": p.get("symbol"),
+                "preview": content[:1200],
+            })
+        return out
     except Exception:
         log.debug("qdrant search failed", exc_info=True)
         return []
