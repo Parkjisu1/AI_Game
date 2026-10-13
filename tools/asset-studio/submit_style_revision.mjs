@@ -1,0 +1,13 @@
+import {readFile,writeFile} from 'node:fs/promises';
+const config=await readFile('/home/aimed/projecthub-web/.env.production','utf8');
+const line=config.split(/\r?\n/).find(l=>l.startsWith('HERMES_INTERNAL_API_KEY='));
+const key=line.slice(line.indexOf('=')+1).replace(/^(["'])(.*)\1$/,'$2');
+const form=new FormData();
+form.set('title','Wind Ronin · 원화 비교 수정 v29');
+form.set('brief','원화와 실제 렌더를 반복 비교했습니다. 1024 형태 재생성, 닫힌 표면, 4방향 4K 손맵, UV 겹침과 축소 시 검은 선 수정, 32본 리깅, 몸통 3150·손 575정점 웨이트 보정, 검집·스카프. 얼굴 옆면·손가락·천 늘어짐·극단 동작과 엔진 성능 검수는 남아 있습니다.');
+form.set('profile','pc');
+form.set('file',new File([await readFile('/home/aimed/projecthub-3d/wind-ronin-style-v29.blend')],'wind-ronin-style-v29.blend'));
+const response=await fetch('http://127.0.0.1:3000/api/assets-3d',{method:'POST',headers:{'x-hermes-key':key},body:form});
+const data=await response.json();if(response.status!==201)throw new Error(JSON.stringify(data));
+await writeFile('/home/aimed/projecthub-3d/style-revision-job.json',JSON.stringify(data));
+console.log('STYLE_REVISION_JOB',data.id);

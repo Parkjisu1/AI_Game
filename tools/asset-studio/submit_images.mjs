@@ -1,0 +1,15 @@
+import { readFile,writeFile } from 'node:fs/promises';
+const root='/home/aimed/projecthub-web';
+const config=await readFile(root+'/.env.production','utf8');
+const line=config.split(/\r?\n/).find(l=>l.startsWith('HERMES_INTERNAL_API_KEY='));
+const key=line.slice(line.indexOf('=')+1).replace(/^(["'])(.*)\1$/,'$2');
+const form=new FormData();
+form.set('title','Wind Ronin · 정면/후면 자동 제작');
+form.set('brief','야스오의 비대칭 어깨와 바람 검객 분위기를 참고한 독자 캐릭터. 전신 A 포즈 이미지로 형태 생성, UV, 텍스처·노멀 베이크, FK 리깅, LOD, 패키징. 최종 아트·변형·엔진 검수 필요.');
+form.set('profile','pc');
+for(const side of ['front','back'])form.set(side==='front'?'file':'back',new File([await readFile(`${root}/public/asset-studio/wind-ronin-${side}.png`)],`${side}.png`,{type:'image/png'}));
+const response=await fetch('http://127.0.0.1:3000/api/assets-3d',{method:'POST',headers:{'x-hermes-key':key},body:form});
+const data=await response.json();
+if(response.status!==201 || data.status!=='queued')throw new Error(JSON.stringify(data));
+await writeFile('/home/aimed/projecthub-3d/final-example-job.json',JSON.stringify(data));
+console.log('IMAGE_PIPELINE_JOB',data.id);

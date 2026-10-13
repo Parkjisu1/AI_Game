@@ -1,0 +1,14 @@
+import { readFile,writeFile } from 'node:fs/promises';
+const config=await readFile('/home/aimed/projecthub-web/.env.production','utf8');
+const line=config.split(/\r?\n/).find(l=>l.startsWith('HERMES_INTERNAL_API_KEY='));
+const key=line.slice(line.indexOf('=')+1).replace(/^(["'])(.*)\1$/,'$2');
+const form=new FormData();
+form.set('title','Wind Ronin · 이미지 기반 모델 v2');
+form.set('brief','야스오를 참고한 독자 검객. TripoSG 형태 생성 → Blender 감면 → 앞뒤 투영 BaseColor/고폴리 Normal 베이크 → FK 리깅 및 웨이트 보정. 얼굴·측면 텍스처·관절·엔진 검수 필요.');
+form.set('profile','pc');
+form.set('file',new File([await readFile('/home/aimed/projecthub-3d/wind-ronin-prepared.blend')],'wind-ronin.blend'));
+const res=await fetch('http://127.0.0.1:3000/api/assets-3d',{method:'POST',headers:{'x-hermes-key':key},body:form});
+const data=await res.json();
+if(res.status!==201)throw new Error(JSON.stringify(data));
+await writeFile('/home/aimed/projecthub-3d/image-model-job.json',JSON.stringify(data));
+console.log('IMAGE_MODEL_JOB',data.id);

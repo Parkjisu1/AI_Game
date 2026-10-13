@@ -1,0 +1,15 @@
+[Unit]
+Description=ProjectHub Blender asset worker (Mother to Build PC)
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/aimed/projecthub-3d
+Environment=PROJECTHUB_WEB_ROOT=/home/aimed/projecthub-web
+ExecStart=/home/aimed/.nvm/versions/node/v20.20.2/bin/node /home/aimed/projecthub-3d/worker.mjs
+Restart=on-failure
+RestartSec=15
+TimeoutStopSec=2850
+
+[Install]
+WantedBy=default.target
