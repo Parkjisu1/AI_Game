@@ -1,0 +1,63 @@
+{
+  "generated_at_note": "stamp after run",
+  "cutoff": "2026-06-02",
+  "total_records": 259,
+  "baseline_before_rag": {
+    "window": "< 2026-06-02",
+    "overall": {
+      "tasks": 79,
+      "reviewer_records": 240,
+      "avg_cycles_per_task": 3.04,
+      "max_cycles": 28,
+      "tasks_ge5_cycles": 14,
+      "pct_tasks_ge5": 17.7,
+      "user_rejected_after_approval": 48,
+      "pct_userreject_of_reviews": 20,
+      "request_changes": 100,
+      "pct_requestchanges_of_reviews": 41.7,
+      "approved": 92
+    },
+    "dev_only": {
+      "tasks": 76,
+      "reviewer_records": 237,
+      "avg_cycles_per_task": 3.12,
+      "max_cycles": 28,
+      "tasks_ge5_cycles": 14,
+      "pct_tasks_ge5": 18.4,
+      "user_rejected_after_approval": 48,
+      "pct_userreject_of_reviews": 20.3,
+      "request_changes": 99,
+      "pct_requestchanges_of_reviews": 41.8,
+      "approved": 90
+    }
+  },
+  "after_rag": {
+    "window": ">= 2026-06-02",
+    "overall": {
+      "tasks": 5,
+      "reviewer_records": 17,
+      "avg_cycles_per_task": 3.4,
+      "max_cycles": 8,
+      "tasks_ge5_cycles": 1,
+      "pct_tasks_ge5": 20,
+      "user_rejected_after_approval": 0,
+      "pct_userreject_of_reviews": 0,
+      "request_changes": 16,
+      "pct_requestchanges_of_reviews": 94.1,
+      "approved": 1
+    },
+    "dev_only": {
+      "tasks": 5,
+      "reviewer_records": 17,
+      "avg_cycles_per_task": 3.4,
+      "max_cycles": 8,
+      "tasks_ge5_cycles": 1,
+      "pct_tasks_ge5": 20,
+      "user_rejected_after_approval": 0,
+      "pct_userreject_of_reviews": 0,
+      "request_changes": 16,
+      "pct_requestchanges_of_reviews": 94.1,
+      "approved": 1
+    }
+  }
+}
