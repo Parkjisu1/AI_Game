@@ -795,7 +795,60 @@ class GenreCaptureApp:
 # Entry Point
 # ═══════════════════════════════════════════════════════════════════════════════
 
-def main():
+def _crash_log_path():
+    """크래시 로그 경로 (EXE 옆 우선, 실패 시 유저 로컬)."""
+    try:
+        if getattr(sys, 'frozen', False):
+            p = Path(sys.executable).parent / "crash.log"
+        else:
+            p = Path(__file__).parent / "crash.log"
+        # 쓰기 가능 테스트
+        p.parent.mkdir(parents=True, exist_ok=True)
+        return p
+    except Exception:
+        base = os.environ.get("LOCALAPPDATA") or str(Path.home())
+        p = Path(base) / "ClickCapture" / "crash.log"
+        p.parent.mkdir(parents=True, exist_ok=True)
+        return p
+
+
+def _write_crash(exc_text: str):
+    """크래시 로그 + 시스템 정보 기록."""
+    import platform
+    try:
+        p = _crash_log_path()
+        with open(p, "a", encoding="utf-8") as f:
+            f.write("=" * 70 + "\n")
+            f.write(f"Time: {datetime.now().isoformat()}\n")
+            f.write(f"Python: {sys.version}\n")
+            f.write(f"Platform: {platform.platform()}\n")
+            f.write(f"Executable: {sys.executable}\n")
+            f.write(f"Frozen: {getattr(sys, 'frozen', False)}\n")
+            f.write("-" * 70 + "\n")
+            f.write(exc_text + "\n")
+        return p
+    except Exception:
+        return None
+
+
+def _show_error_box(title: str, msg: str):
+    """tkinter 메시지박스 시도 → 실패 시 Win32 MessageBox."""
+    try:
+        from tkinter import messagebox
+        r = tk.Tk()
+        r.withdraw()
+        messagebox.showerror(title, msg)
+        r.destroy()
+        return
+    except Exception:
+        pass
+    try:
+        ctypes.windll.user32.MessageBoxW(0, msg, title, 0x10)
+    except Exception:
+        print(f"[{title}] {msg}", file=sys.stderr)
+
+
+def _real_main():
     try:
         ctypes.windll.shcore.SetProcessDpiAwareness(1)
     except Exception:
@@ -818,6 +871,25 @@ def main():
         app._update_emu_status()
 
     root.mainloop()
+
+
+def main():
+    """크래시 캐치 + 로그 기록 진입점."""
+    import traceback
+    try:
+        _real_main()
+    except SystemExit:
+        raise
+    except BaseException:
+        exc_text = traceback.format_exc()
+        log_path = _write_crash(exc_text)
+        location = f"\n\n로그: {log_path}" if log_path else ""
+        _show_error_box(
+            "ClickCapture — 실행 오류",
+            f"프로그램 실행 중 오류가 발생했습니다.{location}\n\n"
+            f"{exc_text[-600:]}"
+        )
+        sys.exit(1)
 
 
 if __name__ == "__main__":

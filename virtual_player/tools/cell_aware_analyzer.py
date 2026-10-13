@@ -83,23 +83,26 @@ def build_render_palette(profile):
 # ══════════════════════════════════════════════════════════════
 
 def classify_pixel(pixel, pal_keys, pal_arr):
-    """단일 픽셀 분류. 어두운 픽셀에 특별 처리."""
+    """단일 픽셀 분류.
+
+    어두운 픽셀은 saturation으로 검정/보라 구분:
+      - 무채색(sat 낮음) + 어두움 → c8 검정
+      - 유채색(sat 높음) + 어두움 → 유클리드 거리로 c21/c3 등 선택
+    """
     r, g, b = float(pixel[0]), float(pixel[1]), float(pixel[2])
-    brightness = max(r, g, b)
+    vmax = max(r, g, b)
+    vmin = min(r, g, b)
+    saturation = (vmax - vmin) / (vmax + 1) if vmax > 0 else 0.0
 
-    # 매우 어두운 픽셀: 채널 비율로 분류
-    if brightness < 60:
-        if brightness < 15:
-            return 8  # 거의 검정 → c8 (Dark)
-        blue_ratio = b / (brightness + 1)
-        green_ratio = g / (brightness + 1)
-        if blue_ratio > 0.6 and b > r * 1.5:
-            return 21  # 푸른 기운 → c21 (DarkPurple)
-        if green_ratio > 0.6 and g > r * 1.5:
-            return 10  # 녹색 기운 → c10 (DarkGreen)
-        return 8  # 중립 어두움 → c8
+    # 거의 완전 검정
+    if vmax < 12:
+        return 8
 
-    # 일반: 유클리드 거리
+    # 어두움 + 무채색에 가까움 = 검정 (범위 완화)
+    if vmax < 130 and saturation < 0.35:
+        return 8
+
+    # 나머지: 유클리드 거리 (유채색 어두움은 c21 DarkPurple 등으로)
     px = np.array([r, g, b], dtype=np.float64)
     dists = np.sqrt(np.sum((pal_arr - px) ** 2, axis=1))
     return pal_keys[int(np.argmin(dists))]
@@ -139,26 +142,76 @@ def find_board_region(img_cv, profile):
 #  2. Multi-Sample Cell Classification
 # ══════════════════════════════════════════════════════════════
 
-def extract_cell_colors(board_rgb, profile, pal_keys, pal_arr):
+def extract_cell_colors(board_rgb, profile, pal_keys, pal_arr,
+                        auto_grid=True, grid_result=None):
     """다중 샘플 투표 기반 셀 색상 추출.
 
     각 셀에서 9개 포인트를 샘플링하고, 가중 투표로 색상 결정.
     중앙 픽셀은 3배 가중치, 중앙 영역 median은 2배 가중치.
+
+    Args:
+        board_rgb: HxWx3 RGB (보드만 크롭됨)
+        profile: cell_profile.json 내용
+        pal_keys, pal_arr: 팔레트
+        auto_grid: True면 FFT로 그리드 크기 자동 탐지 (기본)
+        grid_result: 미리 계산된 grid_detector 결과 (재사용)
+
+    그리드 크기 결정 우선순위:
+      1. grid_result 인자 (외부에서 전달)
+      2. auto_grid=True + FFT 탐지 성공
+      3. profile['grid']['rows'/'cols'] (fallback)
     """
     h, w = board_rgb.shape[:2]
-    grid_rows = profile["grid"]["rows"]
-    grid_cols = profile["grid"]["cols"]
-    ch = h / grid_rows
-    cw = w / grid_cols
 
+    # 1. grid 크기 결정
+    gridlines_h = None
+    gridlines_v = None
+
+    if grid_result is not None:
+        grid_rows = grid_result["rows"]
+        grid_cols = grid_result["cols"]
+        gridlines_h = grid_result.get("gridlines_h")
+        gridlines_v = grid_result.get("gridlines_v")
+    elif auto_grid:
+        try:
+            from grid_detector import detect_grid_dimensions
+            r = detect_grid_dimensions(board_rgb)
+            if r["rows"] > 2 and r["cols"] > 2:
+                grid_rows = r["rows"]
+                grid_cols = r["cols"]
+                gridlines_h = r["gridlines_h"]
+                gridlines_v = r["gridlines_v"]
+            else:
+                grid_rows = profile["grid"]["rows"]
+                grid_cols = profile["grid"]["cols"]
+        except Exception:
+            grid_rows = profile["grid"]["rows"]
+            grid_cols = profile["grid"]["cols"]
+    else:
+        grid_rows = profile["grid"]["rows"]
+        grid_cols = profile["grid"]["cols"]
+
+    # 2. 셀 경계 계산: gridline이 있으면 그것을, 없으면 균등 분할
     grid = [[0] * grid_cols for _ in range(grid_rows)]
 
     for r in range(grid_rows):
         for c in range(grid_cols):
-            y0 = int(r * ch)
-            y1 = int((r + 1) * ch)
-            x0 = int(c * cw)
-            x1 = int((c + 1) * cw)
+            if gridlines_v is not None and r + 1 < len(gridlines_v):
+                y0 = gridlines_v[r]
+                y1 = gridlines_v[r + 1]
+            else:
+                ch = h / grid_rows
+                y0 = int(r * ch)
+                y1 = int((r + 1) * ch)
+
+            if gridlines_h is not None and c + 1 < len(gridlines_h):
+                x0 = gridlines_h[c]
+                x1 = gridlines_h[c + 1]
+            else:
+                cw = w / grid_cols
+                x0 = int(c * cw)
+                x1 = int((c + 1) * cw)
+
             cell = board_rgb[y0:y1, x0:x1]
             cell_h, cell_w = cell.shape[:2]
 
@@ -370,25 +423,45 @@ def render_grid(grid, cell_size=12, frame_mask=None, render_colors=None):
 #  7. Full Pipeline
 # ══════════════════════════════════════════════════════════════
 
-def analyze(img_path, profile, output_dir=None, level_num=1):
+def analyze(img_path, profile, output_dir=None, level_num=1, auto_grid=True):
     """단일 이미지 cell-aware 분석.
 
+    Args:
+        auto_grid: True면 FFT 기반 그리드 자동 탐지 (기본).
+                   False면 profile의 고정 50x50 사용 (기존 동작).
+
     Returns:
-        dict: {grid, content_grid, fieldmap, level_json, stats, ...}
+        dict: {grid, content_grid, fieldmap, level_json, stats, grid_result}
     """
     img_cv = cv2.imread(str(img_path))
     if img_cv is None:
         return {"error": f"Cannot read: {img_path}"}
 
-    # 1. 보드 크롭 (이미 크롭된 이미지라면 그대로)
-    board_cv, crop_rect = find_board_region(img_cv, profile)
+    # 1. 보드 크롭 - YOLO board_detector 우선, 실패 시 HSV fallback
+    try:
+        from board_detector import detect_board_region as yolo_board_detect
+        board_cv, crop_rect = yolo_board_detect(img_cv)
+    except Exception:
+        board_cv, crop_rect = find_board_region(img_cv, profile)
     board_rgb = cv2.cvtColor(board_cv, cv2.COLOR_BGR2RGB)
 
     # 2. 렌더 팔레트 구축
     pal_keys, pal_arr = build_render_palette(profile)
 
-    # 3. 다중 샘플 투표 기반 셀 색상 추출
-    grid = extract_cell_colors(board_rgb, profile, pal_keys, pal_arr)
+    # 3. 그리드 크기 자동 탐지 (FFT)
+    grid_result = None
+    if auto_grid:
+        try:
+            from grid_detector import detect_grid_dimensions
+            grid_result = detect_grid_dimensions(board_rgb)
+        except Exception:
+            grid_result = None
+
+    # 4. 다중 샘플 투표 기반 셀 색상 추출 (자동 그리드 적용)
+    grid = extract_cell_colors(
+        board_rgb, profile, pal_keys, pal_arr,
+        auto_grid=auto_grid, grid_result=grid_result,
+    )
 
     # 4. CC 스무딩 (노이즈 제거)
     grid = cc_smooth(grid, min_size=3)
@@ -436,10 +509,14 @@ def analyze(img_path, profile, output_dir=None, level_num=1):
     fieldmap = grid_to_fieldmap(grid, flip_y=True)
     content_fieldmap = grid_to_fieldmap(content_grid, flip_y=True)
 
+    # 실제 탐지된 grid 크기 (profile 고정값이 아닌 auto-detect 결과)
+    actual_rows = len(grid)
+    actual_cols = len(grid[0]) if grid else 0
+
     result = {
         "source": str(img_path),
-        "grid_rows": profile["grid"]["rows"],
-        "grid_cols": profile["grid"]["cols"],
+        "grid_rows": actual_rows,
+        "grid_cols": actual_cols,
         "crop_rect": crop_rect,
         "elements": element_stats,
         "num_colors": len(content_colors),
@@ -449,6 +526,8 @@ def analyze(img_path, profile, output_dir=None, level_num=1):
         ),
         "fieldmap": fieldmap,
         "content_fieldmap": content_fieldmap,
+        "auto_grid_used": grid_result is not None,
+        "grid_confidence": grid_result.get("confidence", 0.0) if grid_result else 0.0,
     }
 
     # 출력

@@ -8,6 +8,7 @@ Extracted from carmatch_tester.py and made configurable.
 
 import json
 import logging
+from copy import deepcopy
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -96,7 +97,22 @@ class DesignDBExporter:
                         "name": data.get("name", pid),
                         "value": data.get("value"),
                         "confidence": data.get("confidence", 0.0),
+                        # Document source describes the import route, not each value's validity.
+                        "status": data.get("status") or "unknown",
+                        "sources": deepcopy(data.get("sources", [])),
                     }
+                    # Preserve supplied evidence only. The exporter cannot reconstruct
+                    # screenshots, environments or disagreements discarded upstream.
+                    for field in (
+                        "raw_confidence", "source", "evidence_kind", "evidence_refs",
+                        "observation_ids", "observations", "context", "observation_context",
+                        "build_id", "build_version", "device", "environment",
+                        "initial_state", "input", "output", "timestamp", "provenance",
+                        "selected_observation_id", "alternative_values",
+                        "dissenting_observation_ids", "selection_metadata",
+                    ):
+                        if field in data:
+                            params_data[pid][field] = deepcopy(data[field])
 
             if not params_data:
                 logger.debug("Skipping empty domain group: %s", group.domain)
@@ -121,6 +137,15 @@ class DesignDBExporter:
                 "data_type": "spec",
                 "balance_area": group.balance_area,
                 "source_file": "virtual_player AI Tester observation",
+                "evidence_interpretation": {
+                    "document_source_scope": "Import route only; inspect each parameter status and evidence.",
+                    "selection": "Values are supplied upstream; this exporter does not independently measure them.",
+                    "parameter_aggregator_policy": "ParameterAggregator selects the highest domain-weighted confidence value; it does not establish consensus.",
+                    "consensus": "not_established_by_export",
+                    "reproduction": "not_established_by_export",
+                    "causal_effect": "not_established_by_export",
+                    "confidence": "Upstream score, not calibrated accuracy or market evidence.",
+                },
                 "content": {
                     "summary": (
                         f"{self.project} ({self.package_name}) {group.system} parameters "
@@ -137,18 +162,18 @@ class DesignDBExporter:
                         f"{self.project} via automated observation."
                     ),
                     "context": (
-                        "External game observation without source code access. "
-                        "Parameters estimated via ADB screenshots + pixel analysis + OCR."
+                        "Parameters supplied by the observation pipeline. "
+                        "Inspect per-parameter provenance for the actual source access, capture method and environment."
                     ),
                     "strengths": [
-                        "Direct observation from live game build",
-                        "Automated measurement reduces human bias",
-                        "Multiple observers cross-validate parameters",
+                        "Preserves supplied per-parameter status and source records",
+                        "Preserves supplied observation context without inferring missing evidence",
                     ],
                     "concerns": [
-                        "No source code access limits parameter accuracy (~85-89%)",
+                        "Accuracy is not established by this export",
+                        "Highest-weight selection is not independent consensus or reproduction",
                         "Some parameters require extended play sessions",
-                        "OCR-dependent values may have recognition errors",
+                        "Any supplied capture or interpretation method may have measurement errors",
                     ],
                     "db_recommendation": f"{genre_lower}/{group.domain}/files/",
                     "reasoning": (

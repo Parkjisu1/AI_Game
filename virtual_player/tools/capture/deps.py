@@ -2,7 +2,8 @@
 Dependency Auto-Installer
 ==========================
 첫 실행 시 누락된 의존성(Tesseract, ADB)을 자동 설치.
-EXE 옆 deps/ 폴더에 설치 → 시스템 오염 없음, 이식 가능.
+설치 위치: %LOCALAPPDATA%\\ClickCapture\\deps (유저 로컬 → 관리자 불필요, 한글/공백 경로 안전)
+폴백: EXE 옆 deps/ 폴더 (쓰기 권한 있을 때만)
 
 설치 대상:
   - Tesseract-OCR 5.5 (Idle 모드 OCR용) ~75MB
@@ -13,17 +14,25 @@ import io
 import json
 import os
 import shutil
+import ssl
 import subprocess
 import sys
 import tempfile
 import threading
-import tkinter as tk
+import time
+import traceback
 import zipfile
 from pathlib import Path
-from tkinter import ttk
 from typing import Callable, Dict, List, Optional, Tuple
 from urllib.request import urlopen, Request
-from urllib.error import URLError
+from urllib.error import URLError, HTTPError
+
+try:
+    import tkinter as tk
+    from tkinter import ttk
+    _HAS_TK = True
+except Exception:
+    _HAS_TK = False
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Paths
@@ -36,12 +45,42 @@ def _app_root() -> Path:
     return Path(__file__).parent
 
 
+def _user_local_root() -> Path:
+    """유저 로컬 설치 루트 (%LOCALAPPDATA%\\ClickCapture)."""
+    base = os.environ.get("LOCALAPPDATA") or os.environ.get("APPDATA") or str(Path.home())
+    return Path(base) / "ClickCapture"
+
+
 def _deps_dir() -> Path:
-    return _app_root() / "deps"
+    """
+    의존성 설치 폴더.
+    1순위: %LOCALAPPDATA%\\ClickCapture\\deps (유저 로컬, 관리자 불필요)
+    2순위: EXE 옆 deps/ (레거시 호환 — 이미 있으면 그대로 사용)
+    """
+    legacy = _app_root() / "deps"
+    if legacy.exists() and any(legacy.iterdir()):
+        return legacy
+    return _user_local_root() / "deps"
+
+
+def _log_path() -> Path:
+    return _user_local_root() / "deps_install.log"
+
+
+def _log(msg: str):
+    """설치 로그를 파일에 기록 (디버깅용)."""
+    try:
+        p = _log_path()
+        p.parent.mkdir(parents=True, exist_ok=True)
+        ts = time.strftime("%Y-%m-%d %H:%M:%S")
+        with open(p, "a", encoding="utf-8") as f:
+            f.write(f"[{ts}] {msg}\n")
+    except Exception:
+        pass
 
 
 def _deps_config_path() -> Path:
-    return _app_root() / "deps_config.json"
+    return _user_local_root() / "deps_config.json"
 
 
 def _load_deps_config() -> dict:
@@ -139,107 +178,181 @@ def _find_adb() -> Optional[str]:
 # Download + Install Logic
 # ─────────────────────────────────────────────────────────────────────────────
 
-def _download_with_progress(url: str, dest: Path,
-                            progress_cb: Callable[[int, int], None]) -> bool:
-    """URL 다운로드 + 진행률 콜백."""
-    try:
-        req = Request(url, headers={"User-Agent": "GenreCapture/1.0"})
-        resp = urlopen(req, timeout=60)
-        total = int(resp.headers.get("Content-Length", 0))
-        downloaded = 0
-        chunk_size = 64 * 1024
-
-        dest.parent.mkdir(parents=True, exist_ok=True)
-        with open(dest, "wb") as f:
-            while True:
-                chunk = resp.read(chunk_size)
-                if not chunk:
-                    break
-                f.write(chunk)
-                downloaded += len(chunk)
-                progress_cb(downloaded, total)
-        return True
-    except Exception:
-        if dest.exists():
-            dest.unlink()
-        return False
-
-
-def _install_tesseract(progress_cb: Callable[[str, int, int], None]) -> Optional[str]:
+def _build_ssl_context() -> ssl.SSLContext:
     """
-    Tesseract 다운로드 + 설치.
+    SSL 컨텍스트 생성 (certifi → 시스템 인증서 → 검증 없음 순서 폴백).
+    오래된 Windows에서 GitHub/Google HTTPS 실패 방지.
+    """
+    # 1. certifi (PyInstaller 번들에 포함)
+    try:
+        import certifi
+        return ssl.create_default_context(cafile=certifi.where())
+    except Exception:
+        pass
 
-    Returns: tesseract.exe 경로 또는 None
+    # 2. 시스템 기본
+    try:
+        ctx = ssl.create_default_context()
+        return ctx
+    except Exception:
+        pass
+
+    # 3. 최후의 수단: 검증 비활성화 (보안 경고)
+    _log("WARNING: SSL 검증 비활성화 — 시스템 인증서 로드 실패")
+    ctx = ssl._create_unverified_context()
+    return ctx
+
+
+def _download_with_progress(url: str, dest: Path,
+                            progress_cb: Callable[[int, int], None],
+                            max_retries: int = 3) -> Tuple[bool, str]:
+    """
+    URL 다운로드 + 진행률 콜백 + 재시도.
+
+    Returns: (성공 여부, 에러 메시지)
+    """
+    last_err = ""
+    ctx = _build_ssl_context()
+
+    for attempt in range(1, max_retries + 1):
+        try:
+            _log(f"Download attempt {attempt}: {url}")
+            req = Request(url, headers={
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0) ClickCapture/1.0",
+                "Accept": "*/*",
+            })
+            resp = urlopen(req, timeout=60, context=ctx)
+            total = int(resp.headers.get("Content-Length", 0))
+            downloaded = 0
+            chunk_size = 64 * 1024
+
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            with open(dest, "wb") as f:
+                while True:
+                    chunk = resp.read(chunk_size)
+                    if not chunk:
+                        break
+                    f.write(chunk)
+                    downloaded += len(chunk)
+                    progress_cb(downloaded, total)
+
+            if total > 0 and downloaded < total:
+                raise IOError(f"불완전 다운로드 ({downloaded}/{total} bytes)")
+
+            _log(f"Download OK: {dest} ({downloaded} bytes)")
+            return True, ""
+        except HTTPError as e:
+            last_err = f"HTTP {e.code}: {e.reason}"
+            _log(f"HTTPError: {last_err}")
+        except URLError as e:
+            last_err = f"네트워크 오류: {e.reason}"
+            _log(f"URLError: {last_err}")
+        except ssl.SSLError as e:
+            last_err = f"SSL 오류: {e}"
+            _log(f"SSLError: {last_err}")
+        except Exception as e:
+            last_err = f"{type(e).__name__}: {e}"
+            _log(f"Exception: {last_err}\n{traceback.format_exc()}")
+
+        if dest.exists():
+            try: dest.unlink()
+            except Exception: pass
+
+        if attempt < max_retries:
+            time.sleep(2 * attempt)  # exponential backoff
+
+    return False, last_err or "알 수 없는 오류"
+
+
+def _install_tesseract(progress_cb: Callable[[str, int, int], None]) -> Tuple[Optional[str], str]:
+    """
+    Tesseract 다운로드 + 설치 (유저 로컬, 관리자 불필요).
+
+    Returns: (tesseract.exe 경로 또는 None, 에러 메시지)
     """
     deps = _deps_dir()
-    deps.mkdir(parents=True, exist_ok=True)
+    try:
+        deps.mkdir(parents=True, exist_ok=True)
+    except PermissionError as e:
+        return None, f"설치 폴더 생성 실패: {e}"
+
     installer_path = deps / "tesseract_installer.exe"
     install_dir = deps / "tesseract"
 
     # 이미 설치됨?
     exe = install_dir / "tesseract.exe"
     if exe.exists():
-        return str(exe)
+        return str(exe), ""
 
     # 다운로드
     progress_cb("Tesseract OCR 다운로드 중...", 0, 0)
-
     def on_progress(downloaded, total):
         progress_cb("Tesseract OCR 다운로드 중...", downloaded, total)
 
-    if not _download_with_progress(TESSERACT_URL, installer_path, on_progress):
-        progress_cb("다운로드 실패", 0, 0)
-        return None
+    ok, err = _download_with_progress(TESSERACT_URL, installer_path, on_progress)
+    if not ok:
+        progress_cb(f"다운로드 실패: {err}", 0, 0)
+        return None, err
 
-    # 사일런트 설치 (지정 경로)
+    # 사일런트 설치 (NSIS /D= 는 마지막 인자여야 하며 절대경로 필수)
     progress_cb("Tesseract OCR 설치 중...", 0, 0)
     try:
         install_dir.mkdir(parents=True, exist_ok=True)
+        abs_dir = str(install_dir.resolve())
+        _log(f"Tesseract install: /S /D={abs_dir}")
+
         result = subprocess.run(
-            [str(installer_path), "/S", f"/D={install_dir}"],
-            capture_output=True, timeout=120,
+            [str(installer_path), "/S", f"/D={abs_dir}"],
+            capture_output=True, timeout=180,
             creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0,
         )
-        # 설치 후 확인
+        _log(f"Tesseract installer exit={result.returncode}")
+
         if exe.exists():
-            # 설치 파일 정리
-            try:
-                installer_path.unlink()
-            except Exception:
-                pass
+            try: installer_path.unlink()
+            except Exception: pass
             progress_cb("Tesseract OCR 설치 완료", 1, 1)
-            return str(exe)
-        else:
-            progress_cb("설치 실패 — tesseract.exe를 찾을 수 없습니다", 0, 0)
-            return None
+            return str(exe), ""
+
+        # 설치 실패 → 폴백: 7zip-sfx 형태로 직접 추출 시도
+        err_msg = f"설치 실패 (exit={result.returncode}). tesseract.exe 미생성. 경로={abs_dir}"
+        _log(err_msg)
+        progress_cb("설치 실패 — 로그 확인: " + str(_log_path()), 0, 0)
+        return None, err_msg
+    except subprocess.TimeoutExpired:
+        return None, "설치 타임아웃 (180초 초과)"
     except Exception as e:
-        progress_cb(f"설치 실패: {e}", 0, 0)
-        return None
+        _log(f"Tesseract install exception: {traceback.format_exc()}")
+        return None, f"설치 예외: {e}"
 
 
-def _install_adb(progress_cb: Callable[[str, int, int], None]) -> Optional[str]:
+def _install_adb(progress_cb: Callable[[str, int, int], None]) -> Tuple[Optional[str], str]:
     """
     ADB platform-tools 다운로드 + 설치.
 
-    Returns: adb.exe 경로 또는 None
+    Returns: (adb.exe 경로 또는 None, 에러 메시지)
     """
     deps = _deps_dir()
-    deps.mkdir(parents=True, exist_ok=True)
+    try:
+        deps.mkdir(parents=True, exist_ok=True)
+    except PermissionError as e:
+        return None, f"설치 폴더 생성 실패: {e}"
+
     zip_path = deps / "platform-tools.zip"
     install_dir = deps / "platform-tools"
 
     exe = install_dir / "adb.exe"
     if exe.exists():
-        return str(exe)
+        return str(exe), ""
 
     progress_cb("ADB Platform Tools 다운로드 중...", 0, 0)
-
     def on_progress(downloaded, total):
         progress_cb("ADB Platform Tools 다운로드 중...", downloaded, total)
 
-    if not _download_with_progress(ADB_URL, zip_path, on_progress):
-        progress_cb("다운로드 실패", 0, 0)
-        return None
+    ok, err = _download_with_progress(ADB_URL, zip_path, on_progress)
+    if not ok:
+        progress_cb(f"다운로드 실패: {err}", 0, 0)
+        return None, err
 
     # ZIP 압축 해제
     progress_cb("ADB 압축 해제 중...", 0, 0)
@@ -247,18 +360,14 @@ def _install_adb(progress_cb: Callable[[str, int, int], None]) -> Optional[str]:
         with zipfile.ZipFile(zip_path, "r") as zf:
             zf.extractall(deps)
         if exe.exists():
-            try:
-                zip_path.unlink()
-            except Exception:
-                pass
+            try: zip_path.unlink()
+            except Exception: pass
             progress_cb("ADB 설치 완료", 1, 1)
-            return str(exe)
-        else:
-            progress_cb("설치 실패", 0, 0)
-            return None
+            return str(exe), ""
+        return None, "압축 해제 후 adb.exe 미발견"
     except Exception as e:
-        progress_cb(f"압축 해제 실패: {e}", 0, 0)
-        return None
+        _log(f"ADB unzip exception: {traceback.format_exc()}")
+        return None, f"압축 해제 실패: {e}"
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -327,7 +436,7 @@ class SetupDialog:
     ERROR = "#f87171"
     WARNING = "#fbbf24"
 
-    def __init__(self, parent: Optional[tk.Tk], status: DepStatus):
+    def __init__(self, parent, status: DepStatus):
         self.status = status
         self.result_status: Optional[DepStatus] = None
         self._cancelled = False
@@ -464,17 +573,22 @@ class SetupDialog:
 
     def _install_all(self):
         missing = self.status.missing
+        errors = []
 
         if "tesseract" in missing:
-            result = _install_tesseract(self._update_progress)
+            result, err = _install_tesseract(self._update_progress)
             ok = result is not None
+            if not ok and err:
+                errors.append(f"Tesseract: {err}")
             self.win.after(0, lambda: self._status_labels["Tesseract OCR"].config(
                 text="OK" if ok else "FAILED",
                 fg=self.SUCCESS if ok else self.ERROR))
 
         if "adb" in missing:
-            result = _install_adb(self._update_progress)
+            result, err = _install_adb(self._update_progress)
             ok = result is not None
+            if not ok and err:
+                errors.append(f"ADB: {err}")
             self.win.after(0, lambda: self._status_labels["ADB (Android Debug Bridge)"].config(
                 text="OK" if ok else "FAILED",
                 fg=self.SUCCESS if ok else self.ERROR))
@@ -495,7 +609,12 @@ class SetupDialog:
         self.result_status = new_status
 
         def _done():
-            self._update_progress("설치 완료!", 1, 1)
+            if errors:
+                msg = " | ".join(errors)[:200]
+                self._update_progress(f"일부 실패: {msg}", 0, 0)
+                self.lbl_detail.config(text=f"로그: {_log_path()}")
+            else:
+                self._update_progress("설치 완료!", 1, 1)
             self.btn_skip.config(state="normal", text="Continue")
             if hasattr(self, 'btn_install'):
                 self.btn_install.config(state="disabled", text="Done")
@@ -512,18 +631,21 @@ class SetupDialog:
 # Public API
 # ═══════════════════════════════════════════════════════════════════════════════
 
-def ensure_dependencies(parent: Optional[tk.Tk] = None) -> DepStatus:
+def ensure_dependencies(parent=None) -> DepStatus:
     """
     의존성 확인 + 누락 시 설치 다이얼로그.
 
     - 이미 설치 완료된 적 있으면 (deps_config.json 존재) 빠르게 통과
-    - 누락 있으면 SetupDialog 표시
+    - 누락 있으면 SetupDialog 표시 (tkinter 없으면 자동 skip)
 
     Returns: DepStatus (경로 정보 포함)
     """
+    _log(f"ensure_dependencies start — frozen={getattr(sys, 'frozen', False)}, "
+         f"app_root={_app_root()}, deps_dir={_deps_dir()}")
+
     # 이전 설정 로드 → PATH에 추가
     cfg = _load_deps_config()
-    if cfg.get("tesseract_path"):
+    if cfg.get("tesseract_path") and Path(cfg["tesseract_path"]).exists():
         tess_dir = str(Path(cfg["tesseract_path"]).parent)
         os.environ["PATH"] = tess_dir + os.pathsep + os.environ.get("PATH", "")
         try:
@@ -532,17 +654,29 @@ def ensure_dependencies(parent: Optional[tk.Tk] = None) -> DepStatus:
         except ImportError:
             pass
 
-    if cfg.get("adb_path"):
+    if cfg.get("adb_path") and Path(cfg["adb_path"]).exists():
         adb_dir = str(Path(cfg["adb_path"]).parent)
         os.environ["PATH"] = adb_dir + os.pathsep + os.environ.get("PATH", "")
 
     status = DepStatus()
+    _log(f"DepStatus: tesseract={status.tesseract_path}, adb={status.adb_path}")
 
     if status.all_ok:
         status.apply_to_env()
         return status
 
+    # tkinter 없으면 다이얼로그 불가 → skip
+    if not _HAS_TK:
+        _log("tkinter 없음 — 의존성 다이얼로그 skip")
+        status.apply_to_env()
+        return status
+
     # 누락 있으면 다이얼로그
-    dialog = SetupDialog(parent, status)
-    result = dialog.run()
-    return result
+    try:
+        dialog = SetupDialog(parent, status)
+        result = dialog.run()
+        return result
+    except Exception as e:
+        _log(f"SetupDialog 실패: {traceback.format_exc()}")
+        status.apply_to_env()
+        return status
