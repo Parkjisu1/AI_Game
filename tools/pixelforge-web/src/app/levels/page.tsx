@@ -41,6 +41,8 @@ export default function LevelsPage() {
   const [genProgress, setGenProgress] = useState("");
   const [transparentBg, setTransparentBg] = useState(false);
   const [useColorLimit, setUseColorLimit] = useState(true);
+  const [singleSubject, setSingleSubject] = useState(false); // 단일 중앙 피사체(캐릭터형 씬화 방지)
+  const [forcePalette, setForcePalette] = useState(false);   // 팔레트 강제(K→28을 의도색만)
   const [maxColors, setMaxColors] = useState<number>(0); // 0 = 제한 없음
   const [expandedNum, setExpandedNum] = useState<number | null>(null);
   // 행별 색상 override (확장된 행에서 사용)
@@ -60,7 +62,7 @@ export default function LevelsPage() {
 
   // 단일 레벨 즉시 생성 (확장 행에서 사용)
   // 단일 레벨 생성 payload 빌드 (generateOne + generateSelected가 공유)
-  function buildGenPayload(lv: Level, colorOverride?: number[]) {
+  function buildGenPayload(lv: Level, colorOverride?: number[], genTargetLong?: number) {
     const note = String(lv.designer_note || "").trim();
     let prompt = note || "pixel art pattern";
     const motif = note.match(/\[Motif\][^:\[]*:?\s*([^\[\n]+)/);
@@ -104,10 +106,13 @@ export default function LevelsPage() {
       level_data: lv,
       no_background: transparentBg,
       use_color_limit: useColorLimit, // 서버가 color count reduction 적용 여부 결정
+      single_subject: singleSubject,  // 캐릭터형 단일 중앙 피사체 컨벤션
+      force_palette: forcePalette,    // 팔레트 강제
+      ...(genTargetLong ? { gen_target_long: genTargetLong } : {}), // "크게 생성" 시 큰 해상도
     };
   }
 
-  async function callGenerate(lv: Level, apiKey: string, colorOverride?: number[]) {
+  async function callGenerate(lv: Level, apiKey: string, colorOverride?: number[], genTargetLong?: number) {
     const proKey = typeof window !== "undefined" ? localStorage.getItem("pixellab_pro_key") || "" : "";
     console.log("[callGenerate]", {
       level: lv.level_number,
@@ -119,10 +124,10 @@ export default function LevelsPage() {
       "x-pixellab-key": apiKey,
     };
     if (proKey) headers["x-pixellab-pro-key"] = proKey;
-    const res = await fetch("/api/generate", {
+    const res = await fetch("/pixelforge/api/generate", {
       method: "POST",
       headers,
-      body: JSON.stringify(buildGenPayload(lv, colorOverride)),
+      body: JSON.stringify(buildGenPayload(lv, colorOverride, genTargetLong)),
     });
     const data = await res.json();
 
@@ -138,7 +143,7 @@ export default function LevelsPage() {
         await new Promise((r) => setTimeout(r, 5000));
         setGenProgress(`Level ${lv.level_number} 생성 중... (${Math.round(elapsed / 1000 + 5)}초)`);
         try {
-          const pollRes = await fetch(`/api/pro-poll?jobId=${encodeURIComponent(data.proJobId)}`, {
+          const pollRes = await fetch(`/pixelforge/api/pro-poll?jobId=${encodeURIComponent(data.proJobId)}`, {
             headers: pollHeaders,
           });
           const pollData = await pollRes.json();
@@ -164,19 +169,19 @@ export default function LevelsPage() {
     return data;
   }
 
-  const generateOne = useCallback(async (lv: Level) => {
+  const generateOne = useCallback(async (lv: Level, genTargetLong?: number) => {
     const apiKey = typeof window !== "undefined" ? localStorage.getItem("pixellab_api_key") || "" : "";
     if (!apiKey) {
       flash("우상단 ⚙️에서 PixelLab API Key 먼저 설정");
       return;
     }
     setGenerating(true);
-    setGenProgress(`Level ${lv.level_number}`);
+    setGenProgress(`Level ${lv.level_number}${genTargetLong ? " (크게)" : ""}`);
     try {
-      const data = await callGenerate(lv, apiKey);
+      const data = await callGenerate(lv, apiKey, undefined, genTargetLong);
       if (data.ok) {
-        flash(`Level ${lv.level_number} 생성 완료`);
-        const fresh = await fetch("/api/levels").then((r) => r.json());
+        flash(`Level ${lv.level_number} 생성 완료${genTargetLong ? " (크게)" : ""}`);
+        const fresh = await fetch("/pixelforge/api/levels").then((r) => r.json());
         if (Array.isArray(fresh)) setLevels(fresh);
       } else {
         flash(`생성 실패: ${data.error || "unknown"}`);
@@ -187,7 +192,7 @@ export default function LevelsPage() {
       setGenerating(false);
       setGenProgress("");
     }
-  }, [rowColors, useColorLimit, maxColors, transparentBg]);
+  }, [rowColors, useColorLimit, maxColors, transparentBg, singleSubject, forcePalette]);
 
   async function generateSelected() {
     if (selectedNums.size === 0) return;
@@ -215,7 +220,7 @@ export default function LevelsPage() {
     flash(`생성 완료: ${success}건${failed > 0 ? `, 실패 ${failed}건` : ""}`);
     // DB 갱신
     try {
-      const fresh = await fetch("/api/levels").then((r) => r.json());
+      const fresh = await fetch("/pixelforge/api/levels").then((r) => r.json());
       if (Array.isArray(fresh)) setLevels(fresh);
     } catch {}
   }
@@ -303,7 +308,7 @@ export default function LevelsPage() {
       await Promise.all(
         targets.map((lv) => {
           const id = lv._id || String(lv.level_number);
-          return fetch(`/api/levels/${id}`, { method: "DELETE" });
+          return fetch(`/pixelforge/api/levels/${id}`, { method: "DELETE" });
         })
       );
       setLevels((prev) => prev.filter((l) => !selectedNums.has(l.level_number)));
@@ -317,10 +322,21 @@ export default function LevelsPage() {
   }
 
   useEffect(() => {
-    fetch("/api/levels")
-      .then((r) => r.json())
-      .then((data) => { if (Array.isArray(data)) setLevels(data); })
-      .catch(() => {});
+    fetch("/pixelforge/api/levels")
+      .then(async (r) => {
+        const data = await r.json();
+        if (!r.ok) throw new Error(data?.error || `HTTP ${r.status}`);
+        return data;
+      })
+      .then((data) => {
+        if (Array.isArray(data)) setLevels(data);
+        else flash(`레벨 로드 실패: 응답이 배열 아님`);
+      })
+      .catch((e) => {
+        const msg = e instanceof Error ? e.message : String(e);
+        console.error("[levels load]", msg);
+        flash(`레벨 로드 실패: ${msg.substring(0, 120)}`);
+      });
   }, []);
 
   useEffect(() => {
@@ -339,7 +355,7 @@ export default function LevelsPage() {
     try {
       const body = { ...level };
       delete body._id;
-      await fetch("/api/levels", {
+      await fetch("/pixelforge/api/levels", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -367,7 +383,7 @@ export default function LevelsPage() {
   const deleteLevel = useCallback(async (level: Level) => {
     if (!confirm(`Level ${level.level_number} 삭제?`)) return;
     const id = level._id || String(level.level_number);
-    await fetch(`/api/levels/${id}`, { method: "DELETE" });
+    await fetch(`/pixelforge/api/levels/${id}`, { method: "DELETE" });
     setLevels((prev) => prev.filter((l) => l.level_number !== level.level_number));
     flash("삭제됨");
   }, []);
@@ -552,7 +568,7 @@ export default function LevelsPage() {
     }
     setSaving(true);
     try {
-      const res = await fetch("/api/levels", {
+      const res = await fetch("/pixelforge/api/levels", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(validRows),
@@ -564,7 +580,7 @@ export default function LevelsPage() {
         console.error("[CSV import error]", json);
         return false;
       }
-      const fresh = await fetch("/api/levels").then((r) => r.json());
+      const fresh = await fetch("/pixelforge/api/levels").then((r) => r.json());
       if (Array.isArray(fresh)) setLevels(fresh);
       setCsvModal(false);
       setCsvText("");
@@ -726,6 +742,24 @@ export default function LevelsPage() {
             className="w-4 h-4"
           />
           <span className="text-xs" style={{color:"#000"}}>투명 배경 (PNG)</span>
+        </label>
+        <label className="flex items-center gap-1.5 cursor-pointer" title="캐릭터형: PixelLab이 풍경/씬으로 그리지 않고 중앙 단일 피사체를 그리게 프롬프트 강제 + 투명배경. 잘림/씬화 근본 방지.">
+          <input
+            type="checkbox"
+            checked={singleSubject}
+            onChange={(e) => setSingleSubject(e.target.checked)}
+            className="w-4 h-4"
+          />
+          <span className="text-xs" style={{color:"#000"}}>🎯 단일 중앙 피사체</span>
+        </label>
+        <label className="flex items-center gap-1.5 cursor-pointer" title="snap 시 K→28 색매핑을 의도 색(color_distribution)으로만 제한. 색상 의도 불일치 해결.">
+          <input
+            type="checkbox"
+            checked={forcePalette}
+            onChange={(e) => setForcePalette(e.target.checked)}
+            className="w-4 h-4"
+          />
+          <span className="text-xs" style={{color:"#000"}}>🎨 팔레트 강제</span>
         </label>
         <span className="text-xs text-gray-500 ml-auto">
           크기는 레벨 행/열 비율로 자동 계산 · 픽셀-퍼펙트 (셀 1개 = 정수 픽셀)

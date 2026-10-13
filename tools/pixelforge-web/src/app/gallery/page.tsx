@@ -2,6 +2,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { downloadLevelJson, levelFileName } from "@/lib/levelJson";
 import { PALETTE_HEX, COLOR_NAMES, parseColorDist } from "@/lib/palette";
+import { CorrectionMini } from "@/components/CorrectionMini";
+import { BatchCorrectionDialog } from "@/components/BatchCorrectionDialog";
 
 const PAGE_SIZE = 30;
 
@@ -46,6 +48,10 @@ export default function GalleryPage() {
   const [modalPalette, setModalPalette] = useState<number[]>([]);
   const [notice, setNotice] = useState("");
   const [page, setPage] = useState(1);
+  const [correctionLv, setCorrectionLv] = useState<Level | null>(null);
+  const [batchRunning, setBatchRunning] = useState(false);
+  const [batchProgress, setBatchProgress] = useState("");
+  const [showBatchDialog, setShowBatchDialog] = useState(false);
 
   // 페이지네이션: 30개씩 보기
   const totalPages = Math.max(1, Math.ceil(levels.length / PAGE_SIZE));
@@ -74,7 +80,7 @@ export default function GalleryPage() {
   }
 
   useEffect(() => {
-    fetch("/api/levels")
+    fetch("/pixelforge/api/levels")
       .then((r) => r.json())
       .then((data) => {
         if (Array.isArray(data)) {
@@ -100,6 +106,30 @@ export default function GalleryPage() {
     a.href = src;
     a.download = levelFileName(level, "png");
     a.click();
+  }
+
+  // PixelLab 원본(image_base64) 그대로 — nearest-neighbor 업스케일로 작업 가능한 크기 제공.
+  // 우리 가공 없이 원본 픽셀 그대로(확대만) → 아트/기획이 직접 크롭/사용.
+  function downloadRaw(level: Level) {
+    const b64 = level.image_base64;
+    if (!b64) { alert("원본 image_base64 없음"); return; }
+    const img = new window.Image();
+    img.onload = () => {
+      // 적응형 배율: 장변 ~1024px 목표 (원본이 크면 배율↓, 작으면 배율↑). 픽셀 보존.
+      const scale = Math.max(1, Math.round(1024 / Math.max(img.width, img.height)));
+      const cw = img.width * scale, ch = img.height * scale;
+      const canvas = document.createElement("canvas");
+      canvas.width = cw; canvas.height = ch;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      ctx.imageSmoothingEnabled = false; // 픽셀 보존(확대만)
+      ctx.drawImage(img, 0, 0, cw, ch);
+      const a = document.createElement("a");
+      a.href = canvas.toDataURL("image/png");
+      a.download = `${levelFileName(level, "png").replace(/\.png$/, "")}_raw.png`;
+      a.click();
+    };
+    img.src = `data:image/png;base64,${b64}`;
   }
 
   function downloadJson(level: Level) {
@@ -128,9 +158,74 @@ export default function GalleryPage() {
     await batchDownload(targets, true);
   }
 
+  // 선택된 레벨들을 순차로 Correction 호출. 각 호출 30~90초 → N개면 N*분 단위.
+  // 서버측 봇이 storage_state로 인증하므로 클라이언트 PixelLab 키는 불필요.
+  async function correctionSelected(strength: number) {
+    if (selectedNums.size === 0) return;
+    setShowBatchDialog(false);
+    strength = Math.max(0, Math.min(1, Number(strength) || 0.10));
+
+    const targets = levels.filter((l) => selectedNums.has(l.level_number)).sort((a, b) => a.level_number - b.level_number);
+    setBatchRunning(true);
+    let success = 0;
+    const failures: { lv: number; err: string }[] = [];
+
+    let stopped = false;
+    for (let i = 0; i < targets.length; i++) {
+      const lv = targets[i];
+      setBatchProgress(`${i + 1}/${targets.length} — Level ${lv.level_number} (strength ${strength.toFixed(2)})`);
+      try {
+        const res = await fetch("/pixelforge/api/correction", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ level_number: lv.level_number, strength }),
+        });
+        const data = await res.json();
+        if (data.ok) {
+          success++;
+          // 매 결과 후 갤러리 새로고침 — 사용자가 진행 상황 + 결과를 실시간 확인 가능
+          try {
+            const fresh = await fetch("/pixelforge/api/levels").then((r) => r.json());
+            if (Array.isArray(fresh)) setLevels(fresh.filter((l: Level) => l.image_base64 || l.image_base64_alt));
+          } catch {}
+        } else {
+          // ★ 첫 실패에서 즉시 중단 — 사용자가 "하나 완성하고 확인" 흐름.
+          // 실패면 더 진행 안 함 (망가뜨리지 않게 안전).
+          failures.push({ lv: lv.level_number, err: String(data.error || `HTTP ${res.status}`).slice(0, 160) });
+          stopped = true;
+          break;
+        }
+      } catch (e) {
+        failures.push({ lv: lv.level_number, err: e instanceof Error ? e.message : String(e) });
+        stopped = true;
+        break;
+      }
+    }
+
+    setBatchRunning(false);
+    setBatchProgress("");
+
+    // 갤러리 refresh
+    try {
+      const fresh = await fetch("/pixelforge/api/levels").then((r) => r.json());
+      if (Array.isArray(fresh)) setLevels(fresh.filter((l: Level) => l.image_base64 || l.image_base64_alt));
+    } catch {}
+
+    if (stopped && failures.length > 0) {
+      const f = failures[0];
+      flash(`⛔ Lv${f.lv}에서 중단 (이후 안전상 미진행)\n성공: ${success}/${targets.length}\n실패 원인: ${f.err}`);
+    } else if (failures.length > 0) {
+      const detail = failures.slice(0, 3).map(f => `Lv${f.lv}: ${f.err}`).join("\n");
+      flash(`Correction 완료: ${success}/${targets.length} 성공, ${failures.length} 실패\n${detail}${failures.length > 3 ? "\n..." : ""}`);
+    } else {
+      flash(`🩹 Correction 완료: ${success}/${targets.length} 모두 성공`);
+    }
+  }
+
   function flash(msg: string) {
     setNotice(msg);
-    setTimeout(() => setNotice(""), 2500);
+    // batch 완료 메시지가 길면 더 오래 표시
+    setTimeout(() => setNotice(""), msg.length > 60 ? 8000 : 2500);
   }
 
   async function regeneratePixelLabPalette(level: Level, paletteIds: number[]) {
@@ -140,7 +235,7 @@ export default function GalleryPage() {
     setRegenerating(true);
     setRegenProgress(`Level ${level.level_number} (PixelLab recolor)`);
     try {
-      const res = await fetch("/api/regenerate-pixellab", {
+      const res = await fetch("/pixelforge/api/regenerate-pixellab", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-pixellab-key": apiKey },
         body: JSON.stringify({ level_number: level.level_number, palette_ids: paletteIds }),
@@ -149,7 +244,7 @@ export default function GalleryPage() {
       if (!data.ok) { flash(`실패: ${data.error}`); return; }
       flash("PixelLab 재생성 완료");
       // 갤러리 + 모달 갱신
-      const fresh = await fetch("/api/levels").then((r) => r.json());
+      const fresh = await fetch("/pixelforge/api/levels").then((r) => r.json());
       if (Array.isArray(fresh)) {
         setLevels(fresh.filter((l: Level) => l.image_base64 || l.image_base64_alt));
         const updated = fresh.find((l: Level) => l.level_number === level.level_number);
@@ -185,23 +280,35 @@ export default function GalleryPage() {
         </div>
         {levels.length > 0 && (
           <div className="flex flex-wrap gap-2 self-start sm:self-auto">
-            {notice && <span className="text-xs text-green-600 self-center font-medium">{notice}</span>}
+            {notice && <span className="text-xs text-green-600 self-center font-medium whitespace-pre-line max-w-md">{notice}</span>}
             {regenerating && <span className="text-xs text-blue-500 self-center">{regenProgress}</span>}
+            {batchRunning && <span className="text-xs text-emerald-600 self-center font-medium">🩹 {batchProgress}</span>}
             <button
               onClick={toggleSelectAll}
-              className="px-3 py-2 text-xs border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+              disabled={batchRunning}
+              className="px-3 py-2 text-xs border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-40"
               style={{color:"#000"}}
             >
               {selectedNums.size === levels.length ? "선택 해제" : "전체 선택"}
             </button>
             {selectedNums.size > 0 && (
-              <button
-                onClick={downloadSelected}
-                disabled={downloading}
-                className="px-4 py-2 text-sm bg-black text-white rounded-lg hover:bg-gray-800 disabled:opacity-40 transition-colors"
-              >
-                {downloading ? "다운로드 중..." : `선택 다운로드 (${selectedNums.size})`}
-              </button>
+              <>
+                <button
+                  onClick={() => setShowBatchDialog(true)}
+                  disabled={downloading || batchRunning}
+                  className="px-4 py-2 text-sm bg-emerald-500 text-black rounded-lg hover:bg-emerald-400 disabled:opacity-40 font-medium"
+                  title="선택된 레벨에 PixelLab Correction 일괄 실행"
+                >
+                  {batchRunning ? "..." : `🩹 일괄 Correction (${selectedNums.size})`}
+                </button>
+                <button
+                  onClick={downloadSelected}
+                  disabled={downloading || batchRunning}
+                  className="px-4 py-2 text-sm bg-black text-white rounded-lg hover:bg-gray-800 disabled:opacity-40 transition-colors"
+                >
+                  {downloading ? "다운로드 중..." : `선택 다운로드 (${selectedNums.size})`}
+                </button>
+              </>
             )}
             <button
               onClick={downloadAll}
@@ -229,8 +336,9 @@ export default function GalleryPage() {
         </div>
       )}
 
+      {/* 데스크탑 그리드 (md 이상) */}
       {!loading && levels.length > 0 && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div className="hidden md:grid grid-cols-3 lg:grid-cols-4 gap-4">
           {pagedLevels.map((level) => {
             const isSelected = selectedNums.has(level.level_number);
             return (
@@ -283,7 +391,23 @@ export default function GalleryPage() {
                 {level.designer_note && (
                   <p className="text-xs text-gray-400 truncate mb-2">{level.designer_note}</p>
                 )}
+                {Boolean(level.nr_flag) && (
+                  <div
+                    title={(level.nr_reasons as string[] | undefined)?.join(" / ") || ""}
+                    className="text-[11px] mb-2 px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 inline-block"
+                  >
+                    ⚠ 재생성 권장 — {(level.nr_reasons as string[] | undefined)?.join(", ")}
+                  </div>
+                )}
                 <div className="flex gap-1">
+                  <button
+                    onClick={() => downloadRaw(level)}
+                    title="PixelLab 원본 그대로 (가공 없이 ×16 확대) — 아트가 직접 크롭"
+                    className="flex-1 text-xs py-1.5 border border-blue-200 bg-blue-50 rounded-lg hover:bg-blue-100"
+                    style={{color:"#1d4ed8"}}
+                  >
+                    원본↑
+                  </button>
                   <button
                     onClick={() => downloadImage(level)}
                     className="flex-1 text-xs py-1.5 border border-gray-200 rounded-lg hover:bg-gray-50"
@@ -301,7 +425,7 @@ export default function GalleryPage() {
                   <button
                     onClick={async () => {
                       if (!confirm(`Level ${level.level_number} 삭제?`)) return;
-                      await fetch(`/api/levels/${level._id || level.level_number}`, { method: "DELETE" });
+                      await fetch(`/pixelforge/api/levels/${level._id || level.level_number}`, { method: "DELETE" });
                       setLevels((prev) => prev.filter((l) => l.level_number !== level.level_number));
                     }}
                     className="text-xs py-1.5 px-2 border border-red-200 rounded-lg hover:bg-red-50"
@@ -312,6 +436,71 @@ export default function GalleryPage() {
                 </div>
               </div>
             </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* 모바일 IG 피드 (md 미만) */}
+      {!loading && levels.length > 0 && (
+        <div className="md:hidden space-y-4">
+          {pagedLevels.map((level) => {
+            const isSelected = selectedNums.has(level.level_number);
+            return (
+              <article key={level.level_number} className="-mx-4 border-y border-gray-200 bg-white">
+                {/* 헤더 */}
+                <div className="flex items-center gap-2.5 px-4 py-2.5">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-tr from-fuchsia-500 via-pink-500 to-amber-400 text-[10px] font-bold text-white">
+                    {level.level_number}
+                  </span>
+                  <div className="min-w-0 flex-1 leading-tight">
+                    <div className="text-sm font-semibold">Level {level.level_number}</div>
+                    <div className="text-[11px] text-gray-400">{level.field_columns} × {level.field_rows}</div>
+                  </div>
+                  <button
+                    onClick={async () => {
+                      if (!confirm(`Level ${level.level_number} 삭제?`)) return;
+                      await fetch(`/pixelforge/api/levels/${level._id || level.level_number}`, { method: "DELETE" });
+                      setLevels((prev) => prev.filter((l) => l.level_number !== level.level_number));
+                    }}
+                    className="px-2 text-lg text-gray-400"
+                    aria-label="삭제"
+                  >
+                    ⋯
+                  </button>
+                </div>
+                {/* 미디어 */}
+                <button
+                  onClick={() => openModal(level)}
+                  className="block w-full bg-gray-100"
+                  style={{ aspectRatio: "1 / 1" }}
+                  aria-label={`Level ${level.level_number} 확대 보기`}
+                >
+                  <img
+                    src={imgSrc(level)}
+                    alt={`Level ${level.level_number}`}
+                    className="h-full w-full object-contain"
+                    style={{ imageRendering: "pixelated" }}
+                  />
+                </button>
+                {/* 액션행 — ♥ 선택(배치 작업 연동) · 이미지/JSON 다운로드 */}
+                <div className="flex items-center gap-5 px-4 pt-3">
+                  <button
+                    onClick={() => toggleSelect(level.level_number)}
+                    aria-label="선택"
+                    className={`text-2xl leading-none ${isSelected ? "text-red-500" : "text-gray-800"}`}
+                  >
+                    {isSelected ? "♥" : "♡"}
+                  </button>
+                  <button onClick={() => downloadImage(level)} aria-label="이미지 다운로드" className="text-2xl leading-none text-gray-800">⬇</button>
+                  <button onClick={() => downloadJson(level)} aria-label="JSON 다운로드" className="font-mono text-lg font-bold leading-none text-gray-800">{`{ }`}</button>
+                </div>
+                {/* 캡션 */}
+                <div className="px-4 pb-3 pt-2 text-sm">
+                  <span className="font-semibold">Level {level.level_number}</span>
+                  {level.designer_note ? <span className="text-gray-700"> {level.designer_note}</span> : null}
+                </div>
+              </article>
             );
           })}
         </div>
@@ -356,6 +545,35 @@ export default function GalleryPage() {
             ≫
           </button>
         </div>
+      )}
+
+      {/* Batch Correction strength dialog */}
+      {showBatchDialog && (
+        <BatchCorrectionDialog
+          count={selectedNums.size}
+          onClose={() => setShowBatchDialog(false)}
+          onConfirm={(strength) => correctionSelected(strength)}
+        />
+      )}
+
+      {/* Correction (PixelLab UI 봇) */}
+      {correctionLv && (
+        <CorrectionMini
+          level={correctionLv}
+          onClose={() => setCorrectionLv(null)}
+          onComplete={async () => {
+            const fresh = await fetch("/pixelforge/api/levels").then((r) => r.json());
+            if (Array.isArray(fresh)) {
+              setLevels(fresh.filter((l: Level) => l.image_base64 || l.image_base64_alt));
+              const updated = fresh.find((l: Level) => l.level_number === correctionLv.level_number);
+              if (updated) {
+                setModalLevel(updated);
+                setShowAlt(false); // primary가 corrected로 채택됐으니 원본 표시
+              }
+            }
+            flash("🩹 Correction 완료 — 갤러리·JSON 갱신됨 (원본은 image_base64_pre_correction에 백업)");
+          }}
+        />
       )}
 
       {/* Full-size Modal */}
@@ -455,12 +673,20 @@ export default function GalleryPage() {
                 >
                   {regenerating ? "..." : "🪝 PixelLab 재생성"}
                 </button>
+                <button
+                  onClick={() => setCorrectionLv(modalLevel)}
+                  disabled={regenerating || !modalLevel.image_base64}
+                  className="px-3 py-1.5 text-xs bg-emerald-500 text-black rounded-lg hover:bg-emerald-400 disabled:opacity-40 font-medium"
+                  title="PixelLab Pixel Art Correction (서버측 봇)"
+                >
+                  🩹 Correction
+                </button>
                 {modalLevel.image_base64_alt && (
                   <button
                     onClick={async () => {
                       if (!confirm("alt 이미지 삭제? (원본만 남음)")) return;
                       try {
-                        const res = await fetch("/api/levels/clear-alt", {
+                        const res = await fetch("/pixelforge/api/levels/clear-alt", {
                           method: "POST",
                           headers: { "Content-Type": "application/json" },
                           body: JSON.stringify({ level_number: modalLevel.level_number }),
@@ -472,7 +698,7 @@ export default function GalleryPage() {
                         }
                         flash("alt 삭제 완료");
                         // 갤러리 + 모달 갱신
-                        const fresh = await fetch("/api/levels").then((r) => r.json());
+                        const fresh = await fetch("/pixelforge/api/levels").then((r) => r.json());
                         if (Array.isArray(fresh)) {
                           setLevels(fresh.filter((l: Level) => l.image_base64 || l.image_base64_alt));
                           const updated = fresh.find((l: Level) => l.level_number === modalLevel.level_number);

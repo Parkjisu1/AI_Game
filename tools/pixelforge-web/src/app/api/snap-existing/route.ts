@@ -2,7 +2,7 @@
 // AI 호출 없음, 빠름, 무료
 import { NextRequest, NextResponse } from "next/server";
 import { getDb } from "@/lib/mongodb";
-import { snapImageToGridAndPalette } from "@/lib/snapToGrid";
+import { snapImageToGridAndPaletteV2 } from "@/lib/snapToGridV2";
 import { matrixToFieldMap } from "@/lib/matrixRenderer";
 import { parseColorDist } from "@/lib/palette";
 
@@ -43,11 +43,14 @@ export async function POST(req: NextRequest) {
       paletteIds = parseColorDist(String(lv.color_distribution || ""));
     }
 
-    const snapped = await snapImageToGridAndPalette(lv.image_base64, {
+    const snapped = await snapImageToGridAndPaletteV2(lv.image_base64, {
       cols,
       rows,
       allowedIds: paletteIds.length > 0 ? paletteIds : undefined,
       transparentBg,
+      targetColorCount: typeof body.target_color_count === "number" && body.target_color_count > 0
+        ? body.target_color_count : undefined,
+      forcePalette: body.force_palette === true, // "팔레트 강제": K→28을 palette_ids로만 매핑
     });
 
     // save_to_original: true면 image_base64를 직접 덮어쓰기 (Pro 후처리용)
@@ -59,11 +62,15 @@ export async function POST(req: NextRequest) {
     if (saveToOriginal) {
       setFields.image_base64 = snapped.base64;
       setFields.field_map = matrixToFieldMap(snapped.matrix);
+      setFields.field_map_pipeline = snapped.stats.pipeline;
+      setFields.palette_mapping = snapped.paletteMapping;
     } else {
       setFields.image_base64_alt = snapped.base64;
       setFields.field_map_alt = matrixToFieldMap(snapped.matrix);
+      setFields.palette_mapping_alt = snapped.paletteMapping;
       setFields.alt_meta = {
         source: "snap-existing",
+        pipeline: snapped.stats.pipeline,
         width: snapped.width,
         height: snapped.height,
         pixels_per_cell: snapped.pixelsPerCell,

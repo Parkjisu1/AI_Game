@@ -19,7 +19,6 @@ function maskKey(key: string): string {
 export default function Nav() {
   const pathname = usePathname();
   const [showSettings, setShowSettings] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
   // 입력 state (항상 빈 값으로 시작 — 사용자가 새로 입력하는 용도)
   const [apiKeyInput, setApiKeyInput] = useState("");
   const [proKeyInput, setProKeyInput] = useState("");
@@ -28,17 +27,21 @@ export default function Nav() {
   const [saved, setSaved] = useState(false);
   const [balance, setBalance] = useState("--");
   const [saveNotice, setSaveNotice] = useState("");
-  const [hasStyleImage, setHasStyleImage] = useState(false);
-  const [styleUploading, setStyleUploading] = useState(false);
+  // style 레퍼런스 슬롯: default(공통 fallback) + character/background/structure(유형별)
+  const STYLE_SLOTS: { key: string; label: string; desc: string }[] = [
+    { key: "default", label: "공통 (기본 fallback)", desc: "유형별 슬롯이 비면 이걸 사용" },
+    { key: "character", label: "캐릭터 모티프", desc: "Animal·Character·Food·Object" },
+    { key: "background", label: "배경 모티프", desc: "Nature·Seasonal·Art" },
+    { key: "structure", label: "선형·반복 구조", desc: "Geometric·Symbol·Abstract" },
+  ];
+  const [styleB64, setStyleB64] = useState<Record<string, string>>({}); // slot → full base64
+  const [styleUploading, setStyleUploading] = useState<string>(""); // 업로드 중인 slot
 
   useEffect(() => {
     const stored = localStorage.getItem("pixellab_api_key");
     if (stored) { setStoredApiKey(stored); setSaved(true); fetchBalance(stored); }
     const pro = localStorage.getItem("pixellab_pro_key");
     if (pro) setStoredProKey(pro);
-    fetch("/api/style-image").then((r) => r.json()).then((j) => {
-      if (j.ok) setHasStyleImage(j.hasImage || false);
-    }).catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -46,13 +49,27 @@ export default function Nav() {
       setApiKeyInput("");
       setProKeyInput("");
       setSaveNotice("");
+      loadStyleSlots(); // 4개 슬롯 전체 base64 로드 (미리보기)
     }
   }, [showSettings]);
 
-  // 경로 변경 시 모바일 메뉴 자동 닫기
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [pathname]);
+  function slotUrl(slot: string, qs = ""): string {
+    const params = new URLSearchParams(qs);
+    if (slot !== "default") params.set("type", slot);
+    const s = params.toString();
+    return s ? `/pixelforge/api/style-image?${s}` : "/pixelforge/api/style-image";
+  }
+
+  async function loadStyleSlots() {
+    const out: Record<string, string> = {};
+    await Promise.all(["default", "character", "background", "structure"].map(async (slot) => {
+      try {
+        const j = await fetch(slotUrl(slot, "full=1")).then((r) => r.json());
+        if (j.ok && j.hasImage) out[slot] = j.base64 || "";
+      } catch { /* ignore */ }
+    }));
+    setStyleB64(out);
+  }
 
   // PixelLab /balance 공식 스키마 (openapi.json 확인):
   // { credits: { type: "usd", usd: number }, subscription: { type: "generations", generations: number, total: number } }
@@ -88,7 +105,7 @@ export default function Nav() {
   function fetchBalance(key?: string) {
     const k = key || localStorage.getItem("pixellab_api_key");
     if (!k) { setBalance("--"); return; }
-    fetch("/api/generate", { headers: { "x-pixellab-key": k } })
+    fetch("/pixelforge/api/generate", { headers: { "x-pixellab-key": k } })
       .then((r) => r.json())
       .then((data) => {
         console.log("[balance] raw response:", JSON.stringify(data).substring(0, 400));
@@ -133,8 +150,8 @@ export default function Nav() {
     setTimeout(() => setSaveNotice(""), 3500);
   }
 
-  async function uploadStyleImage(file: File) {
-    setStyleUploading(true);
+  async function uploadStyleImage(file: File, slot: string) {
+    setStyleUploading(slot);
     try {
       const reader = new FileReader();
       const dataUrl = await new Promise<string>((resolve, reject) => {
@@ -142,7 +159,6 @@ export default function Nav() {
         reader.onerror = () => reject(new Error("읽기 실패"));
         reader.readAsDataURL(file);
       });
-      // 이미지 크기 파악
       const img = new window.Image();
       await new Promise<void>((resolve, reject) => {
         img.onload = () => resolve();
@@ -150,15 +166,15 @@ export default function Nav() {
         img.src = dataUrl;
       });
       const base64 = dataUrl.split(",")[1] || dataUrl;
-      const res = await fetch("/api/style-image", {
+      const res = await fetch(slotUrl(slot), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ base64, width: img.width, height: img.height }),
       });
       const j = await res.json();
       if (j.ok) {
-        setHasStyleImage(true);
-        setSaveNotice(`✓ Style image 업로드됨 (${img.width}×${img.height})`);
+        setStyleB64((p) => ({ ...p, [slot]: base64 }));
+        setSaveNotice(`✓ ${slot} 레퍼런스 업로드됨 (${img.width}×${img.height})`);
         setTimeout(() => setSaveNotice(""), 3000);
       } else {
         setSaveNotice(`업로드 실패: ${j.error}`);
@@ -166,15 +182,15 @@ export default function Nav() {
     } catch (e) {
       setSaveNotice(`오류: ${e instanceof Error ? e.message : "unknown"}`);
     } finally {
-      setStyleUploading(false);
+      setStyleUploading("");
     }
   }
 
-  async function deleteStyleImage() {
-    if (!confirm("Style image 삭제?")) return;
-    await fetch("/api/style-image", { method: "DELETE" });
-    setHasStyleImage(false);
-    setSaveNotice("Style image 삭제됨");
+  async function deleteStyleImage(slot: string) {
+    if (!confirm(`${slot} 레퍼런스 삭제?`)) return;
+    await fetch(slotUrl(slot), { method: "DELETE" });
+    setStyleB64((p) => { const n = { ...p }; delete n[slot]; return n; });
+    setSaveNotice(`${slot} 레퍼런스 삭제됨`);
     setTimeout(() => setSaveNotice(""), 2500);
   }
 
@@ -193,8 +209,14 @@ export default function Nav() {
     <>
       <nav className="border-b border-gray-200 bg-white sticky top-0 z-30">
         <div className="px-4 sm:px-6 py-3 flex items-center gap-3 sm:gap-8">
-          <Link href="/" className="text-lg font-bold text-black tracking-tight shrink-0">
-            PixelForge
+          <Link href="/" className="shrink-0">
+            {/* 모바일: IG 그라데이션 워드마크 / 데스크탑: 기존 검정 로고 */}
+            <span className="md:hidden text-2xl font-extrabold italic tracking-tight bg-gradient-to-tr from-fuchsia-600 via-pink-500 to-amber-400 bg-clip-text text-transparent">
+              PixelForge
+            </span>
+            <span className="hidden md:inline text-lg font-bold text-black tracking-tight">
+              PixelForge
+            </span>
           </Link>
 
           {/* Desktop links */}
@@ -215,9 +237,7 @@ export default function Nav() {
 
           <div className="ml-auto flex items-center gap-2 sm:gap-3">
             <a
-              href="https://projecthub-web.vercel.app"
-              target="_blank"
-              rel="noopener"
+              href="/tasks"
               className="text-xs px-2.5 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
               style={{color:"#000"}}
             >
@@ -241,50 +261,8 @@ export default function Nav() {
               {saved ? "⚙️" : "⚠️ Key"}
               <span className="hidden sm:inline ml-1">{saved ? "설정" : "필요"}</span>
             </button>
-
-            {/* Hamburger button (mobile only) */}
-            <button
-              onClick={() => setMobileOpen((v) => !v)}
-              className="md:hidden p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50"
-              aria-label="메뉴 열기"
-              aria-expanded={mobileOpen}
-            >
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2">
-                {mobileOpen ? (
-                  <>
-                    <line x1="4" y1="4" x2="16" y2="16" />
-                    <line x1="16" y1="4" x2="4" y2="16" />
-                  </>
-                ) : (
-                  <>
-                    <line x1="3" y1="6" x2="17" y2="6" />
-                    <line x1="3" y1="10" x2="17" y2="10" />
-                    <line x1="3" y1="14" x2="17" y2="14" />
-                  </>
-                )}
-              </svg>
-            </button>
           </div>
         </div>
-
-        {/* Mobile dropdown */}
-        {mobileOpen && (
-          <div className="md:hidden border-t border-gray-100 bg-white px-2 py-2 flex flex-col gap-0.5">
-            <div className="px-3 py-1.5 text-xs text-gray-400">Credits: {balance}</div>
-            {links.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                style={{ color: pathname === l.href ? "#ffffff" : "#000000" }}
-                className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                  pathname === l.href ? "bg-black" : "hover:bg-gray-100 active:bg-gray-200"
-                }`}
-              >
-                {l.label}
-              </Link>
-            ))}
-          </div>
-        )}
       </nav>
 
       {/* 설정 모달 */}
@@ -350,41 +328,54 @@ export default function Nav() {
               </p>
             </div>
 
-            {/* Style Image (Pro용) */}
+            {/* Style 레퍼런스 (Pro용) — 유형별 4슬롯 */}
             <div className="mb-4 pt-3 border-t border-gray-100">
-              <div className="flex items-center justify-between mb-1">
-                <label className="text-sm font-medium text-black">Style Image (Pro)</label>
-                {hasStyleImage && (
-                  <span className="text-xs text-green-600">✓ 업로드됨</span>
-                )}
-              </div>
-              <p className="text-xs text-gray-500 mb-2">
-                Piximo 스크린샷 같은 레퍼런스 이미지 업로드 → 모든 이미지 생성에 이 스타일이 적용됩니다.
-                {!hasStyleImage && " 없으면 pixflux (non-Pro)를 사용합니다."}
+              <label className="text-sm font-medium text-black">Style 레퍼런스 (Pro)</label>
+              <p className="text-xs text-gray-500 mb-3">
+                유형별 레퍼런스를 두면, 레벨의 bl_category에 맞춰 자동 선택됩니다 (캐릭터/배경/구조).
+                유형 슬롯이 비면 <b>공통</b>으로 fallback. 공통도 없으면 pixflux(non-Pro) 사용.
               </p>
-              <div className="flex items-center gap-2">
-                <label className="px-3 py-1.5 text-xs border border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
-                  {styleUploading ? "업로드 중..." : "📎 이미지 선택"}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    disabled={styleUploading}
-                    onChange={(e) => {
-                      const f = e.target.files?.[0];
-                      if (f) uploadStyleImage(f);
-                    }}
-                    className="hidden"
-                  />
-                </label>
-                {hasStyleImage && (
-                  <button
-                    type="button"
-                    onClick={deleteStyleImage}
-                    className="text-xs text-red-600 hover:underline"
-                  >
-                    삭제
-                  </button>
-                )}
+              <div className="grid grid-cols-2 gap-3">
+                {STYLE_SLOTS.map((s) => {
+                  const b64 = styleB64[s.key];
+                  return (
+                    <div key={s.key} className="border border-gray-200 rounded-lg p-2">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs font-semibold text-black">{s.label}</span>
+                        {b64 && <span className="text-[10px] text-green-600">✓</span>}
+                      </div>
+                      <p className="text-[10px] text-gray-400 mb-1.5 leading-tight">{s.desc}</p>
+                      {b64 ? (
+                        <img
+                          src={`data:image/png;base64,${b64}`}
+                          alt={s.label}
+                          className="h-16 w-full rounded border border-gray-200 object-contain mb-1.5 bg-gray-50"
+                        />
+                      ) : (
+                        <div className="h-16 w-full rounded border border-dashed border-gray-200 mb-1.5 flex items-center justify-center text-[10px] text-gray-300">없음</div>
+                      )}
+                      <div className="flex items-center gap-2">
+                        <label className="px-2 py-1 text-[11px] border border-dashed border-gray-300 rounded cursor-pointer hover:bg-gray-50">
+                          {styleUploading === s.key ? "업로드…" : "📎 선택"}
+                          <input
+                            type="file"
+                            accept="image/*"
+                            disabled={styleUploading !== ""}
+                            onChange={(e) => {
+                              const f = e.target.files?.[0];
+                              if (f) uploadStyleImage(f, s.key);
+                            }}
+                            className="hidden"
+                          />
+                        </label>
+                        {b64 && (
+                          <button type="button" onClick={() => deleteStyleImage(s.key)}
+                            className="text-[11px] text-red-600 hover:underline">삭제</button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 

@@ -53,6 +53,8 @@ export interface GenerateV2Options {
   styleImageBase64?: string;
   styleImageWidth?: number;
   styleImageHeight?: number;
+  // reference_images — 피사체/구도 유도 (style_image와 별개 필드). opt-in.
+  referenceImageBase64?: string;
 }
 
 // 비동기 요청 시작 → jobId 반환
@@ -84,13 +86,22 @@ export async function generateImageV2Start(
     payload.style_image = {
       image: { type: "base64", base64: b64, format: "png" } satisfies Base64Image,
       size: {
-        width: options.styleImageWidth || 64,
-        height: options.styleImageHeight || 64,
+        width: options.styleImageWidth || 32,
+        height: options.styleImageHeight || 32,
       },
     };
   }
 
   if (typeof options.seed === "number") payload.seed = options.seed;
+
+  // reference_images (opt-in) — 단일 중앙 피사체 유도. style_image(화풍)와 별개.
+  if (options.referenceImageBase64) {
+    const rb64 = stripDataUrlPrefix(options.referenceImageBase64);
+    payload.reference_images = [{
+      image: { type: "base64", base64: rb64, format: "png" } satisfies Base64Image,
+      usage_description: "the single subject to draw, centered and full-body",
+    }];
+  }
 
   const res = await fetch(`${API}/generate-image-v2`, {
     method: "POST",

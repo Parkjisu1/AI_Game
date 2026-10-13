@@ -2,6 +2,18 @@
 import React, { memo, useCallback } from "react";
 import { parseColorDist, PALETTE_HEX, COLOR_NAMES } from "@/lib/palette";
 import { computeImageSize } from "@/lib/genUtils";
+import QueuePreview, { type QueueData, type Difficulty as QueueDifficulty } from "@/components/QueuePreview";
+
+// purpose_type (한국어 또는 영어) → QueuePreview difficulty 매핑
+function inferDifficulty(purpose: string | undefined): QueueDifficulty {
+  if (!purpose) return "normal";
+  const s = String(purpose).toLowerCase();
+  if (s.includes("super") || s.includes("슈퍼") || s.includes("슈하")) return "super_hard";
+  if (s.includes("hard") || s.includes("하드")) return "hard";
+  if (s.includes("tutorial") || s.includes("튜토")) return "tutorial";
+  if (s.includes("rest") || s.includes("휴식")) return "rest";
+  return "normal";
+}
 
 export interface Level {
   _id?: string;
@@ -15,6 +27,10 @@ export interface Level {
   status: string;
   image_base64?: string;
   field_map?: string;
+  nr_flag?: boolean;           // NR 탐지: 재생성 권장 (잘림/씬화/치우침)
+  nr_severity?: number;
+  nr_reasons?: string[];
+  nr_style_type?: string;
   [key: string]: unknown;
 }
 
@@ -44,7 +60,7 @@ interface LevelRowProps {
   onCancelEdit: () => void;
   onEditValChange: (v: string) => void;
   onDelete: (lv: Level) => void;
-  onGenerateOne: (lv: Level) => void;
+  onGenerateOne: (lv: Level, genTargetLong?: number) => void;
   onSetRowColors: (num: number, ids: number[]) => void;
   onClearRowColors: (num: number) => void;
 }
@@ -61,6 +77,7 @@ function LevelRowImpl(props: LevelRowProps) {
   const handleExpand = useCallback(() => onToggleExpand(level.level_number), [level.level_number, onToggleExpand]);
   const handleDelete = useCallback(() => onDelete(level), [level, onDelete]);
   const handleGen = useCallback(() => onGenerateOne(level), [level, onGenerateOne]);
+  const handleGenLarge = useCallback(() => onGenerateOne(level, 192), [level, onGenerateOne]);
 
   function handleKeyDown(e: React.KeyboardEvent) {
     if (e.key === "Enter") onCommitEdit();
@@ -160,6 +177,15 @@ function LevelRowImpl(props: LevelRowProps) {
         })}
         <td className="px-2 py-2.5 whitespace-nowrap">
           <div className="flex items-center justify-end gap-1">
+            {level.nr_flag && (
+              <span
+                title={(level.nr_reasons || []).join(" / ")}
+                className="text-amber-600 text-sm cursor-help"
+                aria-label="재생성 권장"
+              >
+                ⚠
+              </span>
+            )}
             <button
               onClick={handleExpand}
               className="w-7 h-7 flex items-center justify-center text-xs text-blue-600 hover:bg-blue-50 rounded transition-colors"
@@ -187,6 +213,7 @@ function LevelRowImpl(props: LevelRowProps) {
           transparentBg={transparentBg}
           maxColors={maxColors}
           onGenerateOne={handleGen}
+          onGenerateOneLarge={handleGenLarge}
           onSetRowColors={onSetRowColors}
           onClearRowColors={onClearRowColors}
         />
@@ -203,6 +230,7 @@ function ExpandedSection({
   transparentBg,
   maxColors,
   onGenerateOne,
+  onGenerateOneLarge,
   onSetRowColors,
   onClearRowColors,
 }: {
@@ -212,6 +240,7 @@ function ExpandedSection({
   transparentBg: boolean;
   maxColors: number;
   onGenerateOne: () => void;
+  onGenerateOneLarge: () => void;
   onSetRowColors: (num: number, ids: number[]) => void;
   onClearRowColors: (num: number) => void;
 }) {
@@ -293,6 +322,14 @@ function ExpandedSection({
               >
                 🎨 이 레벨 생성
               </button>
+              <button
+                onClick={onGenerateOneLarge}
+                disabled={generating}
+                title="필드보다 큰 해상도로 생성 → 작은 캔버스에 우겨넣어 잘리던 피사체에 여유 (snap이 다운샘플). 원본도 크게 저장돼 크롭 가능."
+                className="px-3 py-1.5 text-xs bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-40 transition-colors"
+              >
+                🔍 크게 생성
+              </button>
               {rowColorOverride && (
                 <button
                   onClick={() => onClearRowColors(level.level_number)}
@@ -308,6 +345,44 @@ function ExpandedSection({
                 {maxColors > 0 ? ` · 최대 ${maxColors}색` : ""}
               </span>
             </div>
+
+            {/* 큐 미리보기 — field_map이 생성된 이후만 의미 있음 */}
+            {String(level.field_map || "").trim() && (
+              <div className="mt-3">
+                <QueuePreview
+                  mode="pixelforge"
+                  paletteMode="balloonflow_28"
+                  initialDifficulty={inferDifficulty(level.purpose_type)}
+                  fetchQueue={async (seed, diff) => {
+                    // pixelforge-web은 basePath="/pixelforge"로 proxy됨 (next.config.ts).
+                    const url = new URL(
+                      "/pixelforge/api/queue/generate",
+                      window.location.origin,
+                    );
+                    url.searchParams.set("level_number", String(level.level_number));
+                    if (diff) url.searchParams.set("difficulty", diff);
+                    if (seed != null) url.searchParams.set("seed", String(seed));
+                    const r = await fetch(url.toString());
+                    const j = await r.json();
+                    if (!j.ok) throw new Error(j.error ?? `HTTP ${r.status}`);
+                    // /api/queue/generate 응답은 raw QueueResult에 field_overlay/field_gimmick_validation 모두 포함됨
+                    return j.queue as QueueData;
+                  }}
+                  onConfirm={async (queue) => {
+                    const r = await fetch("/pixelforge/api/queue/confirm", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        level_number: level.level_number,
+                        queue,
+                      }),
+                    });
+                    const j = await r.json();
+                    if (!j.ok) throw new Error(j.error ?? `HTTP ${r.status}`);
+                  }}
+                />
+              </div>
+            )}
           </div>
         </div>
       </td>

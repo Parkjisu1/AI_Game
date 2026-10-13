@@ -1,6 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import StoryRow, { type StoryItem } from "@/components/StoryRow";
+
+// 모바일 IG 스토리행 — 주요 목적지 빠른 이동 (실제 라우트)
+const STORY_ITEMS: StoryItem[] = [
+  { href: "/levels", label: "레벨", icon: "📋" },
+  { href: "/gallery", label: "갤러리", icon: "🖼" },
+  { href: "/json-vault", label: "JSON", icon: "📦" },
+  { href: "/tasks", label: "Hub", icon: "📊" },
+];
 
 export default function Dashboard() {
   const [stats, setStats] = useState({ levels: 0, generated: 0 });
@@ -9,7 +18,7 @@ export default function Dashboard() {
   function loadBalance() {
     const k = typeof window !== "undefined" ? localStorage.getItem("pixellab_api_key") : null;
     if (!k) { setBalance("--"); return; }
-    fetch("/api/generate", { headers: { "x-pixellab-key": k } })
+    fetch("/pixelforge/api/generate", { headers: { "x-pixellab-key": k } })
       .then((r) => r.json())
       .then((data) => {
         // 공식 스키마: { credits: {usd: N}, subscription: {generations, total} }
@@ -32,7 +41,7 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
-    fetch("/api/levels").then((r) => r.json()).then((data) => {
+    fetch("/pixelforge/api/levels").then((r) => r.json()).then((data) => {
       if (Array.isArray(data)) {
         setStats({
           levels: data.length,
@@ -52,7 +61,9 @@ export default function Dashboard() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">PixelForge</h1>
+      {/* 모바일: IG 스토리행 (헤더 워드마크가 타이틀 역할) / 데스크탑: 기존 h1 */}
+      <StoryRow items={STORY_ITEMS} />
+      <h1 className="hidden md:block text-2xl font-bold mb-6">PixelForge</h1>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
         {cards.map((c) => (
           <Link

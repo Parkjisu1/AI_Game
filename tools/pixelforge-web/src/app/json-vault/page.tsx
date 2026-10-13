@@ -29,7 +29,7 @@ export default function JsonVaultPage() {
   const [notice, setNotice] = useState("");
 
   useEffect(() => {
-    fetch("/api/levels")
+    fetch("/pixelforge/api/levels")
       .then((r) => r.json())
       .then((data) => { if (Array.isArray(data)) setLevels(data); })
       .catch(() => {})

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pollBackgroundJob } from "@/lib/pixellab";
-import { snapImageToGridAndPalette } from "@/lib/snapToGrid";
+import { snapImageToGridAndPaletteV2 } from "@/lib/snapToGridV2";
 import { matrixToFieldMap } from "@/lib/matrixRenderer";
 import { getDb } from "@/lib/mongodb";
 import sharp from "sharp";
@@ -77,25 +77,32 @@ export async function GET(req: NextRequest) {
       if (jobCtx?.level_number) {
         let fieldMap = "";
         let generatedColors: number[] = [];
+        let paletteMapping: Record<number, number> = {};
+        let pipelineTag = "";
         try {
-          const snapped = await snapImageToGridAndPalette(base64, {
+          const snapped = await snapImageToGridAndPaletteV2(base64, {
             cols: jobCtx.field_cols || 20,
             rows: jobCtx.field_rows || 20,
             allowedIds: jobCtx.color_ids?.length > 0 ? jobCtx.color_ids : undefined,
             transparentBg: jobCtx.no_background === true,
             targetColorCount: jobCtx.target_color_count > 0 ? jobCtx.target_color_count : undefined,
+            forcePalette: jobCtx.force_palette === true,
           });
           fieldMap = matrixToFieldMap(snapped.matrix);
           generatedColors = snapped.stats.dominantColors;
-          console.log(`[pro-poll] snap: ${snapped.stats.uniqueColorsBefore}→${snapped.stats.uniqueColorsAfter} colors`);
+          paletteMapping = snapped.paletteMapping;
+          pipelineTag = snapped.stats.pipeline;
+          console.log(`[pro-poll] snap v2: ${snapped.stats.uniqueColorsBefore}→${snapped.stats.uniqueColorsAfter} colors (K=${snapped.stats.k})`);
         } catch (e) {
           console.error("[pro-poll] snap error:", e);
         }
 
-        // DB 저장: 원본 이미지 + fieldMap
+        // DB 저장: 원본 이미지 + fieldMap + v2 metadata
         const saveData: Record<string, unknown> = {
           image_base64: base64,
           field_map: fieldMap,
+          field_map_pipeline: pipelineTag,
+          palette_mapping: paletteMapping,
           status: "generated",
           updated_at: new Date().toISOString(),
         };

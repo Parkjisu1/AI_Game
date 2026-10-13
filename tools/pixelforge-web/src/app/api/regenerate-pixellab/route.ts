@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getDb } from "@/lib/mongodb";
 import { generateImage } from "@/lib/pixellab";
 import { koToEn } from "@/lib/translate";
-import { snapImageToGridAndPalette } from "@/lib/snapToGrid";
+import { snapImageToGridAndPaletteV2 } from "@/lib/snapToGridV2";
 import { matrixToFieldMap } from "@/lib/matrixRenderer";
 
 export const maxDuration = 60;
@@ -69,28 +69,28 @@ export async function POST(req: NextRequest) {
       textGuidanceScale: isPattern ? 12 : 10,
     });
 
-    // ★ 핵심 후처리: 그리드 + 팔레트로 강제 snap
-    // PixelLab 원본은 블러/팔레트 이탈 있음 → 각 셀의 mode color를 28색 중 선택
-    const snapped = await snapImageToGridAndPalette(result.base64, {
+    // ★ 핵심 후처리: V2 unfake 파이프라인 (K색 정제 → 셀 mode → Lab ΔE K→28 매핑)
+    const snapped = await snapImageToGridAndPaletteV2(result.base64, {
       cols,
       rows,
       allowedIds: paletteIds,
       transparentBg,
+      targetColorCount: paletteIds.length > 0 ? paletteIds.length : undefined,
     });
 
-    // FieldMap은 snapped matrix에서 직접 생성 (imageToFieldMap 대신)
     const fieldMap = matrixToFieldMap(snapped.matrix);
-    console.log(`[regenerate-pixellab] snap stats: ${snapped.stats.uniqueColorsBefore} colors → ${snapped.stats.uniqueColorsAfter} palette colors`);
+    console.log(`[regenerate-pixellab] snap v2: ${snapped.stats.uniqueColorsBefore}→${snapped.stats.uniqueColorsAfter} colors (K=${snapped.stats.k})`);
 
-    // alt 필드로 저장 — snap된 결과 사용 (원본 PixelLab base64가 아님)
     await db.collection("pixelforge_levels").updateOne(
       { level_number: levelNumber },
       {
         $set: {
           image_base64_alt: snapped.base64,
           field_map_alt: fieldMap,
+          palette_mapping_alt: snapped.paletteMapping,
           alt_meta: {
             source: "pixellab+snap",
+            pipeline: snapped.stats.pipeline,
             width: snapped.width,
             height: snapped.height,
             pixels_per_cell: snapped.pixelsPerCell,

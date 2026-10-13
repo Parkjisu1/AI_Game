@@ -20,3 +20,41 @@ body {
 body {
   color: #000000;
 }
+
+/* 가로 스크롤 영역 스크롤바 숨김 (IG 스토리행 등) */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ──────────────────────────────────────────────
+   모바일 반응형 안전망 (md 미만, 767px 이하)
+   데스크탑(md 이상)은 영향 없음. 기능 손실 없음.
+   ────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+
+  pre {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  button, a[role="button"], [role="button"] {
+    min-height: 30px;
+  }
+}

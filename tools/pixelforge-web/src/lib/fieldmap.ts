@@ -1,23 +1,95 @@
 import sharp from "sharp";
 import { GAME_PALETTE } from "./palette";
 
-const PAL_ENTRIES = Object.entries(GAME_PALETTE).map(([id, rgb]) => ({
-  id: parseInt(id),
-  r: rgb[0], g: rgb[1], b: rgb[2],
-}));
+// ─────────────────────────────────────────────────────────────────────────────
+// [2026-06-15 색상매칭 개선] 탁한 색(예: 초원 풀색)이 순수 RGB 유클리드 거리로
+// 회색(24)·검정(8)에 빨려가는 문제 수정. → 제작 이미지(초록)와 저장 JSON 레벨(회색)
+// 디자인 불일치 발생. 원인: 팔레트에 "중간 톤 녹색"이 없어 honest 최근접이 무채색이 됨.
+// 해결: hue(색조) 계열을 1차 게이팅한 뒤, 그 계열 안에서만 RGB 최근접을 고른다.
+//       ("초록 계열이면 초록 후보 중에서만 선택" — 결정론적, AI 비전 불필요)
+//
+// ▼▼ 원복(ROLLBACK) 방법 ▼▼
+//   USE_HUE_GATE = false  → 즉시 기존 순수-RGB 동작으로 복귀 (아래 nearestColorLegacy와 동일).
+//   완전 제거하려면 이 주석 블록과 신규 함수를 지우고
+//   nearestColorLegacy 를 nearestColor 로 이름만 되돌리면 원본과 100% 동일.
+//
+// 튜닝 파라미터(검증된 기본값 — 탁한 풀색 4종 → 초록/연초록, 진짜 회색은 회색 유지):
+//   PX_NEUTRAL_FLOOR=18  HUE_WINDOW=50  PAL_NEUTRAL_FLOOR=20
+// 참고: snapToGrid.ts / snapToGridV2.ts 의 nearestPaletteId 도 동일한 RGB-유클리드라
+//       같은 증상 있음 — 필요 시 동일 패치 적용(이번 변경 범위 아님).
+// ─────────────────────────────────────────────────────────────────────────────
+const USE_HUE_GATE = true;       // ← false 로 바꾸면 원복(순수 RGB 유클리드)
+const PX_NEUTRAL_FLOOR = 18;     // 픽셀 chroma(max-min)가 이 값 미만이면 "무채색"으로 취급
+const HUE_WINDOW = 50;           // 같은 색 계열로 묶는 hue 허용 범위(deg)
+const PAL_NEUTRAL_FLOOR = 20;    // 팔레트 색의 chroma가 이 값 미만이면 무채색 후보로 분류
 
-function nearestColor(r: number, g: number, b: number, allowedIds?: number[]): number {
-  const candidates = allowedIds && allowedIds.length > 0
-    ? PAL_ENTRIES.filter((p) => allowedIds.includes(p.id))
-    : PAL_ENTRIES;
+function rgbHue(r: number, g: number, b: number): number {
+  const mx = Math.max(r, g, b), mn = Math.min(r, g, b), c = mx - mn;
+  if (c === 0) return 0;
+  let h: number;
+  if (mx === r) h = ((g - b) / c) % 6;
+  else if (mx === g) h = (b - r) / c + 2;
+  else h = (r - g) / c + 4;
+  h *= 60;
+  return h < 0 ? h + 360 : h;
+}
+function hueDist(a: number, b: number): number {
+  const d = Math.abs(a - b) % 360;
+  return Math.min(d, 360 - d);
+}
 
-  let bestId = candidates[0]?.id || 1;
+// 팔레트 1회 전처리: hue / chroma / 무채색 여부 캐싱
+const PAL_ENTRIES = Object.entries(GAME_PALETTE).map(([id, rgb]) => {
+  const [r, g, b] = rgb;
+  const chroma = Math.max(r, g, b) - Math.min(r, g, b);
+  return { id: parseInt(id), r, g, b, hue: rgbHue(r, g, b), chroma, neutral: chroma < PAL_NEUTRAL_FLOOR };
+});
+type PalEntry = (typeof PAL_ENTRIES)[number];
+
+function pickNearest(r: number, g: number, b: number, cands: PalEntry[]): number {
+  let bestId = cands[0]?.id || 1;
   let bestDist = Infinity;
-  for (const p of candidates) {
+  for (const p of cands) {
     const d = (r - p.r) ** 2 + (g - p.g) ** 2 + (b - p.b) ** 2;
     if (d < bestDist) { bestDist = d; bestId = p.id; }
   }
   return bestId;
+}
+
+// [LEGACY] 기존 순수 RGB 유클리드 최근접 — 원복용으로 보존(미사용)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function nearestColorLegacy(r: number, g: number, b: number, allowedIds?: number[]): number {
+  const candidates = allowedIds && allowedIds.length > 0
+    ? PAL_ENTRIES.filter((p) => allowedIds.includes(p.id))
+    : PAL_ENTRIES;
+  return pickNearest(r, g, b, candidates);
+}
+
+function nearestColor(r: number, g: number, b: number, allowedIds?: number[]): number {
+  const base = allowedIds && allowedIds.length > 0
+    ? PAL_ENTRIES.filter((p) => allowedIds.includes(p.id))
+    : PAL_ENTRIES;
+  if (base.length === 0) return 1;
+
+  // 원복 스위치: 끄면 기존 순수-RGB 동작
+  if (!USE_HUE_GATE) return pickNearest(r, g, b, base);
+
+  // 1차: hue 계열 게이팅
+  const chroma = Math.max(r, g, b) - Math.min(r, g, b);
+  let cands: PalEntry[];
+  if (chroma < PX_NEUTRAL_FLOOR) {
+    // 무채색 픽셀 → 무채색 팔레트끼리만 (후보 없으면 전체로 폴백)
+    cands = base.filter((p) => p.neutral);
+    if (cands.length === 0) cands = base;
+  } else {
+    // 유채색 픽셀 → 같은 hue 계열(유채색)만. 없으면 유채색 전체, 그래도 없으면 전체.
+    const h = rgbHue(r, g, b);
+    cands = base.filter((p) => !p.neutral && hueDist(h, p.hue) < HUE_WINDOW);
+    if (cands.length === 0) cands = base.filter((p) => !p.neutral);
+    if (cands.length === 0) cands = base;
+  }
+  // 2차: 계열 안에서 RGB 최근접
+  return pickNearest(r, g, b, cands);
 }
 
 export async function imageToFieldMap(
