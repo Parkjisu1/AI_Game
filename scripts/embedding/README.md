@@ -20,8 +20,8 @@ project 이름은 레지스트리 `hermes_projects.graph.embed_project` 와 같�
 ## 파일
 
 워크스테이션: `chunks.js`, `art_index.js`, `manifest_todo.js`, `kb_status.js`, `clip_embed.py`(CLIP venv 전용),
-`code_base_stale_embeddings.js`(낡은 OpenAI embedding 무효화), `embed_missing_status.js`, `twin_check.py`, `code_base_changed.js`(진단), `code_base_ghosts.js`·`art_assets_delete.js`(승인된 삭제)
-임베딩컴(`host/` → `~/` 로 scp): `qdrant_delta.py`, `artload_file.py`, `kb_qdrant.py`
+`code_base_stale_embeddings.js`(낡은 OpenAI embedding 무효화), `embed_missing_status.js`, `twin_check.py`, `code_base_changed.js`(진단), `code_base_ghosts.js`·`art_assets_delete.js`(승인된 삭제), `lib_dump.js`(EJSON 백업, 덮어쓰기 금지), `restore_mongo_dump.js`(복원)
+임베딩컴(`host/` → `~/` 로 scp, repo·host md5 일치 유지): `qdrant_delta.py`, `artload_file.py`, `kb_qdrant.py`, `kb_delete.py`
 
 ```bash
 scp scripts/embedding/host/*.py aimed@100.87.87.59:~/      # 바뀌었을 때만
@@ -42,6 +42,11 @@ scp $W/chunks.jsonl aimed@100.87.87.59:~/kb_delta/
 ssh aimed@100.87.87.59 "python3 ~/qdrant_delta.py ~/kb_delta/chunks.jsonl --dry-run"   # 변경/신규/잔존 확인
 ssh aimed@100.87.87.59 "cd ~/kb_delta && nohup bash -c 'python3 ~/qdrant_delta.py ~/kb_delta/chunks.jsonl --missing-out=missing.txt; echo DONE_MARK' > delta.log 2>&1 < /dev/null &"
 #   끝났는지는 delta.log 의 DONE_MARK 로 본다(pgrep -f 대기 루프는 자기 명령줄과 매치돼 끝나지 않는다).
+#   qdrant_delta 는 fileSha 뿐 아니라 조각 (chunkIndex,pieceIndex) 집합도 디스크 기대값과 비교한다 → 빠진 조각이 있는 파일은
+#   incomplete 로 다시 임베딩. 한 조각이라도 임베딩 실패하면 그 파일은 쓰지 않고(기존 유지) FAILED_FILES 출력 + 종료코드 3.
+#   (2026-10-13 수정 전엔 실패 조각만 빠진 채 fileSha 가 기록돼 영영 unchanged 였다 — Mod10*.cs 등 8개 프로젝트 30파일)
+#   조각 누락 전수 점검: ssh ... "python3 ~/kb_qdrant.py gaps [project...]"   ("cNpM?" = 꼬리 누락 의심, 확정 아님)
+#   일부 파일만 보수: chunks.js ... --only=<paths.txt> → qdrant_delta (나머지는 missing 으로 보고만 됨, --delete-missing 금지)
 #   --delete-missing 은 사람이 삭제를 결정했을 때만.
 
 # 2) 아트 메타 → art_assets, 그리고 CLIP 대상 계산
@@ -78,16 +83,32 @@ ssh aimed@100.87.87.59 "python3 ~/kb_qdrant.py counts $P; python3 ~/kb_qdrant.py
 
 ## 잔존 삭제 (사람이 승인했을 때만)
 
-업서트 스크립트에는 삭제 기능이 없다. 따로 둔 두 도구를 쓰며, 둘 다 `--apply` 없이는 조회만 한다.
+업서트 스크립트에는 삭제 기능이 없다. 삭제 도구는 따로 있고, **`--apply` 없이는 조회만 하며 파일도 쓰지 않는다**(2026-10-13 수정:
+예전엔 dry-run 도 덤프를 써서, 지운 뒤 같은 경로로 dry-run 하면 백업이 `[]` 로 덮어써질 수 있었다).
+`--apply` 때만 백업을 쓰고, **이미 있는 파일은 덮어쓰지 않는다**(있으면 중단, 경로 생략 시 시각 붙은 새 이름).
+
+| 도구 | 대상 | 백업(--apply 때만) | 복구 |
+|---|---|---|---|
+| `host/kb_delete.py <coll> <project> <paths> --apply [--backup=f]` | Qdrant 포인트 | `~/kb_delta/deleted/<coll>_<project>_<시각>.jsonl` (id·vector·payload) | `artload_file.py <backup>`(art_vectors) |
+| `art_assets_delete.js <project> <paths> --apply [--dump=f]` | art_assets | `deleted/art_assets_<project>_<시각>.ejson` | `restore_mongo_dump.js <dump> art_assets --apply` |
+| `code_base_ghosts.js <project> <root> --apply [--include=..] [--dump=f]` | code_base | `deleted/code_base_ghosts_<project>_<시각>.ejson` | `restore_mongo_dump.js <dump> code_base --apply` |
+| `code_base_stale_embeddings.js --unset [--project=P] [--log=f]` | code_base embedding 3필드 | `deleted/code_base_stale_embeddings_<시각>.ejson` (옛 벡터 포함) | 보통 불필요(재임베딩) |
+| `host/qdrant_delta.py --delete-missing` | 디스크에 없는 path 의 조각 | `~/kb_delta/deleted/<project>_missing_<시각>.jsonl` | 같은 형식 PUT |
+
+Mongo 덤프는 **EJSON canonical**(`lib_dump.js`) — ObjectId·Date·숫자 타입이 그대로 남는다.
+`restore_mongo_dump.js <dump> <collection> [--target=c] [--apply]` 는 기본 dry-run, 대상에 같은 `_id` 가 있으면 건너뛴다.
+2026-10-12 이전의 평범한 JSON 덤프(`buddyflow_ghost_codebase_20261012.json`, `buddyflow_stale_20261012_assets_docs.json`)도
+자동 감지해 `_id`→ObjectId, `updatedAt`→Date 로 바꿔 넣는다(임시 컬렉션 복원으로 살아 있는 문서와 필드 타입 일치 확인, 2026-10-13).
 
 ```bash
-# 목록 재계산(위 2단계) → 디스크 부재 재확인 → dry-run → 목록 보관 → --apply
+# 목록 재계산(위 2단계) → 디스크 부재 재확인 → dry-run → --apply (백업은 자동)
 scp $W/art_vectors_stale.txt aimed@100.87.87.59:~/kb_delta/
-ssh aimed@100.87.87.59 "python3 ~/kb_delete.py art_vectors $P ~/kb_delta/art_vectors_stale.txt --ids-out=\$HOME/kb_delta/ids.txt [--apply]"
-node scripts/embedding/art_assets_delete.js $P $W/art_assets_missing.txt scripts/embedding/deleted/<이름>_docs.json [--apply]
+ssh aimed@100.87.87.59 "python3 ~/kb_delete.py art_vectors $P ~/kb_delta/art_vectors_stale.txt"            # dry-run
+ssh aimed@100.87.87.59 "python3 ~/kb_delete.py art_vectors $P ~/kb_delta/art_vectors_stale.txt --apply"
+node scripts/embedding/art_assets_delete.js $P $W/art_assets_missing.txt            # dry-run
+node scripts/embedding/art_assets_delete.js $P $W/art_assets_missing.txt --apply
 ```
-지운 목록·덤프는 `deleted/` 에 둔다(2026-10-12 Buddyflow: 벡터 104, art_assets 166).
-gf_code_chunks_m3 는 `qdrant_delta.py --delete-missing` (git 삭제 확인 후).
+지운 목록·덤프는 `deleted/` 에 둔다(2026-10-12 Buddyflow: 벡터 104, art_assets 166, code_base 유령 8).
 
 ## code_base OpenAI 임베딩 필드
 
@@ -104,6 +125,7 @@ code_base 유령(소스 파일·클래스가 사라진 문서): `node scripts/em
 - **art_index 의 root 는 기존 문서 path 접두와 대소문자까지 같아야 한다.** 다르면 assetId 가 바뀌어 중복이 생긴다. Buddyflow = `E:/Buddyflow/Buddyflow/Assets`(소문자 f).
 - art_assets 변경 판정은 바이트 크기만 본다(원래 동작). 같은 크기로 바뀐 이미지는 못 잡는다.
 - 디스크에서 사라진 항목은 자동 삭제하지 않는다. `--missing-out`/`--stale-out` 목록을 사람에게 보여 주고 결정을 받는다.
+- **조각 누락의 뿌리**: 최초 적재(`~/embed_qdrant.py`, nomic-embed-text, 문맥 2048토큰)에서 한국어 주석이 많은 6000자 조각이 HTTP 400 으로 "embed skip" 됐고, bge-m3 이관(`reembed_m3.py`)은 있는 포인트만 옮겨 구멍이 그대로 남았다. bge-m3(8192토큰)에서는 같은 조각이 ~2,300토큰으로 정상 임베딩된다 → 청커 문제 아님. 2026-10-13 보수: Buddyflow·NextPR·CrewFlowRotation·BalloonFlow·FantaPuzzle·TamplePuzzle·Playable 17파일. 남은 것: ARRRM 12파일(소스가 이 PC 에 없음), BalloonFlow `Resources/TextData/TextData.csv`(.cs 아님 — chunks.js 범위 밖).
 - bash heredoc(`<<EOF`)에 JS 정규식 백슬래시를 넣으면 사라진다 → 파일은 에디터/Write 로 쓴다.
 - code_base 의 `embedding` 필드(text-embedding-3-small)는 parser.js 가 갱신하지 않는다 → 4b 를 빼먹으면 내용과 다른 낡은 벡터가 남는다(검사: `code_base_stale_embeddings.js`, `twin_check.py`).
 
