@@ -1,10 +1,10 @@
 # Puzzle Genre Design Standard (퍼즐 장르 설계 표준)
 # Workflow 0단계 산출물
-# Version 1.1 | 2026-03-11 | 기획자 경험 기반 초안
+# Version 1.2 | 2026-04-30 | 방법론 5종 추가 (BalloonFlow 검증 패턴 일반화)
 
 genre: Puzzle
-version: "1.1"
-date: "2026-03-11"
+version: "1.2"
+date: "2026-04-30"
 scope: "Sort / Block / Screw / Match / Merge 등 하이브리드 캐주얼 퍼즐 전체"
 
 purpose: |
@@ -24,6 +24,12 @@ files:
     metadata_doc: schema/metadata-planner-doc.md
     leveldata: schema/leveldata-spec.md
     piggybank: schema/piggybank-spec.md
+  methodologies:                          # 실전 검증된 작성 방법론 (BalloonFlow 일반화)
+    beat_chart: methodologies/beat_chart.md                    # PKG 단위 레벨 페이싱 작성법
+    gimmick_spec: methodologies/gimmick_spec_template.md       # 기믹 명세서 5섹션 양식
+    bot_simulation: methodologies/bot_simulation_spec.md       # 정적+동적 검증 표준
+    cross_validation: methodologies/cross_validation_template.md  # 문서 간 일관성 17항목
+    feedback_direction: methodologies/feedback_direction_template.md  # P0/P1/P2 우선순위
 
 parameter_counts:
   InGame: 10     # 7 필수, 3 선택 | 9 커스텀, 1 공통
@@ -51,4 +57,14 @@ changelog:
   - version: "1.1"
     date: "2026-03-11"
     changes: "스키마 대조 반영: Balance에 target_near_miss_rate, max_hopeless_fail_rate, optimal_moves_policy 추가. Content에 gimmick_intro_schedule, level_composition_params 추가. OutGame booster_types 카테고리 분류 구체화."
+  - version: "1.2"
+    date: "2026-04-30"
+    changes: |
+      methodologies/ 폴더 추가 — BalloonFlow 실전 명세 14건에서 장르 일반화 가능한 작성 방법론 5종 추출.
+        - beat_chart.md: PKG 단위 레벨 페이싱 (Hard/Soft Rules, 포지션 규칙, 톱니 리듬, 색상 계층, 기믹 도입 원칙)
+        - gimmick_spec_template.md: 5섹션 명세 양식 + 축 분포 + 상호작용 매트릭스
+        - bot_simulation_spec.md: 최적 봇 + 정적/동적 2단계 검증 + 클리어율 등급
+        - cross_validation_template.md: 17개 표준 검증 영역 + 변경 이력 추적
+        - feedback_direction_template.md: P0/P1/P2 우선순위 + 햅틱 강도 체계
+      방법론은 Designer/Design Validator 에이전트가 참조하여 Stage 0/2/3 산출물 작성·검증에 사용.
 

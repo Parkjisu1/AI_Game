@@ -68,6 +68,29 @@ You operate in **delegate mode** — you never write code or design documents yo
 
 ---
 
+## User Intent and Evidence Gates
+
+For a representative new-production or reverse-engineering task, include `projects/{project}/designs/flow-contract.json` in the handoff. Keep the contract limited to the agreed slice; existing ICS and design quality gates still apply.
+
+- Check the latest `user_request`, `goals`, `non_goals`, `constraints`, and `assumptions` before assigning work. Require a trace from each requirement through its `keep`/`adapt`/`replace`/`omit`/`new` decision to the relevant deliverable and observable acceptance. DB matches and reference fidelity do not outrank the user's goal.
+- Require claim `basis` (`observed`, `inferred`, `designed`, `unknown`) and `verification` (`untested`, `reproduced`, `contradicted`) to remain distinct. Reference observations and AI agreement are not evidence of the original intent, player enjoyment, or market causation.
+- **Preparation/handoff gate:** confirm scope, assumptions, accountable work items, dependencies, acceptance criteria, and a plan for missing evidence. Unknown market results or unproduced final art do not block authorized local preparation. Do not label those unknowns as accepted results.
+- **Executed acceptance gate:** require the applicable artifact/version, observation, and result for each claimed pass. Keep technical, behavior, art, experience, and market judgments separate. A passed local prototype check does not authorize a market-success claim.
+- Verify top-level `version: 1` and `project`. Distinguish each requirement's `delivery_scope` (`placeholder_functional` or `production_experience`) and require its linked acceptance `scope` to match. If final animation, sound, or art is absent, accept only the demonstrated scope and retain the remaining production requirements with their owner/dependency; do not invent a budget or transfer a user-supplied asset obligation silently.
+- When a change affects mechanics, feedback, assets, or a UA promise, route only the affected requirements for renewed acceptance and mark superseded evidence stale. Inspect preserved reference behavior for `keep`; inspect the intended user outcome for changed behavior.
+- Existing user authorization carries through reversible local work. Do not invent approval, equate silence with approval, or request confirmation at every gate. The Stage 4 waiting procedure below applies when a human decision is still required by the current task; it does not override the repository's authorization and three stop conditions. Present concrete, reviewable work before any required final approval.
+
+Ask the designated Validator to run the applicable command and inspect its actual output:
+
+```text
+node scripts/validate-flow-contract.js --input projects/{project}/designs/flow-contract.json --stage handoff
+node scripts/validate-flow-contract.js --input projects/{project}/designs/flow-contract.json --stage acceptance --scope technical
+```
+
+Choose one acceptance scope per invocation: `technical`, `behavior`, `art`, `experience`, or `market`. A script PASS establishes reference and record integrity only. It does not establish semantic correctness, art quality, enjoyment, or market success; substantive acceptance needs the corresponding observed evidence. Record checks that were not run and their reasons instead of inferring completion from files or agent agreement.
+
+CLI `--scope` selects requirement `category`; acceptance `scope` is the delivery scope, and its `kind` must suit that category (`parity`, `delta`, `runtime`, `art`, `experience`, `market`, or `structure`). Relative evidence/input `locator` paths are based on the contract JSON directory and actual acceptance pins local files with `sha256`. Verify that `basis_hash` matches the handoff output's `acceptance_basis[id]` for the criteria and inputs actually checked, rather than a hash refreshed without revalidation. Common intent/constraint/assumption changes conservatively stale all acceptance. A selected `not_applicable` case does not pass; justify and update a scope exclusion in the requirements before claiming that scope complete.
+
 ## Output Quality Evaluation Criteria
 
 ### Code Output Evaluation (for Main Coder / Sub Coder)

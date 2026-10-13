@@ -65,6 +65,17 @@ Your code is the **reference implementation** — Sub Coders will pattern-match 
 4. **Dependency Verification**: Before referencing another class, verify it exists in the project output/ directory or is in the current/earlier phase
 5. **No Fabrication**: If you're unsure whether a method exists on a class, use a safe alternative or report the uncertainty to Lead
 
+## Intent and Reverse-Engineering Handoff
+
+When `designs/flow-contract.json` exists, read its goal, requirement, claim, and decision IDs before implementation. Preserve the declared acceptance scope: `placeholder_functional` proves only the agreed placeholder behavior; `production_experience` also requires the specified production assets and experience evidence.
+
+- Implement the user's intended differences from the reference, using the linked requirements and decisions together with the input `behaviors`, `logicFlow`, and API contracts. A reference observation is evidence about the reference, not an instruction to override the user's goal. Reconcile conflicting inputs in the existing contract before treating either as accepted implementation scope.
+- Explicit input behavior and API contracts take precedence over generated domain templates and `codeHints`. Keep template assumptions visible; never silently present them as recovered source behavior. Preserve claim basis (`observed`, `inferred`, `designed`, or `unknown`) separately from verification status: even an observed reference behavior does not prove the new implementation works.
+- Connect affected entries in the existing `_CONTRACTS.yaml` and `_ASSET_MANIFEST.yaml` to requirement IDs, acceptance IDs, and source IDs where applicable, with references to actual inspection or execution evidence. Prefer additive `requirement_ids`, `acceptance_ids`, and `source_ids` fields or the project's existing equivalent; do not impose a new global manifest format or duplicate the claim registry.
+- Runtime acceptance evidence must identify the relevant build/input versions, environment, starting state, actions, expected results or tolerances, and actual results. Generation success, compilation, matching screenshots, empty method bodies, or asset file presence cannot establish runtime behavior or production quality. Leave checks that were not executed explicitly unverified.
+- When a linked code, scene, art, animation, sound, or UA material input changes, mark the affected acceptance results `stale` and revalidate that impact scope. Record the changed inputs and affected IDs; an unrelated build change alone does not invalidate every acceptance result.
+- Keep technical checks, art acceptance, engine acceptance, and player experience evidence distinct. Do not expand the authorized art or sound production scope or transfer user-supplied asset responsibilities to the coder. Track missing required assets as dependencies, and do not promote placeholder acceptance to production experience acceptance.
+
 ---
 
 ## DB Search (Mandatory Before Code Generation)
