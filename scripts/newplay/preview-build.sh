@@ -16,10 +16,11 @@
 #   preview-build.sh /path/to.patch  # 수정안 적용 후 빌드
 set -uo pipefail
 
-ROOT="$HOME/newplay-preview/webstore"
+PREVIEW_ROOT="${NEWPLAY_PREVIEW_ROOT:-$HOME/newplay-preview}"
+ROOT="$PREVIEW_ROOT/webstore"
 FE="$ROOT/front-end"
-SERVE="$HOME/newplay-preview/serve"
-META="$HOME/newplay-preview/state.json"
+SERVE="$PREVIEW_ROOT/serve"
+META="$PREVIEW_ROOT/state.json"
 GIT="git"
 export PATH="$HOME/.nvm/versions/node/v20.20.2/bin:$PATH"
 
@@ -40,7 +41,7 @@ cd "$FE" || fail "front-end 디렉토리 없음: $FE"
 
 # 동시 빌드 차단 — 두 사람이 동시에 미리보기를 누르면 서로의 패치가 섞이고
 # serve 디렉토리 교체가 겹쳐 반쪽짜리 화면이 나온다.
-LOCK="$HOME/newplay-preview/.build.lock"
+LOCK="$PREVIEW_ROOT/.build.lock"
 exec 9>"$LOCK"
 if ! flock -n 9; then
   fail "다른 미리보기 빌드가 진행 중입니다. 잠시 후 다시 시도하세요."

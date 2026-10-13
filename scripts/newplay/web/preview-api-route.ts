@@ -19,7 +19,7 @@ import os from "os";
 export const dynamic = "force-dynamic";
 
 const HOME = process.env.HOME || "/home/aimed";
-const BASE = path.join(HOME, "newplay-preview");
+const BASE = process.env.NEWPLAY_PREVIEW_ROOT || path.join(HOME, "newplay-preview");
 const SCRIPT = path.join(BASE, "preview-build.sh");
 const STATE = path.join(BASE, "state.json");
 

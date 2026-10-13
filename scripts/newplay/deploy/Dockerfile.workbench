@@ -1,0 +1,19 @@
+# NewPlay workbench — 사람 1명당 1개. Claude Code CLI + node/yarn + python + git + tmux. 토큰은 env 로만 들어온다.
+FROM node:20-bookworm
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update -qq && apt-get install -y -qq --no-install-recommends \
+      git tmux curl ca-certificates jq less vim-tiny python3 python3-venv python3-pip ripgrep procps locales \
+    && sed -i 's/^# *ko_KR.UTF-8/ko_KR.UTF-8/; s/^# *en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen && locale-gen \
+    && npm i -g @anthropic-ai/claude-code \
+    && git config --system --add safe.directory '*' \
+    && mkdir -p /home/app /work && chmod 777 /home/app /work \
+    && rm -rf /var/lib/apt/lists/*
+ENV HOME=/home/app LANG=ko_KR.UTF-8 LC_ALL=ko_KR.UTF-8 TERM=xterm-256color
+# 이 컨테이너는 호스트 사용자 uid 로 돈다(게이트웨이가 --user 로 지정). root 로 돌리면 공유 저장소(/data/git)의
+# .git/worktrees 가 root 소유가 되어 **워처가 작업 폴더를 못 만든다** — 맡기기·대리 모드 전체 정지(실측).
+# node:20 이미지의 기본 사용자 node 가 uid 1000 이라 그대로 쓰면 맞는다. npm 전역 설치 경로도 쓸 수 있게 열어 둔다.
+RUN chmod -R a+rX /usr/local/lib/node_modules && mkdir -p /home/app/.npm-global && chmod 777 /home/app/.npm-global
+# tmux: 마우스·긴 스크롤백·창 닫아도 세션 유지
+RUN printf 'set -g mouse on\nset -g history-limit 20000\nset -g status-right "#S"\nset -g default-terminal "tmux-256color"\n' > /etc/tmux.conf
+WORKDIR /work
+CMD ["sleep", "infinity"]

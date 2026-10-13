@@ -1,0 +1,7 @@
+# NewPlay web — Next.js. 소스는 볼륨(/srv/web)으로 마운트되므로 이미지는 런타임(node 20)만 담는다.
+# 빌드 산출물(.next)은 sync-src.sh 가 호스트에서 만들거나, ops 가 배포 시 컨테이너 안에서 `npm run build` 한다.
+FROM node:20-bookworm-slim
+RUN apt-get update -qq && apt-get install -y -qq --no-install-recommends git curl ca-certificates python3 util-linux && rm -rf /var/lib/apt/lists/*
+WORKDIR /srv/web
+EXPOSE 3000
+HEALTHCHECK --interval=15s --timeout=5s --retries=6 CMD curl -fsS http://127.0.0.1:3000/login >/dev/null || exit 1

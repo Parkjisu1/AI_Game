@@ -56,7 +56,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const isOwner = OWNER_EMAILS.has(email);
   const userLabel = isOwner ? "Boss" : (email.split("@")[0] || "Member").replace(/^./, (c) => c.toUpperCase());
   const role = isOwner ? "Owner" : "Member";
-  const moreLinks = isOwner ? MOBILE_MORE : MOBILE_MORE.filter((l) => l.href !== "/settings");
+  // 설정 메뉴 노출: clean(NewPlay) 인스턴스는 로그인한 허용 사용자 전원에게 보인다.
+  // 페이지 안의 관리자 전용 구역(허용 사용자·감사 로그)은 API 가 ADMIN_EMAILS 로 따로 가른다.
+  // 게임팀 인스턴스는 기존대로 소유자에게만.
+  const showSettings = IS_CLEAN ? Boolean(email) : isOwner;
+  const moreLinks = showSettings ? MOBILE_MORE : MOBILE_MORE.filter((l) => l.href !== "/settings");
   return (
     <html lang="ko" data-theme={IS_CLEAN ? "clean" : undefined}>
       <body className={`${inter.className} min-h-screen`}>
@@ -69,7 +73,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         )}
         {IS_CLEAN ? (
           /* clean 인스턴스: Slack/Flex형 좌측 사이드바 셸 (데스크톱) */
-          <SideNav isOwner={isOwner} email={email} userLabel={userLabel} />
+          <SideNav isOwner={isOwner} showSettings={showSettings} email={email} userLabel={userLabel} />
         ) : (
           /* 게임팀: 상단 가로 네비 + 하단 아이콘 독 */
           <>

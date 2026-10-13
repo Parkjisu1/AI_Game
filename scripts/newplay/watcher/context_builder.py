@@ -35,6 +35,10 @@ def _project_config(project: str) -> dict[str, Any]:
         return {}
 
 
+#: 헤르메스가 남긴 코멘트 중 몇 개까지 넘길지. 진행 로그라 최근 것만 있으면 된다.
+_MAX_BOT_COMMENTS = int(os.environ.get("NEWPLAY_CTX_BOT_COMMENTS", "12"))
+
+
 def build_context(task: dict[str, Any]) -> dict[str, Any]:
     project = str(task.get("project") or DEFAULT_PROJECT).lower()
     cfg = _project_config(project)
@@ -44,13 +48,24 @@ def build_context(task: dict[str, Any]) -> dict[str, Any]:
     hermes_authors = {"hermes", "hermes-bot", "헤르메스"}
     user_replies = [c for c in comments if str(c.get("author") or "").strip().lower() not in hermes_authors]
 
+    # 사용자 지시는 **전부** 넘긴다. 헤르베스 진행 로그만 최근 것으로 줄인다.
+    #
+    # 예전에는 `comments[-14:]` 로 둘을 똑같이 셌다. 그런데 헤르메스는 한 태스크에서
+    # 코멘트를 대여섯 개씩 남긴다(실행 중 / 결과 / 검수 / 재작업 …).
+    # 그래서 대화가 조금만 길어지면 정작 잘리면 안 되는 **사용자 지시가 먼저 밀려났다**.
+    # 분량 조절은 프롬프트 조립(_history)에서 하고, 여기서는 버리지 않는다.
+    bot_kept = [c for c in comments
+                if str(c.get("author") or "").strip().lower() in hermes_authors][-_MAX_BOT_COMMENTS:]
+    keep = {id(c) for c in user_replies} | {id(c) for c in bot_kept}
+    selected = [c for c in comments if id(c) in keep]
+
     return {
         "project": project,
         "project_config": cfg,
         "repo": cfg.get("repo") or {},
         "knowledge": cfg.get("knowledge") or {},
         "kb_health": newplay_kb.health(),
-        "comments": comments[-14:],   # 물어봄→답변 패턴이 잘리지 않게 넉넉히
+        "comments": selected,   # 사용자 지시 전부 + 헤르메스 최근 것
         "last_user_reply": (user_replies[-1].get("text") if user_replies else "") or "",
         "comment_count": len(comments),
     }

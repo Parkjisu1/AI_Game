@@ -1,0 +1,179 @@
+# NewPlay Hub v2 — 단계 A: 현재 스택의 컨테이너화
+# 사용: cd deploy && ./sync-src.sh && docker compose --env-file .env.compose up -d --build
+# 검증 단계(WSL2)에서는 다른 포트(3100/27019/6353/11435)로 띄워 기존 서비스와 공존한다. 사무실 Ubuntu 에서는 .env.compose 의 포트를 기본값으로.
+name: newplay
+
+x-data: &data /data/newplay
+
+services:
+  mongo:
+    image: mongo:8
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+    restart: unless-stopped
+    ports: ["127.0.0.1:${MONGO_PORT:-27018}:27017"]
+    volumes: ["${DATA_ROOT:-/data/newplay}/mongo:/data/db"]
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "try{rs.status().ok}catch(e){rs.initiate({_id:'rs0',members:[{_id:0,host:'mongo:27017'}]}).ok}"]
+      interval: 10s
+      timeout: 10s
+      retries: 12
+
+  qdrant:
+    image: qdrant/qdrant:v1.12.0
+    restart: unless-stopped
+    ports: ["127.0.0.1:${QDRANT_PORT:-6343}:6333"]
+    volumes: ["${DATA_ROOT:-/data/newplay}/qdrant:/qdrant/storage"]
+    ulimits: { nofile: { soft: 65536, hard: 65536 } }
+
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    ports: ["127.0.0.1:${OLLAMA_PORT:-11434}:11434"]
+    volumes: ["${DATA_ROOT:-/data/newplay}/ollama:/root/.ollama"]
+    environment: { OLLAMA_KEEP_ALIVE: "-1" }
+    # GPU 가 있는 호스트(nvidia-container-toolkit)에서만 아래 주석을 푼다
+    # deploy: { resources: { reservations: { devices: [{ driver: nvidia, count: 1, capabilities: [gpu] }] } } }
+
+  web:
+    build: { context: ./src/web, dockerfile: ../../Dockerfile.web }
+    image: newplay/web
+    restart: unless-stopped
+    depends_on: { mongo: { condition: service_healthy } }
+    ports: ["127.0.0.1:${WEB_PORT:-3000}:3000"]
+    env_file: [.env.web]
+    environment:
+      MONGODB_URI: "mongodb://mongo:27017/newteam?directConnection=true"
+      MONGODB_DB: newteam
+      NEXT_PUBLIC_APP_THEME: clean
+      PORT: "3000"
+      NEWPLAY_OPS_URL: "http://ops:8090"          # 배포 API 는 ops 컨테이너가 수행
+      NEWPLAY_QDRANT_URL: "http://qdrant:6333"
+      NEWPLAY_KB_COLLECTION: newplay_code_m3
+      NEWPLAY_PREVIEW_ROOT: /data/preview
+    volumes:
+      - ./src/web:/srv/web                         # 소스+빌드 산출물 (ops 가 여기서 git apply·빌드)
+      - "${DATA_ROOT:-/data/newplay}/preview:/data/preview"
+      - ../preview-build.sh:/data/preview/preview-build.sh:ro
+    working_dir: /srv/web
+    command: ["node", "node_modules/next/dist/bin/next", "start", "-p", "3000", "-H", "0.0.0.0"]
+
+  watcher:
+    build: { context: ./src/watcher, dockerfile: ../../Dockerfile.watcher }
+    image: newplay/watcher
+    restart: unless-stopped
+    depends_on: { mongo: { condition: service_healthy } }
+    env_file: [.env.watcher]
+    environment:
+      MONGODB_URI: "mongodb://mongo:27017/newteam?directConnection=true"
+      MONGODB_DB: newteam
+      NEWPLAY_QDRANT_URL: "http://qdrant:6333"
+      NEWPLAY_OLLAMA_URL: "http://ollama:11434"
+      NEWPLAY_EMBED_PROVIDER: ollama
+      NEWPLAY_KB_COLLECTION: newplay_code_m3
+      NEWPLAY_WORK_ROOT: /data/git
+      NEWPLAY_MIRROR_ROOT: /data/mirror
+      NEWPLAY_VERIFY_REPO: /data/git/webstore/origin
+      NEWPLAY_CLAUDE_TOKEN_DIR: /data/tokens
+      NEWPLAY_CLAUDE_SHARE: "0"
+      NEWPLAY_LEARNING_THREAD: "0"                 # 학습은 learner 가 맡는다
+      NEWPLAY_AGENTIC: "1"
+      HERMES_WORKER_SLOTS: "2"
+    volumes:
+      - ./src/watcher:/srv/watcher
+      - "${DATA_ROOT:-/data/newplay}/git:/data/git"
+      - "${DATA_ROOT:-/data/newplay}/mirror:/data/mirror:ro"
+      - "${DATA_ROOT:-/data/newplay}/tokens:/data/tokens:ro"
+      - "${DATA_ROOT:-/data/newplay}/transcripts:/data/transcripts"
+      - "${DATA_ROOT:-/data/newplay}/logs:/data/logs"
+    working_dir: /srv/watcher
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"     # 볼륨 파일 소유권 유지
+    command: ["python", "projecthub_watcher.py"]
+
+  learner:
+    image: newplay/watcher
+    restart: unless-stopped
+    depends_on: { mongo: { condition: service_healthy } }
+    env_file: [.env.watcher]
+    environment:
+      MONGODB_URI: "mongodb://mongo:27017/newteam?directConnection=true"
+      MONGODB_DB: newteam
+      NEWPLAY_QDRANT_URL: "http://qdrant:6333"
+      NEWPLAY_OLLAMA_URL: "http://ollama:11434"
+      NEWPLAY_EMBED_PROVIDER: ollama
+      NEWPLAY_KB_COLLECTION: newplay_code_m3
+      NEWPLAY_WORK_ROOT: /data/git
+      NEWPLAY_CLAUDE_TOKEN_DIR: /data/tokens
+      NEWPLAY_CLAUDE_SHARE: "0"
+      NEWPLAY_LEARNING_THREAD: "0"                 # 실행기 모듈의 내장 스레드는 끄고 learner_main 의 루프만
+      NEWPLAY_HOME_ROOT: /data/newplay/home
+    volumes:
+      - ./src/watcher:/srv/watcher
+      - "${DATA_ROOT:-/data/newplay}/git:/data/git"
+      - "${DATA_ROOT:-/data/newplay}/tokens:/data/tokens:ro"
+      - "${DATA_ROOT:-/data/newplay}/transcripts:/data/transcripts"
+      - "${DATA_ROOT:-/data/newplay}/home:/data/newplay/home:ro"
+    working_dir: /srv/watcher
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+    command: ["python", "learner_main.py"]
+
+  ops:
+    # 배포 실행기: 웹의 /api/platform/apply 가 여기로 HTTP 요청. git apply → 빌드 → 컨테이너 재기동 → 헬스체크 → 자동 복구.
+    image: newplay/watcher
+    restart: unless-stopped
+    depends_on: { mongo: { condition: service_healthy } }
+    env_file: [.env.web]                            # 웹과 같은 배포 실행기 인증 키
+    environment:
+      MONGODB_URI: "mongodb://mongo:27017/newteam?directConnection=true"
+      MONGODB_DB: newteam
+      NEWPLAY_RUNTIME: docker
+      NEWPLAY_PLATFORM_TREE: /srv/web
+      NEWPLAY_WATCHER_TREE: /srv/watcher
+      NEWPLAY_WEB_CONTAINER: newplay-web-1
+      NEWPLAY_WATCHER_CONTAINER: newplay-watcher-1
+      NEWPLAY_LEARNER_CONTAINER: newplay-learner-1
+      NEWPLAY_PLATFORM_HEALTH: "http://web:3000/login"
+      NEWPLAY_WATCHER_LOG: /data/logs/watcher.log
+      NEWPLAY_CLAUDE_TOKEN_DIR: /data/tokens
+    volumes:
+      - ./src/web:/srv/web
+      - ./src/watcher:/srv/watcher
+      - "${DATA_ROOT:-/data/newplay}/tokens:/data/tokens"
+      - "${DATA_ROOT:-/data/newplay}/logs:/data/logs"
+      - /var/run/docker.sock:/var/run/docker.sock
+    working_dir: /srv/watcher
+    user: "${HOST_UID:-1000}:${DOCKER_GID:-999}"    # docker.sock 접근용으로 그룹만 docker 그룹
+    command: ["python", "ops_server.py"]
+
+  gateway:
+    # 직접 모드: 브라우저 터미널 ↔ 사람별 workbench 컨테이너(PTY). 티켓은 web 이 HERMES_INTERNAL_API_KEY 로 서명.
+    build: { context: ./gateway }
+    image: newplay/gateway
+    restart: unless-stopped
+    depends_on: { mongo: { condition: service_healthy } }
+    ports: ["127.0.0.1:${GATEWAY_PORT:-3001}:3001"]
+    env_file: [.env.web]                             # HERMES_INTERNAL_API_KEY 공유
+    environment:
+      MONGODB_URI: "mongodb://mongo:27017/newteam?directConnection=true"
+      NEWPLAY_CLAUDE_TOKEN_DIR: /data/tokens
+      DATA_ROOT_HOST: "${DATA_ROOT:-/data/newplay}"
+      WORKBENCH_IMAGE: newplay/workbench
+      WORKBENCH_IDLE_MIN: "${WORKBENCH_IDLE_MIN:-10}"
+      WORKBENCH_USER: "${HOST_UID:-1000}:${HOST_GID:-1000}"   # 작업대도 호스트 사용자로 — root 면 공유 저장소가 잠긴다
+      COMPOSE_NETWORK: newplay_workbench
+    networks: [default, workbench]
+    volumes:
+      - "${DATA_ROOT:-/data/newplay}/tokens:/data/tokens:ro"
+      - "${DATA_ROOT:-/data/newplay}/home:/data/home"          # 개인 홈을 호스트 사용자 소유로 미리 만들기 위해
+      - /var/run/docker.sock:/var/run/docker.sock
+    user: "${HOST_UID:-1000}:${DOCKER_GID:-999}"
+
+  workbench-image:
+    # 이미지 빌드 전용(실행 안 함). gateway 가 사람마다 `docker run newplay/workbench` 로 띄운다.
+    build: { context: ., dockerfile: Dockerfile.workbench }
+    image: newplay/workbench
+    profiles: ["build-only"]
+    command: ["true"]
+
+networks:
+  workbench:
+    name: newplay_workbench

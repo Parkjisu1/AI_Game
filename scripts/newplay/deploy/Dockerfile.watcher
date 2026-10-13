@@ -1,0 +1,20 @@
+# NewPlay watcher / learner / ops 공용 이미지 — python 3.12 + node 20(Claude Code CLI, yarn 실행) + git + docker CLI(ops 용)
+FROM python:3.12-slim-bookworm
+ENV DEBIAN_FRONTEND=noninteractive PYTHONUNBUFFERED=1 NODE_MAJOR=20
+RUN apt-get update -qq && apt-get install -y -qq --no-install-recommends \
+      git curl ca-certificates gnupg tmux jq procps build-essential \
+    && curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash - \
+    && apt-get install -y -qq --no-install-recommends nodejs \
+    && curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
+    && echo "deb [signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian bookworm stable" > /etc/apt/sources.list.d/docker.list \
+    && apt-get update -qq && apt-get install -y -qq --no-install-recommends docker-ce-cli \
+    && npm i -g @anthropic-ai/claude-code \
+    && rm -rf /var/lib/apt/lists/*
+# 파이썬 의존성은 소스 볼륨의 requirements.lock 으로 (이미지 빌드 시점의 사본을 먼저 설치)
+COPY requirements.lock /tmp/requirements.lock
+RUN pip install --no-cache-dir -r /tmp/requirements.lock
+WORKDIR /srv/watcher
+# 컨테이너는 호스트 사용자(uid 1000)로 돈다 — 볼륨 파일 소유권이 root 로 바뀌지 않게. git 설정은 어느 사용자에게나 적용되게 system 에.
+RUN git config --system --add safe.directory '*' && git config --system user.name newplay-ai && git config --system user.email ai@newplay.local \
+    && mkdir -p /home/app && chmod 777 /home/app
+ENV HOME=/home/app

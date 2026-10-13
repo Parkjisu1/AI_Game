@@ -16,7 +16,7 @@ import path from "path";
  */
 export const dynamic = "force-dynamic";
 
-const ROOT = path.join(process.env.HOME || "/home/aimed", "newplay-preview", "serve");
+const ROOT = path.join(process.env.NEWPLAY_PREVIEW_ROOT || path.join(process.env.HOME || "/home/aimed", "newplay-preview"), "serve");
 
 const MIME: Record<string, string> = {
   ".html": "text/html; charset=utf-8",
