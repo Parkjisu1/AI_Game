@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "project": "FlowTraceDemo",
+  "intent": {
+    "user_request": "Synthetic demonstration: preserve a requested behavior through the design-to-code handoff.",
+    "goals": [{"id": "G1", "statement": "An explicit request produces the specified recorded result without substituting a domain template."}],
+    "non_goals": ["This fixture is not a game or evidence of player demand."],
+    "constraints": ["Local fixture only; do not publish or connect to production data."],
+    "assumptions": [{"statement": "One synthetic node is sufficient to demonstrate trace preservation.", "status": "assumed", "basis": "Workflow test scope", "reversible": true}]
+  },
+  "references": [],
+  "claims": [],
+  "decisions": [{"id": "D1", "mode": "new", "goal_ids": ["G1"], "claim_ids": [], "rationale": "Exercise explicit handoff data.", "expected_difference": "New fixture, no reference parity claim."}],
+  "requirements": [{"id": "R1", "goal_ids": ["G1"], "decision_ids": ["D1"], "statement": "Preserve API, behaviors and logicFlow from the fixture input.", "category": "technical", "delivery_scope": "placeholder_functional", "acceptance_ids": ["A1"]}],
+  "work_items": [{"id": "W1", "discipline": "development", "requirement_ids": ["R1"], "deliverable": "Explicit FlowTraceDemo node handoff", "node_ids": ["IntentProbe"]}],
+  "acceptance": [{"id": "A1", "kind": "structure", "scope": "placeholder_functional", "method": "Parse generated L2/L3 and compare explicit input plus trace IDs.", "expected": "All explicit API/behavior/logicFlow fields and R1/D1/A1 links survive.", "status": "not_run", "evidence": [], "input_artifacts": []}]
+}

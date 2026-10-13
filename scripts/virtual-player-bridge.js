@@ -1,294 +1,202 @@
 #!/usr/bin/env node
-/**
- * virtual-player-bridge.js
- * Reads Virtual Player YAML exports and converts them to Design DB feedback format.
- *
- * Mapping logic:
- *   Session patterns    → validate design intent  (session_length, engagement_hooks)
- *   Action distributions → validate core loop      (action_frequency, action_variety)
- *   Failure points      → map to feedback categories (SYSTEM, BALANCE, CONTENT, UX)
- *
- * Usage:
- *   node virtual-player-bridge.js
- *     --input  <virtual-player-export-yaml>
- *     --project <project-name>
- *     --output  <feedback-output-path>   (optional; defaults to projects/{project}/feedback/design/vp_feedback.json)
- */
-
 'use strict';
 
-const fs   = require('fs');
+// Compare VP observations with explicit project criteria; never diagnose enjoyment or root cause.
+const fs = require('fs');
 const path = require('path');
-
-// Shared libraries
+const { randomUUID } = require('crypto');
 const { parseYaml } = require('./lib/yaml-utils');
-const { writeJsonAtomic, ensureDir } = require('./lib/safe-io');
+const { writeJsonAtomic } = require('./lib/safe-io');
+const object = v => v !== null && typeof v === 'object' && !Array.isArray(v);
+const own = (v, key) => object(v) && Object.prototype.hasOwnProperty.call(v, key);
+const finite = v => typeof v === 'number' && Number.isFinite(v);
+const text = v => typeof v === 'string' && v.trim().length > 0;
+const METRICS = ['session_length', 'action_frequency', 'action_variety', 'engagement_hooks', 'failure_rate'];
 
-// ---------------------------------------------------------------------------
-// CLI parsing
-// ---------------------------------------------------------------------------
+/* contract.virtual_player.criteria, or explicit VP input virtual_player.criteria:
+ * [{id, metric, requirement_ids, acceptance_ids, min?, max?, expected_hooks?, point?}]
+ * Inclusive numeric bounds require min or max. Units: seconds, actions/minute,
+ * exported variety score/count, failure ratio [0,1]. Failure ratios also need point.
+ * Hooks need expected_hooks (including []). No global numeric or hook defaults.
+ * This bridge validates criterion definitions and links in addition to handoff validation.
+ */
 function parseArgs(argv) {
   const args = {};
-  for (let i = 2; i < argv.length; i++) {
+  for (let i = 0; i < argv.length; i++) {
     const flag = argv[i];
-    if (flag.startsWith('--')) {
-      const key = flag.slice(2);
-      const val  = argv[i + 1] && !argv[i + 1].startsWith('--') ? argv[++i] : true;
-      args[key] = val;
-    }
+    if (flag === '--help' || flag === '-h') { args.help = true; continue; }
+    if (!['--input', '--project', '--output', '--flow-contract'].includes(flag)) throw new Error(`Unknown option: ${flag}`);
+    const value = argv[++i];
+    if (!value || value.startsWith('-')) throw new Error(`${flag} requires a value`);
+    args[flag.slice(2)] = value;
   }
   return args;
 }
 
-const args = parseArgs(process.argv);
-
-const INPUT   = args.input;
-const PROJECT = args.project;
-const OUTPUT  = args.output || `E:/AI/projects/${PROJECT}/feedback/design/vp_feedback.json`;
-
-if (!INPUT || !PROJECT) {
-  console.error('[ERROR] --input <yaml-path> and --project <name> are required');
-  process.exit(1);
-}
-if (!fs.existsSync(INPUT)) {
-  console.error(`[ERROR] Input file not found: ${INPUT}`);
-  process.exit(1);
+function readFirst(data, keys, prefix = '') {
+  for (const key of keys) if (own(data, key)) return { present: true, value: data[key], locator: prefix + key };
+  return { present: false, value: null, locator: prefix + keys[0] };
 }
 
-// ---------------------------------------------------------------------------
-// Fix: unique ID counter to prevent collision in tight loops
-// ---------------------------------------------------------------------------
-let idCounter = 0;
-function nextId(prefix) {
-  return `${prefix}_${Date.now()}_${++idCounter}`;
+function observations(data) {
+  const sessions = readFirst(data, ['sessions', 'session_data']);
+  const actions = readFirst(data, ['actions', 'action_data']);
+  const failures = readFirst(data, ['failures', 'failure_points', 'failure_data']);
+  const values = {
+    session_length: readFirst(sessions.value, ['avg_length', 'average_session'], sessions.locator + '.'),
+    action_frequency: readFirst(actions.value, ['frequency', 'actions_per_minute'], actions.locator + '.'),
+    action_variety: readFirst(actions.value, ['variety_score', 'unique_action_types'], actions.locator + '.'),
+    engagement_hooks: readFirst(sessions.value, ['engagement_hooks'], sessions.locator + '.'),
+  };
+  // A hook dictionary may be a definition table or zero counts; keys alone do not prove observed events.
+  const list = Array.isArray(failures.value) ? failures.value
+    : object(failures.value) ? Object.entries(failures.value).map(([point, v]) => object(v) ? { ...v, point } : { point, rate: v }) : [];
+  values.failure_rates = list.map((failure, i) => ({
+    point: typeof failure === 'string' ? failure : readFirst(failure, ['point', 'location']).value,
+    ...readFirst(failure, ['rate', 'drop_off_rate'], `${failures.locator}[${i}].`),
+  }));
+  return values;
 }
 
-// ---------------------------------------------------------------------------
-// Feedback category mapping
-// Priority-based: compound patterns first, then single keywords.
-// Each entry has an optional `priority` (lower = higher priority).
-// ---------------------------------------------------------------------------
-const FAILURE_CATEGORY_MAP = [
-  // Compound patterns (higher specificity) — checked first
-  { pattern: 'combat_tutorial',  priority: 1, category: 'BALANCE', type: 'CURVE_TOO_STEEP'   },
-  { pattern: 'ui_confusion',     priority: 1, category: 'UX',      type: 'FLOW_BROKEN'       },
-  { pattern: 'content_gap',      priority: 1, category: 'CONTENT', type: 'PACING_ISSUE'      },
-  // Single keyword patterns
-  { pattern: 'tutorial',         priority: 2, category: 'UX',      type: 'TUTORIAL_GAP'      },
-  { pattern: 'onboarding',       priority: 2, category: 'UX',      type: 'TUTORIAL_GAP'      },
-  { pattern: 'navigation',       priority: 2, category: 'UX',      type: 'FLOW_BROKEN'       },
-  { pattern: 'combat',           priority: 2, category: 'BALANCE', type: 'CURVE_TOO_STEEP'   },
-  { pattern: 'difficulty',       priority: 2, category: 'BALANCE', type: 'CURVE_TOO_STEEP'   },
-  { pattern: 'economy',          priority: 2, category: 'BALANCE', type: 'ECONOMY_IMBALANCE' },
-  { pattern: 'currency',         priority: 2, category: 'BALANCE', type: 'ECONOMY_IMBALANCE' },
-  { pattern: 'paywall',          priority: 2, category: 'BM',      type: 'PAY_WALL_TOO_HARD' },
-  { pattern: 'iap',              priority: 2, category: 'BM',      type: 'VALUE_MISMATCH'    },
-  { pattern: 'stage',            priority: 2, category: 'CONTENT', type: 'PACING_ISSUE'      },
-  { pattern: 'crash',            priority: 2, category: 'SYSTEM',  type: 'MISSING_FEATURE'   },
-  { pattern: 'bug',              priority: 2, category: 'SYSTEM',  type: 'RULE_CONFLICT'     },
-  { pattern: 'feature',          priority: 2, category: 'SYSTEM',  type: 'MISSING_FEATURE'   },
-];
+function selectCriteria(data, contract) {
+  if (contract) return { source: 'flow_contract', criteria: contract.virtual_player?.criteria };
+  if (own(data, 'virtual_player')) return { source: 'explicit_input', criteria: data.virtual_player?.criteria };
+  const sessions = readFirst(data, ['sessions', 'session_data']).value;
+  if (own(sessions, 'target_length')) {
+    const target = sessions.target_length;
+    const tolerance = own(sessions, 'tolerance_seconds') ? sessions.tolerance_seconds
+      : own(sessions, 'tolerance_ratio') && finite(target) && finite(sessions.tolerance_ratio) ? Math.abs(target) * sessions.tolerance_ratio : null;
+    const criterion = { id: 'input_session_target', metric: 'session_length', target, tolerance };
+    if (finite(target) && target >= 0 && finite(tolerance) && tolerance >= 0) {
+      criterion.min = Math.max(0, target - tolerance); criterion.max = target + tolerance;
+    }
+    return { source: 'explicit_input_target', criteria: [criterion] };
+  }
+  return { source: 'undefined', criteria: undefined };
+}
 
-function mapFailureToCategory(failurePoint) {
-  const fp = (failurePoint || '').toLowerCase();
-
-  // Sort by priority (ascending) so compound/high-priority patterns are checked first
-  const sorted = FAILURE_CATEGORY_MAP.slice().sort((a, b) => a.priority - b.priority);
-
-  for (const entry of sorted) {
-    if (fp.includes(entry.pattern)) {
-      return { category: entry.category, type: entry.type };
+function definitionIssues(c) {
+  if (!object(c)) return ['Criterion must be an object'];
+  const issues = [];
+  if (!text(c.id)) issues.push('id is required');
+  if (!METRICS.includes(c.metric)) issues.push('Unsupported or missing metric');
+  if (c.metric === 'engagement_hooks') {
+    if (!Array.isArray(c.expected_hooks) || c.expected_hooks.some(h => !text(h))) issues.push('expected_hooks must be a string array; [] explicitly requires no hooks');
+  } else {
+    if (!own(c, 'min') && !own(c, 'max')) issues.push('Explicit min/max required; a target without tolerance does not define a pass range');
+    for (const key of ['min', 'max']) if (own(c, key) && (!finite(c[key]) || c[key] < 0)) issues.push(`${key} must be a finite nonnegative number`);
+    if (finite(c.min) && finite(c.max) && c.min > c.max) issues.push('min must not exceed max');
+    if (c.metric === 'failure_rate') {
+      if (!text(c.point)) issues.push('failure_rate needs point');
+      if (c.min > 1 || c.max > 1) issues.push('failure_rate bounds must be in [0,1]');
     }
   }
-  return { category: 'SYSTEM', type: 'OVER_COMPLEXITY' };
+  return issues;
 }
 
-function severityFromRate(rate) {
-  if (rate >= 0.5) return 'CRITICAL';
-  if (rate >= 0.25) return 'HIGH';
-  if (rate >= 0.1) return 'MEDIUM';
-  return 'LOW';
+function checkLinks(criteria, contract) {
+  const seen = new Set();
+  for (const c of criteria) {
+    if (!object(c)) continue;
+    if (seen.has(c.id)) throw new Error(`Duplicate VP criterion id: ${c.id}`);
+    seen.add(c.id);
+    if (!contract) continue;
+    for (const key of ['requirement_ids', 'acceptance_ids']) {
+      if (!Array.isArray(c[key]) || !c[key].length || c[key].some(id => !text(id))) throw new Error(`${c.id}: ${key} must be a nonempty ID array`);
+    }
+    const reqs = c.requirement_ids.map(id => {
+      const req = contract.requirements.find(item => item.id === id);
+      if (!req) throw new Error(`${c.id}: unknown requirement ${id}`);
+      return req;
+    });
+    for (const id of c.acceptance_ids) {
+      if (!contract.acceptance.some(item => item.id === id) || !reqs.some(req => req.acceptance_ids.includes(id))) throw new Error(`${c.id}: acceptance ${id} is not linked to its requirements`);
+    }
+    if (reqs.some(req => !req.acceptance_ids.some(id => c.acceptance_ids.includes(id)))) throw new Error(`${c.id}: requirement has no selected acceptance`);
+  }
 }
 
-// ---------------------------------------------------------------------------
-// Transform Virtual Player export → Design feedback
-// ---------------------------------------------------------------------------
-function transform(vpData) {
-  // Fix: validate input structure — warn if all main sections are missing
-  const hasSessions = !!(vpData.sessions || vpData.session_data);
-  const hasActions  = !!(vpData.actions  || vpData.action_data);
-  const hasFailures = !!(vpData.failures || vpData.failure_points || vpData.failure_data);
+function compare(c, values) {
+  const issues = definitionIssues(c);
+  const base = { criterion_id: c?.id ?? null, metric: c?.metric ?? null,
+    requirement_ids: c?.requirement_ids ?? [], acceptance_ids: c?.acceptance_ids ?? [],
+    definition: c ?? null, status: 'missing_definition', issues };
+  if (issues.length) return base;
+  const matches = c.metric === 'failure_rate' ? values.failure_rates.filter(item => item.point === c.point) : [];
+  const observed = c.metric === 'failure_rate' ? matches[0] || { present: false, value: null } : values[c.metric];
+  const actual = observed.value, hooks = c.metric === 'engagement_hooks';
+  const valid = observed.present && (hooks ? Array.isArray(actual) && actual.every(text)
+    : finite(actual) && actual >= 0 && (c.metric !== 'failure_rate' || actual <= 1));
+  if (!valid || matches.length > 1) return { ...base, status: 'missing_evidence', actual, locator: observed.locator ?? null,
+    issues: [matches.length > 1 ? 'Multiple failure observations need an explicit aggregation' : !observed.present ? 'Observation absent' : actual === null ? 'Observation explicitly null' : 'Observation invalid for this metric'] };
+  const within = hooks ? c.expected_hooks.every(hook => actual.includes(hook))
+    : (!own(c, 'min') || actual >= c.min) && (!own(c, 'max') || actual <= c.max);
+  return { ...base, status: within ? 'within_declared_range' : 'outside_declared_range', actual, locator: observed.locator, issues: [],
+    ...(hooks ? { missing_hooks: c.expected_hooks.filter(hook => !actual.includes(hook)) } : {}) };
+}
 
-  if (!hasSessions && !hasActions && !hasFailures) {
-    console.warn('[WARN] VP data has no sessions, actions, or failures sections. Output may be empty.');
-  }
-
-  const feedbackItems = [];
-  const ts = new Date().toISOString();
-
-  // ── 1. Session patterns → design intent validation ──────────────────────
-  const sessions = vpData.sessions || vpData.session_data || {};
-  const avgSession     = sessions.avg_length   || sessions.average_session || 0;
-  const targetSession  = sessions.target_length || 300;
-  const engagementHooks = Array.isArray(sessions.engagement_hooks)
-    ? sessions.engagement_hooks
-    : Object.keys(sessions.engagement_hooks || {});
-
-  if (avgSession && targetSession && Math.abs(avgSession - targetSession) / targetSession > 0.2) {
-    feedbackItems.push({
-      id               : nextId('vpb_session'),
-      timestamp        : ts,
-      source           : 'virtual_player_bridge',
-      designId         : vpData.design_id || `${PROJECT}_design`,
-      feedback_category: 'UX',
-      feedback_type    : 'FLOW_BROKEN',
-      severity         : severityFromRate(Math.abs(avgSession - targetSession) / targetSession),
-      description      : `Session length deviation: actual ${avgSession}s vs target ${targetSession}s (${Math.round((avgSession - targetSession) / targetSession * 100)}%)`,
-      recommendation   : avgSession < targetSession
-        ? 'Review engagement hooks and mid-session content pacing. Consider adding rewarding checkpoints.'
-        : 'Session is longer than intended — check if users are confused or stuck rather than engaged.',
-      session_data     : { avg_length: avgSession, target_length: targetSession, hooks_present: engagementHooks },
-    });
-  }
-
-  // Check engagement hooks completeness
-  const expectedHooks = ['tutorial_complete', 'first_win', 'daily_reward', 'level_up'];
-  const missingHooks  = expectedHooks.filter(h => !engagementHooks.includes(h));
-  if (missingHooks.length > 0) {
-    feedbackItems.push({
-      id               : nextId('vpb_hooks'),
-      timestamp        : ts,
-      source           : 'virtual_player_bridge',
-      designId         : vpData.design_id || `${PROJECT}_design`,
-      feedback_category: 'UX',
-      feedback_type    : 'TUTORIAL_GAP',
-      severity         : 'MEDIUM',
-      description      : `Missing engagement hooks: ${missingHooks.join(', ')}`,
-      recommendation   : `Implement missing engagement triggers: ${missingHooks.join(', ')}`,
-      session_data     : { missing_hooks: missingHooks, present_hooks: engagementHooks },
-    });
-  }
-
-  // ── 2. Action distributions → core loop validation ──────────────────────
-  const actions = vpData.actions || vpData.action_data || {};
-  const actionFreq    = actions.frequency     || actions.actions_per_minute || 0;
-  const actionVariety = actions.variety_score || actions.unique_action_types || 0;
-  const coreLoopActions = Array.isArray(actions.core_loop)
-    ? actions.core_loop
-    : Object.keys(actions.core_loop || {});
-
-  if (actionFreq > 0 && actionFreq < 2) {
-    feedbackItems.push({
-      id               : nextId('vpb_freq'),
-      timestamp        : ts,
-      source           : 'virtual_player_bridge',
-      designId         : vpData.design_id || `${PROJECT}_design`,
-      feedback_category: 'CONTENT',
-      feedback_type    : 'PACING_ISSUE',
-      severity         : severityFromRate(1 - actionFreq / 2),
-      description      : `Low action frequency: ${actionFreq} actions/min. Core loop may be too slow.`,
-      recommendation   : 'Reduce wait times or add parallel engagement options to increase action density.',
-      action_data      : { frequency: actionFreq, core_loop: coreLoopActions },
-    });
-  }
-
-  if (actionVariety > 0 && actionVariety < 3) {
-    feedbackItems.push({
-      id               : nextId('vpb_variety'),
-      timestamp        : ts,
-      source           : 'virtual_player_bridge',
-      designId         : vpData.design_id || `${PROJECT}_design`,
-      feedback_category: 'CONTENT',
-      feedback_type    : 'PACING_ISSUE',
-      severity         : 'MEDIUM',
-      description      : `Low action variety: ${actionVariety} unique action types. Risk of boredom loop.`,
-      recommendation   : 'Diversify core loop with at least 3–5 distinct player action types.',
-      action_data      : { variety_score: actionVariety, unique_actions: coreLoopActions },
-    });
-  }
-
-  // ── 3. Failure points → categorised feedback ────────────────────────────
-  const failures = vpData.failures || vpData.failure_points || vpData.failure_data || {};
-  const failureList = Array.isArray(failures)
-    ? failures
-    : Object.entries(failures).map(([point, rate]) => ({ point, rate: typeof rate === 'number' ? rate : 0.1 }));
-
-  for (const failure of failureList) {
-    const point = typeof failure === 'string' ? failure : (failure.point || failure.location || '');
-    const rate  = typeof failure === 'object'  ? (failure.rate || failure.drop_off_rate || 0.1) : 0.1;
-    const { category, type } = mapFailureToCategory(point);
-
-    feedbackItems.push({
-      id               : nextId('vpb_fail'),
-      timestamp        : ts,
-      source           : 'virtual_player_bridge',
-      designId         : vpData.design_id || `${PROJECT}_design`,
-      feedback_category: category,
-      feedback_type    : type,
-      severity         : severityFromRate(rate),
-      description      : `Failure point detected: "${point}" — drop-off rate ${Math.round(rate * 100)}%`,
-      recommendation   : generateRecommendation(category, type, point, rate),
-      failure_data     : { point, drop_off_rate: rate },
-    });
-  }
-
+function transform(data, options = {}) {
+  if (!object(data)) throw new Error('VP input must be an object');
+  const { project, inputFile = null, contract = null, contractTrace = null } = options;
+  if (!text(project)) throw new Error('project is required');
+  if (contract && contract.project !== project) throw new Error('Flow contract project mismatch');
+  if (own(data, 'project') && data.project !== project) throw new Error('VP input project mismatch');
+  const values = observations(data), selected = selectCriteria(data, contract), criteria = selected.criteria;
+  if (Array.isArray(criteria)) checkLinks(criteria, contract);
+  const results = !Array.isArray(criteria) || !criteria.length ? [{ criterion_id: null, metric: null, status: 'missing_definition',
+    issues: ['No explicit virtual_player.criteria; no project target judgment can be made'] }] : criteria.map(c => compare(c, values));
+  const generated = new Date().toISOString();
+  const feedbackItems = results.filter(r => r.status !== 'within_declared_range').map(r => ({
+    id: `vpb_${randomUUID()}`, timestamp: generated, source: 'virtual_player_bridge', designId: data.design_id ?? `${project}_design`,
+    feedback_category: r.status === 'outside_declared_range' ? 'COMPARISON' : 'EVIDENCE',
+    feedback_type: r.status.toUpperCase(), severity: 'UNASSESSED',
+    description: r.status === 'outside_declared_range' ? `Observed ${r.metric} is outside explicitly declared bounds; cause and player impact are unverified.` : r.issues.join('; '),
+    comparison: r,
+  }));
   return {
-    source         : 'virtual_player_bridge',
-    project        : PROJECT,
-    input_file     : INPUT,
-    generated_at   : ts,
-    vp_metadata    : {
-      design_id    : vpData.design_id,
-      export_date  : vpData.export_date || vpData.timestamp,
-      player_count : vpData.player_count || vpData.session_count || 'unknown',
-    },
-    feedback_items : feedbackItems,
-    summary        : {
-      total          : feedbackItems.length,
-      by_category    : countBy(feedbackItems, 'feedback_category'),
-      by_severity    : countBy(feedbackItems, 'severity'),
-      critical_count : feedbackItems.filter(f => f.severity === 'CRITICAL').length,
-    },
+    source: 'virtual_player_bridge', project, input_file: inputFile, generated_at: generated,
+    evaluation_scope: 'declared_metric_comparison_only',
+    limitation: 'VP observations and numeric comparisons do not establish player enjoyment, causal diagnosis, engine quality, or market acceptance.',
+    criteria_source: selected.source, contract_trace: contractTrace, observations: values, comparisons: results,
+    vp_metadata: { design_id: data.design_id ?? null, export_date: data.export_date ?? data.timestamp ?? null,
+      player_count: readFirst(data, ['player_count', 'session_count']).value },
+    feedback_items: feedbackItems,
+    summary: { total: feedbackItems.length, by_status: countBy(results, 'status'), by_category: countBy(feedbackItems, 'feedback_category'),
+      by_severity: countBy(feedbackItems, 'severity'), critical_count: 0, severity_assessed: false },
   };
 }
 
-function generateRecommendation(category, type, point, rate) {
-  const rateStr = `${Math.round(rate * 100)}%`;
-  switch (type) {
-    case 'TUTORIAL_GAP':      return `Tutorial gap at "${point}" (${rateStr} drop). Simplify instructions or add contextual hints.`;
-    case 'FLOW_BROKEN':       return `UX flow break at "${point}" (${rateStr} drop). Review navigation and screen transitions.`;
-    case 'CURVE_TOO_STEEP':   return `Difficulty spike at "${point}" (${rateStr} drop). Smooth difficulty curve or add fail-state guidance.`;
-    case 'ECONOMY_IMBALANCE': return `Economy issue at "${point}" (${rateStr} drop). Rebalance resource generation/consumption.`;
-    case 'PAY_WALL_TOO_HARD': return `Hard paywall at "${point}" (${rateStr} drop). Consider soft-gate or freemium alternative.`;
-    case 'PACING_ISSUE':      return `Content pacing issue at "${point}" (${rateStr} drop). Add bridging content or adjust progression speed.`;
-    case 'RULE_CONFLICT':     return `System rule conflict detected at "${point}". Review overlapping mechanics.`;
-    case 'MISSING_FEATURE':   return `Missing feature expected at "${point}" (${rateStr} drop). Implement or surface existing feature.`;
-    default:                  return `Issue at "${point}" (${rateStr} drop). Investigate and address root cause.`;
+function countBy(values, field) {
+  return values.reduce((counts, v) => { const key = v[field]; counts[key] = (counts[key] || 0) + 1; return counts; }, {});
+}
+
+function main(argv = process.argv.slice(2)) {
+  const args = parseArgs(argv);
+  if (args.help) { console.log('node virtual-player-bridge.js --input <yaml/json> --project <name> [--output <json>] [--flow-contract <json>]'); return; }
+  if (!args.input || !args.project) throw new Error('--input and --project are required');
+  const inputPath = path.resolve(args.input), raw = fs.readFileSync(inputPath, 'utf8');
+  const data = /\.json$/i.test(inputPath) ? JSON.parse(raw.replace(/^\uFEFF/, '')) : parseYaml(raw);
+  const output = args.output || path.join('E:/AI/projects', args.project, 'feedback/design/vp_feedback.json');
+  const contractPath = args['flow-contract'] || path.join('E:/AI/projects', args.project, 'designs/flow-contract.json');
+  const { sha256 } = require('./lib/flow-contract');
+  let contract = null, contractTrace = null;
+  if (args['flow-contract'] || fs.existsSync(contractPath)) {
+    const content = fs.readFileSync(contractPath, 'utf8');
+    contract = JSON.parse(content.replace(/^\uFEFF/, ''));
+    const result = require('./lib/flow-contract').validateContract(contract, { stage: 'handoff', baseDir: path.dirname(path.resolve(contractPath)) });
+    if (!result.ok) throw new Error(`Flow contract invalid: ${JSON.stringify(result.errors)}`);
+    if (contract.project !== args.project) throw new Error('Flow contract project mismatch');
+    contractTrace = { path: path.resolve(contractPath), sha256: sha256(content), acceptance_basis: result.acceptance_basis };
   }
+  const feedback = transform(data, { project: args.project, inputFile: inputPath, contract, contractTrace });
+  // Preserve exact input for review; do not write DB records or promote acceptance statuses.
+  feedback.input_snapshot = { sha256: sha256(raw), raw };
+  writeJsonAtomic(output, feedback);
+  console.log(JSON.stringify({ output, evaluation_scope: feedback.evaluation_scope, summary: feedback.summary }));
+  return feedback;
 }
 
-function countBy(arr, key) {
-  return arr.reduce((acc, item) => {
-    const val = item[key] || 'unknown';
-    acc[val] = (acc[val] || 0) + 1;
-    return acc;
-  }, {});
-}
-
-// ---------------------------------------------------------------------------
-// Main
-// ---------------------------------------------------------------------------
-const rawYaml = fs.readFileSync(INPUT, 'utf8');
-const vpData  = parseYaml(rawYaml);
-
-const feedback = transform(vpData);
-
-// Ensure output directory exists and write atomically
-ensureDir(path.dirname(OUTPUT));
-writeJsonAtomic(OUTPUT, feedback);
-
-console.log(`[OK] Feedback written to: ${OUTPUT}`);
-console.log(`[OK] Total feedback items: ${feedback.summary.total}`);
-if (feedback.summary.critical_count > 0) {
-  console.warn(`[WARN] ${feedback.summary.critical_count} CRITICAL issues found — review immediately`);
+module.exports = { parseArgs, observations, selectCriteria, definitionIssues, checkLinks, compare, transform, main };
+if (require.main === module) {
+  try { main(); } catch (error) { console.error(error.message); process.exitCode = 1; }
 }

@@ -67,15 +67,24 @@ function parseArgs(argv) {
         project: null,
         input: null,
         output: null,
+        flowContract: null,
         help: false,
     };
 
     for (let i = 0; i < argv.length; i++) {
+        const option = argv[i];
+        const value = () => {
+            const next = argv[++i];
+            if (!next || next.startsWith('--')) throw new Error(`${option} requires a value`);
+            return next;
+        };
         switch (argv[i]) {
-            case '--project': args.project = argv[++i]; break;
-            case '--input':   args.input   = argv[++i]; break;
-            case '--output':  args.output  = argv[++i]; break;
+            case '--project': args.project = value(); break;
+            case '--input':   args.input   = value(); break;
+            case '--output':  args.output  = value(); break;
+            case '--flow-contract': args.flowContract = value(); break;
             case '--help': case '-h': args.help = true; break;
+            default: throw new Error(`Unknown option: ${option}`);
         }
     }
 
@@ -93,6 +102,7 @@ Options:
   --project <name>   프로젝트 이름
   --input <path>     design_workflow 폴더 경로
   --output <path>    designs 출력 폴더 경로
+  --flow-contract <path>  검증할 의도/역설계 계약 (기본: 출력 폴더의 flow-contract.json)
   --help, -h         도움말
 
 Examples:
@@ -107,15 +117,22 @@ Examples:
 // Design Workflow Reader
 // ============================================================
 
-function readYamlFiles(dir) {
+function isObject(value) {
+    return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+function readYamlFiles(dir, strict = false) {
     if (!fs.existsSync(dir)) return [];
     return fs.readdirSync(dir)
         .filter(f => f.endsWith('.yaml') || f.endsWith('.yml'))
         .map(f => {
             try {
                 const content = fs.readFileSync(path.join(dir, f), 'utf-8');
-                return { file: f, data: parseYaml(content), raw: content };
+                const data = parseYaml(content);
+                if (strict && !isObject(data)) throw new Error('Expected a design object');
+                return { file: f, data, raw: content };
             } catch (e) {
+                if (strict) throw new Error(`${f}: ${e.message}`);
                 console.warn(`  경고: ${f} 파싱 실패 - ${e.message}`);
                 return null;
             }
@@ -123,7 +140,7 @@ function readYamlFiles(dir) {
         .filter(Boolean);
 }
 
-function collectDesignElements(inputDir) {
+function collectDesignElements(inputDir, strict = false) {
     const elements = {
         systems: [],
         balance: [],
@@ -133,19 +150,19 @@ function collectDesignElements(inputDir) {
     };
 
     // Read systems/
-    const systemFiles = readYamlFiles(path.join(inputDir, 'systems'));
+    const systemFiles = readYamlFiles(path.join(inputDir, 'systems'), strict);
     elements.systems = systemFiles;
 
     // Read balance/
-    const balanceFiles = readYamlFiles(path.join(inputDir, 'balance'));
+    const balanceFiles = readYamlFiles(path.join(inputDir, 'balance'), strict);
     elements.balance = balanceFiles;
 
     // Read content/
-    const contentFiles = readYamlFiles(path.join(inputDir, 'content'));
+    const contentFiles = readYamlFiles(path.join(inputDir, 'content'), strict);
     elements.content = contentFiles;
 
     // Read bm/
-    const bmFiles = readYamlFiles(path.join(inputDir, 'bm'));
+    const bmFiles = readYamlFiles(path.join(inputDir, 'bm'), strict);
     elements.bm = bmFiles;
 
     elements.all = [...systemFiles, ...balanceFiles, ...contentFiles, ...bmFiles];
@@ -183,7 +200,23 @@ function inferRoleFromSystem(systemName, domain) {
     return DOMAIN_TO_ROLE[domain] || 'Manager';
 }
 
-function buildContract(systemName, domain, data) {
+function buildContract(systemName, domain, data, strict = false) {
+    if (data.contract !== undefined && data.contracts !== undefined && JSON.stringify(data.contract) !== JSON.stringify(data.contracts)) {
+        throw new Error(`${systemName}: conflicting contract and contracts`);
+    }
+    const explicit = data.contract ?? data.contracts;
+    if (explicit !== undefined) {
+        if (!isObject(explicit) || !Array.isArray(explicit.provides) || !Array.isArray(explicit.requires)) {
+            throw new Error(`${systemName}: explicit contract requires provides/requires arrays`);
+        }
+        for (const field of ['provides', 'requires']) {
+            if (explicit[field].some(item => !(typeof item === 'string' && item.trim()) && !(isObject(item) && Object.keys(item).length))) {
+                throw new Error(`${systemName}: contract ${field} entries must be nonempty strings or objects`);
+            }
+        }
+        return explicit;
+    }
+    if (strict) throw new Error(`${systemName}: explicit contract provides/requires required`);
     const provides = [];
     const requires = [];
 
@@ -321,6 +354,10 @@ function buildSystemSpec(nodes, project, genre) {
             responsibilities: node.responsibilities || [],
             states: node.states || [],
             behaviors: node.behaviors || [],
+            contract: node.contract,
+            logicFlow: node.logicFlow,
+            generation_assumptions: node.generation_assumptions,
+            ...(node.flow_trace ? { flow_trace: node.flow_trace } : {}),
             relations: node.relations || { uses: [], usedBy: [], publishes: [], subscribes: [] },
         });
     }
@@ -354,96 +391,55 @@ function writeYamlFile(filePath, data, comment = '') {
 // Main Processing
 // ============================================================
 
-function processDesignElements(elements, project, genre) {
+function processDesignElements(elements, project, genre, options = {}) {
+    const { strict = false } = options;
     const nodes = [];
     const seenNodes = new Set();
-
-    // Process system files
+    function add(data, file, fixedDomain, suffix = '') {
+        if (strict && !isObject(data)) throw new Error(file + ': expected a system object');
+        const name = typeof data === 'string' ? data : (data.nodeId || data.name || data.id || data.system || path.basename(file, path.extname(file)));
+        const nodeId = data.nodeId || (sanitizeNodeId(name) + suffix);
+        if (typeof nodeId !== 'string' || !/^[A-Za-z][A-Za-z0-9_]*$/.test(nodeId)) {
+            throw new Error(file + ': invalid nodeId ' + nodeId);
+        }
+        // Output is consumed on Windows too; distinct C# casing must not overwrite one YAML file.
+        const outputKey = strict ? nodeId.toLowerCase() : nodeId;
+        if (seenNodes.has(outputKey)) {
+            if (strict) throw new Error('Duplicate nodeId: ' + nodeId);
+            return;
+        }
+        seenNodes.add(outputKey);
+        const domain = fixedDomain || data.domain || inferDomainFromName(name);
+        const role = data.role || inferRoleFromSystem(name, domain);
+        const contract = buildContract(name, domain, data, strict);
+        nodes.push(buildNode(nodeId, name, domain, role, genre, data, contract, options));
+    }
     for (const { file, data } of elements.systems) {
-        // Try to extract system list from YAML
-        const systemList = data.systems || data.system_list || [];
-        const systemArray = Array.isArray(systemList) ? systemList : [];
-
-        if (systemArray.length > 0) {
-            for (const sys of systemArray) {
-                const name = typeof sys === 'string' ? sys : (sys.nodeId || sys.name || sys.id || '');
-                if (!name || seenNodes.has(name)) continue;
-                seenNodes.add(name);
-
-                const domain = sys.domain || inferDomainFromName(name);
-                const role = inferRoleFromSystem(name, domain);
-                const nodeId = sanitizeNodeId(name);
-                const contract = buildContract(name, domain, sys);
-
-                nodes.push(buildNode(nodeId, name, domain, role, genre, sys, contract));
-            }
-        } else {
-            // Treat the file itself as a system definition
-            const name = data.name || data.nodeId || data.id || path.basename(file, path.extname(file));
-            if (!name || seenNodes.has(name)) { continue; }
-            seenNodes.add(name);
-
-            const domain = data.domain || inferDomainFromName(name);
-            const role = inferRoleFromSystem(name, domain);
-            const nodeId = sanitizeNodeId(name);
-            const contract = buildContract(name, domain, data);
-
-            nodes.push(buildNode(nodeId, name, domain, role, genre, data, contract));
+        if (strict && !isObject(data)) throw new Error(file + ': expected a design object');
+        const systemList = data.systems ?? data.system_list;
+        if (systemList !== undefined && strict && !Array.isArray(systemList)) {
+            throw new Error(file + ': systems must be an array');
+        }
+        if (Array.isArray(systemList) && systemList.length) {
+            for (const sys of systemList) add(sys, file);
+        } else if (systemList === undefined || !strict) {
+            add(data, file);
         }
     }
-
-    // Process balance files → Calculator/Processor nodes
-    for (const { file, data } of elements.balance) {
-        const name = data.name || data.system || path.basename(file, path.extname(file));
-        const balanceName = `${sanitizeNodeId(name)}Calculator`;
-        if (seenNodes.has(balanceName)) continue;
-        seenNodes.add(balanceName);
-
-        const domain = 'balance';
-        const role = 'Calculator';
-        const contract = buildContract(balanceName, domain, data);
-        nodes.push(buildNode(balanceName, name + ' Calculator', domain, role, genre, data, contract));
+    for (const [key, domain, suffix] of [['balance', 'balance', 'Calculator'], ['content', 'content', 'Manager'], ['bm', 'bm', 'Manager']]) {
+        for (const { file, data } of elements[key]) add(data, file, domain, suffix);
     }
-
-    // Process content files → Manager nodes
-    for (const { file, data } of elements.content) {
-        const name = data.name || data.system || path.basename(file, path.extname(file));
-        const contentName = `${sanitizeNodeId(name)}Manager`;
-        if (seenNodes.has(contentName)) continue;
-        seenNodes.add(contentName);
-
-        const domain = 'content';
-        const role = 'Manager';
-        const contract = buildContract(contentName, domain, data);
-        nodes.push(buildNode(contentName, name + ' Manager', domain, role, genre, data, contract));
-    }
-
-    // Process bm files → Manager nodes
-    for (const { file, data } of elements.bm) {
-        const name = data.name || data.system || path.basename(file, path.extname(file));
-        const bmName = `${sanitizeNodeId(name)}Manager`;
-        if (seenNodes.has(bmName)) continue;
-        seenNodes.add(bmName);
-
-        const domain = 'bm';
-        const role = 'Manager';
-        const contract = buildContract(bmName, domain, data);
-        nodes.push(buildNode(bmName, name + ' Manager', domain, role, genre, data, contract));
-    }
-
-    // If no nodes found, generate defaults from domain mappings
     if (nodes.length === 0) {
-        console.warn('  경고: design_workflow에서 시스템을 추출하지 못했습니다. 기본 노드를 생성합니다.');
+        if (strict) throw new Error('No explicit design nodes; default game generation is disabled');
+        console.warn('No design nodes found; generating unverified domain templates.');
         for (const [domain, systems] of Object.entries(DOMAIN_TO_CODE_SYSTEMS)) {
-            if (systems.length === 0) continue;
             for (const sys of systems) {
-                const nodeId = `${sys}Manager`;
+                const nodeId = sys + 'Manager';
                 const contract = buildContract(nodeId, domain, {});
                 nodes.push(buildNode(nodeId, sys, domain, DOMAIN_TO_ROLE[domain] || 'Manager', genre, {}, contract));
             }
         }
     }
-
     return nodes;
 }
 
@@ -461,11 +457,37 @@ function inferDomainFromName(name) {
     return 'ingame';
 }
 
-function buildNode(nodeId, systemName, domain, role, genre, sourceData, contract) {
-    const layer = DOMAIN_LAYER[domain] || 'Domain';
-    const phase = DOMAIN_PHASE[domain] || 1;
-    const logicFlow = buildLogicFlow(domain, nodeId);
-    const refPatterns = buildReferencePatterns(domain, role);
+function buildNode(nodeId, systemName, domain, role, genre, sourceData, contract, options = {}) {
+    const { strict = false } = options;
+    const layer = sourceData.layer || DOMAIN_LAYER[domain] || 'Domain';
+    const phase = sourceData.phase ?? DOMAIN_PHASE[domain] ?? 1;
+    for (const field of ['logicFlow', 'behaviors']) {
+        if (strict && (!Array.isArray(sourceData[field]) || sourceData[field].length === 0)) {
+            throw new Error(`${nodeId}: explicit nonempty ${field} required`);
+        }
+        if (strict && sourceData[field].some(item => !isObject(item) || typeof item.action !== 'string' || !item.action.trim())) {
+            throw new Error(`${nodeId}: ${field} entries must be objects with a nonempty action`);
+        }
+    }
+    const logicFlow = sourceData.logicFlow ?? buildLogicFlow(domain, nodeId);
+    const refPatterns = sourceData.referencePatterns ?? (strict ? [] : buildReferencePatterns(domain, role));
+    const codeHints = sourceData.codeHints ?? (strict ? {} : {
+        patterns: [role_to_hint(role)],
+        avoidPatterns: ['Find() / FindObjectOfType()', 'new GameObject() for UI', 'Magic numbers'],
+    });
+    const generation_assumptions = [];
+    for (const field of ['contract', 'logicFlow', 'behaviors', 'referencePatterns', 'codeHints']) {
+        const missing = field === 'contract' ? sourceData.contract == null && sourceData.contracts == null
+            : field === 'behaviors' ? !Array.isArray(sourceData.behaviors) : sourceData[field] == null;
+        if (missing && (!strict || !['referencePatterns', 'codeHints'].includes(field))) {
+            generation_assumptions.push({ field, reason: 'domain_template', basis: 'proposed', verification: 'untested' });
+        }
+    }
+    for (const field of ['layer', 'phase', 'role', 'purpose', 'responsibilities']) {
+        if (sourceData[field] === undefined && !(field === 'purpose' && sourceData.description !== undefined)) {
+            generation_assumptions.push({ field, reason: 'domain_template', basis: 'proposed', verification: 'untested' });
+        }
+    }
 
     const behaviors = [];
     if (sourceData.behaviors && Array.isArray(sourceData.behaviors)) {
@@ -494,6 +516,8 @@ function buildNode(nodeId, systemName, domain, role, genre, sourceData, contract
         contract,
         logicFlow,
         referencePatterns: refPatterns,
+        codeHints,
+        generation_assumptions,
     };
 }
 
@@ -514,16 +538,65 @@ const DOMAIN_LAYER = {
 // Entry Point
 // ============================================================
 
-function main() {
-    const args = parseArgs(process.argv.slice(2));
+function loadFlowContext(args) {
+    const candidate = args.flowContract || path.join(args.output, 'flow-contract.json');
+    if (!args.flowContract && !fs.existsSync(candidate)) return null;
+    const contractPath = path.resolve(candidate);
+    const content = fs.readFileSync(contractPath, 'utf8');
+    const contract = JSON.parse(content.replace(/^\uFEFF/, ''));
+    const { validateContract, sha256 } = require('./lib/flow-contract');
+    const result = validateContract(contract, { stage: 'handoff', baseDir: path.dirname(contractPath) });
+    if (!result.ok) throw new Error(`Flow contract validation failed: ${JSON.stringify(result.errors)}`);
+    if (contract.project !== args.project) throw new Error('Flow contract project does not match --project');
+    return { contract, contractPath, hash: sha256(content), content };
+}
+
+function attachFlowTrace(nodes, context) {
+    const contract = context.contract;
+    const requirements = new Map(contract.requirements.map(item => [item.id, item]));
+    const nodeIds = new Set(nodes.map(node => node.nodeId));
+    for (const item of contract.work_items) {
+        for (const id of item.node_ids || []) {
+            if (!nodeIds.has(id)) throw new Error(`Work item ${item.id}: unknown node ${id}`);
+        }
+    }
+    for (const node of nodes) {
+        const items = contract.work_items.filter(item => (item.node_ids || []).includes(node.nodeId));
+        const requirementIds = [...new Set(items.flatMap(item => item.requirement_ids || []))];
+        if (!requirementIds.length) throw new Error(`${node.nodeId}: no work item requirement mapping`);
+        const linked = requirementIds.map(id => {
+            if (!requirements.has(id)) throw new Error(`${node.nodeId}: unknown requirement ${id}`);
+            return requirements.get(id);
+        });
+        const ids = key => [...new Set(linked.flatMap(item => item[key] || []))];
+        const decisions = (contract.decisions || []).filter(item => ids('decision_ids').includes(item.id));
+        const claimIds = [...new Set([...ids('claim_ids'), ...decisions.flatMap(item => item.claim_ids || [])])];
+        const sourceIds = [...new Set((contract.claims || []).filter(item => claimIds.includes(item.id)).map(item => item.reference_id).filter(Boolean))];
+        node.flow_trace = {
+            contract_path: context.contractPath,
+            contract_sha256: context.hash,
+            snapshot_path: 'flow-contract.snapshot.json',
+            work_item_ids: items.map(item => item.id),
+            requirement_ids: requirementIds,
+            goal_ids: ids('goal_ids'),
+            claim_ids: claimIds,
+            source_ids: sourceIds,
+            decision_ids: ids('decision_ids'),
+            acceptance_ids: ids('acceptance_ids'),
+        };
+    }
+}
+
+function main(argv = process.argv.slice(2)) {
+    const args = parseArgs(argv);
 
     if (args.help || !args.project || !args.input || !args.output) {
         printUsage();
         if (!args.help) {
             console.error('오류: --project, --input, --output 가 필요합니다.');
-            process.exit(1);
+            throw new Error('--project, --input, --output are required');
         }
-        process.exit(0);
+        return;
     }
 
     const { project, input: inputDir, output: outputDir } = args;
@@ -532,7 +605,7 @@ function main() {
         console.error(`오류: 입력 폴더가 없습니다: ${inputDir}`);
         console.error(`  design_workflow/ 폴더가 존재하는지 확인하세요.`);
         console.error(`  예: E:/AI/projects/${project}/designs/design_workflow`);
-        process.exit(1);
+        throw new Error('Input folder does not exist');
     }
 
     console.log('='.repeat(60));
@@ -542,9 +615,11 @@ function main() {
     console.log(`Output:  ${outputDir}`);
     console.log('='.repeat(60));
 
+    const flowContext = loadFlowContext(args);
+    const strict = !!flowContext;
     // Collect design elements
     console.log('\n기획 데이터 수집 중...');
-    const elements = collectDesignElements(inputDir);
+    const elements = collectDesignElements(inputDir, strict);
 
     console.log(`  systems: ${elements.systems.length}개`);
     console.log(`  balance: ${elements.balance.length}개`);
@@ -560,13 +635,20 @@ function main() {
 
     // Generate nodes
     console.log('\n코드 노드 생성 중...');
-    const nodes = processDesignElements(elements, project, genre);
+    const nodes = processDesignElements(elements, project, genre, { strict });
+    if (flowContext) attachFlowTrace(nodes, flowContext);
     console.log(`  → ${nodes.length}개 노드 생성`);
 
     // Prepare output directories
     const nodesDir = path.join(outputDir, 'nodes');
+    if (strict && fs.existsSync(nodesDir)) {
+        const expected = new Set(nodes.map(node => `${node.nodeId}.yaml`));
+        const stale = fs.readdirSync(nodesDir).filter(file => /\.ya?ml$/i.test(file) && !expected.has(file));
+        if (stale.length) throw new Error(`Existing nodes are outside this handoff: ${stale.join(', ')}; explicit cleanup/archive needed`);
+    }
     ensureDir(outputDir);
     ensureDir(nodesDir);
+    if (flowContext) fs.writeFileSync(path.join(outputDir, 'flow-contract.snapshot.json'), flowContext.content, 'utf8');
 
     // Write system_spec.yaml
     const systemSpec = buildSystemSpec(nodes, project, genre);
@@ -593,10 +675,7 @@ function main() {
                 internal: node.relations.uses || [],
                 external: [],
             },
-            contract: {
-                provides: node.contract.provides,
-                requires: node.contract.requires,
-            },
+            contract: node.contract,
             tags: {
                 layer: node.layer,
                 genre: node.genre,
@@ -606,17 +685,11 @@ function main() {
                 minorFunctions: ['Assign', 'Notify'],
             },
             logicFlow: node.logicFlow,
+            behaviors: node.behaviors,
+            generation_assumptions: node.generation_assumptions,
+            ...(node.flow_trace ? { flow_trace: node.flow_trace } : {}),
             referencePatterns: node.referencePatterns,
-            codeHints: {
-                patterns: [
-                    role_to_hint(node.role),
-                ],
-                avoidPatterns: [
-                    'Find() / FindObjectOfType()',
-                    'new GameObject() for UI',
-                    'Magic numbers',
-                ],
-            },
+            codeHints: node.codeHints,
         };
 
         const nodePath = path.join(nodesDir, `${node.nodeId}.yaml`);
@@ -652,4 +725,7 @@ function role_to_hint(role) {
     return hints[role] || 'Singleton 또는 일반 클래스';
 }
 
-main();
+module.exports = { main, parseArgs, collectDesignElements, processDesignElements, buildSystemSpec, buildNode, buildContract, attachFlowTrace };
+if (require.main === module) {
+    try { main(); } catch (error) { console.error(error.message); process.exitCode = 1; }
+}

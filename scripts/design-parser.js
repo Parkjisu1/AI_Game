@@ -25,7 +25,8 @@ const path = require('path');
 const { parseYaml } = require('./lib/yaml-utils');
 const { ensureDir, upsertIndex } = require('./lib/safe-io');
 const { normalizeDomain, displayDomain, displayGenre } = require('./lib/domain-utils');
-const dbClient = require('./lib/db-client');
+// Preserve CLI .env loading while keeping pure parsing/imports free of DB setup.
+const dbClient = require.main === module ? require('./lib/db-client') : null;
 
 // ============================================================
 // Configuration
@@ -101,14 +102,30 @@ function parseArgs(argv) {
     };
 
     for (let i = 0; i < argv.length; i++) {
+        const option = argv[i];
+        const valueOptions = ['--input', '--format', '--genre', '--project', '--output', '--source-type', '--source'];
+        if (valueOptions.includes(option) &&
+            (!argv[i + 1] || !argv[i + 1].trim() || argv[i + 1].startsWith('--'))) {
+            throw new Error(`Missing value for ${option}`);
+        }
         switch (argv[i]) {
             case '--input': args.input = argv[++i]; break;
             case '--format': args.format = argv[++i]?.toLowerCase(); break;
             case '--genre': args.genre = argv[++i]?.toLowerCase(); break;
             case '--project': args.project = argv[++i]; break;
             case '--output': args.output = argv[++i]; break;
+            case '--source-type':
+            case '--source': {
+                const source = argv[++i];
+                if (args.source && args.source !== source) {
+                    throw new Error('Conflicting --source-type/--source values');
+                }
+                args.source = source;
+                break;
+            }
             case '--mongo-only': args.mongoOnly = true; break;
             case '--help': case '-h': printUsage(); process.exit(0);
+            default: throw new Error(`Unknown argument: ${argv[i]}`);
         }
     }
 
@@ -130,6 +147,8 @@ Required:
 
 Optional:
   --output <db-path>   Design DB 경로 (기본: E:/AI/db/design)
+  --source-type <type> 출처 기본값 (예: observed; 입력의 명시적 source 우선)
+  --source <type>      --source-type 별칭; 기존 source 문자열 보존
   --mongo-only         MongoDB에만 저장 (로컬 JSON 파일 쓰기 건너뜀)
   --help, -h           도움말
 
@@ -328,11 +347,15 @@ function createDetailFile(designId, project, domain, genre, system, source, cont
     const domainNorm = normalizeDomainName(domain);
 
     // Extract content fields from parsed data
-    const summary = data.summary || data.description || data.desc || data.overview || '';
-    const formula = data.formula || data.equation || data.calculation || '';
-    const parameters = data.parameters || data.params || data.variables || {};
-    const edgeCases = data.edge_cases || data.edgeCases || data.edge_case || [];
-    const references = data.references || data.refs || [];
+    const nested = data.content && typeof data.content === 'object' && !Array.isArray(data.content)
+        ? data.content : {};
+    // Explicit flat fields take precedence, including empty strings/arrays.
+    const summary = data.summary ?? data.description ?? data.desc ?? data.overview ?? nested.summary ?? '';
+    const formula = data.formula ?? data.equation ?? data.calculation ?? nested.formula ?? '';
+    const parameters = data.parameters ?? data.params ?? data.variables ?? nested.parameters ?? {};
+    const edgeCases = data.edge_cases ?? data.edgeCases ?? data.edge_case ?? nested.edge_cases ?? [];
+    const references = data.references ?? data.refs ?? nested.references ?? [];
+    const flow = data.flow ?? nested.flow;
 
     return {
         designId,
@@ -350,12 +373,15 @@ function createDetailFile(designId, project, domain, genre, system, source, cont
         },
         post_launch_label: null,
         accuracy_estimate: null,
+        ...(data.evidence_interpretation !== undefined
+            ? { evidence_interpretation: data.evidence_interpretation } : {}),
         content: {
             summary: typeof summary === 'string' ? summary : JSON.stringify(summary),
             formula: typeof formula === 'string' ? formula : JSON.stringify(formula),
             parameters: typeof parameters === 'object' ? parameters : {},
             edge_cases: Array.isArray(edgeCases) ? edgeCases : [edgeCases].filter(Boolean),
-            references: Array.isArray(references) ? references : [references].filter(Boolean)
+            references: Array.isArray(references) ? references : [references].filter(Boolean),
+            ...(flow !== undefined ? { flow } : {})
         },
         versions: [{
             version: '1.0.0',
@@ -408,7 +434,9 @@ function convertYaml(data, args) {
         if (data.systems || data.system_list) {
             const systems = data.systems || data.system_list;
             for (const [sysName, sysData] of Object.entries(systems)) {
-                const item = { ...sysData, system: sysName, ...args };
+                // A CLI default must not relabel an explicitly inferred/proposed item.
+                const item = { ...sysData, system: sysName,
+                    source: sysData.source || data.source || args.source };
                 const converted = convertSingleItem(item, args);
                 entries.push(...converted);
             }
@@ -444,7 +472,7 @@ function convertC10Format(data, args) {
         for (const domain of domains) {
             const domainDir = domain.toLowerCase().replace(/\s/g, '');
             const designId = generateDesignId(args.project, domainDir, system, paramName);
-            const source = data.source || args.source || 'internal_produced';
+            const source = paramData.source || data.source || args.source || 'internal_produced';
             const data_type = paramData.data_type || data.data_type || 'formula';
             const balance_area = paramData.balance_area || data.balance_area || null;
 
@@ -791,7 +819,12 @@ async function main() {
     console.log(`${'='.repeat(60)}\n`);
 }
 
-main().catch(err => {
-    console.error(`[FATAL] ${err.message}`);
-    dbClient.close().finally(() => process.exit(1));
-});
+module.exports = { parseArgs, parseCsv, parseMd, convertYaml, convertJson, convertCsv, convertMd };
+
+if (require.main === module) {
+    main().catch(async err => {
+        console.error(`[FATAL] ${err.message}`);
+        if (dbClient) await dbClient.close();
+        process.exitCode = 1;
+    });
+}
