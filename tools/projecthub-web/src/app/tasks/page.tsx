@@ -2,6 +2,7 @@
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Icon from "@/components/Icon";
+import Thread, { type ThreadComment } from "@/components/paper/Thread";
 
 interface Comment {
   text: string;
@@ -18,7 +19,7 @@ interface Attachment {
   content: string;  // UTF-8 평문 (base64 아님) — LLM이 직접 읽을 수 있게
 }
 
-type Team = "dev" | "art" | "design" | "chat" | "auto";
+type Team = "dev" | "art" | "design" | "data" | "chat" | "auto";
 
 interface Task {
   _id?: string;
@@ -57,15 +58,27 @@ const TEAM_META: Record<Team, { label: string; emoji: string; color: string; bg:
   dev:    { label: "개발", emoji: "💻", color: "text-cyan-700",    bg: "bg-cyan-50 border-cyan-300" },
   art:    { label: "아트", emoji: "🎨", color: "text-pink-700",    bg: "bg-pink-50 border-pink-300" },
   design: { label: "기획", emoji: "📐", color: "text-amber-700",   bg: "bg-amber-50 border-amber-300" },
+  // executor 는 이미 team="data" 를 task 에 기록한다(hermes_executor `_persist_team(task,"data")`).
+  // 여기 없으면 data task 가 하나 생기는 순간 TEAM_META[team] 이 undefined 가 된다.
+  data:   { label: "데이터", emoji: "📊", color: "text-emerald-700", bg: "bg-emerald-50 border-emerald-300" },
   chat:   { label: "대화", emoji: "💬", color: "text-gray-600",    bg: "bg-gray-50 border-gray-300" },
   auto:   { label: "자동", emoji: "🤖", color: "text-slate-500",   bg: "bg-slate-50 border-slate-300" },
 };
+
+/** 모르는 team 이 와도 화면이 죽지 않게. TEAM_META[t] 직접 접근 금지. */
+function teamMetaOf(t?: string) {
+  return TEAM_META[(t || "auto") as Team] ?? {
+    label: t || "미지정", emoji: "❓", color: "text-slate-500", bg: "bg-slate-50 border-slate-300",
+  };
+}
 
 /** team별 sub_team 카탈로그 — /api/agents/roles의 SUB_TEAMS와 동기화 */
 const SUB_TEAMS: Record<Team, string[]> = {
   dev:    ["general", "ui", "server", "ingame", "outgame"],
   art:    ["general", "ui", "background", "illustration"],
   design: ["general", "content", "level"],
+  // hermes_executor._DATA_SUB_ROLE 와 같은 목록이어야 한다 (bq/logspec/review/livesync/general)
+  data:   ["general", "bq", "logspec", "review", "livesync"],
   chat:   ["general"],
   auto:   ["general"],
 };
@@ -80,6 +93,11 @@ const SUB_TEAM_LABELS: Record<string, string> = {
   illustration: "원화",
   content:      "컨텐츠",
   level:        "레벨",
+  // data 팀 분과 — hermes_executor._DATA_SUB_ROLE 과 대응
+  bq:           "BigQuery",
+  logspec:      "로그 요청서",
+  review:       "분석 검수",
+  livesync:     "라이브 환류",
 };
 
 function subTeamLabel(s?: string): string {
@@ -558,7 +576,7 @@ function TaskBoard({ project }: { project: string }) {
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="제목·설명·코멘트 검색..."
           className="flex-1 min-w-[180px] px-3 py-1.5 border border-gray-200 rounded-lg text-sm"
-          style={{ color: "#e6e9ef" }}
+          style={{ color: "var(--text)" }}
         />
         <label
           className={`flex items-center gap-1.5 px-3 py-1.5 text-xs border rounded-lg cursor-pointer ${
@@ -578,7 +596,7 @@ function TaskBoard({ project }: { project: string }) {
           value={filterAssignee}
           onChange={(e) => setFilterAssignee(e.target.value)}
           className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg bg-white"
-          style={{ color: "#e6e9ef" }}
+          style={{ color: "var(--text)" }}
         >
           <option value="all">모든 담당자</option>
           {assigneeList.map((a) => (
@@ -589,7 +607,7 @@ function TaskBoard({ project }: { project: string }) {
           value={filterPriority}
           onChange={(e) => setFilterPriority(e.target.value)}
           className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg bg-white"
-          style={{ color: "#e6e9ef" }}
+          style={{ color: "var(--text)" }}
         >
           <option value="all">모든 우선순위</option>
           <option value="urgent">Urgent</option>
@@ -601,12 +619,13 @@ function TaskBoard({ project }: { project: string }) {
           value={filterTeam}
           onChange={(e) => { setFilterTeam(e.target.value); setFilterSubTeam("all"); }}
           className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg bg-white"
-          style={{ color: "#e6e9ef" }}
+          style={{ color: "var(--text)" }}
         >
           <option value="all">모든 팀</option>
           <option value="dev">💻 개발</option>
           <option value="art">🎨 아트</option>
           <option value="design">📐 기획</option>
+          <option value="data">📊 데이터</option>
           <option value="chat">💬 대화</option>
         </select>
         {filterTeam !== "all" && SUB_TEAMS[filterTeam as Team] && SUB_TEAMS[filterTeam as Team].length > 1 && (
@@ -614,7 +633,7 @@ function TaskBoard({ project }: { project: string }) {
             value={filterSubTeam}
             onChange={(e) => setFilterSubTeam(e.target.value)}
             className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg bg-white"
-            style={{ color: "#e6e9ef" }}
+            style={{ color: "var(--text)" }}
           >
             <option value="all">모든 분과</option>
             {SUB_TEAMS[filterTeam as Team].map((s) => (
@@ -693,7 +712,7 @@ function TaskBoard({ project }: { project: string }) {
                 <div className="p-2 space-y-2 min-h-[200px]">
                   {colTasks.map((task) => {
                     const team = inferTeam(task);
-                    const teamMeta = TEAM_META[team];
+                    const teamMeta = teamMetaOf(team);
                     const isOverride = !!task.team_override;
                     const subTeam = inferSubTeam(task, team);
                     const subOverride = !!task.sub_team_override;
@@ -709,6 +728,9 @@ function TaskBoard({ project }: { project: string }) {
                         dragging === task._id ? "opacity-50" : ""
                       }`}
                       onClick={() => setDetailTask(task)}
+                      data-card="task"
+                      data-pri={task.priority}
+                      data-stopped={task.hermes_stopped ? "1" : undefined}
                     >
                       {/* Team badge + priority dot + title */}
                       <div className="flex items-start gap-2 mb-2">
@@ -725,7 +747,7 @@ function TaskBoard({ project }: { project: string }) {
                         <span
                           className={`mt-1.5 shrink-0 w-2 h-2 rounded-full ${priStyle(task.priority).dot}`}
                         />
-                        <p className="text-sm font-medium leading-snug line-clamp-2 flex-1">{task.title}</p>
+                        <p className="text-sm font-medium leading-snug truncate flex-1" title={task.title}>{task.title}</p>
                         {(task.status as string) === "draft" && (
                           <span className="shrink-0 text-[10px] px-1.5 py-0.5 rounded border border-violet-200 bg-violet-50 text-violet-700 font-medium"
                             title="목표([goal]) 분해로 생성된 하위 작업 — 부모 작업 승인 시 자동 실행">
@@ -743,10 +765,7 @@ function TaskBoard({ project }: { project: string }) {
                       </div>
                       {/* 카드 thumbnail 제거 — 6.4MB 페이로드 → 100KB로 축소 (2026-04-30). 이미지는 모달에서만. */}
 
-                      {/* Description preview */}
-                      {task.description && (
-                        <p className="text-xs text-gray-400 line-clamp-2 mb-2 pl-4">{task.description}</p>
-                      )}
+                      {/* 설명 발췌 제거 — 제목이 이미 요약이다. 상세는 카드를 열면 있다. */}
 
                       {/* Footer */}
                       <div className="flex items-center justify-between pl-4">
@@ -931,7 +950,7 @@ function TaskBoard({ project }: { project: string }) {
                     value={form.assignee}
                     onChange={(e) => setForm({ ...form, assignee: e.target.value })}
                     className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 bg-white"
-                    style={{color:"#e6e9ef"}}
+                    style={{color:"var(--text)"}}
                   >
                     <option value="">담당자 선택</option>
                     {allowedAssignees.map((a) => (
@@ -1087,7 +1106,7 @@ function TaskBoard({ project }: { project: string }) {
                 onChange={(e) => setPaletteQuery(e.target.value)}
                 placeholder="태스크 검색 (제목·설명·담당자·코멘트)..."
                 className="flex-1 text-sm outline-none bg-transparent"
-                style={{ color: "#e6e9ef" }}
+                style={{ color: "var(--text)" }}
               />
               <kbd className="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded text-gray-500">ESC</kbd>
             </div>
@@ -1164,6 +1183,7 @@ function TaskBoard({ project }: { project: string }) {
             moveTask(detailTask, newStatus);
             setDetailTask({ ...detailTask, status: newStatus });
           }}
+          defaultAuthor={(currentUserEmail.split("@")[0] || "").trim()}
           onAddComment={async (text, author) => {
             await fetch("/api/tasks", {
               method: "PATCH",
@@ -1215,6 +1235,7 @@ function DetailModal({
   onStatusChange,
   onAddComment,
   onDeleteComment,
+  defaultAuthor,
 }: {
   task: Task;
   columns: Array<{ id: Task["status"]; label: string }>;
@@ -1225,6 +1246,8 @@ function DetailModal({
   onStatusChange: (status: Task["status"]) => void;
   onAddComment: (text: string, author: string) => Promise<void>;
   onDeleteComment: (index: number) => Promise<void>;
+  /** 로그인 사용자 표시명 — 스레드에서 이름 입력칸을 없앤 대신 이걸 쓴다 */
+  defaultAuthor?: string;
 }) {
   const [editing, setEditing] = useState(false);
   const [editForm, setEditForm] = useState({
@@ -1260,11 +1283,14 @@ function DetailModal({
     }
   }
 
-  async function handleAddComment() {
-    if (!commentText.trim()) return;
+  // text 를 인자로 받는다 — Thread 가 자기 draft 를 들고 있어서, state 반영을
+  // 기다리는 순간(setCommentText 는 비동기다) 빈 문자열이 전송되는 사고가 난다.
+  async function handleAddComment(text?: string) {
+    const body = (text ?? commentText).trim();
+    if (!body) return;
     setAddingComment(true);
     try {
-      await onAddComment(commentText.trim(), commentAuthor.trim() || "익명");
+      await onAddComment(body, commentAuthor.trim() || defaultAuthor || "익명");
       setCommentText("");
     } finally {
       setAddingComment(false);
@@ -1282,7 +1308,7 @@ function DetailModal({
       onClick={onClose}
     >
       <div
-        className="glass w-full max-w-[600px] my-4 max-h-[92vh] overflow-y-auto"
+        className="glass w-full max-w-[1060px] my-4 max-h-[92vh] overflow-hidden"
         style={{ borderColor: "var(--line-strong)" }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -1322,7 +1348,29 @@ function DetailModal({
           <div className="gauge-track h-1.5 mt-1.5"><div className="gauge-fill h-full" style={{ width: `${_prog}%` }} /></div>
         </div>
 
-        <div className="px-6 py-4 space-y-4">
+        {/* 2단 — 대화가 주인공이고 속성은 곁다리다.
+            예전엔 한 열에 편집폼·메타·게이트·로그가 쌓여 스레드가 화면 밖으로 밀렸다. */}
+        <div className="pp-detail">
+          <div className="pp-detail-main">
+            {/* Comments */}
+            {/* ── 스레드 ──────────────────────────────────────────────
+                사람과 에이전트가 같은 방에 있다. 예전엔 회색 상자를 쌓은 댓글
+                목록이라, 누가 사람이고 누가 기계인지 매번 다시 읽어야 했다.
+                Thread 가 화자 종류·연속 발언·상태 로그를 형태로 구분한다. */}
+            <div className="pt-3 border-t border-gray-100">
+              <div className="pp-eyebrow">스레드 · {task.comments?.length || 0}</div>
+              <Thread
+                comments={(task.comments || []) as ThreadComment[]}
+                busy={addingComment}
+                onDelete={onDeleteComment}
+                onSend={async (text) => {
+                  setCommentText(text);
+                  await handleAddComment(text);
+                }}
+              />
+            </div>
+          </div>
+          <div className="pp-detail-side px-5 py-4 space-y-4">
           {/* Edit fields */}
           {editing ? (
             <div className="space-y-3">
@@ -1333,7 +1381,7 @@ function DetailModal({
                     value={editForm.assignee}
                     onChange={(e) => setEditForm({ ...editForm, assignee: e.target.value })}
                     className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white"
-                    style={{ color: "#e6e9ef" }}
+                    style={{ color: "var(--text)" }}
                   >
                     <option value="">담당자 선택</option>
                     {allowedAssignees.map((a) => (
@@ -1356,7 +1404,7 @@ function DetailModal({
                     value={editForm.priority}
                     onChange={(e) => setEditForm({ ...editForm, priority: e.target.value as Task["priority"] })}
                     className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white"
-                    style={{ color: "#e6e9ef" }}
+                    style={{ color: "var(--text)" }}
                   >
                     <option value="urgent">Urgent</option>
                     <option value="high">High</option>
@@ -1372,7 +1420,7 @@ function DetailModal({
                   onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
                   className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm resize-none"
                   rows={4}
-                  style={{ color: "#e6e9ef" }}
+                  style={{ color: "var(--text)" }}
                 />
               </div>
               <div>
@@ -1381,7 +1429,7 @@ function DetailModal({
                   value={editForm.related_levels}
                   onChange={(e) => setEditForm({ ...editForm, related_levels: e.target.value })}
                   className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
-                  style={{ color: "#e6e9ef" }}
+                  style={{ color: "var(--text)" }}
                 />
               </div>
               <button
@@ -1404,7 +1452,7 @@ function DetailModal({
                 </span>
                 {(() => {
                   const team = inferTeam(task);
-                  const meta = TEAM_META[team];
+                  const meta = teamMetaOf(team);
                   return (
                     <span
                       className={`text-xs px-2 py-0.5 rounded-full font-medium border ${meta.bg} ${meta.color}`}
@@ -1471,12 +1519,13 @@ function DetailModal({
                     });
                   }}
                   className="px-2 py-1 text-xs border border-gray-200 rounded-lg bg-white"
-                  style={{ color: "#e6e9ef" }}
+                  style={{ color: "var(--text)" }}
                 >
                   <option value="auto">🤖 자동 (Translator)</option>
                   <option value="dev">💻 개발</option>
                   <option value="art">🎨 아트</option>
                   <option value="design">📐 기획</option>
+                  <option value="data">📊 데이터</option>
                   <option value="chat">💬 대화</option>
                 </select>
                 {task.team_override && (
@@ -1503,7 +1552,7 @@ function DetailModal({
                         });
                       }}
                       className="px-2 py-1 text-xs border border-gray-200 rounded-lg bg-white"
-                      style={{ color: "#e6e9ef" }}
+                      style={{ color: "var(--text)" }}
                     >
                       <option value="auto">🤖 자동 (PM)</option>
                       {opts.map((s) => (
@@ -1575,7 +1624,7 @@ function DetailModal({
                       ? "bg-black text-white border-black"
                       : "border-gray-200 hover:bg-gray-50"
                   }`}
-                  style={{ color: task.status === col.id ? undefined : "#e6e9ef" }}
+                  style={{ color: task.status === col.id ? undefined : "var(--text)" }}
                 >
                   {col.label}
                 </button>
@@ -1602,67 +1651,6 @@ function DetailModal({
             );
           })()}
 
-          {/* Comments */}
-          <div className="pt-3 border-t border-gray-100">
-            <p className="text-xs text-gray-400 mb-3">
-              댓글 {task.comments?.length ? `(${task.comments.length})` : ""}
-            </p>
-
-            {/* Comment list */}
-            {task.comments && task.comments.length > 0 && (
-              <div className="space-y-3 mb-4 max-h-60 overflow-y-auto">
-                {task.comments.map((c, i) => (
-                  <div key={i} className="bg-gray-50 rounded-lg p-3 group">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs font-semibold" style={{ color: "#e6e9ef" }}>{c.author}</span>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-gray-400">
-                          {new Date(c.created_at).toLocaleString("ko-KR", {
-                            month: "short", day: "numeric", hour: "2-digit", minute: "2-digit",
-                          })}
-                        </span>
-                        <button
-                          onClick={() => onDeleteComment(i)}
-                          className="text-xs text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
-                          title="댓글 삭제"
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    </div>
-                    <p className="text-sm text-gray-700 whitespace-pre-wrap">{c.text}</p>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Add comment */}
-            <div className="flex flex-col gap-2">
-              <div className="flex gap-2">
-                <input
-                  value={commentAuthor}
-                  onChange={(e) => setCommentAuthor(e.target.value)}
-                  placeholder="이름"
-                  className="w-24 shrink-0 px-2.5 py-2 text-xs border border-gray-200 rounded-lg"
-                  style={{ color: "#e6e9ef" }}
-                />
-                <input
-                  value={commentText}
-                  onChange={(e) => setCommentText(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) handleAddComment(); }}
-                  placeholder="댓글 작성... (Enter로 전송)"
-                  className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-lg"
-                  style={{ color: "#e6e9ef" }}
-                />
-                <button
-                  onClick={handleAddComment}
-                  disabled={addingComment || !commentText.trim()}
-                  className="px-3 py-2 text-xs bg-black text-white rounded-lg hover:bg-gray-800 disabled:opacity-40 shrink-0"
-                >
-                  {addingComment ? "..." : "전송"}
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -1869,6 +1857,7 @@ function CompetitiveLevels({ taskId, levelIds }: { taskId: string; levelIds: str
                   return (
                     <button
                       key={n}
+                      data-star={filled ? "on" : "off"}
                       disabled={isSaving}
                       onClick={() => setStar(lv, n)}
                       className={`text-lg leading-none transition-transform hover:scale-110 ${

@@ -349,14 +349,14 @@ export default function GalleryPage() {
               onChange={(e) => setQ(e.target.value)}
               placeholder="프롬프트 검색..."
               className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm"
-              style={{ color: "#e6e9ef" }}
+              style={{ color: "var(--text)" }}
             />
           </div>
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as SortKey)}
             className="px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white"
-            style={{ color: "#e6e9ef" }}
+            style={{ color: "var(--text)" }}
           >
             <option value="newest">최신순</option>
             <option value="oldest">오래된순</option>
@@ -366,7 +366,7 @@ export default function GalleryPage() {
             value={tagFilter}
             onChange={(e) => setTagFilter(e.target.value)}
             className="px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white"
-            style={{ color: "#e6e9ef" }}
+            style={{ color: "var(--text)" }}
           >
             <option value="">모든 태그</option>
             {facets.tags.map((t) => (
@@ -377,7 +377,7 @@ export default function GalleryPage() {
             value={authorFilter}
             onChange={(e) => setAuthorFilter(e.target.value)}
             className="px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white"
-            style={{ color: "#e6e9ef" }}
+            style={{ color: "var(--text)" }}
           >
             <option value="">모든 작성자</option>
             {facets.authors.map((a) => (
@@ -471,7 +471,7 @@ export default function GalleryPage() {
               value={minRating}
               onChange={(e) => setMinRating(parseInt(e.target.value, 10))}
               className="border border-gray-200 rounded px-2 py-0.5 text-xs"
-              style={{ color: "#e6e9ef" }}
+              style={{ color: "var(--text)" }}
             >
               <option value={0}>전체</option>
               <option value={1}>★ 1+</option>
@@ -593,7 +593,7 @@ export default function GalleryPage() {
                   rows={4}
                   placeholder="예: pastel pink balloon character with a smiley face, game UI asset, transparent background"
                   className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
-                  style={{ color: "#e6e9ef" }}
+                  style={{ color: "var(--text)" }}
                 />
               </div>
               <div className="grid grid-cols-3 gap-3">
@@ -603,7 +603,7 @@ export default function GalleryPage() {
                     value={gN}
                     onChange={(e) => setGN(parseInt(e.target.value, 10))}
                     className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white"
-                    style={{ color: "#e6e9ef" }}
+                    style={{ color: "var(--text)" }}
                   >
                     {COUNTS.map((n) => <option key={n} value={n}>{n}장</option>)}
                   </select>
@@ -614,7 +614,7 @@ export default function GalleryPage() {
                     value={gSize}
                     onChange={(e) => setGSize(e.target.value)}
                     className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white"
-                    style={{ color: "#e6e9ef" }}
+                    style={{ color: "var(--text)" }}
                   >
                     {SIZES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
                   </select>
@@ -625,7 +625,7 @@ export default function GalleryPage() {
                     value={gQuality}
                     onChange={(e) => setGQuality(e.target.value)}
                     className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white"
-                    style={{ color: "#e6e9ef" }}
+                    style={{ color: "var(--text)" }}
                   >
                     {QUALITIES.map((q) => <option key={q.value} value={q.value}>{q.label}</option>)}
                   </select>
@@ -694,7 +694,7 @@ export default function GalleryPage() {
                         value={gBorderPx}
                         onChange={(e) => setGBorderPx(Math.max(8, Math.min(256, parseInt(e.target.value) || 96)))}
                         className="w-20 border border-amber-300 rounded px-2 py-1 text-xs"
-                        style={{ color: "#e6e9ef" }}
+                        style={{ color: "var(--text)" }}
                       />
                       px
                     </label>
@@ -717,7 +717,7 @@ export default function GalleryPage() {
                   onChange={(e) => setGTags(e.target.value)}
                   placeholder="예: balloon, character, pastel"
                   className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
-                  style={{ color: "#e6e9ef" }}
+                  style={{ color: "var(--text)" }}
                 />
               </div>
               {genError && <p className="text-xs text-red-600">{genError}</p>}
@@ -831,6 +831,7 @@ export default function GalleryPage() {
                     return (
                       <button
                         key={r}
+                        data-star={filled ? "on" : "off"}
                         onClick={() => setRating(detail, myR === r ? 0 : r)}
                         className={`text-lg transition-transform hover:scale-110 ${filled ? "text-yellow-500" : "text-gray-300 hover:text-yellow-300"}`}
                         title={`${r}점${myR === r ? " (해제)" : ""}`}
@@ -891,7 +892,7 @@ export default function GalleryPage() {
                       onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) postComment(); }}
                       placeholder="피드백·코멘트 작성... (Enter)"
                       className="flex-1 px-3 py-1.5 text-xs border border-gray-200 rounded"
-                      style={{ color: "#e6e9ef" }}
+                      style={{ color: "var(--text)" }}
                     />
                     <button
                       onClick={postComment}
@@ -1066,7 +1067,7 @@ export default function GalleryPage() {
                       onChange={(e) => setSliceBorder(Math.max(8, Math.min(512, parseInt(e.target.value) || 96)))}
                       disabled={slicingBusy}
                       className="w-full border border-gray-200 rounded px-3 py-1.5"
-                      style={{ color: "#e6e9ef" }}
+                      style={{ color: "var(--text)" }}
                     />
                   </div>
                 ) : (
@@ -1084,7 +1085,7 @@ export default function GalleryPage() {
                           onChange={(e) => setter(Math.max(0, Math.min(512, parseInt(e.target.value) || 0)))}
                           disabled={slicingBusy}
                           className="w-full border border-gray-200 rounded px-2 py-1"
-                          style={{ color: "#e6e9ef" }}
+                          style={{ color: "var(--text)" }}
                         />
                       </div>
                     ))}
@@ -1366,7 +1367,7 @@ function InpaintModal({
                 rows={5}
                 placeholder="예: replace the marked area with a clean wooden texture, no metal"
                 className="w-full px-3 py-2 text-xs border border-gray-200 rounded resize-none"
-                style={{ color: "#e6e9ef" }}
+                style={{ color: "var(--text)" }}
               />
               <p className="text-[10px] text-gray-400 mt-0.5">
                 팁: 영문 + 구체적인 형용사 (color, material, style) 가 잘 먹힙니다.

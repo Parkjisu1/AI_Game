@@ -6,10 +6,21 @@ interface TeamRow {
   label: string;
   icon: string;
   color: string;
+  kind: "team" | "batch";
   n: number;
   avg: number | null;
   last_score_at: string | null;
+  stale: boolean;
+  age_days: number | null;
   weak: boolean;
+}
+interface Meta {
+  total_n: number;
+  last_at: string | null;
+  stale: boolean;
+  age_days: number | null;
+  stale_days: number;
+  dist: { score: number; n: number }[];
 }
 interface PatternRow {
   team_id: string;
@@ -28,6 +39,7 @@ interface RecentRow {
   created_at: string;
 }
 interface Resp {
+  meta: Meta;
   teams: TeamRow[];
   by_pattern: PatternRow[];
   recent: RecentRow[];
@@ -46,9 +58,44 @@ function StarBar({ value }: { value: number }) {
   return (
     <div className="flex items-center gap-0.5">
       {[1, 2, 3, 4, 5].map((n) => (
-        <span key={n} className={`text-base ${value >= n ? "text-yellow-400" : "text-gray-300"}`}>★</span>
+        <span key={n} data-star={value >= n ? "on" : "off"} className={`text-base ${value >= n ? "text-yellow-400" : "text-gray-300"}`}>★</span>
       ))}
       <span className="ml-1 text-xs text-gray-500 font-mono">{(value ?? 0).toFixed(2)}</span>
+    </div>
+  );
+}
+
+/** 팀 카드 한 장. 휴면(오래된 데이터)이면 색을 빼고 판정을 보류한다. */
+function TeamCard({ t }: { t: TeamRow }) {
+  const cc = COLOR_CLASSES[t.color] || COLOR_CLASSES.gray;
+  const dim = t.stale || t.n === 0;
+  return (
+    <div className={`rounded-xl border-2 p-4 ${dim ? "border-gray-200 bg-gray-50 opacity-75" : `${cc.border} ${cc.bg}`}`}>
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <h3 className={`font-bold truncate ${dim ? "text-gray-600" : cc.text}`}>{t.icon} {t.label}</h3>
+          <p className="text-[11px] text-gray-500 font-mono truncate">{t.team_id}</p>
+        </div>
+        {t.weak && (
+          <span className="shrink-0 px-1.5 py-0.5 bg-red-500 text-white text-[10px] rounded font-bold">WEAK</span>
+        )}
+        {!t.weak && t.stale && t.n > 0 && (
+          <span className="shrink-0 px-1.5 py-0.5 bg-gray-300 text-gray-700 text-[10px] rounded font-bold">휴면</span>
+        )}
+      </div>
+      <div className="mt-3">
+        {t.avg !== null ? <StarBar value={t.avg} /> : <span className="text-sm text-gray-400">아직 별점 없음</span>}
+      </div>
+      <div className="mt-2 flex flex-wrap items-center gap-x-3 text-[11px] text-gray-500">
+        <span>표본 {t.n}건</span>
+        {t.last_score_at && <span>· 최근 {t.last_score_at.slice(0, 10)}</span>}
+        {t.age_days !== null && t.age_days > 30 && <span className="text-gray-400">({t.age_days}일 전)</span>}
+      </div>
+      {t.stale && t.n >= 5 && (t.avg ?? 5) < 3.0 && (
+        <p className="mt-2 text-[11px] text-gray-500">
+          평균은 낮지만 데이터가 오래돼 약팀 판정은 보류했습니다.
+        </p>
+      )}
     </div>
   );
 }
@@ -57,6 +104,7 @@ export default function DesignTeamsPage() {
   const [data, setData] = useState<Resp | null>(null);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
+  const [showBatch, setShowBatch] = useState(false);
 
   useEffect(() => {
     fetch("/api/agents/design-teams")
@@ -72,7 +120,8 @@ export default function DesignTeamsPage() {
         <div>
           <h1 className="text-2xl font-bold">🏁 Design Teams Leaderboard</h1>
           <p className="mt-1 text-sm text-gray-500">
-            4팀 경쟁 누적 별점 (1~5). 평균 &lt; 3 + 표본 5+ → 약팀 표시 + 다음 task에서 패턴 선택 가중치 자동 조정.
+            4팀 경쟁 누적 별점 (1~5). 평균 &lt; 3 + 표본 5+ + <b>최근 30일 내 데이터</b> → 약팀 표시
+            + 다음 task에서 패턴 선택 가중치 자동 조정.
           </p>
         </div>
         <div className="flex gap-2">
@@ -86,44 +135,57 @@ export default function DesignTeamsPage() {
 
       {data && (
         <>
-          {/* 팀 카드 4개 */}
+          {/* 데이터 실태 — 판정을 믿어도 되는 상태인지 먼저 알린다 */}
+          {data.meta && (
+            <div className={`mb-6 rounded-lg border p-3 text-sm ${
+              data.meta.stale ? "border-amber-200 bg-amber-50 text-amber-800"
+                              : "border-gray-200 bg-gray-50 text-gray-600"}`}>
+              별점 {data.meta.total_n.toLocaleString()}건
+              {data.meta.last_at && <> · 최근 {data.meta.last_at.slice(0, 10)}</>}
+              {data.meta.stale && data.meta.age_days !== null && (
+                <> — <b>{data.meta.age_days}일째 새 별점이 없습니다.</b> 약팀 판정은 보류 중입니다.</>
+              )}
+              {data.meta.dist?.length > 0 && (
+                <span className="ml-2 text-xs opacity-80">
+                  (분포 {data.meta.dist.map((d) => `${d.score}★ ${d.n}`).join(" · ")})
+                </span>
+              )}
+            </div>
+          )}
+
+          {/* 팀 카드 — 경쟁하는 팀만. batch_* 는 팀이 아니라 배치 실행 태그라 아래로 뺀다 */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            {data.teams.map((t) => {
-              const cc = COLOR_CLASSES[t.color] || COLOR_CLASSES.gray;
-              return (
-                <div key={t.team_id} className={`rounded-xl border-2 ${cc.border} ${cc.bg} p-4`}>
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className={`font-bold ${cc.text}`}>{t.icon} {t.label}</h3>
-                      <p className="text-[11px] text-gray-500 font-mono">{t.team_id}</p>
-                    </div>
-                    {t.weak && (
-                      <span className="px-1.5 py-0.5 bg-red-500 text-white text-[10px] rounded font-bold">
-                        WEAK
-                      </span>
-                    )}
-                  </div>
-                  <div className="mt-3">
-                    {t.avg !== null ? (
-                      <StarBar value={t.avg} />
-                    ) : (
-                      <span className="text-sm text-gray-400">아직 별점 없음</span>
-                    )}
-                  </div>
-                  <div className="mt-2 flex items-center gap-3 text-[11px] text-gray-500">
-                    <span>표본 {t.n}건</span>
-                    {t.last_score_at && (
-                      <span>· 최근 {t.last_score_at.slice(5, 10)}</span>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+            {data.teams.filter((t) => t.kind !== "batch").map((t) => (
+              <TeamCard key={t.team_id} t={t} />
+            ))}
           </div>
+
+          {data.teams.some((t) => t.kind === "batch") && (
+            <div className="mb-8">
+              <button
+                onClick={() => setShowBatch((v) => !v)}
+                className="text-xs px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg"
+              >
+                {showBatch ? "▾" : "▸"} 배치 실행 태그 {data.teams.filter((t) => t.kind === "batch").length}개
+                <span className="ml-1 text-gray-500">— 팀이 아닌 일괄 생성 기록</span>
+              </button>
+              {showBatch && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-3">
+                  {data.teams.filter((t) => t.kind === "batch").map((t) => (
+                    <TeamCard key={t.team_id} t={t} />
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* 팀×패턴 leaderboard */}
           <div className="rounded-xl border border-gray-200 bg-white p-5 mb-6">
-            <h2 className="text-base font-bold mb-3">📊 팀 × 패턴 별 평균 별점</h2>
+            <h2 className="text-base font-bold mb-1">📊 팀 × 패턴 별 평균 별점</h2>
+            <p className="text-xs text-gray-400 mb-3">
+              변형(<code>_P</code>, <code>_A</code> …)은 기저 패턴으로 합산했습니다.
+              {!showBatch && " 배치 실행 태그는 위 토글로 펼칠 수 있습니다."}
+            </p>
             {data.by_pattern.length === 0 ? (
               <p className="text-sm text-gray-400 text-center py-6">데이터 없음 — 별점 누적되면 표시됩니다.</p>
             ) : (
@@ -138,7 +200,10 @@ export default function DesignTeamsPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {data.by_pattern.map((r, i) => {
+                    {data.by_pattern.filter((r) => {
+                      const t = data.teams.find((x) => x.team_id === r.team_id);
+                      return showBatch || t?.kind !== "batch";
+                    }).map((r, i) => {
                       const team = data.teams.find((t) => t.team_id === r.team_id);
                       const cc = team ? COLOR_CLASSES[team.color] || COLOR_CLASSES.gray : COLOR_CLASSES.gray;
                       return (

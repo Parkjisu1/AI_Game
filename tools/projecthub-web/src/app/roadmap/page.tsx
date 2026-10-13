@@ -157,9 +157,13 @@ export default function RoadmapEditorPage() {
 
   if (!data) {
     return (
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h1 className="text-xl font-bold mb-2">로드맵 편집</h1>
-        <p className="text-sm text-gray-500 mb-3">로드맵 데이터가 없습니다. 대시보드에서 CSV를 먼저 업로드하거나 빈 로드맵을 만들어 시작하세요.</p>
+      /* 빈 상태가 화면 폭 전체를 먹고 안에 세 줄만 있었다 — 1400px 짜리 흰 슬래브에
+         글자 세 줄은 "설계된 여백" 이 아니라 "안 채워진 자리" 로 읽힌다.
+         빈 상태는 읽는 물건이므로 480px 로 묶고 가운데에 둔다. */
+      <div className="pp-blank">
+        <div className="pp-eyebrow">로드맵</div>
+        <h1 className="pp-title mb-2">아직 로드맵이 없습니다</h1>
+        <p className="text-sm text-gray-500 mb-4">대시보드에서 CSV를 올리거나, 빈 로드맵으로 시작할 수 있습니다.</p>
         <button
           onClick={() => saveData({
             uploadedAt: new Date().toISOString(),
@@ -190,14 +194,14 @@ export default function RoadmapEditorPage() {
           <button
             onClick={openStartDate}
             className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg hover:bg-gray-50"
-            style={{ color: "#e6e9ef" }}
+            style={{ color: "var(--text)" }}
           >
             <span className="inline-flex items-center gap-1"><Icon name="calendar" size={13} /> 시작일: {data.startDate || "미설정"}</span>
           </button>
           <button
             onClick={openAddSprint}
             className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg hover:bg-gray-50"
-            style={{ color: "#e6e9ef" }}
+            style={{ color: "var(--text)" }}
           >
             + Sprint
           </button>
@@ -239,7 +243,7 @@ export default function RoadmapEditorPage() {
                   value={taskModal.task.title}
                   onChange={(e) => setTaskModal({ ...taskModal, task: { ...taskModal.task, title: e.target.value } })}
                   className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
-                  style={{ color: "#e6e9ef" }}
+                  style={{ color: "var(--text)" }}
                   autoFocus
                 />
               </div>
@@ -250,7 +254,7 @@ export default function RoadmapEditorPage() {
                     value={taskModal.task.role}
                     onChange={(e) => setTaskModal({ ...taskModal, task: { ...taskModal.task, role: e.target.value } })}
                     className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white"
-                    style={{ color: "#e6e9ef" }}
+                    style={{ color: "var(--text)" }}
                   >
                     {ROLE_OPTIONS.map((r) => <option key={r} value={r}>{r}</option>)}
                   </select>
@@ -261,7 +265,7 @@ export default function RoadmapEditorPage() {
                     value={taskModal.task.sprintId}
                     onChange={(e) => setTaskModal({ ...taskModal, task: { ...taskModal.task, sprintId: Number(e.target.value) } })}
                     className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white"
-                    style={{ color: "#e6e9ef" }}
+                    style={{ color: "var(--text)" }}
                   >
                     {data.sprints.map((s) => (
                       <option key={s.id} value={s.id}>Sprint {s.id} (W{s.weekStart}~W{s.weekEnd})</option>
@@ -278,7 +282,7 @@ export default function RoadmapEditorPage() {
                     onFocus={(e) => e.target.select()}
                     placeholder="예: 4"
                     className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
-                    style={{ color: "#e6e9ef" }}
+                    style={{ color: "var(--text)" }}
                   />
                 </div>
                 <div>
@@ -291,7 +295,7 @@ export default function RoadmapEditorPage() {
                     onFocus={(e) => e.target.select()}
                     placeholder="예: 6"
                     className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
-                    style={{ color: "#e6e9ef" }}
+                    style={{ color: "var(--text)" }}
                   />
                 </div>
               </div>
@@ -302,7 +306,7 @@ export default function RoadmapEditorPage() {
                 <button onClick={deleteTask} className="text-sm text-red-600 hover:underline">삭제</button>
               ) : <span />}
               <div className="flex gap-2">
-                <button onClick={() => setTaskModal(null)} className="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50" style={{ color: "#e6e9ef" }}>취소</button>
+                <button onClick={() => setTaskModal(null)} className="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50" style={{ color: "var(--text)" }}>취소</button>
                 <button onClick={commitTask} className="px-4 py-2 text-sm bg-black text-white rounded-lg hover:bg-gray-800">저장</button>
               </div>
             </div>
@@ -326,7 +330,7 @@ export default function RoadmapEditorPage() {
                   value={sprintModal.sprint.id}
                   onChange={(e) => setSprintModal({ ...sprintModal, sprint: { ...sprintModal.sprint, id: Number(e.target.value) || 0 } })}
                   className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
-                  style={{ color: "#e6e9ef" }}
+                  style={{ color: "var(--text)" }}
                   disabled={sprintModal.mode === "edit"}
                 />
               </div>
@@ -336,7 +340,7 @@ export default function RoadmapEditorPage() {
                   value={sprintModal.sprint.label}
                   onChange={(e) => setSprintModal({ ...sprintModal, sprint: { ...sprintModal.sprint, label: e.target.value } })}
                   className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
-                  style={{ color: "#e6e9ef" }}
+                  style={{ color: "var(--text)" }}
                   placeholder="SPRINT 0: 프리프로덕션"
                 />
               </div>
@@ -351,7 +355,7 @@ export default function RoadmapEditorPage() {
                     onFocus={(e) => e.target.select()}
                     placeholder="예: 1"
                     className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
-                    style={{ color: "#e6e9ef" }}
+                    style={{ color: "var(--text)" }}
                   />
                 </div>
                 <div>
@@ -364,7 +368,7 @@ export default function RoadmapEditorPage() {
                     onChange={(e) => setSprintModal({ ...sprintModal, sprint: { ...sprintModal.sprint, weekEnd: Number(e.target.value) || 0 } })}
                     placeholder="예: 3"
                     className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
-                    style={{ color: "#e6e9ef" }}
+                    style={{ color: "var(--text)" }}
                   />
                 </div>
               </div>
@@ -375,7 +379,7 @@ export default function RoadmapEditorPage() {
                 <button onClick={deleteSprint} className="text-sm text-red-600 hover:underline">삭제</button>
               ) : <span />}
               <div className="flex gap-2">
-                <button onClick={() => setSprintModal(null)} className="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50" style={{ color: "#e6e9ef" }}>취소</button>
+                <button onClick={() => setSprintModal(null)} className="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50" style={{ color: "var(--text)" }}>취소</button>
                 <button onClick={commitSprint} className="px-4 py-2 text-sm bg-black text-white rounded-lg hover:bg-gray-800">저장</button>
               </div>
             </div>
@@ -393,10 +397,10 @@ export default function RoadmapEditorPage() {
               value={startDateVal}
               onChange={(e) => setStartDateVal(e.target.value)}
               className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
-              style={{ color: "#e6e9ef" }}
+              style={{ color: "var(--text)" }}
             />
             <div className="flex justify-end gap-2 mt-5">
-              <button onClick={() => setStartDateModal(false)} className="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50" style={{ color: "#e6e9ef" }}>취소</button>
+              <button onClick={() => setStartDateModal(false)} className="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50" style={{ color: "var(--text)" }}>취소</button>
               <button onClick={commitStartDate} className="px-4 py-2 text-sm bg-black text-white rounded-lg hover:bg-gray-800">저장</button>
             </div>
           </div>

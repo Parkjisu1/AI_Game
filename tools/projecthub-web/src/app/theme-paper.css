@@ -1,0 +1,645 @@
+/* ══════════════════════════════════════════════════════════════
+   PAPER — 종이 테마 (NEXT_PUBLIC_APP_THEME=paper)
+
+   globals.css 의 네온 베이스 위에 덧씌우는 레이어.
+   env 가 없으면 이 파일의 선택자는 하나도 매치되지 않으므로
+   기존 인스턴스 렌더링은 1px도 바뀌지 않는다.
+   (globals.css 의 무한정 !important 를 이기려면 html[data-theme] 접두가 필요하다.)
+
+   ── 이 테마가 서 있는 자리 ─────────────────────────────────
+   쓰는 사람: 게임 스튜디오 디렉터. 아침에 열어 "밤새 에이전트가 뭘 했나,
+   내가 승인할 게 뭔가"를 훑는다. 하루에 수십 번 여닫는 도구다.
+   느낌: 작업 책상 위의 종이. 조용하고 따뜻하고, 색은 상태에만 쓴다.
+
+   ── 결정 ──────────────────────────────────────────────────
+   면    : 미색 책상(#FBF9F5) 위에 흰 종이(#FFF). 색상(hue)은 하나, 명도만 이동.
+   깊이  : **보더 전용.** 그림자는 진짜 떠 있는 것(모달·팝오버)에만 1px 링.
+   색    : 60/30/10 — 무채색이 구조를 만들고 오렌지는 "지금 봐야 할 것"에만.
+           #E1791B 는 흰 배경에서 2.7:1 이라 **글자로 쓰지 않는다**(면·선·점 전용).
+           글자용 액센트는 #8A4308(6.4:1).
+   타입  : 디스플레이=Fraunces(세리프), 본문=DM Sans+Pretendard, 수치=Geist Mono.
+           15px 기준 1.25 배수. 한글 제목은 세리프 대신 Pretendard 700 — 작은 크기의
+           한글 명조는 가독성이 떨어진다(라틴/숫자만 세리프가 살아난다).
+   라디우스: 입력 4 · 카드 5 · 모달 10. 원형은 아바타·점·토글만.
+   ══════════════════════════════════════════════════════════════ */
+
+html[data-theme="paper"] {
+  /* 면 — 한 색상에서 명도만 이동 (다른 hue 를 섞으면 공간이 쪼개진다) */
+  --pp-desk:    #fbf9f5;   /* 책상 = 페이지 바탕 */
+  --pp-sheet:   #ffffff;   /* 종이 = 카드 */
+  --pp-recess:  #f4f1ea;   /* 파인 면 = 입력·헤더·비활성 */
+  --pp-recess-2:#eae5db;
+
+  /* 잉크 — 4단 위계 */
+  --pp-ink:     #1a1815;   /* 본문·제목      15.0:1 */
+  --pp-ink-2:   #3d3833;   /*                 9.6:1 */
+  --pp-ink-3:   #6b645c;   /* 보조            5.4:1 */
+  --pp-ink-4:   #8a8279;   /* 메타            3.6:1 — 12px 이상에서만 */
+
+  /* 괘선 — 찾으면 보이고, 안 찾으면 안 보이는 세기 */
+  --pp-rule:    rgba(26, 24, 21, 0.10);
+  --pp-rule-2:  rgba(26, 24, 21, 0.17);
+  --pp-rule-3:  rgba(26, 24, 21, 0.28);
+
+  /* 액센트 — 형광펜 오렌지. 면/선/점 전용 */
+  --pp-accent:      #e1791b;
+  --pp-accent-ink:  #8a4308;   /* 글자용 */
+  --pp-accent-wash: rgba(225, 121, 27, 0.10);
+
+  /* 상태 — 채도를 낮춰 종이에 인쇄된 잉크처럼 */
+  --pp-ok:     #2e7d57;
+  --pp-warn:   #a96a10;
+  --pp-err:    #c0392f;   /* 교정 펜 */
+  --pp-ok-w:   rgba(46, 125, 87, 0.10);
+  --pp-warn-w: rgba(169, 106, 16, 0.10);
+  --pp-err-w:  rgba(192, 57, 47, 0.09);
+
+  --pp-display: var(--font-display), "Iowan Old Style", Georgia, serif;
+  --pp-ui: var(--font-ui), Pretendard, "Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif;
+  --pp-mono: var(--font-mono-ph), ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  --pp-ease: cubic-bezier(0.23, 1, 0.32, 1);
+
+  color-scheme: light;
+
+  /* ── globals.css 의 네온 토큰을 종이 값으로 갈아끼운다 ──────────
+     상단바·독·배지 상당수가 클래스가 아니라 **인라인 style 로 var(--neon)/var(--line)**
+     을 쓴다. 유틸리티만 재매핑하면 페이지는 종이인데 크롬만 다크로 남는다.
+     여기서 변수를 바꾸면 그 인라인 스타일들이 통째로 따라온다. */
+  --bg-0: #f4f1ea;
+  --bg-1: #fbf9f5;
+  --bg-2: #f4f1ea;
+  --neon: #e1791b;
+  --neon-soft: #8a4308;
+  --neon-deep: #c2620f;
+  --line: rgba(26, 24, 21, 0.10);
+  --line-strong: rgba(26, 24, 21, 0.22);
+  --panel: #ffffff;
+  --panel-solid: #ffffff;
+  --text: #1a1815;
+  --text-dim: #6b645c;
+  --text-faint: #8a8279;
+  --ok: #2e7d57;
+  --warn: #a96a10;
+  --err: #c0392f;
+  --violet: #8a4308;
+  --pink: #8a4308;
+}
+
+/* ── 바탕: 네온 그라디언트·HUD 격자를 걷어내고 종이 그레인을 얹는다 ──
+   그레인이 없으면 그냥 "흰 테마"고, 있으면 종이가 된다. 2% 이하로 아주 얕게. */
+html[data-theme="paper"] body {
+  background: var(--pp-desk);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");
+  background-attachment: fixed;
+  color: var(--pp-ink);
+  font-family: var(--pp-ui);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+html[data-theme="paper"] body::before,
+html[data-theme="paper"] body::after { display: none; }
+
+/* ── 타이포 ───────────────────────────────────────────────
+   위계는 크기 하나가 아니라 서체·웨이트·색 세 축으로 만든다. */
+html[data-theme="paper"] h1,
+html[data-theme="paper"] h2 {
+  font-family: var(--pp-display);
+  font-weight: 600;
+  letter-spacing: -0.018em;   /* 큰 글자는 조여야 짜임새가 생긴다 */
+  color: var(--pp-ink);
+  text-wrap: balance;
+}
+html[data-theme="paper"] h3,
+html[data-theme="paper"] h4 {
+  font-weight: 600;
+  letter-spacing: -0.006em;
+  color: var(--pp-ink);
+}
+html[data-theme="paper"] p { text-wrap: pretty; }
+
+/* 수치·ID·코드는 전부 모노 탭룰러 — 숫자가 바뀔 때 자리가 흔들리면 안 된다 */
+html[data-theme="paper"] .font-mono,
+html[data-theme="paper"] .mono,
+html[data-theme="paper"] code,
+html[data-theme="paper"] pre,
+html[data-theme="paper"] .tabular-nums {
+  font-family: var(--pp-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.94em;
+}
+html[data-theme="paper"] code {
+  background: var(--pp-recess);
+  border: 1px solid var(--pp-rule);
+  border-radius: 4px;
+  padding: 0.08em 0.34em;
+  color: var(--pp-ink-2);
+}
+html[data-theme="paper"] pre {
+  background: var(--pp-recess);
+  border: 1px solid var(--pp-rule);
+  border-radius: 6px;
+  color: var(--pp-ink-2);
+}
+html[data-theme="paper"] pre code { background: none; border: 0; padding: 0; }
+
+/* 한글에 라틴 트래킹을 그대로 쓰면 읽기 어렵다 */
+html[data-theme="paper"] .tracking-hud,
+html[data-theme="paper"] .tracking-wide,
+html[data-theme="paper"] .tracking-wider,
+html[data-theme="paper"] .tracking-widest { letter-spacing: 0.05em !important; }
+
+/* ── 발광 계열 무력화 ────────────────────────────────────── */
+html[data-theme="paper"] .neon-text { color: var(--pp-accent-ink) !important; text-shadow: none !important; }
+html[data-theme="paper"] .neon-text-soft { color: var(--pp-ink-3) !important; text-shadow: none !important; }
+html[data-theme="paper"] .glow-cyan { box-shadow: 0 0 0 1px var(--pp-rule-2) !important; }
+html[data-theme="paper"] .hud::before,
+html[data-theme="paper"] .hud::after { display: none; }
+html[data-theme="paper"] .core-pulse { animation: none; filter: none; opacity: 1; }
+html[data-theme="paper"] .float { animation: none; }
+html[data-theme="paper"] .orbit-spin,
+html[data-theme="paper"] .orbit-spin-rev { animation-duration: 90s; opacity: .5; }
+
+/* ── 종이 한 장 ───────────────────────────────────────────
+   시그니처. 카드는 책상 위에 놓인 흰 종이다 — 떠 있지 않으니 그림자도 없다. */
+html[data-theme="paper"] .glass {
+  background: var(--pp-sheet) !important;
+  border: 1px solid var(--pp-rule) !important;
+  border-radius: 5px !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+html[data-theme="paper"] .glass-hover { transition: border-color .16s var(--pp-ease), background-color .16s var(--pp-ease); }
+html[data-theme="paper"] .glass-hover:hover {
+  border-color: var(--pp-rule-3) !important;
+  box-shadow: none !important;
+  transform: none !important;   /* 종이는 뜨지 않는다 */
+  background: var(--pp-sheet) !important;
+}
+
+/* ── 상태 점 — 발광 대신 잉크 점 ─────────────────────────── */
+html[data-theme="paper"] .dot-run { background: var(--pp-accent) !important; box-shadow: none !important; }
+html[data-theme="paper"] .dot-ok  { background: var(--pp-ok) !important;  box-shadow: none !important; }
+html[data-theme="paper"] .dot-wait{ background: var(--pp-warn) !important; box-shadow: none !important; }
+html[data-theme="paper"] .dot-err { background: var(--pp-err) !important; box-shadow: none !important; }
+html[data-theme="paper"] .wave i { background: var(--pp-accent) !important; box-shadow: none !important; }
+
+/* ── 게이지 ───────────────────────────────────────────────── */
+html[data-theme="paper"] .gauge-track { background: var(--pp-recess-2) !important; border-radius: 2px !important; }
+html[data-theme="paper"] .gauge-fill { background: var(--pp-accent) !important; box-shadow: none !important; border-radius: 2px !important; }
+
+/* ══════════════════════════════════════════════════════════════
+   Tailwind 유틸 재매핑 — 페이지 코드를 건드리지 않고 전면 적용
+   ══════════════════════════════════════════════════════════════ */
+
+/* 면 */
+html[data-theme="paper"] .bg-white {
+  background: var(--pp-sheet) !important;
+  border-color: var(--pp-rule) !important;
+  backdrop-filter: none !important;
+}
+html[data-theme="paper"] .bg-white\/95 { background: rgba(255, 255, 255, 0.96) !important; }
+html[data-theme="paper"] .bg-gray-50,
+html[data-theme="paper"] .bg-slate-50,
+html[data-theme="paper"] .bg-slate-100 { background-color: var(--pp-recess) !important; }
+html[data-theme="paper"] .bg-gray-100 { background-color: var(--pp-recess) !important; }
+html[data-theme="paper"] .bg-gray-200 { background-color: var(--pp-recess-2) !important; }
+html[data-theme="paper"] .bg-black { background-color: var(--pp-ink) !important; }
+
+html[data-theme="paper"] .hover\:bg-gray-50:hover,
+html[data-theme="paper"] .hover\:bg-gray-100:hover { background-color: var(--pp-recess) !important; }
+
+/* 글자 — 4단 위계 */
+html[data-theme="paper"] .text-black,
+html[data-theme="paper"] .text-gray-900 { color: var(--pp-ink) !important; }
+html[data-theme="paper"] .text-gray-800,
+html[data-theme="paper"] .text-gray-700 { color: var(--pp-ink-2) !important; }
+html[data-theme="paper"] .text-gray-600,
+html[data-theme="paper"] .text-gray-500 { color: var(--pp-ink-3) !important; }
+html[data-theme="paper"] .text-gray-400,
+html[data-theme="paper"] .text-gray-300 { color: var(--pp-ink-4) !important; }
+/* 다크 전제로 쓰인 밝은 회색 — 종이 위에선 안 보인다. 본문 잉크로 되돌린다.
+   (.text-white 는 건드리지 않는다 — 오렌지 버튼 위 흰 글자가 죽는다) */
+html[data-theme="paper"] .text-gray-100,
+html[data-theme="paper"] .text-gray-200 { color: var(--pp-ink) !important; }
+html[data-theme="paper"] .text-slate-600,
+html[data-theme="paper"] .text-slate-700,
+html[data-theme="paper"] .text-slate-800,
+html[data-theme="paper"] .text-slate-900,
+html[data-theme="paper"] .text-zinc-600, html[data-theme="paper"] .text-zinc-700,
+html[data-theme="paper"] .text-zinc-800, html[data-theme="paper"] .text-zinc-900,
+html[data-theme="paper"] .text-neutral-600, html[data-theme="paper"] .text-neutral-700,
+html[data-theme="paper"] .text-neutral-800, html[data-theme="paper"] .text-stone-600,
+html[data-theme="paper"] .text-stone-700, html[data-theme="paper"] .text-gray-950 { color: var(--pp-ink-2) !important; }
+
+/* 선 — 위계에 맞춘 3단 */
+html[data-theme="paper"] .border,
+html[data-theme="paper"] .border-t, html[data-theme="paper"] .border-b,
+html[data-theme="paper"] .border-l, html[data-theme="paper"] .border-r,
+html[data-theme="paper"] .border-gray-100,
+html[data-theme="paper"] .border-gray-200,
+html[data-theme="paper"] .border-slate-200,
+html[data-theme="paper"] .divide-y > * + * { border-color: var(--pp-rule) !important; }
+html[data-theme="paper"] .border-gray-300,
+html[data-theme="paper"] .border-gray-400,
+html[data-theme="paper"] .border-gray-700,
+html[data-theme="paper"] .border-gray-800 { border-color: var(--pp-rule-2) !important; }
+
+/* 액센트 — 파랑/시안/인디고 계열을 오렌지 하나로 흡수.
+   글자엔 accent-ink(대비 6.4:1), 면엔 accent. 색을 여러 개 두면 초점이 흩어진다. */
+html[data-theme="paper"] .text-blue-500, html[data-theme="paper"] .text-blue-600,
+html[data-theme="paper"] .text-blue-700, html[data-theme="paper"] .text-blue-800,
+html[data-theme="paper"] .text-sky-600, html[data-theme="paper"] .text-sky-700,
+html[data-theme="paper"] .text-indigo-600, html[data-theme="paper"] .text-indigo-700,
+html[data-theme="paper"] .text-cyan-600, html[data-theme="paper"] .text-cyan-700,
+html[data-theme="paper"] .text-teal-600, html[data-theme="paper"] .text-teal-700,
+html[data-theme="paper"] .text-purple-500, html[data-theme="paper"] .text-purple-600, html[data-theme="paper"] .text-purple-700,
+html[data-theme="paper"] .text-violet-500, html[data-theme="paper"] .text-violet-600, html[data-theme="paper"] .text-violet-700,
+html[data-theme="paper"] .text-pink-500, html[data-theme="paper"] .text-pink-600, html[data-theme="paper"] .text-pink-700,
+html[data-theme="paper"] .text-fuchsia-500, html[data-theme="paper"] .text-fuchsia-600,
+html[data-theme="paper"] .text-blue-400, html[data-theme="paper"] .text-cyan-400,
+html[data-theme="paper"] .text-sky-400, html[data-theme="paper"] .text-indigo-400 { color: var(--pp-accent-ink) !important; }
+
+html[data-theme="paper"] .bg-blue-500,
+html[data-theme="paper"] .bg-blue-600 {
+  background: var(--pp-accent) !important;
+  background-image: none !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  border-radius: 5px;
+}
+html[data-theme="paper"] .hover\:bg-blue-600:hover { filter: brightness(0.94); }
+html[data-theme="paper"] .bg-blue-500.h-full,
+html[data-theme="paper"] .h-full.bg-blue-500 {
+  background: var(--pp-accent) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border-radius: 2px !important;
+}
+html[data-theme="paper"] .bg-blue-50, html[data-theme="paper"] .bg-blue-100,
+html[data-theme="paper"] .bg-sky-50, html[data-theme="paper"] .bg-sky-100,
+html[data-theme="paper"] .bg-indigo-50, html[data-theme="paper"] .bg-indigo-100,
+html[data-theme="paper"] .bg-cyan-50, html[data-theme="paper"] .bg-cyan-100,
+html[data-theme="paper"] .bg-teal-50, html[data-theme="paper"] .bg-teal-100,
+html[data-theme="paper"] .bg-purple-50, html[data-theme="paper"] .bg-purple-100,
+html[data-theme="paper"] .bg-violet-50, html[data-theme="paper"] .bg-violet-100,
+html[data-theme="paper"] .bg-pink-50, html[data-theme="paper"] .bg-pink-100,
+html[data-theme="paper"] .bg-fuchsia-50, html[data-theme="paper"] .bg-fuchsia-100 { background-color: var(--pp-accent-wash) !important; }
+html[data-theme="paper"] .border-blue-200,
+html[data-theme="paper"] .border-blue-500,
+html[data-theme="paper"] .border-indigo-200 { border-color: var(--pp-accent) !important; }
+
+/* 상태색 — 여기서만 색이 의미를 갖는다 */
+html[data-theme="paper"] .text-green-600, html[data-theme="paper"] .text-green-700,
+html[data-theme="paper"] .text-emerald-500, html[data-theme="paper"] .text-emerald-600,
+html[data-theme="paper"] .text-emerald-700, html[data-theme="paper"] .text-emerald-800 { color: var(--pp-ok) !important; }
+html[data-theme="paper"] .text-amber-600, html[data-theme="paper"] .text-amber-700,
+html[data-theme="paper"] .text-amber-800, html[data-theme="paper"] .text-yellow-600,
+html[data-theme="paper"] .text-yellow-700, html[data-theme="paper"] .text-orange-600,
+html[data-theme="paper"] .text-orange-700 { color: var(--pp-warn) !important; }
+html[data-theme="paper"] .text-red-500, html[data-theme="paper"] .text-red-600,
+html[data-theme="paper"] .text-red-700, html[data-theme="paper"] .text-rose-500,
+html[data-theme="paper"] .text-rose-600, html[data-theme="paper"] .text-rose-700 { color: var(--pp-err) !important; }
+html[data-theme="paper"] .text-green-500, html[data-theme="paper"] .text-emerald-400,
+html[data-theme="paper"] .text-teal-500 { color: var(--pp-ok) !important; }
+html[data-theme="paper"] .text-amber-500, html[data-theme="paper"] .text-yellow-500,
+html[data-theme="paper"] .text-orange-500 { color: var(--pp-warn) !important; }
+
+html[data-theme="paper"] .bg-green-50, html[data-theme="paper"] .bg-green-100,
+html[data-theme="paper"] .bg-emerald-50, html[data-theme="paper"] .bg-emerald-100,
+html[data-theme="paper"] .bg-lime-50, html[data-theme="paper"] .bg-lime-100 { background-color: var(--pp-ok-w) !important; }
+html[data-theme="paper"] .bg-amber-50, html[data-theme="paper"] .bg-amber-100,
+html[data-theme="paper"] .bg-yellow-50, html[data-theme="paper"] .bg-yellow-100,
+html[data-theme="paper"] .bg-orange-50, html[data-theme="paper"] .bg-orange-100 { background-color: var(--pp-warn-w) !important; }
+html[data-theme="paper"] .bg-red-50, html[data-theme="paper"] .bg-red-100,
+html[data-theme="paper"] .bg-rose-50, html[data-theme="paper"] .bg-rose-100 { background-color: var(--pp-err-w) !important; }
+
+/* 상태 배지는 wash 만으로는 약하다 — 1px 잉크선을 얹어 인쇄된 느낌을 준다 */
+html[data-theme="paper"] .bg-green-50, html[data-theme="paper"] .bg-green-100,
+html[data-theme="paper"] .bg-emerald-50, html[data-theme="paper"] .bg-emerald-100 { box-shadow: inset 0 0 0 1px rgba(46,125,87,.22); }
+html[data-theme="paper"] .bg-amber-50, html[data-theme="paper"] .bg-amber-100,
+html[data-theme="paper"] .bg-yellow-50, html[data-theme="paper"] .bg-yellow-100 { box-shadow: inset 0 0 0 1px rgba(169,106,16,.22); }
+html[data-theme="paper"] .bg-red-50, html[data-theme="paper"] .bg-red-100 { box-shadow: inset 0 0 0 1px rgba(192,57,47,.20); }
+
+/* ── 라디우스 스케일: 입력 4 · 카드 5 · 모달 10 ── */
+html[data-theme="paper"] .rounded-3xl,
+html[data-theme="paper"] .rounded-2xl { border-radius: 10px !important; }
+html[data-theme="paper"] .rounded-xl,
+html[data-theme="paper"] .rounded-lg { border-radius: 6px !important; }
+html[data-theme="paper"] .rounded-md,
+html[data-theme="paper"] .rounded { border-radius: 4px !important; }
+html[data-theme="paper"] .rounded-full { border-radius: 9999px !important; }
+
+/* ── 깊이는 보더 하나로 통일. 진짜 떠 있는 것만 링을 남긴다 ── */
+html[data-theme="paper"] .shadow,
+html[data-theme="paper"] .shadow-sm,
+html[data-theme="paper"] .shadow-md,
+html[data-theme="paper"] .hover\:shadow-md:hover { box-shadow: none !important; }
+html[data-theme="paper"] .shadow-lg,
+html[data-theme="paper"] .shadow-xl,
+html[data-theme="paper"] .shadow-2xl {
+  box-shadow: 0 0 0 1px rgba(26,24,21,.07), 0 1px 2px -1px rgba(26,24,21,.10), 0 8px 24px -12px rgba(26,24,21,.18) !important;
+}
+
+/* ── 입력: 파인 면 + 오렌지 포커스 링 ── */
+html[data-theme="paper"] input,
+html[data-theme="paper"] select,
+html[data-theme="paper"] textarea {
+  background: var(--pp-recess) !important;
+  border: 1px solid var(--pp-rule-2) !important;
+  color: var(--pp-ink) !important;
+  border-radius: 4px !important;
+  font-family: var(--pp-ui);
+}
+html[data-theme="paper"] input::placeholder,
+html[data-theme="paper"] textarea::placeholder { color: var(--pp-ink-4) !important; }
+html[data-theme="paper"] input:focus,
+html[data-theme="paper"] select:focus,
+html[data-theme="paper"] textarea:focus {
+  outline: none !important;
+  background: var(--pp-sheet) !important;
+  border-color: var(--pp-accent) !important;
+  box-shadow: 0 0 0 3px var(--pp-accent-wash) !important;
+}
+
+/* 누른 느낌 — 100~160ms, 0.97 이하로는 내리지 않는다 */
+html[data-theme="paper"] button:active,
+html[data-theme="paper"] a[role="button"]:active { transform: scale(0.985); }
+html[data-theme="paper"] button { transition: background-color .14s var(--pp-ease), border-color .14s var(--pp-ease), transform .1s var(--pp-ease); }
+
+/* ── 스크롤바 ── */
+html[data-theme="paper"] ::-webkit-scrollbar { width: 10px; height: 10px; }
+html[data-theme="paper"] ::-webkit-scrollbar-track { background: var(--pp-recess); }
+html[data-theme="paper"] ::-webkit-scrollbar-thumb {
+  background: var(--pp-rule-3);
+  border: 2px solid var(--pp-desk);
+  border-radius: 9999px;
+}
+html[data-theme="paper"] .thin-scroll { scrollbar-color: var(--pp-rule-3) transparent; }
+html[data-theme="paper"] .thin-scroll::-webkit-scrollbar-thumb { background: var(--pp-rule-2); border: 0; }
+
+/* 한글은 최소 폭이 한 글자다 — flex/grid 안에서 세로로 쌓이는 것을 막는다 */
+html[data-theme="paper"] .truncate { min-width: 0; }
+html[data-theme="paper"] .flex > .flex-1,
+html[data-theme="paper"] .flex > .grow { min-width: 0; }
+
+/* ══════════════════════════════════════════════════════════════
+   크롬(상단바·하단 독·모바일) — 인라인 style 로 박힌 값은 !important 로만 이긴다.
+   내비게이션은 장식이 아니라 제품이다. 페이지만 종이고 크롬이 다크면 반쪽이다.
+   ══════════════════════════════════════════════════════════════ */
+
+/* 상단바: 반투명 딥스페이스 → 종이 위에 얹힌 머리글. 아래로 헤어라인 하나. */
+html[data-theme="paper"] header.fixed {
+  background: rgba(251, 249, 245, 0.86) !important;
+  border-bottom: 1px solid var(--pp-rule) !important;
+  backdrop-filter: saturate(1.2) blur(10px) !important;
+  -webkit-backdrop-filter: saturate(1.2) blur(10px) !important;
+}
+
+/* 로고 마크: 네온 그라디언트 → 잉크 도장 */
+html[data-theme="paper"] header.fixed a > span:first-child {
+  background: var(--pp-ink) !important;
+  background-image: none !important;
+  color: var(--pp-desk) !important;
+  box-shadow: none !important;
+  border-radius: 5px !important;
+}
+/* 워드마크는 디스플레이 세리프로 — 제품 이름은 라틴이라 세리프가 살아난다 */
+html[data-theme="paper"] header.fixed .neon-text-soft {
+  font-family: var(--pp-display) !important;
+  font-weight: 600;
+  letter-spacing: -0.01em !important;
+  color: var(--pp-ink) !important;
+}
+
+/* 하단 독: 발광 알약 → 종이 위 얇은 트레이 */
+html[data-theme="paper"] .fixed.bottom-0 .glass {
+  box-shadow: 0 0 0 1px rgba(26,24,21,.07), 0 6px 18px -10px rgba(26,24,21,.28) !important;
+}
+/* 활성 아이콘: 네온 → 오렌지 면 (선택은 하나뿐이라 색이 의미를 갖는다) */
+html[data-theme="paper"] .fixed.bottom-0 a[style*="gradient"],
+html[data-theme="paper"] .fixed.bottom-0 a[style*="radial"] {
+  background: var(--pp-accent) !important;
+  background-image: none !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+html[data-theme="paper"] .fixed.bottom-0 .mono.neon-text-soft {
+  color: var(--pp-ink-4) !important;
+  font-family: var(--pp-mono) !important;
+  letter-spacing: 0.14em !important;
+}
+
+/* 모바일 상·하단 바도 같은 종이 위에 */
+html[data-theme="paper"] nav.fixed,
+html[data-theme="paper"] .fixed.bottom-0.z-40,
+html[data-theme="paper"] .fixed.top-0.z-40 {
+  background: rgba(251, 249, 245, 0.94) !important;
+  border-color: var(--pp-rule) !important;
+}
+
+/* 인라인 시안(활성 탭·배지) — 유틸이 아니라 style 속성이라 여기서만 잡힌다.
+   배경까지 바꾸지 않으면 종이 위에 시안 조각이 남는다(실제로 남았다). */
+html[data-theme="paper"] [style*="rgba(34,211,238"],
+html[data-theme="paper"] [style*="rgba(34, 211, 238"] {
+  background: var(--pp-accent-wash) !important;
+  border-color: var(--pp-accent) !important;
+  color: var(--pp-accent-ink) !important;
+  box-shadow: none !important;
+}
+
+/* 프로젝트 카드의 아이콘 칩 — cyan-50/300 조합이 종이에서 뜬다. 잉크 칩으로. */
+html[data-theme="paper"] .bg-cyan-50,
+html[data-theme="paper"] .bg-teal-50,
+html[data-theme="paper"] .bg-sky-50 { background-color: var(--pp-recess) !important; }
+html[data-theme="paper"] .border-cyan-300,
+html[data-theme="paper"] .border-cyan-400,
+html[data-theme="paper"] .border-teal-300,
+html[data-theme="paper"] .border-sky-300 { border-color: var(--pp-rule-2) !important; }
+
+/* 움직임을 원치 않는 사람에겐 움직이지 않는다 */
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme="paper"] *,
+  html[data-theme="paper"] *::before,
+  html[data-theme="paper"] *::after {
+    animation-duration: .001ms !important;
+    transition-duration: .001ms !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   가독성 보정 (2026-08-12) — 사용자 지적: "흰색 계열 글자가 배경과
+   구분이 안 된다", "박스 안 글자가 밖으로 삐져나온다".
+
+   실측(playwright + 캔버스 sRGB 변환)으로 잡은 위반만 고친다.
+   근거: 대비는 WCAG AA(본문 4.5:1 / 큰 글자 3:1) 기준으로 계산.
+   ══════════════════════════════════════════════════════════════ */
+
+html[data-theme="paper"] {
+  /* 메타 잉크가 3.6:1 이었다 — 10~12px 로 쓰이는 자리라 AA(4.5) 미달.
+     4단 위계는 유지한 채 아래 두 단만 내린다. 측정: 흰 종이 기준. */
+  --pp-ink-3: #635c54;   /* 6.6:1 (이전 #6b645c 5.4) */
+  --pp-ink-4: #767068;   /* 4.9:1 (이전 #8a8279 3.6) — 책상 바탕에서도 4.7 */
+  --text-dim: #635c54;
+  --text-faint: #767068;
+}
+
+/* ── 다크 테마 잔재: 밝은 무채색 글자 ─────────────────────────
+   zinc 계열은 remap 목록에서 빠져 있었다(gray/slate 만 있었다).
+   /levels · /agents/cost 두 화면에서 흰 종이 위 #d4d4d8(1.5:1)로 떴다. */
+html[data-theme="paper"] .text-zinc-200,
+html[data-theme="paper"] .text-zinc-100 { color: var(--pp-ink-2) !important; }
+html[data-theme="paper"] .text-zinc-300,
+html[data-theme="paper"] .text-zinc-400 { color: var(--pp-ink-4) !important; }
+html[data-theme="paper"] .text-zinc-500 { color: var(--pp-ink-3) !important; }
+html[data-theme="paper"] .text-neutral-300, html[data-theme="paper"] .text-neutral-400,
+html[data-theme="paper"] .text-stone-300, html[data-theme="paper"] .text-stone-400 { color: var(--pp-ink-4) !important; }
+html[data-theme="paper"] .text-neutral-500, html[data-theme="paper"] .text-stone-500 { color: var(--pp-ink-3) !important; }
+
+/* zinc 어두운 면(비활성 칩)도 같이 뒤집지 않으면 위 글자가 안 보인다 */
+html[data-theme="paper"] .bg-zinc-700,
+html[data-theme="paper"] .bg-zinc-800,
+html[data-theme="paper"] .bg-zinc-900 { background-color: var(--pp-recess) !important; }
+html[data-theme="paper"] .hover\:bg-zinc-700:hover { background-color: var(--pp-recess-2) !important; }
+html[data-theme="paper"] .border-zinc-700,
+html[data-theme="paper"] .border-zinc-800 { border-color: var(--pp-rule-2) !important; }
+
+/* ── 노랑: 흰 배경에서 글자로 쓰면 1.4:1 ─────────────────────── */
+html[data-theme="paper"] .text-yellow-400, html[data-theme="paper"] .text-yellow-300,
+html[data-theme="paper"] .hover\:text-yellow-300:hover { color: var(--pp-warn) !important; }
+/* 노란 면 + 흰 글자(= /levels 활성 필터 칩)는 1.6:1 → 잉크 골드로 4.4:1 */
+html[data-theme="paper"] .bg-yellow-400,
+html[data-theme="paper"] .bg-yellow-500 { background-color: var(--pp-warn) !important; }
+
+/* ── 별점 ────────────────────────────────────────────────────
+   채움/빈칸을 클래스가 아니라 data-star 로 표시한다(소스에서 부여).
+   빈칸은 "정보"가 아니라 트랙이라 2.8:1 — 채움(4.4:1)과 명도로 갈린다. */
+html[data-theme="paper"] [data-star="on"] { color: var(--pp-warn) !important; }
+html[data-theme="paper"] [data-star="off"] { color: #a29a90 !important; }
+html[data-theme="paper"] [data-star="off"]:hover { color: var(--pp-warn) !important; }
+
+/* ── 인라인 다크 리터럴 안전망 ────────────────────────────────
+   소스의 color:"#e6e9ef" 85곳은 var(--text) 로 바꿨다. 혹시 남거나
+   앞으로 다시 들어올 경우를 대비한 그물(직렬화는 공백 있는/없는 두 벌). */
+html[data-theme="paper"] [style*="rgb(230, 233, 239)"],
+html[data-theme="paper"] [style*="rgb(230,233,239)"],
+html[data-theme="paper"] [style*="rgb(226, 232, 240)"],
+html[data-theme="paper"] [style*="rgb(226,232,240)"] { color: var(--pp-ink) !important; }
+
+/* ── 팀 색(네온 팔레트)이 글자로 쓰인 자리 ────────────────────
+   /agents 는 팀 정체성을 meta.color 인라인으로 칠한다. 종이 위에서
+   #22d3ee 1.6:1 · #f59e0b 2.2:1 로 읽히지 않았다.
+   해법은 색을 지우는 게 아니라 **자리를 옮기는 것** — 색은 마크(아이콘·선)에
+   남기고 글자는 잉크로. 인라인 style 은 CSS !important 로만 이긴다. */
+html[data-theme="paper"] [data-tint="text"] { color: var(--pp-ink) !important; }
+html[data-theme="paper"] [data-tint="mark"] { color: var(--pp-ink-3) !important; }
+html[data-theme="paper"] [data-tint="chip"] {
+  background: var(--pp-recess) !important;
+  border-color: var(--pp-rule) !important;
+}
+html[data-theme="paper"] [data-tint="chip-soft"] {
+  background: var(--pp-sheet) !important;
+  border-color: var(--pp-rule) !important;
+}
+html[data-theme="paper"] [data-tint="card"] {
+  background: var(--pp-sheet) !important;
+  border-color: var(--pp-rule-2) !important;
+  box-shadow: none !important;
+}
+html[data-theme="paper"] [data-tint="card"][data-active="1"] {
+  background: var(--pp-accent-wash) !important;
+  border-color: var(--pp-accent) !important;
+}
+html[data-theme="paper"] [data-tint="teamcard"] {
+  border-color: var(--pp-rule-2) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* 카드가 종이면이 됐으니 그 위의 slate 글자도 잉크로 (이전엔 다크 슬래브 위라 손대면 안 됐다) */
+html[data-theme="paper"] .text-slate-200 { color: var(--pp-ink-2) !important; }
+html[data-theme="paper"] .text-slate-300,
+html[data-theme="paper"] .text-slate-400 { color: var(--pp-ink-4) !important; }
+html[data-theme="paper"] .text-slate-500 { color: var(--pp-ink-3) !important; }
+
+/* 투명도 변형까지 잡아야 한다 — bg-zinc-900/30 은 흰 위에서 #b9b9ba(중간 회색)가 된다 */
+html[data-theme="paper"] [class*="bg-zinc-900/"],
+html[data-theme="paper"] [class*="bg-zinc-800/"],
+html[data-theme="paper"] [class*="bg-slate-900/"],
+html[data-theme="paper"] [class*="bg-slate-800/"],
+html[data-theme="paper"] [class*="bg-gray-900/"],
+html[data-theme="paper"] [class*="bg-gray-800/"] { background-color: var(--pp-recess) !important; }
+html[data-theme="paper"] .border-zinc-900,
+html[data-theme="paper"] .border-slate-800,
+html[data-theme="paper"] .border-gray-800 { border-color: var(--pp-rule) !important; }
+
+/* ── 예외: 의도적으로 어두운 면 ────────────────────────────────
+   /balloonflow 의 코드 그래프는 다크 캔버스다(그래프 편집기 관례).
+   여기서는 종이 잉크 매핑을 되돌려야 한다 — 안 그러면 검은 면에 검은 글자가 된다.
+   [data-surface="dark"] 를 소스에서 달아 두고, 특이도로 위 매핑을 이긴다. */
+html[data-theme="paper"] [data-surface="dark"] { color: #e6e9ef; }
+html[data-theme="paper"] [data-surface="dark"] .text-gray-100,
+html[data-theme="paper"] [data-surface="dark"] .text-gray-200,
+html[data-theme="paper"] [data-surface="dark"] .text-zinc-200 { color: #e6e9ef !important; }
+html[data-theme="paper"] [data-surface="dark"] .text-gray-300,
+html[data-theme="paper"] [data-surface="dark"] .text-gray-400,
+html[data-theme="paper"] [data-surface="dark"] .text-zinc-300,
+html[data-theme="paper"] [data-surface="dark"] .text-zinc-400,
+html[data-theme="paper"] [data-surface="dark"] .text-slate-300,
+html[data-theme="paper"] [data-surface="dark"] .text-slate-400 { color: #b6c0d0 !important; }
+html[data-theme="paper"] [data-surface="dark"] .text-gray-500,
+html[data-theme="paper"] [data-surface="dark"] .text-zinc-500,
+html[data-theme="paper"] [data-surface="dark"] .text-slate-500 { color: #97a6bd !important; }
+html[data-theme="paper"] [data-surface="dark"] .border-gray-700,
+html[data-theme="paper"] [data-surface="dark"] .border-gray-800 { border-color: rgba(230,233,239,.16) !important; }
+
+/* ── 밝은 액센트 글자(다크 테마 200~400단) ────────────────────
+   다크 배경 위에서 빛나라고 고른 색들이다. 종이 위에서는 1.2~2.3:1.
+   상태 의미는 유지하고 명도만 인쇄 잉크 쪽으로 옮긴다.
+   (의도적으로 어두운 면 [data-surface="dark"] 안쪽은 위에서 예외 처리됨) */
+html[data-theme="paper"] .text-amber-300, html[data-theme="paper"] .text-amber-400,
+html[data-theme="paper"] .text-yellow-200, html[data-theme="paper"] .text-orange-300,
+html[data-theme="paper"] .text-orange-400, html[data-theme="paper"] .text-lime-400,
+html[data-theme="paper"] .hover\:text-amber-300:hover { color: var(--pp-warn) !important; }
+
+html[data-theme="paper"] .text-cyan-200, html[data-theme="paper"] .text-cyan-300,
+html[data-theme="paper"] .text-sky-300, html[data-theme="paper"] .text-blue-300,
+html[data-theme="paper"] .text-indigo-300, html[data-theme="paper"] .text-violet-300,
+html[data-theme="paper"] .text-violet-400, html[data-theme="paper"] .text-purple-300,
+html[data-theme="paper"] .text-purple-400, html[data-theme="paper"] .text-pink-300,
+html[data-theme="paper"] .text-pink-400, html[data-theme="paper"] .text-fuchsia-400 { color: var(--pp-accent-ink) !important; }
+
+html[data-theme="paper"] .text-red-300, html[data-theme="paper"] .text-red-400,
+html[data-theme="paper"] .text-rose-300, html[data-theme="paper"] .text-rose-400,
+html[data-theme="paper"] [class*="text-red-400/"], html[data-theme="paper"] [class*="text-red-300/"],
+html[data-theme="paper"] .hover\:text-red-300:hover { color: var(--pp-err) !important; }
+
+html[data-theme="paper"] .text-emerald-200, html[data-theme="paper"] .text-emerald-300,
+html[data-theme="paper"] .text-green-300, html[data-theme="paper"] .text-green-400,
+html[data-theme="paper"] .text-teal-300, html[data-theme="paper"] .text-teal-400 { color: var(--pp-ok) !important; }
+
+/* 채도 높은 반투명 배지 면 — 흰 종이 위에서는 워시로 */
+html[data-theme="paper"] [class*="bg-amber-500/"], html[data-theme="paper"] [class*="bg-yellow-500/"],
+html[data-theme="paper"] [class*="bg-orange-500/"] { background-color: var(--pp-warn-w) !important; }
+html[data-theme="paper"] [class*="bg-emerald-500/"], html[data-theme="paper"] [class*="bg-green-500/"] { background-color: var(--pp-ok-w) !important; }
+html[data-theme="paper"] [class*="bg-red-500/"], html[data-theme="paper"] [class*="bg-rose-500/"] { background-color: var(--pp-err-w) !important; }
+html[data-theme="paper"] [class*="bg-cyan-500/"], html[data-theme="paper"] [class*="bg-blue-500/"],
+html[data-theme="paper"] [class*="bg-purple-500/"], html[data-theme="paper"] [class*="bg-pink-500/"],
+html[data-theme="paper"] [class*="bg-violet-500/"] { background-color: var(--pp-accent-wash) !important; }
+
+/* 별점 빈칸: 흰 종이 2.8:1 / 미색 책상 2.5:1 이었다 — 흰 종이·미색 책상·파인 면 모두 3:1 이상 (#8f887e = 3.5 · 3.3 · 3.1) */
+html[data-theme="paper"] [data-star="off"] { color: #8f887e !important; }
+
+/* 어두운 회색 면 + 흰 글자 = "선택된 칩". 면을 밝게 뒤집으면 글자가 사라진다.
+   같은 클래스가 어떤 곳에선 비활성(회색 면 + 회색 글자)이라 면만 보고는 구분이 안 된다.
+   → **흰 글자가 있을 때만** 잉크 면으로 (그러면 흰 글자가 15:1 로 산다). */
+html[data-theme="paper"] .text-white.bg-zinc-800, html[data-theme="paper"] .text-white.bg-zinc-900,
+html[data-theme="paper"] .text-white.bg-gray-800, html[data-theme="paper"] .text-white.bg-gray-900,
+html[data-theme="paper"] .text-white.bg-slate-800, html[data-theme="paper"] .text-white.bg-slate-900,
+html[data-theme="paper"] .text-white.bg-neutral-800, html[data-theme="paper"] .text-white.bg-zinc-700 {
+  background-color: var(--pp-ink) !important;
+  border-color: var(--pp-ink) !important;
+}

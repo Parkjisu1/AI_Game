@@ -5,17 +5,19 @@ import { useEffect, useState } from "react";
 import Icon from "./Icon";
 
 // 데스크톱 상단 가로 네비 (md+). 모바일은 별도 상단 Nav + 하단 탭바.
-const LINKS: { href: string; label: string; owner?: boolean }[] = [
+const IS_CLEAN = process.env.NEXT_PUBLIC_APP_THEME === "clean";
+const LINKS: { href: string; label: string; owner?: boolean; game?: boolean }[] = [
   { href: "/", label: "대시보드" },
   { href: "/tasks", label: "작업 보드" },
   { href: "/agents", label: "AI 팀" },
   { href: "/voice", label: "음성 명령" },
-  { href: "/gallery", label: "설계 갤러리" },
-  { href: "/balloonflow", label: "QA 검사" },
-  { href: "/simulator", label: "시뮬레이터" },
+  { href: "/gallery", label: "설계 갤러리", game: true },
+  { href: "/assets-3d", label: "3D 제작실", game: true },
+  { href: "/balloonflow", label: "QA 검사", game: true },
+  { href: "/simulator", label: "시뮬레이터", game: true },
   { href: "/roadmap", label: "로드맵" },
   { href: "/settings", label: "설정", owner: true },
-];
+].filter((l) => !IS_CLEAN || !l.game);
 
 interface Sess { task_id?: string; task_title?: string; role?: string; success?: boolean; created_at?: string; }
 
@@ -50,6 +52,8 @@ export default function TopNav({ isOwner = false, userLabel = "Boss", role = "Ow
     boxShadow: "0 24px 70px -18px rgba(0,0,0,.85), 0 0 34px -10px rgba(34,211,238,.35)",
   };
 
+  if (pathname === "/login") return null;
+
   return (
     <>
       <header
@@ -61,7 +65,7 @@ export default function TopNav({ isOwner = false, userLabel = "Boss", role = "Ow
             style={{ background: "linear-gradient(135deg, var(--neon-deep), var(--neon))", boxShadow: "0 0 14px -2px rgba(34,211,238,.7)", color: "#041018" }}>
             <Icon name="cpu" size={15} />
           </span>
-          <span className="text-[16px] font-bold tracking-hud neon-text-soft">ProjectHub</span>
+          <span className="text-[16px] font-bold tracking-hud neon-text-soft">{IS_CLEAN ? "NewPlay Hub" : "ProjectHub"}</span>
         </Link>
 
         <nav className="flex items-center gap-1 flex-1 min-w-0 overflow-x-auto no-scrollbar">

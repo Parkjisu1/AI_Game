@@ -111,10 +111,10 @@ export default function CostPage() {
                     <div className="w-24 font-mono text-zinc-400">{d.date}</div>
                     <div className="relative h-6 flex-1 overflow-hidden rounded bg-zinc-800">
                       <div
-                        className="absolute inset-y-0 left-0 bg-gradient-to-r from-indigo-600 to-purple-500"
-                        style={{ width: `${(d.cost_usd / dailyMaxCost) * 100}%` }}
+                        className="absolute inset-y-0 left-0"
+                        style={{ width: `${(d.cost_usd / dailyMaxCost) * 100}%`, background: "var(--neon)" }}
                       />
-                      <div className="absolute inset-0 flex items-center justify-end pr-2 text-xs text-white">
+                      <div className="absolute inset-0 flex items-center justify-end pr-2 text-xs font-medium" style={{ color: "var(--text)" }}>
                         {d.calls}건 · {fmtUsd(d.cost_usd)}
                       </div>
                     </div>

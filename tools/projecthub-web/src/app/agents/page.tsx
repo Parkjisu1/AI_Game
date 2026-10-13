@@ -1,8 +1,10 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Icon from "@/components/Icon";
 
-type Team = "dev" | "design" | "art";
+type Team = "dev" | "design" | "art" | "data";
+/** 화면이 아는 팀 목록. DB 에 이것 밖의 team 이 들어와도 화면은 죽지 않아야 한다. */
+const KNOWN_TEAMS: Team[] = ["dev", "art", "design", "data"];
 
 interface AgentRole {
   role: string;
@@ -59,7 +61,7 @@ const TEAMS: Record<Team, { label: string; color: string; glow: string; icon: st
   },
   dev: {
     label: "개발",
-    color: "#22d3ee",
+    color: "var(--neon)",
     glow: "rgba(34, 211, 238, 0.45)",
     icon: "code",
     description: "Unity 코드 수정 · 검증 · PR",
@@ -71,7 +73,24 @@ const TEAMS: Record<Team, { label: string; color: string; glow: string; icon: st
     icon: "palette",
     description: "GPT Image 2 · 이미지 리뷰",
   },
+  // 2026-08-03 에 연결된 데이터 분과. 이 화면이 design/dev/art 만 알고 있어서
+  // team="data" 역할 5개가 들어오는 순간 byTeam 이 터졌다(= /agents 백지).
+  data: {
+    label: "데이터",
+    color: "#34d399",
+    glow: "rgba(52, 211, 153, 0.4)",
+    icon: "graph",
+    description: "BigQuery 추출 · 로그 요청서 · 라이브 환류",
+  },
 };
+
+/** 모르는 team 이라도 렌더는 되게 — TEAMS[t] 를 직접 쓰면 undefined 에서 또 죽는다. */
+function teamMeta(t: string) {
+  return TEAMS[t as Team] ?? {
+    label: t, color: "var(--text-dim)", glow: "rgba(148,163,184,0.35)",
+    icon: "users", description: "미등록 팀",
+  };
+}
 
 const ROLE_ICON: Record<string, string> = {
   translator: "target",
@@ -98,6 +117,49 @@ const PIPE_LAYERS: { name: string; sub: string; match: (r: string) => boolean }[
   { name: "Review", sub: "검증 · 리뷰", match: (r) => /validat|review|optim/i.test(r) },
 ];
 const pipeLayerOf = (role: string) => { for (let i = 0; i < PIPE_LAYERS.length; i++) if (PIPE_LAYERS[i].match(role)) return i; return -1; };
+
+/** 레이어 한 칸. 대기(idle) 는 기본으로 접는다.
+ *  대기 40개를 40줄로 그리면 "지금 무슨 일이 벌어지는가" 가 그 안에 묻힌다. */
+function LayerCol({
+  title, sub, nodes, renderNode,
+}: {
+  title: string; sub: string;
+  nodes: { role: string; st: string }[];
+  renderNode: (n: { role: string; st: string }) => React.ReactNode;
+}) {
+  const [open, setOpen] = React.useState(false);
+  const live = nodes.filter((n) => n.st !== "idle");
+  const idle = nodes.filter((n) => n.st === "idle");
+  const shown = open ? nodes : live;
+  return (
+    <div className="flex-1 min-w-[172px]">
+      <div className="mb-2 pb-1.5" style={{ borderBottom: "1px solid var(--line)" }}>
+        <div className="text-[11px] font-bold tracking-hud text-gray-200">
+          {title} <span className="text-gray-500 font-normal">Layer</span>
+        </div>
+        <div className="text-[9px] mono text-gray-500">
+          {sub} · {nodes.length}명{live.length > 0 ? ` · 활동 ${live.length}` : ""}
+        </div>
+      </div>
+      <div className="space-y-2">
+        {shown.length === 0 ? (
+          <div className="text-[11px] text-gray-500 py-1.5">전원 대기</div>
+        ) : (
+          shown.map((n) => renderNode(n))
+        )}
+        {idle.length > 0 && (
+          <button
+            className="pp-more press"
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+          >
+            {open ? "대기 접기" : `대기 ${idle.length}명 보기`}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
 
 const OPTIONAL_ROLES = new Set(["optimizer", "optimization_reviewer"]);
 const ACTIVE_WINDOW_MS = 300_000; // 5분
@@ -160,11 +222,12 @@ export default function AgentsPage() {
   }, []);
 
   useEffect(() => {
-    fetch("/api/tasks").then((r) => r.json()).then((d) => {
-      if (Array.isArray(d)) {
-        setTaskStats({ inProgress: d.filter((t) => t.status === "in_progress").length, done: d.filter((t) => t.status === "done").length });
-        const sorted = [...d].sort((a, b) => Date.parse(b.created_at || "") - Date.parse(a.created_at || ""));
-        setLatestTask(sorted[0] || null);
+    // 전체 목록을 받아서 세지 않는다 — 845KB / 8.9초였다(2026-08-03 실측).
+    // 서버가 세어주는 summary 를 쓴다.
+    fetch("/api/tasks?summary=1").then((r) => r.json()).then((d) => {
+      if (d && typeof d.inProgress === "number") {
+        setTaskStats({ inProgress: d.inProgress, done: d.done });
+        setLatestTask(d.latest || null);
       }
     }).catch(() => {});
     fetch("/api/agents/cost").then((r) => r.json()).then((d) => { if (d?.totals?.cost_usd != null) setCostUsd(Number(d.totals.cost_usd)); }).catch(() => {});
@@ -265,16 +328,27 @@ export default function AgentsPage() {
 
   // 팀별 역할 그룹화
   const byTeam = useMemo(() => {
-    const g: Record<Team, AgentRole[]> = { design: [], dev: [], art: [] };
+    // 모르는 team 값이 와도 버킷을 만들어 받는다.
+    // 예전엔 { design, dev, art } 만 만들어 두고 g[t].push(r) 를 해서,
+    // team="data" 역할이 DB 에 생기자마자 g["data"] 가 undefined → 페이지 전체가 죽었다.
+    // 화면 하나 못 그리는 것과 화면이 통째로 안 뜨는 것은 차이가 크다.
+    const g = {} as Record<string, AgentRole[]>;
+    for (const t of KNOWN_TEAMS) g[t] = [];
     for (const r of roles) {
-      const t = (r.team || "dev") as Team;
-      g[t].push(r);
+      const t = String(r.team || "dev");
+      (g[t] ||= []).push(r);
     }
-    for (const t of Object.keys(g) as Team[]) {
+    for (const t of Object.keys(g)) {
       g[t].sort((a, b) => (a.display_order ?? 99) - (b.display_order ?? 99));
     }
     return g;
   }, [roles]);
+
+  /** 실제로 역할이 있는 팀만, 알려진 순서대로 + 미지의 팀은 뒤에 붙여서. */
+  const teamsToShow = useMemo(() => {
+    const extra = Object.keys(byTeam).filter((t) => !KNOWN_TEAMS.includes(t as Team));
+    return [...KNOWN_TEAMS, ...extra].filter((t) => (byTeam[t] || []).length > 0) as Team[];
+  }, [byTeam]);
 
   async function saveRole() {
     if (!editing) return;
@@ -343,21 +417,45 @@ export default function AgentsPage() {
         </div>
       </div>
 
-      {/* 커맨드센터 상단 스탯바 — 실데이터 */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-4">
-        {[
-          { label: "진행 중 작업", value: String(taskStats.inProgress), icon: "box", color: "text-blue-500" },
-          { label: "완료된 작업", value: String(taskStats.done), icon: "check", color: "text-emerald-500" },
-          { label: "오류·이슈", value: String(sessions.filter((s) => s.success === false).length), icon: "ban", color: "text-rose-500" },
-          { label: "총 비용", value: costUsd != null ? `$${costUsd.toFixed(2)}` : "—", icon: "dollar", color: "text-amber-500" },
-          { label: "팀 점수", value: teamScore != null ? `${gradeOf(teamScore)} ${teamScore.toFixed(1)}` : "—", icon: "award", color: "text-violet-500" },
-        ].map((c) => (
-          <div key={c.label} className="rounded-xl border border-gray-200 bg-white p-3 min-w-0">
-            <div className="flex items-center gap-1.5 text-[11px] text-gray-500 mb-1"><Icon name={c.icon} size={13} /> {c.label}</div>
-            <div className={`text-xl sm:text-2xl font-bold truncate ${c.color}`}>{c.value}</div>
+      {/* ── 상단 지표 ────────────────────────────────────────────
+          예전엔 같은 크기 카드 5개라 눈이 갈 곳이 없었다. 이 화면에 오는 이유는
+          "지금 뭐가 돌고 있나 / 막힌 게 있나" 하나다 → 그걸 주인공으로 세우고
+          나머지는 괘선으로 나뉜 띠에 눕힌다. 오류가 있으면 주인공이 바뀐다. */}
+      {(() => {
+        const errCount = sessions.filter((s) => s.success === false).length;
+        const lead = errCount > 0
+          ? { label: "오류·이슈", value: String(errCount), tone: "err" as const,
+              delta: `진행 중 ${taskStats.inProgress} · 완료 ${taskStats.done}` }
+          : { label: "진행 중 작업", value: String(taskStats.inProgress), tone: "ink" as const,
+              delta: `완료 ${taskStats.done} · 오류 0` };
+        // 주인공으로 올라간 지표는 띠에서 빼고 그 자리를 다른 값이 채운다 — 항상 4칸.
+        const rest = [
+          { label: "완료", value: String(taskStats.done), tone: "ok" as const },
+          errCount > 0
+            ? { label: "진행 중", value: String(taskStats.inProgress), tone: "ink" as const }
+            : { label: "오류", value: "0", tone: "ink" as const },
+          { label: "누적 비용", value: costUsd != null ? `$${costUsd.toFixed(2)}` : "—", tone: "ink" as const },
+          { label: "팀 점수", value: teamScore != null ? `${gradeOf(teamScore)} ${teamScore.toFixed(1)}` : "—",
+            tone: teamScore != null && teamScore < 60 ? ("warn" as const) : ("ink" as const) },
+        ];
+        return (
+          <div className="pp-statbar">
+            <div className="pp-stat-lead">
+              <div className="pp-metric-label">{lead.label}</div>
+              <div className={`pp-metric-value tone-${lead.tone}`}>{lead.value}</div>
+              <div className="pp-metric-delta">{lead.delta}</div>
+            </div>
+            <div className="pp-stat-strip">
+              {rest.map((c) => (
+                <div key={c.label} className="pp-stat-cell">
+                  <div className="pp-metric-label">{c.label}</div>
+                  <div className={`pp-metric-value tone-${c.tone}`}>{c.value}</div>
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
-      </div>
+        );
+      })()}
 
       {/* 현재 요청 + 작업 흐름 stepper */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-4">
@@ -443,9 +541,12 @@ export default function AgentsPage() {
             <div className="flex gap-2 overflow-x-auto thin-scroll pb-1">
               {PIPE_LAYERS.map((L, i) => (
                 <div key={L.name} className="flex gap-2 shrink-0 lg:flex-1">
-                  <Layer title={L.name} sub={L.sub}>
-                    {layerNodes[i].length === 0 ? <div className="text-[11px] text-gray-600 py-2">—</div> : layerNodes[i].map((it) => <Node key={it.role} role={it.role} st={it.st} />)}
-                  </Layer>
+                  <LayerCol
+                    title={L.name}
+                    sub={L.sub}
+                    nodes={layerNodes[i]}
+                    renderNode={(it) => <Node key={it.role} role={it.role} st={it.st} />}
+                  />
                   <Chevron />
                 </div>
               ))}
@@ -560,19 +661,19 @@ export default function AgentsPage() {
 
       {/* 팀 플로우차트 */}
       <div className="rounded-xl border border-slate-800 mb-4 p-5 overflow-x-auto thin-scroll"
-           style={{ background: "radial-gradient(ellipse at center, #0a1524 0%, #04070c 100%)" }}>
+           style={{ background: "radial-gradient(ellipse at center, var(--bg-2) 0%, var(--bg-0) 100%)" }}>
         <div className="min-w-[680px]">
         {/* 최상단: User Input → Translator */}
         <div className="flex flex-col items-center mb-6">
-          <NodeBox icon="tasks" label="User Task Input" borderColor="#22d3ee" textColor="#67e8f9" />
+          <NodeBox icon="tasks" label="User Task Input" borderColor="#22d3ee" textColor="var(--neon-soft)" />
           <Arrow color="#22d3ee" />
-          {byTeam.dev.find((r) => r.role === "translator") && (
+          {(byTeam.dev || []).find((r) => r.role === "translator") && (
             <>
               <NodeBox
                 icon={iconOf("translator")}
                 label="Translator"
                 borderColor="#a855f7"
-                textColor="#c084fc"
+                textColor="var(--neon-soft)"
                 sub="자연어 해석 · 팀 라우팅"
                 active={activeRoles.has("translator")}
                 stats={stats["translator"]}
@@ -581,9 +682,9 @@ export default function AgentsPage() {
                 <div className="w-px h-4 bg-slate-600" />
                 <div className="flex items-center gap-2.5 rounded-full border border-slate-700 bg-slate-800/40 px-3 py-1">
                   <span className="text-[10px] text-slate-400 mr-0.5">팀 라우팅</span>
-                  {(["design", "dev", "art"] as Team[]).map((t) => (
-                    <span key={t} className="inline-flex items-center gap-1 text-[11px] font-medium" style={{ color: TEAMS[t].color }}>
-                      <Icon name={TEAMS[t].icon} size={12} /> {TEAMS[t].label}
+                  {teamsToShow.map((t) => (
+                    <span key={t} data-tint="text" className="inline-flex items-center gap-1 text-[11px] font-medium" style={{ color: teamMeta(t).color }}>
+                      <Icon name={teamMeta(t).icon} size={12} /> {teamMeta(t).label}
                     </span>
                   ))}
                 </div>
@@ -595,11 +696,11 @@ export default function AgentsPage() {
 
         {/* 조직도 — 팀별 풀-와이드 행, 분과는 가로 정렬 */}
         <div className="space-y-5">
-          {(["dev", "art", "design"] as Team[]).map((t) => (
+          {teamsToShow.map((t) => (
             <TeamOrgChart
               key={t}
               team={t}
-              roles={byTeam[t].filter((r) => r.role !== "translator")}
+              roles={(byTeam[t] || []).filter((r) => r.role !== "translator")}
               activeRoles={activeRoles}
               stats={stats}
               isAdmin={isAdmin}
@@ -617,7 +718,7 @@ export default function AgentsPage() {
             <div className="w-px h-8 bg-slate-700" />
           </div>
           <Arrow color="#10b981" />
-          <NodeBox icon="rocket" label="Git / PR / main" borderColor="#10b981" textColor="#6ee7b7" sub="auto-merge → 팀 git pull" />
+          <NodeBox icon="rocket" label="Git / PR / main" borderColor="#10b981" textColor="var(--ok)" sub="auto-merge → 팀 git pull" />
         </div>
         </div>
       </div>
@@ -766,7 +867,7 @@ function TeamOrgChart({
   team: Team; roles: AgentRole[]; activeRoles: Set<string>; stats: Record<string, { count: number; success: number }>;
   isAdmin: boolean; onEdit: (r: AgentRole) => void; onDelete: (role: string) => void;
 }) {
-  const meta = TEAMS[team];
+  const meta = teamMeta(team);
   const anyActive = roles.some((r) => activeRoles.has(r.role));
 
   // PM은 헤더에 따로, 나머지는 sub_team별로 그룹화
@@ -790,6 +891,7 @@ function TeamOrgChart({
 
   return (
     <div
+      data-tint="teamcard"
       className="rounded-xl border-2 p-4"
       style={{
         borderColor: meta.color,
@@ -799,9 +901,9 @@ function TeamOrgChart({
     >
       {/* 팀 헤더 — 회사 부서장 자리 */}
       <div className="flex items-center gap-3 mb-3 pb-2 border-b" style={{ borderColor: `${meta.color}40` }}>
-        <span style={{ color: meta.color }}><Icon name={meta.icon} size={28} /></span>
+        <span data-tint="mark" style={{ color: meta.color }}><Icon name={meta.icon} size={28} /></span>
         <div className="flex-1">
-          <div className="font-bold text-base" style={{ color: meta.color }}>{meta.label}팀</div>
+          <div data-tint="text" className="font-bold text-base" style={{ color: meta.color }}>{meta.label}팀</div>
           <div className="text-[11px] text-slate-400">{meta.description}</div>
         </div>
         <div className="text-right">
@@ -844,19 +946,21 @@ function TeamOrgChart({
                     </div>
                     {/* 분과 헤더 */}
                     <div
+                      data-tint="chip"
                       className="rounded-md text-center py-1.5 mb-2"
                       style={{
                         background: sub === "general" ? `${meta.color}25` : `${meta.color}18`,
                         border: `1px solid ${meta.color}55`,
                       }}
                     >
-                      <div className="text-[11px] font-bold uppercase tracking-wide" style={{ color: meta.color }}>
+                      <div data-tint="text" className="text-[11px] font-bold uppercase tracking-wide" style={{ color: meta.color }}>
                         {sub === "general" ? "공용 풀" : subLabel(sub)}
                       </div>
                       <div className="text-[9px] text-slate-400">{list.length}명</div>
                     </div>
                     {/* 분과 멤버 (세로 스택) */}
                     <div
+                      data-tint="chip-soft"
                       className="rounded-lg p-2 flex-1 space-y-1.5"
                       style={{ background: `${meta.color}06`, border: `1px dashed ${meta.color}25` }}
                     >
@@ -886,17 +990,19 @@ function RoleBox({
   const isPlaceholder = r.description.startsWith("[미연결]");
   return (
     <div
+      data-tint="card"
+      data-active={active ? "1" : "0"}
       className={`relative rounded-lg border px-3 py-2 transition-all ${isPlaceholder ? "opacity-40" : ""}`}
       style={{
         borderColor: meta.color,
         borderStyle: isOptional || isPlaceholder ? "dashed" : "solid",
-        background: active ? `${meta.color}20` : "rgba(15,23,42,0.6)",
+        background: active ? `${meta.color}20` : "var(--panel)",
         boxShadow: active ? `0 0 12px ${meta.glow}` : "none",
       }}
     >
-      <div className="flex items-center gap-1.5">
-        <span style={{ color: meta.color }}><Icon name={ROLE_ICON[r.role] || "bot"} size={16} /></span>
-        <span className="font-mono text-[10px] font-bold uppercase" style={{ color: meta.color }}>{r.role}</span>
+      <div className="flex items-center gap-1.5 min-w-0">
+        <span data-tint="mark" className="shrink-0" style={{ color: meta.color }}><Icon name={ROLE_ICON[r.role] || "bot"} size={16} /></span>
+        <span data-tint="text" className="font-mono text-[10px] font-bold uppercase min-w-0 break-all leading-tight" title={r.role} style={{ color: meta.color }}>{r.role}</span>
         {active && <span className="text-[9px] text-cyan-400 font-bold animate-pulse">● LIVE</span>}
         {isAdmin && (
           <div className="ml-auto flex gap-0.5">
@@ -973,7 +1079,7 @@ function EditModal({
               placeholder="예: main_coder"
               disabled={exists}
               className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm font-mono disabled:bg-gray-50"
-              style={{ color: "#e6e9ef" }}
+              style={{ color: "var(--text)" }}
             />
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -983,7 +1089,7 @@ function EditModal({
                 value={editing.team || "dev"}
                 onChange={(e) => setEditing({ ...editing, team: e.target.value as Team, sub_team: "general" })}
                 className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white"
-                style={{ color: "#e6e9ef" }}
+                style={{ color: "var(--text)" }}
               >
                 <option value="dev">개발</option>
                 <option value="design">기획</option>
@@ -998,7 +1104,7 @@ function EditModal({
                 onChange={(e) => setEditing({ ...editing, sub_team: e.target.value.trim().toLowerCase() || "general" })}
                 placeholder="general"
                 className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm font-mono"
-                style={{ color: "#e6e9ef" }}
+                style={{ color: "var(--text)" }}
               />
               <datalist id="subteam-list-dev">
                 <option value="general" /><option value="ui" /><option value="server" /><option value="ingame" /><option value="outgame" />
@@ -1016,7 +1122,7 @@ function EditModal({
                 value={editing.tool}
                 onChange={(e) => setEditing({ ...editing, tool: e.target.value })}
                 className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white"
-                style={{ color: "#e6e9ef" }}
+                style={{ color: "var(--text)" }}
               >
                 <option value="claude">claude</option>
                 <option value="litellm">litellm</option>
@@ -1031,7 +1137,7 @@ function EditModal({
                 value={editing.display_order ?? 99}
                 onChange={(e) => setEditing({ ...editing, display_order: parseInt(e.target.value, 10) || 99 })}
                 className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
-                style={{ color: "#e6e9ef" }}
+                style={{ color: "var(--text)" }}
               />
             </div>
           </div>
@@ -1040,9 +1146,9 @@ function EditModal({
             <input
               value={editing.model}
               onChange={(e) => setEditing({ ...editing, model: e.target.value })}
-              placeholder="예: claude-opus-4-7 또는 gpt-image-2"
+              placeholder="예: claude-opus-5 또는 gpt-image-2"
               className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm font-mono"
-              style={{ color: "#e6e9ef" }}
+              style={{ color: "var(--text)" }}
             />
           </div>
           <div>
@@ -1052,7 +1158,7 @@ function EditModal({
               onChange={(e) => setEditing({ ...editing, description: e.target.value })}
               rows={2}
               className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
-              style={{ color: "#e6e9ef" }}
+              style={{ color: "var(--text)" }}
             />
           </div>
           <div>
@@ -1068,7 +1174,7 @@ function EditModal({
               rows={8}
               placeholder={`예) 당신은 모바일 캐주얼 게임의 UI 아티스트입니다.\n\n핵심 책임:\n- ...\n\n전문 역량:\n- ...`}
               className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm font-mono"
-              style={{ color: "#e6e9ef" }}
+              style={{ color: "var(--text)" }}
             />
             <p className="text-[10px] text-gray-400 mt-0.5">
               호출 시 프롬프트 최상단에 주입되어 LLM이 그 직무 전문가처럼 행동. 비워두면 미주입.
@@ -1115,19 +1221,20 @@ const TEAM_COLOR_MAP: Record<string, string> = {
   dev:    "#22d3ee",
   art:    "#ec4899",
   design: "#f59e0b",
+  data:   "#34d399",
 };
-const TEAM_LABEL_MAP: Record<string, string> = { dev: "개발", art: "아트", design: "기획" };
-const TEAM_ICON_MAP: Record<string, string> = { dev: "code", art: "palette", design: "ruler" };
+const TEAM_LABEL_MAP: Record<string, string> = { dev: "개발", art: "아트", design: "기획", data: "데이터" };
+const TEAM_ICON_MAP: Record<string, string> = { dev: "code", art: "palette", design: "ruler", data: "graph" };
 const SUB_LABEL_MAP: Record<string, string> = {
   general: "공용", ui: "UI", server: "서버", ingame: "인게임", outgame: "아웃게임",
   background: "배경", illustration: "원화", content: "컨텐츠", level: "레벨",
 };
 function _scoreColor(avg: number | null): string {
-  if (avg == null) return "#475569";
-  if (avg >= 85) return "#10b981"; // green
-  if (avg >= 70) return "#22d3ee"; // cyan
-  if (avg >= 55) return "#f59e0b"; // amber
-  return "#ef4444";                 // red — 모델 자동 승격 발동 임박/진행
+  if (avg == null) return "var(--text-dim)";
+  if (avg >= 85) return "var(--ok)";    // green
+  if (avg >= 70) return "var(--neon-soft)";  // cyan — 액센트(#e1791b)는 종이에서 2.7:1 이라 글자로 못 쓴다
+  if (avg >= 55) return "var(--warn)";  // amber
+  return "var(--err)";                  // red — 모델 자동 승격 발동 임박/진행
 }
 
 function TeamScorePanel() {
@@ -1174,9 +1281,9 @@ function TeamScorePanel() {
     <div
       className="rounded-xl border-2 p-5 mb-5"
       style={{
-        background: "linear-gradient(180deg, #0f172a 0%, #1e293b 100%)",
+        background: "linear-gradient(180deg, var(--panel-solid) 0%, var(--bg-2) 100%)",
         borderColor: "#334155",
-        color: "#e2e8f0",
+        color: "var(--text)",
       }}
     >
       <div className="flex items-center justify-between mb-3">
@@ -1202,10 +1309,10 @@ function TeamScorePanel() {
       )}
 
       {!loading && !isEmpty && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {(["dev", "art", "design"] as const).map((team) => {
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {(["dev", "art", "design", "data"] as const).map((team) => {
             const rows = byTeam.get(team) || [];
-            const teamColor = TEAM_COLOR_MAP[team];
+            const teamColor = TEAM_COLOR_MAP[team] || "#94a3b8";
             return (
               <div
                 key={team}
@@ -1215,7 +1322,7 @@ function TeamScorePanel() {
                   border: `1px dashed ${teamColor}40`,
                 }}
               >
-                <div className="text-xs font-bold mb-2 flex items-center gap-1.5" style={{ color: teamColor }}>
+                <div data-tint="text" className="text-xs font-bold mb-2 flex items-center gap-1.5" style={{ color: teamColor }}>
                   <Icon name={TEAM_ICON_MAP[team]} size={14} /> {TEAM_LABEL_MAP[team]}
                 </div>
                 {rows.length === 0 ? (
@@ -1363,9 +1470,9 @@ function PatchesPanel() {
     <div
       className="rounded-xl border-2 p-5 mb-5"
       style={{
-        background: "linear-gradient(180deg, #0f172a 0%, #1e293b 100%)",
+        background: "linear-gradient(180deg, var(--panel-solid) 0%, var(--bg-2) 100%)",
         borderColor: "#475569",
-        color: "#e2e8f0",
+        color: "var(--text)",
       }}
     >
       <div className="flex items-center justify-between mb-3">
@@ -1396,12 +1503,12 @@ function PatchesPanel() {
             const sb = p.score_before;
             const sa = p.score_after;
             const delta = (typeof sb === "number" && typeof sa === "number") ? (sa - sb) : null;
-            const deltaColor = delta == null ? "#64748b" : delta > 0 ? "#10b981" : delta < -2 ? "#ef4444" : "#f59e0b";
+            const deltaColor = delta == null ? "var(--text-dim)" : delta > 0 ? "var(--ok)" : delta < -2 ? "var(--err)" : "var(--warn)";
             return (
               <div
                 key={p._id}
                 className="rounded-lg p-3 text-xs"
-                style={{ background: "#0b1220", border: "1px solid #334155" }}
+                style={{ background: "var(--bg-2)", border: "1px solid var(--line)" }}
               >
                 <div className="flex items-center gap-2 mb-1">
                   <span className="font-mono text-cyan-300">{p.role}</span>
@@ -1437,13 +1544,13 @@ function PatchesPanel() {
 
       {/* Bad Case 섹션 — 영구 차단 (reflection이 다시 제안 안 함) */}
       {badCases.length > 0 && (
-        <div className="mt-3 rounded-lg p-3" style={{ background: "#1a0e08", border: "1px solid #7c2d12" }}>
+        <div className="mt-3 rounded-lg p-3" style={{ background: "var(--bg-2)", border: "1px solid var(--warn)" }}>
           <div className="text-[11px] font-bold text-amber-300 mb-2 flex items-center gap-1.5">
             <Icon name="ban" size={14} /> Bad Cases — 방향성 어긋남으로 영구 차단됨 ({badCases.length}개)
           </div>
           <div className="space-y-1.5 text-[11px]">
             {badCases.map((p) => (
-              <div key={p._id} className="px-2 py-1 rounded" style={{ background: "#0b1220" }}>
+              <div key={p._id} className="px-2 py-1 rounded" style={{ background: "var(--bg-2)" }}>
                 <div className="flex items-center gap-2">
                   <span className="font-mono text-slate-300">{p.role}</span>
                   <span className="text-[10px] px-1.5 py-0.5 rounded bg-red-500/20 text-red-300">
@@ -1468,7 +1575,7 @@ function PatchesPanel() {
           </summary>
           <div className="mt-2 space-y-1">
             {reverted.map((p) => (
-              <div key={p._id} className="px-2 py-1 rounded flex items-start gap-2" style={{ background: "#0b1220" }}>
+              <div key={p._id} className="px-2 py-1 rounded flex items-start gap-2" style={{ background: "var(--bg-2)" }}>
                 <span className="font-mono text-slate-400">{p.role}</span>
                 <div className="flex-1 text-slate-500">
                   <span className="line-through">{p.patch_text.slice(0, 100)}</span>
@@ -1516,19 +1623,19 @@ function PatchActionModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={onClose}>
       <div
         className="rounded-xl p-5 max-w-lg w-full text-sm"
-        style={{ background: "#0f172a", border: "1px solid #475569", color: "#e2e8f0" }}
+        style={{ background: "var(--panel-solid)", border: "1px solid var(--line)", color: "var(--text)" }}
         onClick={(e) => e.stopPropagation()}
       >
         <h3 className="text-base font-bold mb-2">패치 처리</h3>
         <div className="text-[11px] text-slate-400 mb-3">
           역할 <span className="font-mono text-cyan-300">{patch.role}</span>의 패치:
         </div>
-        <div className="text-xs p-2 rounded mb-4" style={{ background: "#0b1220", border: "1px solid #334155" }}>
+        <div className="text-xs p-2 rounded mb-4" style={{ background: "var(--bg-2)", border: "1px solid var(--line)" }}>
           {patch.patch_text}
         </div>
 
         {!isReverted && (
-          <div className="mb-4 p-3 rounded text-xs" style={{ background: "#1e293b" }}>
+          <div className="mb-4 p-3 rounded text-xs" style={{ background: "var(--bg-2)" }}>
             <div className="font-semibold mb-1 text-slate-300">옵션 A — 잠시 빼기 (revert)</div>
             <div className="text-[11px] text-slate-400 mb-2">
               일시적 노이즈일 수도 있을 때. LLM은 비슷한 방향을 다시 제안할 수 있음.
@@ -1536,14 +1643,14 @@ function PatchActionModal({
             <button
               onClick={() => onApply(patch._id, "revert", "", note)}
               className="px-3 py-1 rounded text-xs"
-              style={{ background: "#475569", color: "#e2e8f0" }}
+              style={{ background: "#475569", color: "var(--text)" }}
             >
               revert만
             </button>
           </div>
         )}
 
-        <div className="mb-4 p-3 rounded text-xs" style={{ background: "#1a0e08", border: "1px solid #7c2d12" }}>
+        <div className="mb-4 p-3 rounded text-xs" style={{ background: "var(--bg-2)", border: "1px solid var(--warn)" }}>
           <div className="font-semibold mb-1 text-amber-300">
             옵션 {isReverted ? "" : "B — "}Bad Case로 영구 차단
           </div>
@@ -1555,7 +1662,7 @@ function PatchActionModal({
             value={reason}
             onChange={(e) => setReason(e.target.value as "off_direction" | "wrong_result" | "other")}
             className="w-full mb-2 px-2 py-1 rounded text-xs"
-            style={{ background: "#0b1220", color: "#e2e8f0", border: "1px solid #334155" }}
+            style={{ background: "var(--bg-2)", color: "var(--text)", border: "1px solid var(--line)" }}
           >
             <option value="off_direction">방향 자체가 어긋남 (제작 의도와 정반대 또는 무관)</option>
             <option value="wrong_result">결과 불일치 (의도한 출력과 다른 결과 유도)</option>
@@ -1567,7 +1674,7 @@ function PatchActionModal({
             onChange={(e) => setNote(e.target.value.slice(0, 500))}
             rows={2}
             className="w-full px-2 py-1 rounded text-xs mb-2"
-            style={{ background: "#0b1220", color: "#e2e8f0", border: "1px solid #334155" }}
+            style={{ background: "var(--bg-2)", color: "var(--text)", border: "1px solid var(--line)" }}
             placeholder="예: 페르소나 의도와 정반대 — 항상 X하지 말라고 했는데 패치는 X하라고 시킴"
           />
           <button

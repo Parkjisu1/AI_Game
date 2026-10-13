@@ -56,6 +56,25 @@ export async function POST(req: NextRequest) {
   body.created_at = new Date().toISOString();
   body.updated_at = new Date().toISOString();
 
+  // clean 인스턴스: 배선(라우팅) 규칙 — 담당 미지정 작업을 첫 매칭 규칙대로 자동 배정
+  if (process.env.NEXT_PUBLIC_APP_THEME === "clean" && !body.assignee) {
+    try {
+      const doc = await db.collection("projecthub_settings").findOne({ key: "routing_rules" });
+      const rules = Array.isArray(doc?.rules) ? doc.rules : [];
+      const text = `${body.title || ""} ${body.description || ""}`.toLowerCase();
+      for (const r of rules) {
+        if (!r || r.enabled === false || !r.assign?.assignee) continue;
+        if (r.match?.project && r.match.project !== (body.project || "")) continue;
+        if (r.match?.keyword && !text.includes(String(r.match.keyword).toLowerCase())) continue;
+        body.assignee = r.assign.assignee;
+        if (r.assign.ai_role) body.ai_role = r.assign.ai_role;
+        if (r.assign.reviewer && !body.reviewer) body.reviewer = r.assign.reviewer;
+        body.routed_by = r.id || "rule";
+        break;
+      }
+    } catch { /* 규칙 로드 실패 시 배정 없이 그대로 진행 */ }
+  }
+
   // 로그인된 사용자 이메일을 created_by_email로 자동 주입 (Hermes 질문 DM 대상)
   try {
     const session = await auth();

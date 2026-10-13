@@ -357,7 +357,7 @@ export default function SettingsPage() {
               onKeyDown={(e) => { if (e.key === "Enter") addAllowedEmail(); }}
               placeholder="추가할 이메일 (예: alice@gameberry.co.kr)"
               className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm"
-              style={{ color: "#e6e9ef" }}
+              style={{ color: "var(--text)" }}
             />
             <button
               onClick={addAllowedEmail}
@@ -433,7 +433,7 @@ export default function SettingsPage() {
             onChange={(e) => setBotToken(e.target.value)}
             placeholder={hasBotToken ? `현재: ${maskedBotToken} (변경하려면 새 토큰 입력)` : "xoxb-..."}
             className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm font-mono"
-            style={{ color: "#e6e9ef" }}
+            style={{ color: "var(--text)" }}
           />
           {hasBotToken && (
             <button onClick={clearBotToken} className="px-2.5 py-2 text-xs text-red-600 hover:bg-red-50 rounded-lg">✕</button>
@@ -467,7 +467,7 @@ export default function SettingsPage() {
                   onChange={(e) => updateRow(idx, { assignee: e.target.value })}
                   placeholder="담당자 이름"
                   className="flex-1 px-2.5 py-1.5 border border-gray-200 rounded text-sm font-medium"
-                  style={{ color: "#e6e9ef" }}
+                  style={{ color: "var(--text)" }}
                 />
                 <button
                   onClick={() => removeRow(idx)}
@@ -478,31 +478,31 @@ export default function SettingsPage() {
                 </button>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-xs w-14 shrink-0" style={{ color: "#e6e9ef" }}>Email</span>
+                <span className="text-xs w-14 shrink-0" style={{ color: "var(--text)" }}>Email</span>
                 <input
                   type="email"
                   value={row.email}
                   onChange={(e) => updateRow(idx, { email: e.target.value })}
                   placeholder="jisu.park@gameberry.co.kr (로그인 이메일 — Hermes 질문 DM 라우팅용)"
                   className="flex-1 px-2.5 py-1.5 border border-gray-200 rounded text-xs bg-white"
-                  style={{ color: "#e6e9ef" }}
+                  style={{ color: "var(--text)" }}
                 />
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-xs w-14 shrink-0" style={{ color: "#e6e9ef" }}>User ID</span>
+                <span className="text-xs w-14 shrink-0" style={{ color: "var(--text)" }}>User ID</span>
                 <input
                   type="text"
                   value={row.slack_user_id}
                   onChange={(e) => updateRow(idx, { slack_user_id: e.target.value })}
                   placeholder="U01ABC2DEF... (Slack 멤버 ID)"
                   className="flex-1 px-2.5 py-1.5 border border-gray-200 rounded text-xs font-mono bg-white"
-                  style={{ color: "#e6e9ef" }}
+                  style={{ color: "var(--text)" }}
                 />
                 <button
                   onClick={() => testRowDM(row, idx)}
                   disabled={testing === `row-${idx}` || !row.slack_user_id}
                   className="px-2.5 py-1.5 text-xs border border-gray-300 rounded hover:bg-white disabled:opacity-40 shrink-0"
-                  style={{ color: "#e6e9ef" }}
+                  style={{ color: "var(--text)" }}
                   title="Bot DM 테스트"
                 >
                   {testing === `row-${idx}` ? "..." : "🤖 DM 테스트"}
@@ -516,13 +516,13 @@ export default function SettingsPage() {
                   onChange={(e) => updateRow(idx, { webhook_url: e.target.value })}
                   placeholder="(선택) https://hooks.slack.com/services/..."
                   className="flex-1 px-2.5 py-1.5 border border-gray-200 rounded text-xs font-mono bg-white"
-                  style={{ color: "#e6e9ef" }}
+                  style={{ color: "var(--text)" }}
                 />
                 <button
                   onClick={() => testRowWebhook(row, idx)}
                   disabled={testing === `row-${idx}` || !row.webhook_url || row.webhook_url.startsWith("***")}
                   className="px-2.5 py-1.5 text-xs border border-gray-300 rounded hover:bg-white disabled:opacity-40 shrink-0"
-                  style={{ color: "#e6e9ef" }}
+                  style={{ color: "var(--text)" }}
                   title="Webhook 테스트"
                 >
                   {testing === `row-${idx}` ? "..." : "🪝 Webhook 테스트"}
@@ -535,7 +535,7 @@ export default function SettingsPage() {
         <button
           onClick={addRow}
           className="px-3 py-1.5 text-xs border border-dashed border-gray-300 rounded-lg hover:bg-gray-50"
-          style={{ color: "#e6e9ef" }}
+          style={{ color: "var(--text)" }}
         >
           + 작업자 추가
         </button>
@@ -554,13 +554,13 @@ export default function SettingsPage() {
             onChange={(e) => setDefaultUrl(e.target.value)}
             placeholder={hasDefault ? `현재: ${maskedDefault}` : "https://hooks.slack.com/services/..."}
             className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm font-mono"
-            style={{ color: "#e6e9ef" }}
+            style={{ color: "var(--text)" }}
           />
           <button
             onClick={testDefault}
             disabled={testing === "default" || (!defaultUrl.trim() && !hasDefault)}
             className="px-2.5 py-2 text-xs border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-40"
-            style={{ color: "#e6e9ef" }}
+            style={{ color: "var(--text)" }}
           >
             {testing === "default" ? "..." : "🚀 테스트"}
           </button>
@@ -575,11 +575,11 @@ export default function SettingsPage() {
         <div className="space-y-2 mb-4">
           <label className="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" checked={notifyCreate} onChange={(e) => setNotifyCreate(e.target.checked)} className="w-4 h-4" />
-            <span className="text-sm" style={{ color: "#e6e9ef" }}>새 작업 등록 시 알림</span>
+            <span className="text-sm" style={{ color: "var(--text)" }}>새 작업 등록 시 알림</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" checked={notifyStatus} onChange={(e) => setNotifyStatus(e.target.checked)} className="w-4 h-4" />
-            <span className="text-sm" style={{ color: "#e6e9ef" }}>작업 상태 변경 시 알림</span>
+            <span className="text-sm" style={{ color: "var(--text)" }}>작업 상태 변경 시 알림</span>
           </label>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -596,7 +596,7 @@ export default function SettingsPage() {
       </div>
 
       {/* 가이드 */}
-      <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 max-w-3xl text-sm" style={{ color: "#e6e9ef" }}>
+      <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 max-w-3xl text-sm" style={{ color: "var(--text)" }}>
         <div className="font-bold mb-2">📖 봇이 작업자에게 직접 DM 보내기</div>
 
         <div className="font-semibold mt-3 mb-1">1단계 — Bot Token 발급 (1번만)</div>

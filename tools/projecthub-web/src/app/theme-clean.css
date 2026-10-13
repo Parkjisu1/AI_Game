@@ -1,0 +1,196 @@
+/* ══════════════════════════════════════════════════════════════
+   ProjectHub — Office Dark Theme (APP_THEME=clean 인스턴스 전용)
+   Flex/Slack형 다크 오피스: 뉴트럴 다크 + 절제된 블루 액센트.
+   네온/글로우/HUD 없음. globals.css의 네온 리매핑 레이어를
+   html[data-theme="clean"] 스코프로 재-오버라이드한다.
+   game-team 인스턴스는 data-theme 미설정 → 이 파일 전체 비활성.
+   ══════════════════════════════════════════════════════════════ */
+
+html[data-theme="clean"] {
+  color-scheme: dark;
+  --bg-0: #101114;
+  --bg-1: #131417;
+  --bg-2: #17181b;
+  --neon: #4b8bfa;          /* 액센트 = 차분한 블루 (글로우 없음) */
+  --neon-soft: #6ca0f8;
+  --neon-deep: #2f6fed;
+  --line: #2a2c31;
+  --line-strong: #3a3d43;
+  --panel: #1e1f23;
+  --panel-solid: #1e1f23;
+  --text: #e8e9ea;
+  --text-dim: #9b9ea4;
+  --text-faint: #5f6267;
+  --ok: #3fb950;
+  --warn: #f0883e;
+  --err: #f85149;
+  --violet: #bc8cff;
+  --pink: #ec8cbf;
+}
+
+html[data-theme="clean"] body {
+  color: var(--text);
+  background: #131417;
+  background-attachment: scroll;
+  font-family: "Pretendard Variable", Pretendard, Inter, -apple-system, "Segoe UI", system-ui, sans-serif;
+}
+/* HUD 격자 오버레이 제거 */
+html[data-theme="clean"] body::before { display: none; }
+
+/* ── 타이포 유틸: 발광 제거 ── */
+html[data-theme="clean"] .neon-text { color: var(--neon); text-shadow: none; }
+html[data-theme="clean"] .neon-text-soft { color: var(--neon-soft); text-shadow: none; }
+
+/* ── 글래스 패널 → 플랫 다크 패널 ── */
+html[data-theme="clean"] .glass {
+  background: #1e1f23;
+  border: 1px solid #2a2c31;
+  border-radius: 8px;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+}
+html[data-theme="clean"] .glass-hover:hover {
+  border-color: #3a3d43;
+  box-shadow: none;
+  transform: none;
+}
+html[data-theme="clean"] .glow-cyan { box-shadow: 0 0 0 1px #3a3d43; }
+
+/* HUD 코너 브라켓 제거 */
+html[data-theme="clean"] .hud::before,
+html[data-theme="clean"] .hud::after { display: none; }
+
+/* ── 상태 점: 플랫 ── */
+html[data-theme="clean"] .dot-run { background: var(--neon); box-shadow: none; }
+html[data-theme="clean"] .dot-ok { background: var(--ok); box-shadow: none; }
+html[data-theme="clean"] .dot-wait { background: var(--warn); box-shadow: none; }
+html[data-theme="clean"] .dot-err { background: var(--err); box-shadow: none; }
+
+/* ── 웨이브폼/펄스 ── */
+html[data-theme="clean"] .wave i { background: var(--neon); box-shadow: none; }
+html[data-theme="clean"] .core-pulse { animation: none; opacity: 1; }
+html[data-theme="clean"] .float { animation: none; }
+
+/* ── 진행 게이지 ── */
+html[data-theme="clean"] .gauge-track { background: rgba(255, 255, 255, 0.08); }
+html[data-theme="clean"] .gauge-fill { background: var(--neon); box-shadow: none; }
+
+/* ══════════════════════════════════════════════════════════════
+   라이트 유틸 → 오피스 다크 리매핑 (globals.css 네온 레이어 재정의)
+   ══════════════════════════════════════════════════════════════ */
+html[data-theme="clean"] .bg-white {
+  background: #1e1f23 !important;
+  border-color: #2a2c31 !important;
+  backdrop-filter: none;
+}
+html[data-theme="clean"] .bg-gray-50 { background-color: #191a1d !important; }
+html[data-theme="clean"] .bg-gray-100 { background-color: #25262b !important; }
+html[data-theme="clean"] .bg-gray-200 { background-color: #2b2d32 !important; }
+html[data-theme="clean"] .text-black { color: #e8e9ea !important; }
+html[data-theme="clean"] .text-gray-900 { color: #e8e9ea !important; }
+html[data-theme="clean"] .text-gray-800 { color: #d4d6d9 !important; }
+html[data-theme="clean"] .text-gray-700 { color: #bfc2c6 !important; }
+html[data-theme="clean"] .text-gray-600 { color: #9b9ea4 !important; }
+html[data-theme="clean"] .text-gray-500 { color: #82868c !important; }
+html[data-theme="clean"] .text-gray-400 { color: #5f6267 !important; }
+html[data-theme="clean"] .text-gray-300 { color: #47494e !important; }
+html[data-theme="clean"] .border-gray-100 { border-color: #232428 !important; }
+html[data-theme="clean"] .border-gray-200 { border-color: #2a2c31 !important; }
+html[data-theme="clean"] .border-gray-300 { border-color: #3a3d43 !important; }
+html[data-theme="clean"] .hover\:bg-gray-50:hover { background-color: rgba(255, 255, 255, 0.04) !important; }
+html[data-theme="clean"] .hover\:bg-gray-100:hover { background-color: rgba(255, 255, 255, 0.06) !important; }
+html[data-theme="clean"] .bg-black { background-color: #0c0d0f !important; }
+html[data-theme="clean"] .bg-white\/95 { background-color: rgba(30, 31, 35, 0.95) !important; }
+
+html[data-theme="clean"] input,
+html[data-theme="clean"] textarea,
+html[data-theme="clean"] select {
+  background-color: #1a1b1e !important;
+  color: #e8e9ea !important;
+  border-color: #2a2c31 !important;
+}
+html[data-theme="clean"] input::placeholder,
+html[data-theme="clean"] textarea::placeholder { color: #5f6267 !important; }
+html[data-theme="clean"] input:focus,
+html[data-theme="clean"] textarea:focus,
+html[data-theme="clean"] select:focus {
+  outline: none;
+  border-color: #4b8bfa !important;
+  box-shadow: 0 0 0 3px rgba(75, 139, 250, 0.15);
+}
+
+/* 컬러 칩 배경 → 반투명 다크 톤 */
+html[data-theme="clean"] .bg-blue-50, html[data-theme="clean"] .bg-blue-100,
+html[data-theme="clean"] .bg-sky-50, html[data-theme="clean"] .bg-sky-100,
+html[data-theme="clean"] .bg-indigo-50, html[data-theme="clean"] .bg-indigo-100 { background-color: rgba(75, 139, 250, 0.14) !important; }
+html[data-theme="clean"] .bg-cyan-50, html[data-theme="clean"] .bg-cyan-100,
+html[data-theme="clean"] .bg-teal-50, html[data-theme="clean"] .bg-teal-100 { background-color: rgba(77, 208, 225, 0.13) !important; }
+html[data-theme="clean"] .bg-emerald-50, html[data-theme="clean"] .bg-emerald-100,
+html[data-theme="clean"] .bg-green-50, html[data-theme="clean"] .bg-green-100,
+html[data-theme="clean"] .bg-lime-50, html[data-theme="clean"] .bg-lime-100 { background-color: rgba(63, 185, 80, 0.14) !important; }
+html[data-theme="clean"] .bg-amber-50, html[data-theme="clean"] .bg-amber-100,
+html[data-theme="clean"] .bg-yellow-50, html[data-theme="clean"] .bg-yellow-100,
+html[data-theme="clean"] .bg-orange-50, html[data-theme="clean"] .bg-orange-100 { background-color: rgba(240, 136, 62, 0.15) !important; }
+html[data-theme="clean"] .bg-red-50, html[data-theme="clean"] .bg-red-100,
+html[data-theme="clean"] .bg-rose-50, html[data-theme="clean"] .bg-rose-100,
+html[data-theme="clean"] .bg-pink-50, html[data-theme="clean"] .bg-pink-100,
+html[data-theme="clean"] .bg-fuchsia-50, html[data-theme="clean"] .bg-fuchsia-100 { background-color: rgba(248, 81, 73, 0.13) !important; }
+html[data-theme="clean"] .bg-purple-50, html[data-theme="clean"] .bg-purple-100,
+html[data-theme="clean"] .bg-violet-50, html[data-theme="clean"] .bg-violet-100 { background-color: rgba(188, 140, 255, 0.13) !important; }
+html[data-theme="clean"] .bg-slate-50, html[data-theme="clean"] .bg-slate-100 { background-color: rgba(255, 255, 255, 0.05) !important; }
+
+/* 컬러 텍스트 → 다크 배경 대비 톤 */
+html[data-theme="clean"] .text-blue-500, html[data-theme="clean"] .text-blue-600,
+html[data-theme="clean"] .text-blue-700, html[data-theme="clean"] .text-blue-800,
+html[data-theme="clean"] .text-sky-600, html[data-theme="clean"] .text-sky-700,
+html[data-theme="clean"] .text-indigo-600, html[data-theme="clean"] .text-indigo-700 { color: #6ca0f8 !important; }
+html[data-theme="clean"] .text-cyan-600, html[data-theme="clean"] .text-cyan-700,
+html[data-theme="clean"] .text-teal-600, html[data-theme="clean"] .text-teal-700 { color: #4dd0e1 !important; }
+html[data-theme="clean"] .text-emerald-500, html[data-theme="clean"] .text-emerald-600,
+html[data-theme="clean"] .text-emerald-700, html[data-theme="clean"] .text-emerald-800,
+html[data-theme="clean"] .text-green-600, html[data-theme="clean"] .text-green-700 { color: #56d364 !important; }
+html[data-theme="clean"] .text-amber-600, html[data-theme="clean"] .text-amber-700,
+html[data-theme="clean"] .text-amber-800, html[data-theme="clean"] .text-yellow-700,
+html[data-theme="clean"] .text-orange-600, html[data-theme="clean"] .text-orange-700 { color: #f0883e !important; }
+html[data-theme="clean"] .text-red-600, html[data-theme="clean"] .text-red-700,
+html[data-theme="clean"] .text-rose-600, html[data-theme="clean"] .text-rose-700,
+html[data-theme="clean"] .text-pink-600, html[data-theme="clean"] .text-pink-700 { color: #ff7b72 !important; }
+html[data-theme="clean"] .text-purple-600, html[data-theme="clean"] .text-purple-700,
+html[data-theme="clean"] .text-violet-600, html[data-theme="clean"] .text-violet-700 { color: #bc8cff !important; }
+html[data-theme="clean"] .text-slate-600, html[data-theme="clean"] .text-slate-700,
+html[data-theme="clean"] .text-slate-800, html[data-theme="clean"] .text-slate-900,
+html[data-theme="clean"] .text-zinc-600, html[data-theme="clean"] .text-zinc-700,
+html[data-theme="clean"] .text-zinc-800, html[data-theme="clean"] .text-zinc-900,
+html[data-theme="clean"] .text-neutral-600, html[data-theme="clean"] .text-neutral-700,
+html[data-theme="clean"] .text-neutral-800, html[data-theme="clean"] .text-stone-600,
+html[data-theme="clean"] .text-stone-700, html[data-theme="clean"] .text-gray-950 { color: #9b9ea4 !important; }
+
+/* 버튼: 단색 블루, 글로우 없음 */
+html[data-theme="clean"] .bg-blue-500,
+html[data-theme="clean"] .bg-blue-600 {
+  background: #2f6fed !important;
+  color: #ffffff !important;
+  box-shadow: none;
+}
+html[data-theme="clean"] .hover\:bg-blue-600:hover { filter: none; background: #2a63d4 !important; }
+
+/* 진행바 fill */
+html[data-theme="clean"] .bg-blue-500.h-full,
+html[data-theme="clean"] .h-full.bg-blue-500 { background: #4b8bfa !important; box-shadow: none; }
+
+/* 카드 호버: 보더만 */
+html[data-theme="clean"] .hover\:shadow-md:hover { box-shadow: 0 0 0 1px #3a3d43 !important; }
+
+/* ── 정형화(사무적) 톤: 라운딩 축소 ── */
+html[data-theme="clean"] .rounded-2xl { border-radius: 10px !important; }
+html[data-theme="clean"] .rounded-xl { border-radius: 8px !important; }
+html[data-theme="clean"] .rounded-lg { border-radius: 6px !important; }
+
+/* ── 사이드바 (SideNav) — 콘텐츠보다 살짝 어둡게 ── */
+html[data-theme="clean"] .sidenav { background: #17181b !important; border-color: #26272b !important; }
+
+/* 스크롤바 뉴트럴 */
+html[data-theme="clean"] .thin-scroll { scrollbar-color: #3a3d43 transparent; }
+html[data-theme="clean"] .thin-scroll::-webkit-scrollbar-thumb { background: #3a3d43; }
+html[data-theme="clean"] .thin-scroll::-webkit-scrollbar-thumb:hover { background: #4a4d54; }

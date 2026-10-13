@@ -4,25 +4,28 @@ import { usePathname } from "next/navigation";
 import Icon from "./Icon";
 
 // 데스크톱 하단 아이콘 독 (md+). 이미지 #2의 하단 독 재현.
-const DOCK: { href: string; icon: string; label: string; owner?: boolean }[] = [
+const IS_CLEAN = process.env.NEXT_PUBLIC_APP_THEME === "clean";
+const DOCK: { href: string; icon: string; label: string; owner?: boolean; game?: boolean }[] = [
   { href: "/", icon: "home", label: "대시보드" },
   { href: "/tasks", icon: "tasks", label: "작업 보드" },
   { href: "/agents", icon: "cpu", label: "AI 팀" },
   { href: "/voice", icon: "mic", label: "음성 명령" },
-  { href: "/gallery", icon: "image", label: "설계 갤러리" },
-  { href: "/balloonflow", icon: "flask", label: "QA 검사" },
-  { href: "/simulator", icon: "target", label: "시뮬레이터" },
+  { href: "/gallery", icon: "image", label: "설계 갤러리", game: true },
+  { href: "/balloonflow", icon: "flask", label: "QA 검사", game: true },
+  { href: "/simulator", icon: "target", label: "시뮬레이터", game: true },
   { href: "/settings", icon: "gear", label: "설정", owner: true },
-];
+].filter((l) => !IS_CLEAN || !l.game);
 
 export default function BottomDock({ isOwner = false }: { isOwner?: boolean }) {
   const pathname = usePathname();
   const active = (h: string) => (h === "/" ? pathname === "/" : pathname?.startsWith(h));
   const items = DOCK.filter((d) => !d.owner || isOwner);
 
+  if (pathname === "/login") return null;
+
   return (
     <div className="hidden md:flex fixed bottom-0 left-0 right-0 z-30 h-16 items-center justify-between px-6 pointer-events-none">
-      <span className="text-[13px] font-bold tracking-hud mono neon-text-soft pointer-events-auto">JARVIS</span>
+      <span className="text-[13px] font-bold tracking-hud mono neon-text-soft pointer-events-auto">{IS_CLEAN ? "NewPlay" : "JARVIS"}</span>
 
       <div className="pointer-events-auto flex items-center gap-1.5 px-3 py-2 rounded-2xl glass" style={{ boxShadow: "0 0 30px -10px rgba(34,211,238,.35), 0 10px 40px -12px rgba(0,0,0,.7)" }}>
         {items.map((d) => {

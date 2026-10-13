@@ -1,0 +1,314 @@
+/* ══════════════════════════════════════════════════════════════
+   INSTRUMENT — 계기판 테마 (NEXT_PUBLIC_APP_THEME=instrument)
+
+   globals.css 의 JARVIS 네온 위에 덧씌우는 레이어.
+   env 가 없으면 이 파일의 선택자는 하나도 매치되지 않으므로
+   기존 인스턴스 렌더링은 1px도 바뀌지 않는다.
+
+   설계 근거: 밀도를 올리고 장식을 걷어낸다.
+   - 라디우스 16px → 2px (직각이 정렬을 만든다)
+   - 그라디언트·글로우 제거, 액센트는 "상태"에만
+   - 그림자 대신 1px 선으로 영역 구분 (다크에서 그림자는 안 보인다)
+   - 숫자·ID는 모노(자릿수 정렬), 한글 문장은 산세리프
+   ══════════════════════════════════════════════════════════════ */
+
+html[data-theme="instrument"] {
+  --bg-0: #0d0f13;
+  --bg-1: #0f1115;
+  --bg-2: #14161b;
+  --panel-solid: #161a1f;
+  --panel-2: #1c2027;
+  --line-1: #272c34;
+  --line-2: #39404a;
+
+  --neon: #ff4a2b;        /* 액센트 — 주의를 요구하는 곳에만 */
+  --neon-soft: #ff6a4d;
+  --neon-deep: #c92800;
+
+  --text: #e9ebee;
+  --text-dim: #99a2ae;
+  --text-faint: #5f6873;
+
+  --ok: #3fb950;
+  --warn: #e3903c;
+  --err: #f0503f;
+
+  --mono: ui-monospace, "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace;
+}
+
+html[data-theme="instrument"] body {
+  background: var(--bg-1);
+  color: var(--text);
+  font-family: Pretendard, "Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif;
+}
+
+/* 배경 방사형 글로우·격자 오버레이 제거 */
+html[data-theme="instrument"] body::before { display: none; }
+html[data-theme="instrument"] body::after { display: none; }
+
+/* ── 숫자·ID·기술 라벨은 모노 (한글 문장은 산세리프 유지) ── */
+html[data-theme="instrument"] .font-mono,
+html[data-theme="instrument"] code,
+html[data-theme="instrument"] pre,
+html[data-theme="instrument"] .tabular-nums {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── 발광 제거 ── */
+html[data-theme="instrument"] .neon-text { color: var(--neon); text-shadow: none; }
+html[data-theme="instrument"] .neon-text-soft { color: var(--neon-soft); text-shadow: none; }
+html[data-theme="instrument"] .glow-cyan { box-shadow: 0 0 0 1px var(--line-2); }
+
+/* ── 글래스 패널 → 계기 패널 ── */
+html[data-theme="instrument"] .glass {
+  background: var(--panel-solid);
+  border: 1px solid var(--line-1);
+  border-radius: 2px;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+html[data-theme="instrument"] .glass-hover:hover {
+  background: var(--panel-2);
+  border-color: var(--line-2);
+}
+
+/* ── 상태 점: 발광 없이 ── */
+html[data-theme="instrument"] .dot-run { background: var(--neon); box-shadow: none; }
+html[data-theme="instrument"] .dot-ok { background: var(--ok); box-shadow: none; }
+html[data-theme="instrument"] .dot-wait { background: var(--warn); box-shadow: none; }
+html[data-theme="instrument"] .dot-err { background: var(--err); box-shadow: none; }
+
+html[data-theme="instrument"] .wave i { background: var(--neon); box-shadow: none; }
+html[data-theme="instrument"] .core-pulse { animation: none; opacity: 1; }
+html[data-theme="instrument"] .float { animation: none; }
+
+/* ── 게이지: 그라디언트 → 단색 ── */
+html[data-theme="instrument"] .gauge-track {
+  background: var(--line-1);
+  border-radius: 0;
+}
+html[data-theme="instrument"] .gauge-fill {
+  background: var(--neon);
+  box-shadow: none;
+  border-radius: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Tailwind 유틸 재매핑 — 컴포넌트 코드를 건드리지 않고 전면 적용
+   ══════════════════════════════════════════════════════════════ */
+
+/* 면 */
+html[data-theme="instrument"] .bg-white {
+  background-color: var(--panel-solid) !important;
+  border: 1px solid var(--line-1);
+}
+html[data-theme="instrument"] .bg-gray-50 { background-color: var(--bg-2) !important; }
+html[data-theme="instrument"] .bg-gray-100 { background-color: var(--panel-2) !important; }
+html[data-theme="instrument"] .bg-gray-200 { background-color: #2b3038 !important; }
+
+/* 글자 */
+html[data-theme="instrument"] .text-black,
+html[data-theme="instrument"] .text-gray-900 { color: var(--text) !important; }
+html[data-theme="instrument"] .text-gray-800 { color: #d6d9dd !important; }
+html[data-theme="instrument"] .text-gray-700 { color: #c2c6cc !important; }
+html[data-theme="instrument"] .text-gray-600 { color: var(--text-dim) !important; }
+html[data-theme="instrument"] .text-gray-500 { color: #848b95 !important; }
+html[data-theme="instrument"] .text-gray-400 { color: var(--text-faint) !important; }
+html[data-theme="instrument"] .text-gray-300 { color: #494e56 !important; }
+
+/* 선 */
+html[data-theme="instrument"] .border,
+html[data-theme="instrument"] .border-t,
+html[data-theme="instrument"] .border-b,
+html[data-theme="instrument"] .border-l,
+html[data-theme="instrument"] .border-r { border-color: var(--line-1) !important; }
+html[data-theme="instrument"] .border-gray-100,
+html[data-theme="instrument"] .border-gray-200 { border-color: var(--line-1) !important; }
+html[data-theme="instrument"] .border-gray-300 { border-color: var(--line-2) !important; }
+html[data-theme="instrument"] .divide-y > * + * { border-color: var(--line-1) !important; }
+
+/* 액센트 계열 — 시안/파랑을 계기판 액센트로 */
+html[data-theme="instrument"] .text-blue-500,
+html[data-theme="instrument"] .text-blue-600,
+html[data-theme="instrument"] .text-blue-700,
+html[data-theme="instrument"] .text-blue-800,
+html[data-theme="instrument"] .text-sky-600,
+html[data-theme="instrument"] .text-sky-700,
+html[data-theme="instrument"] .text-indigo-600,
+html[data-theme="instrument"] .text-indigo-700,
+html[data-theme="instrument"] .text-cyan-600,
+html[data-theme="instrument"] .text-cyan-700,
+html[data-theme="instrument"] .text-teal-600,
+html[data-theme="instrument"] .text-teal-700 { color: var(--neon) !important; }
+
+html[data-theme="instrument"] .bg-blue-500,
+html[data-theme="instrument"] .bg-blue-600 {
+  background: var(--neon) !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  border-radius: 2px;
+}
+html[data-theme="instrument"] .bg-blue-500.h-full,
+html[data-theme="instrument"] .h-full.bg-blue-500 {
+  background: var(--neon) !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+html[data-theme="instrument"] .bg-blue-50,
+html[data-theme="instrument"] .bg-blue-100 { background-color: rgba(255, 74, 43, 0.12) !important; }
+html[data-theme="instrument"] .border-blue-200,
+html[data-theme="instrument"] .border-blue-500 { border-color: var(--neon) !important; }
+
+/* 상태색 */
+html[data-theme="instrument"] .text-green-600,
+html[data-theme="instrument"] .text-green-700,
+html[data-theme="instrument"] .text-emerald-600 { color: var(--ok) !important; }
+html[data-theme="instrument"] .text-yellow-600,
+html[data-theme="instrument"] .text-amber-600,
+html[data-theme="instrument"] .text-orange-600 { color: var(--warn) !important; }
+html[data-theme="instrument"] .text-red-500,
+html[data-theme="instrument"] .text-red-600,
+html[data-theme="instrument"] .text-red-700 { color: var(--err) !important; }
+html[data-theme="instrument"] .bg-green-50,
+html[data-theme="instrument"] .bg-green-100 { background-color: rgba(63, 185, 80, 0.12) !important; }
+html[data-theme="instrument"] .bg-yellow-50,
+html[data-theme="instrument"] .bg-yellow-100,
+html[data-theme="instrument"] .bg-amber-50 { background-color: rgba(227, 144, 60, 0.12) !important; }
+html[data-theme="instrument"] .bg-red-50,
+html[data-theme="instrument"] .bg-red-100 { background-color: rgba(240, 80, 63, 0.12) !important; }
+
+/* 보라 계열은 액센트로 흡수 (장식용 색을 남기지 않는다) */
+html[data-theme="instrument"] .text-purple-600,
+html[data-theme="instrument"] .text-violet-600,
+html[data-theme="instrument"] .text-pink-600 { color: var(--neon-soft) !important; }
+html[data-theme="instrument"] .bg-purple-50,
+html[data-theme="instrument"] .bg-violet-50 { background-color: rgba(255, 106, 77, 0.10) !important; }
+
+/* ── 라디우스: 직각으로 ── */
+html[data-theme="instrument"] .rounded-3xl,
+html[data-theme="instrument"] .rounded-2xl,
+html[data-theme="instrument"] .rounded-xl { border-radius: 3px !important; }
+html[data-theme="instrument"] .rounded-lg,
+html[data-theme="instrument"] .rounded-md,
+html[data-theme="instrument"] .rounded { border-radius: 2px !important; }
+/* 아바타·점·토글은 원형 유지 */
+html[data-theme="instrument"] .rounded-full { border-radius: 9999px !important; }
+
+/* ── 그림자 제거 ── */
+html[data-theme="instrument"] .shadow,
+html[data-theme="instrument"] .shadow-sm,
+html[data-theme="instrument"] .shadow-md,
+html[data-theme="instrument"] .shadow-lg,
+html[data-theme="instrument"] .shadow-xl,
+html[data-theme="instrument"] .shadow-2xl { box-shadow: none !important; }
+
+/* ── 입력 ── */
+html[data-theme="instrument"] input[type="text"],
+html[data-theme="instrument"] input[type="search"],
+html[data-theme="instrument"] input[type="email"],
+html[data-theme="instrument"] input[type="password"],
+html[data-theme="instrument"] input[type="number"],
+html[data-theme="instrument"] select,
+html[data-theme="instrument"] textarea {
+  background: var(--bg-0) !important;
+  border: 1px solid var(--line-2) !important;
+  color: var(--text) !important;
+  border-radius: 2px !important;
+}
+html[data-theme="instrument"] input::placeholder,
+html[data-theme="instrument"] textarea::placeholder { color: var(--text-faint) !important; }
+html[data-theme="instrument"] input:focus,
+html[data-theme="instrument"] select:focus,
+html[data-theme="instrument"] textarea:focus {
+  outline: none !important;
+  border-color: var(--neon) !important;
+}
+
+/* ── 스크롤바: 스크롤 가능함이 보여야 한다 ── */
+html[data-theme="instrument"] ::-webkit-scrollbar { width: 9px; height: 9px; }
+html[data-theme="instrument"] ::-webkit-scrollbar-track { background: var(--bg-0); }
+html[data-theme="instrument"] ::-webkit-scrollbar-thumb {
+  background: var(--line-2);
+  border: 2px solid var(--bg-1);
+}
+
+/* ── 한글 라벨 자간: 영문 트래킹을 그대로 쓰면 읽기 어렵다 ── */
+html[data-theme="instrument"] .tracking-wide,
+html[data-theme="instrument"] .tracking-wider,
+html[data-theme="instrument"] .tracking-widest { letter-spacing: 0.04em !important; }
+
+/* ── 한글은 최소 폭이 한 글자다. flex/grid 안에서 세로로 쌓이는 것을 막는다 ── */
+html[data-theme="instrument"] .truncate { min-width: 0; }
+html[data-theme="instrument"] .flex > .flex-1,
+html[data-theme="instrument"] .flex > .grow { min-width: 0; }
+
+/* ══════════════════════════════════════════════════════════════
+   계기판 셸 — 상태 스트립 + 그룹 탭 + 하위 탭 (InstrumentNav)
+   ══════════════════════════════════════════════════════════════ */
+.instr-shell {
+  background: var(--bg-1);
+  border-bottom: 1px solid var(--line-1);
+  font-family: Pretendard, "Malgun Gothic", system-ui, sans-serif;
+}
+.instr-strip {
+  display: flex; align-items: center; gap: 20px;
+  padding: 7px 14px; border-bottom: 1px solid var(--line-1);
+  background: var(--panel-solid);
+}
+.instr-kv { display: flex; flex-direction: column; gap: 1px; white-space: nowrap; }
+.instr-kv.right { text-align: right; }
+.instr-kv .k { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; color: var(--text-faint); }
+.instr-kv .v { font-size: 11.5px; font-weight: 700; letter-spacing: .02em; }
+.instr-kv .v.ok { color: var(--ok); }
+.instr-kv .v.off { color: var(--text-faint); }
+.instr-spacer { flex: 1; }
+.instr-out {
+  border: 1px solid var(--line-2); background: transparent; color: var(--text-dim);
+  font: inherit; font-size: 10px; letter-spacing: .06em; padding: 5px 9px;
+  cursor: pointer; border-radius: 2px;
+}
+.instr-out:hover { border-color: var(--neon); color: var(--neon); }
+
+.instr-tabs { display: flex; gap: 5px; padding: 6px 14px 0; }
+.instr-tab {
+  flex: 1; border: 1px solid var(--line-1); background: var(--panel-solid);
+  color: var(--text-dim); padding: 7px 11px; font-size: 11px; letter-spacing: .03em;
+  display: flex; align-items: center; gap: 8px; border-radius: 2px;
+  text-decoration: none; position: relative;
+}
+.instr-tab:hover { color: var(--text); }
+.instr-tab.on { background: var(--text); color: var(--bg-1); border-color: var(--text); font-weight: 700; }
+.instr-tab .n { font-family: var(--mono); font-size: 9.5px; color: var(--text-faint); }
+.instr-tab.on .n { color: var(--bg-1); opacity: .55; }
+.instr-tab .cnt { margin-left: auto; font-size: 9.5px; color: var(--text-faint); }
+.instr-tab.on .cnt { color: var(--bg-1); opacity: .6; }
+.instr-tab.on::after {
+  content: ""; position: absolute; right: -1px; top: -1px;
+  border-top: 8px solid var(--neon); border-left: 8px solid transparent;
+}
+
+.instr-sub {
+  display: flex; align-items: stretch; margin: 6px 14px 0;
+  border: 1px solid var(--line-1); background: var(--panel-solid);
+  border-radius: 2px; overflow-x: auto;
+}
+.instr-sub .cap {
+  display: flex; align-items: center; padding: 0 11px; flex-shrink: 0;
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: .14em;
+  color: var(--text-faint); border-right: 1px solid var(--line-1); background: var(--panel-2);
+}
+.instr-stab {
+  border-right: 1px solid var(--line-1); color: var(--text);
+  padding: 7px 14px; font-size: 11.5px; text-decoration: none;
+  display: flex; align-items: center; gap: 7px; flex-shrink: 0; white-space: nowrap;
+}
+.instr-stab:hover { background: var(--panel-2); }
+.instr-stab.on { background: var(--neon); color: #fff; font-weight: 700; }
+.instr-stab .rt { font-size: 9.5px; color: var(--text-faint); }
+.instr-stab.on .rt { color: rgba(255,255,255,.78); }
+
+/* 셸 높이만큼 본문을 내린다 (상태 32 + 그룹 40 + 하위 40) */
+@media (min-width: 768px) {
+  html[data-theme="instrument"] main.instr-main { padding-top: 118px !important; padding-bottom: 24px !important; }
+}

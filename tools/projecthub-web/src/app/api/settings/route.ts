@@ -18,6 +18,7 @@ export async function GET() {
       slack_bot_token: maskSecret(settings.slack_bot_token),
       slack_assignee_webhooks: (settings.slack_assignee_webhooks || []).map((w) => ({
         assignee: w.assignee,
+        email: w.email || "",
         webhook_url: maskSecret(w.webhook_url),
         slack_user_id: w.slack_user_id || "",
       })),
@@ -79,8 +80,11 @@ export async function POST(req: NextRequest) {
           if (webhook_url.startsWith("***")) {
             webhook_url = existing?.webhook_url || "";
           }
+          // email: 인바운드 폴러의 user_map 키. UI가 빈값을 보내도 기존값 보존(왕복 유실 방지)
+          const email = ((w.email || existing?.email || "").trim()).toLowerCase();
           return {
             assignee: w.assignee,
+            email,
             webhook_url,
             slack_user_id: (w.slack_user_id || "").trim(),
           };

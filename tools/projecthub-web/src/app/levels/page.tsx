@@ -249,69 +249,80 @@ export default function LevelsPage() {
         </div>
       </div>
 
-      {/* Mood tabs */}
-      {data?.facets.moods && data.facets.moods.length > 0 && (
-        <div className="mb-3 flex flex-wrap gap-2">
-          <span className="self-center text-[11px] text-zinc-500">mood:</span>
-          <button
-            onClick={() => { setMood(""); setPage(1); }}
-            className={`rounded-lg border px-3 py-1.5 text-xs ${
-              mood === ""
-                ? "border-zinc-800 bg-zinc-800 text-white"
-                : "border-zinc-300 bg-white hover:bg-zinc-50"
-            }`}
-          >
-            모든 mood
-          </button>
-          {data.facets.moods.map((m) => {
-            const meta = MOOD_META[m.mood] || { label: m.mood, icon: "?", color: "" };
-            const active = mood === m.mood;
-            return (
+      {/* 분류 필터 — mood·style 두 줄이 콘텐츠보다 먼저 자리를 먹고 있었다.
+          평소엔 접어 두고, 고른 게 있으면 펼친 채로 연다.
+          native <details> 를 쓴다 — 상태도 키보드 처리도 공짜다. */}
+      <details className="pp-facets" open={!!(mood || style)}>
+        <summary className="pp-facets-sum press">
+          분류 필터{(mood || style) ? ` · ${[mood, style].filter(Boolean).join(" · ")}` : ""}
+        </summary>
+        <div className="pp-facets-body">
+          {/* Mood tabs */}
+          {data?.facets.moods && data.facets.moods.length > 0 && (
+            <div className="mb-3 flex flex-wrap gap-2">
+              <span className="self-center text-[11px] text-zinc-500">mood:</span>
               <button
-                key={m.mood}
-                onClick={() => { setMood(m.mood); setPage(1); }}
-                className={`rounded-lg border-2 px-3 py-1.5 text-xs font-medium ${
-                  active ? meta.color : "border-zinc-200 bg-white hover:bg-zinc-50"
+                onClick={() => { setMood(""); setPage(1); }}
+                className={`rounded-lg border px-3 py-1.5 text-xs ${
+                  mood === ""
+                    ? "border-zinc-800 bg-zinc-800 text-white"
+                    : "border-zinc-300 bg-white hover:bg-zinc-50"
                 }`}
               >
-                {meta.icon} {meta.label} <span className="ml-1 text-[10px] text-zinc-500">({m.count})</span>
+                모든 mood
               </button>
-            );
-          })}
-        </div>
-      )}
+              {data.facets.moods.map((m) => {
+                const meta = MOOD_META[m.mood] || { label: m.mood, icon: "?", color: "" };
+                const active = mood === m.mood;
+                return (
+                  <button
+                    key={m.mood}
+                    onClick={() => { setMood(m.mood); setPage(1); }}
+                    className={`rounded-lg border-2 px-3 py-1.5 text-xs font-medium ${
+                      active ? meta.color : "border-zinc-200 bg-white hover:bg-zinc-50"
+                    }`}
+                  >
+                    {meta.icon} {meta.label} <span className="ml-1 text-[10px] text-zinc-500">({m.count})</span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
-      {/* Style tabs (batch v2) */}
-      {data?.facets.styles && data.facets.styles.length > 0 && (
-        <div className="mb-3 flex flex-wrap gap-2">
-          <span className="self-center text-[11px] text-zinc-500">style:</span>
-          <button
-            onClick={() => { setStyle(""); setPage(1); }}
-            className={`rounded-lg border px-3 py-1.5 text-xs ${
-              style === ""
-                ? "border-zinc-800 bg-zinc-800 text-white"
-                : "border-zinc-300 bg-white hover:bg-zinc-50"
-            }`}
-          >
-            모든 style
-          </button>
-          {data.facets.styles.map((s) => {
-            const meta = STYLE_META[s.style] || { label: s.style, icon: "?", color: "" };
-            const active = style === s.style;
-            return (
+          {/* Style tabs (batch v2) */}
+          {data?.facets.styles && data.facets.styles.length > 0 && (
+            <div className="mb-3 flex flex-wrap gap-2">
+              <span className="self-center text-[11px] text-zinc-500">style:</span>
               <button
-                key={s.style}
-                onClick={() => { setStyle(s.style); setPage(1); }}
-                className={`rounded-lg border-2 px-3 py-1.5 text-xs font-medium ${
-                  active ? meta.color : "border-zinc-200 bg-white hover:bg-zinc-50"
+                onClick={() => { setStyle(""); setPage(1); }}
+                className={`rounded-lg border px-3 py-1.5 text-xs ${
+                  style === ""
+                    ? "border-zinc-800 bg-zinc-800 text-white"
+                    : "border-zinc-300 bg-white hover:bg-zinc-50"
                 }`}
               >
-                {meta.icon} {meta.label} <span className="ml-1 text-[10px] text-zinc-500">({s.count})</span>
+                모든 style
               </button>
-            );
-          })}
+              {data.facets.styles.map((s) => {
+                const meta = STYLE_META[s.style] || { label: s.style, icon: "?", color: "" };
+                const active = style === s.style;
+                return (
+                  <button
+                    key={s.style}
+                    onClick={() => { setStyle(s.style); setPage(1); }}
+                    className={`rounded-lg border-2 px-3 py-1.5 text-xs font-medium ${
+                      active ? meta.color : "border-zinc-200 bg-white hover:bg-zinc-50"
+                    }`}
+                  >
+                    {meta.icon} {meta.label} <span className="ml-1 text-[10px] text-zinc-500">({s.count})</span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
         </div>
-      )}
+      </details>
 
       {/* Filters */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
@@ -449,6 +460,7 @@ export default function LevelsPage() {
                   return (
                     <button
                       key={n}
+                      data-star={filled ? "on" : "off"}
                       disabled={savingId === lv._id}
                       onClick={(e) => { e.stopPropagation(); setStar(lv._id, n); }}
                       className={`text-lg leading-none transition-transform hover:scale-110 ${

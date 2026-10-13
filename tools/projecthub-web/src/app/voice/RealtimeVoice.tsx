@@ -150,12 +150,13 @@ export default function RealtimeVoice() {
     }
   };
 
+  const IS_CLEAN = process.env.NEXT_PUBLIC_APP_THEME === "clean";
   return (
-    <div className="glass hud p-4 space-y-3">
+    <div className={`glass ${IS_CLEAN ? "" : "hud"} p-4 space-y-3`}>
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <span className="w-7 h-7 rounded-lg flex items-center justify-center"
-            style={{ background: "rgba(34,211,238,0.14)", color: "var(--neon)" }}>
+            style={IS_CLEAN ? { background: "rgba(75,139,250,0.15)", color: "#6ca0f8" } : { background: "rgba(34,211,238,0.14)", color: "var(--neon)" }}>
             <Icon name="chat" size={15} />
           </span>
           <div>
@@ -169,7 +170,7 @@ export default function RealtimeVoice() {
         {!live ? (
           <button onClick={start} disabled={connecting}
             className="text-xs px-3 py-1.5 rounded-lg font-medium disabled:opacity-50"
-            style={{ background: "linear-gradient(135deg, var(--neon-deep), var(--neon))", color: "#041018" }}>
+            style={IS_CLEAN ? { background: "#2f6fed", color: "#ffffff" } : { background: "linear-gradient(135deg, var(--neon-deep), var(--neon))", color: "#041018" }}>
             {connecting ? "연결 중…" : "대화 시작"}
           </button>
         ) : (

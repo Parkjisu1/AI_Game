@@ -1,0 +1,30 @@
+{
+  "date": "2026-09-21",
+  "publication": "https://medium.com/supercent-blog",
+  "target": {
+    "genre": "Sort hypercasual puzzle",
+    "D1_target": 0.45,
+    "CPI": "minimize subject to retention and unit economics"
+  },
+  "unique_article_urls": 123,
+  "rss_bodies": 106,
+  "additional_web_bodies": 9,
+  "excerpt_only": 8,
+  "reviewed_source_cards": 28,
+  "feed_requests": 110,
+  "distinct_feed_urls": 105,
+  "latest_feed_status_counts": {
+    "200": 23,
+    "429": 81,
+    "error": 1
+  },
+  "rss_feeds_at_10_item_cap": 9,
+  "completeness": "UNVERIFIED_PARTIAL",
+  "reason": "Medium archive HTTP 403; later RSS HTTP 429 Cloudflare challenge. RSS item limits prevent an authoritative total. No complete-publication denominator available.",
+  "limitations": [
+    "Search excerpts are not full-body confirmation.",
+    "Embedded video and every image were not exhaustively transcribed. Three graphs in the interstitial experiment were visually inspected.",
+    "Some RSS dates and web display dates differ; preserve source dates rather than silently harmonize.",
+    "No game build or current game metrics were supplied. Sort recommendations are hypotheses, not observed findings about the user game."
+  ]
+}

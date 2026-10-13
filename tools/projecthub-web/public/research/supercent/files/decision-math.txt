@@ -1,0 +1,13 @@
+// Reproducible arithmetic for the PM brief. Not a forecast or a live analytics client.
+export function wilson(k,n,z=1.959963984540054){
+ if(!Number.isInteger(n)||n<=0||!Number.isInteger(k)||k<0||k>n)throw new Error('Expected integers 0 <= retained <= users, users > 0');
+ const p=k/n,d=1+z*z/n,c=(p+z*z/(2*n))/d,h=z*Math.sqrt(p*(1-p)/n+z*z/(4*n*n))/d;
+ return {rate:p,low:c-h,high:c+h};
+}
+export function twoArmSample(p0,p1){
+ const p=(p0+p1)/2;
+ return Math.ceil((1.959963984540054*Math.sqrt(2*p*(1-p))+.8416212335729143*Math.sqrt(p0*(1-p0)+p1*(1-p1)))**2/(p1-p0)**2);
+}
+for(const [k,n]of [[45,100],[180,400],[450,1000],[485,1000]])console.log(JSON.stringify({retained:k,users:n,...wilson(k,n)}));
+console.log(JSON.stringify({normal_approximation_users_per_arm_40_to_45:twoArmSample(.40,.45)}));
+console.log(JSON.stringify({illustrative_cost_per_D1_retained:{A:.22/.30,B:.28/.48,C:.18/.46},burger_cpi_relative_drop:(.41-.29)/.41,hit_run_D0_relative_increase:(1060-680)/680}));

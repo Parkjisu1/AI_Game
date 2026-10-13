@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@google-cloud/bigquery": "^8.1.1",
     "@types/pngjs": "^6.0.5",
     "jszip": "^3.10.1",
     "mongodb": "^7.1.1",

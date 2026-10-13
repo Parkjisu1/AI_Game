@@ -1,0 +1,678 @@
+/* ══════════════════════════════════════════════════════════════
+   PAPER COMPONENTS — 구조 층
+
+   theme-paper.css 가 "무슨 색인가"라면 여기는 "무슨 모양인가"다.
+   테마만으로는 색과 분위기만 바뀌고 구조는 그대로 남는다 — 그 간극이 여기서 메워진다.
+
+   전부 html[data-theme="paper"] 스코프 안에 둔다. 테마를 되돌리면 이 모양도 같이 사라진다.
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 누른 느낌: 모든 컨트롤 공통. 0.985 아래로는 내리지 않는다 ── */
+html[data-theme="paper"] .press {
+  transition: transform .12s var(--pp-ease), background-color .14s var(--pp-ease),
+              border-color .14s var(--pp-ease), color .14s var(--pp-ease), opacity .14s var(--pp-ease);
+}
+html[data-theme="paper"] .press:active { transform: scale(0.985); }
+html[data-theme="paper"] .press:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--pp-accent-wash), 0 0 0 1px var(--pp-accent);
+}
+
+/* ══ 편집 리듬 ══════════════════════════════════════════════
+   아이브로우(작은 대문자) → 선언문(세리프, 타이트) → 부연(작게).
+   세 줄이 한 박자다. 페이지마다 이 리듬이 반복되면 제품이 한 사람이 만든 것처럼 읽힌다. */
+html[data-theme="paper"] .pp-eyebrow {
+  font-family: var(--pp-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--pp-ink-4);
+  margin-bottom: 6px;
+}
+html[data-theme="paper"] .pp-sechead {
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;
+  padding-bottom: 12px; margin-bottom: 18px;
+  border-bottom: 1px solid var(--pp-rule);   /* 괘선 — 인쇄물의 단 구분 */
+}
+html[data-theme="paper"] .pp-title {
+  font-family: var(--pp-display);
+  font-size: 23px; font-weight: 600;
+  line-height: 1.1; letter-spacing: -0.014em;
+  color: var(--pp-ink); margin: 0;
+}
+html[data-theme="paper"] .pp-sub {
+  margin: 6px 0 0; font-size: 13.5px; line-height: 1.55; color: var(--pp-ink-3);
+  max-width: 62ch;   /* 읽는 줄은 62자에서 끊는다 */
+}
+
+/* ══ 세그먼티드 ═══════════════════════════════════════════ */
+html[data-theme="paper"] .pp-seg {
+  display: inline-flex; padding: 2px; gap: 2px;
+  background: var(--pp-recess); border: 1px solid var(--pp-rule); border-radius: 7px;
+}
+html[data-theme="paper"] .pp-seg-item {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 11px; min-height: 30px;
+  font-size: 13px; font-weight: 500; color: var(--pp-ink-3);
+  background: transparent; border: 0; border-radius: 5px;  /* 부모 7 − 패딩 2 = 5 (동심원) */
+  cursor: pointer; white-space: nowrap;
+}
+html[data-theme="paper"] .pp-seg-item:hover { color: var(--pp-ink); }
+html[data-theme="paper"] .pp-seg-item.on {
+  background: var(--pp-sheet); color: var(--pp-ink); font-weight: 600;
+  box-shadow: 0 0 0 1px var(--pp-rule);
+}
+html[data-theme="paper"] .pp-seg-count {
+  font-family: var(--pp-mono); font-size: 11px; font-variant-numeric: tabular-nums;
+  color: var(--pp-ink-4);
+}
+html[data-theme="paper"] .pp-seg-item.on .pp-seg-count { color: var(--pp-accent-ink); }
+
+/* ══ 칩 ══════════════════════════════════════════════════ */
+html[data-theme="paper"] .pp-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 10px; min-height: 30px;
+  font-size: 12.5px; font-weight: 500; color: var(--pp-ink-2);
+  background: var(--pp-sheet); border: 1px solid var(--pp-rule-2); border-radius: 999px;
+  cursor: pointer; white-space: nowrap;
+}
+html[data-theme="paper"] .pp-chip:hover { border-color: var(--pp-rule-3); }
+html[data-theme="paper"] .pp-chip.on {
+  background: var(--pp-ink); border-color: var(--pp-ink); color: var(--pp-desk);
+}
+html[data-theme="paper"] .pp-chip-count { font-family: var(--pp-mono); font-size: 11px; opacity: .7; }
+
+/* ══ 버튼 ════════════════════════════════════════════════ */
+html[data-theme="paper"] .pp-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 34px; padding: 0 14px; border-radius: 6px;
+  font-size: 13.5px; font-weight: 500; cursor: pointer; white-space: nowrap;
+  border: 1px solid transparent;
+}
+html[data-theme="paper"] .pp-btn:disabled { opacity: .45; cursor: not-allowed; }
+html[data-theme="paper"] .pp-btn-primary { background: var(--pp-ink); color: var(--pp-desk); font-weight: 600; }
+html[data-theme="paper"] .pp-btn-primary:hover:not(:disabled) { background: #000; }
+html[data-theme="paper"] .pp-btn-ghost {
+  background: var(--pp-sheet); border-color: var(--pp-rule-2); color: var(--pp-ink-2);
+}
+html[data-theme="paper"] .pp-btn-ghost:hover:not(:disabled) { border-color: var(--pp-rule-3); color: var(--pp-ink); }
+html[data-theme="paper"] .pp-btn-quiet { background: transparent; color: var(--pp-ink-3); }
+html[data-theme="paper"] .pp-btn-quiet:hover:not(:disabled) { background: var(--pp-recess); color: var(--pp-ink); }
+
+/* ══ 빈 상태 ═════════════════════════════════════════════ */
+html[data-theme="paper"] .pp-empty {
+  padding: 40px 24px; text-align: center;
+  border: 1px dashed var(--pp-rule-2); border-radius: 8px; background: var(--pp-sheet);
+}
+html[data-theme="paper"] .pp-empty-title {
+  font-family: var(--pp-display); font-size: 17px; font-weight: 600; color: var(--pp-ink-2);
+}
+html[data-theme="paper"] .pp-empty-hint { margin-top: 6px; font-size: 13px; color: var(--pp-ink-4); }
+
+/* ══ 지표 ════════════════════════════════════════════════
+   값이 주인공. 라벨은 눕히고 숫자가 이긴다(크기+웨이트+모노). */
+html[data-theme="paper"] .pp-metric-label {
+  font-family: var(--pp-mono); font-size: 10.5px; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--pp-ink-4);
+}
+html[data-theme="paper"] .pp-metric-value {
+  margin-top: 4px; font-family: var(--pp-mono); font-size: 28px; font-weight: 500;
+  line-height: 1.05; letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
+  color: var(--pp-ink);
+}
+html[data-theme="paper"] .pp-metric-value.tone-ok { color: var(--pp-ok); }
+html[data-theme="paper"] .pp-metric-value.tone-warn { color: var(--pp-warn); }
+html[data-theme="paper"] .pp-metric-value.tone-err { color: var(--pp-err); }
+html[data-theme="paper"] .pp-metric-value.tone-accent { color: var(--pp-accent-ink); }
+html[data-theme="paper"] .pp-metric-delta { margin-top: 3px; font-size: 12px; color: var(--pp-ink-3); }
+
+/* ══ 스탯바 ══════════════════════════════════════════════
+   지표 5개를 같은 크기 상자로 늘어놓으면 눈이 갈 곳이 없다(= 초점 없음).
+   하나를 주인공으로 세우고 나머지는 괘선으로 나뉜 띠에 눕힌다.
+   비율 자체가 말한다 — "이건 지금 보는 값, 저건 참고값". */
+html[data-theme="paper"] .pp-statbar {
+  display: grid; gap: 12px; margin-bottom: 18px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 900px) {
+  html[data-theme="paper"] .pp-statbar { grid-template-columns: minmax(230px, 1fr) 2.15fr; }
+}
+
+html[data-theme="paper"] .pp-stat-lead {
+  background: var(--pp-sheet); border: 1px solid var(--pp-rule); border-radius: 8px;
+  padding: 16px 18px; display: flex; flex-direction: column; justify-content: center;
+}
+html[data-theme="paper"] .pp-stat-lead .pp-metric-value {
+  font-size: 44px; letter-spacing: -0.03em; margin-top: 6px;
+}
+html[data-theme="paper"] .pp-stat-lead .pp-metric-delta { margin-top: 7px; font-size: 12.5px; }
+
+/* 보조 지표 — 상자 4개가 아니라 괘선으로 나뉜 띠 하나 */
+html[data-theme="paper"] .pp-stat-strip {
+  background: var(--pp-sheet); border: 1px solid var(--pp-rule); border-radius: 8px;
+  display: grid; grid-template-columns: repeat(2, 1fr); overflow: hidden;
+}
+@media (min-width: 640px) {
+  html[data-theme="paper"] .pp-stat-strip { grid-template-columns: repeat(4, 1fr); }
+}
+html[data-theme="paper"] .pp-stat-cell {
+  padding: 14px 16px; min-width: 0;
+  border-left: 1px solid var(--pp-rule);
+  border-top: 1px solid var(--pp-rule);
+}
+/* 첫 열·첫 행의 선은 지운다 — 바깥 테두리와 겹치면 두꺼워 보인다 */
+html[data-theme="paper"] .pp-stat-cell:nth-child(2n + 1) { border-left: 0; }
+html[data-theme="paper"] .pp-stat-cell:nth-child(-n + 2) { border-top: 0; }
+@media (min-width: 640px) {
+  html[data-theme="paper"] .pp-stat-cell { border-top: 0; }
+  html[data-theme="paper"] .pp-stat-cell:nth-child(2n + 1) { border-left: 1px solid var(--pp-rule); }
+  html[data-theme="paper"] .pp-stat-cell:first-child { border-left: 0; }
+}
+html[data-theme="paper"] .pp-stat-cell .pp-metric-value { font-size: 21px; }
+
+/* 파형은 입력과 무관하게 늘 같은 애니메이션을 돈다 — 아무것도 말하지 않는 장식이다.
+   마이크 입력창이 바로 아래에 있어 어포던스는 이미 충분하다. */
+html[data-theme="paper"] .wave { display: none; }
+
+/* ══════════════════════════════════════════════════════════════
+   RAIL — 좌측 내비게이션 (데스크톱)
+   사이드바는 캔버스와 **같은 바탕**을 쓴다. 다른 색을 주면 화면이
+   "사이드바 세계"와 "본문 세계"로 쪼개진다. 경계는 1px 선이면 충분하다.
+   ══════════════════════════════════════════════════════════════ */
+html[data-theme="paper"] .pp-nav { display: none; }
+
+@media (min-width: 768px) {
+  html[data-theme="paper"] .pp-nav {
+    position: fixed; inset: 0 auto 0 0; z-index: 50;
+    width: 232px;
+    display: flex; flex-direction: column;
+    background: var(--pp-desk);
+    border-right: 1px solid var(--pp-rule);
+    padding: 14px 10px 12px;
+  }
+  /* 레일 폭만큼 본문을 민다 — 232 이 "내비가 본문을 돕는다" 는 비율이다 */
+  html[data-theme="paper"] main { padding-left: 232px !important; padding-top: 0 !important; }
+  html[data-theme="paper"] main > div { padding-top: 22px; }
+}
+
+html[data-theme="paper"] .pp-nav-mark {
+  display: flex; align-items: center; gap: 9px;
+  padding: 6px 8px 14px; text-decoration: none;
+}
+html[data-theme="paper"] .pp-nav-mark-box {
+  width: 24px; height: 24px; border-radius: 6px;
+  background: var(--pp-ink); color: var(--pp-desk);
+  display: inline-flex; align-items: center; justify-content: center;
+}
+html[data-theme="paper"] .pp-nav-mark-text {
+  font-family: var(--pp-display); font-size: 16px; font-weight: 600;
+  letter-spacing: -0.012em; color: var(--pp-ink);
+}
+
+html[data-theme="paper"] .pp-nav-groups { flex: 1; min-height: 0; overflow-y: auto; }
+html[data-theme="paper"] .pp-nav-group + .pp-nav-group { margin-top: 18px; }
+html[data-theme="paper"] .pp-nav-group-title {
+  font-family: var(--pp-mono); font-size: 9.5px; font-weight: 500;
+  letter-spacing: .22em; text-transform: uppercase; color: var(--pp-ink-4);
+  padding: 0 8px 6px;
+}
+
+html[data-theme="paper"] .pp-rail-item {
+  display: flex; align-items: center; gap: 9px;
+  height: 32px; padding: 0 8px; border-radius: 6px;
+  font-size: 13.5px; color: var(--pp-ink-2); text-decoration: none;
+}
+html[data-theme="paper"] .pp-rail-item:hover { background: var(--pp-recess); color: var(--pp-ink); }
+/* 활성은 하나뿐이므로 잉크를 다 써도 된다 — "지금 여기" 가 한눈에 */
+html[data-theme="paper"] .pp-rail-item.on {
+  background: var(--pp-ink); color: var(--pp-desk); font-weight: 600;
+}
+html[data-theme="paper"] .pp-rail-item-label { flex: 1; min-width: 0; }
+html[data-theme="paper"] .pp-rail-badge {
+  font-family: var(--pp-mono); font-size: 11px; font-variant-numeric: tabular-nums;
+  color: var(--pp-accent-ink);
+}
+html[data-theme="paper"] .pp-rail-item.on .pp-rail-badge { color: var(--pp-desk); opacity: .75; }
+
+html[data-theme="paper"] .pp-nav-foot { border-top: 1px solid var(--pp-rule); padding-top: 8px; }
+html[data-theme="paper"] .pp-nav-user {
+  display: flex; align-items: center; gap: 9px;
+  margin-top: 8px; padding: 7px 8px;
+}
+html[data-theme="paper"] .pp-nav-user-avatar {
+  width: 24px; height: 24px; border-radius: 7px; flex-shrink: 0;
+  background: var(--pp-recess-2); color: var(--pp-ink-2);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600;
+}
+html[data-theme="paper"] .pp-nav-user-name {
+  display: block; font-size: 12.5px; font-weight: 600; color: var(--pp-ink);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+html[data-theme="paper"] .pp-nav-user-role {
+  display: block; font-family: var(--pp-mono); font-size: 9.5px;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--pp-ink-4);
+}
+
+/* ══ 측정 폭 ═════════════════════════════════════════════
+   셸이 1680px 였다. 칸반 4열(약 1000px)에도 남는 폭이고, 문장이 든 카드는
+   그만큼 늘어져 읽기 어려워진다. 1400 으로 좁힌다 — 보드는 그대로 들어가고
+   읽는 면은 짧아진다. 진짜 넓어야 하는 화면은 .pp-wide 로 빠져나간다. */
+html[data-theme="paper"] main > div { max-width: 1400px; }
+html[data-theme="paper"] main > div:has(.pp-wide) { max-width: 1680px; }
+
+/* ══ 파이프라인 레일 ═════════════════════════════════════
+   원형 오비탈은 6개 노드가 **정적 라벨**이라 아무 상태도 담고 있지 않았다 —
+   420px 를 장식에 쓰고 있었던 셈이다. 흐름은 원이 아니라 선이다.
+   여기서 말하는 것: "이 제품의 일은 이 순서로 흐른다" + 지금 몇 개가 돌고 있나. */
+html[data-theme="paper"] .pp-rail {
+  display: flex; align-items: stretch; gap: 0;
+  border: 1px solid var(--pp-rule); border-radius: 8px;
+  background: var(--pp-sheet); overflow-x: auto;
+}
+html[data-theme="paper"] .pp-rail-step {
+  /* min-width 를 크게 잡았더니 6칸이 카드를 넘어 마지막 단계가 잘렸다.
+     0 으로 두고 균등 분할 — 좁아지면 영문 부제부터 접는다. */
+  flex: 1 1 0; min-width: 0;
+  padding: 11px 10px 12px;
+  border-left: 1px solid var(--pp-rule);
+  display: flex; flex-direction: column; gap: 2px;
+}
+html[data-theme="paper"] .pp-rail-step:first-child { border-left: 0; }
+html[data-theme="paper"] .pp-rail-n {
+  font-family: var(--pp-mono); font-size: 9.5px; letter-spacing: .16em; color: var(--pp-ink-4);
+}
+html[data-theme="paper"] .pp-rail-label {
+  font-size: 13px; font-weight: 600; color: var(--pp-ink);
+  white-space: nowrap;   /* "모니터링" 이 세로로 쪼개지지 않게 */
+}
+html[data-theme="paper"] .pp-rail-sub {
+  font-family: var(--pp-mono); font-size: 9.5px; letter-spacing: .04em; color: var(--pp-ink-4);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+/* 좁으면 영문 부제는 버린다 — 한글 라벨만 남아도 뜻은 전달된다 */
+@media (max-width: 1279px) {
+  html[data-theme="paper"] .pp-rail-sub { display: none; }
+}
+/* 지금 돌고 있는 단계만 잉크가 찬다. 색을 여기 하나에만 쓰기 때문에 눈이 바로 간다. */
+html[data-theme="paper"] .pp-rail-step.live { background: var(--pp-accent-wash); }
+html[data-theme="paper"] .pp-rail-step.live .pp-rail-label { color: var(--pp-accent-ink); }
+
+/* ══════════════════════════════════════════════════════════════
+   HOME — 편집 흐름 (① 오늘 ② 지시 ③ 손댈 것 ④ 최근 활동)
+   ══════════════════════════════════════════════════════════════ */
+html[data-theme="paper"] .pp-home { max-width: 1180px; }
+html[data-theme="paper"] .pp-home-head { padding: 6px 0 20px; }
+html[data-theme="paper"] .pp-home-title {
+  font-family: var(--pp-display);
+  font-size: 34px; font-weight: 600; line-height: 1.08; letter-spacing: -0.022em;
+  color: var(--pp-ink); margin: 0; text-wrap: balance;
+}
+/* 숫자만 모노로 — 문장 안에서 수치가 튀어나와야 한 눈에 읽힌다 */
+html[data-theme="paper"] .pp-home-count {
+  font-family: var(--pp-mono); font-variant-numeric: tabular-nums;
+  color: var(--pp-accent-ink); letter-spacing: -0.03em;
+}
+html[data-theme="paper"] .pp-home-sub {
+  margin: 9px 0 0; font-size: 13.5px; line-height: 1.6; color: var(--pp-ink-3); max-width: 62ch;
+}
+html[data-theme="paper"] .pp-home-sub b { color: var(--pp-err); font-weight: 600; }
+
+html[data-theme="paper"] .pp-home-cmd {
+  display: flex; gap: 8px; margin-bottom: 30px;
+  max-width: 720px;   /* 입력은 화면 끝까지 늘리지 않는다 — 한 줄 지시는 짧다 */
+}
+html[data-theme="paper"] .pp-home-cmd-input {
+  flex: 1; min-width: 0; height: 38px; padding: 0 12px;
+  font-size: 14px !important; border-radius: 6px !important;
+}
+
+html[data-theme="paper"] .pp-home-cols { display: grid; gap: 28px; grid-template-columns: 1fr; }
+@media (min-width: 1024px) {
+  /* 3:1 — "손댈 것" 이 주인공이고 활동 로그는 곁다리라는 선언 */
+  html[data-theme="paper"] .pp-home-cols { grid-template-columns: 1fr 330px; gap: 36px; }
+}
+
+/* ══ 목록 행 ══════════════════════════════════════════════
+   카드로 감싸지 않는다. 행이 곧 항목이고, 구분은 괘선 하나면 된다.
+   (모든 것을 흰 카드로 감싸면 화면 전체가 같은 리듬이 되어 위계가 사라진다) */
+html[data-theme="paper"] .pp-list { list-style: none; margin: 0; padding: 0; }
+html[data-theme="paper"] .pp-list > li + li { border-top: 1px solid var(--pp-rule); }
+html[data-theme="paper"] .pp-list-row {
+  display: flex; align-items: flex-start; gap: 11px;
+  padding: 11px 8px 11px 4px; margin: 0 -8px 0 -4px;
+  border-radius: 6px; text-decoration: none;
+}
+html[data-theme="paper"] .pp-list-row:hover { background: var(--pp-recess); }
+/* 상태는 배지가 아니라 왼쪽 잉크 자국 — 배지는 제목과 자리를 다툰다 */
+html[data-theme="paper"] .pp-list-mark {
+  width: 3px; align-self: stretch; border-radius: 2px; flex-shrink: 0;
+  background: var(--pp-rule-3);
+}
+html[data-theme="paper"] .pp-list-mark.urgent { background: var(--pp-err); }
+html[data-theme="paper"] .pp-list-mark.review { background: var(--pp-accent); }
+html[data-theme="paper"] .pp-list-mark.ok { background: var(--pp-ok); }
+html[data-theme="paper"] .pp-list-main { flex: 1; min-width: 0; }
+html[data-theme="paper"] .pp-list-title {
+  display: block; font-size: 14px; font-weight: 500; color: var(--pp-ink);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+html[data-theme="paper"] .pp-list-title.mono { font-family: var(--pp-mono); font-size: 12.5px; }
+html[data-theme="paper"] .pp-list-meta {
+  display: block; margin-top: 2px; font-size: 12px; color: var(--pp-ink-4);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+html[data-theme="paper"] .pp-list-go {
+  color: var(--pp-ink-4); font-size: 13px; opacity: 0; align-self: center;
+  transition: opacity .14s var(--pp-ease);
+}
+html[data-theme="paper"] .pp-list-row:hover .pp-list-go { opacity: 1; }
+html[data-theme="paper"] .pp-list-more {
+  padding: 10px 4px 0; font-size: 12.5px;
+}
+html[data-theme="paper"] .pp-list-more a { color: var(--pp-accent-ink); text-decoration: none; }
+html[data-theme="paper"] .pp-list-more a:hover { text-decoration: underline; }
+
+/* ══════════════════════════════════════════════════════════════
+   작업 상세 — 2단 (대화가 주인공, 속성이 곁다리)
+
+   예전엔 한 열에 편집폼 · 메타 · 재배정 · 게이트 · 로그 · 스레드가 차례로 쌓여
+   **스레드가 늘 화면 밖**에 있었다. 이 제품에서 스레드는 곁다리가 아니라 일 자체다.
+   1fr / 340px — 이 비율이 "대화가 본체, 속성은 참조" 를 선언한다.
+   ══════════════════════════════════════════════════════════════ */
+html[data-theme="paper"] .pp-detail {
+  display: grid; grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 900px) {
+  html[data-theme="paper"] .pp-detail { grid-template-columns: minmax(0, 1fr) 340px; }
+}
+/* 두 열이 **따로** 스크롤한다 — 속성을 보려고 대화를 스크롤하는 일이 없어야 한다 */
+html[data-theme="paper"] .pp-detail-main,
+html[data-theme="paper"] .pp-detail-side {
+  min-width: 0; max-height: calc(92vh - 136px);
+}
+html[data-theme="paper"] .pp-detail-main {
+  display: flex; flex-direction: column;
+  padding: 14px 22px 18px;
+}
+html[data-theme="paper"] .pp-detail-main > div { display: flex; flex-direction: column; min-height: 0; flex: 1; }
+html[data-theme="paper"] .pp-detail-main .pp-thread { flex: 1; min-height: 0; }
+/* 스레드가 열 맨 위에 오므로 옛 구분선은 필요 없다 */
+html[data-theme="paper"] .pp-detail-main > div.border-t { border-top: 0 !important; padding-top: 0 !important; }
+
+html[data-theme="paper"] .pp-detail-side {
+  overflow-y: auto;
+  border-left: 1px solid var(--pp-rule);
+  background: var(--pp-recess) !important;  /* 종이 위의 한 단계 — 참조 영역임을 속삭인다 */
+}
+/* 속성 패널 안의 흰 카드는 배경을 지운다 — 파인 면 위에 또 흰 상자를 얹으면 층이 하나 늘어난다 */
+html[data-theme="paper"] .pp-detail-side .bg-white,
+html[data-theme="paper"] .pp-detail-side .glass {
+  background: transparent !important; border-color: var(--pp-rule) !important;
+}
+
+/* ── 남은 딥스페이스 리터럴 일괄 정리 ─────────────────────────
+   인라인 style 에 박힌 다크 배경들. 두 가지를 조심해야 한다:
+   ① 브라우저는 속성값을 그대로 두므로 `rgba(3, 6, 14, .72)` 처럼 **공백이 있는 형태**도 있다
+      → 공백 유무 두 벌을 다 적는다(하나만 적었다가 오버레이를 놓쳤다).
+   ② 배경이 gradient 인 경우가 있어 `background-image` 도 같이 지운다. */
+html[data-theme="paper"] [style*="rgba(6,11,22"],
+html[data-theme="paper"] [style*="rgba(6, 11, 22"],
+html[data-theme="paper"] [style*="rgba(9,15,28"],
+html[data-theme="paper"] [style*="rgba(9, 15, 28"],
+html[data-theme="paper"] [style*="rgba(12,20,36"],
+html[data-theme="paper"] [style*="rgba(12, 20, 36"] {
+  background: var(--pp-sheet) !important;
+  background-image: none !important;
+  border-bottom-color: var(--pp-rule) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+/* 모달 장막 — 검정이 아니라 잉크가 옅게 덮인 느낌. 뒤가 종이라는 걸 잊지 않게. */
+html[data-theme="paper"] [style*="rgba(3,6,14"],
+html[data-theme="paper"] [style*="rgba(3, 6, 14"] {
+  background: rgba(26, 24, 21, 0.34) !important;
+}
+/* 바깥은 스크롤하지 않는다(안쪽 두 열이 한다) */
+html[data-theme="paper"] .pp-detail-side .text-xs.font-medium.uppercase,
+html[data-theme="paper"] .pp-detail-side label {
+  font-family: var(--pp-mono); font-size: 9.5px; letter-spacing: .16em;
+  color: var(--pp-ink-4); text-transform: uppercase;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   보드 카드 — 스캔되는 카드
+
+   예전 한 장에 들어 있던 것: 팀 배지 · 우선순위 점 · 제목 2줄 · 설명 발췌 2줄 ·
+   우선순위 배지 · 레벨 · 담당 · 날짜 · 이동/삭제 버튼. 아홉 가지가 같은 목소리로 떠들어서
+   한 열에 다섯 장밖에 안 보였고, 훑어서 찾는 게 불가능했다.
+
+   남긴 것: **제목 한 줄** + 왼쪽 잉크 스트립(우선순위) + 메타 한 줄.
+   나머지는 지우지 않고 hover 로 미뤘다 — 기능은 그대로, 평소엔 조용하게.
+   ══════════════════════════════════════════════════════════════ */
+html[data-theme="paper"] [data-card="task"] {
+  position: relative;
+  padding: 10px 11px 10px 14px !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+}
+/* 우선순위는 배지가 아니라 왼쪽 자국 — 배지는 제목과 자리를 다툰다 */
+html[data-theme="paper"] [data-card="task"]::before {
+  content: ""; position: absolute; left: 0; top: 6px; bottom: 6px; width: 3px;
+  border-radius: 0 2px 2px 0; background: var(--pp-rule-2);
+}
+html[data-theme="paper"] [data-card="task"][data-pri="urgent"]::before { background: var(--pp-err); }
+html[data-theme="paper"] [data-card="task"][data-pri="high"]::before   { background: var(--pp-accent); }
+html[data-theme="paper"] [data-card="task"][data-pri="medium"]::before { background: var(--pp-rule-3); }
+html[data-theme="paper"] [data-card="task"][data-stopped="1"]::before {
+  background: repeating-linear-gradient(180deg, var(--pp-err) 0 4px, transparent 4px 7px);
+}
+html[data-theme="paper"] [data-card="task"]:hover { border-color: var(--pp-rule-3) !important; }
+
+/* 제목 한 줄 고정.
+   Tailwind `truncate` 를 붙였는데도 계산값이 white-space:normal 이었다(실측) —
+   유틸리티가 어딘가에 밀린 것으로 보이나, 원인을 쫓기보다 스코프 안에서 확정한다.
+   카드 높이가 균일해야 세로로 훑어서 찾는 게 가능해진다. */
+html[data-theme="paper"] [data-card="task"] p {
+  white-space: nowrap !important;
+  overflow: hidden; text-overflow: ellipsis;
+  font-size: 13px !important; line-height: 1.45 !important;
+  color: var(--pp-ink) !important;
+}
+
+/* 팀 배지 → 테두리 없는 잔글씨. 색 칩이 카드마다 뜨면 보드 전체가 알록달록해진다 */
+html[data-theme="paper"] [data-card="task"] > div:first-child > span:first-child {
+  background: transparent !important; border: 0 !important; padding: 0 !important;
+  color: var(--pp-ink-4) !important; font-size: 11px !important;
+}
+/* 우선순위 점·배지는 스트립이 대신하므로 감춘다 */
+html[data-theme="paper"] [data-card="task"] > div:first-child > span.rounded-full { display: none; }
+html[data-theme="paper"] [data-card="task"] .rounded-full.font-medium { display: none; }
+
+/* 메타 줄: 들여쓰기(pl-4)를 없애고 한 줄로 */
+html[data-theme="paper"] [data-card="task"] > div:nth-child(2) { padding-left: 0 !important; }
+html[data-theme="paper"] [data-card="task"] > div:nth-child(2) span { font-size: 11.5px !important; color: var(--pp-ink-4) !important; }
+
+/* 이동/삭제/중단은 평소엔 숨긴다 — 매번 보일 필요가 없고, 보이면 카드가 시끄럽다 */
+html[data-theme="paper"] [data-card="task"] > div:last-child {
+  margin-left: 0 !important;
+  max-height: 0; overflow: hidden; opacity: 0; margin-top: 0 !important;
+  transition: max-height .16s var(--pp-ease), opacity .16s var(--pp-ease);
+}
+html[data-theme="paper"] [data-card="task"]:hover > div:last-child,
+html[data-theme="paper"] [data-card="task"]:focus-within > div:last-child {
+  max-height: 32px; opacity: 1; margin-top: 7px !important;
+}
+
+/* 목록 아래 "더 보기" — 버튼처럼 보이되 자리를 차지하지 않는다 */
+html[data-theme="paper"] .pp-more {
+  width: 100%; text-align: left;
+  padding: 5px 2px; background: none; border: 0; cursor: pointer;
+  font-family: var(--pp-mono); font-size: 10.5px; letter-spacing: .06em;
+  color: var(--pp-ink-4);
+}
+html[data-theme="paper"] .pp-more:hover { color: var(--pp-accent-ink); }
+
+/* ══ 빈 상태 — 읽는 물건이므로 폭을 묶는다 ═══════════════ */
+html[data-theme="paper"] .pp-blank {
+  max-width: 480px; margin: 40px auto;
+  background: var(--pp-sheet); border: 1px solid var(--pp-rule);
+  border-radius: 8px; padding: 26px 24px;
+}
+
+/* ══ 분류 필터 접기 (native details) ══════════════════════ */
+html[data-theme="paper"] .pp-facets { margin-bottom: 14px; }
+html[data-theme="paper"] .pp-facets-sum {
+  display: inline-flex; align-items: center; gap: 6px;
+  list-style: none; cursor: pointer;
+  padding: 5px 10px; border-radius: 999px;
+  border: 1px solid var(--pp-rule-2); background: var(--pp-sheet);
+  font-size: 12.5px; color: var(--pp-ink-2); width: fit-content;
+}
+html[data-theme="paper"] .pp-facets-sum::-webkit-details-marker { display: none; }
+html[data-theme="paper"] .pp-facets-sum::before {
+  content: "▸"; color: var(--pp-ink-4); transition: transform .16s var(--pp-ease);
+}
+html[data-theme="paper"] .pp-facets[open] .pp-facets-sum::before { transform: rotate(90deg); }
+html[data-theme="paper"] .pp-facets-sum:hover { border-color: var(--pp-rule-3); }
+html[data-theme="paper"] .pp-facets-body { padding-top: 10px; }
+
+/* ══ 시뮬레이터 지표 — 평균 클리어율이 주인공 ═════════════ */
+html[data-theme="paper"] .pp-simstat { display: grid; gap: 12px; grid-template-columns: 1fr; }
+@media (min-width: 900px) {
+  html[data-theme="paper"] .pp-simstat { grid-template-columns: minmax(250px, 1.4fr) repeat(3, 1fr); }
+}
+html[data-theme="paper"] .pp-simstat > div {
+  border-radius: 6px !important; border-color: var(--pp-rule) !important;
+}
+/* 첫 칸만 크게 — 나머지는 참고값이다 */
+html[data-theme="paper"] .pp-simstat > div:first-child { padding: 16px 18px !important; }
+html[data-theme="paper"] .pp-simstat > div:first-child > div:nth-child(2) {
+  font-size: 40px !important; line-height: 1.05; letter-spacing: -0.028em; margin-top: 6px !important;
+}
+html[data-theme="paper"] .pp-simstat > div:not(:first-child) > div:nth-child(2) {
+  font-size: 20px !important;
+}
+
+/* ══ 접기 ════════════════════════════════════════════════ */
+html[data-theme="paper"] .pp-disclose { border-top: 1px solid var(--pp-rule); }
+html[data-theme="paper"] .pp-disclose-sum {
+  display: flex; align-items: center; gap: 7px; width: 100%;
+  padding: 8px 0; background: none; border: 0; cursor: pointer;
+  font-family: var(--pp-mono); font-size: 11.5px; letter-spacing: .06em;
+  color: var(--pp-ink-3); text-align: left;
+}
+html[data-theme="paper"] .pp-disclose-sum:hover { color: var(--pp-ink); }
+html[data-theme="paper"] .pp-disclose-caret { transition: transform .16s var(--pp-ease); }
+html[data-theme="paper"] .pp-disclose-caret[data-open="1"] { transform: rotate(90deg); }
+html[data-theme="paper"] .pp-disclose-body { padding: 0 0 10px 18px; font-size: 13px; color: var(--pp-ink-2); }
+
+/* ══════════════════════════════════════════════════════════════
+   THREAD — 사람과 에이전트가 같은 방
+   ══════════════════════════════════════════════════════════════ */
+html[data-theme="paper"] .pp-thread { display: flex; flex-direction: column; min-height: 0; }
+html[data-theme="paper"] .pp-thread-scroll {
+  flex: 1; min-height: 0; overflow-y: auto;
+  padding: 4px 2px 8px;
+  display: flex; flex-direction: column;
+}
+html[data-theme="paper"] .pp-thread-empty {
+  padding: 28px 4px; font-size: 13.5px; color: var(--pp-ink-4); line-height: 1.6;
+}
+html[data-theme="paper"] .pp-thread-empty span { display: block; color: var(--pp-ink-3); }
+
+/* 한 발언 = 여백(아바타) + 본문. 그리드라서 그룹핑해도 본문 왼쪽이 흔들리지 않는다. */
+html[data-theme="paper"] .pp-msg {
+  display: grid; grid-template-columns: 30px 1fr; gap: 10px;
+  padding: 9px 0;
+}
+html[data-theme="paper"] .pp-msg.grouped { padding-top: 1px; }   /* 이어지는 말은 붙인다 */
+html[data-theme="paper"] .pp-msg-gutter { display: flex; justify-content: center; }
+
+html[data-theme="paper"] .pp-avatar {
+  width: 26px; height: 26px; border-radius: 7px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600; letter-spacing: 0;
+  user-select: none;
+}
+/* 사람 = 잉크 도장 / 에이전트 = 테두리만 (기계는 채우지 않는다) */
+html[data-theme="paper"] .pp-avatar-human { background: var(--pp-ink); color: var(--pp-desk); }
+html[data-theme="paper"] .pp-avatar-agent {
+  background: var(--pp-sheet); color: var(--pp-ink-3);
+  box-shadow: inset 0 0 0 1px var(--pp-rule-3);
+  font-family: var(--pp-mono); font-size: 10px;
+}
+
+html[data-theme="paper"] .pp-msg-head {
+  display: flex; align-items: baseline; gap: 8px; margin-bottom: 3px;
+}
+html[data-theme="paper"] .pp-msg-author { font-size: 13px; font-weight: 600; color: var(--pp-ink); }
+html[data-theme="paper"] .pp-msg-tag {
+  font-family: var(--pp-mono); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--pp-ink-4); border: 1px solid var(--pp-rule-2); border-radius: 3px; padding: 0 4px;
+}
+/* 시각은 늘 보이면 노이즈다 — 그룹 머리에서만, 흐리게 */
+html[data-theme="paper"] .pp-msg-time {
+  font-family: var(--pp-mono); font-size: 11px; color: var(--pp-ink-4);
+  font-variant-numeric: tabular-nums;
+}
+html[data-theme="paper"] .pp-msg-del {
+  margin-left: auto; background: none; border: 0; cursor: pointer;
+  font-size: 11px; color: var(--pp-ink-4); padding: 2px 6px; border-radius: 4px;
+  opacity: 0;
+}
+html[data-theme="paper"] .pp-msg:hover .pp-msg-del { opacity: 1; }
+html[data-theme="paper"] .pp-msg-del:hover { color: var(--pp-err); background: var(--pp-err-w); }
+
+html[data-theme="paper"] .pp-msg-text {
+  font-size: 14px; line-height: 1.62; color: var(--pp-ink-2);
+  white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere;
+}
+
+/* 에이전트 발언 — 파인 면 + 왼쪽 잉크 스트립. 여백에 적힌 기계 메모처럼. */
+html[data-theme="paper"] .pp-msg-agent .pp-msg-body {
+  background: var(--pp-recess);
+  border-left: 2px solid var(--pp-rule-3);
+  border-radius: 0 5px 5px 0;
+  padding: 8px 11px;
+  margin-left: -2px;
+}
+html[data-theme="paper"] .pp-msg-agent .pp-msg-text {
+  font-size: 13.5px; color: var(--pp-ink-2);
+}
+
+/* 시스템 한 줄 — 대화가 아니라 사건이다. 아바타도 말풍선도 없다. */
+html[data-theme="paper"] .pp-sysline {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 0 7px 40px; margin: 2px 0;
+  border-top: 1px solid var(--pp-rule);
+  font-size: 12px; color: var(--pp-ink-3);
+}
+html[data-theme="paper"] .pp-sysline-text { flex: 1; min-width: 0; }
+html[data-theme="paper"] .pp-sysline-time {
+  font-family: var(--pp-mono); font-size: 10.5px; color: var(--pp-ink-4);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 작성 영역 — 스레드 바닥에 붙는 종이 */
+html[data-theme="paper"] .pp-compose {
+  display: flex; align-items: flex-end; gap: 8px;
+  margin-top: 10px; padding-top: 10px;
+  border-top: 1px solid var(--pp-rule);
+}
+html[data-theme="paper"] .pp-compose-input {
+  flex: 1; min-width: 0; resize: none;
+  padding: 9px 11px; border-radius: 6px !important;
+  font-size: 14px !important; line-height: 1.55;
+  background: var(--pp-recess) !important; border: 1px solid var(--pp-rule-2) !important;
+  color: var(--pp-ink) !important;
+  max-height: 200px;
+}
+html[data-theme="paper"] .pp-compose-send {
+  height: 36px; padding: 0 15px; border-radius: 6px; border: 0;
+  background: var(--pp-ink); color: var(--pp-desk);
+  font-size: 13.5px; font-weight: 600; cursor: pointer; white-space: nowrap;
+}
+html[data-theme="paper"] .pp-compose-send:disabled { opacity: .35; cursor: not-allowed; }
+html[data-theme="paper"] .pp-compose-send:hover:not(:disabled) { background: #000; }

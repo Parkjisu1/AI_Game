@@ -180,7 +180,7 @@ export function RoadmapView({ data, onUpload, editable, onTaskClick, onSprintCli
                   ? "border-blue-400 bg-blue-50 ring-1 ring-blue-300/40"
                   : "border-gray-200 bg-gray-50"
               }`}
-              style={{ color: "#e6e9ef" }}
+              style={{ color: "var(--text)" }}
             >
               <div className="flex items-center justify-between">
                 <span className="font-semibold tracking-tight">Sprint {s.id}</span>
@@ -206,13 +206,13 @@ export function RoadmapView({ data, onUpload, editable, onTaskClick, onSprintCli
               className="inline-block w-3 h-3 rounded-full shadow-sm"
               style={{ backgroundColor: ROLE_COLORS[role] || "#94a3b8" }}
             />
-            <span style={{ color: "#e6e9ef" }}>{role}</span>
+            <span style={{ color: "var(--text)" }}>{role}</span>
           </div>
         ))}
         {today > 0 && (
           <div className="flex items-center gap-1.5 text-xs ml-auto">
             <span className="inline-block w-4 h-0.5 rounded-full bg-red-500" />
-            <span style={{ color: "#e6e9ef" }}>현재 W{today}</span>
+            <span style={{ color: "var(--text)" }}>현재 W{today}</span>
           </div>
         )}
       </div>
@@ -224,7 +224,7 @@ export function RoadmapView({ data, onUpload, editable, onTaskClick, onSprintCli
           <div className="flex sticky top-0 bg-white z-10 border-b border-gray-200">
             <div
               className="shrink-0 px-3 py-2 text-xs font-semibold border-r border-gray-200 bg-gray-50"
-              style={{ width: labelWidth, color: "#e6e9ef" }}
+              style={{ width: labelWidth, color: "var(--text)" }}
             >
               Task
             </div>
@@ -235,7 +235,7 @@ export function RoadmapView({ data, onUpload, editable, onTaskClick, onSprintCli
                   className={`shrink-0 text-center text-[10px] py-2 border-r border-gray-100 ${
                     w === today ? "bg-red-50 font-bold text-red-600" : "bg-gray-50"
                   }`}
-                  style={{ width: colWidth, color: w === today ? undefined : "#e6e9ef" }}
+                  style={{ width: colWidth, color: w === today ? undefined : "var(--text)" }}
                 >
                   W{w}
                 </div>
@@ -264,7 +264,7 @@ export function RoadmapView({ data, onUpload, editable, onTaskClick, onSprintCli
                 >
                   <div
                     className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold border-r border-gray-200"
-                    style={{ width: labelWidth + colWidth * maxWeek, color: "#e6e9ef" }}
+                    style={{ width: labelWidth + colWidth * maxWeek, color: "var(--text)" }}
                   >
                     <Icon name="flag" size={12} />
                     <span>Sprint {sprint.id} · {(sprint.label ?? "").replace(/^SPRINT\s+\d+:\s*/i, "")}</span>
@@ -300,7 +300,7 @@ export function RoadmapView({ data, onUpload, editable, onTaskClick, onSprintCli
                           style={{ backgroundColor: ROLE_COLORS[task.role] || "#94a3b8" }}
                           title={task.role}
                         />
-                        <span style={{color:"#e6e9ef"}} className="truncate">{task.title}</span>
+                        <span style={{color:"var(--text)"}} className="truncate">{task.title}</span>
                       </div>
                       <div className="flex relative">
                         {Array.from({ length: maxWeek }, (_, i) => i + 1).map((w) => (

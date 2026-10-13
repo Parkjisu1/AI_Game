@@ -1,0 +1,1605 @@
+{
+  "sections": [
+    {
+      "id": "plan-0",
+      "title": "먼저 내리는 결정",
+      "html": "<p><strong>지금 가장 먼저 확인할 것은 신규 유저가 규칙을 이해하고, 스스로 첫 정리를 끝내고, 다음 판을 시작하는가다.</strong> 이 구간이 막혀 있다면 레벨 수·일일 보상·대형 메타를 늘려도 그 콘텐츠에 도달하지 못한다. 반대로 이 구간이 이미 좋다면 튜토리얼을 다시 만들지 않고 첫 실패·반복 피로·광고 이탈을 본다.</p>\n<p>현재 지표가 없으므로 아래 세 가지를 첫 조사 대상으로 삼는다. 셋을 동시에 바꾸라는 뜻은 아니다.</p>\n<ol>\n<li><strong>첫 이동과 첫 완료:</strong> 무엇을 어디로 옮길 수 있는지, 안 되는 이유가 읽히는가.</li>\n<li><strong>첫 실패와 재도전:</strong> 실패 이유를 알 수 있고, 다시 시작해 다른 선택을 해볼 수 있는가.</li>\n<li><strong>광고의 약속과 실제 첫 플레이:</strong> 광고에서 기대한 정리 쾌감을 설치 직후 직접 경험하는가.</li>\n</ol>\n<p>근거는 FTUE 상태 피드백, 코어 재미를 방해하는 규칙 제거, 명확한 광고 표현이다. 이 세 가지가 Sort D1 45%를 보장한다는 공개 실험은 찾지 못했다. <a href=\"https://medium.com/supercent-blog/pizza-ready%EC%9D%98-ftue%EB%A5%BC-%EA%B0%9C%EC%84%A0%ED%95%98%EB%A9%B0-1d1b451f8269\">FTUE 사례</a>, <a href=\"https://medium.com/supercent-blog/snake-clash-%EC%A0%9C%EC%9E%91-%EB%B9%84%ED%95%98%EC%9D%B8%EB%93%9C-%EC%8A%A4%ED%86%A0%EB%A6%AC-1dd643796775\">핵심 재미 사례</a>, <a href=\"https://medium.com/supercent-blog/3-tips-to-reduce-your-games-cpi-by-30-5dd90ecb9f86\">광고 표현 사례</a></p>\n"
+    },
+    {
+      "id": "plan-1",
+      "title": "1. 자료에서 실제로 가져갈 것",
+      "html": "<table>\n<thead>\n<tr>\n<th>공개 사례</th>\n<th>확인된 성과</th>\n<th>이번 게임에서 시험할 원리</th>\n<th>잘못 가져오면 생기는 문제</th>\n</tr>\n</thead>\n<tbody><tr>\n<td>Pizza Ready FTUE</td>\n<td>중간 퍼널 +8%p, 첫 세션 +1.9분, D1 +4.5%</td>\n<td>행동을 더 잘 측정하고 현재 상태에 맞는 안내·피드백</td>\n<td>+4.5%p 보장으로 오해하거나 화살표를 그대로 복제</td>\n</tr>\n<tr>\n<td>Burger Please 개선</td>\n<td>D1 44→50%, CPI $0.41→$0.29</td>\n<td>진척을 읽히게 하고 복귀할 이유를 만든다</td>\n<td>여러 변경의 효과를 진행바 하나의 효과로 오해</td>\n</tr>\n<tr>\n<td>Dino Universe 광고</td>\n<td>잔존·리텐션·RV 개선. RV 그래프는 구간별 +8~24%</td>\n<td>필수 동작을 끊는 광고 위치를 바꾼다</td>\n<td>광고 슬롯을 7개 만들거나 D1 +20%로 오해</td>\n</tr>\n<tr>\n<td>Snake Clash 제작 회고</td>\n<td>이전 실패작 D1 7%; 테마·규칙을 다시 설계</td>\n<td>규칙과 소재를 일치시키고 핵심 만족을 훼손하는 규칙 제거</td>\n<td>테마 교체만으로 성공한다고 판단</td>\n</tr>\n<tr>\n<td>광고·ASO 사례</td>\n<td>소재·카메라·아이콘·스크린샷별 전환 개선 사례</td>\n<td>한눈에 실제 행동과 결과가 읽히는 표현 비교</td>\n<td>밝은 색 또는 특정 소재를 정답으로 고정</td>\n</tr>\n</tbody></table>\n<p>수치는 회사의 자체 보고이며 표본·국가·기간·배정 방식 등이 충분히 공개되지 않았다. 과거 특정 게임의 성과를 현재 Sort의 예상 개선폭으로 쓰지 않는다. 출처와 한계는 <a href=\"#sources\">근거카드 S01~S12</a>에 정리했다. 광고 사례의 세 그래프는 직접 확인했다.</p>\n<p><strong>중요한 공백:</strong> 수집 범위에서는 Sort 전용 난이도 곡선, 최적 첫 광고 레벨, 하루 레벨 소비량, D7 목표를 입증할 자료를 확보하지 못했다. 따라서 아래 Sort 설계는 실험 가설이다. 슈퍼센트의 검증된 공식처럼 취급하지 않는다.</p>\n"
+    },
+    {
+      "id": "plan-2",
+      "title": "2. 가장 싼 진단부터: 어디에서 떨어지는지 분리한다",
+      "html": "<p>처음에는 첫 10레벨과 첫 세션을 조사 범위로 잡는다. 이는 작업 범위를 제한하기 위한 제안이며 최적 레벨 수가 아니다. 실제 첫 세션이 더 짧거나 길면 범위를 조정한다.</p>\n<table>\n<thead>\n<tr>\n<th>관측되는 문제</th>\n<th>우선 의심할 것</th>\n<th>먼저 확인하거나 바꿀 것</th>\n<th>후순위로 미룰 일</th>\n</tr>\n</thead>\n<tbody><tr>\n<td>광고 클릭부터 적다</td>\n<td>훅·보드 판독·핵심 행동 노출</td>\n<td>서로 다른 재미 약속의 실제 플레이 영상 비교</td>\n<td>레벨 대량 제작</td>\n</tr>\n<tr>\n<td>클릭은 하는데 설치가 적다</td>\n<td>스토어 첫 화면·광고와 스토어의 불일치</td>\n<td>아이콘·첫 스크린샷을 광고의 검증 소재와 맞춤</td>\n<td>인게임 밸런스 전면 수정</td>\n</tr>\n<tr>\n<td>설치 후 첫 유효 이동 전 이탈</td>\n<td>로딩·멈춤·선택/목적지 혼동</td>\n<td>실기기·첫 행동 관찰, 선택 상태와 불가 사유</td>\n<td>일일 보상</td>\n</tr>\n<tr>\n<td>첫 레벨을 깨지만 다음 레벨을 안 함</td>\n<td>보상 전달·버튼·긴 연출·광고·기대 불일치</td>\n<td>완료→다음 판의 시간을 분해</td>\n<td>레벨 난이도 하향 일괄 적용</td>\n</tr>\n<tr>\n<td>특정 레벨의 첫 실패 후 이탈</td>\n<td>설명 안 된 규칙·과도한 제약·재시도 비용</td>\n<td>해당 레벨과 앞 레벨의 규칙 차이, 실패→재시작 흐름</td>\n<td>전체 레벨을 쉽게 만들기</td>\n</tr>\n<tr>\n<td>오래 풀지만 재미가 약함</td>\n<td>입력/애니메이션 지연·막힘·지나친 계산</td>\n<td>활성 조작 시간과 대기 시간을 분리</td>\n<td>플레이타임 증가를 성공으로 보고</td>\n</tr>\n<tr>\n<td>첫 세션은 좋지만 D1이 낮음</td>\n<td>복귀 기대·진척 보존·같은 경험 반복·광고 피로</td>\n<td>저장 복구, 다음 목표 인지, 실제 이탈 맥락</td>\n<td>대형 메타 자동 착수</td>\n</tr>\n<tr>\n<td>CPI가 싸지만 소재별 D1이 낮음</td>\n<td>잘못된 기대 또는 맞지 않는 유입</td>\n<td>동일 국가·OS에서 소재별 코호트 비교</td>\n<td>싼 소재에 예산 확대</td>\n</tr>\n</tbody></table>\n<p>첫 관찰은 게임을 처음 보는 목표 유저 5~8명 정도로 시작할 수 있다. <strong>이 수는 재현되는 사용성 문제를 발견하기 위한 제안이지 리텐션 통계 표본이 아니다.</strong> 설명하지 않고 플레이를 보며 첫 망설임·오조작·실패·완료를 기록한다. 답을 알려준 뒤 잘했다는 결과는 초기 경험 평가에서 분리한다.</p>\n"
+    },
+    {
+      "id": "plan-3",
+      "title": "3. 우선 실행할 실험 카드",
+      "html": "<p>아래 비용은 구현체를 보지 않은 상대 추정이다. 작은 변경은 기존 기능 수정, 중간 변경은 레벨·저장·복구까지 손대는 작업을 뜻한다. 한 번에 하나의 주가설만 테스트한다. 심각한 버그 수정은 실험 대조군에 결함을 남기지 말고 먼저 해결한 뒤 새 기준선을 잡는다.</p>\n<h3>E01. 첫 수가 보이는가 — 우선순위 P0, 비용 작음</h3>\n<ul>\n<li><strong>적용 조건:</strong> 첫 유효 이동까지 망설임·무효 탭이 반복된다.</li>\n<li><strong>변경:</strong> 첫 보드에서 선택된 대상과 가능한 목적지가 구분되게 한다. 불가능한 이동에는 이유를 짧게 표시한다. 이미 성공적으로 조작하는 사람에게 반복 안내를 강제하지 않는다.</li>\n<li><strong>측정:</strong> 첫 유효 이동까지 시간, 무효 입력률, 첫 완료율. 최종 판단은 신규 코호트 D1.</li>\n<li><strong>채택/중단:</strong> 안내가 사라진 다음 레벨에서도 스스로 플레이해야 한다. 안내 중 성공만 늘고 이후 이탈이 커지면 채택하지 않는다.</li>\n<li><strong>근거:</strong> S01·S12의 상태 기반 UX를 Sort로 전환한 가설. 무료 자동 정답 기능의 효과를 주장하는 것이 아니다.</li>\n</ul>\n<h3>E02. 완성 순간이 느껴지는가 — P0, 비용 작음</h3>\n<ul>\n<li><strong>적용 조건:</strong> 정렬을 완료해도 알아차리지 못하거나 다음 행동으로 이어지지 않는다.</li>\n<li><strong>변경:</strong> 묶음 완성에 짧고 일관된 피드백을 주고, 그 뒤 다음 입력이 바로 가능하게 한다. 긴 축하 화면 추가부터 시작하지 않는다.</li>\n<li><strong>측정:</strong> 묶음 완성→다음 입력, 레벨 완료→다음 시작, 입력 잠김 시간, D1.</li>\n<li><strong>채택/중단:</strong> 다음 레벨 진입과 D1 방향이 좋고 오류·대기가 늘지 않을 때 유지한다. 긴 연출 때문에 세션 시간이 늘어난 것은 개선이 아니다.</li>\n<li><strong>근거:</strong> S05. Sort에서의 효과 크기는 미검증.</li>\n</ul>\n<h3>E03. 첫 실패가 납득되는가 — P0, 비용 작음~중간</h3>\n<ul>\n<li><strong>적용 조건:</strong> 특정 초기 레벨에서 실패 직후 종료가 집중된다.</li>\n<li><strong>변경:</strong> 새로운 규칙과 빡빡한 공간/이동 제약이 동시에 도입되는지 확인한다. 같은 핵심 문제를 유지하며 한 제약만 바꾸거나, 해당 규칙을 앞에서 안전하게 경험하도록 한다.</li>\n<li><strong>측정:</strong> 해당 레벨 도달자 기준 첫 시도 성공률·재시도율·재시도 성공률·실패 후 종료. 전체 신규 유저 D1을 함께 본다.</li>\n<li><strong>채택/중단:</strong> 클리어율만 오르고 자발적인 다음 판 진입이나 D1이 나빠지면 기각한다. 난이도와 초기 재미를 같이 판단한다.</li>\n<li><strong>추가 진단:</strong> 해법이 존재하는 보드인지 확인한다. 그러나 솔버가 푼다는 사실은 사람이 재밌게 푼다는 증거가 아니다.</li>\n<li><strong>근거:</strong> S04의 핵심 재미 보호를 응용한 PM 가설. 최적 성공률·난이도 곡선은 미확보.</li>\n</ul>\n<h3>E04. 실패 후 다시 할 수 있는가 — P0, 비용 작음</h3>\n<ul>\n<li><strong>적용 조건:</strong> 실패→재시작 사이에 긴 화면·광고·추가 탭이 있거나 재시도 방법을 찾지 못한다.</li>\n<li><strong>변경:</strong> 기존 무료 재시작의 경로를 짧고 명확하게 한다. 선택형 도움 광고와 재시작을 구분한다. Undo/빈 슬롯 추가는 필요성이 관측된 뒤 별도 실험으로 분리한다.</li>\n<li><strong>측정:</strong> 실패→재시작 전환, 재시작까지 시간, 재시도 후 성공, D1, 사용자당 광고 수익.</li>\n<li><strong>채택/중단:</strong> 재시도만 늘고 동일한 막힘이 반복된다면 복구 UX가 아니라 레벨 설계 가설로 돌아간다.</li>\n<li><strong>근거:</strong> S01·S03에서 도출한 Sort 가설. ‘광고를 모두 빼라’는 처방이 아니다.</li>\n</ul>\n<h3>E05. 광고가 만족이나 재도전을 끊는가 — 조건부 P0, 비용 작음</h3>\n<ul>\n<li><strong>적용 조건:</strong> 광고 노출 직전/직후 종료가 집중된다. 단순 상관만으로 광고가 원인이라고 확정하지 않는다.</li>\n<li><strong>변경:</strong> 한 실험에서는 노출 가능 횟수·쿨타임을 유지하고, 노출을 자연스러운 판 종료 경계로 옮긴다. 첫 광고를 늦추는 실험은 별도로 분리한다.</li>\n<li><strong>측정:</strong> 광고 닫힘→실제 플레이 재개, D1, 노출/신규 유저, RV 완료/신규 유저, 코호트 수익. 광고 로드 실패·복귀 오류도 확인한다.</li>\n<li><strong>채택/중단:</strong> D1과 관측 수익을 함께 기록한다. 총 광고 매출 감소를 더 긴 관측 없이 LTV 증가로 보상받았다고 가정하지 않는다.</li>\n<li><strong>근거:</strong> S03. ‘첫 광고는 무조건 N레벨’이라는 기준은 정하지 않았다.</li>\n</ul>\n<h3>E06. 무엇이 다음에 달라지는가 — 조건부 P1, 비용 작음~중간</h3>\n<ul>\n<li><strong>적용 조건:</strong> 초반 조작·실패 문제는 줄었지만 첫 세션 뒤 재방문 동기가 약하다.</li>\n<li><strong>변경:</strong> 이미 예정된 다음 목표나 새 규칙을 이해 가능한 한 가지 예고로 보여준다. 현재 진행을 저장하고 재접속 시 자연스럽게 이어준다.</li>\n<li><strong>측정:</strong> 다음 목표 이해, 재접속 후 플레이 재개, D1/D3/D7, 실제 콘텐츠 소진.</li>\n<li><strong>채택/중단:</strong> 기대만 높이고 실제 새 경험이 없거나 반복을 더 요구하면 기각한다. 달력·재화·상점·가챠를 한꺼번에 추가하지 않는다.</li>\n<li><strong>근거:</strong> S02·S16. 오프라인 보상은 방치형에 적합한 사례이므로 Sort에 기본 처방하지 않는다.</li>\n</ul>\n<h3>E07. 색·형태·터치 판독 — 관측 시 P0, 비용 작음</h3>\n<ul>\n<li><strong>적용 조건:</strong> 같은 색을 다르게 보거나 다른 색을 혼동하고, 선택 대상을 자주 잘못 누른다.</li>\n<li><strong>변경:</strong> 배경 대비·선택 경계·가림을 수정한다. 색만으로 구별하기 어려우면 형태/표식 보조를 시험한다. 레벨의 퍼즐 제약은 유지한다.</li>\n<li><strong>측정:</strong> 오조작, 되돌림, 첫 시도 성공, 프레임 저하, 기기별 이탈. 실제 저사양·작은 화면에서 확인한다.</li>\n<li><strong>채택/중단:</strong> 판독 개선과 난이도 하향을 섞지 않는다. 노치 때문에 UI가 가려지는 결함은 우선 수정한다.</li>\n<li><strong>근거:</strong> S10·S11·S12·S14. 형태 보조는 PM 제안이다.</li>\n</ul>\n<h3>E08. 낮은 CPI를 찾는 세 가지 광고 훅 — P0, 비용 작음~중간</h3>\n<p>실제 빌드에서 구현된 장면만 사용해 아래 세 콘셉트를 비교한다. 각 영상 길이·노출 국가·OS·목표·스토어 버전 등 비교 조건은 가능한 한 맞춘다.</p>\n<table>\n<thead>\n<tr>\n<th>콘셉트</th>\n<th>처음에 보여줄 경험</th>\n<th>전달해야 할 정렬의 결과</th>\n<th>잘못된 제작 방향</th>\n</tr>\n</thead>\n<tbody><tr>\n<td>정리 쾌감</td>\n<td>섞인 보드에서 정확한 정렬이 시작됨</td>\n<td>흐트러진 상태가 읽기 좋게 완성됨</td>\n<td>이펙트가 색·규칙을 가림</td>\n</tr>\n<tr>\n<td>한 수 해결</td>\n<td>실제로 해결 가능한 국면과 유효한 선택</td>\n<td>플레이어가 판단해 문제를 풂</td>\n<td>실제 게임에 없는 규칙·불가능한 실패 연기</td>\n</tr>\n<tr>\n<td>완성 변화</td>\n<td>마지막 묶음 직전의 상태와 입력</td>\n<td>실제 완료 피드백과 다음 목표</td>\n<td>설치 후 경험할 수 없는 자동 연쇄 연출</td>\n</tr>\n</tbody></table>\n<ul>\n<li><strong>1차 판단:</strong> 훅별 CPI·설치 전환으로 차이를 찾는다. CTR 하나로 승자를 정하지 않는다.</li>\n<li><strong>2차 판단:</strong> 같은 훅으로 들어온 성숙 코호트의 D1을 확인한다. 목표 45% 미달을 싼 CPI로 상쇄하지 않는다.</li>\n<li><strong>후속:</strong> 유망한 훅을 정한 뒤 보드 확대·재질·배경 변형을 하나씩 비교한다. 처음부터 수십 변형을 만들면 적은 표본이 분산된다.</li>\n<li><strong>근거:</strong> S06·S07·S17. 세 콘셉트와 실험 순서는 이번 게임을 위한 PM 제안이다.</li>\n</ul>\n<h3>E09. 스토어가 같은 게임을 약속하는가 — 조건부 P1, 비용 작음</h3>\n<ul>\n<li><strong>적용 조건:</strong> 광고 클릭 대비 설치 전환이 약하다.</li>\n<li><strong>변경:</strong> 검증된 광고의 정렬 행동을 아이콘/첫 스크린샷에서 읽히게 한다. 보드 확대 시 전체 규칙이 왜곡되지 않게 한다.</li>\n<li><strong>측정:</strong> OS·국가별 스토어 전환, CPI, 소재별 D1.</li>\n<li><strong>채택/중단:</strong> 시선만 끌고 다른 게임으로 오해하게 만드는 시안은 제외한다. 스토어 변경과 게임 변경은 동시에 하지 않는다.</li>\n<li><strong>근거:</strong> S08·S09. 직접적인 D1 개선을 약속하는 작업이 아니다.</li>\n</ul>\n"
+    },
+    {
+      "id": "plan-4",
+      "title": "4. 최소 계측: 많이 심는 대신 의사결정에 필요한 것을 연결한다",
+      "html": "<p>프로젝트 코드는 수정하지 않았다. 아래는 구현할 때의 요구사항이다. 기존 이벤트가 같은 의미를 충족하면 재사용한다.</p>\n<table>\n<thead>\n<tr>\n<th>이벤트</th>\n<th>꼭 구분할 값</th>\n<th>판단 목적</th>\n</tr>\n</thead>\n<tbody><tr>\n<td>first_open / session_start</td>\n<td>익명 사용자, 최초 유입일, 빌드, 국가, OS, 기기, 유입 소스/소재</td>\n<td>같은 유저 집단끼리 비교</td>\n</tr>\n<tr>\n<td>experiment_assignment</td>\n<td>실험 ID·그룹, 최초 배정 시각</td>\n<td>이후 세션에도 같은 그룹 유지</td>\n</tr>\n<tr>\n<td>level_start</td>\n<td>레벨 ID, 레벨 데이터 버전, 시도 번호</td>\n<td>버전·난이도 변경의 혼입 방지</td>\n</tr>\n<tr>\n<td>first_valid_move</td>\n<td>레벨 시작부터 경과 시간</td>\n<td>첫 행동 이해</td>\n</tr>\n<tr>\n<td>invalid_move</td>\n<td>이유: 대상/목적지/규칙/입력 잠김</td>\n<td>혼란과 시스템 지연 분리</td>\n</tr>\n<tr>\n<td>group_complete</td>\n<td>묶음 수, 경과 시간</td>\n<td>한 레벨 내 작은 성공</td>\n</tr>\n<tr>\n<td>level_end</td>\n<td>win/fail, 실패 사유, 유효 이동 수, 활성/대기 시간</td>\n<td>성공·막힘·피로 구분</td>\n</tr>\n<tr>\n<td>retry / next_level_start</td>\n<td>이전 결과, 이전 이벤트부터 경과 시간</td>\n<td>재도전과 다음 판 진입</td>\n</tr>\n<tr>\n<td>ad_opportunity / ad_impression / ad_closed / gameplay_resumed</td>\n<td>형식, 지면, 실제 노출 여부, 레벨 상태, SDK 오류</td>\n<td>광고 기회·노출·종료·복귀 분리</td>\n</tr>\n<tr>\n<td>reward_granted</td>\n<td>보상 사유·종류, 광고 결과 연결 ID</td>\n<td>시청 후 보상 누락 진단</td>\n</tr>\n<tr>\n<td>progress_loaded</td>\n<td>저장 버전, 복구 성공 여부</td>\n<td>재방문 손실 진단</td>\n</tr>\n</tbody></table>\n<p>앱 종료 이벤트만 믿지 않는다. 강제 종료·OS 종료에는 이벤트가 안 올 수 있다. 마지막 관측 행동 뒤 재개가 없는 사례는 관측 창과 함께 ‘재개 미관측’으로 표시한다. 장시간 방치와 실제 조작 시간을 구분하고, 평균뿐 아니라 중앙값과 긴 지연 구간도 본다.</p>\n<p>레벨별 성공률은 <strong>그 레벨 도달자</strong>를 분모로 한다. D1은 <strong>전체 신규 코호트</strong>를 분모로 한다. 튜토리얼 완료자만 골라 D1을 계산하면 초기 이탈을 숨긴다. 특정 레벨 도달자 D1이 높다는 상관만으로 그 레벨이 리텐션을 높였다고 해석하지 않는다.</p>\n"
+    },
+    {
+      "id": "plan-5",
+      "title": "5. D1 45%를 판정하는 방법",
+      "html": "<p>우선 운영 정의를 고정한다. 이 문서의 기본안은 ‘고정한 분석 시간대에서 최초 플레이한 날을 D0로 두고, 다음 달력 날짜에 다시 플레이한 신규 유저 비율’이다. 기존 분석이 설치 후 24~48시간 방식이라면 그 정의를 유지해도 되지만 두 숫자를 섞지 않는다. <strong>관측 창이 끝나지 않은 코호트는 분모에 넣지 않는다.</strong> 내부 테스트·중복 집계 제외 기준도 비교 전에 고정한다.</p>\n<table>\n<thead>\n<tr>\n<th>관측 결과</th>\n<th align=\"right\">D1 점추정</th>\n<th align=\"right\">95% Wilson 구간</th>\n<th>해석</th>\n</tr>\n</thead>\n<tbody><tr>\n<td>100명 중 45명 재방문</td>\n<td align=\"right\">45.0%</td>\n<td align=\"right\">35.61~54.76%</td>\n<td>목표 점추정에 닿았지만 불확실성이 큼</td>\n</tr>\n<tr>\n<td>400명 중 180명</td>\n<td align=\"right\">45.0%</td>\n<td align=\"right\">40.20~49.90%</td>\n<td>여전히 45% 미만도 설명 가능</td>\n</tr>\n<tr>\n<td>1,000명 중 450명</td>\n<td align=\"right\">45.0%</td>\n<td align=\"right\">41.94~48.10%</td>\n<td>‘안정적으로 넘었다’고 단정 못 함</td>\n</tr>\n<tr>\n<td>1,000명 중 485명</td>\n<td align=\"right\">48.5%</td>\n<td align=\"right\">45.41~51.60%</td>\n<td>이 표본 가정에서 하한도 45% 초과</td>\n</tr>\n</tbody></table>\n<p>마지막 행은 <strong>목표를 48.5%로 바꾸라는 뜻이 아니다.</strong> 목표는 45%이며, 달성 관측과 달성 확신을 구분하려는 예시다. 표본 수를 채우기 위해 감당 못 할 광고비를 쓰라는 지침도 아니다. 적은 예산에서는 사용성 문제를 먼저 줄이고 큰 차이만 탐지하는 단계로 운영할 수 있다.</p>\n<p>A/B로 40%→45%의 차이를 검출하려면, 독립된 신규 사용자·동일 크기 두 군·양측 유의수준 5%·검정력 80%·고정 종료 시점이라는 단순 가정에서 <strong>약 1,534명/군</strong>이 필요하다. 이는 계획용 정규근사이며 다중 비교·기기 중복·유입 편중 등을 포함하지 않는다. 매일 결과를 보다가 좋은 날 종료하면 그 가정이 깨진다. <a href=\"/research/supercent/files/decision-math.txt\">재현 계산기</a></p>\n<p>테스트 시작 전에 최소 의미 차이, 종료 표본/관측 기간, 최대 테스트 비용, 즉시 중단할 결함을 적는다. 그 비용으로 구분할 수 없는 작은 차이를 ‘없다’ 또는 ‘확실하다’고 말하지 않는다. 여러 동시 실험은 작은 표본을 더 흩뜨리므로 첫 단계에서는 제한한다.</p>\n"
+    },
+    {
+      "id": "plan-6",
+      "title": "6. CPI는 이렇게 낮춘다",
+      "html": "<p><strong>우선 D1 45%를 만족하는 소재·유입 조합을 찾고, 그 안에서 CPI를 낮춘다.</strong> 게임 빌드 검증과 광고 소재 검증을 분리한다. 게임 A/B는 신규 유저를 고정 배정하고, 광고 소재 실험은 플랫폼 전달 편향까지 기록한다. 서로 다른 국가나 매체 평균만 비교하면 싼 국가 비중 증가를 크리에이티브 개선으로 착각할 수 있다.</p>\n<p>다음은 실제 성과가 아닌 산술 예시다. 같은 모집단에서 설치·최초 플레이가 일치한다고 단순화했다.</p>\n<table>\n<thead>\n<tr>\n<th>소재</th>\n<th align=\"right\">CPI</th>\n<th align=\"right\">D1</th>\n<th align=\"right\">D1 잔존 유저 1명당 획득비용(CPI÷D1)</th>\n<th>목표 판단</th>\n</tr>\n</thead>\n<tbody><tr>\n<td>A</td>\n<td align=\"right\">$0.22</td>\n<td align=\"right\">30%</td>\n<td align=\"right\">$0.733</td>\n<td>D1 미달</td>\n</tr>\n<tr>\n<td>B</td>\n<td align=\"right\">$0.28</td>\n<td align=\"right\">48%</td>\n<td align=\"right\">$0.583</td>\n<td>D1 점추정 통과</td>\n</tr>\n<tr>\n<td>C</td>\n<td align=\"right\">$0.18</td>\n<td align=\"right\">46%</td>\n<td align=\"right\">$0.391</td>\n<td>같은 조건·충분한 관측이면 더 유망</td>\n</tr>\n</tbody></table>\n<p>실무에서는 광고비÷실제 D1 잔존 신규 유저 수를 직접 계산한다. MMP 설치 수와 분석 도구 first_open 수가 다르면 CPI÷D1이 정확히 같은 계산이 되지 않는다. 이 비용은 유입 품질을 보는 보조값이며 <strong>LTV나 이익은 아니다.</strong> D1을 넘겨도 사용자당 수익과 비용 회수가 맞지 않으면 확장 근거가 부족하다.</p>\n<p>싼 CPI를 위해 광고와 실제 플레이의 간극을 키우지 않는다. 광고에서 먹힌 재미가 게임 첫 세션에 존재하는지 확인한다. 현재 장르의 시장 단가·국가·OS가 없으므로 $0.2 같은 절대 CPI 합격선을 지어내지 않았다.</p>\n"
+    },
+    {
+      "id": "plan-7",
+      "title": "7. 비용을 보호하는 순서와 중단 기준",
+      "html": "<ol>\n<li><strong>기준선 확보:</strong> 동일 국가·OS·빌드의 성숙 D1, 소재별 CPI, 첫 세션 퍼널을 한 장에 정리한다. 데이터가 없으면 먼저 관찰과 계측을 한다.</li>\n<li><strong>한 병목 선택:</strong> E01~E07 중 실제로 관측된 병목 하나만 선택한다. 동시에 수정해야 하는 명백한 결함은 수정 목록으로 구분한다.</li>\n<li><strong>작은 수정과 회귀 확인:</strong> 저장·재시도·광고 복귀·입력 반응이 유지되는지 실기기로 확인한다.</li>\n<li><strong>비교와 학습:</strong> 고정한 종료 조건까지 관측하고 승리·패배·불충분을 구분한다. 성공하지 않은 실험도 원인과 다음 선택을 남긴다.</li>\n<li><strong>CPI 탐색:</strong> 같은 빌드로 E08의 서로 다른 훅을 제한적으로 비교하고, 성숙 D1로 재선별한다. 기준이 충족된 후보만 ASO/세부 변형으로 확장한다.</li>\n</ol>\n<p>첫 개선 사이클을 계획하는 작업 상한으로 3~5영업일을 제안할 수 있다. 이는 구현+진단 범위를 제한하는 PM 가정이며, D1/A·B의 관측이 그 안에 끝난다는 뜻이 아니다. 실제 잔여 시간에 맞춰 축소한다.</p>\n<table>\n<thead>\n<tr>\n<th>상황</th>\n<th>다음 결정</th>\n</tr>\n</thead>\n<tbody><tr>\n<td>크래시·저장 손실·막힌 광고 복귀</td>\n<td>해당 버전 중단/롤백 후 결함 수정. 리텐션 실험과 분리</td>\n</tr>\n<tr>\n<td>충분한 관측에서 D1 개선 없이 작업 상한을 넘김</td>\n<td>같은 기능을 더 다듬지 말고 가설 변경</td>\n</tr>\n<tr>\n<td>표본이 부족해 차이가 안 보임</td>\n<td>결론을 불충분으로 남김. 더 쓸 가치와 비용을 먼저 판단</td>\n</tr>\n<tr>\n<td>첫 재미·유입 기대를 서로 다른 작은 수정으로 검증해도 D1 미달</td>\n<td>새 메타 착수 대신 코어/테마/타깃 재검토. 실패 버전 원본은 보존</td>\n</tr>\n<tr>\n<td>D1 ≥45%지만 수익 검증 부족</td>\n<td>제한된 검증 유지. 바로 대규모 UA 확장하지 않음</td>\n</tr>\n<tr>\n<td>D1과 동일 조건 CPI 개선, 수익·품질 훼손 없음</td>\n<td>작게 확대하고 새 유입 코호트에서도 재확인</td>\n</tr>\n</tbody></table>\n<p>‘몇 번 실패하면 무조건 폐기’라는 보편 규칙은 없다. 다만 시작 전에 <strong>이번 가설에 쓸 최대 시간과 비용</strong>을 정하지 않으면 절박함이 무한 폴리싱으로 바뀔 수 있다. 현재 예산을 모르므로 비용 수치를 임의로 승인하거나 광고를 집행하지 않았다.</p>\n"
+    },
+    {
+      "id": "plan-8",
+      "title": "8. 이번 단계에서 우선 만들지 않을 것",
+      "html": "<p>현재 빌드의 병목이 확인되기 전에는 대형 경제/가챠, 길드·대규모 라이브옵스, 수백 레벨, 자체 LTV 머신러닝, 사내 AI 플랫폼을 우선 작업으로 잡지 않는다. 제작할 수 있다는 이유만으로 D1 목표에 기여하는 것은 아니다. 필요성은 실제 콘텐츠 소진·반복 피로·수익 문제의 데이터가 생겼을 때 다시 판단한다.</p>\n<p>슈퍼센트의 다채널 UA·데이터팀·AI 기반 제작 조직은 그 회사의 자원 조건과 함께 봐야 한다. 이 프로젝트에는 그 결과물보다 <strong>가설을 작게 만들고 실제 사용자로 확인하는 운영 방식</strong>을 가져오는 것이 맞다. <a href=\"#sources\">개발 단계 S15, 제작 효율 S19, 조직 조건 S28</a></p>\n"
+    },
+    {
+      "id": "plan-9",
+      "title": "다음 의사결정에 필요한 실제 값",
+      "html": "<p>현재 D1의 분자/분모·정의·관측 완료일, 국가/OS, 소재별 CPI, 첫 세션 레벨별 결과, 첫 광고 조건, 남은 작업 시간·테스트 한도다. 이 값과 빌드를 받으면 이 문서의 후보 중 <strong>딱 한 개의 첫 실험</strong>을 고를 수 있다. 지금은 자료만으로 어느 레벨을 얼마나 쉽게 바꿔야 한다거나 D1이 몇 %p 오를지 확정하지 않는다.</p>\n"
+    }
+  ],
+  "notes": [
+    {
+      "key": "S01",
+      "article_id": "1d1b451f8269",
+      "title": "FTUE: 유저 상태에 맞는 안내",
+      "evidence": "A: 대조군 A/B 결과 보고",
+      "observed": "행동 퍼널을 세분화하고 안내·시선·대기·불가능한 행동의 피드백을 고쳤다. 튜토리얼 중간 잔존 +8%p, 첫 세션 +1.9분, D1 +4.5%를 보고한다.",
+      "sort_application": "첫 선택·목적지·유효 이동·첫 묶음 완성·첫 클리어를 분리해서 측정한다. 이동 불가 사유를 즉시 보여준다.",
+      "limitations": "여러 UX 변경의 묶음 효과다. 표본·기간·기저 D1·신뢰구간은 비공개. 4.5%를 4.5%p로 해석하지 않는다.",
+      "locator": "문제는 이탈이 아니라 이탈의 맥락 / 주요 개선 사항 / 수치는 말해준다",
+      "priority": 1,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/pizza-ready%EC%9D%98-ftue%EB%A5%BC-%EA%B0%9C%EC%84%A0%ED%95%98%EB%A9%B0-1d1b451f8269"
+    },
+    {
+      "key": "S02",
+      "article_id": "f53bfd2c77de",
+      "title": "Burger Please: 성장 표시와 복귀 이유",
+      "evidence": "B: 복합 개선 전후 비교",
+      "observed": "콘텐츠·진행 표시·오프라인 보상·수익화·광고 소재를 함께 개선했다. D1 44→50%, CPI $0.41→$0.29, D0 광고 LTV +50%를 보고한다.",
+      "sort_application": "Sort의 첫 완료 피드백과 다음 판의 분명한 목표를 검토한다. 복귀 장치는 현재 게임에 이미 존재하는 진척과 연결한다.",
+      "limitations": "D1 +6%p는 묶음 효과이며 진행바 하나의 효과가 아니다. 아케이드 아이들 결과를 Sort 예상치로 쓰지 않는다.",
+      "locator": "Focusing on User Experience / Lowering CPI",
+      "priority": 2,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/how-burger-please-hit-1-on-the-charts-in-2-weeks-f53bfd2c77de"
+    },
+    {
+      "key": "S03",
+      "article_id": "e19bd1d62057",
+      "title": "Dino Universe: 광고 지면의 맥락",
+      "evidence": "B: 지면 변경 전후 및 그래프",
+      "observed": "필수 둥지 동선 한 곳의 전면광고를 7개 이상 지면으로 분산했다. 잔존·리텐션·RV 시청 증가를 보고한다. RV 그래프는 코호트 인덱스에 따라 +8~24%로 다르다.",
+      "sort_application": "Sort의 이동 중·마지막 정렬 직전·실패 직후 광고를 기록한다. 빈도를 유지하고 노출 시점 하나만 바꾸는 실험부터 한다.",
+      "limitations": "광고 슬롯 7개를 만들라는 뜻이 아니다. 제목의 20%는 D1 상승치도 전체 코호트 공통값도 아니다. 그래프 시간축 단위는 명시되지 않았다.",
+      "locator": "Dino Universe 실험 및 세 그래프",
+      "priority": 1,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/rv-%EC%8B%9C%EC%B2%AD-20-%EC%A6%9D%EA%B0%80-%EC%9D%B8%ED%84%B0%EC%8A%A4%ED%8B%B0%EC%85%9C-%EC%8B%A4%ED%97%98-%EB%A6%AC%ED%8F%AC%ED%8A%B8-e19bd1d62057"
+    },
+    {
+      "key": "S04",
+      "article_id": "1dd643796775",
+      "title": "Snake Clash: 테마와 코어 재미의 일치",
+      "evidence": "C: 제작 회고",
+      "observed": "Liquid Cat의 D1 7%, D0 380초 실패 뒤 늘어나는 움직임에 맞는 뱀 테마를 택했다. 성장할수록 불리해지는 규칙을 제거했다.",
+      "sort_application": "분류 대상·정렬 규칙을 설명 없이 이해할 수 있는지 본다. 잘 정리했는데 오히려 손해를 보는 규칙이 있는지 점검한다.",
+      "limitations": "테마 변경 단독 A/B도 Sort 검증도 아니다. 기존 테마 전체 교체보다 작은 표현 실험이 먼저다.",
+      "locator": "테마와 메커닉을 일치시키다 / 본질에 집중하다",
+      "priority": 1,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/snake-clash-%EC%A0%9C%EC%9E%91-%EB%B9%84%ED%95%98%EC%9D%B8%EB%93%9C-%EC%8A%A4%ED%86%A0%EB%A6%AC-1dd643796775"
+    },
+    {
+      "key": "S05",
+      "article_id": "fde586c79970",
+      "title": "FX: 완료와 상태를 전달하는 연출",
+      "evidence": "C: 설계 원칙과 예시",
+      "observed": "성공·성장·목표를 FX로 명확히 전달하되 지나친 효과가 플레이를 방해하지 않도록 조절한다.",
+      "sort_application": "묶음 완성 순간 짧은 시각·청각·촉각 피드백을 준다. 연출이 다음 입력을 막는지 별도로 측정한다.",
+      "limitations": "정량 D1 효과는 공개되지 않았다. 화려함이나 연출 길이를 늘리는 목표로 사용하지 않는다.",
+      "locator": "시각적 성취감 / 몰입과 피드백 / 신중하게 조율된 FX",
+      "priority": 1,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/%ED%95%98%EC%9D%B4%ED%8D%BC%EC%BA%90%EC%A3%BC%EC%96%BC-%EA%B2%8C%EC%9E%84%EC%97%90%EC%84%9C-fx%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%97%B0%EC%B6%9C-fde586c79970"
+    },
+    {
+      "key": "S06",
+      "article_id": "f6ba35e4753c",
+      "title": "광고: 움직임·성장·확장",
+      "evidence": "C: 크리에이티브 제작 프레임워크",
+      "observed": "반응이 좋았던 광고의 변화를 움직임·성장·확장으로 분류하고 카메라·색·소리를 결합한다.",
+      "sort_application": "실제 Sort 화면으로 정리 쾌감, 한 수 해결, 완성 변화라는 서로 다른 훅을 제작한다.",
+      "limitations": "성과의 크기와 표본은 없다. 세 훅은 이번 프로젝트를 위한 PM 가설이다.",
+      "locator": "잘 되는 크리에이티브 속 반복되는 세 가지 흐름",
+      "priority": 1,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/%EF%B8%8F%EC%8B%A4%ED%8C%A8%EC%97%86%EB%8A%94-%ED%81%AC%EB%A6%AC%EC%97%90%EC%9D%B4%ED%8B%B0%EB%B8%8C-%EA%B8%B0%ED%9A%8D-%EB%B0%94%EC%9D%B4%EB%B8%94-f6ba35e4753c"
+    },
+    {
+      "key": "S07",
+      "article_id": "5dd90ecb9f86",
+      "title": "CPI: 핵심 플레이를 앞에 배치",
+      "evidence": "B/C: 소재 사례 및 운영 원칙",
+      "observed": "영상 첫 5초 안에 핵심을 보여주고 차별적 소재를 찾은 뒤 카메라·색·캐릭터 등 변형을 테스트한다. 당첨 소재에도 후속 탐색을 지속한다.",
+      "sort_application": "로고 설명보다 유효한 정렬과 결과가 먼저 보이게 한다. 먼저 훅의 차이를 검증하고 그다음 색·각도를 비교한다.",
+      "limitations": "CPI 30% 감소는 당시 특정 게임의 사례다. 2026년 Sort의 단가 목표가 아니다.",
+      "locator": "Step 1 / Step 2 / Step 3",
+      "priority": 1,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/3-tips-to-reduce-your-games-cpi-by-30-5dd90ecb9f86"
+    },
+    {
+      "key": "S08",
+      "article_id": "b70dff9282e3",
+      "title": "아이콘: 소재보다 행동 전달",
+      "evidence": "B: ASO 테스트 사례",
+      "observed": "핵심 행동, 밝은 대비, 움직임 표현을 테스트하고 광고에서 검증한 소재를 아이콘에 옮긴다. OS별 결과가 달랐다.",
+      "sort_application": "분류 대상만 나열한 아이콘과 실제 정렬 중인 아이콘을 비교한다. Android와 iOS 성과를 섞지 않는다.",
+      "limitations": "설치 전환 효과이며 D1 효과는 아니다. 개별 증가율을 우리 게임 기대치로 복사하지 않는다.",
+      "locator": "Tip 1~5",
+      "priority": 2,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C%EB%A5%BC-%EC%9C%A0%EB%8F%84%ED%95%98%EB%8A%94-%EC%95%84%EC%9D%B4%EC%BD%98-%EB%A7%8C%EB%93%9C%EB%8A%94-%EB%B0%A9%EB%B2%95-5%EA%B0%80%EC%A7%80-b70dff9282e3"
+    },
+    {
+      "key": "S09",
+      "article_id": "1a3ece629db2",
+      "title": "스크린샷: 실제 작은 노출면에서 판독",
+      "evidence": "B: ASO 테스트 사례",
+      "observed": "줌·순서·연속 배치·대비·새 콘텐츠·현지화를 각각 테스트했다. 여러 항목의 상승률과 국가별 반대 결과를 함께 소개한다.",
+      "sort_application": "첫 이미지에 보드·목표·정렬 결과가 읽히게 한다. 확대해도 목적지와 제약이 사라지지 않게 한다.",
+      "limitations": "‘모든 국가에 문구 추가’는 정답이 아니다. 여러 테스트의 개선율을 합산할 수 없다.",
+      "locator": "Tip 1~6",
+      "priority": 2,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/%EC%A0%84%ED%99%98%EC%9C%A8%EC%9D%84-%EC%98%AC%EB%A6%AC%EB%8A%94-aso-%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7-%EC%B5%9C%EC%A0%81%ED%99%94-tip-6-1a3ece629db2"
+    },
+    {
+      "key": "S10",
+      "article_id": "031501177c32",
+      "title": "색상: 시각적 위계",
+      "evidence": "C: 설계 원칙",
+      "observed": "핵심 대상 간 대비를 확보하고 배경·부수 요소의 시각적 강도를 낮추며 사용자 반응으로 검증한다.",
+      "sort_application": "Sort의 구분 색과 선택·잠금·완료 상태가 혼동되는지 확인한다. 형태/표식 보조는 PM 추가 제안이다.",
+      "limitations": "원문의 2~3색 중심 원칙을 다색 분류 규칙 자체를 줄이라는 뜻으로 적용하지 않는다.",
+      "locator": "단순하고 대비 높은 색상 / 주의 집중 / CPI 테스트",
+      "priority": 1,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/%EC%84%B1%EA%B3%B5%ED%95%98%EB%8A%94-%ED%95%98%EC%9D%B4%ED%8D%BC%EC%BA%90%EC%A5%AC%EC%96%BC-%EA%B2%8C%EC%9E%84%EC%9D%98-%EC%83%89%EC%83%81-%ED%99%9C%EC%9A%A9%EB%B2%95-031501177c32"
+    },
+    {
+      "key": "S11",
+      "article_id": "4b5763509525",
+      "title": "배경: 판독과 진행감 지원",
+      "evidence": "C: 설계 원칙",
+      "observed": "배경은 핵심 오브젝트를 돋보이게 하고 위치·진행을 알려주며 익숙한 테마를 활용하도록 권한다.",
+      "sort_application": "보드 밖 장식을 줄이고 정렬 대상 경계를 선명하게 만든다. 배경 색상만 바꾼 저비용 광고 시안을 비교할 수 있다.",
+      "limitations": "밝은 배경이 항상 더 낮은 CPI를 보장하지 않는다. 장르와 국가 조건이 필요하다.",
+      "locator": "핵심 강조 / 플레이에 도움 / 익숙한 배경",
+      "priority": 2,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/cpi%EB%A5%BC-%EB%82%AE%EC%B6%94%EB%8A%94-%ED%95%98%EC%9D%B4%ED%8D%BC%EC%BA%90%EC%A5%AC%EC%96%BC-%EA%B2%8C%EC%9E%84%EC%9D%98-%EB%B0%B0%EA%B2%BD-%EB%94%94%EC%9E%90%EC%9D%B8-%ED%8C%81-4b5763509525"
+    },
+    {
+      "key": "S12",
+      "article_id": "dd7c858bec82",
+      "title": "UI: 입력 가능한 것과 다음 행동의 명료성",
+      "evidence": "C: 설계 원칙",
+      "observed": "간단한 UI, 누르기 쉬운 버튼, 기능별 일관된 색, 짧은 피드백, 명확한 광고·결제 정보를 제안한다.",
+      "sort_application": "빈 슬롯·선택 대상·이동 가능 여부를 구분한다. 다음 레벨 버튼과 보상형 광고 버튼을 혼동시키지 않는다.",
+      "limitations": "게임 참여 개선의 정량 효과는 제시되지 않았다.",
+      "locator": "Intuitive UI / Buttons / Animations / Ads",
+      "priority": 1,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/designing-ui-of-hyper-casual-games-for-effective-user-experience-dd7c858bec82"
+    },
+    {
+      "key": "S13",
+      "article_id": "53f7bc1a20ec",
+      "title": "조작감: 장르에 맞는 입력 반응",
+      "evidence": "C: 조이스틱 설계 설명",
+      "observed": "방향 전환과 속도 조절 중 게임에 중요한 요소에 맞춰 입력 범위·감도·반응을 조정한다.",
+      "sort_application": "탭 또는 드래그 Sort에서는 오탭·취소·입력 잠김·대상 선택 반응으로 문제를 번역한다.",
+      "limitations": "조이스틱 구현과 설정값은 Sort에 이식하지 않는다. 조작감 개선의 간접 참고다.",
+      "locator": "조이스틱 작동 원리 / 종류와 특징 / 결론",
+      "priority": 2,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/%EC%84%B1%EA%B3%B5%EC%A0%81%EC%9D%B8-hc%EA%B2%8C%EC%9E%84%EC%9D%84-%EC%9C%84%ED%95%9C-%EC%A1%B0%EC%9D%B4%EC%8A%A4%ED%8B%B1-%EA%B0%9C%EB%B0%9C-53f7bc1a20ec"
+    },
+    {
+      "key": "S14",
+      "article_id": "8f09e1a17575",
+      "title": "노치 대응: 주요 UI가 가려지지 않게",
+      "evidence": "C: 기술 가이드",
+      "observed": "기기별 노치와 화면 안전 영역을 고려하는 UI 대응을 설명한다.",
+      "sort_application": "실기기에서 맨 위 슬롯·하단 재시도·다음 버튼이 잘리거나 눌리지 않는지 검토한다.",
+      "limitations": "직접적인 리텐션 상승 근거는 없다. 최신 API 구현 검토는 이번 조사 범위 밖이다.",
+      "locator": "Safe Area",
+      "priority": 1,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/%EB%86%8B%EC%B9%98-%ED%99%94%EB%A9%B4-%EB%A7%9E%EC%B6%A4-%EA%B0%9C%EB%B0%9C-8f09e1a17575"
+    },
+    {
+      "key": "S15",
+      "article_id": "77bd30f3b896",
+      "title": "개발 단계: 시장성→LTV→확장",
+      "evidence": "C: 퍼블리싱 프로세스",
+      "observed": "작은 MVP로 CPI를 보고, 이후 리텐션·수익화, 검증 후 추가 콘텐츠·메타와 확장을 진행한다.",
+      "sort_application": "Sort 코어의 첫 성공과 다시 할 이유가 확인되기 전 대형 메타·다량 레벨 제작을 보류한다.",
+      "limitations": "2023년 자체 KPI 수치를 현재 보편 기준으로 사용하지 않는다.",
+      "locator": "Phase 1 / Phase 2 / Phase 3",
+      "priority": 1,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/%ED%8D%BC%EB%B8%94%EB%A6%AC%EC%8B%B1-%EB%A7%A1%EA%B2%A8%EB%A7%8C-%EC%A3%BC%EC%84%B8%EC%9A%94-77bd30f3b896"
+    },
+    {
+      "key": "S16",
+      "article_id": "04bc5b8674d2",
+      "title": "깊이: 목표와 성장 경로",
+      "evidence": "C: 전략 글",
+      "observed": "친숙한 테마와 차별성, 명확한 핵심 목표, 성장 경로·레벨디자인·경제 균형을 강조한다.",
+      "sort_application": "초반 이탈이 줄고 실제 콘텐츠 소진이 관측될 때 새 제약·목표·짧은 진척 구조를 검토한다.",
+      "limitations": "70/30은 사고방식이지 입증된 최적 배합이 아니다. Sort에 RPG 경제를 추가할 근거가 아니다.",
+      "locator": "Deeper 게임플레이",
+      "priority": 3,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/%EC%9C%84%EA%B8%B0%EB%A5%BC-%EA%B8%B0%ED%9A%8C%EB%A1%9C-%EA%B8%89%EB%B3%80%ED%95%98%EB%8A%94-%EC%8B%9C%EC%9E%A5-%EC%83%81%ED%99%A9%EC%97%90%EC%84%9C-supercent%EA%B0%80-%EB%B9%A0%EB%A5%B8-%EC%86%8D%EB%8F%84%EB%A1%9C-%EC%84%B1%EA%B3%B5%ED%95%A0-%EC%88%98-%EC%9E%88%EC%97%88%EB%8D%98-%EB%B9%84%EB%B2%95-04bc5b8674d2"
+    },
+    {
+      "key": "S17",
+      "article_id": "eeee5ae306fd",
+      "title": "UA: 국가·서브소스별 품질",
+      "evidence": "B/C: 운영 사례",
+      "observed": "광고 노출 앱·국가별 LTV·ROAS·리텐션을 비교하고 입찰을 조정했다. 설치 표본과 반영 시간을 고려하고 영상+플레이어블을 운영했다.",
+      "sort_application": "동일 조건 내 소재별 CPI와 D1을 함께 기록한다. 전체 평균만 좋아지는 구성비 착시를 확인한다.",
+      "limitations": "20·50·100설치는 원문의 소스 최적화 탐색 예시다. D1 유의성 검증 표본 기준이 아니다.",
+      "locator": "서브 소스 최적화 / 크리에이티브",
+      "priority": 2,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/%EB%B2%84%EA%B1%B0%ED%94%8C%EB%A6%AC%EC%A6%88-%EC%B0%A8%ED%8A%B8-%EC%97%AD%EC%A3%BC%ED%96%89%EC%9D%98-%EB%B9%84%EB%B0%80-eeee5ae306fd"
+    },
+    {
+      "key": "S18",
+      "article_id": "dddd3ad4f8d9",
+      "title": "예측: 조기 행동을 운영 의사결정으로",
+      "evidence": "C: 모델 자체 성능 보고",
+      "observed": "세션·리텐션·광고·국가·기기 등을 활용하는 수익 예측과 자동 운영을 소개한다.",
+      "sort_application": "지금은 같은 코호트의 행동·수익을 한 표에서 연결한다. 예측 모델 개발보다 데이터 정의를 우선한다.",
+      "limitations": "R² 99.21%, 오차 2.21%는 자체 보고다. 데이터 분할·독립 재현 근거가 없어 우리 수익 예측 정확도로 쓸 수 없다.",
+      "locator": "행동 데이터 / 예측 성능 / 자동화",
+      "priority": 3,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8-ua-%ED%8C%80%EC%9D%B4-%EB%91%90%EB%A0%A4%EC%9B%80-%EC%97%86%EC%9D%B4-%EC%98%88%EC%82%B0%EC%9D%84-%EC%A7%80%EC%B6%9C%ED%95%A0-%EC%88%98-%EC%9E%88%EB%8A%94-%EC%9D%B4%EC%9C%A0-dddd3ad4f8d9"
+    },
+    {
+      "key": "S19",
+      "article_id": "2981e163bf75",
+      "title": "AI: 구현량보다 실험 반복 비용",
+      "evidence": "C: 조직 회고",
+      "observed": "흩어진 의도·밸런스·예외·결정 근거를 모으고 반복 비용을 낮추려 했다. 빌드 70%는 3일, 마지막 30%는 3주가 걸린 예를 공개한다.",
+      "sort_application": "한 실험 문서에 가설·변경 범위·지표·롤백을 남긴다. AI 작업량 대신 유저 가설을 닫은 횟수로 생산성을 판단한다.",
+      "limitations": "기업 전체 시스템 구축은 현재 목표와 비용이 맞지 않는다. AI 플레이의 성공을 실제 유저 D1로 대체할 수 없다.",
+      "locator": "부분은 빨라졌는데 / 실제로는 어땠을까요",
+      "priority": 2,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/ai-powered%EC%97%90%EC%84%9C-ai-native%EB%A1%9C-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4%EB%A5%BC-%EC%B2%98%EC%9D%8C%EB%B6%80%ED%84%B0-%EB%8B%A4%EC%8B%9C-%EC%84%A4%EA%B3%84%ED%95%9C-%EC%9D%B4%EC%95%BC%EA%B8%B0-2981e163bf75"
+    },
+    {
+      "key": "S20",
+      "article_id": "0138eb1a3437",
+      "title": "PM: 업데이트를 데이터로 평가",
+      "evidence": "C: 담당자 인터뷰",
+      "observed": "업데이트 우선순위·성과 분석·재미와 사업성 개선을 PM 역할로 설명한다. 기존 좋은 플레이 경험과 새로운 소재를 결합한 사례를 든다.",
+      "sort_application": "요청된 기능 수가 아니라 가장 큰 이탈 병목 하나를 해결하는 작업에 우선순위를 둔다.",
+      "limitations": "인터뷰는 실험 결과가 아니다. 타이틀 소재 교체만으로 성공한다고 주장하지 않는다.",
+      "locator": "주요 업무 / 기억에 남는 프로젝트",
+      "priority": 2,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/%EC%8A%88-%EC%8A%A4-%EC%9D%B8%ED%84%B0%EB%B7%B0-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EB%A7%A4%EB%8B%88%EC%A0%80-pm-%ED%97%A4%EC%9D%BC%EB%A6%AC%EB%8B%98-0138eb1a3437"
+    },
+    {
+      "key": "S21",
+      "article_id": "16fd8b369d76",
+      "title": "AI 아트: 시안 비교와 최종 검수",
+      "evidence": "C: 제작 워크플로우",
+      "observed": "아이디어→시각 변형→2D/3D 제작→검토로 나누고 최종 기술 규격과 사람의 수정을 강조한다.",
+      "sort_application": "현재 사용 가능한 도구로 같은 보드의 재질·배경 시안만 적게 만든다. 실제 기기에서 판독성과 성능을 검수한다.",
+      "limitations": "AI 도구 추가 구독이나 자체 제작 파이프라인 구축을 권하지 않는다. 2025년 도구 비교를 현재 순위로 인용하지 않는다.",
+      "locator": "1~4단계 / 현재의 한계",
+      "priority": 3,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/ai%EC%99%80-%EC%95%84%ED%8B%B0%EC%8A%A4%ED%8A%B8%EC%9D%98-%EA%B3%B5%EC%A1%B4-%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8%EC%97%90%EC%84%9C%EB%8A%94-ai%EB%A5%BC-%EC%96%B4%EB%96%BB%EA%B2%8C-%ED%99%9C%EC%9A%A9%ED%95%98%EA%B3%A0-%EC%9E%88%EC%9D%84%EA%B9%8C-16fd8b369d76"
+    },
+    {
+      "key": "S22",
+      "article_id": "8d983fb7ea93",
+      "title": "자동 코드 리뷰: 반복 점검",
+      "evidence": "C: 내부 도구 소개",
+      "observed": "커밋 전 자체 리뷰와 야간 리뷰, 리뷰 기준 공유를 소개한다.",
+      "sort_application": "이미 있는 검증 방식으로 저장·재개·재시도·광고 복귀 회귀를 점검한다.",
+      "limitations": "NightCoder 재구축은 우선순위 밖이다. 자동 리뷰 도입의 D1 효과가 공개되지 않았다.",
+      "locator": "두 가지 코드 리뷰 방식",
+      "priority": 3,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/night-coder-%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8%EC%9D%98-%EB%B0%A4%EC%9D%84-%EC%A7%80%EC%BC%9C%EC%A3%BC%EB%8A%94-ai-%EC%BD%94%EB%93%9C-%EB%A6%AC%EB%B7%B0%EC%96%B4-8d983fb7ea93"
+    },
+    {
+      "key": "S23",
+      "article_id": "98f545ca08b8",
+      "title": "장기 성장과 재접속: XP Hero",
+      "evidence": "D: 제품 소개",
+      "observed": "짧은 세션과 이어지는 성장, 무기 조합·합성·보스·라이브 콘텐츠를 설명한다.",
+      "sort_application": "Sort에 대한 직접 근거로 쓰지 않는다. 향후 복귀 이유 설계의 참고만 남긴다.",
+      "limitations": "RPG의 복잡한 성장·라이브 콘텐츠는 초기 Sort에 비용과 복잡성을 늘릴 수 있다.",
+      "locator": "매일 조금씩 자라는 영웅 / 새로운 이야기",
+      "priority": 3,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/%EF%B8%8F-xp-hero-%EC%95%84%EC%BC%80%EC%9D%B4%EB%93%9C-rpg%EC%9D%98-%EC%84%B8%EA%B3%84%EB%A1%9C-98f545ca08b8"
+    },
+    {
+      "key": "S24",
+      "article_id": "57e8b270b989",
+      "title": "크리에이티브 학습을 재사용",
+      "evidence": "C: 담당자 인터뷰",
+      "observed": "광고 성공 패턴과 새로운 시도를 함께 탐색하고 핵심 메커닉 기반 프레임워크로 지식을 공유한다고 설명한다.",
+      "sort_application": "광고별 훅·첫 행동·보상 표현·CPI·D1을 짧게 기록해 다음 제작의 근거로 쓴다.",
+      "limitations": "시안 개수 증가 자체를 성과로 취급하지 않는다.",
+      "locator": "현재 업무 / 프레임워크 정립",
+      "priority": 2,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/%EC%8A%88-%EC%8A%A4-%EC%9D%B8%ED%84%B0%EB%B7%B0-%ED%81%AC%EB%A6%AC%EC%97%90%EC%9D%B4%ED%8B%B0%EB%B8%8C-%EC%A0%84%EB%9E%B5%EA%B0%80-%EC%95%A0%EB%8B%88%EB%8B%98-57e8b270b989"
+    },
+    {
+      "key": "S25",
+      "article_id": "fbc555775bfc",
+      "title": "캐릭터: 기능이 보이는 외형",
+      "evidence": "C: 검색 본문 발췌",
+      "observed": "거부감이 적고 게임성을 드러내는 캐릭터, 여러 CPI 테스트를 제안한다.",
+      "sort_application": "캐릭터 없는 Sort라면 새 캐릭터를 만들지 않는다. 분류 대상의 형태·재질이 규칙을 읽기 쉽게 하는지만 검토한다.",
+      "limitations": "원문 전체 페이지는 이번 재접근에서 셸만 반환했다. 검색에서 확인한 범위만 사용했다.",
+      "locator": "검색 색인의 제목·핵심 포인트",
+      "priority": 3,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/%EC%99%9C-%ED%95%98%EC%9D%B4%ED%8D%BC%EC%BA%90%EC%A3%BC%EC%96%BC-%EA%B2%8C%EC%9E%84-%EC%BA%90%EB%A6%AD%ED%84%B0%EB%93%A4%EC%9D%80-%EB%8B%A4-%EB%98%91%EA%B0%99%EC%9D%B4-%EC%83%9D%EA%B2%BC%EC%9D%84%EA%B9%8C-fbc555775bfc"
+    },
+    {
+      "key": "S26",
+      "article_id": "820b4d49b2c9",
+      "title": "Hit & Run: 반복 개선 사례",
+      "evidence": "B: 검색 색인의 전후 수치",
+      "observed": "11차례 스프린트 뒤 CPI $0.38→$0.25, D1 42→50%, D0 680→1060초를 보고한다.",
+      "sort_application": "지표를 바꾼 실험 기록을 남긴다는 교훈만 사용한다. 장기간 반복 투자 자체를 성공법으로 삼지 않는다.",
+      "limitations": "검색 색인에서 확인. 본문 직접 열기는 셸만 반환. 재계산 D0 +55.88%는 원문의 +54% 서술과 불일치한다.",
+      "locator": "The first CPI Test / Reduced CPI",
+      "priority": 3,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/hit-run-solo-leveling-global-top-game-of-2022-by-gameanalytics-820b4d49b2c9"
+    },
+    {
+      "key": "S27",
+      "article_id": "521d3d4ee0eb",
+      "title": "기획: 코어를 먼저 내고 결과로 수정",
+      "evidence": "C: 기획자 인터뷰",
+      "observed": "핵심 루프를 먼저 만들고 유저 데이터로 방향을 조율하며 실패 경험을 여러 팀과 공유한다고 설명한다.",
+      "sort_application": "한 줄 재미 가설, 작은 빌드, 실제 신규 유저 관찰, 변경 전후 비교의 순환을 유지한다.",
+      "limitations": "작은 실험을 반복하되 종료 조건 없는 무한 반복은 권하지 않는다.",
+      "locator": "기획 문화 / 재미를 느끼는 포인트",
+      "priority": 2,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/%EC%8A%88-%EC%8A%A4-%EC%9D%B8%ED%84%B0%EB%B7%B0-play-bigger-edition-%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8%EC%9D%98-%EA%B8%B0%ED%9A%8D%EB%AC%B8%ED%99%94-521d3d4ee0eb"
+    },
+    {
+      "key": "S28",
+      "article_id": "30ecc0f04b2f",
+      "title": "대규모 UA 조직의 조건",
+      "evidence": "C: 마케터 인터뷰",
+      "observed": "20개 이상 네트워크, 데이터팀, 수익 예측, 유연한 예산 운영이라는 실행 조건을 설명한다.",
+      "sort_application": "소규모 프로젝트는 검증 채널과 소재 수를 좁힌다. 대형 조직의 방법을 필요한 데이터와 인력까지 포함해서 판단한다.",
+      "limitations": "예산 제약이 적은 회사 사례를 자원이 부족한 프로젝트의 집행 지침으로 사용하지 않는다.",
+      "locator": "담당 업무 / 입사 전후 차이",
+      "priority": 3,
+      "application_is_pm_hypothesis": true,
+      "url": "https://medium.com/supercent-blog/%EC%8A%88-%EC%8A%A4-%EC%9D%B8%ED%84%B0%EB%B7%B0-%ED%8D%BC%ED%8F%AC%EB%A8%BC%EC%8A%A4-%EB%A7%88%EC%BC%80%ED%84%B0-%EC%A1%B0%EC%97%98%EB%8B%98-30ecc0f04b2f"
+    }
+  ],
+  "catalog": [
+    {
+      "id": "7bd0b8875861",
+      "title": "슈퍼센트의 두 번째 생일을 축하합니다 (feat. 회고)",
+      "url": "https://medium.com/supercent-blog/%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8%EC%9D%98-%EB%91%90-%EB%B2%88%EC%A7%B8-%EC%83%9D%EC%9D%BC%EC%9D%84-%EC%B6%95%ED%95%98%ED%95%A9%EB%8B%88%EB%8B%A4-feat-%ED%9A%8C%EA%B3%A0-7bd0b8875861",
+      "published_at": "2023-04-21",
+      "body_status": "web_excerpt_or_shell",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "8285b65ab48e",
+      "title": "슈퍼센트 멤버들은 어떤 곳에서 일할까?",
+      "url": "https://medium.com/supercent-blog/%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8-%EB%A9%A4%EB%B2%84%EB%93%A4%EC%9D%80-%EC%96%B4%EB%96%A4-%EA%B3%B3%EC%97%90%EC%84%9C-%EC%9D%BC%ED%95%A0%EA%B9%8C-8285b65ab48e",
+      "published_at": "2023-04-21",
+      "body_status": "web_excerpt_or_shell",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "b9a40fe6ef73",
+      "title": "Where do Supercent members work? (En)",
+      "url": "https://medium.com/supercent-blog/where-do-supercent-members-work-b9a40fe6ef73",
+      "published_at": "2023-04-24",
+      "body_status": "web_body_read",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "f5dc3ee079df",
+      "title": "Congratulations on Supercent’s Second Company Anniversary",
+      "url": "https://medium.com/supercent-blog/congratulations-on-supercents-second-birthday-f5dc3ee079df",
+      "published_at": "2023-04-24",
+      "body_status": "web_excerpt_or_shell",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "f53bfd2c77de",
+      "title": "How Burger Please! hit #1 on the charts in 2 weeks (En)",
+      "url": "https://medium.com/supercent-blog/how-burger-please-hit-1-on-the-charts-in-2-weeks-f53bfd2c77de",
+      "published_at": "2023-04-27",
+      "body_status": "web_body_read",
+      "topic_auto": "게임사례·전략",
+      "review_note": "S02"
+    },
+    {
+      "id": "3abba9cc653",
+      "title": "당신의 게임의 CPI를 30% 낮출수 있는 3가지 팁",
+      "url": "https://medium.com/supercent-blog/%EB%8B%B9%EC%8B%A0%EC%9D%98-%EA%B2%8C%EC%9E%84%EC%9D%98-cpi%EB%A5%BC-30-%EB%82%AE%EC%B6%9C%EC%88%98-%EC%9E%88%EB%8A%94-3%EA%B0%80%EC%A7%80-%ED%8C%81-3abba9cc653",
+      "published_at": "2023-05-02",
+      "body_status": "web_excerpt_or_shell",
+      "topic_auto": "유입·소재",
+      "review_note": null
+    },
+    {
+      "id": "5dd90ecb9f86",
+      "title": "3 Tips To Reduce Your Game’s CPI By 30% (En)",
+      "url": "https://medium.com/supercent-blog/3-tips-to-reduce-your-games-cpi-by-30-5dd90ecb9f86",
+      "published_at": "2023-05-03",
+      "body_status": "web_body_read",
+      "topic_auto": "유입·소재",
+      "review_note": "S07"
+    },
+    {
+      "id": "5df45670ea8d",
+      "title": "개발 실력은 이거로 결정됩니다 (feat.자료구조)",
+      "url": "https://medium.com/supercent-blog/%EA%B0%9C%EB%B0%9C-%EC%8B%A4%EB%A0%A5%EC%9D%80-%EC%9D%B4%EA%B1%B0%EB%A1%9C-%EA%B2%B0%EC%A0%95%EB%90%A9%EB%8B%88%EB%8B%A4-feat-%EC%9E%90%EB%A3%8C%EA%B5%AC%EC%A1%B0-5df45670ea8d",
+      "published_at": "2023-05-19T06:56:56.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "기술기초",
+      "review_note": null
+    },
+    {
+      "id": "2d2e0adcc931",
+      "title": "Data Structures for Game Developers",
+      "url": "https://medium.com/supercent-blog/data-structures-for-game-developers-2d2e0adcc931",
+      "published_at": "2023-05-22T08:52:12.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "기술기초",
+      "review_note": null
+    },
+    {
+      "id": "77bd30f3b896",
+      "title": "퍼블리싱? 맡겨만 주세요!",
+      "url": "https://medium.com/supercent-blog/%ED%8D%BC%EB%B8%94%EB%A6%AC%EC%8B%B1-%EB%A7%A1%EA%B2%A8%EB%A7%8C-%EC%A3%BC%EC%84%B8%EC%9A%94-77bd30f3b896",
+      "published_at": "2023-05-23T11:08:59.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "유입·소재",
+      "review_note": "S15"
+    },
+    {
+      "id": "8b6b96315b83",
+      "title": "Publishing? Leave it to Supercent!",
+      "url": "https://medium.com/supercent-blog/publishing-leave-it-to-supercent-8b6b96315b83",
+      "published_at": "2023-05-25T03:11:06.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "유입·소재",
+      "review_note": null
+    },
+    {
+      "id": "4dd61b321c2",
+      "title": "Hyper-Casual Game Background Design: The 3 Key Points You Need to Know",
+      "url": "https://medium.com/supercent-blog/hyper-casual-game-background-design-the-3-key-points-you-need-to-know-4dd61b321c2",
+      "published_at": "2023-05-31",
+      "body_status": "web_excerpt_or_shell",
+      "topic_auto": "가독성·조작·연출",
+      "review_note": null
+    },
+    {
+      "id": "4b5763509525",
+      "title": "CPI를 낮추는 하이퍼캐쥬얼 게임의 배경 디자인 팁",
+      "url": "https://medium.com/supercent-blog/cpi%EB%A5%BC-%EB%82%AE%EC%B6%94%EB%8A%94-%ED%95%98%EC%9D%B4%ED%8D%BC%EC%BA%90%EC%A5%AC%EC%96%BC-%EA%B2%8C%EC%9E%84%EC%9D%98-%EB%B0%B0%EA%B2%BD-%EB%94%94%EC%9E%90%EC%9D%B8-%ED%8C%81-4b5763509525",
+      "published_at": "2023-05-31T02:27:31.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "유입·소재",
+      "review_note": "S11"
+    },
+    {
+      "id": "e72bf84ae9dc",
+      "title": "교육생에서 인턴까지! 슈퍼센트 개발자 인턴 2인 인터뷰",
+      "url": "https://medium.com/supercent-blog/%EA%B5%90%EC%9C%A1%EC%83%9D%EC%97%90%EC%84%9C-%EC%9D%B8%ED%84%B4%EA%B9%8C%EC%A7%80-%EA%B0%9C%EB%B0%9C%EC%9E%90-%EC%9D%B8%ED%84%B4-2%EC%9D%B8-%EC%9D%B8%ED%84%B0%EB%B7%B0-e72bf84ae9dc",
+      "published_at": "2023-06-08T07:32:32.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "87b81deb8802",
+      "title": "A Journey from Academy Trainee to Intern: Interview with Two Developer Interns",
+      "url": "https://medium.com/supercent-blog/journey-from-academy-trainees-to-interns-interview-with-two-developer-interns-87b81deb8802",
+      "published_at": "2023-06-10T02:29:22.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "제작효율·AI",
+      "review_note": null
+    },
+    {
+      "id": "5048334a2e2f",
+      "title": "유니티 기본기 : 코루틴(Coroutine)",
+      "url": "https://medium.com/supercent-blog/%EC%9C%A0%EB%8B%88%ED%8B%B0-%EA%B8%B0%EB%B3%B8%EA%B8%B0-%EC%BD%94%EB%A3%A8%ED%8B%B4-coroutine-5048334a2e2f",
+      "published_at": "2023-06-13T02:33:29.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "기술기초",
+      "review_note": null
+    },
+    {
+      "id": "5eb4b7171a9e",
+      "title": "Unity Basics: Coroutine",
+      "url": "https://medium.com/supercent-blog/unity-basics-coroutine-5eb4b7171a9e",
+      "published_at": "2023-06-15T08:01:40.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "기술기초",
+      "review_note": null
+    },
+    {
+      "id": "eeee5ae306fd",
+      "title": "버거플리즈 차트 역주행의 비밀",
+      "url": "https://medium.com/supercent-blog/%EB%B2%84%EA%B1%B0%ED%94%8C%EB%A6%AC%EC%A6%88-%EC%B0%A8%ED%8A%B8-%EC%97%AD%EC%A3%BC%ED%96%89%EC%9D%98-%EB%B9%84%EB%B0%80-eeee5ae306fd",
+      "published_at": "2023-07-31T09:23:45.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "유입·소재",
+      "review_note": "S17"
+    },
+    {
+      "id": "806f98b601ad",
+      "title": "The Sizzling Success of ‘Burger Please!’ — How We Topped the Charts Again",
+      "url": "https://medium.com/supercent-blog/burger-please-made-a-stunning-comeback-on-the-charts-806f98b601ad",
+      "published_at": "2023-08-17T03:33:08.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "유입·소재",
+      "review_note": null
+    },
+    {
+      "id": "dd7c858bec82",
+      "title": "Mastering UI Design for Hyper-Casual Games: A Guide to Elevating User Experience",
+      "url": "https://medium.com/supercent-blog/designing-ui-of-hyper-casual-games-for-effective-user-experience-dd7c858bec82",
+      "published_at": "2023-08-25",
+      "body_status": "web_body_read",
+      "topic_auto": "가독성·조작·연출",
+      "review_note": "S12"
+    },
+    {
+      "id": "b70dff9282e3",
+      "title": "다운로드를 유도하는 아이콘 만드는 방법 5가지",
+      "url": "https://medium.com/supercent-blog/%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C%EB%A5%BC-%EC%9C%A0%EB%8F%84%ED%95%98%EB%8A%94-%EC%95%84%EC%9D%B4%EC%BD%98-%EB%A7%8C%EB%93%9C%EB%8A%94-%EB%B0%A9%EB%B2%95-5%EA%B0%80%EC%A7%80-b70dff9282e3",
+      "published_at": "2023-09-12T09:01:07.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "유입·소재",
+      "review_note": "S08"
+    },
+    {
+      "id": "8f09e1a17575",
+      "title": "놋치 화면 맞춤 개발",
+      "url": "https://medium.com/supercent-blog/%EB%86%8B%EC%B9%98-%ED%99%94%EB%A9%B4-%EB%A7%9E%EC%B6%A4-%EA%B0%9C%EB%B0%9C-8f09e1a17575",
+      "published_at": "2023-10-23T01:41:36.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "가독성·조작·연출",
+      "review_note": "S14"
+    },
+    {
+      "id": "f9217b066bb1",
+      "title": "Unity Basics: Animator — Part 1",
+      "url": "https://medium.com/supercent-blog/unity-basics-animator-part-1-f9217b066bb1",
+      "published_at": "2023-10-26T10:30:47.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "기술기초",
+      "review_note": null
+    },
+    {
+      "id": "53f7bc1a20ec",
+      "title": "성공적인 HC게임을 위한 조이스틱 개발",
+      "url": "https://medium.com/supercent-blog/%EC%84%B1%EA%B3%B5%EC%A0%81%EC%9D%B8-hc%EA%B2%8C%EC%9E%84%EC%9D%84-%EC%9C%84%ED%95%9C-%EC%A1%B0%EC%9D%B4%EC%8A%A4%ED%8B%B1-%EA%B0%9C%EB%B0%9C-53f7bc1a20ec",
+      "published_at": "2023-10-27T05:35:59.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "가독성·조작·연출",
+      "review_note": "S13"
+    },
+    {
+      "id": "1c958dbec259",
+      "title": "5 tips for Designing an eye-catching mobile app icon",
+      "url": "https://medium.com/supercent-blog/5-tips-for-designing-an-eye-catching-mobile-app-icon-1c958dbec259",
+      "published_at": "2023-10-31T02:16:28.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "유입·소재",
+      "review_note": null
+    },
+    {
+      "id": "1a3ece629db2",
+      "title": "전환율을 높이는 ASO 스크린샷 최적화 TIP 6",
+      "url": "https://medium.com/supercent-blog/%EC%A0%84%ED%99%98%EC%9C%A8%EC%9D%84-%EC%98%AC%EB%A6%AC%EB%8A%94-aso-%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7-%EC%B5%9C%EC%A0%81%ED%99%94-tip-6-1a3ece629db2",
+      "published_at": "2023-11-21T08:58:55.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "유입·소재",
+      "review_note": "S09"
+    },
+    {
+      "id": "04bc5b8674d2",
+      "title": "위기를 기회로: 급변하는 시장 상황에서 Supercent가 빠른 속도로 성공할 수 있었던 비법",
+      "url": "https://medium.com/supercent-blog/%EC%9C%84%EA%B8%B0%EB%A5%BC-%EA%B8%B0%ED%9A%8C%EB%A1%9C-%EA%B8%89%EB%B3%80%ED%95%98%EB%8A%94-%EC%8B%9C%EC%9E%A5-%EC%83%81%ED%99%A9%EC%97%90%EC%84%9C-supercent%EA%B0%80-%EB%B9%A0%EB%A5%B8-%EC%86%8D%EB%8F%84%EB%A1%9C-%EC%84%B1%EA%B3%B5%ED%95%A0-%EC%88%98-%EC%9E%88%EC%97%88%EB%8D%98-%EB%B9%84%EB%B2%95-04bc5b8674d2",
+      "published_at": "2023-11-30T05:43:09.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "게임사례·전략",
+      "review_note": "S16"
+    },
+    {
+      "id": "b52b93b7f5b0",
+      "title": "Supercent’s Recipe for Success in a Competitive Market — Part 1",
+      "url": "https://medium.com/supercent-blog/breaking-the-mold-supercents-recipe-for-success-in-a-competitive-market-b52b93b7f5b0",
+      "published_at": "2023-12-01T03:39:50.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "게임사례·전략",
+      "review_note": null
+    },
+    {
+      "id": "d6f04df6da4c",
+      "title": "Breaking the Mold: Supercent’s Recipe for Success in a Competitive Market — Part 2",
+      "url": "https://medium.com/supercent-blog/breaking-the-mold-supercents-recipe-for-success-in-a-competitive-market-part-2-d6f04df6da4c",
+      "published_at": "2023-12-07T04:18:18.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "0a8245c0d5f4",
+      "title": "‘Outlets Rush’ 전 세계 게임 다운로드 1위 기록",
+      "url": "https://medium.com/supercent-blog/outlets-rush-%EC%A0%84-%EC%84%B8%EA%B3%84-%EA%B2%8C%EC%9E%84-%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C-1%EC%9C%84-%EA%B8%B0%EB%A1%9D-0a8245c0d5f4",
+      "published_at": "2023-12-13T02:23:40.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "게임사례·전략",
+      "review_note": null
+    },
+    {
+      "id": "0778b73b117a",
+      "title": "‘Outlets Rush’ Achieves the #1 Game Download Worldwide",
+      "url": "https://medium.com/supercent-blog/outlets-rush-achieves-the-1-game-download-worldwide-0778b73b117a",
+      "published_at": "2023-12-13T07:43:41.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "게임사례·전략",
+      "review_note": null
+    },
+    {
+      "id": "68ba74057e3b",
+      "title": "수억 명의 게임 유저를 사로잡은 슈퍼센트의 비결",
+      "url": "https://medium.com/supercent-blog/%EC%88%98%EC%96%B5-%EB%AA%85%EC%9D%98-%EA%B2%8C%EC%9E%84-%EC%9C%A0%EC%A0%80%EB%A5%BC-%EC%82%AC%EB%A1%9C%EC%9E%A1%EC%9D%80-%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8%EC%9D%98-%EB%B9%84%EA%B2%B0-68ba74057e3b",
+      "published_at": "2024-01-11",
+      "body_status": "web_body_read",
+      "topic_auto": "게임사례·전략",
+      "review_note": null
+    },
+    {
+      "id": "031501177c32",
+      "title": "성공하는 하이퍼캐쥬얼 게임의 색상 활용법",
+      "url": "https://medium.com/supercent-blog/%EC%84%B1%EA%B3%B5%ED%95%98%EB%8A%94-%ED%95%98%EC%9D%B4%ED%8D%BC%EC%BA%90%EC%A5%AC%EC%96%BC-%EA%B2%8C%EC%9E%84%EC%9D%98-%EC%83%89%EC%83%81-%ED%99%9C%EC%9A%A9%EB%B2%95-031501177c32",
+      "published_at": "2024-01-30",
+      "body_status": "web_body_read",
+      "topic_auto": "가독성·조작·연출",
+      "review_note": "S10"
+    },
+    {
+      "id": "849177c64b50",
+      "title": "“Burger Please!” won in the Best Mobile Tycoon Game category for the Sensor Tower APAC Awards 2023",
+      "url": "https://medium.com/supercent-blog/burger-please-won-in-the-best-mobile-tycoon-game-category-for-the-sensor-tower-apac-awards-2023-849177c64b50",
+      "published_at": "2024-02-28T15:31:09.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "게임사례·전략",
+      "review_note": null
+    },
+    {
+      "id": "83e7abedb171",
+      "title": "‘버거 플리즈!’, 2023년 센서타워 어워즈 ‘최고의 모바일 타이쿤 게임' 선정",
+      "url": "https://medium.com/supercent-blog/%EB%B2%84%EA%B1%B0-%ED%94%8C%EB%A6%AC%EC%A6%88-2023%EB%85%84-%EC%84%BC%EC%84%9C%ED%83%80%EC%9B%8C-%EC%96%B4%EC%9B%8C%EC%A6%88-%EC%B5%9C%EA%B3%A0%EC%9D%98-%EB%AA%A8%EB%B0%94%EC%9D%BC-%ED%83%80%EC%9D%B4%EC%BF%A4-%EA%B2%8C%EC%9E%84-%EC%84%A0%EC%A0%95-83e7abedb171",
+      "published_at": "2024-03-18T09:21:43.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "게임사례·전략",
+      "review_note": null
+    },
+    {
+      "id": "3294e86bf55f",
+      "title": "유니티 기본기 : 애니메이터(Animator) 3편",
+      "url": "https://medium.com/supercent-blog/%EC%9C%A0%EB%8B%88%ED%8B%B0-%EA%B8%B0%EB%B3%B8%EA%B8%B0-%EC%95%A0%EB%8B%88%EB%A9%94%EC%9D%B4%ED%84%B0-animator-3%ED%8E%B8-3294e86bf55f",
+      "published_at": "2024-03-27T10:11:23.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "기술기초",
+      "review_note": null
+    },
+    {
+      "id": "d306f9b4ef48",
+      "title": "Unity Basics: Animator — Part 2",
+      "url": "https://medium.com/supercent-blog/unity-basics-animator-part-2-d306f9b4ef48",
+      "published_at": "2024-05-17T10:19:12.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "기술기초",
+      "review_note": null
+    },
+    {
+      "id": "93cade704f03",
+      "title": "Unity Basics: Animator — Part 3",
+      "url": "https://medium.com/supercent-blog/unity-basics-animator-part-3-93cade704f03",
+      "published_at": "2024-05-20T07:51:22.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "기술기초",
+      "review_note": null
+    },
+    {
+      "id": "7c9f8f8ccd73",
+      "title": "How Supercent’s New Games Made It To The Top In The Stagnating Hypercasual Market",
+      "url": "https://medium.com/supercent-blog/how-supercents-new-games-made-it-to-the-top-in-the-stagnating-hypercasual-market-7c9f8f8ccd73",
+      "published_at": "2024-05-23T10:46:40.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "유입·소재",
+      "review_note": null
+    },
+    {
+      "id": "1dd643796775",
+      "title": "<Snake Clash!> 제작 비하인드 스토리",
+      "url": "https://medium.com/supercent-blog/snake-clash-%EC%A0%9C%EC%9E%91-%EB%B9%84%ED%95%98%EC%9D%B8%EB%93%9C-%EC%8A%A4%ED%86%A0%EB%A6%AC-1dd643796775",
+      "published_at": "2024-06-12T08:44:17.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "게임사례·전략",
+      "review_note": "S04"
+    },
+    {
+      "id": "14bd4e46d80d",
+      "title": "Effects Using FX in Hyper-Casual Games",
+      "url": "https://medium.com/supercent-blog/effects-using-fx-in-hyper-casual-games-14bd4e46d80d",
+      "published_at": "2024-10-31T07:34:21.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "가독성·조작·연출",
+      "review_note": null
+    },
+    {
+      "id": "fde586c79970",
+      "title": "하이퍼캐주얼 게임에서 FX를 이용한 연출",
+      "url": "https://medium.com/supercent-blog/%ED%95%98%EC%9D%B4%ED%8D%BC%EC%BA%90%EC%A3%BC%EC%96%BC-%EA%B2%8C%EC%9E%84%EC%97%90%EC%84%9C-fx%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%97%B0%EC%B6%9C-fde586c79970",
+      "published_at": "2024-10-31T09:33:22.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "가독성·조작·연출",
+      "review_note": "S05"
+    },
+    {
+      "id": "ffa1eec660f9",
+      "title": "Super-Special Interview: Game Artist Oryu ️",
+      "url": "https://medium.com/supercent-blog/super-special-interview-game-artist-oryu-%EF%B8%8F-ffa1eec660f9",
+      "published_at": "2024-12-11T07:49:29.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "30ecc0f04b2f",
+      "title": "슈-스 인터뷰: 퍼포먼스 마케터 조엘님",
+      "url": "https://medium.com/supercent-blog/%EC%8A%88-%EC%8A%A4-%EC%9D%B8%ED%84%B0%EB%B7%B0-%ED%8D%BC%ED%8F%AC%EB%A8%BC%EC%8A%A4-%EB%A7%88%EC%BC%80%ED%84%B0-%EC%A1%B0%EC%97%98%EB%8B%98-30ecc0f04b2f",
+      "published_at": "2024-12-13T07:10:37.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "유입·소재",
+      "review_note": "S28"
+    },
+    {
+      "id": "91902d75a2ef",
+      "title": "Super-Special Interview: Performance Marketer Joel",
+      "url": "https://medium.com/supercent-blog/super-special-interview-performance-marketer-joel-91902d75a2ef",
+      "published_at": "2024-12-13T07:10:48.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "유입·소재",
+      "review_note": null
+    },
+    {
+      "id": "2f203c9ad3ad",
+      "title": "슈-스 인터뷰: 3D 디자이너 페퍼님",
+      "url": "https://medium.com/supercent-blog/%EC%8A%88-%EC%8A%A4-%EC%9D%B8%ED%84%B0%EB%B7%B0-3d-%EB%94%94%EC%9E%90%EC%9D%B4%EB%84%88-%ED%8E%98%ED%8D%BC%EB%8B%98-2f203c9ad3ad",
+      "published_at": "2024-12-18T07:09:45.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "가독성·조작·연출",
+      "review_note": null
+    },
+    {
+      "id": "d01eee7bb15d",
+      "title": "Super-Special Interview: 3D Designer Pepper",
+      "url": "https://medium.com/supercent-blog/super-special-interview-3d-designer-pepper-d01eee7bb15d",
+      "published_at": "2024-12-18T07:10:17.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "가독성·조작·연출",
+      "review_note": null
+    },
+    {
+      "id": "7542d2b72579",
+      "title": "슈-스 인터뷰: 게임 클라이언트 개발자 카로님",
+      "url": "https://medium.com/supercent-blog/%EC%8A%88-%EC%8A%A4-%EC%9D%B8%ED%84%B0%EB%B7%B0-%EA%B2%8C%EC%9E%84-%ED%81%B4%EB%9D%BC%EC%9D%B4%EC%96%B8%ED%8A%B8-%EA%B0%9C%EB%B0%9C%EC%9E%90-%EC%B9%B4%EB%A1%9C%EB%8B%98-7542d2b72579",
+      "published_at": "2024-12-26T05:09:19.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "30db6a50e67c",
+      "title": "Super-Special Interview: Game Client Developer Karo",
+      "url": "https://medium.com/supercent-blog/super-special-interview-game-client-developer-karo-30db6a50e67c",
+      "published_at": "2024-12-26T05:10:09.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "0138eb1a3437",
+      "title": "슈-스 인터뷰: 프로젝트 매니저(PM) 헤일리님",
+      "url": "https://medium.com/supercent-blog/%EC%8A%88-%EC%8A%A4-%EC%9D%B8%ED%84%B0%EB%B7%B0-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EB%A7%A4%EB%8B%88%EC%A0%80-pm-%ED%97%A4%EC%9D%BC%EB%A6%AC%EB%8B%98-0138eb1a3437",
+      "published_at": "2024-12-30T05:49:26.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": "S20"
+    },
+    {
+      "id": "c9a5a860ee39",
+      "title": "Super-Special Interview: Project Manager Hayley",
+      "url": "https://medium.com/supercent-blog/super-special-interview-project-manager-hayley-c9a5a860ee39",
+      "published_at": "2024-12-30T05:53:31.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "e0e4cbd8dd83",
+      "title": "2024 슈퍼센트 연말파티: SupercenTogether",
+      "url": "https://medium.com/supercent-blog/2024-%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8-%EC%97%B0%EB%A7%90%ED%8C%8C%ED%8B%B0-supercentogether-e0e4cbd8dd83",
+      "published_at": "2025-01-10T05:15:53.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "5b3619c362aa",
+      "title": "2024 Supercent Year-end Party: SupercenTogether",
+      "url": "https://medium.com/supercent-blog/2024-supercent-year-end-party-supercentogether-5b3619c362aa",
+      "published_at": "2025-01-13T01:54:57.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "546a2b392c0e",
+      "title": "2025 상반기 슈퍼센트 전 직군 대규모 채용",
+      "url": "https://medium.com/supercent-blog/2025-%EC%83%81%EB%B0%98%EA%B8%B0-%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8-%EC%A0%84-%EC%A7%81%EA%B5%B0-%EB%8C%80%EA%B7%9C%EB%AA%A8-%EC%B1%84%EC%9A%A9-546a2b392c0e",
+      "published_at": "2025-01-20T08:51:51.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "ce0e2989ab19",
+      "title": "Unity와 슈퍼센트의 특별한 만남",
+      "url": "https://medium.com/supercent-blog/unity%EC%99%80-%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8%EC%9D%98-%ED%8A%B9%EB%B3%84%ED%95%9C-%EB%A7%8C%EB%82%A8-ce0e2989ab19",
+      "published_at": "2025-05-20T05:42:29.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "기술기초",
+      "review_note": null
+    },
+    {
+      "id": "b6dc657ac2db",
+      "title": "Unity x Supercent: A Special Collaboration Begins",
+      "url": "https://medium.com/supercent-blog/unity-x-supercent-a-special-collaboration-begins-b6dc657ac2db",
+      "published_at": "2025-05-20T05:43:14.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "기술기초",
+      "review_note": null
+    },
+    {
+      "id": "f6ba35e4753c",
+      "title": "⚡️실패없는 크리에이티브 기획 바이블",
+      "url": "https://medium.com/supercent-blog/%EF%B8%8F%EC%8B%A4%ED%8C%A8%EC%97%86%EB%8A%94-%ED%81%AC%EB%A6%AC%EC%97%90%EC%9D%B4%ED%8B%B0%EB%B8%8C-%EA%B8%B0%ED%9A%8D-%EB%B0%94%EC%9D%B4%EB%B8%94-f6ba35e4753c",
+      "published_at": "2025-06-11T05:49:03.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "유입·소재",
+      "review_note": "S06"
+    },
+    {
+      "id": "6add6f9ea107",
+      "title": "⚡️ Creative Wins Aren’t Random",
+      "url": "https://medium.com/supercent-blog/%EF%B8%8F-creative-wins-arent-random-6add6f9ea107",
+      "published_at": "2025-06-11T05:49:18.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "유입·소재",
+      "review_note": null
+    },
+    {
+      "id": "16fd8b369d76",
+      "title": "AI와 아티스트의 공존: 슈퍼센트에서는 AI를 게임아트에 어떻게 활용하고 있을까?",
+      "url": "https://medium.com/supercent-blog/ai%EC%99%80-%EC%95%84%ED%8B%B0%EC%8A%A4%ED%8A%B8%EC%9D%98-%EA%B3%B5%EC%A1%B4-%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8%EC%97%90%EC%84%9C%EB%8A%94-ai%EB%A5%BC-%EC%96%B4%EB%96%BB%EA%B2%8C-%ED%99%9C%EC%9A%A9%ED%95%98%EA%B3%A0-%EC%9E%88%EC%9D%84%EA%B9%8C-16fd8b369d76",
+      "published_at": "2025-06-18T07:55:17.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "가독성·조작·연출",
+      "review_note": "S21"
+    },
+    {
+      "id": "3659b1e68e8e",
+      "title": "AI & Artists Collaboration: How Supercent Brings AI into Game Art",
+      "url": "https://medium.com/supercent-blog/ai-artists-collaboration-how-supercent-brings-ai-into-game-art-3659b1e68e8e",
+      "published_at": "2025-06-18T07:55:38.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "가독성·조작·연출",
+      "review_note": null
+    },
+    {
+      "id": "6750305de78f",
+      "title": "아이디어가 현실이 되다, 슈퍼센트 게임잼 “슈퍼슈매파\"",
+      "url": "https://medium.com/supercent-blog/%EC%95%84%EC%9D%B4%EB%94%94%EC%96%B4%EA%B0%80-%ED%98%84%EC%8B%A4%EC%9D%B4-%EB%90%98%EB%8B%A4-%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8-%EA%B2%8C%EC%9E%84%EC%9E%BC-%EC%8A%88%ED%8D%BC%EC%8A%88%EB%A7%A4%ED%8C%8C-6750305de78f",
+      "published_at": "2025-06-25T06:41:02.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "c753aba01276",
+      "title": "From Idea to Reality: Supercent Game Jam “Super SMP”",
+      "url": "https://medium.com/supercent-blog/from-idea-to-reality-supercent-game-jam-super-smp-c753aba01276",
+      "published_at": "2025-06-25T06:43:24.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "dddd3ad4f8d9",
+      "title": "슈퍼센트 UA 팀이 두려움 없이 예산을 지출할 수 있는 이유",
+      "url": "https://medium.com/supercent-blog/%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8-ua-%ED%8C%80%EC%9D%B4-%EB%91%90%EB%A0%A4%EC%9B%80-%EC%97%86%EC%9D%B4-%EC%98%88%EC%82%B0%EC%9D%84-%EC%A7%80%EC%B6%9C%ED%95%A0-%EC%88%98-%EC%9E%88%EB%8A%94-%EC%9D%B4%EC%9C%A0-dddd3ad4f8d9",
+      "published_at": "2025-07-01T06:17:15.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "유입·소재",
+      "review_note": "S18"
+    },
+    {
+      "id": "42a4d9b771b6",
+      "title": "The Confidence Behind Supercent’s UA Spending",
+      "url": "https://medium.com/supercent-blog/%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8-ua-%ED%8C%80%EC%9D%B4-%EB%91%90%EB%A0%A4%EC%9B%80-%EC%97%86%EC%9D%B4-%EC%98%88%EC%82%B0%EC%9D%84-%EC%A7%80%EC%B6%9C%ED%95%A0-%EC%88%98-%EC%9E%88%EB%8A%94-%EC%9D%B4%EC%9C%A0-42a4d9b771b6",
+      "published_at": "2025-07-01T06:26:01.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "유입·소재",
+      "review_note": null
+    },
+    {
+      "id": "11eda193fa2e",
+      "title": "Redesigning the FTUE of Pizza Ready",
+      "url": "https://medium.com/supercent-blog/redesigning-the-ftue-of-pizza-ready-11eda193fa2e",
+      "published_at": "2025-07-16",
+      "body_status": "web_body_read",
+      "topic_auto": "리텐션·수익화",
+      "review_note": null
+    },
+    {
+      "id": "1d1b451f8269",
+      "title": "Pizza Ready의 FTUE를 개선하며",
+      "url": "https://medium.com/supercent-blog/pizza-ready%EC%9D%98-ftue%EB%A5%BC-%EA%B0%9C%EC%84%A0%ED%95%98%EB%A9%B0-1d1b451f8269",
+      "published_at": "2025-07-16",
+      "body_status": "web_body_read",
+      "topic_auto": "리텐션·수익화",
+      "review_note": "S01"
+    },
+    {
+      "id": "57e8b270b989",
+      "title": "슈-스 인터뷰: 크리에이티브 전략가 애니님",
+      "url": "https://medium.com/supercent-blog/%EC%8A%88-%EC%8A%A4-%EC%9D%B8%ED%84%B0%EB%B7%B0-%ED%81%AC%EB%A6%AC%EC%97%90%EC%9D%B4%ED%8B%B0%EB%B8%8C-%EC%A0%84%EB%9E%B5%EA%B0%80-%EC%95%A0%EB%8B%88%EB%8B%98-57e8b270b989",
+      "published_at": "2025-08-19",
+      "body_status": "web_body_read",
+      "topic_auto": "유입·소재",
+      "review_note": "S24"
+    },
+    {
+      "id": "a4a0cfbf238f",
+      "title": "슈-스 인터뷰: 크리에이티브 매니저 토리님",
+      "url": "https://medium.com/supercent-blog/%EC%8A%88-%EC%8A%A4-%EC%9D%B8%ED%84%B0%EB%B7%B0-%ED%81%AC%EB%A6%AC%EC%97%90%EC%9D%B4%ED%8B%B0%EB%B8%8C-%EB%A7%A4%EB%8B%88%EC%A0%80-%ED%86%A0%EB%A6%AC%EB%8B%98-a4a0cfbf238f",
+      "published_at": "2025-08-20T08:53:58.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "유입·소재",
+      "review_note": null
+    },
+    {
+      "id": "1663cd433a6a",
+      "title": "Super-Special Interview: Creative Manager Tory",
+      "url": "https://medium.com/supercent-blog/super-special-interview-creative-manager-tory-1663cd433a6a",
+      "published_at": "2025-08-20T08:54:41.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "유입·소재",
+      "review_note": null
+    },
+    {
+      "id": "77dda6954d0b",
+      "title": "슈퍼센트 시즌2, 근데 이제 새로운 오피스를 곁들인",
+      "url": "https://medium.com/supercent-blog/%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8-%EC%8B%9C%EC%A6%8C2-%EA%B7%BC%EB%8D%B0-%EC%9D%B4%EC%A0%9C-%EC%83%88%EB%A1%9C%EC%9A%B4-%EC%98%A4%ED%94%BC%EC%8A%A4%EB%A5%BC-%EA%B3%81%EB%93%A4%EC%9D%B8-77dda6954d0b",
+      "published_at": "2025-08-22T09:53:08.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "가독성·조작·연출",
+      "review_note": null
+    },
+    {
+      "id": "ab72021dd4e3",
+      "title": "2025 하반기 슈퍼센트 대규모 채용 OPEN",
+      "url": "https://medium.com/supercent-blog/2025-%ED%95%98%EB%B0%98%EA%B8%B0-%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8-%EB%8C%80%EA%B7%9C%EB%AA%A8-%EC%B1%84%EC%9A%A9-open-ab72021dd4e3",
+      "published_at": "2025-08-25T08:23:35.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "bb2c78f073b3",
+      "title": "RE:BOUND 2025: A Second Leap to the Global Stage",
+      "url": "https://medium.com/supercent-blog/re-bound-2025-a-second-leap-to-the-global-stage-bb2c78f073b3",
+      "published_at": "2025-10-02T10:08:34.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "게임사례·전략",
+      "review_note": null
+    },
+    {
+      "id": "5cfaa29ce518",
+      "title": "AI Creative Cheat Sheet: Image Prompts, But Way Smarter",
+      "url": "https://medium.com/supercent-blog/%EF%B8%8F-ai-creative-cheat-sheet-image-prompts-but-way-smarter-5cfaa29ce518",
+      "published_at": "2025-10-23",
+      "body_status": "web_excerpt_or_shell",
+      "topic_auto": "유입·소재",
+      "review_note": null
+    },
+    {
+      "id": "3dec24be303b",
+      "title": "️ AI 크리에이티브 치트 시트: 프롬프트 완전 정복하기_이미지 편",
+      "url": "https://medium.com/supercent-blog/%EF%B8%8F-ai-%ED%81%AC%EB%A6%AC%EC%97%90%EC%9D%B4%ED%8B%B0%EB%B8%8C-%EC%B9%98%ED%8A%B8-%EC%8B%9C%ED%8A%B8-%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8-%EC%99%84%EC%A0%84-%EC%A0%95%EB%B3%B5%ED%95%98%EA%B8%B0-%EC%9D%B4%EB%AF%B8%EC%A7%80-%ED%8E%B8-3dec24be303b",
+      "published_at": "2025-10-23T08:36:50.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "유입·소재",
+      "review_note": null
+    },
+    {
+      "id": "1229d1690aed",
+      "title": "AI 크리에이티브 치트 시트: 프롬프트 완전 정복하기_영상 편",
+      "url": "https://medium.com/supercent-blog/ai-%ED%81%AC%EB%A6%AC%EC%97%90%EC%9D%B4%ED%8B%B0%EB%B8%8C-%EC%B9%98%ED%8A%B8-%EC%8B%9C%ED%8A%B8-%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8-%EC%99%84%EC%A0%84-%EC%A0%95%EB%B3%B5%ED%95%98%EA%B8%B0-%EC%98%81%EC%83%81-%ED%8E%B8-1229d1690aed",
+      "published_at": "2025-10-24T08:57:37.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "유입·소재",
+      "review_note": null
+    },
+    {
+      "id": "e19bd1d62057",
+      "title": "RV 시청 20% 증가: 인터스티셜 실험 리포트",
+      "url": "https://medium.com/supercent-blog/rv-%EC%8B%9C%EC%B2%AD-20-%EC%A6%9D%EA%B0%80-%EC%9D%B8%ED%84%B0%EC%8A%A4%ED%8B%B0%EC%85%9C-%EC%8B%A4%ED%97%98-%EB%A6%AC%ED%8F%AC%ED%8A%B8-e19bd1d62057",
+      "published_at": "2025-10-28T06:09:05.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "리텐션·수익화",
+      "review_note": "S03"
+    },
+    {
+      "id": "0823a8ef2e02",
+      "title": "20% More Rewarded Video Views: Interstitial Experiment Enhancement",
+      "url": "https://medium.com/supercent-blog/20-more-rewarded-video-views-interstitial-experiment-enhancement-0823a8ef2e02",
+      "published_at": "2025-10-28T06:09:30.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "리텐션·수익화",
+      "review_note": null
+    },
+    {
+      "id": "4346a7eb9800",
+      "title": "‍♀️ AI와 함께 글로벌 무대로, 슈퍼센트 AI Challenge",
+      "url": "https://medium.com/supercent-blog/%EF%B8%8F-ai%EC%99%80-%ED%95%A8%EA%BB%98-%EA%B8%80%EB%A1%9C%EB%B2%8C-%EB%AC%B4%EB%8C%80%EB%A1%9C-%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8-ai-challenge-4346a7eb9800",
+      "published_at": "2025-10-30T06:57:07.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "제작효율·AI",
+      "review_note": null
+    },
+    {
+      "id": "78776fc96898",
+      "title": "‍♀️ To the Global Stage with AI: Supercent AI Challenge",
+      "url": "https://medium.com/supercent-blog/%EF%B8%8F-to-the-global-stage-with-ai-supercent-ai-challenge-78776fc96898",
+      "published_at": "2025-10-30T07:06:10.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "제작효율·AI",
+      "review_note": null
+    },
+    {
+      "id": "e571f14b4a1d",
+      "title": "APAC 최고의 AI Innovation Pioneer, 슈퍼센트!",
+      "url": "https://medium.com/supercent-blog/apac-%EC%B5%9C%EA%B3%A0%EC%9D%98-ai-innovation-pioneer-%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8-e571f14b4a1d",
+      "published_at": "2025-11-14T01:12:21.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "제작효율·AI",
+      "review_note": null
+    },
+    {
+      "id": "25e0fe388e27",
+      "title": "APAC’s Top AI Innovation Pioneer: Supercent!",
+      "url": "https://medium.com/supercent-blog/apacs-top-ai-innovation-pioneer-supercent-25e0fe388e27",
+      "published_at": "2025-11-20T02:47:04.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "제작효율·AI",
+      "review_note": null
+    },
+    {
+      "id": "bb0686ca5992",
+      "title": "슈패패: 가장 소중한 사람들과 함께하는 슈퍼센트 오피스 투어",
+      "url": "https://medium.com/supercent-blog/%EC%8A%88%ED%8C%A8%ED%8C%A8-%EA%B0%80%EC%9E%A5-%EC%86%8C%EC%A4%91%ED%95%9C-%EC%82%AC%EB%9E%8C%EB%93%A4%EA%B3%BC-%ED%95%A8%EA%BB%98%ED%95%98%EB%8A%94-%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8-%EC%98%A4%ED%94%BC%EC%8A%A4-%ED%88%AC%EC%96%B4-bb0686ca5992",
+      "published_at": "2025-11-26T08:35:54.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "da45ee84eebf",
+      "title": "슈퍼센트가 AI를 ‘문화’로 만든 방법",
+      "url": "https://medium.com/supercent-blog/%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8%EA%B0%80-ai%EB%A5%BC-%EB%AC%B8%ED%99%94%EB%A1%9C-%EB%A7%8C%EB%93%A0-%EB%B0%A9%EB%B2%95-da45ee84eebf",
+      "published_at": "2025-11-28T08:07:30.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "제작효율·AI",
+      "review_note": null
+    },
+    {
+      "id": "5eb22c5bfe79",
+      "title": "How Supercent Turned AI into a “Culture”",
+      "url": "https://medium.com/supercent-blog/how-supercent-turned-ai-into-a-culture-5eb22c5bfe79",
+      "published_at": "2025-11-28T08:07:53.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "제작효율·AI",
+      "review_note": null
+    },
+    {
+      "id": "53a8170f7c7c",
+      "title": "AI 챌린지, 대망의 결과 발표!",
+      "url": "https://medium.com/supercent-blog/ai-%EC%B1%8C%EB%A6%B0%EC%A7%80-%EB%8C%80%EB%A7%9D%EC%9D%98-%EA%B2%B0%EA%B3%BC-%EB%B0%9C%ED%91%9C-53a8170f7c7c",
+      "published_at": "2026-01-05T07:59:51.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "제작효율·AI",
+      "review_note": null
+    },
+    {
+      "id": "7c88db2d7437",
+      "title": "The Moment of Truth: AI Challenge Results Announced!",
+      "url": "https://medium.com/supercent-blog/the-moment-of-truth-ai-challenge-results-announced-7c88db2d7437",
+      "published_at": "2026-01-05T08:00:00.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "제작효율·AI",
+      "review_note": null
+    },
+    {
+      "id": "8d983fb7ea93",
+      "title": "Night Coder: 슈퍼센트의 밤을 지켜주는 AI 코드 리뷰어",
+      "url": "https://medium.com/supercent-blog/night-coder-%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8%EC%9D%98-%EB%B0%A4%EC%9D%84-%EC%A7%80%EC%BC%9C%EC%A3%BC%EB%8A%94-ai-%EC%BD%94%EB%93%9C-%EB%A6%AC%EB%B7%B0%EC%96%B4-8d983fb7ea93",
+      "published_at": "2026-01-07T07:38:53.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "제작효율·AI",
+      "review_note": "S22"
+    },
+    {
+      "id": "4e7e3786400e",
+      "title": "Night Coder: An Overnight AI Code Reviewer for Supercent",
+      "url": "https://medium.com/supercent-blog/night-coder-an-overnight-ai-code-reviewer-for-supercent-4e7e3786400e",
+      "published_at": "2026-01-07T07:39:13.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "제작효율·AI",
+      "review_note": null
+    },
+    {
+      "id": "7c4176af431b",
+      "title": "2025 슈퍼센트 연말파티: SupercenTogether",
+      "url": "https://medium.com/supercent-blog/2025-%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8-%EC%97%B0%EB%A7%90%ED%8C%8C%ED%8B%B0-supercentogether-7c4176af431b",
+      "published_at": "2026-01-20T08:22:38.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "c73ac42606b8",
+      "title": "2025 Supercent Year-End Party: SupercenTogether",
+      "url": "https://medium.com/supercent-blog/2025-supercent-year-end-party-supercentogether-c73ac42606b8",
+      "published_at": "2026-01-20T08:23:27.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "bc2343b88c7d",
+      "title": "Supercent AI Studio: 슈퍼센트의 가능성을 실험하는 AI 스튜디오",
+      "url": "https://medium.com/supercent-blog/supercent-ai-studio-%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8%EC%9D%98-%EA%B0%80%EB%8A%A5%EC%84%B1%EC%9D%84-%EC%8B%A4%ED%97%98%ED%95%98%EB%8A%94-ai-%EC%8A%A4%ED%8A%9C%EB%94%94%EC%98%A4-bc2343b88c7d",
+      "published_at": "2026-01-30T08:00:03.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "제작효율·AI",
+      "review_note": null
+    },
+    {
+      "id": "cb878a4e7052",
+      "title": "Supercent AI Studio: An AI Studio to Explore Supercent’s Potential",
+      "url": "https://medium.com/supercent-blog/supercent-ai-studio-an-ai-studio-to-explore-supercents-potential-cb878a4e7052",
+      "published_at": "2026-01-30T08:01:27.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "제작효율·AI",
+      "review_note": null
+    },
+    {
+      "id": "8413b58741e7",
+      "title": "Supercent AI Hub : 슈퍼센트만의 AI 도구를 함께 키우는 허브",
+      "url": "https://medium.com/supercent-blog/supercent-ai-hub-%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8%EB%A7%8C%EC%9D%98-ai-%EB%8F%84%EA%B5%AC%EB%A5%BC-%ED%95%A8%EA%BB%98-%ED%82%A4%EC%9A%B0%EB%8A%94-%ED%97%88%EB%B8%8C-8413b58741e7",
+      "published_at": "2026-03-06T07:24:16.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "제작효율·AI",
+      "review_note": null
+    },
+    {
+      "id": "f44a9ce1f184",
+      "title": "Supercent AI Hub: A Hub Where We Grow Our AI Tools Together",
+      "url": "https://medium.com/supercent-blog/supercent-ai-hub-a-hub-where-we-grow-our-ai-tools-together-f44a9ce1f184",
+      "published_at": "2026-03-06T07:24:35.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "제작효율·AI",
+      "review_note": null
+    },
+    {
+      "id": "521d3d4ee0eb",
+      "title": "슈-스 인터뷰 | Play Bigger Edition 슈퍼센트의 기획문화",
+      "url": "https://medium.com/supercent-blog/%EC%8A%88-%EC%8A%A4-%EC%9D%B8%ED%84%B0%EB%B7%B0-play-bigger-edition-%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8%EC%9D%98-%EA%B8%B0%ED%9A%8D%EB%AC%B8%ED%99%94-521d3d4ee0eb",
+      "published_at": "2026-04-08T08:10:59.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "가독성·조작·연출",
+      "review_note": "S27"
+    },
+    {
+      "id": "5a4087d27c96",
+      "title": "Play Bigger | 2026년 상반기 슈퍼센트 대규모채용",
+      "url": "https://medium.com/supercent-blog/play-bigger-2026%EB%85%84-%EC%83%81%EB%B0%98%EA%B8%B0-%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8-%EB%8C%80%EA%B7%9C%EB%AA%A8%EC%B1%84%EC%9A%A9-5a4087d27c96",
+      "published_at": "2026-04-17T05:47:37.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "2bc1a721b317",
+      "title": "슈퍼센트만의 봄 이벤트 : 슈프링데이",
+      "url": "https://medium.com/supercent-blog/%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8%EB%A7%8C%EC%9D%98-%EB%B4%84-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%8A%88%ED%94%84%EB%A7%81%EB%8D%B0%EC%9D%B4-2bc1a721b317",
+      "published_at": "2026-04-23T05:17:57.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "ac40ee07944f",
+      "title": "NEXT: STAGE Game Challenge — 모두에게 다음 기회는 주어져야 하니까!",
+      "url": "https://medium.com/supercent-blog/next-stage-game-challenge-%EB%AA%A8%EB%91%90%EC%97%90%EA%B2%8C-%EB%8B%A4%EC%9D%8C-%EA%B8%B0%ED%9A%8C%EB%8A%94-%EC%A3%BC%EC%96%B4%EC%A0%B8%EC%95%BC-%ED%95%98%EB%8B%88%EA%B9%8C-ac40ee07944f",
+      "published_at": "2026-04-27T09:08:39.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "게임사례·전략",
+      "review_note": null
+    },
+    {
+      "id": "ef70a7a513a4",
+      "title": "NEXT: STAGE Game Challenge — Every Game Deserves a Next Stage",
+      "url": "https://medium.com/supercent-blog/next-stage-game-challenge-every-game-deserves-a-next-stage-ef70a7a513a4",
+      "published_at": "2026-04-27T09:08:44.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "게임사례·전략",
+      "review_note": null
+    },
+    {
+      "id": "3ebf4f6886a2",
+      "title": "Dear, Idan : 뉴욕에서 온 편지",
+      "url": "https://medium.com/supercent-blog/dear-idan-%EB%89%B4%EC%9A%95%EC%97%90%EC%84%9C-%EC%98%A8-%ED%8E%B8%EC%A7%80-3ebf4f6886a2",
+      "published_at": "2026-05-06T06:25:59.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "36e4faa05293",
+      "title": "Dear, Idan: A Letter from New York",
+      "url": "https://medium.com/supercent-blog/dear-idan-a-letter-from-new-york-36e4faa05293",
+      "published_at": "2026-05-06T06:26:51.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "22b671f751e0",
+      "title": "Miri — 링크 하나로 끝내는 슈퍼센트 공유 공간",
+      "url": "https://medium.com/supercent-blog/miri-%EB%A7%81%ED%81%AC-%ED%95%98%EB%82%98%EB%A1%9C-%EB%81%9D%EB%82%B4%EB%8A%94-%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8-%EA%B3%B5%EC%9C%A0-%EA%B3%B5%EA%B0%84-22b671f751e0",
+      "published_at": "2026-05-29T03:30:05.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "제작효율·AI",
+      "review_note": null
+    },
+    {
+      "id": "1c6a6580c61c",
+      "title": "Miri — Supercent’s Internal Space, One Link Away",
+      "url": "https://medium.com/supercent-blog/miri-supercents-internal-space-one-link-away-1c6a6580c61c",
+      "published_at": "2026-05-29T03:30:08.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "제작효율·AI",
+      "review_note": null
+    },
+    {
+      "id": "314c55e12b0e",
+      "title": "☀️ Supercent’s Next Chapter: Becoming a Content-Tech Company",
+      "url": "https://medium.com/supercent-blog/%EF%B8%8F-supercents-next-chapter-becoming-a-content-tech-company-314c55e12b0e",
+      "published_at": "2026-06-23T05:27:39.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "30bb0371f235",
+      "title": "☀️ 슈퍼센트, 콘텐츠 테크 기업으로의 새로운 도약",
+      "url": "https://medium.com/supercent-blog/%EF%B8%8F-%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8-%EC%BD%98%ED%85%90%EC%B8%A0-%ED%85%8C%ED%81%AC-%EA%B8%B0%EC%97%85%EC%9C%BC%EB%A1%9C%EC%9D%98-%EC%83%88%EB%A1%9C%EC%9A%B4-%EB%8F%84%EC%95%BD-30bb0371f235",
+      "published_at": "2026-06-23T05:33:54.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "874c7cb1a2ca",
+      "title": "XP Hero | 새로운 콘텐츠의 시작",
+      "url": "https://medium.com/supercent-blog/xp-hero-%EC%83%88%EB%A1%9C%EC%9A%B4-%EC%BD%98%ED%85%90%EC%B8%A0%EC%9D%98-%EC%8B%9C%EC%9E%91-874c7cb1a2ca",
+      "published_at": "2026-06-24T07:10:35.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "게임사례·전략",
+      "review_note": null
+    },
+    {
+      "id": "fa175ca0f9cd",
+      "title": "XP Hero | Where New Content Begins",
+      "url": "https://medium.com/supercent-blog/xp-hero-where-new-content-begins-fa175ca0f9cd",
+      "published_at": "2026-06-24T07:10:42.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "게임사례·전략",
+      "review_note": null
+    },
+    {
+      "id": "98f545ca08b8",
+      "title": "⚔️ XP Hero | 아케이드 RPG의 세계로!",
+      "url": "https://medium.com/supercent-blog/%EF%B8%8F-xp-hero-%EC%95%84%EC%BC%80%EC%9D%B4%EB%93%9C-rpg%EC%9D%98-%EC%84%B8%EA%B3%84%EB%A1%9C-98f545ca08b8",
+      "published_at": "2026-07-16T00:58:50.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "게임사례·전략",
+      "review_note": "S23"
+    },
+    {
+      "id": "ba5da69312d7",
+      "title": "⚔️ XP Hero | Step Into the Arcade RPG World",
+      "url": "https://medium.com/supercent-blog/%EF%B8%8F-xp-hero-step-into-the-arcade-rpg-world-ba5da69312d7",
+      "published_at": "2026-07-16T00:59:02.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "게임사례·전략",
+      "review_note": null
+    },
+    {
+      "id": "746155bbfbdb",
+      "title": "AI 시대의 질문, 슈퍼센트가 답하다",
+      "url": "https://medium.com/supercent-blog/ai-%EC%8B%9C%EB%8C%80%EC%9D%98-%EC%A7%88%EB%AC%B8-%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8%EA%B0%80-%EB%8B%B5%ED%95%98%EB%8B%A4-746155bbfbdb",
+      "published_at": "2026-07-28T02:24:42.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "제작효율·AI",
+      "review_note": null
+    },
+    {
+      "id": "a37b2af754c3",
+      "title": "Supercent Answers the Questions of the AI Era",
+      "url": "https://medium.com/supercent-blog/supercent-answers-the-questions-of-the-ai-era-a37b2af754c3",
+      "published_at": "2026-07-28T02:24:48.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "제작효율·AI",
+      "review_note": null
+    },
+    {
+      "id": "877270f6635f",
+      "title": "Aria | 슈퍼센트가 AI를 게임 제작 워크플로우에 녹여낸 방법",
+      "url": "https://medium.com/supercent-blog/aria-%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8%EA%B0%80-ai%EB%A5%BC-%EA%B2%8C%EC%9E%84-%EC%A0%9C%EC%9E%91-%EC%9B%8C%ED%81%AC%ED%94%8C%EB%A1%9C%EC%9A%B0%EC%97%90-%EB%85%B9%EC%97%AC%EB%82%B8-%EB%B0%A9%EB%B2%95-877270f6635f",
+      "published_at": "2026-07-29T07:35:36.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "가독성·조작·연출",
+      "review_note": null
+    },
+    {
+      "id": "dc1eb48b155d",
+      "title": "Aria | How Supercent Wove AI into Game Production Workflows",
+      "url": "https://medium.com/supercent-blog/aria-how-supercent-wove-ai-into-game-production-workflows-dc1eb48b155d",
+      "published_at": "2026-07-29T07:35:39.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "가독성·조작·연출",
+      "review_note": null
+    },
+    {
+      "id": "58bea0173ff6",
+      "title": "슈퍼센트 베트남 오피스 오픈 스토리",
+      "url": "https://medium.com/supercent-blog/%EC%8A%88%ED%8D%BC%EC%84%BC%ED%8A%B8-%EB%B2%A0%ED%8A%B8%EB%82%A8-%EC%98%A4%ED%94%BC%EC%8A%A4-%EC%98%A4%ED%94%88-%EC%8A%A4%ED%86%A0%EB%A6%AC-58bea0173ff6",
+      "published_at": "2026-08-04T02:54:26.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "49767d4990c7",
+      "title": "Supercent’s New Vietnam Office",
+      "url": "https://medium.com/supercent-blog/supercents-new-vietnam-office-49767d4990c7",
+      "published_at": "2026-08-04T02:54:32.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": null
+    },
+    {
+      "id": "2981e163bf75",
+      "title": "AI powered에서 AI Native로 : 프로세스를 처음부터 다시 설계한 이야기",
+      "url": "https://medium.com/supercent-blog/ai-powered%EC%97%90%EC%84%9C-ai-native%EB%A1%9C-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4%EB%A5%BC-%EC%B2%98%EC%9D%8C%EB%B6%80%ED%84%B0-%EB%8B%A4%EC%8B%9C-%EC%84%A4%EA%B3%84%ED%95%9C-%EC%9D%B4%EC%95%BC%EA%B8%B0-2981e163bf75",
+      "published_at": "2026-08-06T03:05:03.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "제작효율·AI",
+      "review_note": "S19"
+    },
+    {
+      "id": "9b6b8f9fd2de",
+      "title": "From AI-Powered to AI-Native: How We Rebuilt Our Process from Scratch",
+      "url": "https://medium.com/supercent-blog/from-ai-powered-to-ai-native-how-we-rebuilt-our-process-from-scratch-9b6b8f9fd2de",
+      "published_at": "2026-08-06T03:06:02.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "제작효율·AI",
+      "review_note": null
+    },
+    {
+      "id": "0130af2a1f4d",
+      "title": "Syncky & Box | 찾는 건 AI가, 고르는 건 Creative가",
+      "url": "https://medium.com/supercent-blog/syncky-box-%EC%B0%BE%EB%8A%94-%EA%B1%B4-ai%EA%B0%80-%EA%B3%A0%EB%A5%B4%EB%8A%94-%EA%B1%B4-creative%EA%B0%80-0130af2a1f4d",
+      "published_at": "2026-09-04T01:16:42.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "유입·소재",
+      "review_note": null
+    },
+    {
+      "id": "07fe5561359d",
+      "title": "Syncky & Box | AI Finds, Creatives Choose",
+      "url": "https://medium.com/supercent-blog/syncky-box-ai-finds-creatives-choose-07fe5561359d",
+      "published_at": "2026-09-04T01:16:55.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "유입·소재",
+      "review_note": null
+    },
+    {
+      "id": "63a4a61a1476",
+      "title": "Crebo, 크리에이티브 제작에 더 집중할 수 있도록",
+      "url": "https://medium.com/supercent-blog/crebo-%ED%81%AC%EB%A6%AC%EC%97%90%EC%9D%B4%ED%8B%B0%EB%B8%8C-%EC%A0%9C%EC%9E%91%EC%97%90-%EB%8D%94-%EC%A7%91%EC%A4%91%ED%95%A0-%EC%88%98-%EC%9E%88%EB%8F%84%EB%A1%9D-63a4a61a1476",
+      "published_at": "2026-09-18T02:18:01.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "유입·소재",
+      "review_note": null
+    },
+    {
+      "id": "e25cf9d77aa6",
+      "title": "Crebo, More Time for Creative Work",
+      "url": "https://medium.com/supercent-blog/crebo-more-time-for-creative-work-e25cf9d77aa6",
+      "published_at": "2026-09-18T02:18:07.000Z",
+      "body_status": "rss_body_available",
+      "topic_auto": "유입·소재",
+      "review_note": null
+    },
+    {
+      "id": "fbc555775bfc",
+      "title": "왜 하이퍼캐주얼 게임 캐릭터들은 똑같이 생겼을까?",
+      "url": "https://medium.com/supercent-blog/%EC%99%9C-%ED%95%98%EC%9D%B4%ED%8D%BC%EC%BA%90%EC%A3%BC%EC%96%BC-%EA%B2%8C%EC%9E%84-%EC%BA%90%EB%A6%AD%ED%84%B0%EB%93%A4%EC%9D%80-%EB%8B%A4-%EB%98%91%EA%B0%99%EC%9D%B4-%EC%83%9D%EA%B2%BC%EC%9D%84%EA%B9%8C-fbc555775bfc",
+      "published_at": "Apr 28, 2023",
+      "body_status": "web_excerpt_or_shell",
+      "topic_auto": "조직·채용·인터뷰·기타",
+      "review_note": "S25"
+    },
+    {
+      "id": "820b4d49b2c9",
+      "title": "Hit & Run: Solo Leveling — Global Top Game of 2022 by GameAnalytics",
+      "url": "https://medium.com/supercent-blog/hit-run-solo-leveling-global-top-game-of-2022-by-gameanalytics-820b4d49b2c9",
+      "published_at": null,
+      "body_status": "web_excerpt_or_shell",
+      "topic_auto": "게임사례·전략",
+      "review_note": "S26"
+    }
+  ],
+  "downloads": [
+    {
+      "file": "sort-pm-plan.md",
+      "label": "PM 실행안 전체"
+    },
+    {
+      "file": "evidence-cards.md",
+      "label": "근거카드 28개"
+    },
+    {
+      "file": "article-index.csv",
+      "label": "수집 목록 CSV"
+    },
+    {
+      "file": "experiment-log-template.csv",
+      "label": "실험 기록 양식 CSV"
+    },
+    {
+      "file": "coverage.json",
+      "label": "수집 범위 JSON"
+    },
+    {
+      "file": "decision-math.txt",
+      "label": "통계 계산 코드"
+    },
+    {
+      "file": "validation.md",
+      "label": "검증 기록"
+    },
+    {
+      "file": "README.md",
+      "label": "조사 방법과 파일 안내"
+    },
+    {
+      "file": "catalog.json",
+      "label": "수집 목록 JSON"
+    },
+    {
+      "file": "source-notes.json",
+      "label": "근거카드 JSON"
+    },
+    {
+      "file": "validation.json",
+      "label": "검증 결과 JSON"
+    }
+  ],
+  "coverage": {
+    "date": "2026-09-21",
+    "publication": "https://medium.com/supercent-blog",
+    "target": {
+      "genre": "Sort hypercasual puzzle",
+      "D1_target": 0.45,
+      "CPI": "minimize subject to retention and unit economics"
+    },
+    "unique_article_urls": 123,
+    "rss_bodies": 106,
+    "additional_web_bodies": 9,
+    "excerpt_only": 8,
+    "reviewed_source_cards": 28,
+    "feed_requests": 110,
+    "distinct_feed_urls": 105,
+    "latest_feed_status_counts": {
+      "200": 23,
+      "429": 81,
+      "error": 1
+    },
+    "rss_feeds_at_10_item_cap": 9,
+    "completeness": "UNVERIFIED_PARTIAL",
+    "reason": "Medium archive HTTP 403; later RSS HTTP 429 Cloudflare challenge. RSS item limits prevent an authoritative total. No complete-publication denominator available.",
+    "limitations": [
+      "Search excerpts are not full-body confirmation.",
+      "Embedded video and every image were not exhaustively transcribed. Three graphs in the interstitial experiment were visually inspected.",
+      "Some RSS dates and web display dates differ; preserve source dates rather than silently harmonize.",
+      "No game build or current game metrics were supplied. Sort recommendations are hypotheses, not observed findings about the user game."
+    ]
+  }
+}

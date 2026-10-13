@@ -41,6 +41,8 @@ export default function MobileTabBar({ tabs, moreLinks = [], fab }: Props) {
     );
   };
 
+  if (pathname === "/login") return null;
+
   return (
     <>
       {moreOpen && moreLinks.length > 0 && (

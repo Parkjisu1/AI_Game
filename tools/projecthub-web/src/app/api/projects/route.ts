@@ -11,14 +11,18 @@ export async function GET() {
     const db = await getDb();
     const col = db.collection("pixelforge_tasks");
 
-    // 레지스트리 로드
+    // 레지스트리 로드 — board_hidden=true는 작업 보드에서 제외.
+    // (게임이 아닌 내부 도구는 Hermes 라우팅은 유지하되 보드엔 노출하지 않는다.
+    //  레지스트리에서 지우면 hermes_projects.repo 기반 라우팅이 깨지므로 삭제 대신 플래그.)
     const registry = await db.collection("hermes_projects")
-      .find({}, { projection: { project: 1, display_name: 1, genre: 1, repo: 1, profile: 1 } })
+      .find({ board_hidden: { $ne: true } },
+            { projection: { project: 1, display_name: 1, genre: 1, repo: 1, profile: 1 } })
       .toArray();
 
-    // 프로젝트 메타 구성 (balloonflow 기본 포함)
-    const ids = new Set<string>(["balloonflow"]);
-    const meta: Record<string, Meta> = {
+    // 프로젝트 메타 구성. clean 인스턴스(비게임 팀)는 balloonflow 기본값 없이 레지스트리만.
+    const IS_CLEAN = process.env.NEXT_PUBLIC_APP_THEME === "clean";
+    const ids = new Set<string>(IS_CLEAN ? [] : ["balloonflow"]);
+    const meta: Record<string, Meta> = IS_CLEAN ? {} : {
       balloonflow: { name: "BalloonFlow", subtitle: "Unity 퍼즐 · 실제 프로젝트", icon: "balloon" },
     };
     for (const r of registry) {
@@ -27,10 +31,11 @@ export async function GET() {
       ids.add(id);
       if (!meta[id]) {
         const engine = (r.profile as { engine?: string } | undefined)?.engine || r.genre || "";
+        const repo = r.repo as { type?: string; owner?: string; name?: string } | undefined;
         meta[id] = {
           name: r.display_name || id,
-          subtitle: `${engine} · 온보딩`,
-          icon: (r.repo as { type?: string } | undefined)?.type === "unity" ? "balloon" : "box",
+          subtitle: IS_CLEAN && repo?.owner && repo?.name ? `${repo.owner}/${repo.name}` : `${engine} · 온보딩`,
+          icon: repo?.type === "unity" ? "balloon" : "box",
         };
       }
     }

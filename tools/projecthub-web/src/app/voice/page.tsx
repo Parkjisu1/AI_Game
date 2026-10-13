@@ -6,6 +6,8 @@ import RealtimeVoice from "./RealtimeVoice";
 
 // 음성 업무 — 회의/지시 녹음 → STT → 요약 + task 분해 → 검토/편집 → 선택 생성.
 // 안전: 잘못 인식돼도 이 화면에서 사람이 보고 고른 것만 task가 됨(human-in-loop).
+// clean 인스턴스는 JARVIS 연출(오빗/글로우/Boss) 없이 중립 스타일로 렌더.
+const IS_CLEAN = process.env.NEXT_PUBLIC_APP_THEME === "clean";
 
 interface DraftTask { title: string; description: string; team?: string; owner?: string; due?: string; priority?: string; sel: boolean; }
 interface Decision { decision: string; context?: string; }
@@ -93,7 +95,10 @@ export default function VoicePage() {
     setDecisions([]); setOpenQuestions([]); setRisks([]);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mr = new MediaRecorder(stream);
+      // 비트레이트를 명시하지 않으면 브라우저 기본값(기기별 128kbps 이상)이 쓰여 장시간 회의가
+      // 서버 상한(25MB)에 금방 걸린다. 음성 전사에는 48kbps로 충분하며, 이 값이면
+      // 약 0.36MB/분 → 25MB까지 약 70분을 녹음할 수 있다. (미지원 브라우저는 옵션 무시)
+      const mr = new MediaRecorder(stream, { audioBitsPerSecond: 48000 });
       chunksRef.current = [];
       mr.ondataavailable = (e) => { if (e.data.size > 0) chunksRef.current.push(e.data); };
       mr.onstop = () => {
@@ -101,7 +106,9 @@ export default function VoicePage() {
         const blob = new Blob(chunksRef.current, { type: mr.mimeType || "audio/webm" });
         upload(blob);
       };
-      mr.start();
+      // timeslice — 통째로 메모리에 들고 있지 않고 30초마다 조각으로 받는다.
+      // 장시간 녹음 시 모바일에서 탭이 메모리로 종료되는 것을 줄인다.
+      mr.start(30000);
       mrRef.current = mr;
       setRecording(true);
       setElapsed(0);
@@ -123,7 +130,18 @@ export default function VoicePage() {
     mrRef.current?.stop();
   };
 
+  // 서버 라우트 가드(STT_MAX_BYTES)와 동일한 값. 여기서 먼저 막아야 25MB를 다 올린 뒤
+  // 실패하는 낭비가 없다. (2026-07-27: 실제로 31MB·13MB 업로드가 서버에서 죽었었다.)
+  const MAX_UPLOAD_BYTES = 25_000_000;
+
   const upload = async (blob: Blob, name?: string) => {
+    if (blob.size > MAX_UPLOAD_BYTES) {
+      setErr(
+        `녹음 파일이 상한을 넘었습니다 (${(blob.size / 1024 / 1024).toFixed(1)}MB / 25MB). ` +
+        `회의를 나눠 녹음하거나, 파일을 분할해 업로드해 주세요. (전사는 대략 70분까지 가능)`
+      );
+      return;
+    }
     setBusy(true); setErr("");
     try {
       let fname = name && name.includes(".") ? name : "";
@@ -150,7 +168,10 @@ export default function VoicePage() {
         setOpenQuestions(Array.isArray(j.open_questions) ? j.open_questions : []);
         setRisks(Array.isArray(j.risks) ? j.risks : []);
         // 저장/Slack DM 실패를 조용히 넘기지 않고 표시 (테스트 시 원인 파악 가능)
-        if (j.meetingId == null) setErr("⚠ 회의 요약이 저장되지 않았습니다 (DB 오류) — 결과는 아래 표시되나 '저장된 회의'엔 없음");
+        // 분석 실패가 최우선 — 요약·업무가 비어있는 이유를 먼저 알려야 한다.
+        if (j.analysisError) setErr(`⚠ 요약·업무 분해 실패: ${j.analysisError} (전사 원문은 아래에서 확인 가능)`);
+        else if (!j.summary && (j.tasks || []).length === 0) setErr("⚠ 전사는 됐으나 요약·업무가 비어있습니다 — 발화가 짧거나 회의 내용으로 인식되지 않았습니다");
+        else if (j.meetingId == null) setErr("⚠ 회의 요약이 저장되지 않았습니다 (DB 오류) — 결과는 아래 표시되나 '저장된 회의'엔 없음");
         else if (j.slackSent && j.slackSent.ok === false) setErr(`⚠ 요약은 저장됐으나 Slack DM 실패: ${j.slackSent.error || "미발송"}`);
         loadMeetings();
       }
@@ -194,10 +215,19 @@ export default function VoicePage() {
       {/* 헤더 — JARVIS 음성 비서 */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2.5">
-          <span className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: "linear-gradient(135deg, var(--neon-deep), var(--neon))", boxShadow: "0 0 16px -2px rgba(34,211,238,.7)", color: "#041018" }}><Icon name="mic" size={17} /></span>
+          <span className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={IS_CLEAN ? { background: "#2f6fed", color: "#ffffff" } : { background: "linear-gradient(135deg, var(--neon-deep), var(--neon))", boxShadow: "0 0 16px -2px rgba(34,211,238,.7)", color: "#041018" }}><Icon name="mic" size={17} /></span>
           <div>
-            <div className="text-lg font-bold tracking-hud neon-text-soft leading-none">JARVIS</div>
-            <div className="text-[10px] mono tracking-hud text-gray-500 mt-1 flex items-center gap-1"><span className="dot dot-ok" /> AI SYSTEM ONLINE</div>
+            {IS_CLEAN ? (
+              <>
+                <div className="text-lg font-bold text-gray-900 leading-none">음성 명령</div>
+                <div className="text-[11px] text-gray-500 mt-1">녹음하면 요약·결정·할 일로 정리됩니다</div>
+              </>
+            ) : (
+              <>
+                <div className="text-lg font-bold tracking-hud neon-text-soft leading-none">JARVIS</div>
+                <div className="text-[10px] mono tracking-hud text-gray-500 mt-1 flex items-center gap-1"><span className="dot dot-ok" /> AI SYSTEM ONLINE</div>
+              </>
+            )}
           </div>
         </div>
         <button onClick={() => setShowHelp(true)} aria-label="안내" title="안내"
@@ -217,24 +247,30 @@ export default function VoicePage() {
       )}
 
       {/* 음성 비서 — 중앙 글로우 오브 */}
-      <div className="glass hud p-8 flex flex-col items-center gap-4 relative overflow-hidden">
-        <div className="absolute top-4 px-3 py-1 rounded-full text-[10px] mono tracking-hud" style={{ background: "rgba(34,211,238,0.1)", border: "1px solid var(--line-strong)", color: "var(--neon)" }}>◇ AI SYSTEM ONLINE ◇</div>
-        <div className="relative w-44 h-44 flex items-center justify-center mt-4">
-          <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full">
-            <circle cx="50" cy="50" r="47" fill="none" stroke="rgba(56,189,248,0.16)" strokeWidth="0.5" strokeDasharray="2 4" className="orbit-spin" style={{ transformOrigin: "50px 50px" }} />
-            <circle cx="50" cy="50" r="39" fill="none" stroke="rgba(34,211,238,0.25)" strokeWidth="0.6" strokeDasharray="10 6" className="orbit-spin-rev" style={{ transformOrigin: "50px 50px" }} />
-          </svg>
-          {recording && <span className="absolute inset-5 rounded-full animate-ping" style={{ background: "rgba(251,90,107,0.22)" }} />}
+      <div className={`glass ${IS_CLEAN ? "" : "hud"} p-8 flex flex-col items-center gap-4 relative overflow-hidden`}>
+        {!IS_CLEAN && <div className="absolute top-4 px-3 py-1 rounded-full text-[10px] mono tracking-hud" style={{ background: "rgba(34,211,238,0.1)", border: "1px solid var(--line-strong)", color: "var(--neon)" }}>◇ AI SYSTEM ONLINE ◇</div>}
+        <div className={`relative ${IS_CLEAN ? "w-32 h-32" : "w-44 h-44 mt-4"} flex items-center justify-center`}>
+          {!IS_CLEAN && (
+            <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full">
+              <circle cx="50" cy="50" r="47" fill="none" stroke="rgba(56,189,248,0.16)" strokeWidth="0.5" strokeDasharray="2 4" className="orbit-spin" style={{ transformOrigin: "50px 50px" }} />
+              <circle cx="50" cy="50" r="39" fill="none" stroke="rgba(34,211,238,0.25)" strokeWidth="0.6" strokeDasharray="10 6" className="orbit-spin-rev" style={{ transformOrigin: "50px 50px" }} />
+            </svg>
+          )}
+          {recording && <span className="absolute inset-5 rounded-full animate-ping" style={{ background: IS_CLEAN ? "rgba(248,81,73,0.18)" : "rgba(251,90,107,0.22)" }} />}
           {!recording ? (
             <button onClick={start} disabled={busy} aria-label="녹음 시작"
-              className="relative w-28 h-28 rounded-full flex items-center justify-center active:scale-95 disabled:opacity-50 core-pulse"
-              style={{ background: "radial-gradient(circle at 40% 35%, #67e8f9, var(--neon-deep))", color: "#041018", boxShadow: "0 0 44px -6px rgba(34,211,238,.85)" }}>
-              <Icon name="mic" size={46} />
+              className={`relative ${IS_CLEAN ? "w-24 h-24" : "w-28 h-28 core-pulse"} rounded-full flex items-center justify-center active:scale-95 disabled:opacity-50`}
+              style={IS_CLEAN
+                ? { background: "#2f6fed", color: "#ffffff" }
+                : { background: "radial-gradient(circle at 40% 35%, #67e8f9, var(--neon-deep))", color: "#041018", boxShadow: "0 0 44px -6px rgba(34,211,238,.85)" }}>
+              <Icon name="mic" size={IS_CLEAN ? 38 : 46} />
             </button>
           ) : (
             <button onClick={stop} aria-label="정지"
-              className="relative w-28 h-28 rounded-full flex items-center justify-center"
-              style={{ background: "radial-gradient(circle at 40% 35%, #fda4af, var(--err))", color: "#180406", boxShadow: "0 0 44px -6px rgba(251,90,107,.8)" }}>
+              className={`relative ${IS_CLEAN ? "w-24 h-24" : "w-28 h-28"} rounded-full flex items-center justify-center`}
+              style={IS_CLEAN
+                ? { background: "#d73a49", color: "#ffffff" }
+                : { background: "radial-gradient(circle at 40% 35%, #fda4af, var(--err))", color: "#180406", boxShadow: "0 0 44px -6px rgba(251,90,107,.8)" }}>
               <span className="w-8 h-8 rounded-md bg-white/90" />
             </button>
           )}
@@ -244,14 +280,14 @@ export default function VoicePage() {
           {Array.from({ length: 32 }).map((_, i) => <i key={i} style={{ animationDelay: `${(i % 10) * 0.08}s`, height: `${30 + ((i * 41) % 70)}%` }} />)}
         </div>
         <div className="text-center">
-          <div className="text-base font-semibold">회의를 녹음하거나 명령을 말씀하세요, <span className="neon-text-soft">Boss</span></div>
+          <div className="text-base font-semibold">{IS_CLEAN ? "회의를 녹음하거나 명령을 말씀하세요" : (<>회의를 녹음하거나 명령을 말씀하세요, <span className="neon-text-soft">Boss</span></>)}</div>
           <div className="text-sm text-gray-500 mt-1 inline-flex items-center gap-1.5 min-h-[20px]">
             {recording ? (<><span className="dot dot-err" /> 녹음 중 {mmss} · 다시 누르면 정지·분석</>)
               : busy ? (<><Icon name="clock" size={14} /> 전사·분석 중… (긴 회의는 1~2분 소요)</>)
               : "버튼을 누르고 회의를 진행 → 정지하면 요약·결정·할 일로 정리됩니다"}
           </div>
-          {recording && elapsed >= 1200 && (
-            <div className="text-xs text-amber-600 mt-1">⚠ {Math.floor(elapsed / 60)}분 녹음 중 — 25~40분(24MB)을 넘으면 전사가 거부됩니다. 긴 회의는 나눠서 정지·분석하세요.</div>
+          {recording && elapsed >= 3600 && (
+            <div className="text-xs text-amber-600 mt-1">⚠ {Math.floor(elapsed / 60)}분 녹음 중 — 약 70분(25MB)을 넘으면 전사가 거부됩니다. 긴 회의는 나눠서 정지·분석하세요.</div>
           )}
         </div>
         {!recording && !busy && (
@@ -269,9 +305,12 @@ export default function VoicePage() {
       {/* 빠른 명령 */}
       {!recording && !busy && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-          {([["프로젝트 현황", "home", "/"], ["작업 보드", "tasks", "/tasks"], ["저장된 회의", "doc", "#saved-meetings"], ["코드 분석", "code", "/balloonflow"]] as [string, string, string][]).map(([label, icon, href]) => (
+          {(IS_CLEAN
+            ? ([["프로젝트 현황", "home", "/"], ["작업 보드", "tasks", "/tasks"], ["저장된 회의", "doc", "#saved-meetings"], ["로드맵", "map", "/roadmap"]] as [string, string, string][])
+            : ([["프로젝트 현황", "home", "/"], ["작업 보드", "tasks", "/tasks"], ["저장된 회의", "doc", "#saved-meetings"], ["코드 분석", "code", "/balloonflow"]] as [string, string, string][])
+          ).map(([label, icon, href]) => (
             <a key={label} href={href} className="glass glass-hover p-3 flex flex-col items-center gap-1.5 text-center">
-              <span className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: "rgba(34,211,238,0.14)", color: "var(--neon)" }}><Icon name={icon} size={17} /></span>
+              <span className="w-9 h-9 rounded-lg flex items-center justify-center" style={IS_CLEAN ? { background: "rgba(75,139,250,0.15)", color: "#6ca0f8" } : { background: "rgba(34,211,238,0.14)", color: "var(--neon)" }}><Icon name={icon} size={17} /></span>
               <span className="text-[11px] font-medium text-gray-300">{label}</span>
             </a>
           ))}

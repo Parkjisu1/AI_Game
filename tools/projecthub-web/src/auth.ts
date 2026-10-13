@@ -75,6 +75,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   session: { strategy: "jwt" },
   trustHost: true,
+  // clean 인스턴스만 커스텀 로그인 페이지 사용 (게임팀은 Auth.js 기본 페이지 유지)
+  ...(process.env.NEXT_PUBLIC_APP_THEME === "clean" ? { pages: { signIn: "/login" } } : {}),
   callbacks: {
     async signIn({ user }) {
       const email = (user?.email || "").toLowerCase();

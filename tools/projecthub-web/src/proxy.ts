@@ -99,8 +99,20 @@ export async function proxy(req: NextRequest) {
   // 2. 인증 우회 경로: /api/auth/* (NextAuth 자체), /api/slack/events (Slack webhook).
   //    이 경로들은 매처가 포함하지만 auth() 통과 없이 다음으로.
   const path = req.nextUrl.pathname;
-  if (path.startsWith("/api/auth/") || path.startsWith("/api/slack/events")) {
+  if (path.startsWith("/api/auth/") || path.startsWith("/api/slack/events") || path === "/login") {
     return attachRateHeaders(NextResponse.next(), req);
+  }
+
+  // clean 인스턴스(비게임 팀): 게임 전용 페이지는 라우트 차단 (숨김이 아니라 접근 불가)
+  if (process.env.NEXT_PUBLIC_APP_THEME === "clean") {
+    const GAME_PAGES = ["/balloonflow", "/simulator", "/pixelforge", "/levels", "/gallery",
+      "/agents/batches", "/agents/design-teams", "/agents/eval"];
+    if (GAME_PAGES.some((p) => path === p || path.startsWith(p + "/"))) {
+      const home = req.nextUrl.clone();
+      home.pathname = "/";
+      home.search = "";
+      return NextResponse.redirect(home);
+    }
   }
 
   if (authDisabled) return attachRateHeaders(NextResponse.next(), req);
@@ -132,7 +144,8 @@ export async function proxy(req: NextRequest) {
   }
   const url = req.nextUrl.clone();
   const callback = url.pathname + url.search;
-  url.pathname = "/api/auth/signin";
+  // clean 인스턴스는 커스텀 /login, 그 외엔 Auth.js 기본 페이지
+  url.pathname = process.env.NEXT_PUBLIC_APP_THEME === "clean" ? "/login" : "/api/auth/signin";
   url.search = `?callbackUrl=${encodeURIComponent(callback || "/")}`;
   return NextResponse.redirect(url);
 }

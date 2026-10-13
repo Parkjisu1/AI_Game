@@ -3,8 +3,11 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Icon from "@/components/Icon";
+import CleanDashboard from "@/components/CleanDashboard";
 
 // JARVIS_AIMED 홀로그래픽 대시보드 — 실데이터(tasks·roles·sessions·node-runs)만 사용.
+// clean 인스턴스(APP_THEME=clean)는 오비탈/JARVIS 연출 대신 중립 요약 카드를 렌더.
+const IS_CLEAN = process.env.NEXT_PUBLIC_APP_THEME === "clean";
 
 interface Task { _id?: string; title?: string; status?: string; priority?: string; assignee?: string; team?: string; progress?: number; updated_at?: string; }
 interface Role { role: string; team?: string; description?: string; }
@@ -118,7 +121,12 @@ function OrbitalHub({ running, live }: { running: number; live: boolean }) {
   );
 }
 
-export default function Dashboard() {
+export default function DashboardPage() {
+  // clean 인스턴스는 JARVIS 대시보드 대신 사무형 대시보드
+  return IS_CLEAN ? <CleanDashboard /> : <Dashboard />;
+}
+
+function Dashboard() {
   const router = useRouter();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [roles, setRoles] = useState<Role[]>([]);
@@ -177,17 +185,23 @@ export default function Dashboard() {
           <span className="px-2.5 py-1 rounded-full glass text-[10px] mono tracking-hud flex items-center gap-1.5" style={{ borderRadius: 9999 }}>
             <span className={live ? "dot dot-run" : "dot dot-err"} /> AI SYSTEM {live ? "ONLINE" : "OFFLINE"}
           </span>
-          <span className="text-[11px] mono text-gray-500 tracking-hud hidden sm:inline">JARVIS_AIMED · PROJECT ASSISTANT</span>
+          <span className="text-[11px] mono text-gray-500 tracking-hud hidden sm:inline">{IS_CLEAN ? "NewPlay · PROJECT HUB" : "JARVIS_AIMED · PROJECT ASSISTANT"}</span>
         </div>
         <span className="text-[11px] mono text-gray-500">{live ? "LIVE" : "—"}</span>
       </div>
+
+      <section aria-label="게임 성장 연구" style={{ marginBottom: 28, padding: "20px 0", borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}>
+        <div className="pp-eyebrow">새 연구 · Supercent · 2026.09.21</div>
+        <Link href="/research/supercent" className="pp-title" style={{ display: "inline-block", margin: "6px 0" }}>Sort 퍼즐 · D1 45%와 낮은 CPI를 위한 실행안 →</Link>
+        <p style={{ color: "var(--text-dim)", fontSize: 14 }}>실험 9개 · 근거 28개 · 수집 목록 123건. 첫 플레이, 재도전, 광고 소재의 우선순위를 확인하세요.</p>
+      </section>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         {/* ── 좌: 음성 비서 + 시스템 ── */}
         <div className="lg:col-span-3 space-y-4">
           <div className="glass hud p-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold tracking-hud neon-text-soft">음성 비서 JARVIS</span>
+              <span className="text-xs font-bold tracking-hud neon-text-soft">{IS_CLEAN ? "음성 비서" : "음성 비서 JARVIS"}</span>
               <span className="flex items-center gap-1 text-[10px] mono text-emerald-500"><span className="dot dot-ok" />LIVE</span>
             </div>
             <Waveform bars={38} height={38} />
@@ -195,7 +209,7 @@ export default function Dashboard() {
 
           <div className="glass p-4">
             <div className="text-xs font-bold text-gray-300 mb-3 flex items-center gap-1.5"><Icon name="mic" size={14} /> 음성 명령</div>
-            <div className="flex items-center gap-2 rounded-xl px-3 py-2" style={{ background: "rgba(6,11,22,0.6)", border: "1px solid var(--line)" }}>
+            <div className="flex items-center gap-2 rounded-xl px-3 py-2" style={IS_CLEAN ? { background: "rgba(255,255,255,0.04)", border: "1px solid var(--line)" } : { background: "rgba(6,11,22,0.6)", border: "1px solid var(--line)" }}>
               <input
                 value={cmd} onChange={(e) => setCmd(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter") submitCmd(); }}
@@ -204,7 +218,9 @@ export default function Dashboard() {
               />
               <button onClick={() => router.push("/voice")} title="음성 명령"
                 className="w-9 h-9 rounded-full flex items-center justify-center shrink-0 float"
-                style={{ background: "linear-gradient(135deg, var(--neon-deep), var(--neon))", color: "#041018", boxShadow: "0 0 18px -2px rgba(34,211,238,.6)" }}>
+                style={IS_CLEAN
+                  ? { background: "#2f6fed", color: "#ffffff" }
+                  : { background: "linear-gradient(135deg, var(--neon-deep), var(--neon))", color: "#041018", boxShadow: "0 0 18px -2px rgba(34,211,238,.6)" }}>
                 <Icon name="mic" size={16} />
               </button>
             </div>
@@ -252,11 +268,27 @@ export default function Dashboard() {
                 {live ? "◇ AI SYSTEM ONLINE ◇" : "◇ AI SYSTEM OFFLINE ◇"}
               </span>
             </div>
-            <OrbitalHub running={running} live={live} />
-            <div className="w-full mt-2 flex items-center justify-center gap-2 text-gray-400">
-              <Waveform bars={28} height={22} />
-            </div>
-            <div className="text-sm text-gray-400 mt-2">명령을 말씀해주세요, <span className="neon-text-soft font-semibold">Boss</span></div>
+            {IS_CLEAN ? (
+              <div className="w-full py-10 flex flex-col items-center text-center">
+                <div className="w-14 h-14 rounded-2xl bg-blue-600 flex items-center justify-center mb-4">
+                  <span className="text-white text-2xl font-bold">N</span>
+                </div>
+                <div className="text-xl font-bold text-gray-900">NewPlay Hub</div>
+                <div className="text-sm text-gray-500 mt-1">AI 프로젝트 어시스턴트</div>
+                <div className="mt-4 flex items-center gap-2 text-sm text-gray-600">
+                  <span className={live ? "dot dot-run" : "dot dot-err"} />
+                  <span>{live ? `에이전트 ${running}개 실행 중` : "AI 워커 대기 중"}</span>
+                </div>
+              </div>
+            ) : (
+              <>
+                <OrbitalHub running={running} live={live} />
+                <div className="w-full mt-2 flex items-center justify-center gap-2 text-gray-400">
+                  <Waveform bars={28} height={22} />
+                </div>
+                <div className="text-sm text-gray-400 mt-2">명령을 말씀해주세요, <span className="neon-text-soft font-semibold">Boss</span></div>
+              </>
+            )}
           </div>
 
           {/* 통계 카드 */}
@@ -264,7 +296,7 @@ export default function Dashboard() {
             {cards.map((c) => (
               <Link key={c.label} href="/tasks" className="glass glass-hover p-3.5 text-center">
                 <div className="text-[10px] mono tracking-hud text-gray-500 mb-1">{c.label}</div>
-                <div className="text-2xl sm:text-[28px] font-bold mono" style={{ color: c.color, textShadow: `0 0 14px ${c.color}44` }}>{c.value}</div>
+                <div className="text-2xl sm:text-[28px] font-bold mono" style={IS_CLEAN ? { color: c.color } : { color: c.color, textShadow: `0 0 14px ${c.color}44` }}>{c.value}</div>
               </Link>
             ))}
           </div>
